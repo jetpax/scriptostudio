@@ -63,7 +63,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         }}
         
         .header {{
-            background: linear-gradient(135deg, #008184 0%, #00a5a8 100%);
+            background: linear-gradient(135deg, #db5201 0%, #ff6b35 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -108,7 +108,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         
         .search-input:focus {{
             outline: none;
-            border-color: #008184;
+            border-color: #db5201;
         }}
         
         .tag-filters {{
@@ -135,9 +135,9 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         }}
         
         .tag-filter.active {{
-            background: #008184;
+            background: #db5201;
             color: white;
-            border-color: #008184;
+            border-color: #db5201;
         }}
         
         .stats {{
@@ -187,11 +187,11 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         
         .scripto-name {{
             font-weight: 600;
-            color: #008184;
+            color: #db5201;
         }}
         
         .scripto-name a {{
-            color: #008184;
+            color: #db5201;
             text-decoration: none;
         }}
         
@@ -216,8 +216,8 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         
         .scripto-tag {{
             padding: 0.25rem 0.5rem;
-            background: #e8f4f5;
-            color: #008184;
+            background: #ffe8e0;
+            color: #db5201;
             border-radius: 12px;
             font-size: 0.75rem;
         }}
@@ -245,7 +245,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
     <div class="container">
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search ScriptOs by name, description, author, or tags...">
+                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search ScriptOs by name, description, or tags...">
             </div>
             <div class="tag-filters" id="tag-filters">
                 <a href="#" class="tag-filter active" data-tag="all">All</a>
@@ -261,7 +261,6 @@ def generate_list_page(scriptos, all_tags, index, output_path):
                 <thead>
                     <tr>
                         <th data-sort="name">Name</th>
-                        <th data-sort="author">Author</th>
                         <th data-sort="description">Description</th>
                         <th data-sort="tags">Tags</th>
                         <th data-sort="version">Version</th>
@@ -276,7 +275,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
     
     <div class="footer">
         <p>Last updated: {format_timestamp(index.get('updated', 0))}</p>
-        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #008184;">View on GitHub</a></p>
+        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #db5201;">View on GitHub</a></p>
     </div>
     
     <script>
@@ -306,7 +305,6 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             return (
                 scripto.name.toLowerCase().includes(q) ||
                 (scripto.description || '').toLowerCase().includes(q) ||
-                (scripto.author || '').toLowerCase().includes(q) ||
                 (scripto.tags || []).some(tag => tag.toLowerCase().includes(q))
             );
         }}
@@ -330,7 +328,6 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             return `
                 <tr>
                     <td class="scripto-name"><a href="${{detailUrl}}">${{scripto.name}}</a></td>
-                    <td>${{scripto.author || 'Unknown'}}</td>
                     <td class="scripto-description">${{descShort}}</td>
                     <td><div class="scripto-tags">${{tags}}</div></td>
                     <td>v${{version}}</td>
@@ -377,7 +374,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             
             tbody.innerHTML = filtered.length > 0
                 ? filtered.map(s => generateRowHTML(s)).join('')
-                : '<tr><td colspan="5" class="no-results">No ScriptOs found</td></tr>';
+                : '<tr><td colspan="4" class="no-results">No ScriptOs found</td></tr>';
             
             statsCount.textContent = filtered.length;
         }}
@@ -433,7 +430,6 @@ def generate_table_row(scripto):
     
     return f"""                    <tr>
                         <td class="scripto-name"><a href="{detail_url}">{scripto['name']}</a></td>
-                        <td>{scripto.get('author', 'Unknown')}</td>
                         <td class="scripto-description">{description}</td>
                         <td><div class="scripto-tags">{tags_html}</div></td>
                         <td>v{version}</td>
@@ -477,7 +473,7 @@ def generate_detail_page(scripto, output_path):
         }}
         
         .header {{
-            background: linear-gradient(135deg, #008184 0%, #00a5a8 100%);
+            background: linear-gradient(135deg, #db5201 0%, #ff6b35 100%);
             color: white;
             padding: 1.5rem 2rem;
         }}
@@ -513,7 +509,7 @@ def generate_detail_page(scripto, output_path):
         }}
         
         .detail-header h1 {{
-            color: #008184;
+            color: #db5201;
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }}
@@ -539,8 +535,8 @@ def generate_detail_page(scripto, output_path):
         
         .scripto-tag {{
             padding: 0.5rem 1rem;
-            background: #e8f4f5;
-            color: #008184;
+            background: #ffe8e0;
+            color: #db5201;
             border-radius: 12px;
             font-size: 0.9rem;
         }}
@@ -591,12 +587,12 @@ def generate_detail_page(scripto, output_path):
         }}
         
         .btn-primary {{
-            background: #008184;
+            background: #db5201;
             color: white;
         }}
         
         .btn-primary:hover {{
-            background: #006668;
+            background: #b84401;
         }}
         
         .btn-secondary {{
