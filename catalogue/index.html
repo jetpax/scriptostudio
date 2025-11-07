@@ -51,13 +51,11 @@
         }
         
         .search-box {
-            display: flex;
-            gap: 1rem;
             margin-bottom: 1rem;
         }
         
         .search-input {
-            flex: 1;
+            width: 100%;
             padding: 0.75rem;
             border: 2px solid #e0e0e0;
             border-radius: 6px;
@@ -84,6 +82,8 @@
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s;
+            text-decoration: none;
+            color: #333;
         }
         
         .tag-filter:hover {
@@ -102,102 +102,80 @@
             font-size: 0.9rem;
         }
         
-        .scriptos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .scripto-card {
+        .scriptos-table {
             background: white;
             border-radius: 8px;
-            padding: 1.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
         }
         
-        .scripto-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        .scripto-card h3 {
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background: #f0f0f0;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .scripto-name {
+            font-weight: 600;
             color: #008184;
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
         }
         
-        .scripto-meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+        .scripto-name a {
+            color: #008184;
+            text-decoration: none;
+        }
+        
+        .scripto-name a:hover {
+            text-decoration: underline;
         }
         
         .scripto-description {
-            margin: 1rem 0;
-            color: #444;
-            line-height: 1.5;
+            color: #666;
+            font-size: 0.9rem;
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         .scripto-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
+            gap: 0.25rem;
         }
         
         .scripto-tag {
-            padding: 0.25rem 0.75rem;
+            padding: 0.25rem 0.5rem;
             background: #e8f4f5;
             color: #008184;
             border-radius: 12px;
-            font-size: 0.85rem;
-        }
-        
-        .scripto-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .btn-primary {
-            background: #008184;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #006668;
-        }
-        
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-        
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-        }
-        
-        .no-results h2 {
-            margin-bottom: 1rem;
-            color: #333;
+            font-size: 0.75rem;
         }
         
         .footer {
@@ -205,6 +183,12 @@
             padding: 2rem;
             color: #666;
             margin-top: 3rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
         }
     </style>
 </head>
@@ -217,448 +201,302 @@
     <div class="container">
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="search-input" class="search-input" placeholder="Search ScriptOs by name, description, or tags...">
+                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search ScriptOs by name, description, author, or tags...">
             </div>
             <div class="tag-filters" id="tag-filters">
-                <div class="tag-filter" data-tag="all">All</div>
-                <div class="tag-filter" data-tag="CAN/TWAI">CAN/TWAI</div>
-                <div class="tag-filter" data-tag="Communication">Communication</div>
-                <div class="tag-filter" data-tag="Hardware">Hardware</div>
-                <div class="tag-filter" data-tag="Network">Network</div>
-                <div class="tag-filter" data-tag="System">System</div>
-                <div class="tag-filter" data-tag="Templates">Templates</div>
-                <div class="tag-filter" data-tag="Testing">Testing</div>
-                <div class="tag-filter" data-tag="Tests/WebFiles">Tests/WebFiles</div>
-                <div class="tag-filter" data-tag="UI Plugins">UI Plugins</div>
+                <a href="#" class="tag-filter active" data-tag="all">All</a>
+                <a href="#" class="tag-filter" data-tag="CAN/TWAI">CAN/TWAI</a>
+                <a href="#" class="tag-filter" data-tag="Communication">Communication</a>
+                <a href="#" class="tag-filter" data-tag="Hardware">Hardware</a>
+                <a href="#" class="tag-filter" data-tag="Network">Network</a>
+                <a href="#" class="tag-filter" data-tag="System">System</a>
+                <a href="#" class="tag-filter" data-tag="Templates">Templates</a>
+                <a href="#" class="tag-filter" data-tag="Testing">Testing</a>
+                <a href="#" class="tag-filter" data-tag="Tests/WebFiles">Tests/WebFiles</a>
+                <a href="#" class="tag-filter" data-tag="UI Plugins">UI Plugins</a>
             </div>
             <div class="stats" id="stats">
                 Showing <span id="count">34</span> of 34 ScriptOs
             </div>
         </div>
         
-        <div class="scriptos-grid" id="scriptos-grid">
-            <div class="scripto-card">
-                <h3>1-Wire Devices Scan</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Initializes a 1-Wire bus on a single GPIO and finds all the family IDs and serial numbers of slave devices.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Communication</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/1-Wire%2520Slaves%2520Scan.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>ADC Reader</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description"> Simple level and voltage reader on a GPIO using an analog-to-digital converter (ADC).
-                          You can specify the dB applied attenuation and the bits resolution.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ADC%2520Reader.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>BLE Scan</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Initializes the Bluetooth Low Energy radio and scans BLE devices via advertising data.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/BLE%2520Scan.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>BLE iBeacon</h3>
-                <div class="scripto-meta">by JC`zic • v2.0.0</div>
-                <div class="scripto-description">Initializes the Bluetooth Low Energy radio and simulates an Apple iBeacon object. The advertising message broadcasts an UUID corresponding to "B.SCRIPTO_BEACON" in binary with the short name "ScriptOmator" while the iBeacon is the response to an active scanner.
-The iBeacon (Apple beacon format) data are:
-Major = 123  /  Minor = 456  /  TX at 1 meter = -55 dB</div>
-                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/BLE%2520iBeacon.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>CAN/TWAI Loopback Test</h3>
-                <div class="scripto-meta">by Scriptomatic Team • v1.0.0</div>
-                <div class="scripto-description">Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32's TWAI controller. For real CAN bus communication with OpenInverter, you'll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.</div>
-                <div class="scripto-tags"><span class="scripto-tag">CAN/TWAI</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/CAN%2520Loopback%2520Test.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/straga/micropython-esp32-twai" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>DAC Output</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Set a GPIO output to a specific voltage using digital-to-analog converter (DAC).</div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/DAC%2520Output.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>GPIO Input</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description"> Simple reader of low/high voltage signals on a GPIO (pin) input.
-                          You can enable an internal pull resistor or not.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/GPIO%2520Input.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>GPIO Output</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Set a GPIO (pin) output to ON or OFF.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/GPIO%2520Output.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>I2C Slaves Scan</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description"> Initializes an I2C bus on two GPIO and scans it to find all the addresses of I2C slaves.
-                          You can choose the bus identifier, the SCL and SDA GPIO as well as the frequency in MHz.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Communication</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/I2C%2520Slaves%2520Scan.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>KT403A MP3 Player</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">For MP3 modules based on KT403A chipset like DFPlayer, Grove-MP3 v2 and more.
-You will be able to connect your board via an UART bus, play all the sound files in loop from the intended storage source (microSD, USB, flash memory), adjust the volume but also choose an audio EQ effect (normal, pop, rock, jazz, classic, bass). Info: KT403A supports MP3 & WAV audio formats on FAT16 or FAT32 files system, 32 GB max for microSD.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/KT403A%2520MP3%2520Player.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>LEDs - DotStar RGB Strip</h3>
-                <div class="scripto-meta">by JC`zic for the colors demo
-Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib • v1.0.0</div>
-                <div class="scripto-description">Try your DotStar RGB LEDs via SPI bus, compatible with strips APA102, SK9822, and more. You can choose the number of LEDs as well as the bus connectivity settings and the lighting in full power or in fading rainbow. The embedded library can be found via the link below.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/LEDs%2520-%2520DotStar%2520Strip.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/mattytrentini/micropython-dotstar" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Magnet Sensor</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Allows to test the hall sensor of the ESP32 chip with detection of the two magnetic poles after automatic calibration.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Magnet%2520Sensor.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Max Threads</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Returns the maximum number of possible threads to create with the configurable stack size.</div>
-                <div class="scripto-tags"><span class="scripto-tag">System</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Max%2520Threads.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Memory Check</h3>
-                <div class="scripto-meta">by jetpax • v2.0.0</div>
-                <div class="scripto-description">WebREPL-safe memory test. Checks available RAM and tests it by allocating a specified size of memory.</div>
-                <div class="scripto-tags"><span class="scripto-tag">System</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Memory%2520Check.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jetpax" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>NTP Time Sync</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description"> This tool synchronizes the UTC date and time from an NTP server.
-                          You can choose the NTP server host to connect to.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/NTP%2520Time%2520Sync.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>OpenInverter UI</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Full OpenInverter web interface with WebREPL communication.
+        <div class="scriptos-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-sort="name">Name</th>
+                        <th data-sort="author">Author</th>
+                        <th data-sort="description">Description</th>
+                        <th data-sort="tags">Tags</th>
+                        <th data-sort="version">Version</th>
+                    </tr>
+                </thead>
+                <tbody id="scriptos-tbody">
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/1-wire-devices-scan.html">1-Wire Devices Scan</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Initializes a 1-Wire bus on a single GPIO and finds all the family IDs and serial numbers of slave d...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Communication</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/adc-reader.html">ADC Reader</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description"> Simple level and voltage reader on a GPIO using an analog-to-digital converter (ADC).
+             ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/ble-scan.html">BLE Scan</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Initializes the Bluetooth Low Energy radio and scans BLE devices via advertising data.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/ble-ibeacon.html">BLE iBeacon</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Initializes the Bluetooth Low Energy radio and simulates an Apple iBeacon object. The advertising me...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
+                        <td>v2.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/cantwai-loopback-test.html">CAN/TWAI Loopback Test</a></td>
+                        <td>Scriptomatic Team</td>
+                        <td class="scripto-description">Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is prop...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">CAN/TWAI</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/dac-output.html">DAC Output</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Set a GPIO output to a specific voltage using digital-to-analog converter (DAC).</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/gpio-input.html">GPIO Input</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description"> Simple reader of low/high voltage signals on a GPIO (pin) input.
+                          You can ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/gpio-output.html">GPIO Output</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Set a GPIO (pin) output to ON or OFF.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/i2c-slaves-scan.html">I2C Slaves Scan</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description"> Initializes an I2C bus on two GPIO and scans it to find all the addresses of I2C slaves.
+          ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Communication</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/kt403a-mp3-player.html">KT403A MP3 Player</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">For MP3 modules based on KT403A chipset like DFPlayer, Grove-MP3 v2 and more.
+You will be able to co...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/leds---dotstar-rgb-strip.html">LEDs - DotStar RGB Strip</a></td>
+                        <td>JC`zic for the colors demo
+Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib</td>
+                        <td class="scripto-description">Try your DotStar RGB LEDs via SPI bus, compatible with strips APA102, SK9822, and more. You can choo...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/magnet-sensor.html">Magnet Sensor</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Allows to test the hall sensor of the ESP32 chip with detection of the two magnetic poles after auto...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/max-threads.html">Max Threads</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Returns the maximum number of possible threads to create with the configurable stack size.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">System</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/memory-check.html">Memory Check</a></td>
+                        <td>jetpax</td>
+                        <td class="scripto-description">WebREPL-safe memory test. Checks available RAM and tests it by allocating a specified size of memory...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">System</span></div></td>
+                        <td>v2.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/ntp-time-sync.html">NTP Time Sync</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description"> This tool synchronizes the UTC date and time from an NTP server.
+                          You can ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/openinverter-ui.html">OpenInverter UI</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Full OpenInverter web interface with WebREPL communication.
                          
-                         This ScriptO provides:
-                         • Full parameter display and editing
-                         • Real-time data visualization
-                         • CAN mapping management
-                         • Direct integration with OpenInverter via CAN bus
-                         
-                         The UI is served from /oi_ui/ directory and opens in a
-                         Studio modal. Communication happens via WebREPL using the
-                         existing OI_helpers functions - no REST API needed!
-                         
-                         Currently uses demo data from OI_helpers.py.
-                         For live hardware: enable CAN bus initialization below.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">UI Plugins</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/OpenInverter%2520UI.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>PWM & Lighting</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Uses a PWM on a GPIO and varies its duty cycle to make a led flash smoothly from 0 to 3.3V.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%2520%2526%2520Lighting.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>PWM & Servo Motor</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description"> Uses a PWM on a GPIO and drives a servo motor by varying its duty cycle.
-                          Several options are available to configure the servo motor, such as pulse frequency, pulse width and rotation time.   
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%2520%2526%2520Servo%2520Motor.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Script Object template </h3>
-                <div class="scripto-meta">by John Smith • v1.0.0</div>
-                <div class="scripto-description"> This template is a guide to developing Script Objects in MicroPython for your Scriptomator device.                          You just have a "dict" to place in your code file with the 2 commented lines above and below.                          You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the "args" class.
-                          Use a "list" type to propose a choice between all the GPIO pins of the ESP32.
-                          Also, use the "dict" type to propose a multiple choice via the "items" sub-tree.
-                          You will be able to write your test scripts very quickly!
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Templates</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ScriptOs%2520-%2520Template.py" class="btn btn-primary">Install</a>
-                    <a href="https://docs.micropython.org" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Stop Button Test</h3>
-                <div class="scripto-meta">by ScriptO Studio • v1.0.0</div>
-                <div class="scripto-description">Simple infinite counter to test the Stop button. Counts up forever until stopped.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Stop%2520Button%2520Test.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - Handler Direct</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Test httpserver.on() directly to diagnose routing.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Handler%2520Direct.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - Manual File Handler</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Manually implement file serving with httpserver.on().</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Manual%2520File%2520Handler.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Queue Cleanup Test</h3>
-                <div class="scripto-meta">by Jonathan E. Peace • v1.0.0</div>
-                <div class="scripto-description">Tests the queue cleanup refactor:
+              ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">UI Plugins</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/pwm--lighting.html">PWM & Lighting</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Uses a PWM on a GPIO and varies its duty cycle to make a led flash smoothly from 0 to 3.3V.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/pwm--servo-motor.html">PWM & Servo Motor</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description"> Uses a PWM on a GPIO and drives a servo motor by varying its duty cycle.
+                          ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/script-object-template-.html">Script Object template </a></td>
+                        <td>John Smith</td>
+                        <td class="scripto-description"> This template is a guide to developing Script Objects in MicroPython for your Scriptomator device. ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Templates</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/stop-button-test.html">Stop Button Test</a></td>
+                        <td>ScriptO Studio</td>
+                        <td class="scripto-description">Simple infinite counter to test the Stop button. Counts up forever until stopped.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---handler-direct.html">Test - Handler Direct</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Test httpserver.on() directly to diagnose routing.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---manual-file-handler.html">Test - Manual File Handler</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Manually implement file serving with httpserver.on().</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/queue-cleanup-test.html">Queue Cleanup Test</a></td>
+                        <td>Jonathan E. Peace</td>
+                        <td class="scripto-description">Tests the queue cleanup refactor:
                          - Static file serving with direct GIL
-                         - WebREPL file transfers with direct GIL
-                         - Concurrent operations
-                         - Memory usage verification
+   ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---vfs-diagnostics.html">Test - VFS Diagnostics</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Diagnose VFS mount points and filesystem structure.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---webfiles-clean.html">Test - WebFiles Clean</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Clean test of webfiles with proper unregistration.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---webfiles-diagnostic.html">Test - WebFiles Diagnostic</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Check if webfiles handler gets called at all.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---webfiles-gzip.html">Test - WebFiles Gzip</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Tests automatic gzip compression support in webfiles module.
+                         Creates both r...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Tests/WebFiles</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---webfiles-minimal.html">Test - WebFiles Minimal</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Minimal test - create one file and serve it.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---webfiles-serving.html">Test - WebFiles Serving</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Test script to verify webfiles.serve() works correctly.
                          
-                         This verifies that file I/O uses direct GIL acquisition
-                         instead of queuing, improving performance and simplicity.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Queue%2520Cleanup.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - VFS Diagnostics</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Diagnose VFS mount points and filesystem structure.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520VFS%2520Diagnostics.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - WebFiles Clean</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Clean test of webfiles with proper unregistration.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Clean.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - WebFiles Diagnostic</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Check if webfiles handler gets called at all.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Diagnostic.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - WebFiles Gzip</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Tests automatic gzip compression support in webfiles module.
-                         Creates both regular and .gz versions of test files.
-                         When client sends "Accept-Encoding: gzip", the .gz version is served automatically.
-                         This tests the new direct GIL file serving with mp_vfs_stat() gzip resolution.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Tests/WebFiles</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Gzip.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - WebFiles Minimal</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Minimal test - create one file and serve it.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Minimal.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - WebFiles Serving</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Test script to verify webfiles.serve() works correctly.
+                  ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/test---webfiles-simple.html">Test - WebFiles Simple</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Super simple webfiles test - no modal, just browse manually.
                          
-                         This ScriptO:
-                         1. Creates /test_webfiles/ directory via Python VFS
-                         2. Creates a simple test.html file via Python VFS
-                         3. Finds correct ESP-IDF VFS mount point
-                         4. Serves it via webfiles.serve() (READ-ONLY)
-                         5. Opens it in Studio modal
+             ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/webfiles-speed-test.html">WebFiles Speed Test</a></td>
+                        <td>ScriptOMatic</td>
+                        <td class="scripto-description">Measure file serving performance with various file sizes</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
+                        <td>v1.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/uart-test.html">UART Test</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description"> Initializes an UART bus on two GPIO, sends or not a custom command and receives data from the bus.
+...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Communication</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/ui-plugin---hello-world.html">UI Plugin - Hello World</a></td>
+                        <td>ScriptO Team</td>
+                        <td class="scripto-description">Minimal demonstration of the ScriptO UI Plugin Architecture.
                          
-                         IMPORTANT: webfiles uses ESP-IDF VFS directly,
-                         while Python uses MicroPython VFS. The actual
-                         filesystem is usually mounted at /flash in ESP-IDF.
-                         
-                         webfiles should ONLY READ files, never write,
-                         to avoid corrupting MicroPython VFS metadata.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Serving.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Test - WebFiles Simple</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
-                <div class="scripto-description">Super simple webfiles test - no modal, just browse manually.
-                         
-                         Creates /test_simple/hello.html and tries to serve it.
-                         Prints URLs to test in your browser.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Simple.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>WebFiles Speed Test</h3>
-                <div class="scripto-meta">by ScriptOMatic • v1.0</div>
-                <div class="scripto-description">Measure file serving performance with various file sizes</div>
-                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Speed%2520Test.py" class="btn btn-primary">Install</a>
-                    
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>UART Test</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description"> Initializes an UART bus on two GPIO, sends or not a custom command and receives data from the bus.
-                          You can choose bus identifier, baud rate, bits per character, parity, stop bits and TX/RX GPIO.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">Communication</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UART%2520Test.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>UI Plugin - Hello World</h3>
-                <div class="scripto-meta">by ScriptO Team • v1.0.1</div>
-                <div class="scripto-description">Minimal demonstration of the ScriptO UI Plugin Architecture.
-                         
-                         This ScriptO:
-                         • Registers an HTTP route that serves a self-contained HTML page
-                         • Sends a command to Studio to open the UI in a modal
-                         • The UI is served directly from your ESP32 device
-                         
-                         This proves the end-to-end plugin flow where ScriptOs can provide 
-                         their own web-based user interfaces without requiring any code changes 
-                         in ScriptO Studio.
-                         
-                         The UI appears in an iframe modal and communicates directly with the device.
-                      </div>
-                <div class="scripto-tags"><span class="scripto-tag">UI Plugins</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UI%2520Plugin%2520-%2520Hello%2520World.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
-            <div class="scripto-card">
-                <h3>Wi-Fi Scan</h3>
-                <div class="scripto-meta">by JC`zic • v1.0.0</div>
-                <div class="scripto-description">Performs a detailed scan of the wireless access points.</div>
-                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
-                <div class="scripto-actions">
-                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Wi-Fi%2520Scan.py" class="btn btn-primary">Install</a>
-                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
-                </div>
-            </div>
+             ...</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">UI Plugins</span></div></td>
+                        <td>v1.0.1</td>
+                    </tr>
+                    <tr>
+                        <td class="scripto-name"><a href="scriptos/wi-fi-scan.html">Wi-Fi Scan</a></td>
+                        <td>JC`zic</td>
+                        <td class="scripto-description">Performs a detailed scan of the wireless access points.</td>
+                        <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     
     <div class="footer">
-        <p>Last updated: <span id="updated">2025-11-07 04:55:51 UTC</span></p>
-        <p><a href="https://github.com" style="color: #008184;">View on GitHub</a></p>
+        <p>Last updated: 2025-11-07 12:46:41 UTC</p>
+        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #008184;">View on GitHub</a></p>
     </div>
     
     <script>
@@ -667,11 +505,13 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
         
         const searchInput = document.getElementById('search-input');
         const tagFilters = document.querySelectorAll('.tag-filter');
-        const scriptosGrid = document.getElementById('scriptos-grid');
+        const tbody = document.getElementById('scriptos-tbody');
         const statsCount = document.getElementById('count');
         
         let activeTag = 'all';
         let searchQuery = '';
+        let sortBy = 'name';
+        let sortAsc = true;
         
         function formatVersion(version) {
             if (Array.isArray(version)) {
@@ -685,67 +525,111 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
             const q = query.toLowerCase();
             return (
                 scripto.name.toLowerCase().includes(q) ||
-                scripto.description.toLowerCase().includes(q) ||
-                scripto.author.toLowerCase().includes(q) ||
-                scripto.tags.some(tag => tag.toLowerCase().includes(q))
+                (scripto.description || '').toLowerCase().includes(q) ||
+                (scripto.author || '').toLowerCase().includes(q) ||
+                (scripto.tags || []).some(tag => tag.toLowerCase().includes(q))
             );
         }
         
         function matchesTag(scripto, tag) {
             if (tag === 'all') return true;
-            return scripto.tags.includes(tag);
+            return (scripto.tags || []).includes(tag);
         }
         
-        function filterScriptos() {
-            const filtered = scriptos.filter(s => 
+        function slugify(name) {
+            return name.replace(/[^a-z0-9]/gi, '-').toLowerCase().replace(/\.py$/, '');
+        }
+        
+        function generateRowHTML(scripto) {
+            const detailUrl = `scriptos/${slugify(scripto.name)}.html`;
+            const tags = (scripto.tags || []).map(t => `<span class="scripto-tag">${t}</span>`).join('');
+            const version = formatVersion(scripto.version);
+            const desc = scripto.description || '';
+            const descShort = desc.length > 100 ? desc.substring(0, 100) + '...' : desc;
+            
+            return `
+                <tr>
+                    <td class="scripto-name"><a href="${detailUrl}">${scripto.name}</a></td>
+                    <td>${scripto.author || 'Unknown'}</td>
+                    <td class="scripto-description">${descShort}</td>
+                    <td><div class="scripto-tags">${tags}</div></td>
+                    <td>v${version}</td>
+                </tr>
+            `;
+        }
+        
+        function filterAndSort() {
+            let filtered = scriptos.filter(s => 
                 matchesSearch(s, searchQuery) && matchesTag(s, activeTag)
             );
             
-            scriptosGrid.innerHTML = filtered.length > 0
-                ? filtered.map(s => generateCardHTML(s)).join('')
-                : '<div class="no-results"><h2>No ScriptOs found</h2><p>Try adjusting your search or filters</p></div>';
+            // Sort
+            filtered.sort((a, b) => {
+                let aVal = a[sortBy];
+                let bVal = b[sortBy];
+                
+                if (sortBy === 'version') {
+                    // Compare version arrays
+                    aVal = a.version || [0, 0, 0];
+                    bVal = b.version || [0, 0, 0];
+                    for (let i = 0; i < 3; i++) {
+                        if (aVal[i] !== bVal[i]) {
+                            return sortAsc ? aVal[i] - bVal[i] : bVal[i] - aVal[i];
+                        }
+                    }
+                    return 0;
+                }
+                
+                if (sortBy === 'tags') {
+                    aVal = (a.tags || []).join(', ');
+                    bVal = (b.tags || []).join(', ');
+                }
+                
+                if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+                
+                if (aVal < bVal) return sortAsc ? -1 : 1;
+                if (aVal > bVal) return sortAsc ? 1 : -1;
+                return 0;
+            });
+            
+            tbody.innerHTML = filtered.length > 0
+                ? filtered.map(s => generateRowHTML(s)).join('')
+                : '<tr><td colspan="5" class="no-results">No ScriptOs found</td></tr>';
             
             statsCount.textContent = filtered.length;
         }
         
-        function generateCardHTML(scripto) {
-            const tags = scripto.tags.map(t => `<span class="scripto-tag">${t}</span>`).join('');
-            const version = formatVersion(scripto.version);
-            const installUrl = `?install=${encodeURIComponent(scripto.url)}`;
-            const docsLink = scripto.docs ? `<a href="${scripto.docs}" target="_blank" class="btn btn-secondary">Docs</a>` : '';
-            
-            return `
-                <div class="scripto-card">
-                    <h3>${scripto.name}</h3>
-                    <div class="scripto-meta">
-                        by ${scripto.author || 'Unknown'} • v${version}
-                    </div>
-                    <div class="scripto-description">${scripto.description}</div>
-                    <div class="scripto-tags">${tags}</div>
-                    <div class="scripto-actions">
-                        <a href="${installUrl}" class="btn btn-primary">Install</a>
-                        ${docsLink}
-                    </div>
-                </div>
-            `;
-        }
-        
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value;
-            filterScriptos();
+            filterAndSort();
         });
         
         tagFilters.forEach(filter => {
-            filter.addEventListener('click', () => {
+            filter.addEventListener('click', (e) => {
+                e.preventDefault();
                 tagFilters.forEach(f => f.classList.remove('active'));
                 filter.classList.add('active');
                 activeTag = filter.dataset.tag;
-                filterScriptos();
+                filterAndSort();
             });
         });
         
-        // Set "All" as active by default
-        document.querySelector('[data-tag="all"]').classList.add('active');
+        // Sort functionality
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const newSort = th.dataset.sort;
+                if (sortBy === newSort) {
+                    sortAsc = !sortAsc;
+                } else {
+                    sortBy = newSort;
+                    sortAsc = true;
+                }
+                filterAndSort();
+            });
+        });
     </script>
 </body>
 </html>
