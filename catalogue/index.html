@@ -19,7 +19,7 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #008184 0%, #00a5a8 100%);
+            background: linear-gradient(135deg, #db5201 0%, #ff6b35 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -64,7 +64,7 @@
         
         .search-input:focus {
             outline: none;
-            border-color: #008184;
+            border-color: #db5201;
         }
         
         .tag-filters {
@@ -91,9 +91,9 @@
         }
         
         .tag-filter.active {
-            background: #008184;
+            background: #db5201;
             color: white;
-            border-color: #008184;
+            border-color: #db5201;
         }
         
         .stats {
@@ -143,11 +143,11 @@
         
         .scripto-name {
             font-weight: 600;
-            color: #008184;
+            color: #db5201;
         }
         
         .scripto-name a {
-            color: #008184;
+            color: #db5201;
             text-decoration: none;
         }
         
@@ -172,8 +172,8 @@
         
         .scripto-tag {
             padding: 0.25rem 0.5rem;
-            background: #e8f4f5;
-            color: #008184;
+            background: #ffe8e0;
+            color: #db5201;
             border-radius: 12px;
             font-size: 0.75rem;
         }
@@ -201,7 +201,7 @@
     <div class="container">
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search ScriptOs by name, description, author, or tags...">
+                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search ScriptOs by name, description, or tags...">
             </div>
             <div class="tag-filters" id="tag-filters">
                 <a href="#" class="tag-filter active" data-tag="all">All</a>
@@ -225,7 +225,6 @@
                 <thead>
                     <tr>
                         <th data-sort="name">Name</th>
-                        <th data-sort="author">Author</th>
                         <th data-sort="description">Description</th>
                         <th data-sort="tags">Tags</th>
                         <th data-sort="version">Version</th>
@@ -234,14 +233,12 @@
                 <tbody id="scriptos-tbody">
                     <tr>
                         <td class="scripto-name"><a href="scriptos/1-wire-devices-scan.html">1-Wire Devices Scan</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Initializes a 1-Wire bus on a single GPIO and finds all the family IDs and serial numbers of slave d...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Communication</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/adc-reader.html">ADC Reader</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description"> Simple level and voltage reader on a GPIO using an analog-to-digital converter (ADC).
              ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
@@ -249,35 +246,30 @@
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/ble-scan.html">BLE Scan</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Initializes the Bluetooth Low Energy radio and scans BLE devices via advertising data.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/ble-ibeacon.html">BLE iBeacon</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Initializes the Bluetooth Low Energy radio and simulates an Apple iBeacon object. The advertising me...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
                         <td>v2.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/cantwai-loopback-test.html">CAN/TWAI Loopback Test</a></td>
-                        <td>Scriptomatic Team</td>
                         <td class="scripto-description">Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is prop...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">CAN/TWAI</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/dac-output.html">DAC Output</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Set a GPIO output to a specific voltage using digital-to-analog converter (DAC).</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/gpio-input.html">GPIO Input</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description"> Simple reader of low/high voltage signals on a GPIO (pin) input.
                           You can ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
@@ -285,14 +277,12 @@
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/gpio-output.html">GPIO Output</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Set a GPIO (pin) output to ON or OFF.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/i2c-slaves-scan.html">I2C Slaves Scan</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description"> Initializes an I2C bus on two GPIO and scans it to find all the addresses of I2C slaves.
           ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Communication</span></div></td>
@@ -300,7 +290,6 @@
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/kt403a-mp3-player.html">KT403A MP3 Player</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">For MP3 modules based on KT403A chipset like DFPlayer, Grove-MP3 v2 and more.
 You will be able to co...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
@@ -308,36 +297,30 @@ You will be able to co...</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/leds---dotstar-rgb-strip.html">LEDs - DotStar RGB Strip</a></td>
-                        <td>JC`zic for the colors demo
-Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib</td>
                         <td class="scripto-description">Try your DotStar RGB LEDs via SPI bus, compatible with strips APA102, SK9822, and more. You can choo...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/magnet-sensor.html">Magnet Sensor</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Allows to test the hall sensor of the ESP32 chip with detection of the two magnetic poles after auto...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/max-threads.html">Max Threads</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Returns the maximum number of possible threads to create with the configurable stack size.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">System</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/memory-check.html">Memory Check</a></td>
-                        <td>jetpax</td>
                         <td class="scripto-description">WebREPL-safe memory test. Checks available RAM and tests it by allocating a specified size of memory...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">System</span></div></td>
                         <td>v2.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/ntp-time-sync.html">NTP Time Sync</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description"> This tool synchronizes the UTC date and time from an NTP server.
                           You can ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
@@ -345,7 +328,6 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/openinverter-ui.html">OpenInverter UI</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Full OpenInverter web interface with WebREPL communication.
                          
               ...</td>
@@ -354,14 +336,12 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/pwm--lighting.html">PWM & Lighting</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Uses a PWM on a GPIO and varies its duty cycle to make a led flash smoothly from 0 to 3.3V.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/pwm--servo-motor.html">PWM & Servo Motor</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description"> Uses a PWM on a GPIO and drives a servo motor by varying its duty cycle.
                           ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Hardware</span></div></td>
@@ -369,35 +349,30 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/script-object-template-.html">Script Object template </a></td>
-                        <td>John Smith</td>
                         <td class="scripto-description"> This template is a guide to developing Script Objects in MicroPython for your Scriptomator device. ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Templates</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/stop-button-test.html">Stop Button Test</a></td>
-                        <td>ScriptO Studio</td>
                         <td class="scripto-description">Simple infinite counter to test the Stop button. Counts up forever until stopped.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---handler-direct.html">Test - Handler Direct</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Test httpserver.on() directly to diagnose routing.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---manual-file-handler.html">Test - Manual File Handler</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Manually implement file serving with httpserver.on().</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/queue-cleanup-test.html">Queue Cleanup Test</a></td>
-                        <td>Jonathan E. Peace</td>
                         <td class="scripto-description">Tests the queue cleanup refactor:
                          - Static file serving with direct GIL
    ...</td>
@@ -406,28 +381,24 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---vfs-diagnostics.html">Test - VFS Diagnostics</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Diagnose VFS mount points and filesystem structure.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---webfiles-clean.html">Test - WebFiles Clean</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Clean test of webfiles with proper unregistration.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---webfiles-diagnostic.html">Test - WebFiles Diagnostic</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Check if webfiles handler gets called at all.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---webfiles-gzip.html">Test - WebFiles Gzip</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Tests automatic gzip compression support in webfiles module.
                          Creates both r...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Tests/WebFiles</span></div></td>
@@ -435,14 +406,12 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---webfiles-minimal.html">Test - WebFiles Minimal</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Minimal test - create one file and serve it.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---webfiles-serving.html">Test - WebFiles Serving</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Test script to verify webfiles.serve() works correctly.
                          
                   ...</td>
@@ -451,7 +420,6 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/test---webfiles-simple.html">Test - WebFiles Simple</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Super simple webfiles test - no modal, just browse manually.
                          
              ...</td>
@@ -460,14 +428,12 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/webfiles-speed-test.html">WebFiles Speed Test</a></td>
-                        <td>ScriptOMatic</td>
                         <td class="scripto-description">Measure file serving performance with various file sizes</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Testing</span></div></td>
                         <td>v1.0</td>
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/uart-test.html">UART Test</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description"> Initializes an UART bus on two GPIO, sends or not a custom command and receives data from the bus.
 ...</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Communication</span></div></td>
@@ -475,7 +441,6 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/ui-plugin---hello-world.html">UI Plugin - Hello World</a></td>
-                        <td>ScriptO Team</td>
                         <td class="scripto-description">Minimal demonstration of the ScriptO UI Plugin Architecture.
                          
              ...</td>
@@ -484,7 +449,6 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
                     </tr>
                     <tr>
                         <td class="scripto-name"><a href="scriptos/wi-fi-scan.html">Wi-Fi Scan</a></td>
-                        <td>JC`zic</td>
                         <td class="scripto-description">Performs a detailed scan of the wireless access points.</td>
                         <td><div class="scripto-tags"><span class="scripto-tag">Network</span></div></td>
                         <td>v1.0.0</td>
@@ -495,8 +459,8 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
     </div>
     
     <div class="footer">
-        <p>Last updated: 2025-11-07 12:46:41 UTC</p>
-        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #008184;">View on GitHub</a></p>
+        <p>Last updated: 2025-11-07 13:00:43 UTC</p>
+        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #db5201;">View on GitHub</a></p>
     </div>
     
     <script>
@@ -526,7 +490,6 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
             return (
                 scripto.name.toLowerCase().includes(q) ||
                 (scripto.description || '').toLowerCase().includes(q) ||
-                (scripto.author || '').toLowerCase().includes(q) ||
                 (scripto.tags || []).some(tag => tag.toLowerCase().includes(q))
             );
         }
@@ -550,7 +513,6 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
             return `
                 <tr>
                     <td class="scripto-name"><a href="${detailUrl}">${scripto.name}</a></td>
-                    <td>${scripto.author || 'Unknown'}</td>
                     <td class="scripto-description">${descShort}</td>
                     <td><div class="scripto-tags">${tags}</div></td>
                     <td>v${version}</td>
@@ -597,7 +559,7 @@ Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib
             
             tbody.innerHTML = filtered.length > 0
                 ? filtered.map(s => generateRowHTML(s)).join('')
-                : '<tr><td colspan="5" class="no-results">No ScriptOs found</td></tr>';
+                : '<tr><td colspan="4" class="no-results">No ScriptOs found</td></tr>';
             
             statsCount.textContent = filtered.length;
         }
