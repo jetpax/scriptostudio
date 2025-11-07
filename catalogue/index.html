@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScriptOs Registry - Browse & Install</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #1f1f1f;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #008184 0%, #00a5a8 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #008184;
+        }
+        
+        .tag-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .tag-filter {
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .tag-filter:hover {
+            background: #e0e0e0;
+        }
+        
+        .tag-filter.active {
+            background: #008184;
+            color: white;
+            border-color: #008184;
+        }
+        
+        .stats {
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .scriptos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .scripto-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .scripto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .scripto-card h3 {
+            color: #008184;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .scripto-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .scripto-description {
+            margin: 1rem 0;
+            color: #444;
+            line-height: 1.5;
+        }
+        
+        .scripto-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .scripto-tag {
+            padding: 0.25rem 0.75rem;
+            background: #e8f4f5;
+            color: #008184;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .scripto-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #008184;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #006668;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .no-results h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📦 ScriptOs Registry</h1>
+        <p>Browse and install ScriptOs for MicroPython</p>
+    </div>
+    
+    <div class="container">
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search-input" class="search-input" placeholder="Search ScriptOs by name, description, or tags...">
+            </div>
+            <div class="tag-filters" id="tag-filters">
+                <div class="tag-filter" data-tag="all">All</div>
+                <div class="tag-filter" data-tag="CAN/TWAI">CAN/TWAI</div>
+                <div class="tag-filter" data-tag="Communication">Communication</div>
+                <div class="tag-filter" data-tag="Hardware">Hardware</div>
+                <div class="tag-filter" data-tag="Network">Network</div>
+                <div class="tag-filter" data-tag="System">System</div>
+                <div class="tag-filter" data-tag="Templates">Templates</div>
+                <div class="tag-filter" data-tag="Testing">Testing</div>
+                <div class="tag-filter" data-tag="Tests/WebFiles">Tests/WebFiles</div>
+                <div class="tag-filter" data-tag="UI Plugins">UI Plugins</div>
+            </div>
+            <div class="stats" id="stats">
+                Showing <span id="count">34</span> of 34 ScriptOs
+            </div>
+        </div>
+        
+        <div class="scriptos-grid" id="scriptos-grid">
+            <div class="scripto-card">
+                <h3>1-Wire Devices Scan</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Initializes a 1-Wire bus on a single GPIO and finds all the family IDs and serial numbers of slave devices.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Communication</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/1-Wire%2520Slaves%2520Scan.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>ADC Reader</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description"> Simple level and voltage reader on a GPIO using an analog-to-digital converter (ADC).
+                          You can specify the dB applied attenuation and the bits resolution.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ADC%2520Reader.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>BLE Scan</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Initializes the Bluetooth Low Energy radio and scans BLE devices via advertising data.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/BLE%2520Scan.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>BLE iBeacon</h3>
+                <div class="scripto-meta">by JC`zic • v2.0.0</div>
+                <div class="scripto-description">Initializes the Bluetooth Low Energy radio and simulates an Apple iBeacon object. The advertising message broadcasts an UUID corresponding to "B.SCRIPTO_BEACON" in binary with the short name "ScriptOmator" while the iBeacon is the response to an active scanner.
+The iBeacon (Apple beacon format) data are:
+Major = 123  /  Minor = 456  /  TX at 1 meter = -55 dB</div>
+                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/BLE%2520iBeacon.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>CAN/TWAI Loopback Test</h3>
+                <div class="scripto-meta">by Scriptomatic Team • v1.0.0</div>
+                <div class="scripto-description">Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32's TWAI controller. For real CAN bus communication with OpenInverter, you'll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.</div>
+                <div class="scripto-tags"><span class="scripto-tag">CAN/TWAI</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/CAN%2520Loopback%2520Test.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/straga/micropython-esp32-twai" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>DAC Output</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Set a GPIO output to a specific voltage using digital-to-analog converter (DAC).</div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/DAC%2520Output.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>GPIO Input</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description"> Simple reader of low/high voltage signals on a GPIO (pin) input.
+                          You can enable an internal pull resistor or not.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/GPIO%2520Input.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>GPIO Output</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Set a GPIO (pin) output to ON or OFF.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/GPIO%2520Output.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>I2C Slaves Scan</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description"> Initializes an I2C bus on two GPIO and scans it to find all the addresses of I2C slaves.
+                          You can choose the bus identifier, the SCL and SDA GPIO as well as the frequency in MHz.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Communication</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/I2C%2520Slaves%2520Scan.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>KT403A MP3 Player</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">For MP3 modules based on KT403A chipset like DFPlayer, Grove-MP3 v2 and more.
+You will be able to connect your board via an UART bus, play all the sound files in loop from the intended storage source (microSD, USB, flash memory), adjust the volume but also choose an audio EQ effect (normal, pop, rock, jazz, classic, bass). Info: KT403A supports MP3 & WAV audio formats on FAT16 or FAT32 files system, 32 GB max for microSD.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/KT403A%2520MP3%2520Player.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>LEDs - DotStar RGB Strip</h3>
+                <div class="scripto-meta">by JC`zic for the colors demo
+Damien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib • v1.0.0</div>
+                <div class="scripto-description">Try your DotStar RGB LEDs via SPI bus, compatible with strips APA102, SK9822, and more. You can choose the number of LEDs as well as the bus connectivity settings and the lighting in full power or in fading rainbow. The embedded library can be found via the link below.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/LEDs%2520-%2520DotStar%2520Strip.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/mattytrentini/micropython-dotstar" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Magnet Sensor</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Allows to test the hall sensor of the ESP32 chip with detection of the two magnetic poles after automatic calibration.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Magnet%2520Sensor.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Max Threads</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Returns the maximum number of possible threads to create with the configurable stack size.</div>
+                <div class="scripto-tags"><span class="scripto-tag">System</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Max%2520Threads.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Memory Check</h3>
+                <div class="scripto-meta">by jetpax • v2.0.0</div>
+                <div class="scripto-description">WebREPL-safe memory test. Checks available RAM and tests it by allocating a specified size of memory.</div>
+                <div class="scripto-tags"><span class="scripto-tag">System</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Memory%2520Check.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jetpax" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>NTP Time Sync</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description"> This tool synchronizes the UTC date and time from an NTP server.
+                          You can choose the NTP server host to connect to.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/NTP%2520Time%2520Sync.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>OpenInverter UI</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Full OpenInverter web interface with WebREPL communication.
+                         
+                         This ScriptO provides:
+                         • Full parameter display and editing
+                         • Real-time data visualization
+                         • CAN mapping management
+                         • Direct integration with OpenInverter via CAN bus
+                         
+                         The UI is served from /oi_ui/ directory and opens in a
+                         Studio modal. Communication happens via WebREPL using the
+                         existing OI_helpers functions - no REST API needed!
+                         
+                         Currently uses demo data from OI_helpers.py.
+                         For live hardware: enable CAN bus initialization below.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">UI Plugins</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/OpenInverter%2520UI.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>PWM & Lighting</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Uses a PWM on a GPIO and varies its duty cycle to make a led flash smoothly from 0 to 3.3V.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%2520%2526%2520Lighting.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>PWM & Servo Motor</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description"> Uses a PWM on a GPIO and drives a servo motor by varying its duty cycle.
+                          Several options are available to configure the servo motor, such as pulse frequency, pulse width and rotation time.   
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Hardware</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%2520%2526%2520Servo%2520Motor.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Script Object template </h3>
+                <div class="scripto-meta">by John Smith • v1.0.0</div>
+                <div class="scripto-description"> This template is a guide to developing Script Objects in MicroPython for your Scriptomator device.                          You just have a "dict" to place in your code file with the 2 commented lines above and below.                          You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the "args" class.
+                          Use a "list" type to propose a choice between all the GPIO pins of the ESP32.
+                          Also, use the "dict" type to propose a multiple choice via the "items" sub-tree.
+                          You will be able to write your test scripts very quickly!
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Templates</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ScriptOs%2520-%2520Template.py" class="btn btn-primary">Install</a>
+                    <a href="https://docs.micropython.org" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Stop Button Test</h3>
+                <div class="scripto-meta">by ScriptO Studio • v1.0.0</div>
+                <div class="scripto-description">Simple infinite counter to test the Stop button. Counts up forever until stopped.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Stop%2520Button%2520Test.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - Handler Direct</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Test httpserver.on() directly to diagnose routing.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Handler%2520Direct.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - Manual File Handler</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Manually implement file serving with httpserver.on().</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Manual%2520File%2520Handler.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Queue Cleanup Test</h3>
+                <div class="scripto-meta">by Jonathan E. Peace • v1.0.0</div>
+                <div class="scripto-description">Tests the queue cleanup refactor:
+                         - Static file serving with direct GIL
+                         - WebREPL file transfers with direct GIL
+                         - Concurrent operations
+                         - Memory usage verification
+                         
+                         This verifies that file I/O uses direct GIL acquisition
+                         instead of queuing, improving performance and simplicity.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Queue%2520Cleanup.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - VFS Diagnostics</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Diagnose VFS mount points and filesystem structure.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520VFS%2520Diagnostics.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - WebFiles Clean</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Clean test of webfiles with proper unregistration.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Clean.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - WebFiles Diagnostic</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Check if webfiles handler gets called at all.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Diagnostic.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - WebFiles Gzip</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Tests automatic gzip compression support in webfiles module.
+                         Creates both regular and .gz versions of test files.
+                         When client sends "Accept-Encoding: gzip", the .gz version is served automatically.
+                         This tests the new direct GIL file serving with mp_vfs_stat() gzip resolution.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Tests/WebFiles</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Gzip.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - WebFiles Minimal</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Minimal test - create one file and serve it.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Minimal.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - WebFiles Serving</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Test script to verify webfiles.serve() works correctly.
+                         
+                         This ScriptO:
+                         1. Creates /test_webfiles/ directory via Python VFS
+                         2. Creates a simple test.html file via Python VFS
+                         3. Finds correct ESP-IDF VFS mount point
+                         4. Serves it via webfiles.serve() (READ-ONLY)
+                         5. Opens it in Studio modal
+                         
+                         IMPORTANT: webfiles uses ESP-IDF VFS directly,
+                         while Python uses MicroPython VFS. The actual
+                         filesystem is usually mounted at /flash in ESP-IDF.
+                         
+                         webfiles should ONLY READ files, never write,
+                         to avoid corrupting MicroPython VFS metadata.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Serving.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Test - WebFiles Simple</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.0</div>
+                <div class="scripto-description">Super simple webfiles test - no modal, just browse manually.
+                         
+                         Creates /test_simple/hello.html and tries to serve it.
+                         Prints URLs to test in your browser.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Simple.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>WebFiles Speed Test</h3>
+                <div class="scripto-meta">by ScriptOMatic • v1.0</div>
+                <div class="scripto-description">Measure file serving performance with various file sizes</div>
+                <div class="scripto-tags"><span class="scripto-tag">Testing</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520WebFiles%2520Speed%2520Test.py" class="btn btn-primary">Install</a>
+                    
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>UART Test</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description"> Initializes an UART bus on two GPIO, sends or not a custom command and receives data from the bus.
+                          You can choose bus identifier, baud rate, bits per character, parity, stop bits and TX/RX GPIO.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">Communication</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UART%2520Test.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>UI Plugin - Hello World</h3>
+                <div class="scripto-meta">by ScriptO Team • v1.0.1</div>
+                <div class="scripto-description">Minimal demonstration of the ScriptO UI Plugin Architecture.
+                         
+                         This ScriptO:
+                         • Registers an HTTP route that serves a self-contained HTML page
+                         • Sends a command to Studio to open the UI in a modal
+                         • The UI is served directly from your ESP32 device
+                         
+                         This proves the end-to-end plugin flow where ScriptOs can provide 
+                         their own web-based user interfaces without requiring any code changes 
+                         in ScriptO Studio.
+                         
+                         The UI appears in an iframe modal and communicates directly with the device.
+                      </div>
+                <div class="scripto-tags"><span class="scripto-tag">UI Plugins</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UI%2520Plugin%2520-%2520Hello%2520World.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jep-scriptomatic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+            <div class="scripto-card">
+                <h3>Wi-Fi Scan</h3>
+                <div class="scripto-meta">by JC`zic • v1.0.0</div>
+                <div class="scripto-description">Performs a detailed scan of the wireless access points.</div>
+                <div class="scripto-tags"><span class="scripto-tag">Network</span></div>
+                <div class="scripto-actions">
+                    <a href="?install=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Wi-Fi%2520Scan.py" class="btn btn-primary">Install</a>
+                    <a href="https://github.com/jczic" target="_blank" class="btn btn-secondary">Docs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Last updated: <span id="updated">2025-11-07 04:55:51 UTC</span></p>
+        <p><a href="https://github.com" style="color: #008184;">View on GitHub</a></p>
+    </div>
+    
+    <script>
+        const scriptos = [{"name": "1-Wire Devices Scan", "filename": "1-Wire Slaves Scan.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Initializes a 1-Wire bus on a single GPIO and finds all the family IDs and serial numbers of slave devices.", "tags": ["Communication"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/1-Wire%20Slaves%20Scan.py"}, {"name": "ADC Reader", "filename": "ADC Reader.py", "version": [1, 0, 0], "author": "JC`zic", "description": " Simple level and voltage reader on a GPIO using an analog-to-digital converter (ADC).\n                          You can specify the dB applied attenuation and the bits resolution.\n                      ", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ADC%20Reader.py"}, {"name": "BLE Scan", "filename": "BLE Scan.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Initializes the Bluetooth Low Energy radio and scans BLE devices via advertising data.", "tags": ["Network"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/BLE%20Scan.py"}, {"name": "BLE iBeacon", "filename": "BLE iBeacon.py", "version": [2, 0, 0], "author": "JC`zic", "description": "Initializes the Bluetooth Low Energy radio and simulates an Apple iBeacon object. The advertising message broadcasts an UUID corresponding to \"B.SCRIPTO_BEACON\" in binary with the short name \"ScriptOmator\" while the iBeacon is the response to an active scanner.\nThe iBeacon (Apple beacon format) data are:\nMajor = 123 \u00a0/\u00a0 Minor = 456 \u00a0/\u00a0 TX at 1 meter = -55 dB", "tags": ["Network"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/BLE%20iBeacon.py"}, {"name": "CAN/TWAI Loopback Test", "filename": "CAN Loopback Test.py", "version": [1, 0, 0], "author": "Scriptomatic Team", "description": "Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32's TWAI controller. For real CAN bus communication with OpenInverter, you'll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120\u03a9 termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.", "tags": ["CAN/TWAI"], "license": "MIT", "docs": "https://github.com/straga/micropython-esp32-twai", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/CAN%20Loopback%20Test.py"}, {"name": "DAC Output", "filename": "DAC Output.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Set a GPIO output to a specific voltage using digital-to-analog converter (DAC).", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/DAC%20Output.py"}, {"name": "GPIO Input", "filename": "GPIO Input.py", "version": [1, 0, 0], "author": "JC`zic", "description": " Simple reader of low/high voltage signals on a GPIO (pin) input.\n                          You can enable an internal pull resistor or not.\n                      ", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/GPIO%20Input.py"}, {"name": "GPIO Output", "filename": "GPIO Output.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Set a GPIO (pin) output to ON or OFF.", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/GPIO%20Output.py"}, {"name": "I2C Slaves Scan", "filename": "I2C Slaves Scan.py", "version": [1, 0, 0], "author": "JC`zic", "description": " Initializes an I2C bus on two GPIO and scans it to find all the addresses of I2C slaves.\n                          You can choose the bus identifier, the SCL and SDA GPIO as well as the frequency in MHz.\n                      ", "tags": ["Communication"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/I2C%20Slaves%20Scan.py"}, {"name": "KT403A MP3 Player", "filename": "KT403A MP3 Player.py", "version": [1, 0, 0], "author": "JC`zic", "description": "For MP3 modules based on KT403A chipset like DFPlayer, Grove-MP3 v2 and more.\nYou will be able to connect your board via an UART bus, play all the sound files in loop from the intended storage source (microSD, USB, flash memory), adjust the volume but also choose an audio EQ effect (normal, pop, rock, jazz, classic, bass). Info: KT403A supports MP3 & WAV audio formats on FAT16 or FAT32 files system, 32 GB max for microSD.", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/KT403A%20MP3%20Player.py"}, {"name": "LEDs - DotStar RGB Strip", "filename": "LEDs - DotStar Strip.py", "version": [1, 0, 0], "author": "JC`zic for the colors demo\nDamien P. George, Ladyada, Scott Shawcroft and Matt Trentini for the DotStar lib", "description": "Try your DotStar RGB LEDs via SPI bus, compatible with strips APA102, SK9822, and more. You can choose the number of LEDs as well as the bus connectivity settings and the lighting in full power or in fading rainbow. The embedded library can be found via the link below.", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/mattytrentini/micropython-dotstar", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/LEDs%20-%20DotStar%20Strip.py"}, {"name": "Magnet Sensor", "filename": "Magnet Sensor.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Allows to test the hall sensor of the ESP32 chip with detection of the two magnetic poles after automatic calibration.", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Magnet%20Sensor.py"}, {"name": "Max Threads", "filename": "Max Threads.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Returns the maximum number of possible threads to create with the configurable stack size.", "tags": ["System"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Max%20Threads.py"}, {"name": "Memory Check", "filename": "Memory Check.py", "version": [2, 0, 0], "author": "jetpax", "description": "WebREPL-safe memory test. Checks available RAM and tests it by allocating a specified size of memory.", "tags": ["System"], "license": "MIT", "docs": "https://github.com/jetpax", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Memory%20Check.py"}, {"name": "NTP Time Sync", "filename": "NTP Time Sync.py", "version": [1, 0, 0], "author": "JC`zic", "description": " This tool synchronizes the UTC date and time from an NTP server.\n                          You can choose the NTP server host to connect to.\n                      ", "tags": ["Network"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/NTP%20Time%20Sync.py"}, {"name": "OpenInverter UI", "filename": "OpenInverter UI.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Full OpenInverter web interface with WebREPL communication.\n                         \n                         This ScriptO provides:\n                         \u2022 Full parameter display and editing\n                         \u2022 Real-time data visualization\n                         \u2022 CAN mapping management\n                         \u2022 Direct integration with OpenInverter via CAN bus\n                         \n                         The UI is served from /oi_ui/ directory and opens in a\n                         Studio modal. Communication happens via WebREPL using the\n                         existing OI_helpers functions - no REST API needed!\n                         \n                         Currently uses demo data from OI_helpers.py.\n                         For live hardware: enable CAN bus initialization below.\n                      ", "tags": ["UI Plugins"], "license": "MIT", "docs": "https://github.com/jep-scriptomatic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/OpenInverter%20UI.py"}, {"name": "PWM & Lighting", "filename": "PWM & Lighting.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Uses a PWM on a GPIO and varies its duty cycle to make a led flash smoothly from 0 to 3.3V.", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%20%26%20Lighting.py"}, {"name": "PWM & Servo Motor", "filename": "PWM & Servo Motor.py", "version": [1, 0, 0], "author": "JC`zic", "description": " Uses a PWM on a GPIO and drives a servo motor by varying its duty cycle.\n                          Several options are available to configure the servo motor, such as pulse frequency, pulse width and rotation time.   \n                      ", "tags": ["Hardware"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%20%26%20Servo%20Motor.py"}, {"name": "Script Object template ", "filename": "ScriptOs - Template.py", "version": [1, 0, 0], "author": "John Smith", "description": " This template is a guide to developing Script Objects in MicroPython for your Scriptomator device.                          You just have a \"dict\" to place in your code file with the 2 commented lines above and below.                          You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the \"args\" class.\n                          Use a \"list\" type to propose a choice between all the GPIO pins of the ESP32.\n                          Also, use the \"dict\" type to propose a multiple choice via the \"items\" sub-tree.\n                          You will be able to write your test scripts very quickly!\n                      ", "tags": ["Templates"], "license": "MIT", "docs": "https://docs.micropython.org", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ScriptOs%20-%20Template.py"}, {"name": "Stop Button Test", "filename": "Stop Button Test.py", "version": [1, 0, 0], "author": "ScriptO Studio", "description": "Simple infinite counter to test the Stop button. Counts up forever until stopped.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Stop%20Button%20Test.py"}, {"name": "Test - Handler Direct", "filename": "Test - Handler Direct.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Test httpserver.on() directly to diagnose routing.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20Handler%20Direct.py"}, {"name": "Test - Manual File Handler", "filename": "Test - Manual File Handler.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Manually implement file serving with httpserver.on().", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20Manual%20File%20Handler.py"}, {"name": "Queue Cleanup Test", "filename": "Test - Queue Cleanup.py", "version": [1, 0, 0], "author": "Jonathan E. Peace", "description": "Tests the queue cleanup refactor:\n                         - Static file serving with direct GIL\n                         - WebREPL file transfers with direct GIL\n                         - Concurrent operations\n                         - Memory usage verification\n                         \n                         This verifies that file I/O uses direct GIL acquisition\n                         instead of queuing, improving performance and simplicity.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20Queue%20Cleanup.py"}, {"name": "Test - VFS Diagnostics", "filename": "Test - VFS Diagnostics.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Diagnose VFS mount points and filesystem structure.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20VFS%20Diagnostics.py"}, {"name": "Test - WebFiles Clean", "filename": "Test - WebFiles Clean.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Clean test of webfiles with proper unregistration.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Clean.py"}, {"name": "Test - WebFiles Diagnostic", "filename": "Test - WebFiles Diagnostic.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Check if webfiles handler gets called at all.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Diagnostic.py"}, {"name": "Test - WebFiles Gzip", "filename": "Test - WebFiles Gzip.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Tests automatic gzip compression support in webfiles module.\n                         Creates both regular and .gz versions of test files.\n                         When client sends \"Accept-Encoding: gzip\", the .gz version is served automatically.\n                         This tests the new direct GIL file serving with mp_vfs_stat() gzip resolution.\n                      ", "tags": ["Tests/WebFiles"], "license": "MIT", "docs": "https://github.com/scriptomatic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Gzip.py"}, {"name": "Test - WebFiles Minimal", "filename": "Test - WebFiles Minimal.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Minimal test - create one file and serve it.", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Minimal.py"}, {"name": "Test - WebFiles Serving", "filename": "Test - WebFiles Serving.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Test script to verify webfiles.serve() works correctly.\n                         \n                         This ScriptO:\n                         1. Creates /test_webfiles/ directory via Python VFS\n                         2. Creates a simple test.html file via Python VFS\n                         3. Finds correct ESP-IDF VFS mount point\n                         4. Serves it via webfiles.serve() (READ-ONLY)\n                         5. Opens it in Studio modal\n                         \n                         IMPORTANT: webfiles uses ESP-IDF VFS directly,\n                         while Python uses MicroPython VFS. The actual\n                         filesystem is usually mounted at /flash in ESP-IDF.\n                         \n                         webfiles should ONLY READ files, never write,\n                         to avoid corrupting MicroPython VFS metadata.\n                      ", "tags": ["Testing"], "license": "MIT", "docs": "https://github.com/jep-scriptomatic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Serving.py"}, {"name": "Test - WebFiles Simple", "filename": "Test - WebFiles Simple.py", "version": [1, 0, 0], "author": "ScriptO Team", "description": "Super simple webfiles test - no modal, just browse manually.\n                         \n                         Creates /test_simple/hello.html and tries to serve it.\n                         Prints URLs to test in your browser.\n                      ", "tags": ["Testing"], "license": "MIT", "docs": "https://github.com/jep-scriptomatic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Simple.py"}, {"name": "WebFiles Speed Test", "filename": "Test - WebFiles Speed Test.py", "version": [1, 0], "author": "ScriptOMatic", "description": "Measure file serving performance with various file sizes", "tags": ["Testing"], "license": "MIT", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20WebFiles%20Speed%20Test.py"}, {"name": "UART Test", "filename": "UART Test.py", "version": [1, 0, 0], "author": "JC`zic", "description": " Initializes an UART bus on two GPIO, sends or not a custom command and receives data from the bus.\n                          You can choose bus identifier, baud rate, bits per character, parity, stop bits and TX/RX GPIO.\n                      ", "tags": ["Communication"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UART%20Test.py"}, {"name": "UI Plugin - Hello World", "filename": "UI Plugin - Hello World.py", "version": [1, 0, 1], "author": "ScriptO Team", "description": "Minimal demonstration of the ScriptO UI Plugin Architecture.\n                         \n                         This ScriptO:\n                         \u2022 Registers an HTTP route that serves a self-contained HTML page\n                         \u2022 Sends a command to Studio to open the UI in a modal\n                         \u2022 The UI is served directly from your ESP32 device\n                         \n                         This proves the end-to-end plugin flow where ScriptOs can provide \n                         their own web-based user interfaces without requiring any code changes \n                         in ScriptO Studio.\n                         \n                         The UI appears in an iframe modal and communicates directly with the device.\n                      ", "tags": ["UI Plugins"], "license": "MIT", "docs": "https://github.com/jep-scriptomatic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UI%20Plugin%20-%20Hello%20World.py"}, {"name": "Wi-Fi Scan", "filename": "Wi-Fi Scan.py", "version": [1, 0, 0], "author": "JC`zic", "description": "Performs a detailed scan of the wireless access points.", "tags": ["Network"], "license": "MIT", "docs": "https://github.com/jczic", "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Wi-Fi%20Scan.py"}];
+        const allTags = ["CAN/TWAI", "Communication", "Hardware", "Network", "System", "Templates", "Testing", "Tests/WebFiles", "UI Plugins"];
+        
+        const searchInput = document.getElementById('search-input');
+        const tagFilters = document.querySelectorAll('.tag-filter');
+        const scriptosGrid = document.getElementById('scriptos-grid');
+        const statsCount = document.getElementById('count');
+        
+        let activeTag = 'all';
+        let searchQuery = '';
+        
+        function formatVersion(version) {
+            if (Array.isArray(version)) {
+                return version.join('.');
+            }
+            return version || '1.0.0';
+        }
+        
+        function matchesSearch(scripto, query) {
+            if (!query) return true;
+            const q = query.toLowerCase();
+            return (
+                scripto.name.toLowerCase().includes(q) ||
+                scripto.description.toLowerCase().includes(q) ||
+                scripto.author.toLowerCase().includes(q) ||
+                scripto.tags.some(tag => tag.toLowerCase().includes(q))
+            );
+        }
+        
+        function matchesTag(scripto, tag) {
+            if (tag === 'all') return true;
+            return scripto.tags.includes(tag);
+        }
+        
+        function filterScriptos() {
+            const filtered = scriptos.filter(s => 
+                matchesSearch(s, searchQuery) && matchesTag(s, activeTag)
+            );
+            
+            scriptosGrid.innerHTML = filtered.length > 0
+                ? filtered.map(s => generateCardHTML(s)).join('')
+                : '<div class="no-results"><h2>No ScriptOs found</h2><p>Try adjusting your search or filters</p></div>';
+            
+            statsCount.textContent = filtered.length;
+        }
+        
+        function generateCardHTML(scripto) {
+            const tags = scripto.tags.map(t => `<span class="scripto-tag">${t}</span>`).join('');
+            const version = formatVersion(scripto.version);
+            const installUrl = `?install=${encodeURIComponent(scripto.url)}`;
+            const docsLink = scripto.docs ? `<a href="${scripto.docs}" target="_blank" class="btn btn-secondary">Docs</a>` : '';
+            
+            return `
+                <div class="scripto-card">
+                    <h3>${scripto.name}</h3>
+                    <div class="scripto-meta">
+                        by ${scripto.author || 'Unknown'} • v${version}
+                    </div>
+                    <div class="scripto-description">${scripto.description}</div>
+                    <div class="scripto-tags">${tags}</div>
+                    <div class="scripto-actions">
+                        <a href="${installUrl}" class="btn btn-primary">Install</a>
+                        ${docsLink}
+                    </div>
+                </div>
+            `;
+        }
+        
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            filterScriptos();
+        });
+        
+        tagFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                tagFilters.forEach(f => f.classList.remove('active'));
+                filter.classList.add('active');
+                activeTag = filter.dataset.tag;
+                filterScriptos();
+            });
+        });
+        
+        // Set "All" as active by default
+        document.querySelector('[data-tag="all"]').classList.add('active');
+    </script>
+</body>
+</html>
