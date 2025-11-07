@@ -12,9 +12,9 @@ dict(
         version     = [1, 1, 0],
         category    = 'Hardware',
         description = 'NeoPixel RGB LEDs demo, compatible with strips WS2812(B), SK6812, ADAxxxx, APA106, FLORA and more. ' \
-                    + 'You can choose rainbow fade animation or static white, as well as the number and type of LEDs,' \
-                    + 'brightness, fade speed, RGB protocol and LED frequency.' \
-                    + 'The script is interruptible and can be stopped with the Stop button or disconnect.', \
+                    + 'You can choose rainbow fade animation or static white, as well as the number and type of LEDs, ' \
+                    + 'brightness, fade speed, RGB protocol and LED frequency. ' \
+                    + 'The script is interruptible and can be stopped with the Stop button or disconnect. ' \
                     + 'The NeoPixel library was coded by Damien P. George.',
         author      = 'jetPax from code by JC`zic',
     ),
