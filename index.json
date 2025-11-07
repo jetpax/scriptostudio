@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1762520735,
+  "updated": 1762524957,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -188,6 +188,22 @@
       "license": "MIT",
       "docs": "https://github.com/mattytrentini/micropython-dotstar",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/LEDs%20-%20DotStar%20Strip.py"
+    },
+    {
+      "name": "LEDs - NeoPixel RGB(+W/Y) Strip (Interruptible)",
+      "filename": "LEDs - NeoPixel Strip.py",
+      "version": [
+        1,
+        1,
+        0
+      ],
+      "author": "jetPax from code by JC`zic",
+      "description": "NeoPixel RGB LEDs demo, compatible with strips WS2812(B), SK6812, ADAxxxx, APA106, FLORA and more. You can choose rainbow fade animation or static white, as well as the number and type of LEDs, brightness, fade speed, RGB protocol and LED frequency. The script is interruptible and can be stopped with the Stop button or disconnect. The NeoPixel library was coded by Damien P. George.",
+      "tags": [
+        "Hardware"
+      ],
+      "license": "MIT",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/LEDs%20-%20NeoPixel%20Strip.py"
     },
     {
       "name": "Magnet Sensor",
