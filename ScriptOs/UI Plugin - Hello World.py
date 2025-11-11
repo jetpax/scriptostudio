@@ -187,8 +187,8 @@ def hello_ui(uri, post_data=None):
         
         <div class="info-box">
             <p><strong>Device IP:</strong> <code>""" + _device_ip + """</code></p>
-            <p><strong>Served via:</strong> HTTP Server on ESP32</p>
-            <p><strong>Protocol:</strong> Iframe (no CORS issues)</p>
+            <p><strong>Served via:</strong> HTTP/HTTPS Server on ESP32</p>
+            <p><strong>Protocol:</strong> Iframe (auto-detects HTTP/HTTPS)</p>
         </div>
         
         <div class="feature-list">
@@ -273,7 +273,9 @@ except Exception as e:
 
 # Send DISPLAY-UI command to Studio
 try:
-    url = f'http://{ip}/hello_ui'
+    # Use helper to get URL with correct protocol (auto-detects HTTPS)
+    from lib.client_helpers import getDeviceURL
+    url = getDeviceURL('/hello_ui')
     title = args.ui_title  # Use the user-configured title
     
     result = webrepl.display_ui(url, title)
