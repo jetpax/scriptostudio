@@ -407,7 +407,9 @@ except Exception as e:
 
 # Trigger Studio modal
 try:
-    url = f'http://{ip}/oi_ui/index.html'
+    # Use helper to get URL with correct protocol (auto-detects HTTPS)
+    from lib.client_helpers import getDeviceURL
+    url = getDeviceURL('/oi_ui/index.html')
     title = args.ui_title
     
     result = webrepl.display_ui(url, title)
