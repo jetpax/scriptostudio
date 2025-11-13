@@ -58,7 +58,7 @@ class OpenInverterApp {
   renderParameters() {
     // Load parameters if not already loaded
     if (!this.state.oiParameters && !this.state.isLoadingOiParameters && this.state.isConnected) {
-      this.emit('refresh-oi-parameters')
+      this.refreshParameters()
     }
 
     return html`
@@ -259,7 +259,7 @@ class OpenInverterApp {
    */
   renderSpotvalues() {
     if (!this.state.oiSpotValues && !this.state.isLoadingOiSpotValues && this.state.isConnected) {
-      this.emit('refresh-oi-spotvalues')
+      this.refreshSpotValues()
     }
 
     return html`
