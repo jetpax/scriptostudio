@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 1, 7],
+//   "version": [0, 1, 8],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -300,6 +300,13 @@ class OpenInverterApp {
   }
 
   renderSpotValuesContent() {
+    console.log('[OI App] renderSpotValuesContent - state:', {
+      isConnected: this.state.isConnected,
+      isLoading: this.state.isLoadingOiSpotValues,
+      hasSpotValues: !!this.state.oiSpotValues,
+      spotValuesKeys: this.state.oiSpotValues ? Object.keys(this.state.oiSpotValues) : []
+    })
+    
     if (!this.state.isConnected) {
       return html`
         <div class="panel-message">
