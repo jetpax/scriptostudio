@@ -46,8 +46,11 @@ class OpenInverterApp {
   }
 
   async getSpotValues() {
+    console.log('[OI App] Fetching spot values...')
     const result = await this.device.execute('from lib.OI_helpers import getSpotValues; getSpotValues()')
+    console.log('[OI App] Raw spot values result:', result)
     const parsed = this.device.parseJSON(result)
+    console.log('[OI App] Parsed spot values:', parsed)
     return parsed.ARG || parsed
   }
 
