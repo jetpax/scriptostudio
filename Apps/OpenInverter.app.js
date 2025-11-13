@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 2, 0],
+//   "version": [0, 2, 1],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -486,6 +486,10 @@ class OpenInverterApp {
     }
 
     if (!this.state.oiSpotValues) {
+      // Auto-load spot values if not already loaded
+      if (!this.state.isLoadingOiSpotValues) {
+        setTimeout(() => this.refreshSpotValues(), 0)
+      }
       return this.html`
         <div class="panel-message">
           <p>Loading spot values...</p>
