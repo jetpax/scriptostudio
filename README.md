@@ -1,6 +1,6 @@
 # ScriptO Registry
 
-A browsable registry of ScriptOs for MicroPython, automatically built and published to GitHub Pages.
+A browsable registry of ScriptOs and Apps for ScriptO Studio.
 
 ## Structure
 
