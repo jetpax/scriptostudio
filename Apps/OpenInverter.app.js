@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 2, 2],
+//   "version": [0, 2, 3],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -663,7 +663,6 @@ class OpenInverterApp {
 
     try {
       const varNames = this.state.plotState.selectedVars
-      console.log('[OI Plot] Acquiring data for variables:', varNames)
       
       if (!varNames || varNames.length === 0) {
         console.error('[OI Plot] No variables selected!')
@@ -672,11 +671,8 @@ class OpenInverterApp {
       }
       
       const argsStr = JSON.stringify(varNames)
-      console.log('[OI Plot] Sending command:', `getPlotData(${argsStr})`)
       const result = await this.device.execute(`from lib.OI_helpers import getPlotData; getPlotData(${argsStr})`)
-      console.log('[OI Plot] Raw result:', result)
       const parsed = this.device.parseJSON(result)
-      console.log('[OI Plot] Parsed result:', parsed)
       const data = parsed.ARG || parsed
 
       if (data && data.values) {
