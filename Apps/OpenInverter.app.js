@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 1, 9],
+//   "version": [0, 1, 10],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -342,21 +342,29 @@ class OpenInverterApp {
     
     return this.html`
       <div class="oi-spotvalues-container">
-        ${Object.entries(categories).map(([category, spots]) => this.html`
-          <div class="oi-category-section">
-            <h3 class="oi-category-title">${category}</h3>
-            <div class="oi-spotvalues-grid">
-              ${spots.map(spot => this.html`
-                <div class="oi-spotvalue-card">
-                  <div class="oi-spotvalue-name">${spot.name}</div>
-                  <div class="oi-spotvalue-value">
-                    ${spot.value} ${spot.unit || ''}
-                  </div>
-                </div>
-              `)}
-            </div>
-          </div>
-        `)}
+        ${Object.entries(categories).map(([category, spots]) => this.renderSpotValueCategory(category, spots))}
+      </div>
+    `
+  }
+  
+  renderSpotValueCategory(category, spots) {
+    return this.html`
+      <div class="oi-category-section">
+        <h3 class="oi-category-title">${category}</h3>
+        <div class="oi-spotvalues-grid">
+          ${spots.map(spot => this.renderSpotValueCard(spot))}
+        </div>
+      </div>
+    `
+  }
+  
+  renderSpotValueCard(spot) {
+    return this.html`
+      <div class="oi-spotvalue-card">
+        <div class="oi-spotvalue-name">${spot.name}</div>
+        <div class="oi-spotvalue-value">
+          ${spot.value} ${spot.unit || ''}
+        </div>
       </div>
     `
   }
