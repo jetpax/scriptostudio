@@ -290,8 +290,22 @@ def parse_scripto_file(file_path, repo_url=None, branch='main'):
         category = info.get('category', '')
         www = info.get('www', '')
         
-        # Convert category to tags (single-item list)
-        tags = [category] if category else []
+        # Extract new fields for converted libraries
+        tags_from_info = info.get('tags', [])
+        source_url = info.get('source_url', None)
+        source_repo = info.get('source_repo', None)
+        upstream_version = info.get('upstream_version', None)
+        license_type = info.get('license', 'MIT')
+        
+        # Build tags list (merge category and explicit tags)
+        tags = []
+        if category:
+            tags.append(category.lower())
+        if isinstance(tags_from_info, list):
+            tags.extend([t.lower() for t in tags_from_info if t.lower() not in tags])
+        elif isinstance(tags_from_info, str):
+            if tags_from_info.lower() not in tags:
+                tags.append(tags_from_info.lower())
         
         # Generate URL
         if repo_url:
@@ -313,8 +327,12 @@ def parse_scripto_file(file_path, repo_url=None, branch='main'):
             "version": version,
             "author": author,
             "description": description,
-            "tags": tags,
-            "license": "MIT",  # Default, could be extracted from file header
+            "category": category if category else None,
+            "tags": tags if tags else None,
+            "license": license_type,
+            "source_url": source_url,
+            "source_repo": source_repo,
+            "upstream_version": upstream_version,
             "docs": www if www else None,
             "url": url
         }
