@@ -56,8 +56,12 @@ The `index.json` file contains:
       "version": [1, 0, 0],
       "author": "Author Name",
       "description": "Description",
+      "category": "Category",
       "tags": ["tag1", "tag2"],
       "license": "MIT",
+      "source_url": "https://...",
+      "source_repo": "owner/repo",
+      "upstream_version": "1.2.3",
       "docs": "https://...",
       "url": "https://raw.githubusercontent.com/..."
     }
@@ -65,11 +69,58 @@ The `index.json` file contains:
 }
 ```
 
+**Extended Fields for Converted Libraries:**
+- `source_url` - Original library URL
+- `source_repo` - GitHub repository (owner/repo)
+- `upstream_version` - Latest version from source
+- `tags` - Includes category + custom tags + `untested` + `awesome-micropython`
+
 ## Adding ScriptOs
+
+### Manual Addition
 
 1. Add your `.py` file to the `ScriptOs/` directory
 2. Ensure it has a config block between `# === START_CONFIG_PARAMETERS ===` and `# === END_CONFIG_PARAMETERS ===`
 3. Push to GitHub - the workflow will automatically build and publish
+
+### Automated Conversion
+
+Use the conversion tool to import libraries from Awesome MicroPython:
+
+```bash
+cd tools
+python3 convert_awesome_mp.py
+```
+
+**Interactive Mode:**
+```bash
+$ python3 convert_awesome_mp.py
+Enter GitHub repository URL: https://github.com/adafruit/Adafruit_CircuitPython_SSD1306
+Enter category (e.g., Display, Sensor, Communications): Display
+```
+
+**Batch Mode:**
+```python
+# Create a list of repos to convert
+repos = [
+    ("https://github.com/adafruit/Adafruit_CircuitPython_SSD1306", "Display"),
+    ("https://github.com/peterhinch/micropython-mqtt", "Communications"),
+]
+
+# Run converter
+for url, category in repos:
+    # Manual or scripted conversion
+    pass
+```
+
+**Update Checking:**
+```bash
+# Check all converted libraries for updates
+python3 check_updates.py
+
+# Show only libraries with updates available
+python3 check_updates.py --update-available
+```
 
 ## GitHub Pages
 
