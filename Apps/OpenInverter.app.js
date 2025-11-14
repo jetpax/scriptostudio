@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 2, 3],
+//   "version": [0, 2, 4],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -676,6 +676,13 @@ class OpenInverterApp {
       const data = parsed.ARG || parsed
 
       if (data && data.values) {
+        // Check if chart still exists (canvas might have been destroyed during re-render)
+        if (!this.state.plotState.chart || !this.state.plotState.chart.canvas || !document.body.contains(this.state.plotState.chart.canvas)) {
+          console.warn('[OI Plot] Chart canvas destroyed, re-initializing...')
+          this.initializeChart()
+          return // Let next cycle update the data
+        }
+
         // Add new data point
         this.state.plotState.dataTime++
         this.state.plotState.chart.data.labels.push(this.state.plotState.dataTime)
