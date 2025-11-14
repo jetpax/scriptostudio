@@ -22,7 +22,8 @@ import os
 import sys
 import json
 import argparse
-import requests
+import urllib.request
+import urllib.error
 from pathlib import Path
 from datetime import datetime
 
@@ -59,31 +60,37 @@ def get_latest_github_version(source_repo):
     try:
         # Try to get latest release first
         releases_url = f"{GITHUB_API}/repos/{source_repo}/releases/latest"
-        response = requests.get(releases_url, headers=get_github_api_headers())
+        req = urllib.request.Request(releases_url, headers=get_github_api_headers())
         
-        if response.status_code == 200:
-            release_data = response.json()
-            return {
-                'version': release_data['tag_name'],
-                'type': 'release',
-                'published_at': release_data['published_at'],
-                'url': release_data['html_url']
-            }
+        try:
+            with urllib.request.urlopen(req) as response:
+                release_data = json.loads(response.read().decode('utf-8'))
+                return {
+                    'version': release_data['tag_name'],
+                    'type': 'release',
+                    'published_at': release_data['published_at'],
+                    'url': release_data['html_url']
+                }
+        except urllib.error.HTTPError:
+            pass
         
         # If no releases, get latest commit
         commits_url = f"{GITHUB_API}/repos/{source_repo}/commits"
-        response = requests.get(commits_url, headers=get_github_api_headers())
+        req = urllib.request.Request(commits_url, headers=get_github_api_headers())
         
-        if response.status_code == 200:
-            commits = response.json()
-            if commits:
-                latest_commit = commits[0]
-                return {
-                    'version': latest_commit['sha'][:7],
-                    'type': 'commit',
-                    'published_at': latest_commit['commit']['committer']['date'],
-                    'url': latest_commit['html_url']
-                }
+        try:
+            with urllib.request.urlopen(req) as response:
+                commits = json.loads(response.read().decode('utf-8'))
+                if commits:
+                    latest_commit = commits[0]
+                    return {
+                        'version': latest_commit['sha'][:7],
+                        'type': 'commit',
+                        'published_at': latest_commit['commit']['committer']['date'],
+                        'url': latest_commit['html_url']
+                    }
+        except urllib.error.HTTPError:
+            pass
         
         return None
         

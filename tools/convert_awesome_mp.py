@@ -24,7 +24,8 @@ import sys
 import re
 import json
 import argparse
-import requests
+import urllib.request
+import urllib.error
 from pathlib import Path
 from urllib.parse import urlparse
 import base64
@@ -111,51 +112,57 @@ def get_github_api_headers():
 def fetch_repo_info(owner, repo):
     """Fetch repository information from GitHub API"""
     url = f"{GITHUB_API}/repos/{owner}/{repo}"
-    response = requests.get(url, headers=get_github_api_headers())
+    req = urllib.request.Request(url, headers=get_github_api_headers())
     
-    if response.status_code == 404:
-        raise ValueError(f"Repository not found: {owner}/{repo}")
-    elif response.status_code != 200:
-        raise ValueError(f"GitHub API error: {response.status_code} - {response.text}")
-    
-    return response.json()
+    try:
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            return data
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            raise ValueError(f"Repository not found: {owner}/{repo}")
+        else:
+            raise ValueError(f"GitHub API error: {e.code} - {e.reason}")
 
 
 def fetch_repo_readme(owner, repo):
     """Fetch README content from GitHub"""
     url = f"{GITHUB_API}/repos/{owner}/{repo}/readme"
-    response = requests.get(url, headers=get_github_api_headers())
+    req = urllib.request.Request(url, headers=get_github_api_headers())
     
-    if response.status_code == 200:
-        readme_data = response.json()
-        # README is base64 encoded
-        content = base64.b64decode(readme_data['content']).decode('utf-8')
-        return content
-    
-    return None
+    try:
+        with urllib.request.urlopen(req) as response:
+            readme_data = json.loads(response.read().decode('utf-8'))
+            # README is base64 encoded
+            content = base64.b64decode(readme_data['content']).decode('utf-8')
+            return content
+    except urllib.error.HTTPError:
+        return None
 
 
 def detect_license(owner, repo):
     """Detect license from GitHub API"""
     url = f"{GITHUB_API}/repos/{owner}/{repo}/license"""
-    response = requests.get(url, headers=get_github_api_headers())
+    req = urllib.request.Request(url, headers=get_github_api_headers())
     
-    if response.status_code == 200:
-        license_data = response.json()
-        return license_data.get('license', {}).get('spdx_id', 'Unknown')
-    
-    return 'Unknown'
+    try:
+        with urllib.request.urlopen(req) as response:
+            license_data = json.loads(response.read().decode('utf-8'))
+            return license_data.get('license', {}).get('spdx_id', 'Unknown')
+    except urllib.error.HTTPError:
+        return 'Unknown'
 
 
 def fetch_repo_contents(owner, repo, path=''):
     """Fetch repository contents (file listing)"""
     url = f"{GITHUB_API}/repos/{owner}/{repo}/contents/{path}"
-    response = requests.get(url, headers=get_github_api_headers())
+    req = urllib.request.Request(url, headers=get_github_api_headers())
     
-    if response.status_code == 200:
-        return response.json()
-    
-    return []
+    try:
+        with urllib.request.urlopen(req) as response:
+            return json.loads(response.read().decode('utf-8'))
+    except urllib.error.HTTPError:
+        return []
 
 
 def find_main_python_file(owner, repo):
@@ -183,14 +190,19 @@ def find_main_python_file(owner, repo):
 
 def fetch_file_content(file_info):
     """Fetch file content from GitHub"""
-    if file_info['encoding'] == 'base64':
+    # Check if content is embedded (base64 encoded)
+    if 'content' in file_info and file_info.get('encoding') == 'base64':
         content = base64.b64decode(file_info['content']).decode('utf-8')
         return content
-    else:
-        # Fetch via download_url
-        response = requests.get(file_info['download_url'])
-        if response.status_code == 200:
-            return response.text
+    
+    # Otherwise fetch via download_url
+    if 'download_url' in file_info:
+        try:
+            with urllib.request.urlopen(file_info['download_url']) as response:
+                return response.read().decode('utf-8')
+        except Exception as e:
+            print(f"  ⚠ Error fetching file: {e}")
+            return None
     
     return None
 
@@ -350,12 +362,14 @@ def convert_library(github_url, output_dir='ScriptOs', category=None):
         # Get latest version/tag
         try:
             tags_url = f"{GITHUB_API}/repos/{owner}/{repo}/tags"
-            tags_response = requests.get(tags_url, headers=get_github_api_headers())
-            if tags_response.status_code == 200 and tags_response.json():
-                upstream_version = tags_response.json()[0]['name']
-            else:
-                # Use latest commit as version
-                upstream_version = repo_info.get('default_branch', 'main')
+            tags_req = urllib.request.Request(tags_url, headers=get_github_api_headers())
+            with urllib.request.urlopen(tags_req) as tags_response:
+                tags_data = json.loads(tags_response.read().decode('utf-8'))
+                if tags_data:
+                    upstream_version = tags_data[0]['name']
+                else:
+                    # Use latest commit as version
+                    upstream_version = repo_info.get('default_branch', 'main')
         except:
             upstream_version = 'main'
         
