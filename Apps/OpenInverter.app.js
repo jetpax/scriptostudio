@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 2, 6],
+//   "version": [0, 2, 7],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -72,42 +72,27 @@ class OpenInverterApp {
           <h2>Parameters</h2>
           <div class="panel-actions oi-button-row">
             <button 
-              class="secondary-button" 
+              class="refresh-button" 
               onclick=${() => this.loadParametersFromFile()}
               title="Load parameters from local JSON file"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              <span>Load from File</span>
+              Load from File
             </button>
             <button 
-              class="secondary-button" 
+              class="refresh-button" 
               onclick=${() => this.refreshParameters()}
               disabled=${!this.state.isConnected}
               title="Load parameters from connected device"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="23 4 23 10 17 10"/>
-                <polyline points="1 20 1 14 7 14"/>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-              </svg>
-              <span>Load from Device</span>
+              Load from Device
             </button>
             <button 
-              class="primary-button" 
+              class="refresh-button" 
               onclick=${() => this.saveParametersToFile()}
               disabled=${!this.state.oiParameters}
               title="Save parameters to local JSON file"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                <polyline points="17 21 17 13 7 13 7 21"/>
-                <polyline points="7 3 7 8 15 8"/>
-              </svg>
-              <span>Save to File</span>
+              Save to File
             </button>
           </div>
         </div>
