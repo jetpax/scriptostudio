@@ -153,7 +153,7 @@ def extract_app_config_block(file_content):
         print(f"Warning: Failed to parse app config JSON: {e}")
         return None
 
-def parse_app_file(file_path, repo_url=None, branch='main'):
+def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
     """Parse an App .js file and extract metadata"""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -166,6 +166,13 @@ def parse_app_file(file_path, repo_url=None, branch='main'):
         
         filename = file_path.name
         
+        # Determine the app's directory structure (relative to Apps/)
+        if apps_base_dir:
+            rel_path = file_path.relative_to(apps_base_dir)
+            app_dir = rel_path.parent
+        else:
+            app_dir = Path('.')
+        
         # Extract metadata
         name = config.get('name', filename.replace('.app.js', ''))
         app_id = config.get('id', name.lower().replace(' ', '-'))
@@ -175,16 +182,60 @@ def parse_app_file(file_path, repo_url=None, branch='main'):
         icon = config.get('icon', 'sliders')
         menu = config.get('menu', [])
         styles = config.get('styles', '')
+        dependencies_config = config.get('dependencies', [])
         
-        # Generate URL
+        # Generate URL for main app file
         if repo_url:
             # GitHub raw URL
             if 'raw.githubusercontent.com' in repo_url:
-                url = f"{repo_url}/{branch}/Apps/{quote(filename)}"
+                url = f"{repo_url}/{branch}/Apps/{str(rel_path).replace(os.sep, '/')}"
             else:
-                url = f"{repo_url}/raw/{branch}/Apps/{quote(filename)}"
+                url = f"{repo_url}/raw/{branch}/Apps/{str(rel_path).replace(os.sep, '/')}"
         else:
-            url = f"/Apps/{quote(filename)}"
+            url = f"/Apps/{str(rel_path).replace(os.sep, '/')}"
+        
+        # Process dependencies
+        dependencies = []
+        for dep_config in dependencies_config:
+            dep_file = dep_config.get('file', '')
+            dep_dest = dep_config.get('destination', '')
+            dep_desc = dep_config.get('description', '')
+            
+            if not dep_file:
+                continue
+            
+            # Resolve dependency file path (relative to app directory)
+            dep_path = file_path.parent / dep_file
+            
+            if not dep_path.exists():
+                print(f"  ⚠ Dependency file not found: {dep_path}")
+                continue
+            
+            # Read dependency file content
+            try:
+                with open(dep_path, 'r', encoding='utf-8') as df:
+                    dep_content = df.read()
+            except Exception as e:
+                print(f"  ⚠ Error reading dependency {dep_file}: {e}")
+                continue
+            
+            # Generate URL for dependency file
+            if repo_url:
+                dep_rel_path = dep_path.relative_to(apps_base_dir) if apps_base_dir else Path(app_dir) / dep_file
+                if 'raw.githubusercontent.com' in repo_url:
+                    dep_url = f"{repo_url}/{branch}/Apps/{str(dep_rel_path).replace(os.sep, '/')}"
+                else:
+                    dep_url = f"{repo_url}/raw/{branch}/Apps/{str(dep_rel_path).replace(os.sep, '/')}"
+            else:
+                dep_url = f"/Apps/{str(app_dir / dep_file).replace(os.sep, '/')}"
+            
+            dependencies.append({
+                "file": dep_file,
+                "destination": dep_dest,
+                "description": dep_desc,
+                "content": dep_content,
+                "url": dep_url
+            })
         
         # Build App entry
         app_entry = {
@@ -200,10 +251,16 @@ def parse_app_file(file_path, repo_url=None, branch='main'):
             "url": url
         }
         
+        # Add dependencies if any
+        if dependencies:
+            app_entry["dependencies"] = dependencies
+        
         return app_entry
         
     except Exception as e:
         print(f"  ✗ Error parsing {file_path.name}: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 def parse_scripto_file(file_path, repo_url=None, branch='main'):
@@ -297,18 +354,19 @@ def build_index(scriptos_dir=SCRIPTOS_DIR, apps_dir=APPS_DIR, output_file=OUTPUT
         if entry:
             scriptos.append(entry)
     
-    # Scan Apps
+    # Scan Apps (including subdirectories)
     apps = []
     if apps_path.exists():
         print(f"\nScanning {apps_dir}...")
-        js_files = list(apps_path.glob('*.app.js'))
+        # Search recursively for .app.js files in subdirectories
+        js_files = list(apps_path.glob('**/*.app.js'))
         
         if js_files:
             print(f"Found {len(js_files)} App files")
             
             for js_file in sorted(js_files):
                 print(f"Processing {js_file.name}...")
-                entry = parse_app_file(js_file, repo_url, branch)
+                entry = parse_app_file(js_file, repo_url, branch, apps_base_dir=apps_path)
                 if entry:
                     apps.append(entry)
         else:

@@ -2,10 +2,17 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 2, 9],
+//   "version": [0, 3, 0],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
+//   "dependencies": [
+//     {
+//       "file": "lib/OI_helpers.py",
+//       "destination": "/lib/OI_helpers.py",
+//       "description": "OpenInverter parameter and CAN mapping helpers"
+//     }
+//   ],
 //   "menu": [
 //     { "id": "parameters", "label": "Parameters", "icon": "sliders" },
 //     { "id": "spotvalues", "label": "Spot Values", "icon": "activity" },
