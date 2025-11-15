@@ -181,7 +181,7 @@ def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
         description = config.get('description', '')
         icon = config.get('icon', 'sliders')
         menu = config.get('menu', [])
-        styles = config.get('styles', '')
+        # Note: styles are not extracted for index.json (loaded from full .app.js instead)
         dependencies_config = config.get('dependencies', [])
         
         # Generate URL for main app file
@@ -238,6 +238,8 @@ def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
             })
         
         # Build App entry
+        # Note: styles are excluded from index.json as they're unused
+        # The actual CSS is loaded from the full .app.js file when the app is installed
         app_entry = {
             "name": name,
             "id": app_id,
@@ -247,7 +249,6 @@ def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
             "description": description,
             "icon": icon,
             "menu": menu,
-            "styles": styles,
             "url": url
         }
         

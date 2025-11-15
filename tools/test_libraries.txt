@@ -1,0 +1,17 @@
+# Test Libraries for Conversion
+# Format: github-url [category]
+
+# Popular sensor libraries
+https://github.com/adafruit/Adafruit_CircuitPython_BME280 Sensors
+https://github.com/adafruit/Adafruit_CircuitPython_DHT Sensors
+
+# Display libraries
+https://github.com/adafruit/Adafruit_CircuitPython_SSD1306 Display
+
+# LED libraries
+https://github.com/adafruit/Adafruit_CircuitPython_NeoPixel LEDs
+
+# Communication
+https://github.com/peterhinch/micropython-mqtt Communications
+
+

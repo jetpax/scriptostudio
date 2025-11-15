@@ -11,6 +11,10 @@ test-index.json
 test-catalogue/
 dist/
 
+# Generated files (built by CI, deployed to gh-pages)
+index.json
+catalogue/
+
 # OS
 .DS_Store
 Thumbs.db
