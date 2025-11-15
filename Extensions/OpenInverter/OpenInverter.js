@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 5, 2],
+//   "version": [0, 5, 3],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -916,10 +916,10 @@ class OpenInverterExtension {
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <h4 style="font-size: 14px; margin: 0; color: var(--text-secondary);">Scan CAN Bus for Devices</h4>
                 <button 
-                  class="refresh-button" 
+                  class="primary-button" 
                   onclick=${() => this.scanCanBus()}
                   disabled=${!this.state.isConnected || this.state.isScanning}
-                  style="padding: 6px 12px; font-size: 13px;">
+                  style="padding: 8px 16px; font-size: 13px;">
                   ${this.state.isScanning ? 'Scanning...' : 'Scan CAN Bus'}
                 </button>
               </div>
@@ -1217,8 +1217,11 @@ class OpenInverterExtension {
   // === Connection Management Methods ===
 
   async scanCanBus() {
+    console.log('[OI Connection] ========== SCAN BUTTON CLICKED ==========')
     console.log('[OI Connection] Starting CAN bus scan...')
     console.log('[OI Connection] isConnected:', this.state.isConnected)
+    console.log('[OI Connection] device:', this.device)
+    console.log('[OI Connection] device.execute:', typeof this.device.execute)
     
     this.state.isScanning = true
     this.state.canScanResults = []
