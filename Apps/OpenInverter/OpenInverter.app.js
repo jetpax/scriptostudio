@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 4, 2],
+//   "version": [0, 4, 3],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -967,7 +967,9 @@ class OpenInverterApp {
 
       const errorResult = await this.device.execute('from lib.OI_helpers import getErrorLog; getErrorLog()')
       const errors = this.device.parseJSON(errorResult)
-      this.state.oiErrorLog = errors.ARG || errors || []
+      const errorList = errors.ARG || errors
+      // Ensure errorLog is always an array
+      this.state.oiErrorLog = Array.isArray(errorList) ? errorList : []
     } catch (error) {
       console.error('[OI App] Failed to load device info:', error)
       this.state.oiDeviceInfo = null

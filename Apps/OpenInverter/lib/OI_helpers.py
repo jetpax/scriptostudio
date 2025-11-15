@@ -1150,15 +1150,33 @@ def getDeviceInfo():
     Get device information (firmware version, uptime, etc).
     """
     if not device_connected or sdo_client is None:
-        _send_error("Device not connected", 'DEVICE-INFO-ERROR')
+        # Return demo data when not connected
+        demo_info = {
+            'connected': False,
+            'serialNumber': 'DEMO-DEVICE',
+            'nodeId': 1,
+            'bitrate': 500000,
+            'uptime': 123456
+        }
+        _send_response('DEVICE-INFO', demo_info)
         return
     
     try:
         info = {
             'connected': True,
-            'node_id': device_node_id,
+            'nodeId': device_node_id,
             'bitrate': device_bitrate
         }
+        
+        # Try to read serial number
+        try:
+            serial_parts = []
+            for i in range(3):
+                part = sdo_client.read(0x5000, i)
+                serial_parts.append(f"{part:08X}")
+            info['serialNumber'] = ":".join(serial_parts)
+        except:
+            info['serialNumber'] = 'Unknown'
         
         # Try to read uptime (common spot value)
         try:
@@ -1183,7 +1201,12 @@ def getErrorLog():
     Error times at SDO 0x2001, error codes at 0x2002.
     """
     if not device_connected or sdo_client is None:
-        _send_error("Device not connected", 'ERROR-LOG-ERROR')
+        # Return demo error log when not connected
+        demo_errors = [
+            {'timestamp': '2024-01-15 10:23:45', 'code': 'E001', 'description': 'Demo: Overvoltage warning'},
+            {'timestamp': '2024-01-15 09:12:33', 'code': 'W005', 'description': 'Demo: Temperature high'},
+        ]
+        _send_response('ERROR-LOG', demo_errors)
         return
     
     try:
@@ -1209,7 +1232,7 @@ def getErrorLog():
                 break
         
         print(f"[OI] Retrieved {len(errors)} error entries")
-        _send_response('ERROR-LOG', {'errors': errors})
+        _send_response('ERROR-LOG', errors)
     except Exception as e:
         _send_error(str(e), 'ERROR-LOG-ERROR')
 
