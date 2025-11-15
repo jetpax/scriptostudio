@@ -1,0 +1,54 @@
+name: Build Index
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'ScriptOs/**'
+      - 'Apps/**'
+      - 'tools/build_index.py'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for proper commits
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+    
+    - name: Build index.json
+      run: |
+        python3 tools/build_index.py \
+          --repo-url "https://github.com/${{ github.repository }}" \
+          --branch "${{ github.ref_name }}"
+    
+    - name: Check if index.json changed
+      id: check_changes
+      run: |
+        if git diff --quiet index.json; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No changes to index.json"
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "index.json has been updated"
+        fi
+    
+    - name: Commit and push if changed
+      if: steps.check_changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add index.json
+        git commit -m "Auto-update index.json [skip ci]"
+        git push
+
