@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763088436,
+  "updated": 1763178456,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -320,11 +320,11 @@
       "filename": "NTP Time Sync.py",
       "version": [
         1,
-        0,
+        1,
         0
       ],
       "author": "JC`zic",
-      "description": " This tool synchronizes the UTC date and time from an NTP server.\n                          You can choose the NTP server host to connect to.\n                      ",
+      "description": " This tool synchronizes the UTC date and time from an NTP server.\n                          You can choose the NTP server host to connect to and configure\n                          your timezone to display the correct local time.\n                      ",
       "category": "Network",
       "tags": [
         "network"
