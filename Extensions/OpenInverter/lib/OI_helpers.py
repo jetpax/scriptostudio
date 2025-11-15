@@ -1324,6 +1324,339 @@ def saveParameters():
 # CAN Bus Scanning
 # ============================================================================
 
+# ============================================================================
+# Firmware Upgrade Functions
+# ============================================================================
+
+# Global firmware upgrade state
+firmware_upgrade_state = {
+    'active': False,
+    'firmware_data': None,
+    'pages': [],
+    'current_page': 0,
+    'progress': 0.0,
+    'state': 'idle',  # idle, waiting_hello, waiting_start, uploading, checking_crc, done, error
+    'message': '',
+    'error': None,
+    'target_serial': None
+}
+
+# CAN IDs for firmware upgrade protocol
+DEVICE_CAN_ID = 0x7DE
+UPGRADER_CAN_ID = 0x7DD
+PAGE_SIZE = 1024
+
+# Device packet types
+PACKET_HELLO = 0x33   # '3'
+PACKET_START = 0x53   # 'S'
+PACKET_PAGE = 0x50    # 'P'
+PACKET_CRC = 0x43     # 'C'
+PACKET_DONE = 0x44    # 'D'
+PACKET_ERROR = 0x45   # 'E'
+
+
+def stm_crc32(data):
+    """
+    Compute CRC-32/MPEG-2 as expected by OpenInverter bootloader.
+    
+    Uses:
+    - width=32
+    - poly=0x04c11db7
+    - init=0xffffffff
+    - refin=false (not reflected)
+    - refout=false
+    - xorout=0 (no post-complement)
+    
+    Data is processed as little-endian 32-bit words.
+    """
+    crc = 0xffffffff
+    
+    # Process data in 4-byte (32-bit) chunks as little-endian words
+    for i in range(0, len(data), 4):
+        # Get 4 bytes as little-endian word
+        word = (data[i] | 
+                (data[i+1] << 8) | 
+                (data[i+2] << 16) | 
+                (data[i+3] << 24))
+        
+        crc = crc ^ word
+        
+        # Process 32 bits
+        for _ in range(32):
+            if crc & 0x80000000:
+                crc = ((crc << 1) ^ 0x04C11DB7) & 0xffffffff
+            else:
+                crc = (crc << 1) & 0xffffffff
+    
+    return crc
+
+
+def uploadFirmwareChunk(args):
+    """
+    Upload a chunk of firmware data to device memory.
+    This is called multiple times to transfer the entire firmware file.
+    """
+    chunk = args.get('chunk')
+    offset = args.get('offset', 0)
+    
+    if not chunk:
+        _send_error("No chunk data provided", 'FIRMWARE-UPLOAD-ERROR')
+        return
+    
+    # Store chunk in firmware data buffer
+    if firmware_upgrade_state['firmware_data'] is None:
+        firmware_upgrade_state['firmware_data'] = bytearray()
+    
+    # Extend buffer if needed
+    required_size = offset + len(chunk)
+    if len(firmware_upgrade_state['firmware_data']) < required_size:
+        firmware_upgrade_state['firmware_data'].extend(bytes(required_size - len(firmware_upgrade_state['firmware_data'])))
+    
+    # Write chunk data
+    firmware_upgrade_state['firmware_data'][offset:offset+len(chunk)] = bytes(chunk)
+    
+    print(f"[OI Firmware] Uploaded chunk at offset {offset}, size {len(chunk)}")
+    _send_success("Chunk uploaded", 'FIRMWARE-CHUNK-UPLOADED')
+
+
+def startFirmwareUpgrade(args):
+    """
+    Start the firmware upgrade process.
+    
+    Args:
+        recovery_mode: bool - If True, wait for any device to boot
+        serial_number: str - 8 hex digit serial (optional, for recovery mode)
+        node_id: int - Node ID to upgrade (for normal mode)
+    """
+    if not CAN_AVAILABLE or can_dev is None:
+        _send_error("CAN not available", 'FIRMWARE-UPGRADE-ERROR')
+        return
+    
+    recovery_mode = args.get('recovery_mode', False)
+    serial_number = args.get('serial_number')
+    node_id = args.get('node_id', device_node_id)
+    
+    # Validate firmware data
+    if not firmware_upgrade_state['firmware_data']:
+        _send_error("No firmware data uploaded", 'FIRMWARE-UPGRADE-ERROR')
+        return
+    
+    firmware_data = firmware_upgrade_state['firmware_data']
+    
+    # Validate firmware format
+    if firmware_data[0:4] == b'\x7fELF':
+        _send_error("ELF files not supported. Use .bin file", 'FIRMWARE-UPGRADE-ERROR')
+        return
+    
+    # Divide firmware into pages
+    pages = []
+    for i in range(0, len(firmware_data), PAGE_SIZE):
+        page_data = firmware_data[i:i+PAGE_SIZE]
+        # Pad last page to PAGE_SIZE
+        if len(page_data) < PAGE_SIZE:
+            page_data = page_data + bytes(PAGE_SIZE - len(page_data))
+        
+        # Calculate CRC for this page
+        page_crc = stm_crc32(page_data)
+        pages.append({
+            'data': page_data,
+            'crc': page_crc
+        })
+    
+    if len(pages) > 255:
+        _send_error("Firmware too large (max 255 KiB)", 'FIRMWARE-UPGRADE-ERROR')
+        return
+    
+    # Store upgrade state
+    firmware_upgrade_state['active'] = True
+    firmware_upgrade_state['pages'] = pages
+    firmware_upgrade_state['current_page'] = 0
+    firmware_upgrade_state['progress'] = 0.0
+    firmware_upgrade_state['state'] = 'waiting_hello'
+    firmware_upgrade_state['message'] = 'Waiting for device to boot...'
+    firmware_upgrade_state['error'] = None
+    firmware_upgrade_state['page_position'] = 0
+    
+    # Set target serial if provided
+    if recovery_mode and serial_number:
+        try:
+            firmware_upgrade_state['target_serial'] = bytes.fromhex(serial_number)
+        except:
+            _send_error("Invalid serial number format", 'FIRMWARE-UPGRADE-ERROR')
+            return
+    else:
+        firmware_upgrade_state['target_serial'] = None
+    
+    # If not recovery mode, reset the device to trigger bootloader
+    if not recovery_mode and sdo_client:
+        try:
+            # Send reset command
+            sdo_client.write(0x1000, 0x01, 1)  # Reset command
+            print("[OI Firmware] Device reset sent")
+        except Exception as e:
+            print(f"[OI Firmware] Failed to reset device: {e}")
+    
+    # Set up CAN filter for upgrade messages (0x7DE)
+    # TODO: Configure CAN filter for DEVICE_CAN_ID
+    
+    print(f"[OI Firmware] Upgrade started: {len(pages)} pages, recovery={recovery_mode}")
+    _send_success({
+        'started': True,
+        'pages': len(pages),
+        'size': len(firmware_data)
+    }, 'FIRMWARE-UPGRADE-STARTED')
+
+
+def processFirmwareCanMessage(can_id, data):
+    """
+    Process incoming CAN messages during firmware upgrade.
+    This should be called from the CAN receive handler.
+    """
+    if not firmware_upgrade_state['active']:
+        return
+    
+    if can_id != DEVICE_CAN_ID:
+        return
+    
+    state = firmware_upgrade_state['state']
+    
+    # Handle HELLO packet (device booting)
+    if len(data) == 8 and data[0] == PACKET_HELLO:
+        if state != 'waiting_hello':
+            return
+        
+        # Extract serial number (bytes 4-7, little-endian)
+        device_serial = data[7:3:-1]
+        
+        # Check if this is our target device
+        target = firmware_upgrade_state['target_serial']
+        if target and device_serial != target:
+            print(f"[OI Firmware] Wrong device, ignoring")
+            return
+        
+        print(f"[OI Firmware] Device HELLO received, serial: {device_serial.hex()}")
+        
+        # Reply with device identifier (serial number)
+        can_dev.send(list(data[4:8]), UPGRADER_CAN_ID)
+        
+        firmware_upgrade_state['state'] = 'waiting_start'
+        firmware_upgrade_state['message'] = 'Device identified, waiting for START...'
+    
+    # Handle START packet
+    elif len(data) == 1 and data[0] == PACKET_START:
+        if state != 'waiting_start':
+            return
+        
+        print(f"[OI Firmware] Device START received")
+        
+        # Reply with number of pages
+        num_pages = len(firmware_upgrade_state['pages'])
+        can_dev.send([num_pages], UPGRADER_CAN_ID)
+        
+        firmware_upgrade_state['state'] = 'uploading'
+        firmware_upgrade_state['current_page'] = 0
+        firmware_upgrade_state['page_position'] = 0
+        firmware_upgrade_state['message'] = 'Uploading firmware...'
+    
+    # Handle PAGE request
+    elif len(data) == 1 and data[0] == PACKET_PAGE:
+        if state != 'uploading':
+            return
+        
+        page_idx = firmware_upgrade_state['current_page']
+        pos = firmware_upgrade_state['page_position']
+        
+        if page_idx >= len(firmware_upgrade_state['pages']):
+            print(f"[OI Firmware] ERROR: Page request beyond available pages")
+            return
+        
+        page = firmware_upgrade_state['pages'][page_idx]
+        
+        # Send 8 bytes of page data
+        chunk = page['data'][pos:pos+8]
+        can_dev.send(list(chunk), UPGRADER_CAN_ID)
+        
+        pos += 8
+        firmware_upgrade_state['page_position'] = pos
+        
+        # Check if page complete
+        if pos >= PAGE_SIZE:
+            firmware_upgrade_state['state'] = 'checking_crc'
+            firmware_upgrade_state['page_position'] = 0
+            print(f"[OI Firmware] Page {page_idx} uploaded, waiting for CRC check")
+    
+    # Handle CRC request
+    elif len(data) == 1 and data[0] == PACKET_CRC:
+        if state != 'checking_crc':
+            return
+        
+        page_idx = firmware_upgrade_state['current_page']
+        page = firmware_upgrade_state['pages'][page_idx]
+        
+        # Send CRC as little-endian 32-bit value
+        crc = page['crc']
+        crc_bytes = [
+            crc & 0xFF,
+            (crc >> 8) & 0xFF,
+            (crc >> 16) & 0xFF,
+            (crc >> 24) & 0xFF
+        ]
+        can_dev.send(crc_bytes, UPGRADER_CAN_ID)
+        
+        print(f"[OI Firmware] Sent CRC for page {page_idx}: 0x{crc:08X}")
+        
+        # Move to next page
+        firmware_upgrade_state['current_page'] += 1
+        firmware_upgrade_state['progress'] = (firmware_upgrade_state['current_page'] * 100.0) / len(firmware_upgrade_state['pages'])
+        
+        # Check if all pages done
+        if firmware_upgrade_state['current_page'] >= len(firmware_upgrade_state['pages']):
+            firmware_upgrade_state['state'] = 'waiting_done'
+            firmware_upgrade_state['message'] = 'Waiting for device to finalize...'
+            print(f"[OI Firmware] All pages uploaded, waiting for DONE")
+        else:
+            firmware_upgrade_state['state'] = 'uploading'
+    
+    # Handle DONE packet
+    elif len(data) == 1 and data[0] == PACKET_DONE:
+        if state != 'waiting_done':
+            return
+        
+        print(f"[OI Firmware] Upgrade COMPLETE!")
+        firmware_upgrade_state['active'] = False
+        firmware_upgrade_state['state'] = 'done'
+        firmware_upgrade_state['progress'] = 100.0
+        firmware_upgrade_state['message'] = 'Upgrade completed successfully!'
+    
+    # Handle ERROR packet
+    elif len(data) == 1 and data[0] == PACKET_ERROR:
+        print(f"[OI Firmware] Device reported CRC ERROR")
+        firmware_upgrade_state['active'] = False
+        firmware_upgrade_state['state'] = 'error'
+        firmware_upgrade_state['error'] = 'CRC check failed on device'
+        firmware_upgrade_state['message'] = 'Upgrade failed: CRC error'
+
+
+def getFirmwareUpgradeStatus():
+    """
+    Get current status of firmware upgrade process.
+    """
+    status = {
+        'active': firmware_upgrade_state['active'],
+        'state': firmware_upgrade_state['state'],
+        'progress': firmware_upgrade_state['progress'],
+        'message': firmware_upgrade_state['message'],
+        'error': firmware_upgrade_state['error'],
+        'complete': firmware_upgrade_state['state'] == 'done'
+    }
+    
+    _send_response('FIRMWARE-STATUS', status)
+
+
+# ============================================================================
+# CAN Bus Scanning
+# ============================================================================
+
 def scanCanBus(args=None):
     """
     Scan CAN bus for OpenInverter devices.
@@ -1355,14 +1688,24 @@ def scanCanBus(args=None):
             try:
                 device_type = temp_sdo.read(0x1000, 0)
                 
+                # Try to read serial number too
+                serial_number = None
+                try:
+                    # Try reading from OpenInverter serial number location
+                    serial_raw = temp_sdo.read(0x5000, 0)
+                    serial_number = f"{serial_raw:08X}"
+                except:
+                    pass
+                
                 # Node responded, add to list
                 found_nodes.append({
-                    'node_id': node_id,
-                    'device_type': device_type,
+                    'nodeId': node_id,
+                    'serialNumber': serial_number,
+                    'deviceType': device_type,
                     'responding': True
                 })
                 
-                print(f"[OI] Found node {node_id} (device type: 0x{device_type:08X})")
+                print(f"[OI] Found node {node_id} (device type: 0x{device_type:08X}, serial: {serial_number})")
                 
             except (SDOTimeoutError, SDOAbortError):
                 # Node didn't respond or doesn't have this object
@@ -1372,5 +1715,5 @@ def scanCanBus(args=None):
             print(f"[OI] Error scanning node {node_id}: {e}")
     
     print(f"[OI] Scan complete. Found {len(found_nodes)} nodes.")
-    _send_response('CAN-SCAN-RESULT', {'nodes': found_nodes, 'scanned': len(node_ids)})
+    _send_response('CAN-SCAN-RESULT', found_nodes)
 
