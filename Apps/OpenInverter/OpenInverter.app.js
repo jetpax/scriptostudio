@@ -6,18 +6,7 @@
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
-//   "dependencies": [
-//     {
-//       "file": "lib/OI_helpers.py",
-//       "destination": "/lib/OI_helpers.py",
-//       "description": "OpenInverter parameter and CAN mapping helpers"
-//     },
-//     {
-//       "file": "lib/canopen_sdo.py",
-//       "destination": "/lib/canopen_sdo.py",
-//       "description": "CANopen SDO protocol implementation"
-//     }
-//   ],
+//   "mipPackage": "github:jetpax/scripto-studio-registry/Apps/OpenInverter/lib",
 //   "menu": [
 //     { "id": "parameters", "label": "Parameters", "icon": "sliders" },
 //     { "id": "spotvalues", "label": "Spot Values", "icon": "activity" },

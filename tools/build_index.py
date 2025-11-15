@@ -181,8 +181,8 @@ def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
         description = config.get('description', '')
         icon = config.get('icon', 'sliders')
         menu = config.get('menu', [])
+        mip_package = config.get('mipPackage', None)
         # Note: styles are not extracted for index.json (loaded from full .app.js instead)
-        dependencies_config = config.get('dependencies', [])
         
         # Generate URL for main app file
         if repo_url:
@@ -193,49 +193,6 @@ def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
                 url = f"{repo_url}/raw/{branch}/Apps/{str(rel_path).replace(os.sep, '/')}"
         else:
             url = f"/Apps/{str(rel_path).replace(os.sep, '/')}"
-        
-        # Process dependencies
-        dependencies = []
-        for dep_config in dependencies_config:
-            dep_file = dep_config.get('file', '')
-            dep_dest = dep_config.get('destination', '')
-            dep_desc = dep_config.get('description', '')
-            
-            if not dep_file:
-                continue
-            
-            # Resolve dependency file path (relative to app directory)
-            dep_path = file_path.parent / dep_file
-            
-            if not dep_path.exists():
-                print(f"  ⚠ Dependency file not found: {dep_path}")
-                continue
-            
-            # Read dependency file content
-            try:
-                with open(dep_path, 'r', encoding='utf-8') as df:
-                    dep_content = df.read()
-            except Exception as e:
-                print(f"  ⚠ Error reading dependency {dep_file}: {e}")
-                continue
-            
-            # Generate URL for dependency file
-            if repo_url:
-                dep_rel_path = dep_path.relative_to(apps_base_dir) if apps_base_dir else Path(app_dir) / dep_file
-                if 'raw.githubusercontent.com' in repo_url:
-                    dep_url = f"{repo_url}/{branch}/Apps/{str(dep_rel_path).replace(os.sep, '/')}"
-                else:
-                    dep_url = f"{repo_url}/raw/{branch}/Apps/{str(dep_rel_path).replace(os.sep, '/')}"
-            else:
-                dep_url = f"/Apps/{str(app_dir / dep_file).replace(os.sep, '/')}"
-            
-            dependencies.append({
-                "file": dep_file,
-                "destination": dep_dest,
-                "description": dep_desc,
-                "content": dep_content,
-                "url": dep_url
-            })
         
         # Build App entry
         # Note: styles are excluded from index.json as they're unused
@@ -252,9 +209,9 @@ def parse_app_file(file_path, repo_url=None, branch='main', apps_base_dir=None):
             "url": url
         }
         
-        # Add dependencies if any
-        if dependencies:
-            app_entry["dependencies"] = dependencies
+        # Add mipPackage if specified
+        if mip_package:
+            app_entry["mipPackage"] = mip_package
         
         return app_entry
         
