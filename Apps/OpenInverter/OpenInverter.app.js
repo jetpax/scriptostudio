@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 4, 1],
+//   "version": [0, 4, 2],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -728,6 +728,254 @@ class OpenInverterApp {
     }
     
     this.emit('render')
+  }
+
+  /**
+   * Render Commands panel
+   * Device control commands: save/load parameters, start/stop, reset
+   */
+  renderCommands() {
+    return this.html`
+      <div class="oi-parameters-container">
+        <h2 style="color: var(--scheme-primary); margin-bottom: 20px;">Device Commands</h2>
+        
+        <!-- Parameter Storage -->
+        <div style="margin-bottom: 32px;">
+          <h3 style="font-size: 16px; margin-bottom: 12px;">Parameter Storage</h3>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="primary-button" onclick=${() => this.deviceSave()}>
+              Save to Flash
+            </button>
+            <button class="secondary-button" onclick=${() => this.deviceLoad()}>
+              Load from Flash
+            </button>
+            <button class="secondary-button" onclick=${() => this.deviceLoadDefaults()}>
+              Load Factory Defaults
+            </button>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">
+            Save parameters to persistent storage or restore defaults
+          </p>
+        </div>
+
+        <!-- Device Control -->
+        <div style="margin-bottom: 32px;">
+          <h3 style="font-size: 16px; margin-bottom: 12px;">Device Control</h3>
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <select id="oi-start-mode" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-primary);">
+              <option value="0">Off</option>
+              <option value="1">Normal</option>
+              <option value="2">Manual</option>
+              <option value="3">Boost</option>
+              <option value="4">Buck</option>
+              <option value="5">Sine</option>
+              <option value="6">ACHeat</option>
+            </select>
+            <button class="primary-button" onclick=${() => this.deviceStart()}>
+              Start Device
+            </button>
+            <button class="secondary-button" onclick=${() => this.deviceStop()}>
+              Stop Device
+            </button>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">
+            Start device in selected mode or stop operation
+          </p>
+        </div>
+
+        <!-- System Actions -->
+        <div>
+          <h3 style="font-size: 16px; margin-bottom: 12px;">System Actions</h3>
+          <button class="secondary-button" style="background: #c0392b; color: white;" onclick=${() => this.deviceReset()}>
+            Reset Device
+          </button>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">
+            Perform a software reset of the device
+          </p>
+        </div>
+      </div>
+    `
+  }
+
+  async deviceSave() {
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceSave; deviceSave()')
+      alert('Parameters saved to flash')
+    } catch (error) {
+      alert('Failed to save parameters: ' + error.message)
+    }
+  }
+
+  async deviceLoad() {
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceLoad; deviceLoad()')
+      alert('Parameters loaded from flash')
+    } catch (error) {
+      alert('Failed to load parameters: ' + error.message)
+    }
+  }
+
+  async deviceLoadDefaults() {
+    if (!confirm('Load factory defaults? This will overwrite all current parameters.')) return
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceLoadDefaults; deviceLoadDefaults()')
+      alert('Factory defaults loaded')
+    } catch (error) {
+      alert('Failed to load defaults: ' + error.message)
+    }
+  }
+
+  async deviceStart() {
+    const mode = document.getElementById('oi-start-mode')?.value || '1'
+    try {
+      await this.device.execute(`from lib.OI_helpers import deviceStart; deviceStart({'mode': ${mode}})`)
+      alert('Device started in mode ' + mode)
+    } catch (error) {
+      alert('Failed to start device: ' + error.message)
+    }
+  }
+
+  async deviceStop() {
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceStop; deviceStop()')
+      alert('Device stopped')
+    } catch (error) {
+      alert('Failed to stop device: ' + error.message)
+    }
+  }
+
+  async deviceReset() {
+    if (!confirm('Reset device? This will restart the controller.')) return
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceReset; deviceReset()')
+      alert('Device reset command sent')
+    } catch (error) {
+      alert('Failed to reset device: ' + error.message)
+    }
+  }
+
+  /**
+   * Render Errors panel
+   * Display device info and error log
+   */
+  renderErrors() {
+    // Load device info if not already loaded
+    if (!this.state.oiDeviceInfo && !this.state.isLoadingDeviceInfo && this.state.isConnected) {
+      setTimeout(() => this.loadDeviceInfo(), 0)
+    }
+
+    return this.html`
+      <div class="oi-parameters-container">
+        <h2 style="color: var(--scheme-primary); margin-bottom: 20px;">Device Information & Error Log</h2>
+        
+        ${this.renderDeviceInfoContent()}
+      </div>
+    `
+  }
+
+  renderDeviceInfoContent() {
+    if (this.state.isLoadingDeviceInfo) {
+      return this.html`
+        <div style="text-align: center; padding: 40px;">
+          <p style="color: var(--text-secondary);">Loading device information...</p>
+        </div>
+      `
+    }
+
+    if (!this.state.oiDeviceInfo) {
+      return this.html`
+        <div style="text-align: center; padding: 40px;">
+          <p style="color: var(--text-secondary);">No device information available</p>
+          <button class="primary-button" style="margin-top: 16px;" onclick=${() => this.loadDeviceInfo()}>
+            Load Device Info
+          </button>
+        </div>
+      `
+    }
+
+    const info = this.state.oiDeviceInfo
+    const errors = this.state.oiErrorLog || []
+
+    return this.html`
+      <div>
+        <!-- Device Info -->
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+          <h3 style="font-size: 16px; margin-bottom: 12px;">Device Info</h3>
+          <div style="display: grid; grid-template-columns: 150px 1fr; gap: 8px; font-size: 14px;">
+            <span style="color: var(--text-secondary);">Serial Number:</span>
+            <span style="font-family: monospace;">${info.serialNumber || 'N/A'}</span>
+            
+            <span style="color: var(--text-secondary);">Node ID:</span>
+            <span>${info.nodeId || 'N/A'}</span>
+            
+            <span style="color: var(--text-secondary);">Bitrate:</span>
+            <span>${info.bitrate ? (info.bitrate / 1000) + ' kbps' : 'N/A'}</span>
+            
+            <span style="color: var(--text-secondary);">Uptime:</span>
+            <span>${info.uptime ? Math.floor(info.uptime / 1000) + ' seconds' : 'N/A'}</span>
+          </div>
+        </div>
+
+        <!-- Error Log -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 style="font-size: 16px; margin: 0;">Error Log</h3>
+            <button class="secondary-button" onclick=${() => this.loadDeviceInfo()}>
+              Refresh
+            </button>
+          </div>
+          
+          ${errors.length === 0 ? this.html`
+            <p style="color: var(--text-secondary); text-align: center; padding: 24px;">
+              No errors logged
+            </p>
+          ` : this.html`
+            <div style="border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: var(--scheme-primary); color: white;">
+                    <th style="padding: 8px; text-align: left;">Timestamp</th>
+                    <th style="padding: 8px; text-align: left;">Error Code</th>
+                    <th style="padding: 8px; text-align: left;">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${errors.map(err => this.html`
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-family: monospace; font-size: 13px;">${err.timestamp || 'N/A'}</td>
+                      <td style="padding: 8px; font-family: monospace; font-weight: 600;">${err.code || 'N/A'}</td>
+                      <td style="padding: 8px;">${err.description || 'N/A'}</td>
+                    </tr>
+                  `)}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+      </div>
+    `
+  }
+
+  async loadDeviceInfo() {
+    this.state.isLoadingDeviceInfo = true
+    this.emit('render')
+
+    try {
+      const infoResult = await this.device.execute('from lib.OI_helpers import getDeviceInfo; getDeviceInfo()')
+      const info = this.device.parseJSON(infoResult)
+      this.state.oiDeviceInfo = info.ARG || info
+
+      const errorResult = await this.device.execute('from lib.OI_helpers import getErrorLog; getErrorLog()')
+      const errors = this.device.parseJSON(errorResult)
+      this.state.oiErrorLog = errors.ARG || errors || []
+    } catch (error) {
+      console.error('[OI App] Failed to load device info:', error)
+      this.state.oiDeviceInfo = null
+      this.state.oiErrorLog = []
+    } finally {
+      this.state.isLoadingDeviceInfo = false
+      this.emit('render')
+    }
   }
 }
 
