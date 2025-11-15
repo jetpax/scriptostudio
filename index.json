@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763237623,
+  "updated": 1763239873,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -670,7 +670,7 @@
     {
       "name": "OpenInverter",
       "id": "openinverter",
-      "filename": "OpenInverter.app.js",
+      "filename": "OpenInverter.js",
       "version": [
         0,
         5,
@@ -716,7 +716,7 @@
           "icon": "download"
         }
       ],
-      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/OpenInverter/OpenInverter.app.js",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/OpenInverter/OpenInverter.js",
       "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib"
     }
   ]
