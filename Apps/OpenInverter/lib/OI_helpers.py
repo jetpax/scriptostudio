@@ -56,9 +56,20 @@ try:
     from lib.canopen_sdo import SDOClient, fixed_to_float, float_to_fixed, param_id_to_sdo
     from lib.canopen_sdo import SDOTimeoutError, SDOAbortError
     CAN_AVAILABLE = True
-except ImportError:
-    print("[OI] Warning: CAN module not available, using demo data only")
+except ImportError as e:
+    print(f"[OI] Warning: CAN/SDO modules not available - {e}")
+    print("[OI] Using demo data only. To enable device support, upload lib/canopen_sdo.py")
     CAN_AVAILABLE = False
+    # Define dummy exception classes so code doesn't break
+    class SDOTimeoutError(Exception):
+        pass
+    class SDOAbortError(Exception):
+        pass
+    # Define dummy classes/functions
+    SDOClient = None
+    fixed_to_float = lambda x, bits: x
+    float_to_fixed = lambda x, bits: int(x)
+    param_id_to_sdo = lambda x: (0, 0)
 
 # --- Global CAN and Device State ---
 can_dev = None
