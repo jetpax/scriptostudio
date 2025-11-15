@@ -29,7 +29,7 @@ Global Parameters Store:
       'unit': <string>,
       'isparam': <bool>,
       'category': <string>,
-      # For parameters only:
+      # For parameter only:
       'minimum': <number>,
       'maximum': <number>,
       'default': <number>,
@@ -1662,8 +1662,9 @@ def scanCanBus(args=None):
     Scan CAN bus for OpenInverter devices.
     
     Args (dict, optional):
-        node_ids: List of node IDs to scan (default: 1-127)
-        timeout: Timeout per node in seconds (default: 0.1)
+        node_ids: List of node IDs to scan (default: 1-10 for quick scan, or 1-127 for full)
+        timeout: Timeout per node in milliseconds (default: 100ms)
+        quick: If True, only scan common node IDs 1-10 (default: True)
     
     Returns list of detected nodes with their SDO responses.
     """
@@ -1671,14 +1672,28 @@ def scanCanBus(args=None):
         _send_error("CAN not available", 'CAN-SCAN-ERROR')
         return
     
-    node_ids = args.get('node_ids', list(range(1, 128))) if args else list(range(1, 128))
+    # Default to quick scan (nodes 1-10) for better UX
+    quick_scan = args.get('quick', True) if args else True
+    default_range = range(1, 11) if quick_scan else range(1, 128)
+    node_ids = args.get('node_ids', list(default_range)) if args else list(default_range)
     timeout = args.get('timeout', 0.1) if args else 0.1
     
-    print(f"[OI] Scanning CAN bus for nodes: {node_ids}")
+    total_nodes = len(node_ids)
+    print(f"[OI] Scanning CAN bus for {total_nodes} node IDs (timeout: {timeout*1000}ms per node)")
     
     found_nodes = []
     
-    for node_id in node_ids:
+    for index, node_id in enumerate(node_ids):
+        # Send progress update every 10 nodes or when a device is found
+        if index % 10 == 0 or index == 0:
+            progress = int((index / total_nodes) * 100)
+            _send_response('CAN-SCAN-PROGRESS', {
+                'progress': progress,
+                'current': node_id,
+                'total': total_nodes,
+                'found': len(found_nodes)
+            })
+        
         try:
             # Create temporary SDO client for this node
             temp_sdo = SDOClient(can_dev, node_id=node_id, timeout=timeout)
@@ -1707,6 +1722,16 @@ def scanCanBus(args=None):
                 
                 print(f"[OI] Found node {node_id} (device type: 0x{device_type:08X}, serial: {serial_number})")
                 
+                # Send immediate progress update when device found
+                progress = int(((index + 1) / total_nodes) * 100)
+                _send_response('CAN-SCAN-PROGRESS', {
+                    'progress': progress,
+                    'current': node_id,
+                    'total': total_nodes,
+                    'found': len(found_nodes),
+                    'lastFound': node_id
+                })
+                
             except (SDOTimeoutError, SDOAbortError):
                 # Node didn't respond or doesn't have this object
                 pass
@@ -1714,6 +1739,12 @@ def scanCanBus(args=None):
         except Exception as e:
             print(f"[OI] Error scanning node {node_id}: {e}")
     
-    print(f"[OI] Scan complete. Found {len(found_nodes)} nodes.")
-    _send_response('CAN-SCAN-RESULT', found_nodes)
+    # Send final result
+    scan_type = "quick" if quick_scan else "full"
+    print(f"[OI] {scan_type.capitalize()} scan complete. Found {len(found_nodes)} device(s).")
+    _send_response('CAN-SCAN-RESULT', {
+        'devices': found_nodes,
+        'scanned': total_nodes,
+        'scanType': scan_type
+    })
 

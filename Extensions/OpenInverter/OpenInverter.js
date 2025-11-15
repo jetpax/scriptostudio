@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 5, 4],
+//   "version": [0, 5, 5],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -885,10 +885,6 @@ class OpenInverterExtension {
       this.state.isScanning = false
     }
     
-    // DEBUG: Log connection state
-    console.log('[OI Device Control] Render - WebREPL connected:', this.state.isConnected)
-    console.log('[OI Device Control] isScanning:', this.state.isScanning)
-
     return this.html`
       <div class="oi-parameters-container">
         <h2 style="color: var(--scheme-primary); margin-bottom: 20px;">Device Control</h2>
@@ -919,13 +915,22 @@ class OpenInverterExtension {
             <div style="margin-bottom: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <h4 style="font-size: 14px; margin: 0; color: var(--text-secondary);">Scan CAN Bus for Devices</h4>
-                <button 
-                  class="primary-button" 
-                  onclick=${() => this.scanCanBus()}
-                  disabled=${!this.state.isConnected || this.state.isScanning}
-                  style="padding: 8px 16px; font-size: 13px;">
-                  ${this.state.isScanning ? 'Scanning...' : 'Scan CAN Bus'}
-                </button>
+                <div style="display: flex; gap: 8px;">
+                  <button 
+                    class="primary-button" 
+                    onclick=${() => this.scanCanBus(false)}
+                    disabled=${!this.state.isConnected || this.state.isScanning}
+                    style="padding: 8px 16px; font-size: 13px;">
+                    ${this.state.isScanning ? 'Scanning...' : 'Quick Scan'}
+                  </button>
+                  <button 
+                    class="secondary-button" 
+                    onclick=${() => this.scanCanBus(true)}
+                    disabled=${!this.state.isConnected || this.state.isScanning}
+                    style="padding: 8px 16px; font-size: 13px;">
+                    Full Scan
+                  </button>
+                </div>
               </div>
               
               ${!this.state.isConnected ? this.html`
@@ -933,12 +938,28 @@ class OpenInverterExtension {
                   <p>⚠️ Please connect to ESP32 device via WebREPL first</p>
                 </div>
               ` : this.state.isScanning ? this.html`
-                <div style="text-align: center; padding: 16px; color: var(--text-secondary); font-size: 13px;">
-                  <p>Scanning CAN bus for OpenInverter devices...</p>
+                <div style="padding: 16px;">
+                  <div style="margin-bottom: 12px; color: var(--text-secondary); font-size: 13px; text-align: center;">
+                    ${this.state.scanProgress ? this.html`
+                      <p>Scanning node ${this.state.scanProgress.current} of ${this.state.scanProgress.total} 
+                        (${this.state.scanProgress.found} found)</p>
+                    ` : this.html`
+                      <p>Initializing scan...</p>
+                    `}
+                  </div>
+                  ${this.state.scanProgress ? this.html`
+                    <div style="width: 100%; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                      <div style="height: 100%; background: var(--scheme-primary); transition: width 0.3s ease; width: ${this.state.scanProgress.progress}%;"></div>
+                    </div>
+                  ` : ''}
+                </div>
+              ` : this.state.scanMessage ? this.html`
+                <div style="text-align: center; padding: 16px; color: var(--text-secondary); font-size: 13px; background: var(--bg-tertiary); border-radius: 4px;">
+                  <p>${this.state.scanMessage}</p>
                 </div>
               ` : this.state.canScanResults.length === 0 ? this.html`
                 <div style="text-align: center; padding: 16px; color: var(--text-secondary); font-size: 13px;">
-                  <p>Click "Scan CAN Bus" to find OpenInverter devices</p>
+                  <p>Click "Quick Scan" to check node IDs 1-10, or "Full Scan" to check all 127 node IDs</p>
                 </div>
               ` : this.html`
                 <div style="border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; font-size: 13px;">
@@ -1220,40 +1241,53 @@ class OpenInverterExtension {
 
   // === Connection Management Methods ===
 
-  async scanCanBus() {
-    console.log('[OI Connection] ========== SCAN BUTTON CLICKED ==========')
-    console.log('[OI Connection] Starting CAN bus scan...')
-    console.log('[OI Connection] isConnected:', this.state.isConnected)
-    console.log('[OI Connection] device:', this.device)
-    console.log('[OI Connection] device.execute:', typeof this.device.execute)
-    
+  async scanCanBus(fullScan = false) {
     this.state.isScanning = true
     this.state.canScanResults = []
+    this.state.scanProgress = { progress: 0, current: 0, total: 0, found: 0 }
     this.emit('render')
 
+    // Set up listener for progress updates
+    const progressHandler = (data) => {
+      if (data.CMD === 'CAN-SCAN-PROGRESS') {
+        this.state.scanProgress = data.ARG
+        this.emit('render')
+      }
+    }
+
     try {
-      console.log('[OI Connection] Executing scanCanBus command...')
-      const result = await this.device.execute('from lib.OI_helpers import scanCanBus; scanCanBus({})')
-      console.log('[OI Connection] Raw scan result:', result)
+      // Listen for progress updates during scan
+      this.device.on && this.device.on('message', progressHandler)
+      
+      const scanArgs = JSON.stringify({ quick: !fullScan })
+      const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus(${scanArgs})`)
       
       const parsed = this.device.parseJSON(result)
-      console.log('[OI Connection] Parsed scan result:', parsed)
       
-      const devices = parsed.ARG || parsed
-      console.log('[OI Connection] Devices found:', devices)
-      
-      if (Array.isArray(devices)) {
-        this.state.canScanResults = devices
-        console.log('[OI Connection] Scan complete, found', devices.length, 'devices')
+      if (parsed.ARG && parsed.ARG.devices) {
+        this.state.canScanResults = parsed.ARG.devices
+        
+        if (this.state.canScanResults.length === 0) {
+          // Show helpful message when no devices found
+          this.state.scanMessage = fullScan 
+            ? `No devices found (scanned all 127 node IDs)`
+            : `No devices found (scanned node IDs 1-10). Try "Full Scan" to check all 127 node IDs.`
+        } else {
+          this.state.scanMessage = null
+        }
       } else {
-        console.warn('[OI Connection] Scan result is not an array:', devices)
+        this.state.scanMessage = 'Scan completed but received unexpected response format'
       }
     } catch (error) {
       console.error('[OI Connection] Scan failed:', error)
-      alert('Scan failed: ' + error.message)
+      this.state.scanMessage = `Scan failed: ${error.message}`
       this.state.canScanResults = []
     } finally {
+      // Clean up progress listener
+      this.device.off && this.device.off('message', progressHandler)
+      
       this.state.isScanning = false
+      this.state.scanProgress = null
       this.emit('render')
     }
   }
@@ -1266,7 +1300,6 @@ class OpenInverterExtension {
       
       if (parsed.success || (parsed.ARG && parsed.ARG.success)) {
         this.state.oiDeviceConnected = true
-        console.log('[OI Connection] Connected successfully')
       } else {
         console.error('[OI Connection] Connection failed:', parsed)
         alert('Failed to connect to device. Check console for details.')
@@ -1288,7 +1321,6 @@ class OpenInverterExtension {
     try {
       await this.device.execute('from lib.OI_helpers import disconnectDevice; disconnectDevice()')
       this.state.oiDeviceConnected = false
-      console.log('[OI Connection] Disconnected')
     } catch (error) {
       console.error('[OI Connection] Disconnect error:', error)
     }
