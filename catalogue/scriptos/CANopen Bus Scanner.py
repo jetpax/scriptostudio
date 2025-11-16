@@ -8,7 +8,7 @@ dict(
     info    = dict(
         # ----------------------------------------------------------------------
         name        = 'CANopen Bus Scanner',
-        version     = [1, 0, 0],
+        version     = [1, 0, 1],
         category    = 'CAN/TWAI',
         description = 'Scan CANopen network for devices by sending SDO (Service Data Object) requests. This tool discovers CANopen nodes on the bus by attempting to read the device type (object 0x1000) from each possible node ID. Useful for identifying OpenInverter devices and other CANopen-compatible equipment.',
         author      = 'Scriptomatic Team',
