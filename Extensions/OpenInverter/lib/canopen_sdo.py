@@ -115,6 +115,10 @@ class SDOClient:
             SDOTimeoutError: If no response within timeout
             SDOAbortError: If device aborts the transfer
         """
+        # Clear any pending messages before sending
+        while self.can.any():
+            self.can.recv()
+        
         # Build upload initiate request
         request = struct.pack('<BBHB3x',
             SDO_CMD_UPLOAD_INITIATE,
@@ -127,25 +131,39 @@ class SDOClient:
         self.can.send(list(request), self.tx_cobid)
         
         # Wait for response
-        start_time = time.time()
+        # Use ticks_ms for better precision in MicroPython
+        try:
+            start_time = time.ticks_ms()
+            timeout_ms = int(self.timeout * 1000)
+        except AttributeError:
+            # Fallback to time.time() if ticks_ms not available
+            start_time = time.time()
+            timeout_ms = None
+        
         while True:
             if self.can.any():
                 response = self.can.recv()
                 can_id = response[0]
-                data = response[3]  # Payload bytes
+                payload = response[3]  # Payload bytes
+                
+                # Convert payload to bytes if it's a list
+                if isinstance(payload, list):
+                    data = bytes(payload)
+                else:
+                    data = payload
                 
                 # Check if it's our response
-                if can_id == self.rx_cobid and len(data) == 8:
+                if can_id == self.rx_cobid and len(data) >= 8:
                     cmd = data[0]
                     
-                    # Check for abort
-                    if cmd == SDO_CMD_ABORT:
+                    # Check for abort (0x80-0xFF range)
+                    if (cmd & 0x80) == 0x80:
                         abort_code = struct.unpack('<I', data[4:8])[0]
                         raise SDOAbortError(abort_code)
                     
-                    # Check for upload response
-                    if cmd == SDO_CMD_UPLOAD_RESPONSE:
-                        # Extract 4-byte value (little-endian)
+                    # Check for upload response (0x4x pattern where x indicates data size)
+                    if (cmd & 0xE0) == 0x40:  # Upload response pattern
+                        # Extract 4-byte value (little-endian, bytes 4-7)
                         value = struct.unpack('<I', data[4:8])[0]
                         # Convert to signed 32-bit
                         if value >= 0x80000000:
@@ -153,10 +171,18 @@ class SDOClient:
                         return value
             
             # Check timeout
-            if time.time() - start_time > self.timeout:
-                raise SDOTimeoutError(f"SDO read timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
-            
-            time.sleep(0.001)  # Small delay to avoid busy loop
+            if timeout_ms is not None:
+                elapsed = time.ticks_diff(time.ticks_ms(), start_time)
+                if elapsed >= timeout_ms:
+                    raise SDOTimeoutError(f"SDO read timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
+                time.sleep_ms(1)
+            else:
+                if time.time() - start_time > self.timeout:
+                    raise SDOTimeoutError(f"SDO read timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
+                try:
+                    time.sleep_ms(1)
+                except AttributeError:
+                    time.sleep(0.001)  # Fallback for systems without sleep_ms
     
     def write(self, index, subindex, value):
         """
@@ -171,6 +197,10 @@ class SDOClient:
             SDOTimeoutError: If no response within timeout
             SDOAbortError: If device aborts the transfer
         """
+        # Clear any pending messages before sending
+        while self.can.any():
+            self.can.recv()
+        
         # Convert to unsigned 32-bit for transmission
         if value < 0:
             value += 0x100000000
@@ -188,23 +218,37 @@ class SDOClient:
         self.can.send(list(request), self.tx_cobid)
         
         # Wait for response
-        start_time = time.time()
+        # Use ticks_ms for better precision in MicroPython
+        try:
+            start_time = time.ticks_ms()
+            timeout_ms = int(self.timeout * 1000)
+        except AttributeError:
+            # Fallback to time.time() if ticks_ms not available
+            start_time = time.time()
+            timeout_ms = None
+        
         while True:
             if self.can.any():
                 response = self.can.recv()
                 can_id = response[0]
-                data = response[3]  # Payload bytes
+                payload = response[3]  # Payload bytes
+                
+                # Convert payload to bytes if it's a list
+                if isinstance(payload, list):
+                    data = bytes(payload)
+                else:
+                    data = payload
                 
                 # Check if it's our response
-                if can_id == self.rx_cobid and len(data) == 8:
+                if can_id == self.rx_cobid and len(data) >= 8:
                     cmd = data[0]
                     
-                    # Check for abort
-                    if cmd == SDO_CMD_ABORT:
+                    # Check for abort (0x80-0xFF range)
+                    if (cmd & 0x80) == 0x80:
                         abort_code = struct.unpack('<I', data[4:8])[0]
                         raise SDOAbortError(abort_code)
                     
-                    # Check for download response
+                    # Check for download response (0x60)
                     if cmd == SDO_CMD_DOWNLOAD_RESPONSE:
                         # Verify index and subindex match
                         resp_index = data[1] | (data[2] << 8)
@@ -213,10 +257,18 @@ class SDOClient:
                             return  # Success
             
             # Check timeout
-            if time.time() - start_time > self.timeout:
-                raise SDOTimeoutError(f"SDO write timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
-            
-            time.sleep(0.001)  # Small delay to avoid busy loop
+            if timeout_ms is not None:
+                elapsed = time.ticks_diff(time.ticks_ms(), start_time)
+                if elapsed >= timeout_ms:
+                    raise SDOTimeoutError(f"SDO write timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
+                time.sleep_ms(1)
+            else:
+                if time.time() - start_time > self.timeout:
+                    raise SDOTimeoutError(f"SDO write timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
+                try:
+                    time.sleep_ms(1)
+                except AttributeError:
+                    time.sleep(0.001)  # Fallback for systems without sleep_ms
     
     def abort_code_to_string(self, code):
         """Convert SDO abort code to human-readable string"""
