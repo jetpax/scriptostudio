@@ -176,7 +176,7 @@ def initializeDevice(args=None):
         print(f"[OI] Initializing CAN: node_id={node_id}, bitrate={bitrate}, tx={tx_pin}, rx={rx_pin}")
         
         # Initialize CAN device
-        can_dev = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=mode, bitrate=bitrate, auto_restart=True)
+        can_dev = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=mode, bitrate=bitrate, auto_restart=False)
         
         # Create SDO client
         sdo_client = SDOClient(can_dev, node_id=node_id, timeout=1.0)
@@ -1687,7 +1687,7 @@ def scanCanBus(args=None):
         
         try:
             print(f"[OI] Auto-initializing CAN for scan: tx={tx_pin}, rx={rx_pin}, bitrate={bitrate}")
-            can_dev = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=CAN.NORMAL, bitrate=bitrate, auto_restart=True)
+            can_dev = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=CAN.NORMAL, bitrate=bitrate, auto_restart=False)
             print("[OI] CAN initialized successfully")
         except Exception as e:
             print(f"[OI] Failed to initialize CAN: {e}")
