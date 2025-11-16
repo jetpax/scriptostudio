@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763337018,
+  "updated": 1763337182,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -37,28 +37,6 @@
       "license": "MIT",
       "docs": "https://github.com/jczic",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ADC%20Reader.py"
-    },
-    {
-      "name": "Adafruit Circuitpython Ssd1306",
-      "filename": "Adafruit Circuitpython Ssd1306.py",
-      "version": [
-        1,
-        0,
-        0
-      ],
-      "author": "adafruit",
-      "description": "Introduction ============",
-      "category": "Display",
-      "tags": [
-        "display",
-        "untested",
-        "awesome-micropython"
-      ],
-      "license": "MIT",
-      "source_url": "https://github.com/adafruit/Adafruit_CircuitPython_SSD1306",
-      "source_repo": "adafruit/Adafruit_CircuitPython_SSD1306",
-      "upstream_version": "2.12.22",
-      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Adafruit%20Circuitpython%20Ssd1306.py"
     },
     {
       "name": "BLE Scan",
@@ -310,28 +288,6 @@
       "license": "MIT",
       "docs": "https://github.com/jetpax",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Memory%20Check.py"
-    },
-    {
-      "name": "Micropython Mqtt",
-      "filename": "Micropython Mqtt.py",
-      "version": [
-        1,
-        0,
-        0
-      ],
-      "author": "peterhinch",
-      "description": "MQTT is an easily used networking protocol designed for IOT (internet of things) applications. It is well suited for controlling hardware devices and",
-      "category": "Communications",
-      "tags": [
-        "communications",
-        "untested",
-        "awesome-micropython"
-      ],
-      "license": "MIT",
-      "source_url": "https://github.com/peterhinch/micropython-mqtt",
-      "source_repo": "peterhinch/micropython-mqtt",
-      "upstream_version": "master",
-      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Micropython%20Mqtt.py"
     },
     {
       "name": "NTP Time Sync",
