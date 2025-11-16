@@ -40,10 +40,10 @@ dict(
         can_mode       = dict( label    = 'CAN Mode:',
                               type     = dict,
                               items    = dict( 
-                                  normal   = "NORMAL - Requires transceiver & termination",
-                                  silent   = "SILENT - No ACK required (for testing)"
+                                  normal   = "NORMAL - Requires ACK from other devices",
+                                  silent   = "SILENT - No ACK required (recommended for scanning)"
                               ),
-                              value    = 'normal' ),
+                              value    = 'silent' ),
         # ----------------------------------------------------------------------
         scan_range     = dict( label    = 'Scan Range:',
                               type     = dict,
@@ -83,6 +83,19 @@ dict(
 import CAN
 import time
 import struct
+
+# Try to import SDO library, fall back to manual implementation if not available
+try:
+    from lib.canopen_sdo import SDOClient, SDOTimeoutError, SDOAbortError
+    SDO_LIBRARY_AVAILABLE = True
+except ImportError:
+    # Fallback: define minimal SDO client inline
+    SDO_LIBRARY_AVAILABLE = False
+    class SDOTimeoutError(Exception):
+        pass
+    class SDOAbortError(Exception):
+        def __init__(self, abort_code):
+            self.abort_code = abort_code
 
 termWidth = 50
 
@@ -128,9 +141,11 @@ print(f"Rate limit: {args.rate_limit_ms} ms between requests")
 print(f"Final wait: {args.wait_time} seconds")
 
 if args.can_mode == 'silent':
-    print("  Note: SILENT mode - no acknowledgment required (good for testing)")
+    print("  Note: SILENT mode - no acknowledgment required (recommended for scanning)")
+    print("        Messages are sent but bus won't go BUS_OFF if no devices respond")
 elif args.can_mode == 'normal':
-    print("  Note: NORMAL mode - requires CAN transceiver and termination")
+    print("  Note: NORMAL mode - requires other devices to ACK messages")
+    print("        If no devices respond, bus may go BUS_OFF due to error accumulation")
 
 # Initialize CAN
 print("\nInitializing CAN...")
@@ -154,23 +169,9 @@ except Exception as e:
     raise
 
 # SDO Protocol Constants
-SDO_CMD_UPLOAD_INITIATE = 0x40  # Read request
-SDO_TX_BASE = 0x600  # Client TX COB-ID base
-SDO_RX_BASE = 0x580  # Client RX COB-ID base
-
 # Object to read: 0x1000 (Device Type) - standard CANopen object
 SDO_INDEX_DEVICE_TYPE = 0x1000
 SDO_SUBINDEX = 0x00
-
-# Build SDO read request for device type (0x1000, subindex 0)
-# Format: [command, index_low, index_high, subindex, 0, 0, 0, 0]
-sdo_request = [
-    SDO_CMD_UPLOAD_INITIATE,
-    SDO_INDEX_DEVICE_TYPE & 0xFF,           # Index low byte
-    (SDO_INDEX_DEVICE_TYPE >> 8) & 0xFF,    # Index high byte
-    SDO_SUBINDEX,
-    0x00, 0x00, 0x00, 0x00
-]
 
 print("Starting scan...")
 print("-" * termWidth)
@@ -179,105 +180,191 @@ print("-" * termWidth)
 while can.any():
     can.recv()
 
-# Collect responses as we go
+# Collect found nodes
 found_nodes = []
-response_count = 0
+scan_errors = 0
 
-def process_responses():
-    """Process any available CAN messages and add found nodes to found_nodes list."""
-    global response_count
-    while can.any():
+# Convert timeout from ms to seconds for SDO client
+sdo_timeout = args.timeout_ms / 1000.0 if args.timeout_ms > 0 else 0.1
+
+# Scan each node using SDO library if available
+if SDO_LIBRARY_AVAILABLE:
+    print(f"Using SDO library to scan nodes {start_node}-{end_node}...")
+    
+    bus_off_detected = False
+    for node_id in range(start_node, end_node + 1):
         try:
-            msg_id, extended, rtr, payload = can.recv()
+            # Create SDO client for this node
+            sdo_client = SDOClient(can, node_id=node_id, timeout=sdo_timeout)
             
-            # Check if this is an SDO response (0x580 + node_id)
-            if msg_id >= SDO_RX_BASE and msg_id < SDO_RX_BASE + 128:
-                node_id = msg_id - SDO_RX_BASE
+            # Try to read device type (standard CANopen object 0x1000)
+            device_type = sdo_client.read(SDO_INDEX_DEVICE_TYPE, SDO_SUBINDEX)
+            
+            # Node responded successfully
+            found_nodes.append({
+                'nodeId': node_id,
+                'deviceType': device_type,
+                'deviceTypeHex': f"0x{device_type:08X}"
+            })
+            print(f"  ✓ Node {node_id}: Device Type = 0x{device_type:08X}")
+            bus_off_detected = False  # Reset flag on success
+            
+        except SDOTimeoutError:
+            # Node didn't respond - this is normal for non-existent nodes
+            pass
+        except SDOAbortError as e:
+            # Node responded but aborted the request
+            # This might indicate the object doesn't exist, but node is present
+            scan_errors += 1
+            if scan_errors <= 3:
+                print(f"  ⚠ Node {node_id}: SDO abort (code: 0x{e.abort_code:08X})")
+        except OSError as e:
+            # Check if this is a BUS_OFF error
+            error_msg = str(e)
+            if 'BUS_OFF' in error_msg or 'bus is BUS_OFF' in error_msg:
+                if not bus_off_detected:
+                    print(f"\n  ⚠ Bus went BUS_OFF")
+                    if args.can_mode == 'normal':
+                        print(f"     In NORMAL mode, this happens when no devices ACK messages")
+                        print(f"     Even with transceiver & termination, BUS_OFF occurs without ACKs")
+                        print(f"     Consider using SILENT mode for scanning (no ACK required)")
+                    print(f"     Driver will automatically recover. Waiting...")
+                    bus_off_detected = True
                 
-                # Verify it's a valid response
-                if len(payload) >= 8:
-                    # Convert payload to bytes if it's a list
-                    if isinstance(payload, list):
-                        payload_bytes = bytes(payload)
-                    else:
-                        payload_bytes = payload
-                    
-                    cmd = payload_bytes[0]
-                    # Check if it's a valid read response (0x4x where x indicates data size)
-                    if (cmd & 0xE0) == 0x40:  # Upload response
-                        # Extract device type (bytes 4-7, little-endian 32-bit)
-                        try:
-                            device_type = struct.unpack('<I', payload_bytes[4:8])[0]
-                            
-                            # Check if this node was already found
-                            node_found = False
-                            for found in found_nodes:
-                                if found['nodeId'] == node_id:
-                                    node_found = True
-                                    break
-                            
-                            if not node_found:
-                                found_nodes.append({
-                                    'nodeId': node_id,
-                                    'deviceType': device_type,
-                                    'deviceTypeHex': f"0x{device_type:08X}"
-                                })
-                                response_count += 1
-                        except:
-                            pass  # Ignore malformed responses
-        except:
-            pass  # Ignore errors processing individual messages
-
-# Send SDO requests to all nodes in range
-total_nodes = end_node - start_node + 1
-print(f"Sending SDO requests to nodes {start_node}-{end_node}...")
-
-send_errors = 0
-for node_id in range(start_node, end_node + 1):
-    tx_cobid = SDO_TX_BASE + node_id
-    try:
-        # Use timeout to prevent hanging if bus goes BUS_OFF
-        can.send(sdo_request, tx_cobid, timeout=100)
-    except Exception as e:
-        send_errors += 1
-        # If we get multiple send errors, bus might be BUS_OFF
-        if send_errors > 3:
-            print(f"\n⚠ Warning: Multiple send errors detected (bus may be BUS_OFF)")
-            print(f"   Error: {e}")
-            print(f"   Continuing scan but some messages may not be sent...")
-            # Try to continue with a small delay
-            time.sleep_ms(50)
-            # Reset error count to allow retry
-            if send_errors > 10:
-                print(f"\n❌ Too many send errors. Stopping scan.")
+                # Wait for bus recovery (driver handles this automatically)
+                # The driver waits 3 seconds + recovery time (needs 128 bus-free signals)
+                # So wait ~4-5 seconds total
+                recovery_wait_ms = 5000  # Wait 5 seconds for recovery
+                elapsed = 0
+                chunk_ms = 500
+                while elapsed < recovery_wait_ms:
+                    time.sleep_ms(chunk_ms)
+                    elapsed += chunk_ms
+                    remaining = (recovery_wait_ms - elapsed) // 1000
+                    if remaining > 0:
+                        print(f"     Recovery in progress... ({remaining}s remaining)")
+                
+                print(f"     ↻ Bus recovered, continuing scan...")
+                scan_errors += 1
+                
+                # Skip remaining nodes if bus keeps going BUS_OFF
+                # This prevents endless BUS_OFF loops
+                if scan_errors > 5:
+                    print(f"\n  ⚠ Bus keeps going BUS_OFF. Possible causes:")
+                    if args.can_mode == 'normal':
+                        print(f"     • NORMAL mode requires devices to ACK (use SILENT mode for scanning)")
+                    print(f"     • Missing bus termination (need 120Ω at both ends)")
+                    print(f"     • Bus wiring issues (CANH/CANL swapped or shorted)")
+                    print(f"     • Transceiver not powered or faulty")
+                    print(f"\n  Stopping scan to prevent bus errors.")
+                    break
+            else:
+                # Other OSError (timeout, etc.)
+                scan_errors += 1
+                if scan_errors <= 3:
+                    print(f"  ⚠ Node {node_id}: Error - {e}")
+        except Exception as e:
+            scan_errors += 1
+            if scan_errors <= 3:
+                print(f"  ⚠ Node {node_id}: Error - {e}")
+            
+            # If too many errors, might be bus issues
+            if scan_errors > 10:
+                print(f"\n❌ Too many scan errors. Stopping scan.")
                 print(f"   Possible causes:")
                 print(f"   • CAN transceiver not connected or powered")
                 print(f"   • Bus termination missing (need 120Ω at both ends)")
                 print(f"   • Bus in BUS_OFF state")
                 print(f"   • Try using SILENT mode if no transceiver is connected")
                 break
+        
+        # Rate limiting between requests
+        if args.rate_limit_ms > 0:
+            time.sleep_ms(args.rate_limit_ms)
+else:
+    # Fallback: Manual SDO implementation (original code)
+    print(f"Using manual SDO implementation to scan nodes {start_node}-{end_node}...")
+    print("  (SDO library not available - using fallback)")
     
-    # Process any responses that came in while sending
-    process_responses()
+    SDO_CMD_UPLOAD_INITIATE = 0x40
+    SDO_TX_BASE = 0x600
+    SDO_RX_BASE = 0x580
     
-    if args.rate_limit_ms > 0:
-        time.sleep_ms(args.rate_limit_ms)
-
-# Wait for remaining responses, processing incrementally
-print(f"\nWaiting {args.wait_time} seconds for responses...")
-wait_time_ms = int(args.wait_time * 1000)
-chunk_ms = 50  # Process messages every 50ms
-elapsed_ms = 0
-
-while elapsed_ms < wait_time_ms:
+    sdo_request = [
+        SDO_CMD_UPLOAD_INITIATE,
+        SDO_INDEX_DEVICE_TYPE & 0xFF,
+        (SDO_INDEX_DEVICE_TYPE >> 8) & 0xFF,
+        SDO_SUBINDEX,
+        0x00, 0x00, 0x00, 0x00
+    ]
+    
+    def process_responses():
+        """Process any available CAN messages and add found nodes to found_nodes list."""
+        global response_count
+        while can.any():
+            try:
+                msg_id, extended, rtr, payload = can.recv()
+                
+                if msg_id >= SDO_RX_BASE and msg_id < SDO_RX_BASE + 128:
+                    node_id = msg_id - SDO_RX_BASE
+                    
+                    if len(payload) >= 8:
+                        if isinstance(payload, list):
+                            payload_bytes = bytes(payload)
+                        else:
+                            payload_bytes = payload
+                        
+                        cmd = payload_bytes[0]
+                        if (cmd & 0xE0) == 0x40:  # Upload response
+                            try:
+                                device_type = struct.unpack('<I', payload_bytes[4:8])[0]
+                                
+                                node_found = False
+                                for found in found_nodes:
+                                    if found['nodeId'] == node_id:
+                                        node_found = True
+                                        break
+                                
+                                if not node_found:
+                                    found_nodes.append({
+                                        'nodeId': node_id,
+                                        'deviceType': device_type,
+                                        'deviceTypeHex': f"0x{device_type:08X}"
+                                    })
+                            except:
+                                pass
+            except:
+                pass
+    
+    send_errors = 0
+    for node_id in range(start_node, end_node + 1):
+        tx_cobid = SDO_TX_BASE + node_id
+        try:
+            can.send(sdo_request, tx_cobid, timeout=100)
+        except Exception as e:
+            send_errors += 1
+            if send_errors > 10:
+                print(f"\n❌ Too many send errors. Stopping scan.")
+                break
+        
+        process_responses()
+        
+        if args.rate_limit_ms > 0:
+            time.sleep_ms(args.rate_limit_ms)
+    
+    # Wait for remaining responses
+    wait_time_ms = int(args.wait_time * 1000)
+    chunk_ms = 50
+    elapsed_ms = 0
+    
+    while elapsed_ms < wait_time_ms:
+        process_responses()
+        sleep_ms = min(chunk_ms, wait_time_ms - elapsed_ms)
+        if sleep_ms > 0:
+            time.sleep_ms(sleep_ms)
+        elapsed_ms += chunk_ms
+    
     process_responses()
-    sleep_ms = min(chunk_ms, wait_time_ms - elapsed_ms)
-    if sleep_ms > 0:
-        time.sleep_ms(sleep_ms)
-    elapsed_ms += chunk_ms
-
-# Final pass to collect any remaining messages
-process_responses()
 
 # Sort by node ID
 found_nodes.sort(key=lambda x: x['nodeId'])
