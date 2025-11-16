@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763309920,
+  "updated": 1763311021,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -674,7 +674,7 @@
       "version": [
         0,
         5,
-        14
+        15
       ],
       "author": "JetPax",
       "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
