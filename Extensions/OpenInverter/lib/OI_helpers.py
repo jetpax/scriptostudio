@@ -50,25 +50,17 @@ import time
 # Import webrepl to send responses directly to client
 from esp32 import webrepl
 
-# Try to import CAN and SDO modules (may not be available on all platforms)
+# Import CAN module (may not be available on all platforms)
+# SDO library is guaranteed to be present in extension lib folder
 try:
     import CAN
-    from lib.canopen_sdo import SDOClient, fixed_to_float, float_to_fixed, param_id_to_sdo
-    from lib.canopen_sdo import SDOTimeoutError, SDOAbortError
     CAN_AVAILABLE = True
-except ImportError as e:
-    # Don't print - it interferes with M2M JSON responses in silent mode
+except ImportError:
     CAN_AVAILABLE = False
-    # Define dummy exception classes so code doesn't break
-    class SDOTimeoutError(Exception):
-        pass
-    class SDOAbortError(Exception):
-        pass
-    # Define dummy classes/functions
-    SDOClient = None
-    fixed_to_float = lambda x: x
-    float_to_fixed = lambda x: int(x)
-    param_id_to_sdo = lambda x: (0, 0)
+
+# SDO library is guaranteed to be present in extension
+from lib.canopen_sdo import SDOClient, fixed_to_float, float_to_fixed, param_id_to_sdo
+from lib.canopen_sdo import SDOTimeoutError, SDOAbortError
 
 # --- Global CAN and Device State ---
 can_dev = None
@@ -1654,84 +1646,186 @@ def getFirmwareUpgradeStatus():
 
 def scanCanBus(args=None):
     """
-    Scan CAN bus for OpenInverter devices.
+    Scan CAN bus for OpenInverter devices using robust SDO scanning.
     
     Args (dict, optional):
-        node_ids: List of node IDs to scan (default: 1-10 for quick scan, or 1-127 for full)
-        timeout: Timeout per node in milliseconds (default: 100ms)
         quick: If True, only scan common node IDs 1-10 (default: True)
+        timeout_ms: Timeout per node in milliseconds (default: 100ms)
+        rate_limit_ms: Delay between requests in milliseconds (default: 10ms)
         tx_pin: CAN TX pin (default: 5)
         rx_pin: CAN RX pin (default: 4)
         bitrate: CAN bitrate (default: 500000)
+        can_mode: CAN mode - 'normal' or 'silent' (default: 'silent' for scanning)
     
-    Returns list of detected nodes with their SDO responses.
+    Returns list of detected nodes with their device types and serial numbers.
     """
     global can_dev
     
     if not CAN_AVAILABLE:
         _send_error("CAN module not available", 'CAN-SCAN-ERROR')
         return
-        
-    # Initialize CAN if not already initialized
-    if can_dev is None:
-        if args is None:
-            args = {}
-        
-        tx_pin = args.get('tx_pin', 5)
-        rx_pin = args.get('rx_pin', 4)
-        bitrate = args.get('bitrate', 500000)
-        
-        try:
-            can_dev = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=CAN.NORMAL, bitrate=bitrate, auto_restart=False)
-        except Exception as e:
-            _send_error(f"Failed to initialize CAN: {e}", 'CAN-SCAN-ERROR')
-            return
     
-    # Default to quick scan (nodes 1-10) for better UX
-    quick_scan = args.get('quick', True) if args else True
-    default_range = range(1, 11) if quick_scan else range(1, 128)
-    node_ids = args.get('node_ids', list(default_range)) if args else list(default_range)
-    timeout = args.get('timeout', 0.1) if args else 0.1
+    if args is None:
+        args = {}
     
-    total_nodes = len(node_ids)
+    # Parse arguments
+    quick_scan = args.get('quick', True)
+    timeout_ms = args.get('timeout_ms', 100)
+    rate_limit_ms = args.get('rate_limit_ms', 10)
+    tx_pin = args.get('tx_pin', 5)
+    rx_pin = args.get('rx_pin', 4)
+    bitrate = args.get('bitrate', 500000)
+    can_mode_str = args.get('can_mode', 'silent')  # Default to SILENT for scanning
+    
+    # Determine scan range
+    if quick_scan:
+        start_node = 1
+        end_node = 10
+    else:
+        start_node = 1
+        end_node = 127
+    
+    # Convert CAN mode string to constant
+    can_mode = CAN.SILENT if can_mode_str == 'silent' else CAN.NORMAL
+    
+    # Initialize CAN for scanning
+    # For scanning, we always use SILENT mode to avoid BUS_OFF
+    # We create a temporary CAN instance to avoid interfering with existing connections
+    scan_can = None
+    try:
+        # Always create a fresh CAN instance for scanning to ensure SILENT mode
+        # This avoids interfering with any existing device connection
+        scan_can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=can_mode, bitrate=bitrate, auto_restart=False)
+    except Exception as e:
+        _send_error(f"Failed to initialize CAN: {e}", 'CAN-SCAN-ERROR')
+        return
+    
+    # Clear any pending messages
+    while scan_can.any():
+        scan_can.recv()
+    
+    # Collect found nodes
     found_nodes = []
+    scan_errors = 0
+    bus_off_detected = False
     
-    for index, node_id in enumerate(node_ids):
+    # Convert timeout from ms to seconds for SDO client
+    sdo_timeout = timeout_ms / 1000.0 if timeout_ms > 0 else 0.1
+    
+    # SDO Protocol Constants
+    SDO_INDEX_DEVICE_TYPE = 0x1000
+    SDO_SUBINDEX = 0x00
+    
+    # Scan each node
+    for node_id in range(start_node, end_node + 1):
         try:
-            # Create temporary SDO client for this node
-            temp_sdo = SDOClient(can_dev, node_id=node_id, timeout=timeout)
-        
-            # Try to read a standard parameter (e.g., index 0x1000 - device type)
+            # Create SDO client for this node
+            sdo_client = SDOClient(scan_can, node_id=node_id, timeout=sdo_timeout)
+            
+            # Try to read device type (standard CANopen object 0x1000)
+            device_type = sdo_client.read(SDO_INDEX_DEVICE_TYPE, SDO_SUBINDEX)
+            
+            # Node responded successfully - try to read serial number
+            serial_number = None
             try:
-                device_type = temp_sdo.read(0x1000, 0)
-                
-                # Try to read serial number too
-                serial_number = None
-                try:
-                    serial_raw = temp_sdo.read(0x5000, 0)
-                    serial_number = f"{serial_raw:08X}"
-                except:
-                    pass
-                
-                # Node responded, add to list
-                found_nodes.append({
-                    'nodeId': node_id,
-                    'serialNumber': serial_number,
-                    'deviceType': device_type,
-                    'responding': True
-                })
-                
-            except (SDOTimeoutError, SDOAbortError):
+                # Serial number is at 0x5000, subindex 0-2 (3 parts)
+                serial_parts = []
+                for i in range(3):
+                    part = sdo_client.read(0x5000, i)
+                    serial_parts.append(f"{part:08X}")
+                serial_number = ":".join(serial_parts)
+            except:
+                # Serial number read failed, but device is still present
                 pass
+            
+            # Node responded successfully
+            found_nodes.append({
+                'nodeId': node_id,
+                'deviceType': device_type,
+                'deviceTypeHex': f"0x{device_type:08X}",
+                'serialNumber': serial_number
+            })
+            bus_off_detected = False  # Reset flag on success
+            
+        except SDOTimeoutError:
+            # Node didn't respond - this is normal for non-existent nodes
+            pass
+        except SDOAbortError as e:
+            # Node responded but aborted the request
+            # This might indicate the object doesn't exist, but node is present
+            scan_errors += 1
+            # Don't add to found_nodes if abort occurred
+        except OSError as e:
+            # Check if this is a BUS_OFF error
+            error_msg = str(e)
+            if 'BUS_OFF' in error_msg or 'bus is BUS_OFF' in error_msg:
+                if not bus_off_detected:
+                    bus_off_detected = True
                 
+                # Wait for bus recovery (driver handles this automatically)
+                # The driver waits 3 seconds + recovery time (needs 128 bus-free signals)
+                recovery_wait_ms = 5000  # Wait 5 seconds for recovery
+                elapsed = 0
+                chunk_ms = 500
+                while elapsed < recovery_wait_ms:
+                    time.sleep_ms(chunk_ms)
+                    elapsed += chunk_ms
+                
+                # After recovery, explicitly restart the driver to ensure it's ready
+                try:
+                    scan_can.restart()
+                except Exception:
+                    pass  # Ignore restart errors
+                
+                scan_errors += 1
+                
+                # Skip remaining nodes if bus keeps going BUS_OFF
+                if scan_errors > 5:
+                    _send_error("Bus keeps going BUS_OFF. Check hardware connections.", 'CAN-SCAN-ERROR')
+                    return
+            else:
+                # Other OSError (timeout, etc.)
+                error_msg = str(e)
+                if 'Device is not ready' in error_msg:
+                    # Driver might be in wrong state after BUS_OFF recovery
+                    if bus_off_detected:
+                        try:
+                            scan_can.restart()
+                        except Exception:
+                            pass
+                    else:
+                        scan_errors += 1
+                else:
+                    scan_errors += 1
         except Exception as e:
-            pass  # Ignore errors for individual nodes
+            error_msg = str(e)
+            if 'Device is not ready' in error_msg:
+                # Driver might be in wrong state after BUS_OFF recovery
+                if bus_off_detected:
+                    try:
+                        scan_can.restart()
+                    except Exception:
+                        pass
+                else:
+                    scan_errors += 1
+            else:
+                scan_errors += 1
+            
+            # If too many errors, might be bus issues
+            if scan_errors > 10:
+                _send_error("Too many scan errors. Check CAN bus hardware.", 'CAN-SCAN-ERROR')
+                return
+        
+        # Rate limiting between requests
+        if rate_limit_ms > 0:
+            time.sleep_ms(rate_limit_ms)
     
     # Send final result
     scan_type = "quick" if quick_scan else "full"
     _send_response('CAN-SCAN-RESULT', {
         'devices': found_nodes,
-        'scanned': total_nodes,
+        'scanned': end_node - start_node + 1,
+        'found': len(found_nodes),
         'scanType': scan_type
     })
 
