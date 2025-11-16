@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 5, 9],
+//   "version": [0, 5, 10],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -940,18 +940,9 @@ class OpenInverterExtension {
               ` : this.state.isScanning ? this.html`
                 <div style="padding: 16px;">
                   <div style="margin-bottom: 12px; color: var(--text-secondary); font-size: 13px; text-align: center;">
-                    ${this.state.scanProgress ? this.html`
-                      <p>Scanning node ${this.state.scanProgress.current} of ${this.state.scanProgress.total} 
-                        (${this.state.scanProgress.found} found)</p>
-                    ` : this.html`
-                      <p>Initializing scan...</p>
-                    `}
+                    <p>Scanning CAN bus for devices...</p>
+                    <p style="font-size: 12px; margin-top: 8px;">This may take a few seconds</p>
                   </div>
-                  ${this.state.scanProgress ? this.html`
-                    <div style="width: 100%; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
-                      <div style="height: 100%; background: var(--scheme-primary); transition: width 0.3s ease; width: ${this.state.scanProgress.progress}%;"></div>
-                    </div>
-                  ` : ''}
                 </div>
               ` : this.state.scanMessage ? this.html`
                 <div style="text-align: center; padding: 16px; color: var(--text-secondary); font-size: 13px; background: var(--bg-tertiary); border-radius: 4px;">
@@ -1244,21 +1235,10 @@ class OpenInverterExtension {
   async scanCanBus(fullScan = false) {
     this.state.isScanning = true
     this.state.canScanResults = []
-    this.state.scanProgress = { progress: 0, current: 0, total: 0, found: 0 }
+    this.state.scanProgress = null
     this.emit('render')
 
-    // Set up listener for progress updates
-    const progressHandler = (data) => {
-      if (data.CMD === 'CAN-SCAN-PROGRESS') {
-        this.state.scanProgress = data.ARG
-        this.emit('render')
-      }
-    }
-
     try {
-      // Listen for progress updates during scan
-      this.device.on && this.device.on('message', progressHandler)
-      
       const scanArgs = JSON.stringify({ quick: !fullScan })
       const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus(${scanArgs})`, false) // false = not silent, show output
       
@@ -1283,9 +1263,6 @@ class OpenInverterExtension {
       this.state.scanMessage = `Scan failed: ${error.message}`
       this.state.canScanResults = []
     } finally {
-      // Clean up progress listener
-      this.device.off && this.device.off('message', progressHandler)
-      
       this.state.isScanning = false
       this.state.scanProgress = null
       this.emit('render')

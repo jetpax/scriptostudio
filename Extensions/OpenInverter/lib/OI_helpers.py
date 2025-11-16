@@ -1706,15 +1706,16 @@ def scanCanBus(args=None):
     found_nodes = []
     
     for index, node_id in enumerate(node_ids):
-        # Send progress update every 10 nodes or when a device is found
-        if index % 10 == 0 or index == 0:
-            progress = int((index / total_nodes) * 100)
-            _send_response('CAN-SCAN-PROGRESS', {
-                'progress': progress,
-                'current': node_id,
-                'total': total_nodes,
-                'found': len(found_nodes)
-            })
+        # Don't send progress updates during execute() as they interfere with JSON parsing
+        # Progress updates would need to be handled differently (via streaming/websocket)
+        # if index % 10 == 0 or index == 0:
+        #     progress = int((index / total_nodes) * 100)
+        #     _send_response('CAN-SCAN-PROGRESS', {
+        #         'progress': progress,
+        #         'current': node_id,
+        #         'total': total_nodes,
+        #         'found': len(found_nodes)
+        #     })
         
         try:
             # Create temporary SDO client for this node
@@ -1744,15 +1745,15 @@ def scanCanBus(args=None):
                 
                 print(f"[OI] Found node {node_id} (device type: 0x{device_type:08X}, serial: {serial_number})")
                 
-                # Send immediate progress update when device found
-                progress = int(((index + 1) / total_nodes) * 100)
-                _send_response('CAN-SCAN-PROGRESS', {
-                    'progress': progress,
-                    'current': node_id,
-                    'total': total_nodes,
-                    'found': len(found_nodes),
-                    'lastFound': node_id
-                })
+                # Don't send progress updates during execute() as they interfere with JSON parsing
+                # progress = int(((index + 1) / total_nodes) * 100)
+                # _send_response('CAN-SCAN-PROGRESS', {
+                #     'progress': progress,
+                #     'current': node_id,
+                #     'total': total_nodes,
+                #     'found': len(found_nodes),
+                #     'lastFound': node_id
+                # })
                 
             except (SDOTimeoutError, SDOAbortError):
                 # Node didn't respond or doesn't have this object
