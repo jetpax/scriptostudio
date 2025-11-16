@@ -73,7 +73,7 @@ The `index.json` file contains:
 - `source_url` - Original library URL
 - `source_repo` - GitHub repository (owner/repo)
 - `upstream_version` - Latest version from source
-- `tags` - Includes category + custom tags + `untested` + `awesome-micropython`
+- `tags` - Includes category + custom tags + `untested` 
 
 ## Adding ScriptOs
 
