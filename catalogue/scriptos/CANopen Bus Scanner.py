@@ -8,7 +8,7 @@ dict(
     info    = dict(
         # ----------------------------------------------------------------------
         name        = 'CANopen Bus Scanner',
-        version     = [1, 0, 1],
+        version     = [1, 0, 2],
         category    = 'CAN/TWAI',
         description = 'Scan CANopen network for devices by sending SDO (Service Data Object) requests. This tool discovers CANopen nodes on the bus by attempting to read the device type (object 0x1000) from each possible node ID. Useful for identifying OpenInverter devices and other CANopen-compatible equipment.',
         author      = 'Scriptomatic Team',
@@ -228,6 +228,11 @@ if SDO_LIBRARY_AVAILABLE:
                         print(f"     In NORMAL mode, this happens when no devices ACK messages")
                         print(f"     Even with transceiver & termination, BUS_OFF occurs without ACKs")
                         print(f"     Consider using SILENT mode for scanning (no ACK required)")
+                    elif args.can_mode == 'silent':
+                        print(f"     BUS_OFF in SILENT mode suggests a hardware issue:")
+                        print(f"     • CANH/CANL may be shorted or swapped")
+                        print(f"     • Transceiver may be faulty")
+                        print(f"     • Bus termination may be incorrect")
                     print(f"     Driver will automatically recover. Waiting...")
                     bus_off_detected = True
                 
@@ -244,7 +249,15 @@ if SDO_LIBRARY_AVAILABLE:
                     if remaining > 0:
                         print(f"     Recovery in progress... ({remaining}s remaining)")
                 
-                print(f"     ↻ Bus recovered, continuing scan...")
+                # After recovery, explicitly restart the driver to ensure it's ready
+                try:
+                    print(f"     ↻ Restarting driver...")
+                    can.restart()
+                    print(f"     ✓ Driver restarted, continuing scan...")
+                except Exception as restart_err:
+                    print(f"     ⚠ Restart failed: {restart_err}")
+                    print(f"     Continuing anyway...")
+                
                 scan_errors += 1
                 
                 # Skip remaining nodes if bus keeps going BUS_OFF
@@ -260,13 +273,43 @@ if SDO_LIBRARY_AVAILABLE:
                     break
             else:
                 # Other OSError (timeout, etc.)
+                error_msg = str(e)
+                if 'Device is not ready' in error_msg:
+                    # Driver might be in wrong state after BUS_OFF recovery
+                    if bus_off_detected:
+                        try:
+                            print(f"     ↻ Attempting driver restart...")
+                            can.restart()
+                            print(f"     ✓ Driver restarted")
+                        except Exception as restart_err:
+                            print(f"     ⚠ Restart failed: {restart_err}")
+                    else:
+                        scan_errors += 1
+                        if scan_errors <= 3:
+                            print(f"  ⚠ Node {node_id}: Error - {e}")
+                else:
+                    scan_errors += 1
+                    if scan_errors <= 3:
+                        print(f"  ⚠ Node {node_id}: Error - {e}")
+        except Exception as e:
+            error_msg = str(e)
+            if 'Device is not ready' in error_msg:
+                # Driver might be in wrong state after BUS_OFF recovery
+                if bus_off_detected:
+                    try:
+                        print(f"     ↻ Attempting driver restart...")
+                        can.restart()
+                        print(f"     ✓ Driver restarted")
+                    except Exception as restart_err:
+                        print(f"     ⚠ Restart failed: {restart_err}")
+                else:
+                    scan_errors += 1
+                    if scan_errors <= 3:
+                        print(f"  ⚠ Node {node_id}: Error - {e}")
+            else:
                 scan_errors += 1
                 if scan_errors <= 3:
                     print(f"  ⚠ Node {node_id}: Error - {e}")
-        except Exception as e:
-            scan_errors += 1
-            if scan_errors <= 3:
-                print(f"  ⚠ Node {node_id}: Error - {e}")
             
             # If too many errors, might be bus issues
             if scan_errors > 10:
