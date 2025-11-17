@@ -14,14 +14,29 @@ Client-callable functions:
 - getOVMSStatus()          - Get connection status
 """
 
-import json
-import time
-import socket
-import struct
-import hashlib
+try:
+    print("[OVMS] Module import: Starting imports")
+    import json
+    import time
+    import socket
+    import struct
+    import hashlib
+    import base64
+    import sys
+    print("[OVMS] Module import: Standard library imports complete")
+    from esp32 import webrepl
+    print("[OVMS] Module import: webrepl import complete")
+except Exception as e:
+    print(f"[OVMS] ERROR during imports: {type(e).__name__}: {e}")
+    import sys
+    try:
+        sys.print_exception(e)
+    except:
+        print(f"[OVMS] Could not print import exception traceback")
+    raise  # Re-raise to fail fast
+
+# Import hmac module (required dependency)
 import hmac
-import base64
-from esp32 import webrepl
 
 # Import OpenInverter helpers to reuse spot value queries
 try:
@@ -59,8 +74,50 @@ _last_poll_time = 0
 
 def _send_response(cmd, arg):
     """Internal helper to send JSON response to WebREPL client"""
-    response = json.dumps({'CMD': cmd, 'ARG': arg})
-    webrepl.send(response)
+    try:
+        # Ensure arg is JSON-serializable
+        if isinstance(arg, dict):
+            # Convert any non-serializable values
+            serializable_arg = {}
+            for k, v in arg.items():
+                if isinstance(v, (str, int, float, bool, type(None))):
+                    serializable_arg[k] = v
+                elif isinstance(v, (list, tuple)):
+                    serializable_arg[k] = list(v)
+                else:
+                    serializable_arg[k] = str(v)  # Convert to string as fallback
+            arg = serializable_arg
+        
+        response = json.dumps({'CMD': cmd, 'ARG': arg})
+        
+        # Try webrepl.send() first, but fall back to print() if it fails
+        # The frontend parses JSON from print() output anyway
+        try:
+            if hasattr(webrepl, 'send'):
+                result = webrepl.send(response)
+                if not result:
+                    # webrepl.send() returned False - no client connected
+                    # Fall through to print()
+                    print(response)
+            else:
+                # webrepl.send() doesn't exist - use print()
+                print(response)
+        except AttributeError:
+            # webrepl.send() doesn't exist - use print()
+            print(response)
+        except Exception as send_error:
+            # webrepl.send() failed - fall back to print()
+            print(f"[OVMS] webrepl.send() failed, using print(): {send_error}")
+            print(response)
+    except Exception as e:
+        # If JSON serialization fails, print error but don't raise
+        print(f"[OVMS] Error sending response: {e}")
+        print(f"[OVMS] CMD: {cmd}, ARG: {arg}")
+        import sys
+        try:
+            sys.print_exception(e)
+        except:
+            pass
 
 
 def _send_error(message, cmd='OVMS-ERROR'):
@@ -72,10 +129,13 @@ def _load_config():
     """Load configuration from file or use defaults"""
     global _config
     try:
+        print("[OVMS] _load_config: Attempting to open /ovms_config.json")
         with open('/ovms_config.json', 'r') as f:
             saved_config = json.loads(f.read())
             _config.update(saved_config)
-    except:
+        print("[OVMS] _load_config: Config loaded successfully")
+    except Exception as e:
+        print(f"[OVMS] _load_config: Using defaults (file not found or error: {e})")
         pass  # Use defaults
 
 
@@ -537,26 +597,60 @@ def stopOVMS():
 
 def getOVMSStatus():
     """Get OVMS connection status"""
-    # Check for server messages if connected
-    if _ovms_connected:
-        checkServerMessages()
-    
-    # Trigger poll if enabled and connected
-    if _config['enabled'] and _ovms_connected:
-        current_time = time.time()
-        if _last_poll_time == 0 or (current_time - _last_poll_time) >= _config['pollinterval']:
-            _poll_loop()
-    
-    status = {
-        'state': _ovms_state,
-        'status': _ovms_status,
-        'connected': _ovms_connected,
-        'metrics_count': len(_metrics),
-        'last_poll': _last_poll_time
-    }
-    _send_response('OVMS-STATUS', status)
+    try:
+        print("[OVMS] getOVMSStatus: Starting")
+        # Check for server messages if connected
+        if _ovms_connected:
+            print("[OVMS] getOVMSStatus: Checking server messages")
+            checkServerMessages()
+        
+        # Trigger poll if enabled and connected
+        if _config['enabled'] and _ovms_connected:
+            current_time = time.time()
+            if _last_poll_time == 0 or (current_time - _last_poll_time) >= _config['pollinterval']:
+                print("[OVMS] getOVMSStatus: Triggering poll")
+                _poll_loop()
+        
+        print("[OVMS] getOVMSStatus: Building status dict")
+        status = {
+            'state': _ovms_state,
+            'status': _ovms_status,
+            'connected': _ovms_connected,
+            'metrics_count': len(_metrics),
+            'last_poll': _last_poll_time
+        }
+        print(f"[OVMS] getOVMSStatus: Sending response, status={status}")
+        _send_response('OVMS-STATUS', status)
+        print("[OVMS] getOVMSStatus: Complete")
+    except Exception as e:
+        # Catch any unexpected exceptions and send error response
+        print(f"[OVMS] ERROR in getOVMSStatus: {type(e).__name__}: {e}")
+        try:
+            import sys
+            print("[OVMS] Printing full exception traceback:")
+            sys.print_exception(e)
+        except Exception as print_err:
+            # Fallback if print_exception not available or fails
+            print(f"[OVMS] Could not print exception: {print_err}")
+            print(f"[OVMS] Exception type: {type(e).__name__}")
+            print(f"[OVMS] Exception message: {e}")
+            print(f"[OVMS] Exception args: {e.args if hasattr(e, 'args') else 'N/A'}")
+        try:
+            _send_error(f'Status error: {e}')
+        except Exception as send_err:
+            print(f"[OVMS] Failed to send error response: {send_err}")
 
 
 # Initialize config on module load
-_load_config()
+try:
+    print("[OVMS] Module loading: Starting _load_config()")
+    _load_config()
+    print("[OVMS] Module loading: _load_config() completed")
+except Exception as e:
+    print(f"[OVMS] ERROR during module load: {type(e).__name__}: {e}")
+    import sys
+    try:
+        sys.print_exception(e)
+    except:
+        print(f"[OVMS] Could not print exception traceback")
 
