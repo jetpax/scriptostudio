@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 6, 6],
+//   "version": [0, 6, 7],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -917,14 +917,14 @@ class OpenInverterExtension {
                 <h4 style="font-size: 14px; margin: 0; color: var(--text-secondary);">Scan CAN Bus for Devices</h4>
                 <div style="display: flex; gap: 8px;">
                   <button 
-                    class="primary-button" 
+                    class="refresh-button" 
                     onclick=${() => this.scanCanBus(false)}
                     disabled=${!this.state.isConnected || this.state.isScanning}
                     style="padding: 8px 16px; font-size: 13px;">
                     ${this.state.isScanning ? 'Scanning...' : 'Quick Scan'}
                   </button>
                   <button 
-                    class="secondary-button" 
+                    class="refresh-button" 
                     onclick=${() => this.scanCanBus(true)}
                     disabled=${!this.state.isConnected || this.state.isScanning}
                     style="padding: 8px 16px; font-size: 13px;">
@@ -1002,8 +1002,8 @@ class OpenInverterExtension {
                 </label>
                 
                 <button 
-                  class="primary-button" 
-                  style="margin-top: 20px;"
+                  class="refresh-button" 
+                  style="margin-top: 20px; color: green;"
                   onclick=${() => this.connectToDevice()}
                   disabled=${!this.state.isConnected}>
                   Connect
