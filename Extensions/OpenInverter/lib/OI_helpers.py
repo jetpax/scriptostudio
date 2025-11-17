@@ -50,13 +50,10 @@ import time
 # Import webrepl to send responses directly to client
 from esp32 import webrepl
 
-# Import CAN module (may not be available on all platforms)
-# SDO library is guaranteed to be present in extension lib folder
-try:
-    import CAN
-    CAN_AVAILABLE = True
-except ImportError:
-    CAN_AVAILABLE = False
+# CAN module will be imported dynamically when needed
+# This avoids import errors at module load time
+CAN_AVAILABLE = None  # Will be checked dynamically
+CAN = None  # Will be imported when needed
 
 # SDO library is guaranteed to be present in extension (same package)
 from canopen_sdo import SDOClient, fixed_to_float, float_to_fixed, param_id_to_sdo
@@ -70,6 +67,29 @@ device_node_id = 1
 device_bitrate = 500000
 param_db_cache = None
 streaming_active = False
+
+
+def _check_can_available():
+    """Helper function to check if CAN module is available, importing it if needed."""
+    global CAN, CAN_AVAILABLE
+    
+    if CAN_AVAILABLE is not None:
+        return CAN_AVAILABLE
+    
+    # Try to import CAN module
+    if CAN is None:
+        try:
+            import CAN
+            CAN_AVAILABLE = True
+            return True
+        except ImportError:
+            CAN_AVAILABLE = False
+            return False
+        except Exception:
+            CAN_AVAILABLE = False
+            return False
+    
+    return CAN_AVAILABLE
 
 # --- Global Parameters/Spot Values Store (Demo Data or from device) ---
 # This will be replaced with actual device data when connected
@@ -147,9 +167,10 @@ def initializeDevice(args=None):
     Returns:
         Connection status and device info
     """
-    global can_dev, sdo_client, device_connected, device_node_id, device_bitrate
+    global can_dev, sdo_client, device_connected, device_node_id, device_bitrate, CAN, CAN_AVAILABLE
     
-    if not CAN_AVAILABLE:
+    # Check if CAN is available (will import if needed)
+    if not _check_can_available():
         _send_error("CAN module not available on this platform", 'INIT-DEVICE-ERROR')
         return
     
@@ -229,7 +250,7 @@ def getDeviceStatus():
     """
     status = {
         'connected': device_connected,
-        'can_available': CAN_AVAILABLE,
+        'can_available': _check_can_available(),
         'node_id': device_node_id,
         'bitrate': device_bitrate,
         'streaming_active': streaming_active
@@ -352,7 +373,7 @@ def getOiParams():
     param_list = {}
     
     # If connected to device, read actual values
-    if device_connected and sdo_client and CAN_AVAILABLE:
+    if device_connected and sdo_client and _check_can_available():
         try:
             for key, item in parameters.items():
                 if item.get('isparam') == True:
@@ -534,7 +555,7 @@ def getSpotValues():
     spot_list = {}
     
     # If connected to device, read actual values
-    if device_connected and sdo_client and CAN_AVAILABLE:
+    if device_connected and sdo_client and _check_can_available():
         try:
             for key, item in parameters.items():
                 if item.get('isparam') != True:
@@ -1243,7 +1264,7 @@ def startLiveStreaming(can_ids):
     """
     global streaming_active
     
-    if not CAN_AVAILABLE or can_dev is None:
+    if not _check_can_available() or can_dev is None:
         _send_error("CAN not available", 'STREAMING-START-ERROR')
         return
     
@@ -1267,7 +1288,7 @@ def stopLiveStreaming():
     """
     global streaming_active
     
-    if not CAN_AVAILABLE or can_dev is None:
+    if not _check_can_available() or can_dev is None:
         _send_error("CAN not available", 'STREAMING-STOP-ERROR')
         return
     
@@ -1415,7 +1436,7 @@ def startFirmwareUpgrade(args):
         serial_number: str - 8 hex digit serial (optional, for recovery mode)
         node_id: int - Node ID to upgrade (for normal mode)
     """
-    if not CAN_AVAILABLE or can_dev is None:
+    if not _check_can_available() or can_dev is None:
         _send_error("CAN not available", 'FIRMWARE-UPGRADE-ERROR')
         return
     
@@ -1660,10 +1681,11 @@ def scanCanBus(args=None):
     
     Returns list of detected nodes with their device types and serial numbers.
     """
-    global can_dev
+    global can_dev, CAN, CAN_AVAILABLE
     
-    if not CAN_AVAILABLE:
-        _send_error("CAN module not available", 'CAN-SCAN-ERROR')
+    # Check if CAN is available (will import if needed)
+    if not _check_can_available():
+        _send_error("CAN module not available - check if CAN module is installed", 'CAN-SCAN-ERROR')
         return
     
     # Parse args if it's a JSON string (from JavaScript calls)
