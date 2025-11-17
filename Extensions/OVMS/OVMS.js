@@ -2,7 +2,7 @@
 // {
 //   "name": "OVMS",
 //   "id": "ovms",
-//   "version": [0, 1, 0],
+//   "version": [0, 1, 1],
 //   "author": "JetPax",
 //   "description": "Send OpenInverter metrics to OVMS v2 server",
 //   "icon": "cloud",
@@ -362,14 +362,14 @@ class OVMSExtension {
             <button 
               class="ovms-button secondary"
               onclick=${() => this.stopOVMS()}
-              disabled={!this.state.isConnected || !status.connected || this.state.ovms.isLoading}
+              disabled=${!this.state.isConnected || !status.connected || this.state.ovms.isLoading}
             >
               Stop OVMS
             </button>
             <button 
               class="ovms-button secondary"
               onclick=${() => this.getOVMSStatus()}
-              disabled={!this.state.isConnected || this.state.ovms.isLoading}
+              disabled=${!this.state.isConnected || this.state.ovms.isLoading}
             >
               Refresh Status
             </button>
