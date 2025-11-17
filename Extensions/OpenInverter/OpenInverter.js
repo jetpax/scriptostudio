@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 6, 3],
+//   "version": [0, 6, 4],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -1240,7 +1240,7 @@ class OpenInverterExtension {
 
     try {
       const scanArgs = JSON.stringify({ quick: !fullScan })
-      const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus(${scanArgs})`) // silent=true (default) to capture JSON response via webrepl.send()
+      const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus('${scanArgs}')`) // Pass as JSON string, function will parse it
       const parsed = this.device.parseJSON(result)
       
       // Check if we got an error response
