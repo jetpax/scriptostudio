@@ -1719,16 +1719,43 @@ def scanCanBus(args=None):
     can_mode = CAN.SILENT if can_mode_str == 'silent' else CAN.NORMAL
     
     # Initialize CAN for scanning
-    # For scanning, we always use SILENT mode to avoid BUS_OFF
-    # We create a temporary CAN instance to avoid interfering with existing connections
+    # ESP32 CAN uses a singleton pattern - CAN(0, ...) always returns the same object
+    # The driver's make_new() will automatically deinit/reinit if needed
     scan_can = None
-    try:
-        # Always create a fresh CAN instance for scanning to ensure SILENT mode
-        # This avoids interfering with any existing device connection
-        scan_can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=can_mode, bitrate=bitrate, auto_restart=False)
-    except Exception as e:
-        _send_error(f"Failed to initialize CAN: {e}", 'CAN-SCAN-ERROR')
-        return
+    
+    # Check if we can reuse existing CAN instance
+    reuse_existing = False
+    if can_dev is not None and device_connected:
+        # If device is connected, we can't change CAN settings
+        # Use existing instance but scanning might interfere
+        scan_can = can_dev
+        reuse_existing = True
+    else:
+        # No device connected, safe to reconfigure CAN for scanning
+        # If can_dev exists, deinit it first to ensure clean state
+        # The driver's make_new() will also check, but explicit deinit ensures cleanup
+        if can_dev is not None:
+            try:
+                can_dev.deinit()
+                # Give FreeRTOS time to actually delete the IRQ task
+                # vTaskDelete is asynchronous, so we need a small delay
+                time.sleep_ms(50)
+            except:
+                pass  # Ignore deinit errors
+            can_dev = None
+        
+        # Let the driver handle reinit automatically
+        # The driver's make_new() checks if initialized and calls can_deinit() if needed
+        try:
+            scan_can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=can_mode, bitrate=bitrate, auto_restart=False)
+            # Update can_dev reference if we created a new instance
+            if not device_connected:
+                can_dev = scan_can
+        except Exception as e:
+            error_msg = str(e)
+            print(f"[OI] CAN init error: {error_msg}")
+            _send_error(f"Failed to initialize CAN: {error_msg}", 'CAN-SCAN-ERROR')
+            return
     
     # Wrap entire scan in try/except to ensure response is always sent
     try:
@@ -1865,4 +1892,12 @@ def scanCanBus(args=None):
         error_msg = str(e)
         print(f"[OI] scanCanBus exception: {error_msg}")
         _send_error(f"Scan failed: {error_msg}", 'CAN-SCAN-ERROR')
+    finally:
+        # Clean up scan CAN instance if we created a separate one
+        # Don't deinit if it's the same as can_dev and device is connected
+        if scan_can is not None and scan_can != can_dev and not device_connected:
+            try:
+                scan_can.deinit()
+            except:
+                pass  # Ignore cleanup errors
 
