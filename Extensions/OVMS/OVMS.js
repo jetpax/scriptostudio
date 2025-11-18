@@ -2,7 +2,7 @@
 // {
 //   "name": "OVMS",
 //   "id": "ovms",
-//   "version": [0, 1, 7],
+//   "version": [0, 1, 8],
 //   "author": "JetPax",
 //   "description": "Send OpenInverter metrics to OVMS v2 server",
 //   "icon": "cloud",
@@ -50,7 +50,8 @@ class OVMSExtension {
           metrics_count: 0,
           last_poll: 0
         },
-        isLoading: false
+        isLoading: false,
+        configLoaded: false
       }
     }
   }
@@ -58,17 +59,32 @@ class OVMSExtension {
   // === Helper Methods for OVMS_helpers.py ===
 
   async getOVMSConfig() {
+    // Prevent multiple simultaneous loads
+    if (this.state.ovms.isLoading) {
+      console.log('[OVMS] Config already loading, skipping')
+      return this.state.ovms.config || {}
+    }
+    
     try {
+      this.state.ovms.isLoading = true
       const result = await this.device.execute('from lib.OVMS_helpers import getOVMSConfig; getOVMSConfig()')
       const parsed = this.device.parseJSON(result)
-      if (parsed.CMD === 'OVMS-CONFIG') {
-        this.state.ovms.config = parsed.ARG
+      if (parsed && parsed.CMD === 'OVMS-CONFIG') {
+        this.state.ovms.config = parsed.ARG || {}
+        this.state.ovms.configLoaded = true
         this.emit('render')
+      } else {
+        // Mark as loaded even if response is invalid to prevent infinite retries
+        this.state.ovms.configLoaded = true
+        console.warn('[OVMS] Config response invalid or missing:', parsed)
       }
-      return parsed.ARG || {}
+      this.state.ovms.isLoading = false
+      return parsed?.ARG || this.state.ovms.config || {}
     } catch (e) {
       console.error('[OVMS] Error getting config:', e)
-      return {}
+      this.state.ovms.isLoading = false
+      this.state.ovms.configLoaded = true // Mark as loaded even on error to prevent infinite retries
+      return this.state.ovms.config || {}
     }
   }
 
@@ -157,7 +173,7 @@ class OVMSExtension {
 
   renderConfig() {
     // Load config if not loaded
-    if (!this.state.ovms.config.server && this.state.isConnected && !this.state.ovms.isLoading) {
+    if (!this.state.ovms.configLoaded && this.state.isConnected && !this.state.ovms.isLoading) {
       setTimeout(() => this.getOVMSConfig(), 0)
     }
 
