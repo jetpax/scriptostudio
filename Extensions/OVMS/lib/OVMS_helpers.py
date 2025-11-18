@@ -35,8 +35,8 @@ except Exception as e:
         print(f"[OVMS] Could not print import exception traceback")
     raise  # Re-raise to fail fast
 
-# Import hmac module (required dependency)
-import hmac
+# Import hmac module from local lib directory
+import lib.hmac as hmac
 
 # Import OpenInverter helpers to reuse spot value queries
 try:

@@ -1,10 +1,8 @@
 {
   "urls": [
-    ["OVMS_helpers.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/OVMS_helpers.py"]
+    ["OVMS_helpers.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/OVMS_helpers.py"],
+    ["hmac.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/hmac.py"]
   ],
-  "deps": [
-    ["hmac", "latest"]
-  ],
-  "version": "0.1.2"
+  "version": "0.1.4"
 }
 
