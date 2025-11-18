@@ -1,8 +1,11 @@
 {
   "urls": [
     ["OVMS_helpers.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/OVMS_helpers.py"],
-    ["hmac.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/hmac.py"]
+    ["hmac.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/hmac.py"],    
+    ["base64.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/base64.py"],
+    ["binascii.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/binascii.py"]
+
   ],
-  "version": "0.1.5"
+  "version": "0.1.7"
 }
 

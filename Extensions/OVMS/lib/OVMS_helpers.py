@@ -466,7 +466,7 @@ def checkServerMessages():
                     _ovms_socket.close()
                 except:
                     pass
-                _ovms_socket = None
+            _ovms_socket = None
             return
         
         _handle_server_response(data)
@@ -479,24 +479,24 @@ def checkServerMessages():
                 _ovms_connected = False
                 _ovms_state = 'disconnected'
                 _ovms_status = f'Connection error: {e}'
-                if _ovms_socket:
-                    try:
-                        _ovms_socket.close()
-                    except:
-                        pass
-                    _ovms_socket = None
-    except Exception as e:
-        if _ovms_connected:
-            print(f"[OVMS] Error checking messages: {e}")
-            _ovms_connected = False
-            _ovms_state = 'disconnected'
-            _ovms_status = f'Connection error: {e}'
             if _ovms_socket:
                 try:
                     _ovms_socket.close()
                 except:
                     pass
                 _ovms_socket = None
+    except Exception as e:
+        if _ovms_connected:
+            print(f"[OVMS] Error checking messages: {e}")
+            _ovms_connected = False
+            _ovms_state = 'disconnected'
+            _ovms_status = f'Connection error: {e}'
+        if _ovms_socket:
+            try:
+                _ovms_socket.close()
+            except:
+                pass
+            _ovms_socket = None
 
 
 def pollMetrics():

@@ -2,7 +2,7 @@
 // {
 //   "name": "OVMS",
 //   "id": "ovms",
-//   "version": [0, 1, 6],
+//   "version": [0, 1, 7],
 //   "author": "JetPax",
 //   "description": "Send OpenInverter metrics to OVMS v2 server",
 //   "icon": "cloud",
