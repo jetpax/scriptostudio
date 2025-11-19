@@ -1,15 +1,14 @@
 // === START_EXTENSION_CONFIG ===
 // {
-//   "name": "GVRET Manager",
+//   "name": "GVRET",
 //   "id": "gvret-manager",
-//   "version": [1, 0, 0],
+//   "version": [1, 1, 0],
 //   "author": "JetPax",
-//   "description": "Manage GVRET Fastpath on ESP32 (CAN over TCP)",
+//   "description": "Manage GVRET on MicroPython with mpDirect (CAN over TCP)",
 //   "icon": "radio",
 //   "menu": [
 //     { "id": "connection", "label": "Connection", "icon": "radio" },
-//     { "id": "filters", "label": "Filters", "icon": "filter" },
-//     { "id": "stats", "label": "Statistics", "icon": "activity" }
+//     { "id": "filters", "label": "Filters", "icon": "filter" }
 //   ],
 //   "styles": ".gvret-container { padding: 20px; } .gvret-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 20px; } .gvret-card h3 { margin-top: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; } .gvret-form-row { display: flex; gap: 16px; margin-bottom: 12px; align-items: center; } .gvret-form-row label { width: 100px; } .gvret-input { padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); } .gvret-btn { padding: 8px 16px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; } .gvret-btn-primary { background: var(--scheme-primary); color: white; } .gvret-btn-danger { background: #ef4444; color: white; } .gvret-filter-list { display: flex; flex-direction: column; gap: 8px; } .gvret-filter-item { display: flex; gap: 12px; padding: 8px; background: var(--bg-primary); border-radius: 4px; align-items: center; } .gvret-stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; } .gvret-stat-card { background: var(--bg-primary); padding: 12px; border-radius: 4px; text-align: center; } .gvret-stat-value { font-size: 24px; font-weight: bold; color: var(--scheme-primary); } .gvret-stat-label { font-size: 12px; color: var(--text-secondary); }"
 // }
@@ -26,16 +25,13 @@ class GVRETExtension {
     if (!this.state.gvret) {
       this.state.gvret = {
         isRunning: false,
-        txPin: 4,
-        rxPin: 5,
-        baudRate: 500000,
         filters: [],
         stats: { rx: 0, tx: 0, dropped: 0 }
       }
     }
   }
 
-  // === Connection Panel ===
+  // === Connection Panel (Combined with Statistics) ===
   renderConnection() {
     const s = this.state.gvret
     
@@ -43,32 +39,6 @@ class GVRETExtension {
       <div class="gvret-container">
         <div class="gvret-card">
           <h3>GVRET Configuration</h3>
-          
-          <div class="gvret-form-row">
-            <label>TX Pin:</label>
-            <input type="number" class="gvret-input" value="${s.txPin}" 
-              onchange=${(e) => { s.txPin = parseInt(e.target.value); this.emit('render'); }}
-              disabled=${s.isRunning} />
-          </div>
-          
-          <div class="gvret-form-row">
-            <label>RX Pin:</label>
-            <input type="number" class="gvret-input" value="${s.rxPin}" 
-              onchange=${(e) => { s.rxPin = parseInt(e.target.value); this.emit('render'); }}
-              disabled=${s.isRunning} />
-          </div>
-          
-          <div class="gvret-form-row">
-            <label>Baud Rate:</label>
-            <select class="gvret-input" value="${s.baudRate}" 
-              onchange=${(e) => { s.baudRate = parseInt(e.target.value); this.emit('render'); }}
-              disabled=${s.isRunning}>
-              <option value="125000">125 kbps</option>
-              <option value="250000">250 kbps</option>
-              <option value="500000">500 kbps</option>
-              <option value="1000000">1 Mbps</option>
-            </select>
-          </div>
           
           <div class="gvret-form-row" style="margin-top: 20px;">
             ${!s.isRunning ? this.html`
@@ -85,6 +55,29 @@ class GVRETExtension {
           <div style="margin-top: 16px; font-size: 14px; color: var(--text-secondary);">
             <p>Status: <strong>${s.isRunning ? 'Running (Port 23)' : 'Stopped'}</strong></p>
             ${s.isRunning ? this.html`<p>Connect SavvyCAN to IP: <strong>${this.device.ip || 'Device IP'}</strong> Port: <strong>23</strong></p>` : ''}
+            <p style="margin-top: 8px; font-size: 12px;">Using system CAN configuration (pins and bitrate configured in Networks → CAN)</p>
+          </div>
+        </div>
+
+        <div class="gvret-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+             <h3>Statistics</h3>
+             <button class="gvret-btn" onclick=${() => this.refreshStats()}>Refresh</button>
+          </div>
+         
+          <div class="gvret-stat-grid">
+            <div class="gvret-stat-card">
+              <div class="gvret-stat-value">${s.stats.rx}</div>
+              <div class="gvret-stat-label">RX Frames</div>
+            </div>
+            <div class="gvret-stat-card">
+              <div class="gvret-stat-value">${s.stats.tx}</div>
+              <div class="gvret-stat-label">TX Frames</div>
+            </div>
+            <div class="gvret-stat-card">
+              <div class="gvret-stat-value">${s.stats.dropped}</div>
+              <div class="gvret-stat-label">Dropped</div>
+            </div>
           </div>
         </div>
       </div>
@@ -130,45 +123,66 @@ class GVRETExtension {
     `
   }
 
-  // === Stats Panel ===
-  renderStats() {
-    const s = this.state.gvret
-    
-    return this.html`
-      <div class="gvret-container">
-        <div class="gvret-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-             <h3>Statistics</h3>
-             <button class="gvret-btn" onclick=${() => this.refreshStats()}>Refresh</button>
-          </div>
-         
-          <div class="gvret-stat-grid">
-            <div class="gvret-stat-card">
-              <div class="gvret-stat-value">${s.stats.rx}</div>
-              <div class="gvret-stat-label">RX Frames</div>
-            </div>
-            <div class="gvret-stat-card">
-              <div class="gvret-stat-value">${s.stats.tx}</div>
-              <div class="gvret-stat-label">TX Frames</div>
-            </div>
-            <div class="gvret-stat-card">
-              <div class="gvret-stat-value">${s.stats.dropped}</div>
-              <div class="gvret-stat-label">Dropped</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `
-  }
 
   // === Actions ===
 
   async startGVRET() {
     const s = this.state.gvret
     try {
+      // Read CAN configuration from /config/can.json
+      const configResult = await this.device.execute(`
+from lib.network_helpers import load_can_config
+import json
+import sys
+
+# Load config and parse response
+try:
+    load_can_config()
+    # The response will be sent via webrepl.send(), so we need to capture it
+    # For now, read directly from file
+    import os
+    config_dir = '/config'
+    if not os.path.exists(config_dir):
+        config_dir = '/store/config'
+    config_file = config_dir + '/can.json'
+    
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+        print(f'CAN_TX_PIN={config.get("txPin", 5)}')
+        print(f'CAN_RX_PIN={config.get("rxPin", 4)}')
+        print(f'CAN_BITRATE={config.get("bitrate", 500000)}')
+    except OSError:
+        # Fallback to main.py if can.json doesn't exist
+        sys.path.insert(0, '/device scripts')
+        from main import CAN_TX_PIN, CAN_RX_PIN, CAN_BITRATE
+        print(f'CAN_TX_PIN={CAN_TX_PIN}')
+        print(f'CAN_RX_PIN={CAN_RX_PIN}')
+        print(f'CAN_BITRATE={CAN_BITRATE}')
+except Exception as e:
+    print(f'ERROR: {e}')
+    # Fallback defaults
+    print('CAN_TX_PIN=5')
+    print('CAN_RX_PIN=4')
+    print('CAN_BITRATE=500000')
+      `)
+      
+      // Parse the output to get CAN pins and bitrate
+      let txPin = 5, rxPin = 4, bitrate = 500000
+      const lines = configResult.split('\n')
+      for (const line of lines) {
+        if (line.startsWith('CAN_TX_PIN=')) {
+          txPin = parseInt(line.split('=')[1])
+        } else if (line.startsWith('CAN_RX_PIN=')) {
+          rxPin = parseInt(line.split('=')[1])
+        } else if (line.startsWith('CAN_BITRATE=')) {
+          bitrate = parseInt(line.split('=')[1])
+        }
+      }
+      
       await this.device.execute(`
 import gvret
-gvret.start(${s.txPin}, ${s.rxPin}, ${s.baudRate})
+gvret.start(${txPin}, ${rxPin}, ${bitrate})
       `)
       s.isRunning = true
       this.emit('render')
