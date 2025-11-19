@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763509301,
+  "updated": 1763569970,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -642,13 +642,44 @@
   ],
   "extensions": [
     {
+      "name": "GVRET Manager",
+      "id": "gvret-manager",
+      "filename": "GVRET.js",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Manage GVRET Fastpath on ESP32 (CAN over TCP)",
+      "icon": "radio",
+      "menu": [
+        {
+          "id": "connection",
+          "label": "Connection",
+          "icon": "radio"
+        },
+        {
+          "id": "filters",
+          "label": "Filters",
+          "icon": "filter"
+        },
+        {
+          "id": "stats",
+          "label": "Statistics",
+          "icon": "activity"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/GVRET/GVRET.js"
+    },
+    {
       "name": "OVMS",
       "id": "ovms",
       "filename": "OVMS.js",
       "version": [
         0,
         2,
-        0
+        1
       ],
       "author": "JetPax",
       "description": "Send OpenInverter metrics to OVMS v2 server",
@@ -680,7 +711,7 @@
       "version": [
         0,
         7,
-        0
+        1
       ],
       "author": "JetPax",
       "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
