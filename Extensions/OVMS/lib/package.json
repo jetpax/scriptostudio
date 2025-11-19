@@ -10,5 +10,5 @@
     ["base64.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/base64.py"],
     ["binascii.py", "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib/binascii.py"]
   ],
-  "version": "0.5.0"
+  "version": "0.6.0"
 }

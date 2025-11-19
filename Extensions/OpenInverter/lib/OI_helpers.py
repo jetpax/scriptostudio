@@ -91,6 +91,27 @@ def _check_can_available():
     
     return CAN_AVAILABLE
 
+
+def _stop_gvret_if_running():
+    """
+    Stop GVRET if it's running to free TWAI for CAN module.
+    GVRET uses TWAI directly and conflicts with the CAN module.
+    Returns True if GVRET was stopped, False otherwise.
+    """
+    try:
+        import gvret
+        try:
+            gvret.stop()
+            print("[OI] Stopped GVRET to free TWAI for CAN module")
+            time.sleep_ms(100)  # Give TWAI time to fully release
+            return True
+        except:
+            # GVRET might not be running, ignore errors
+            return False
+    except ImportError:
+        # GVRET module not available
+        return False
+
 # --- Global Parameters/Spot Values Store (Demo Data or from device) ---
 # This will be replaced with actual device data when connected
 parameters = {
@@ -174,18 +195,70 @@ def initializeDevice(args=None):
         _send_error("CAN module not available on this platform", 'INIT-DEVICE-ERROR')
         return
     
+    # Stop GVRET if running (GVRET uses TWAI directly and conflicts with CAN module)
+    _stop_gvret_if_running()
+    
     # Parse arguments
     if args is None:
         args = {}
     
     node_id = args.get('node_id', 1)
-    bitrate = args.get('bitrate', 500000)
-    tx_pin = args.get('tx_pin', 5)
-    rx_pin = args.get('rx_pin', 4)
     mode = args.get('mode', CAN.NORMAL)
+    
+    # Read CAN configuration from /config/can.json (with fallback to main.py)
+    tx_pin = args.get('tx_pin')
+    rx_pin = args.get('rx_pin')
+    bitrate = args.get('bitrate')
+    
+    if tx_pin is None or rx_pin is None or bitrate is None:
+        # Try to load from /config/can.json
+        try:
+            import os
+            config_dir = '/config'
+            if not os.path.exists(config_dir):
+                config_dir = '/store/config'
+            config_file = config_dir + '/can.json'
+            
+            if os.path.exists(config_file):
+                import json
+                with open(config_file, 'r') as f:
+                    can_config = json.load(f)
+                if tx_pin is None:
+                    tx_pin = can_config.get('txPin', 5)
+                if rx_pin is None:
+                    rx_pin = can_config.get('rxPin', 4)
+                if bitrate is None:
+                    bitrate = can_config.get('bitrate', 500000)
+            else:
+                # Fallback to main.py
+                import sys
+                sys.path.insert(0, '/device scripts')
+                from main import CAN_TX_PIN, CAN_RX_PIN, CAN_BITRATE
+                if tx_pin is None:
+                    tx_pin = CAN_TX_PIN
+                if rx_pin is None:
+                    rx_pin = CAN_RX_PIN
+                if bitrate is None:
+                    bitrate = CAN_BITRATE
+        except Exception as e:
+            print(f"[OI] Warning: Could not load CAN config, using defaults: {e}")
+            if tx_pin is None:
+                tx_pin = 5
+            if rx_pin is None:
+                rx_pin = 4
+            if bitrate is None:
+                bitrate = 500000
     
     try:
         print(f"[OI] Initializing CAN: node_id={node_id}, bitrate={bitrate}, tx={tx_pin}, rx={rx_pin}")
+        
+        # Check if GVRET might be running (it uses TWAI directly and conflicts with CAN module)
+        gvret_running = False
+        try:
+            import gvret
+            gvret_running = True  # Assume it might be running
+        except ImportError:
+            pass  # GVRET module not available
         
         # Initialize CAN device
         can_dev = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=mode, bitrate=bitrate, auto_restart=False)
@@ -222,7 +295,12 @@ def initializeDevice(args=None):
     except Exception as e:
         print(f"[OI] Error initializing CAN: {e}")
         device_connected = False
-        _send_error(f"Failed to initialize CAN: {str(e)}", 'INIT-DEVICE-ERROR')
+        error_msg = str(e)
+        # Check if GVRET might be the issue
+        if gvret_running:
+            _send_error(f"Failed to initialize CAN: {error_msg}. GVRET may be running - stop GVRET first (GVRET uses TWAI directly and conflicts with CAN module).", 'INIT-DEVICE-ERROR')
+        else:
+            _send_error(f"Failed to initialize CAN: {error_msg}", 'INIT-DEVICE-ERROR')
 
 
 def disconnectDevice():
@@ -1688,6 +1766,9 @@ def scanCanBus(args=None):
         _send_error("CAN module not available - check if CAN module is installed", 'CAN-SCAN-ERROR')
         return
     
+    # Stop GVRET if running (GVRET uses TWAI directly and conflicts with CAN module)
+    _stop_gvret_if_running()
+    
     # Parse args if it's a JSON string (from JavaScript calls)
     if args is None:
         args = {}
@@ -1702,10 +1783,50 @@ def scanCanBus(args=None):
     quick_scan = args.get('quick', True)
     timeout_ms = args.get('timeout_ms', 100)
     rate_limit_ms = args.get('rate_limit_ms', 10)
-    tx_pin = args.get('tx_pin', 5)
-    rx_pin = args.get('rx_pin', 4)
-    bitrate = args.get('bitrate', 500000)
     can_mode_str = args.get('can_mode', 'silent')  # Default to SILENT for scanning
+    
+    # Read CAN configuration from /config/can.json (with fallback to main.py)
+    tx_pin = args.get('tx_pin')
+    rx_pin = args.get('rx_pin')
+    bitrate = args.get('bitrate')
+    
+    if tx_pin is None or rx_pin is None or bitrate is None:
+        # Try to load from /config/can.json
+        try:
+            import os
+            config_dir = '/config'
+            if not os.path.exists(config_dir):
+                config_dir = '/store/config'
+            config_file = config_dir + '/can.json'
+            
+            if os.path.exists(config_file):
+                with open(config_file, 'r') as f:
+                    can_config = json.load(f)
+                if tx_pin is None:
+                    tx_pin = can_config.get('txPin', 5)
+                if rx_pin is None:
+                    rx_pin = can_config.get('rxPin', 4)
+                if bitrate is None:
+                    bitrate = can_config.get('bitrate', 500000)
+            else:
+                # Fallback to main.py
+                import sys
+                sys.path.insert(0, '/device scripts')
+                from main import CAN_TX_PIN, CAN_RX_PIN, CAN_BITRATE
+                if tx_pin is None:
+                    tx_pin = CAN_TX_PIN
+                if rx_pin is None:
+                    rx_pin = CAN_RX_PIN
+                if bitrate is None:
+                    bitrate = CAN_BITRATE
+        except Exception as e:
+            print(f"[OI] Warning: Could not load CAN config, using defaults: {e}")
+            if tx_pin is None:
+                tx_pin = 5
+            if rx_pin is None:
+                rx_pin = 4
+            if bitrate is None:
+                bitrate = 500000
     
     # Determine scan range
     if quick_scan:
@@ -1746,19 +1867,22 @@ def scanCanBus(args=None):
         
         # Let the driver handle reinit automatically
         # The driver's make_new() checks if initialized and calls can_deinit() if needed
+        print(f"[OI] Initializing CAN for scanning: tx={tx_pin}, rx={rx_pin}, bitrate={bitrate}, mode={can_mode_str}")
         try:
             scan_can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, mode=can_mode, bitrate=bitrate, auto_restart=False)
+            print(f"[OI] CAN initialized successfully for scanning")
             # Update can_dev reference if we created a new instance
             if not device_connected:
                 can_dev = scan_can
         except Exception as e:
             error_msg = str(e)
             print(f"[OI] CAN init error: {error_msg}")
-            _send_error(f"Failed to initialize CAN: {error_msg}", 'CAN-SCAN-ERROR')
+            _send_error(f"Failed to initialize CAN: {error_msg}. If GVRET is running, stop it first (GVRET uses TWAI directly and conflicts with CAN module).", 'CAN-SCAN-ERROR')
             return
     
     # Wrap entire scan in try/except to ensure response is always sent
     try:
+        print(f"[OI] Starting CAN scan: nodes {start_node}-{end_node}, timeout={timeout_ms}ms per node")
         # Clear any pending messages
         while scan_can.any():
             scan_can.recv()
@@ -1776,6 +1900,7 @@ def scanCanBus(args=None):
         SDO_SUBINDEX = 0x00
         
         # Scan each node
+        print(f"[OI] Scanning node IDs {start_node} to {end_node}...")
         for node_id in range(start_node, end_node + 1):
             try:
                 # Create SDO client for this node
@@ -1900,4 +2025,3 @@ def scanCanBus(args=None):
                 scan_can.deinit()
             except:
                 pass  # Ignore cleanup errors
-

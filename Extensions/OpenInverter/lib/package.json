@@ -3,6 +3,5 @@
     ["OI_helpers.py", "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib/OI_helpers.py"],
     ["canopen_sdo.py", "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib/canopen_sdo.py"]
   ],
-  "version": "0.6.3"
+  "version": "0.7.0"
 }
-
