@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763569970,
+  "updated": 1763577224,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -642,16 +642,16 @@
   ],
   "extensions": [
     {
-      "name": "GVRET Manager",
+      "name": "GVRET",
       "id": "gvret-manager",
       "filename": "GVRET.js",
       "version": [
         1,
-        0,
+        1,
         0
       ],
       "author": "JetPax",
-      "description": "Manage GVRET Fastpath on ESP32 (CAN over TCP)",
+      "description": "Manage GVRET on MicroPython with mpDirect (CAN over TCP)",
       "icon": "radio",
       "menu": [
         {
@@ -663,11 +663,6 @@
           "id": "filters",
           "label": "Filters",
           "icon": "filter"
-        },
-        {
-          "id": "stats",
-          "label": "Statistics",
-          "icon": "activity"
         }
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/GVRET/GVRET.js"
