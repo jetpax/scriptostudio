@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1763586742,
+  "updated": 1763587088,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -666,6 +666,38 @@
         }
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/GVRET/GVRET.js"
+    },
+    {
+      "name": "OVMS",
+      "id": "ovms",
+      "filename": "OVMS.js",
+      "version": [
+        0,
+        6,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Send OpenInverter metrics to OVMS v2 server",
+      "icon": "cloud",
+      "menu": [
+        {
+          "id": "config",
+          "label": "Configuration",
+          "icon": "settings"
+        },
+        {
+          "id": "metrics",
+          "label": "Metrics",
+          "icon": "activity"
+        },
+        {
+          "id": "status",
+          "label": "Status",
+          "icon": "info-circle"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/OVMS/OVMS.js",
+      "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib"
     },
     {
       "name": "OpenInverter",
