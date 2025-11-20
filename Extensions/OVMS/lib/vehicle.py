@@ -143,7 +143,7 @@ def get_vehicle_config(vehicle_type):
             # File doesn't exist, return None
             pass
     except Exception as e:
-        print(f"[vehicle] get_vehicle_config: Exception loading {vehicle_type}: {e}")
+        # Log error but don't print to avoid noise
         import sys
         sys.print_exception(e)
     
@@ -161,37 +161,30 @@ def list_vehicles():
         
         # MicroPython doesn't have os.path, so use direct string manipulation
         vehicles_dir = '/lib/vehicles'
-        print(f"[vehicle] list_vehicles: vehicles_dir={vehicles_dir}")
         
         # Check if vehicles directory exists by trying to list it
         try:
             items = os.listdir(vehicles_dir)
-            print(f"[vehicle] list_vehicles: vehicles_dir exists, listing...")
             # Look for subdirectories (e.g., zombie_vcu/, obdii/)
             for item in items:
                 # Build path manually (no os.path.join)
                 item_path = f'{vehicles_dir}/{item}'
-                print(f"[vehicle] list_vehicles: checking {item}, path={item_path}")
                 
                 # Check if it's a directory by trying to list it
                 try:
-                    sub_items = os.listdir(item_path)
+                    os.listdir(item_path)
                     # If we can list it, it's a directory
                     if not item.startswith('_'):
                         # Build vehicle file path manually
                         vehicle_file = f'{item_path}/{item}.py'
-                        print(f"[vehicle] list_vehicles: checking file {vehicle_file}")
                         
                         # Check if file exists by trying to open it
                         try:
                             with open(vehicle_file, 'r') as f:
-                                # File exists, process it
                                 vehicle_id = item
                                 if vehicle_id not in vehicle_list:
                                     try:
-                                        print(f"[vehicle] list_vehicles: loading {vehicle_file}")
                                         # Read and execute the vehicle file directly
-                                        f.seek(0)  # Reset file pointer
                                         vehicle_code = f.read()
                                         # Create a namespace for the vehicle module
                                         # Pass the constants directly instead of importing vehicle module
@@ -215,7 +208,6 @@ def list_vehicles():
                                         vehicle_globals['vehicle'] = VehicleModule()
                                         exec(vehicle_code, vehicle_globals)
                                         config = vehicle_globals.get('VEHICLE_CONFIG', None)
-                                        print(f"[vehicle] list_vehicles: got config for {vehicle_id}")
                                         if config:
                                             # MicroPython doesn't have .title(), so use config name or format manually
                                             vehicle_name = config.get('name')
@@ -230,24 +222,22 @@ def list_vehicles():
                                                         title_parts.append(p)
                                                 vehicle_name = ' '.join(title_parts)
                                             vehicle_list[vehicle_id] = vehicle_name
-                                            print(f"[vehicle] list_vehicles: added {vehicle_id} = {vehicle_name}")
                                     except Exception as e:
-                                        print(f"[vehicle] list_vehicles: Exception loading {vehicle_id}: {e}")
+                                        # Log error but continue with other vehicles
+                                        import sys
                                         sys.print_exception(e)
                         except OSError:
                             # File doesn't exist, skip
-                            print(f"[vehicle] list_vehicles: file {vehicle_file} does not exist")
                             pass
                 except OSError:
                     # Not a directory or doesn't exist, skip
                     pass
-        except OSError as e:
-            print(f"[vehicle] list_vehicles: vehicles_dir does not exist: {e}")
+        except OSError:
+            # Vehicles directory doesn't exist, return empty list
+            pass
     except Exception as e:
         # Log error instead of silently failing
-        print(f"[vehicle] list_vehicles: Exception during discovery: {e}")
         import sys
         sys.print_exception(e)
     
-    print(f"[vehicle] list_vehicles: returning {vehicle_list}")
     return vehicle_list

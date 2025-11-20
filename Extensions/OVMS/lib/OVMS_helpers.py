@@ -169,60 +169,22 @@ def listVehicles():
 def getOVMSConfig():
     """Get current OVMS configuration"""
     _load_config()
-    debug_info = []
     try:
-        import os
-        lib_dir = os.path.dirname(__file__) if hasattr(os.path, 'dirname') else '/lib'
-        vehicles_dir = os.path.join(lib_dir, 'vehicles') if hasattr(os.path, 'join') else f"{lib_dir}/vehicles"
-        debug_info.append(f"lib_dir={lib_dir}")
-        debug_info.append(f"vehicles_dir={vehicles_dir}")
-        
-        # Check if vehicles directory exists
-        if hasattr(os.path, 'exists'):
-            vehicles_exists = os.path.exists(vehicles_dir)
-            debug_info.append(f"vehicles_dir exists={vehicles_exists}")
-            if vehicles_exists:
-                try:
-                    items = os.listdir(vehicles_dir)
-                    debug_info.append(f"vehicles_dir contents={items}")
-                except Exception as e:
-                    debug_info.append(f"Error listing vehicles_dir: {e}")
-        
         from vehicle import list_vehicles
-        print("[OVMS_helpers] Calling list_vehicles()...")
-        try:
-            available_vehicles = list_vehicles()
-            print(f"[OVMS_helpers] list_vehicles() returned: {available_vehicles}")
-            debug_info.append(f"list_vehicles() returned {len(available_vehicles)} vehicles: {list(available_vehicles.keys())}")
-            if not available_vehicles or len(available_vehicles) == 0:
-                debug_info.append("WARNING: list_vehicles() returned empty dict!")
-        except Exception as e:
-            print(f"[OVMS_helpers] Exception in list_vehicles(): {e}")
-            import sys
-            sys.print_exception(e)
-            debug_info.append(f"Exception in list_vehicles(): {e}")
-            available_vehicles = {}
+        available_vehicles = list_vehicles()
     except ImportError as e:
-        print(f"[OVMS_helpers] ImportError importing list_vehicles: {e}")
+        # Fallback if vehicle module can't be imported
         import sys
         sys.print_exception(e)
-        debug_info.append(f"ImportError: {e}")
         available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
     except Exception as e:
-        print(f"[OVMS_helpers] Exception calling list_vehicles: {e}")
+        # Log error but provide fallback
         import sys
         sys.print_exception(e)
-        debug_info.append(f"Exception: {e}")
         available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
     
-    print(f"[OVMS_helpers] available_vehicles: {available_vehicles}")
-    print(f"[OVMS_helpers] available_vehicles type: {type(available_vehicles)}")
-    print(f"[OVMS_helpers] available_vehicles keys: {list(available_vehicles.keys()) if available_vehicles else 'None'}")
     config_with_vehicles = _config.copy()
     config_with_vehicles['available_vehicles'] = available_vehicles
-    config_with_vehicles['_debug'] = debug_info  # Include debug info in response
-    print(f"[OVMS_helpers] config_with_vehicles['available_vehicles']: {config_with_vehicles.get('available_vehicles')}")
-    print(f"[OVMS_helpers] About to send OVMS-CONFIG, full config keys: {list(config_with_vehicles.keys())}")
     _send_response('OVMS-CONFIG', config_with_vehicles)
 
 
