@@ -2,7 +2,7 @@
 // {
 //   "name": "GVRET",
 //   "id": "gvret-manager",
-//   "version": [1, 1, 0],
+//   "version": [1, 2, 0],
 //   "author": "JetPax",
 //   "description": "Manage GVRET on MicroPython with mpDirect (CAN over TCP)",
 //   "icon": "radio",
@@ -129,61 +129,69 @@ class GVRETExtension {
   async startGVRET() {
     const s = this.state.gvret
     try {
-      // Read CAN configuration from /config/can.json
-      const configResult = await this.device.execute(`
-from lib.network_helpers import load_can_config
-import json
-import sys
+      // Ensure CAN is initialized using generic helper functions
+      const result = await this.device.execute(`
+from lib.can_helpers import ensure_can_initialized, check_can_available, get_can_device
+import gvret
 
-# Load config and parse response
+# Check if CAN is available
+available, reason = check_can_available()
+if not available:
+    raise RuntimeError(reason)
+
+# Ensure CAN is initialized (auto-enables if needed)
+can_dev = ensure_can_initialized()
+if can_dev is None:
+    raise RuntimeError('CAN device is None after initialization')
+
+# Get CAN config for GVRET start
+import json
+import os
+config_dir = '/config'
+if not os.path.exists(config_dir):
+    config_dir = '/store/config'
+config_file = config_dir + '/can.json'
+
 try:
-    load_can_config()
-    # The response will be sent via webrepl.send(), so we need to capture it
-    # For now, read directly from file
-    import os
-    config_dir = '/config'
-    if not os.path.exists(config_dir):
-        config_dir = '/store/config'
-    config_file = config_dir + '/can.json'
-    
+    with open(config_file, 'r') as f:
+        config = json.load(f)
+    tx_pin = config.get('txPin', 5)
+    rx_pin = config.get('rxPin', 4)
+    bitrate = config.get('bitrate', 500000)
+except:
+    # Fallback to main.py or defaults
     try:
-        with open(config_file, 'r') as f:
-            config = json.load(f)
-        print(f'CAN_TX_PIN={config.get("txPin", 5)}')
-        print(f'CAN_RX_PIN={config.get("rxPin", 4)}')
-        print(f'CAN_BITRATE={config.get("bitrate", 500000)}')
-    except OSError:
-        # Fallback to main.py if can.json doesn't exist
+        import sys
         sys.path.insert(0, '/device scripts')
         from main import CAN_TX_PIN, CAN_RX_PIN, CAN_BITRATE
-        print(f'CAN_TX_PIN={CAN_TX_PIN}')
-        print(f'CAN_RX_PIN={CAN_RX_PIN}')
-        print(f'CAN_BITRATE={CAN_BITRATE}')
-except Exception as e:
-    print(f'ERROR: {e}')
-    # Fallback defaults
-    print('CAN_TX_PIN=5')
-    print('CAN_RX_PIN=4')
-    print('CAN_BITRATE=500000')
+        tx_pin = CAN_TX_PIN
+        rx_pin = CAN_RX_PIN
+        bitrate = CAN_BITRATE
+    except:
+        tx_pin = 5
+        rx_pin = 4
+        bitrate = 500000
+
+# Register callback for bitrate changes from SavvyCAN
+def on_bitrate_change(new_bitrate):
+    from lib.can_helpers import reconfigure_can_bitrate
+    reconfigure_can_bitrate(new_bitrate)
+
+gvret.set_bitrate_change_callback(on_bitrate_change)
+
+# Start GVRET
+if not gvret.start(tx_pin, rx_pin, bitrate):
+    raise RuntimeError('GVRET start failed')
       `)
       
-      // Parse the output to get CAN pins and bitrate
-      let txPin = 5, rxPin = 4, bitrate = 500000
-      const lines = configResult.split('\n')
-      for (const line of lines) {
-        if (line.startsWith('CAN_TX_PIN=')) {
-          txPin = parseInt(line.split('=')[1])
-        } else if (line.startsWith('CAN_RX_PIN=')) {
-          rxPin = parseInt(line.split('=')[1])
-        } else if (line.startsWith('CAN_BITRATE=')) {
-          bitrate = parseInt(line.split('=')[1])
-        }
+      // Check for errors in result (RuntimeError will be in traceback)
+      if (result.includes('RuntimeError') || result.includes('Traceback')) {
+        const errorMatch = result.match(/RuntimeError: (.+)/) || result.match(/Error: (.+)/)
+        const errorMsg = errorMatch ? errorMatch[1] : 'Failed to start GVRET'
+        alert(`Failed to start GVRET: ${errorMsg}`)
+        return
       }
       
-      await this.device.execute(`
-import gvret
-gvret.start(${txPin}, ${rxPin}, ${bitrate})
-      `)
       s.isRunning = true
       this.emit('render')
       
