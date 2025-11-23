@@ -169,8 +169,8 @@ try:
     try:
         with open(config_file, 'r') as f:
             config = json.load(f)
-        tx_pin = config.get('txPin', 5)
-        rx_pin = config.get('rxPin', 4)
+        tx_pin = config.get('txPin', 4)  # Default TX=GPIO4 for this hardware
+        rx_pin = config.get('rxPin', 5)  # Default RX=GPIO5 for this hardware
         bitrate = config.get('bitrate', 500000)
     except:
         # Fallback to main.py or defaults
@@ -182,8 +182,9 @@ try:
             rx_pin = CAN_RX_PIN
             bitrate = CAN_BITRATE
         except:
-            tx_pin = 5
-            rx_pin = 4
+            # Final fallback defaults (TX=GPIO4, RX=GPIO5 for this hardware)
+            tx_pin = 4
+            rx_pin = 5
             bitrate = 500000
     
     # Register callback for bitrate changes from SavvyCAN
