@@ -20,6 +20,7 @@ class GVRETExtension {
     this.emit = emit
     this.state = state
     this.html = html
+    this.statsInterval = null  // For auto-refreshing stats
     
     // Initialize state
     if (!this.state.gvret) {
@@ -228,12 +229,17 @@ except Exception as e:
       }
       
       s.isRunning = true
+      // Reset stats when starting
+      s.stats = { rx: 0, tx: 0, dropped: 0 }
       this.emit('render')
       
       // Re-apply filters if any
       if (s.filters.length > 0) {
         await this.applyFilters()
       }
+      
+      // Start auto-refreshing stats every 2 seconds
+      this.startStatsRefresh()
     } catch (e) {
       alert('Failed to start GVRET: ' + e.message)
     }
@@ -246,9 +252,33 @@ import gvret
 gvret.stop()
       `)
       this.state.gvret.isRunning = false
+      // Stop auto-refresh
+      this.stopStatsRefresh()
+      // Reset stats
+      this.state.gvret.stats = { rx: 0, tx: 0, dropped: 0 }
       this.emit('render')
     } catch (e) {
       alert('Failed to stop GVRET: ' + e.message)
+    }
+  }
+  
+  startStatsRefresh() {
+    // Clear any existing interval
+    this.stopStatsRefresh()
+    // Refresh stats every 2 seconds
+    this.statsInterval = setInterval(() => {
+      if (this.state.gvret.isRunning) {
+        this.refreshStats()
+      }
+    }, 2000)
+    // Also refresh immediately
+    this.refreshStats()
+  }
+  
+  stopStatsRefresh() {
+    if (this.statsInterval) {
+      clearInterval(this.statsInterval)
+      this.statsInterval = null
     }
   }
 
@@ -301,11 +331,46 @@ gvret.stop()
   }
 
   async refreshStats() {
-    // TODO: Implement stats reading when C module supports it
-    // For now, just mock or read if available
-    /*
-    const res = await this.device.execute('import gvret; return gvret.get_stats()')
-    */
-    alert('Stats not yet implemented in firmware')
+    const s = this.state.gvret
+    if (!s.isRunning) {
+      // Reset stats when not running
+      s.stats = { rx: 0, tx: 0, dropped: 0 }
+      this.emit('render')
+      return
+    }
+    
+    try {
+      const result = await this.device.execute(`
+import gvret
+try:
+    stats = gvret.get_stats()
+    print(f"STATS:{stats[0]},{stats[1]},{stats[2]}")
+except Exception as e:
+    print(f"ERROR:{e}")
+      `)
+      
+      // Parse stats from output: "STATS:rx,tx,dropped"
+      const statsMatch = result.match(/STATS:(\d+),(\d+),(\d+)/)
+      if (statsMatch) {
+        s.stats.rx = parseInt(statsMatch[1], 10)
+        s.stats.tx = parseInt(statsMatch[2], 10)
+        s.stats.dropped = parseInt(statsMatch[3], 10)
+        this.emit('render')
+      } else {
+        console.error('[GVRET] Failed to parse stats:', result)
+      }
+    } catch (e) {
+      // If error indicates connection lost, silently stop the interval
+      // Don't spam console with connection errors
+      const errorMsg = e.message ? e.message.toLowerCase() : String(e).toLowerCase()
+      if (errorMsg.includes('not connected') || 
+          errorMsg.includes('connection') && errorMsg.includes('closed') ||
+          errorMsg.includes('timeout')) {
+        this.stopStatsRefresh()
+        return
+      }
+      // Only log other errors (not connection errors)
+      console.error('[GVRET] Failed to get stats:', e)
+    }
   }
 }
