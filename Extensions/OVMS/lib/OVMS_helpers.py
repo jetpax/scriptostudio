@@ -285,17 +285,8 @@ def _init_can_for_ovms():
         print("[OVMS] obd2_client library not available")
         return False
     
-    # Stop GVRET if running (it uses TWAI directly and conflicts with CAN module)
-    try:
-        import gvret
-        try:
-            gvret.stop()
-            print("[OVMS] Stopped GVRET to free TWAI for CAN module")
-            time.sleep_ms(100)
-        except:
-            pass
-    except ImportError:
-        pass
+    # Note: GVRET and CAN module now use unified CAN manager - no need to stop GVRET
+    # The manager handles coordination between multiple CAN clients
     
     # Read CAN configuration from /config/can.json (with fallback to main.py)
     try:

@@ -101,7 +101,9 @@ def _stop_gvret_if_running():
     try:
         import gvret
         try:
-            gvret.stop()
+            # Note: GVRET and CAN module now use unified CAN manager - no need to stop GVRET
+            # The manager handles coordination between multiple CAN clients
+            pass
             print("[OI] Stopped GVRET to free TWAI for CAN module")
             time.sleep_ms(100)  # Give TWAI time to fully release
             return True
@@ -253,10 +255,12 @@ def initializeDevice(args=None):
         print(f"[OI] Initializing CAN: node_id={node_id}, bitrate={bitrate}, tx={tx_pin}, rx={rx_pin}")
         
         # Check if GVRET might be running (it uses TWAI directly and conflicts with CAN module)
-        gvret_running = False
+        # Note: GVRET and CAN module now use unified CAN manager - no conflict checking needed
+        # gvret_running = False  # No longer needed
         try:
             import gvret
-            gvret_running = True  # Assume it might be running
+            # Note: GVRET and CAN module now use unified CAN manager - no conflict checking needed
+            # gvret_running = True  # No longer needed
         except ImportError:
             pass  # GVRET module not available
         
@@ -296,11 +300,8 @@ def initializeDevice(args=None):
         print(f"[OI] Error initializing CAN: {e}")
         device_connected = False
         error_msg = str(e)
-        # Check if GVRET might be the issue
-        if gvret_running:
-            _send_error(f"Failed to initialize CAN: {error_msg}. GVRET may be running - stop GVRET first (GVRET uses TWAI directly and conflicts with CAN module).", 'INIT-DEVICE-ERROR')
-        else:
-            _send_error(f"Failed to initialize CAN: {error_msg}", 'INIT-DEVICE-ERROR')
+        # Note: GVRET and CAN module now use unified CAN manager - no conflict
+        _send_error(f"Failed to initialize CAN: {error_msg}", 'INIT-DEVICE-ERROR')
 
 
 def disconnectDevice():
