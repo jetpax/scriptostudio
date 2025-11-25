@@ -52,7 +52,7 @@ from esp32 import webrepl
 
 # CAN module - required for OpenInverter extension
 try:
-    from machine import CAN
+    import CAN
 except ImportError:
     # CAN module not available - functions will fail gracefully
     CAN = None
@@ -419,7 +419,15 @@ def getOiParams():
             if item.get('isparam') == True:
                 param_list[key] = item
     
-    _send_response('PARAMETERS-LIST', param_list)
+    # Always send response, even if empty
+    try:
+        _send_response('PARAMETERS-LIST', param_list)
+    except Exception as e:
+        # If sending fails, try to send error response
+        try:
+            _send_error(f"Failed to send parameters list: {str(e)}", 'PARAMETERS-LIST-ERROR')
+        except:
+            pass  # Silent failure
 
 
 def setParameter(args):
@@ -1154,7 +1162,7 @@ def getSerialNumber():
             serial_parts.append(f"{part:08X}")
         
         serial_number = ":".join(serial_parts)
-                _send_response('SERIAL-NUMBER', {'serialNumber': serial_number})
+        _send_response('SERIAL-NUMBER', {'serialNumber': serial_number})
     except (SDOTimeoutError, SDOAbortError) as e:
         _send_error(str(e), 'SERIAL-NUMBER-ERROR')
     except Exception as e:
@@ -1624,7 +1632,7 @@ def processFirmwareCanMessage(can_id, data):
         if state != 'waiting_done':
             return
         
-                firmware_upgrade_state['active'] = False
+        firmware_upgrade_state['active'] = False
         firmware_upgrade_state['state'] = 'done'
         firmware_upgrade_state['progress'] = 100.0
         firmware_upgrade_state['message'] = 'Upgrade completed successfully!'
@@ -1812,7 +1820,7 @@ def scanCanBus(args=None):
         SDO_SUBINDEX = 0x00
         
         # Scan each node
-                for node_id in range(start_node, end_node + 1):
+        for node_id in range(start_node, end_node + 1):
             try:
                 # Create SDO client for this node
                 sdo_client = SDOClient(scan_can, node_id=node_id, timeout=sdo_timeout)

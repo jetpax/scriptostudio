@@ -28,11 +28,6 @@ try:
     # Silent - module initialization should not produce output
 except Exception as e:
     # Silent - import errors should fail fast, not produce output
-    import sys
-    try:
-        sys.print_exception(e)
-    except:
-        pass
     raise  # Re-raise to fail fast
 
 # Import hmac module from local lib directory
@@ -151,13 +146,19 @@ def getOVMSConfig():
         available_vehicles = list_vehicles()
     except ImportError as e:
         # Fallback if vehicle module can't be imported
-        import sys
-        sys.print_exception(e)
+        # Send error via M2M_LOG (opcode 0x03) instead of print()
+        try:
+            webrepl.send_m2m(f"[OVMS] Failed to import vehicle module: {e}", 0x03)
+        except:
+            pass
         available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
     except Exception as e:
         # Log error but provide fallback
-        import sys
-        sys.print_exception(e)
+        # Send error via M2M_LOG (opcode 0x03) instead of print()
+        try:
+            webrepl.send_m2m(f"[OVMS] Error loading vehicle config: {e}", 0x03)
+        except:
+            pass
         available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
     
     config_with_vehicles = _config.copy()
@@ -247,7 +248,7 @@ def _init_can_for_ovms():
     
     # Import CAN module
     try:
-        from machine import CAN
+        import CAN
         CAN_AVAILABLE = True
     except ImportError:
         # Silent - errors handled by return False
@@ -287,7 +288,8 @@ def _init_can_for_ovms():
             rx_pin = CAN_RX_PIN
             bitrate = CAN_BITRATE
     except Exception as e:
-                tx_pin = 5
+        # Silent - errors handled by return False
+        tx_pin = 5
         rx_pin = 4
         bitrate = 500000
     
@@ -301,7 +303,7 @@ def _init_can_for_ovms():
         _ovms_obd2_client = OBD2Client(_ovms_can_dev, tx_id=tx_id, rx_id=rx_id, timeout=1.0)
         
         _ovms_can_connected = True
-                return True
+        return True
     except Exception as e:
         # Silent - errors handled by return False
         _ovms_can_connected = False
@@ -340,7 +342,7 @@ def _get_spot_values_direct():
             if pid is not None and parse_func_name is not None:
                 parse_func = PARSE_FUNCTIONS.get(parse_func_name)
                 if parse_func is None:
-                                        continue
+                    continue
                 
                 try:
                     # Send OBD2 request
@@ -355,12 +357,15 @@ def _get_spot_values_direct():
                         'timestamp': time.time()
                     }
                 except (OBD2TimeoutError, OBD2AbortError) as e:
-                                        # Skip this value
+                    # Skip this value
+                    pass
                 except Exception as e:
-                                        # Skip this value
+                    # Skip this value
+                    pass
     
     except Exception as e:
         # Silent - errors handled by return empty dict
+        pass
     
     return spot_list
 
@@ -383,7 +388,9 @@ def _update_metrics_from_spot_values():
                     'timestamp': current_time
                 }
     except Exception as e:
-        
+        # Silent - errors handled by return empty dict
+        pass
+
 
 def _poll_loop():
     """Periodic polling loop for metrics - called periodically"""
@@ -400,7 +407,9 @@ def _poll_loop():
         if _ovms_connected:
             _send_metrics_to_server()
     except Exception as e:
-            
+        # Silent - errors handled by return
+        pass
+    
     # Note: In a real implementation, this would be called by a timer or async task
     # For now, the frontend can trigger polling by calling getOVMSMetrics()
 
@@ -516,6 +525,7 @@ def _handle_server_response(data):
                     # Process decrypted message
     except Exception as e:
         # Silent - errors handled by state/status
+        pass
 
 
 def _send_metrics_to_server():
@@ -557,6 +567,7 @@ def _send_metrics_to_server():
             _ovms_socket.send(final_msg.encode('ascii'))
     except Exception as e:
         # Silent - errors handled by state/status
+        pass
 
 
 def checkServerMessages():
@@ -668,6 +679,7 @@ def startOVMS():
             pass
         except Exception as e:
             # Silent - errors handled by state/status
+            pass
         
         # Set non-blocking for subsequent reads
         _ovms_socket.setblocking(False)
@@ -727,25 +739,25 @@ def stopOVMS():
 def getOVMSStatus():
     """Get OVMS connection status"""
     try:
-                # Check for server messages if connected
+        # Check for server messages if connected
         if _ovms_connected:
-                        checkServerMessages()
+            checkServerMessages()
         
         # Trigger poll if enabled and connected
         if _config['enabled'] and _ovms_connected:
             current_time = time.time()
             if _last_poll_time == 0 or (current_time - _last_poll_time) >= _config['pollinterval']:
-                                _poll_loop()
+                _poll_loop()
         
-                status = {
+        status = {
             'state': _ovms_state,
             'status': _ovms_status,
             'connected': _ovms_connected,
             'metrics_count': len(_metrics),
             'last_poll': _last_poll_time
         }
-                _send_response('OVMS-STATUS', status)
-            except Exception as e:
+        _send_response('OVMS-STATUS', status)
+    except Exception as e:
         # Catch any unexpected exceptions and send error response
         # Send error via M2M_LOG (opcode 0x03) instead of print()
         try:
@@ -756,6 +768,7 @@ def getOVMSStatus():
             _send_error(f'Status error: {e}')
         except Exception as send_err:
             # Silent - error already occurred
+            pass
 
 
 # Initialize config on module load
@@ -765,8 +778,4 @@ try:
     # Silent - module initialization should not produce output
 except Exception as e:
     # Silent - module load errors fail silently
-    import sys
-    try:
-        sys.print_exception(e)
-    except:
-        pass
+    pass

@@ -144,8 +144,12 @@ def get_vehicle_config(vehicle_type):
             pass
     except Exception as e:
         # Log error but don't print to avoid noise
-        import sys
-        sys.print_exception(e)
+        # Send error via M2M_LOG (opcode 0x03) if webrepl is available
+        try:
+            import webrepl
+            webrepl.send_m2m(f"[OVMS] Error loading vehicle config for {vehicle_type}: {e}", 0x03)
+        except:
+            pass  # Silent if webrepl not available
     
     return None
 
@@ -224,8 +228,12 @@ def list_vehicles():
                                             vehicle_list[vehicle_id] = vehicle_name
                                     except Exception as e:
                                         # Log error but continue with other vehicles
-                                        import sys
-                                        sys.print_exception(e)
+                                        # Send error via M2M_LOG (opcode 0x03) if webrepl is available
+                                        try:
+                                            import webrepl
+                                            webrepl.send_m2m(f"[OVMS] Error loading vehicle {vehicle_id}: {e}", 0x03)
+                                        except:
+                                            pass  # Silent if webrepl not available
                         except OSError:
                             # File doesn't exist, skip
                             pass
@@ -237,7 +245,11 @@ def list_vehicles():
             pass
     except Exception as e:
         # Log error instead of silently failing
-        import sys
-        sys.print_exception(e)
+        # Send error via M2M_LOG (opcode 0x03) if webrepl is available
+        try:
+            import webrepl
+            webrepl.send_m2m(f"[OVMS] Error listing vehicles: {e}", 0x03)
+        except:
+            pass  # Silent if webrepl not available
     
     return vehicle_list
