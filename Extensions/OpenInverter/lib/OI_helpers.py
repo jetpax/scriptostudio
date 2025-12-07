@@ -47,9 +47,6 @@ Global Parameters Store:
 import json
 import time
 
-# Note: With WCB protocol, print() output automatically goes to M2M channel
-# No need to import webrepl.send_m2m() - just use print(json.dumps(...))
-
 # CAN module - required for OpenInverter extension
 try:
     import CAN
@@ -114,21 +111,18 @@ parameters = {
 def _send_response(cmd, arg):
     """Internal helper to send JSON response to WebREPL client via WCB protocol"""
     response = json.dumps({'CMD': cmd, 'ARG': arg})
-    # With WCB protocol, print() output automatically goes to M2M channel
     print(response)
 
 
 def _send_error(message, cmd):
     """Internal helper to send error response via WCB protocol"""
     response = json.dumps({'CMD': cmd, 'ARG': {'error': message}})
-    # With WCB protocol, print() output automatically goes to M2M channel
     print(response)
 
 
 def _send_success(message, cmd):
     """Internal helper to send success response via WCB protocol"""
     response = json.dumps({'CMD': cmd, 'ARG': {'success': True, 'message': message}})
-    # With WCB protocol, print() output automatically goes to M2M channel
     print(response)
 
 
