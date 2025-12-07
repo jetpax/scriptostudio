@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1765150668,
+  "updated": 1765151020,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -722,7 +722,7 @@
       "filename": "OpenInverter.js",
       "version": [
         0,
-        8,
+        9,
         0
       ],
       "author": "JetPax",
