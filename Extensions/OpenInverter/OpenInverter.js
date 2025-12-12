@@ -2,7 +2,7 @@
 // {
 //   "name": "OpenInverter",
 //   "id": "openinverter",
-//   "version": [0, 9, 0],
+//   "version": [1, 0, 0],
 //   "author": "JetPax",
 //   "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
 //   "icon": "sliders",
@@ -891,8 +891,57 @@ class OpenInverterExtension {
     this.state.plotState.isPaused = !this.state.plotState.isPaused
     this.emit('render')
 
-    if (!this.state.plotState.isPaused) {
-      this.acquirePlotData()
+    if (this.state.plotState.isPaused) {
+      // When pausing, force chart update to recalculate scales based on all current data
+      // Use setTimeout to ensure render completes and DOM is stable before updating chart
+      setTimeout(() => {
+        if (this.state.plotState.chart && this.state.plotState.isPaused) {
+          try {
+            const chart = this.state.plotState.chart
+            const canvas = document.getElementById('oi-plot-canvas')
+            
+            if (!canvas) {
+              console.warn('[OI Plot] Canvas not found during pause')
+              return
+            }
+            
+            // CRITICAL: Force Chart.js to recalculate container size before updating
+            // This fixes the DOM dimension issue where chart reads wrong container size
+            chart.resize()
+            
+            // Reset scale to auto-scale from all data
+            const yScale = chart.scales.y
+            if (yScale) {
+              yScale.options.min = undefined
+              yScale.options.max = undefined
+            }
+            
+            // Update chart - this will recalculate scales from all data with correct container size
+            chart.update('none')
+          } catch (e) {
+            console.warn('[OI Plot] Chart update failed during pause:', e)
+          }
+        }
+      }, 100) // Increased timeout to ensure DOM is fully stable
+    } else {
+      // When resuming, reset scale to auto and continue data acquisition
+      setTimeout(() => {
+        if (!this.state.plotState.isPaused && this.state.plotState.chart) {
+          try {
+            // Force resize to ensure correct dimensions
+            this.state.plotState.chart.resize()
+            // Reset to auto-scaling when resuming
+            const yScale = this.state.plotState.chart.scales.y
+            if (yScale) {
+              yScale.options.min = undefined
+              yScale.options.max = undefined
+            }
+          } catch (e) {
+            // Ignore errors when resetting scale
+          }
+          this.acquirePlotData()
+        }
+      }, 0)
     }
   }
 
