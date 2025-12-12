@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1765309545,
+  "updated": 1765504373,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -306,24 +306,6 @@
       "license": "MIT",
       "docs": "https://github.com/jczic",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/NTP%20Time%20Sync.py"
-    },
-    {
-      "name": "OpenInverter UI",
-      "filename": "OpenInverter UI.py",
-      "version": [
-        1,
-        0,
-        0
-      ],
-      "author": "ScriptO Team",
-      "description": "Full OpenInverter web interface with WebREPL communication.\n                         \n                         This ScriptO provides:\n                         • Full parameter display and editing\n                         • Real-time data visualization\n                         • CAN mapping management\n                         • Direct integration with OpenInverter via CAN bus\n                         \n                         The UI is served from /oi_ui/ directory and opens in a\n                         Studio modal. Communication happens via WebREPL using the\n                         existing OI_helpers functions - no REST API needed!\n                         \n                         Currently uses demo data from OI_helpers.py.\n                         For live hardware: enable CAN bus initialization below.\n                      ",
-      "category": "UI Plugins",
-      "tags": [
-        "ui plugins"
-      ],
-      "license": "MIT",
-      "docs": "https://github.com/jep-scriptomatic",
-      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/OpenInverter%20UI.py"
     },
     {
       "name": "PWM & Lighting",
@@ -738,8 +720,8 @@
       "id": "openinverter",
       "filename": "OpenInverter.js",
       "version": [
+        1,
         0,
-        9,
         0
       ],
       "author": "JetPax",

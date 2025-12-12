@@ -31,7 +31,7 @@ dict(
                          This verifies that file I/O uses direct GIL acquisition
                          instead of queuing, improving performance and simplicity.''',
         author      = 'Jonathan E. Peace',
-        mail        = 'jep@example.com'
+        mail        = 'jep@alphabetiq.com'
     ),
     
     args = dict(
@@ -303,4 +303,3 @@ def print_webrepl_test_instructions():
 if __name__ == '__main__':
     run_all_tests()
     print_webrepl_test_instructions()
-
