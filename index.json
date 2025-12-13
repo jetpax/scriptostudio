@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1765504373,
+  "updated": 1765591653,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -672,13 +672,11 @@
       "menu": [
         {
           "id": "connection",
-          "label": "Connection",
-          "icon": "radio"
+          "label": "Connection"
         },
         {
           "id": "filters",
-          "label": "Filters",
-          "icon": "filter"
+          "label": "Filters"
         }
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/GVRET/GVRET.js"
@@ -698,18 +696,15 @@
       "menu": [
         {
           "id": "config",
-          "label": "Configuration",
-          "icon": "settings"
+          "label": "Configuration"
         },
         {
           "id": "metrics",
-          "label": "Metrics",
-          "icon": "activity"
+          "label": "Metrics"
         },
         {
           "id": "status",
-          "label": "Status",
-          "icon": "info-circle"
+          "label": "Status"
         }
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/OVMS/OVMS.js",
@@ -722,7 +717,7 @@
       "version": [
         1,
         0,
-        0
+        1
       ],
       "author": "JetPax",
       "description": "OpenInverter debug and configuration tool for motor control parameters, spot values, CAN mapping, and live plotting",
@@ -730,38 +725,31 @@
       "menu": [
         {
           "id": "parameters",
-          "label": "Parameters",
-          "icon": "sliders"
+          "label": "Parameters"
         },
         {
           "id": "spotvalues",
-          "label": "Spot Values",
-          "icon": "activity"
+          "label": "Spot Values"
         },
         {
           "id": "canmapping",
-          "label": "CAN Mapping",
-          "icon": "radio"
+          "label": "CAN Mapping"
         },
         {
           "id": "commands",
-          "label": "Device Control",
-          "icon": "zap"
+          "label": "Device Control"
         },
         {
           "id": "errors",
-          "label": "Error Log",
-          "icon": "alert-triangle"
+          "label": "Error Log"
         },
         {
           "id": "plot",
-          "label": "Live Plot",
-          "icon": "trending-up"
+          "label": "Live Plot"
         },
         {
           "id": "firmware",
-          "label": "Firmware Upgrade",
-          "icon": "download"
+          "label": "Firmware Upgrade"
         }
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/OpenInverter/OpenInverter.js",
