@@ -30,6 +30,7 @@ jobs:
         python3 tools/build_index.py \
           --scriptos-dir ScriptOs \
           --extensions-dir Extensions \
+          --boards-dir Boards \
           --output ${{ env.OUTPUT_DIR }}/index.json \
           --repo-url https://github.com/${{ github.repository }} \
           --branch ${{ github.ref_name }}
@@ -85,4 +86,3 @@ jobs:
         echo "Install ScriptO via URL:"
         echo "  ?install=github:${REPO_OWNER}/${REPO_NAME}/ScriptOs/Name.py"
         echo ""
-
