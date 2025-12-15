@@ -76,10 +76,14 @@ _last_poll_time = 0
 # This allows support for multiple vehicle types (ZombieVerter, Tesla, etc.)
 
 
-def _send_response(cmd, arg):
-    """Internal helper to send JSON response to WebREPL client"""
+def _send_response(msg_type, data):
+    """Internal helper to send notification to WebREPL client
+    
+    Uses webrepl.notify() to send structured data via INFO event.
+    Message format: {"ovms": {"type": msg_type, "data": data}}
+    """
     try:
-        # Ensure arg is JSON-serializable (recursively handle nested dicts/lists)
+        # Ensure data is JSON-serializable (recursively handle nested dicts/lists)
         def make_serializable(obj):
             if isinstance(obj, dict):
                 return {k: make_serializable(v) for k, v in obj.items()}
@@ -90,24 +94,25 @@ def _send_response(cmd, arg):
             else:
                 return str(obj)  # Convert to string as fallback
         
-        arg = make_serializable(arg)
+        data = make_serializable(data)
         
-        response = json.dumps({'CMD': cmd, 'ARG': arg})
-        
-        # Send via WM binary protocol (M2M_RESP opcode 0x01)
-        webrepl.send_m2m(response)
+        # Send via notify (INFO event)
+        if hasattr(webrepl, 'notify'):
+            webrepl.notify({"ovms": {"type": msg_type, "data": data}})
+        else:
+            # Fallback for older firmware - use log
+            webrepl.log(f"[OVMS] {msg_type}: {json.dumps(data)}")
     except Exception as e:
-        # Send error via M2M_LOG (opcode 0x03) instead of print()
+        # Send error via log
         try:
-            error_msg = f"[OVMS] Error sending response: {e}, CMD: {cmd}"
-            webrepl.send_m2m(error_msg, 0x03)  # M2M_LOG opcode
+            webrepl.log(f"[OVMS] Error sending response: {e}, type: {msg_type}", level=2)
         except:
             pass  # Silent failure
 
 
-def _send_error(message, cmd='OVMS-ERROR'):
+def _send_error(message, msg_type='error'):
     """Internal helper to send error response"""
-    _send_response(cmd, {'error': message})
+    _send_response(msg_type, {'error': message})
 
 
 def _load_config():
@@ -134,7 +139,7 @@ def listVehicles():
     try:
         from vehicle import list_vehicles
         vehicles = list_vehicles()
-        _send_response('VEHICLES-LIST', vehicles)
+        _send_response('vehicles_list', vehicles)
     except Exception as e:
         _send_error(f'Failed to list vehicles: {e}')
 
@@ -163,7 +168,7 @@ def getOVMSConfig():
     
     config_with_vehicles = _config.copy()
     config_with_vehicles['available_vehicles'] = available_vehicles
-    _send_response('OVMS-CONFIG', config_with_vehicles)
+    _send_response('config', config_with_vehicles)
 
 
 def setOVMSConfig(args):
@@ -205,12 +210,12 @@ def setOVMSConfig(args):
     elif not _config['enabled']:
         stopOVMS()
     
-    _send_response('OVMS-CONFIG-UPDATED', {'success': True})
+    _send_response('config_updated', {'success': True})
 
 
 def getOVMSMetrics():
     """Get current metrics store"""
-    _send_response('OVMS-METRICS', _metrics.copy())
+    _send_response('metrics', _metrics.copy())
 
 
 def _load_vehicle_config():
@@ -632,7 +637,7 @@ def pollMetrics():
     
     try:
         _poll_loop()
-        _send_response('OVMS-POLLED', {'success': True, 'metrics_count': len(_metrics)})
+        _send_response('polled', {'success': True, 'metrics_count': len(_metrics)})
     except Exception as e:
         _send_error(f'Poll error: {e}')
 
@@ -642,7 +647,7 @@ def startOVMS():
     global _ovms_socket, _ovms_connected, _ovms_state, _ovms_status, _poll_task
     
     if _ovms_connected:
-        _send_response('OVMS-STATUS', {'status': 'already_connected'})
+        _send_response('status', {'status': 'already_connected'})
         return
     
     _load_config()
@@ -687,7 +692,7 @@ def startOVMS():
         # Do initial poll
         _poll_loop()
         
-        _send_response('OVMS-STARTED', {'status': _ovms_state})
+        _send_response('started', {'status': _ovms_state})
     except Exception as e:
         _ovms_state = 'error'
         _ovms_status = f'Connection error: {e}'
@@ -733,7 +738,7 @@ def stopOVMS():
     _ovms_crypto_rx = None
     _ovms_crypto_tx = None
     
-    _send_response('OVMS-STOPPED', {'status': 'stopped'})
+    _send_response('stopped', {'status': 'stopped'})
 
 
 def getOVMSStatus():
@@ -756,7 +761,7 @@ def getOVMSStatus():
             'metrics_count': len(_metrics),
             'last_poll': _last_poll_time
         }
-        _send_response('OVMS-STATUS', status)
+        _send_response('status', status)
     except Exception as e:
         # Catch any unexpected exceptions and send error response
         # Send error via M2M_LOG (opcode 0x03) instead of print()

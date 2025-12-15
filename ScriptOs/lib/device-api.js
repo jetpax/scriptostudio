@@ -63,7 +63,7 @@ class DeviceAPI {
   }
   
   /**
-   * Parse JSON response from OI_helpers functions
+   * Parse JSON response from helper functions
    * @param {string} output - Raw output containing JSON
    * @returns {object} - Parsed JSON object
    */
@@ -72,8 +72,8 @@ class DeviceAPI {
       // Try to parse as-is first
       return JSON.parse(output);
     } catch (e) {
-      // Try to extract JSON from output (handles extra text)
-      const jsonMatch = output.match(/\{[^}]*"CMD"[^}]*\}/);
+      // Try to extract JSON object from output (handles extra text)
+      const jsonMatch = output.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       }
@@ -89,8 +89,7 @@ class DeviceAPI {
    */
   async getOiParams() {
     const result = await this.execute('getOiParams()');
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -103,8 +102,7 @@ class DeviceAPI {
     // Escape strings properly
     const valueStr = typeof value === 'string' ? `"${value}"` : value;
     const result = await this.execute(`setParameter({"id": ${id}, "value": ${valueStr}})`);
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -113,8 +111,7 @@ class DeviceAPI {
    */
   async saveParameters() {
     const result = await this.execute('saveParameters()');
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -123,8 +120,7 @@ class DeviceAPI {
    */
   async getSpotValues() {
     const result = await this.execute('getSpotValues()');
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -135,8 +131,7 @@ class DeviceAPI {
   async getPlotData(paramIds) {
     const idsStr = JSON.stringify(paramIds);
     const result = await this.execute(`getPlotData({"ids": ${idsStr}})`);
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -145,8 +140,7 @@ class DeviceAPI {
    */
   async getCanMap() {
     const result = await this.execute('getCanMappingData()');
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -157,8 +151,7 @@ class DeviceAPI {
   async mapCanSpotValue(mapping) {
     const mappingStr = JSON.stringify(mapping);
     const result = await this.execute(`mapCanSpotValue(${mappingStr})`);
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -169,8 +162,7 @@ class DeviceAPI {
    */
   async unmapCanSpotValue(canId, position) {
     const result = await this.execute(`unmapCanSpotValue({"canId": ${canId}, "position": ${position}})`);
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
   
   /**
@@ -179,8 +171,7 @@ class DeviceAPI {
    */
   async getSysInfo() {
     const result = await this.execute('getSysInfo()');
-    const parsed = this._parseResponse(result);
-    return parsed.ARG || parsed;
+    return this._parseResponse(result);
   }
 }
 
@@ -188,4 +179,3 @@ class DeviceAPI {
 if (typeof window !== 'undefined') {
   window.DeviceAPI = DeviceAPI;
 }
-

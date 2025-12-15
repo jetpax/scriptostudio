@@ -193,7 +193,6 @@ Before committing code, verify:
 ### ScriptO Studio Integration
 
 - Extensions run in MicroPython on the device
-- Communication via WebREPL protocol
-- JSON command/response pattern: `{"CMD": "...", "ARG": {...}}`
-- Device API provides `execute()` and `parseJSON()` helpers
-
+- Communication via WebREPL Binary Protocol (WBP)
+- Notifications via `webrepl.notify({"key": value})` - sends CBOR-encoded INFO events
+- Device API provides `execute()` for running code and parsing responses
