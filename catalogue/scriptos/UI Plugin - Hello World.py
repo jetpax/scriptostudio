@@ -8,7 +8,7 @@ dict(
     
     info = dict(
         name        = 'UI Plugin - Hello World',
-        version     = [1, 0, 1],
+        version     = [1, 1, 0],
         category    = 'UI Plugins',
         description = '''Minimal demonstration of the ScriptO UI Plugin Architecture.
                          
@@ -42,7 +42,8 @@ dict(
 
 # === END_CONFIG_PARAMETERS ===
 
-from esp32 import httpserver, webrepl
+import httpserver
+import webrepl_binary as webrepl
 import network
 
 # Get device IP once at module level
@@ -248,7 +249,8 @@ except:
 # Register the HTTP route
 try:
     result = httpserver.on('/hello_ui', hello_ui, 'GET')
-    if result:
+    # httpserver.on() returns the handler slot number (0 or greater on success)
+    if result is not None and result >= 0:
         print("✓ Registered HTTP route: /hello_ui")
     else:
         print("✗ Failed to register route: /hello_ui")
@@ -271,14 +273,15 @@ except Exception as e:
     print(f"✗ Failed to get IP: {e}")
     raise
 
-# Send DISPLAY-UI command to Studio
+# Send DISPLAY-UI command to Studio via webrepl.notify
 try:
     # Use helper to get URL with correct protocol (auto-detects HTTPS)
     from lib.client_helpers import getDeviceURL
     url = getDeviceURL('/hello_ui')
     title = args.ui_title  # Use the user-configured title
     
-    result = webrepl.display_ui(url, title)
+    # Send notification with display_ui payload
+    result = webrepl.notify({"display_ui": {"url": url, "title": title}})
     if result:
         print(f"✓ UI display command sent to Studio")
         print(f"  URL: {url}")

@@ -9,16 +9,25 @@ dict(
     info    = dict(
         # ----------------------------------------------------------------------
         name        = 'CAN/TWAI Loopback Test',
-        version     = [1, 0, 0],
+        version     = [1, 1, 0],
         category    = 'CAN/TWAI',
-        description = 'Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32\'s TWAI controller. For real CAN bus communication with OpenInverter, you\'ll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.',
-        author      = 'Scriptomatic Team',
-        mail        = 'support@scriptomatic.io',
-        www         = 'https://github.com/straga/micropython-esp32-twai'
+        description = 'Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32\'s TWAI controller. Pin configuration is automatically detected from your board definition. For real CAN bus communication with OpenInverter, you\'ll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.',
+        author      = 'JetPax',
+        mail        = 'jep@alphabetiq.com',
+        www         = 'https://github.com/jetpax'
         # ----------------------------------------------------------------------
     ),
     
     args    = dict(
+        # ----------------------------------------------------------------------
+        can_bus        = dict( label    = 'CAN Bus:',
+                              type     = dict,
+                              items    = dict( 
+                                  bus0 = "CAN 0 (default)",
+                                  bus1 = "CAN 1 (ESP32-P4 only)",
+                                  bus2 = "CAN 2 (ESP32-P4 only)"
+                              ),
+                              value    = 'bus0' ),
         # ----------------------------------------------------------------------
         can_mode       = dict( label    = 'CAN Mode:',
                               type     = dict,
@@ -28,14 +37,6 @@ dict(
                                   silent   = "SILENT - Listen-only mode (monitor bus)"
                               ),
                               value    = 'loopback' ),
-        # ----------------------------------------------------------------------
-        tx_pin         = dict( label    = 'TX Pin (GPIO):',
-                              type     = int,
-                              value    = 5 ),
-        # ----------------------------------------------------------------------
-        rx_pin         = dict( label    = 'RX Pin (GPIO):',
-                              type     = int,
-                              value    = 4 ),
         # ----------------------------------------------------------------------
         bitrate        = dict( label    = 'Bitrate (bps):',
                               type     = dict,
@@ -64,12 +65,22 @@ dict(
 
 import CAN
 import time
+from lib.can_helpers import get_can_config
 
 termWidth=40
 
 print("="*termWidth)
 print("CAN/TWAI Loopback Test")
 print("="*termWidth)
+
+# Map bus selection to index
+bus_map = {'bus0': 0, 'bus1': 1, 'bus2': 2}
+bus_id = bus_map.get(args.can_bus, 0)
+
+# Get board-defined CAN configuration
+can_config = get_can_config(bus_id)
+tx_pin = can_config['txPin']
+rx_pin = can_config['rxPin']
 
 # Map bitrate IDs to actual values
 bitrate_map = {
@@ -102,8 +113,9 @@ if args.show_modes:
 
 # Initialize CAN
 print("\nInitializing CAN...")
-print(f"  TX Pin: GPIO{args.tx_pin}")
-print(f"  RX Pin: GPIO{args.rx_pin}")
+print(f"  Bus: CAN{bus_id}")
+print(f"  TX Pin: GPIO{tx_pin} (from board config)")
+print(f"  RX Pin: GPIO{rx_pin} (from board config)")
 print(f"  Bitrate: {selected_bitrate} bps")
 print(f"  Mode: {mode_name}")
 
@@ -115,10 +127,10 @@ elif args.can_mode == 'silent':
     print("  Note: Listen-only mode - will not transmit")
 
 can = CAN(
-    0,                      # CAN bus 0
+    bus_id,                 # CAN bus index
     extframe=False,         # Standard 11-bit IDs
-    tx=args.tx_pin,         # TX pin from config
-    rx=args.rx_pin,         # RX pin from config
+    tx=tx_pin,              # TX pin from board config
+    rx=rx_pin,              # RX pin from board config
     mode=selected_mode,     # Mode from config
     bitrate=selected_bitrate,  # Bitrate from config
     auto_restart=False
@@ -193,6 +205,7 @@ else:
     print("="*termWidth)
     print("\nTroubleshooting:")
     print(f"  • Mode: {mode_name}")
+    print(f"  • Bus: CAN{bus_id}, TX=GPIO{tx_pin}, RX=GPIO{rx_pin}")
     
     if args.can_mode == 'loopback':
         print("  • Loopback uses internal ESP32 feedback (no hardware needed)")
@@ -208,7 +221,7 @@ else:
     
     print("\nFor OpenInverter communication:")
     print("  1. Get CAN transceiver (SN65HVD230 for 3.3V)")
-    print("  2. Wire: ESP32 GPIO5→TX, GPIO4←RX, 3.3V→VCC, GND→GND")
+    print(f"  2. Wire: ESP32 GPIO{tx_pin}→TX, GPIO{rx_pin}←RX, 3.3V→VCC, GND→GND")
     print("  3. Connect CANH/CANL to OpenInverter")
     print("  4. Add 120Ω termination resistors")
     print("  5. Use mode=NORMAL")

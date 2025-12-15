@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1765758335,
+  "updated": 1765823374,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -79,17 +79,17 @@
       "filename": "CAN Loopback Test.py",
       "version": [
         1,
-        0,
+        1,
         0
       ],
-      "author": "Scriptomatic Team",
-      "description": "Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32's TWAI controller. For real CAN bus communication with OpenInverter, you'll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.",
+      "author": "JetPax",
+      "description": "Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32's TWAI controller. Pin configuration is automatically detected from your board definition. For real CAN bus communication with OpenInverter, you'll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.",
       "category": "CAN/TWAI",
       "tags": [
         "can/twai"
       ],
       "license": "MIT",
-      "docs": "https://github.com/straga/micropython-esp32-twai",
+      "docs": "https://github.com/jetpax",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/CAN%20Loopback%20Test.py"
     },
     {
@@ -607,8 +607,8 @@
       "filename": "UI Plugin - Hello World.py",
       "version": [
         1,
-        0,
-        1
+        1,
+        0
       ],
       "author": "ScriptO Team",
       "description": "Minimal demonstration of the ScriptO UI Plugin Architecture.\n                         \n                         This ScriptO:\n                         • Registers an HTTP route that serves a self-contained HTML page\n                         • Sends a command to Studio to open the UI in a modal\n                         • The UI is served directly from your ESP32 device\n                         \n                         This proves the end-to-end plugin flow where ScriptOs can provide \n                         their own web-based user interfaces without requiring any code changes \n                         in ScriptO Studio.\n                         \n                         The UI appears in an iframe modal and communicates directly with the device.\n                      ",
@@ -680,7 +680,7 @@
       "filename": "GVRET.js",
       "version": [
         1,
-        2,
+        3,
         0
       ],
       "author": "JetPax",
