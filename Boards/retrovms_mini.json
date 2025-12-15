@@ -1,0 +1,60 @@
+{
+  "board_id": "retrovms_mini",
+  "board_name": "RetroVMS Mini",
+  "chip": "ESP32-S3",
+  "version": "1.0",
+  "description": "Vehicle control module with 24 inputs, 12 outputs, and CAN bus",
+  
+  "hardware": {
+    "status_led": {
+      "type": "neopixel",
+      "pin": 48,
+      "count": 1,
+      "description": "Onboard RGB status LED"
+    },
+    "can": {
+      "pins": {
+        "tx": 4,
+        "rx": 5,
+        "standby": 6
+      },
+      "bitrate": 500000,
+      "description": "CAN bus with standby control"
+    },
+    "spi1": {
+      "pins": {
+        "miso": 13,
+        "mosi": 11,
+        "sclk": 12
+      },
+      "description": "SPI bus for input/output drivers"
+    },
+    "i2c0": {
+      "pins": {
+        "sda": 8,
+        "scl": 9
+      },
+      "description": "Primary I2C bus"
+    },
+    "tic12400_inputs": {
+      "type": "TIC12400",
+      "driver": "TIC12400",
+      "bus": "spi1",
+      "pins": {
+        "cs": 15
+      },
+      "channels": 24,
+      "description": "24-channel digital input IC"
+    },
+    "drv8912_outputs": {
+      "type": "DRV8912",
+      "driver": "DRV8912",
+      "bus": "spi1",
+      "pins": {
+        "cs": 16
+      },
+      "channels": 12,
+      "description": "12-channel half-bridge output driver"
+    }
+  }
+}

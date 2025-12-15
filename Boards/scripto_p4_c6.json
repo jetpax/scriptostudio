@@ -1,0 +1,57 @@
+{
+  "board_id": "scripto_p4_c6",
+  "board_name": "Scripto P4+C6",
+  "chip": "ESP32-P4",
+  "version": "1.1",
+  "description": "ESP32-P4 development board with Ethernet, CAN, and NeoPixel status LED",
+  
+  "hardware": {
+    "ethernet": {
+      "type": "IP101",
+      "phy_addr": 1,
+      "pins": {
+        "mdc": 31,
+        "mdio": 52,
+        "reset": 51
+      },
+      "description": "IP101 Ethernet PHY with RMII interface"
+    },
+    "i2c0": {
+      "pins": {
+        "sda": 7,
+        "scl": 8
+      },
+      "description": "Primary I2C bus"
+    },
+    "status_led": {
+      "type": "neopixel",
+      "pin": 48,
+      "count": 1,
+      "description": "Onboard RGB status LED (WS2812)"
+    },
+    "spi1": {
+      "pins": {
+        "miso": 13,
+        "mosi": 11,
+        "sclk": 12,
+        "cs": 10
+      },
+      "description": "SPI bus for peripherals"
+    },
+    "uart1": {
+      "pins": {
+        "tx": 17,
+        "rx": 18
+      },
+      "description": "Additional UART"
+    },
+    "can": {
+      "pins": {
+        "tx": 20,
+        "rx": 21
+      },
+      "bitrate": 500000,
+      "description": "CAN bus (TWAI)"
+    }
+  }
+}

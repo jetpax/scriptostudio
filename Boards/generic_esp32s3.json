@@ -1,0 +1,9 @@
+{
+  "board_id": "generic_esp32s3",
+  "board_name": "Generic ESP32-S3",
+  "chip": "ESP32-S3",
+  "version": "1.0",
+  "description": "Generic ESP32-S3 board with no fixed hardware",
+  
+  "hardware": {}
+}

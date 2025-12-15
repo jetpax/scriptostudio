@@ -15,6 +15,7 @@ from urllib.parse import quote
 # Configuration
 SCRIPTOS_DIR = 'ScriptOs'
 EXTENSIONS_DIR = 'Extensions'
+BOARDS_DIR = 'Boards'
 OUTPUT_FILE = 'index.json'
 START_MARKER = '# === START_CONFIG_PARAMETERS ==='
 END_MARKER = '# === END_CONFIG_PARAMETERS ==='
@@ -236,6 +237,51 @@ def parse_extension_file(file_path, repo_url=None, branch='main', extensions_bas
         traceback.print_exc()
         return None
 
+def parse_board_file(file_path, repo_url=None, branch='main'):
+    """Parse a board configuration JSON file"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            board_config = json.load(f)
+        
+        filename = file_path.name
+        
+        # Extract metadata
+        board_id = board_config.get('board_id', filename.replace('.json', ''))
+        board_name = board_config.get('board_name', board_id)
+        chip = board_config.get('chip', 'ESP32')
+        version = board_config.get('version', '1.0')
+        description = board_config.get('description', '')
+        
+        # Generate URL
+        if repo_url:
+            if 'raw.githubusercontent.com' in repo_url:
+                url = f"{repo_url}/{branch}/Boards/{quote(filename)}"
+            else:
+                url = f"{repo_url}/raw/{branch}/Boards/{quote(filename)}"
+        else:
+            url = f"/Boards/{quote(filename)}"
+        
+        # Build board entry
+        board_entry = {
+            "board_id": board_id,
+            "board_name": board_name,
+            "chip": chip,
+            "version": version,
+            "filename": filename,
+            "url": url
+        }
+        
+        if description:
+            board_entry["description"] = description
+        
+        return board_entry
+        
+    except Exception as e:
+        print(f"  ✗ Error parsing {file_path.name}: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 def parse_scripto_file(file_path, repo_url=None, branch='main'):
     """Parse a ScriptO file and extract metadata"""
     try:
@@ -319,10 +365,11 @@ def parse_scripto_file(file_path, repo_url=None, branch='main'):
         print(f"  ✗ Error parsing {file_path.name}: {e}")
         return None
 
-def build_index(scriptos_dir=SCRIPTOS_DIR, extensions_dir=EXTENSIONS_DIR, output_file=OUTPUT_FILE, repo_url=None, branch='main'):
-    """Build index.json from ScriptOs and Extensions directories"""
+def build_index(scriptos_dir=SCRIPTOS_DIR, extensions_dir=EXTENSIONS_DIR, boards_dir=BOARDS_DIR, output_file=OUTPUT_FILE, repo_url=None, branch='main'):
+    """Build index.json from ScriptOs, Extensions, and Boards directories"""
     scriptos_path = Path(scriptos_dir)
     extensions_path = Path(extensions_dir)
+    boards_path = Path(boards_dir)
     
     if not scriptos_path.exists():
         print(f"Error: ScriptOs directory not found: {scriptos_dir}")
@@ -367,12 +414,32 @@ def build_index(scriptos_dir=SCRIPTOS_DIR, extensions_dir=EXTENSIONS_DIR, output
     else:
         print(f"\nExtensions directory not found: {extensions_dir} (skipping)")
     
+    # Scan Boards
+    boards = []
+    if boards_path.exists():
+        print(f"\nScanning {boards_dir}...")
+        json_files = list(boards_path.glob('*.json'))
+        
+        if json_files:
+            print(f"Found {len(json_files)} Board files")
+            
+            for json_file in sorted(json_files):
+                print(f"Processing {json_file.name}...")
+                entry = parse_board_file(json_file, repo_url, branch)
+                if entry:
+                    boards.append(entry)
+        else:
+            print(f"No board files found in {boards_dir}")
+    else:
+        print(f"\nBoards directory not found: {boards_dir} (skipping)")
+    
     # Build index
     index = {
         "v": 1,
         "updated": int(time.time()),
         "scriptos": scriptos,
-        "extensions": extensions
+        "extensions": extensions,
+        "boards": boards
     }
     
     # Write index.json
@@ -382,15 +449,16 @@ def build_index(scriptos_dir=SCRIPTOS_DIR, extensions_dir=EXTENSIONS_DIR, output
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(index, f, indent=2, ensure_ascii=False)
     
-    print(f"\n✓ Generated {output_file} with {len(scriptos)} ScriptOs and {len(extensions)} Extensions")
+    print(f"\n✓ Generated {output_file} with {len(scriptos)} ScriptOs, {len(extensions)} Extensions, and {len(boards)} Boards")
     return True
 
 def main():
     import argparse
     
-    parser = argparse.ArgumentParser(description='Build ScriptOs and Extensions index.json')
+    parser = argparse.ArgumentParser(description='Build ScriptOs, Extensions, and Boards index.json')
     parser.add_argument('--scriptos-dir', default=SCRIPTOS_DIR, help='ScriptOs directory')
     parser.add_argument('--extensions-dir', default=EXTENSIONS_DIR, help='Extensions directory')
+    parser.add_argument('--boards-dir', default=BOARDS_DIR, help='Boards directory')
     parser.add_argument('--output', default=OUTPUT_FILE, help='Output index.json file')
     parser.add_argument('--repo-url', help='GitHub repository URL (e.g., https://github.com/user/repo)')
     parser.add_argument('--branch', default='main', help='Git branch name')
@@ -406,9 +474,8 @@ def main():
         # Remove any duplicate /raw/ in the path
         repo_url = repo_url.replace('/raw/raw/', '/raw/')
     
-    success = build_index(args.scriptos_dir, args.extensions_dir, args.output, repo_url, args.branch)
+    success = build_index(args.scriptos_dir, args.extensions_dir, args.boards_dir, args.output, repo_url, args.branch)
     exit(0 if success else 1)
 
 if __name__ == '__main__':
     main()
-
