@@ -8,16 +8,16 @@ dict(
 
     info = dict(
         name        = 'Test - WebFiles Gzip',
-        version     = [1, 0, 0],
-        category    = 'Tests/WebFiles',
+        version     = [1, 0, 1],
+        category    = 'Testing',
         description = '''Tests automatic gzip compression support in webfiles module.
                          Creates both regular and .gz versions of test files.
                          When client sends "Accept-Encoding: gzip", the .gz version is served automatically.
                          This tests the new direct GIL file serving with mp_vfs_stat() gzip resolution.
                       ''',
         author      = 'ScriptO Team',
-        mail        = 'info@scripto.team',
-        www         = 'https://github.com/scriptomatic'
+        mail        = 'jep@alphabetiq.com',
+        www         = 'https://github.com/jetpax'
     ),
     
     args = dict(
@@ -153,4 +153,3 @@ else:
 print("\n" + "="*60)
 print("Test setup complete!")
 print("="*60)
-
