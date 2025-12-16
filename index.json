@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1765848916,
+  "updated": 1765916494,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -344,6 +344,40 @@
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/PWM%20%26%20Servo%20Motor.py"
     },
     {
+      "name": "SD Card Mount Test",
+      "filename": "SD Card Mount Test.py",
+      "version": [
+        1,
+        1,
+        0
+      ],
+      "author": "jetpax",
+      "description": "Mount SD card and test read/write",
+      "category": "Hardware Tests",
+      "tags": [
+        "hardware tests"
+      ],
+      "license": "MIT",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/SD%20Card%20Mount%20Test.py"
+    },
+    {
+      "name": "SD Card Test",
+      "filename": "SD Card Test.py",
+      "version": [
+        1,
+        1,
+        0
+      ],
+      "author": "jetpax",
+      "description": "Test SD card on Scripto P4+C6 - Diagnostics",
+      "category": "Hardware Tests",
+      "tags": [
+        "hardware tests"
+      ],
+      "license": "MIT",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/SD%20Card%20Test.py"
+    },
+    {
       "name": "Script Object template ",
       "filename": "ScriptOs - Template.py",
       "version": [
@@ -351,8 +385,8 @@
         0,
         0
       ],
-      "author": "John Smith",
-      "description": " This template is a guide to developing Script Objects in MicroPython for your Scriptomator device.                          You just have a \"dict\" to place in your code file with the 2 commented lines above and below.                          You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the \"args\" class.\n                          Use a \"list\" type to propose a choice between all the GPIO pins of the ESP32.\n                          Also, use the \"dict\" type to propose a multiple choice via the \"items\" sub-tree.\n                          You will be able to write your test scripts very quickly!\n                      ",
+      "author": "jetpax",
+      "description": " This template is a guide to developing Script Objects in MicroPython.                          You just need a \"dict\" in your code, with the 2 commented lines above and below.                          You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the \"args\" class.\n                          Use a \"list\" type to propose a choice between all the GPIO pins of the ESP32.\n                          Also, use the \"dict\" type to propose a multiple choice via the \"items\" sub-tree.\n                      ",
       "category": "Templates",
       "tags": [
         "templates"
