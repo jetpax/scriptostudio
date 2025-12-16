@@ -36,7 +36,6 @@ Each board configuration file contains:
 "status_led": {
   "type": "neopixel",
   "pin": 48,
-  "count": 1,
   "description": "Onboard status LED"
 }
 ```

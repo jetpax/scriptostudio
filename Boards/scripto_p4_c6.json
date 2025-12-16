@@ -2,7 +2,7 @@
   "board_id": "scripto_p4_c6",
   "board_name": "Scripto P4+C6",
   "chip": "ESP32-P4",
-  "version": "1.1",
+  "version": "1.2",
   "description": "ESP32-P4 development board with Ethernet, CAN, and NeoPixel status LED",
   
   "hardware": {
@@ -26,7 +26,6 @@
     "status_led": {
       "type": "neopixel",
       "pin": 48,
-      "count": 1,
       "description": "Onboard RGB status LED (WS2812)"
     },
     "spi1": {

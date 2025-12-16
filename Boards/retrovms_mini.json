@@ -9,7 +9,6 @@
     "status_led": {
       "type": "neopixel",
       "pin": 48,
-      "count": 1,
       "description": "Onboard RGB status LED"
     },
     "can": {
