@@ -17,15 +17,14 @@ dict(
         version     = [1, 0, 0],                                # Version is mandatory (list of 3 int)
         category    = 'Templates',                              # Optional: category for organization
         description =                                           # Description is mandatory
-                      ''' This template is a guide to developing Script Objects in MicroPython for your Scriptomator device.\
-                          You just have a "dict" to place in your code file with the 2 commented lines above and below.\
+                      ''' This template is a guide to developing Script Objects in MicroPython.\
+                          You just need a "dict" in your code, with the 2 commented lines above and below.\
                           You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the "args" class.
                           Use a "list" type to propose a choice between all the GPIO pins of the ESP32.
                           Also, use the "dict" type to propose a multiple choice via the "items" sub-tree.
-                          You will be able to write your test scripts very quickly!
                       ''',
-        author      = 'John Smith',                             # Author is mandatory
-        mail        = 'john.smith@super-micropython-coders.io', # Mail is not mandatory
+        author      = 'jetpax',                             # Author is mandatory
+        mail        = 'jep@alphabetiq.com',              # Mail is not mandatory
         www         = 'https://docs.micropython.org'            # Web link is not mandatory
         # ----------------------------------------------------------------------
     ),

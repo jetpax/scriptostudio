@@ -49,8 +49,35 @@
         "tx": 20,
         "rx": 21
       },
-      "bitrate": 500000,
       "description": "CAN bus (TWAI)"
+    },
+    "sdcard": {
+      "mode": "SDMMC",
+      "pins": {
+        "cmd": 44,
+        "clk": 43,
+        "d0": 39,
+        "d1": 40,
+        "d2": 41,
+        "d3": 42
+      },
+      "power_control": {
+        "pin": 45,
+        "active_low": true
+      }
+    },
+    "c6_coprocessor": {
+      "interface": "sdio",
+      "slot": 1,
+      "pins": {
+        "cmd": 26,
+        "clk": 25,
+        "d0": 27,
+        "d1": 28,
+        "d2": 29,
+        "d3": 30
+      },
+      "description": "ESP32-C6 coprocessor connected via SDIO on SD2/SLOT1"
     }
   }
 }

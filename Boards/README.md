@@ -71,9 +71,9 @@ Each board configuration file contains:
     "rx": 21,
     "standby": 22
   },
-  "bitrate": 500000,
   "description": "CAN bus"
 }
+
 ```
 
 ## Usage

@@ -17,7 +17,6 @@
         "rx": 5,
         "standby": 6
       },
-      "bitrate": 500000,
       "description": "CAN bus with standby control"
     },
     "spi1": {
