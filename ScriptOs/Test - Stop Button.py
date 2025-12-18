@@ -7,7 +7,7 @@ dict(
     
     info = dict(
         name        = 'Stop Button Test',
-        version     = [1, 1, 0],
+        version     = [1, 2, 0],
         category    = 'Testing',
         description = 'Simple infinite counter to test the Stop button. Counts up forever until stopped. Also demonstrates logging if enabled',
         author      = 'ScriptO Studio'
@@ -44,7 +44,8 @@ from time import sleep
 # Setup logging if enabled
 logger = None
 if args.enable_logging:
-    import logging_binary as webrepl
+    import logging
+    import webrepl_binary as webrepl
     
     # Get log level
     log_level_map = {
