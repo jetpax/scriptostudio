@@ -9,7 +9,7 @@ dict(
 
     info = dict(
         name        = 'LEDs - NeoPixel RGB(+W/Y) Strip (Interruptible)',
-        version     = [1, 1, 0],
+        version     = [1, 2, 0],
         category    = 'Hardware',
         description = 'NeoPixel RGB LEDs demo, compatible with strips WS2812(B), SK6812, ADAxxxx, APA106, FLORA and more. ' \
                     + 'You can choose rainbow fade animation or static white, as well as the number and type of LEDs, ' \
@@ -27,12 +27,19 @@ dict(
 
         pin        = dict( label = 'GPIO:',
                            type  = list, 
-                           value = 48),
+                           value = 1 ),
 
-        ledType    = dict( label = 'Type of LEDs:',
-                           type  = dict,
-                           items = { '3' : 'Standard RGB (3 in 1)',
-                                     '4' : 'Extended RGB+W/Y (4 in 1)' } ),
+        pixel_order = dict(
+                            label = 'Pixel color order:',
+                            type  = dict,
+                            items = {
+                                'BRG': 'BRG - Blue, Red, Green (3 bytes)',
+                                'GRB': 'GRB - Green, Red, Blue (3 bytes, most common)',
+                                'RGB': 'RGB - Red, Green, Blue (3 bytes)',
+                                'RGBW': 'RGBW - Red, Green, Blue, White (4 bytes)',
+                                'RBGW': 'RBGW - Red, Blue, Green, White (4 bytes)'
+                            },
+                            value = 'GRB' ),
 
         brightness = dict( label = 'Max brightness (%):',
                            type  = int,
@@ -40,7 +47,7 @@ dict(
 
         fadeSpeed  = dict( label = 'Fade speed (1-100):',
                            type  = int,
-                           value = 50 ),
+                           value = 1 ),
 
         frequency  = dict( label = 'Protocol frequency:',
                            type  = dict,
@@ -49,9 +56,6 @@ dict(
                            value = '1' ),
 
         staticWhite = dict( label = 'Static white light (no animation):',
-                           type  = bool ),
-
-        reverseRGB = dict( label = 'Reversed RGB protocol (APA106, FLORA):',
                            type  = bool ) )
 
 )
@@ -65,8 +69,38 @@ from machine import Pin
 from time    import sleep_ms
 import sys
 
+def get_neopixel_order(pixel_order):
+    """
+    Convert pixel_order string to NeoPixel ORDER tuple and bpp.
+    
+    Args:
+        pixel_order: String like "BRG", "GRB", "RGB", "RGBW", "RBGW"
+    
+    Returns:
+        tuple: (ORDER tuple, bpp)
+        ORDER tuple maps (R, G, B, W) positions to byte buffer positions
+    """
+    pixel_order = pixel_order.upper()
+    
+    # Map pixel_order strings to (ORDER tuple, bpp)
+    # ORDER maps color position in tuple (R=0, G=1, B=2, W=3) to byte buffer position
+    order_map = {
+        "BRG": ((2, 1, 0, 3), 3),  # Blue, Red, Green
+        "GRB": ((1, 0, 2, 3), 3),  # Green, Red, Blue (most common)
+        "RGB": ((0, 1, 2, 3), 3),  # Red, Green, Blue
+        "RGBW": ((0, 1, 2, 3), 4), # Red, Green, Blue, White
+        "RBGW": ((0, 2, 1, 3), 4), # Red, Blue, Green, White
+    }
+    
+    if pixel_order in order_map:
+        return order_map[pixel_order]
+    else:
+        # Default to GRB if unknown
+        print(f"⚠️  Unknown pixel_order '{pixel_order}', defaulting to GRB")
+        return ((1, 0, 2, 3), 3)
+
 def setColor(red, green, blue, white=0, fading=False) :
-    global np, r, g, b, w, brightness_mult, fade_steps
+    global np, r, g, b, w, brightness_mult, fade_steps, bpp
     # Apply brightness scaling to target colors
     red = int(red * brightness_mult)
     green = int(green * brightness_mult)
@@ -120,7 +154,7 @@ def setColor(red, green, blue, white=0, fading=False) :
                 w = white
         for n in range(len(np)) :
             c = (round(r), round(g), round(b), round(w)) \
-                if int(args.ledType) == 4 else           \
+                if bpp == 4 else                          \
                 (round(r), round(g), round(b))
             np[n] = c
         np.write()
@@ -161,10 +195,12 @@ except :
     print('Unable to load the "neopixel" library. You must install it.')
     sys.exit()
 
-NeoPixel.ORDER = (0, 1, 2, 3) if args.reverseRGB else (1, 0, 2, 3)
+# Get NeoPixel ORDER tuple and bpp from pixel_order string
+order_tuple, bpp = get_neopixel_order(args.pixel_order)
+NeoPixel.ORDER = order_tuple
 np             = NeoPixel( pin    = Pin(args.pin),
                            n      = args.ledsCount,
-                           bpp    = int(args.ledType),
+                           bpp    = bpp,
                            timing = int(args.frequency) )
 (r, g, b, w)   = (0.0, 0.0, 0.0, 0.0)
 
@@ -189,8 +225,7 @@ try :
 
 except KeyboardInterrupt :
     print('\nStopping LEDs...')
-    c = (0, 0, 0, 0) if int(args.ledType) == 4 else (0, 0, 0)
+    c = (0, 0, 0, 0) if bpp == 4 else (0, 0, 0)
     np.fill(c)
     np.write()
     print('LEDs turned off.')
-
