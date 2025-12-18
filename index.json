@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1766019546,
+  "updated": 1766027731,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -468,7 +468,7 @@
       "filename": "Test - Stop Button.py",
       "version": [
         1,
-        1,
+        2,
         0
       ],
       "author": "ScriptO Studio",
