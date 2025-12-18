@@ -15,7 +15,7 @@
 //     { "id": "metrics", "label": "Metrics" },
 //     { "id": "status", "label": "Status" }
 //   ],
-//   "styles": ".ovms-section { margin-bottom: 24px; } .ovms-section h3 { font-size: 18px; font-weight: 600; color: var(--scheme-primary); margin-bottom: 12px; } .ovms-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; } .ovms-field label { font-size: 14px; font-weight: 600; color: var(--text-primary); } .ovms-field input, .ovms-field select { padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 6px; background: var(--input-bg); color: var(--text-primary); font-size: 14px; } .ovms-field input:focus, .ovms-field select:focus { outline: none; border-color: var(--scheme-primary); box-shadow: 0 0 0 3px rgba(0, 129, 132, 0.2); } .ovms-button { text-transform: uppercase;     letter-spacing: 0.5px; width: auto; padding: 10px 20px; border: none; border-radius: 6px; background: var(--scheme-primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .ovms-button:hover { opacity: 0.9; transform: translateY(-1px); } .ovms-button:disabled { opacity: 0.5; cursor: not-allowed; } .ovms-button.secondary { background: var(--bg-tertiary); color: var(--text-primary); } .ovms-metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 20px; } .ovms-metric-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; } .ovms-metric-name { font-weight: 600; color: var(--scheme-primary); font-size: 13px; margin-bottom: 8px; } .ovms-metric-value { font-size: 24px; font-weight: 700; font-family: 'Menlo', Monaco, 'Courier New', monospace; color: var(--text-primary); } .ovms-metric-unit { font-size: 12px; color: var(--text-secondary); margin-top: 4px; } .ovms-status-panel { padding: 20px; } .ovms-status-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); } .ovms-status-item:last-child { border-bottom: none; } .ovms-status-label { font-weight: 600; color: var(--text-primary); } .ovms-status-value { color: var(--text-secondary); } .ovms-status-value.connected { color: #4caf50; } .ovms-status-value.error { color: #f44336; }"
+//   "styles": ".ovms-section { margin-bottom: 24px; } .ovms-section h3 { font-size: 18px; font-weight: 600; color: var(--scheme-primary); margin-bottom: 12px; } .ovms-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; } .ovms-field label { font-size: 14px; font-weight: 600; color: var(--text-primary); } .ovms-field input, .ovms-field select { padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 6px; background: var(--input-bg); color: var(--text-primary); font-size: 14px; } .ovms-field input:focus, .ovms-field select:focus { outline: none; border-color: var(--scheme-primary); box-shadow: 0 0 0 3px rgba(0, 129, 132, 0.2); } .ovms-button { text-transform: uppercase;     letter-spacing: 0.5px; width: auto; padding: 10px 20px; border: none; border-radius: 6px; background: var(--scheme-primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .ovms-button:hover { opacity: 0.9; transform: translateY(-1px); } .ovms-button:disabled { opacity: 0.5; cursor: not-allowed; } .ovms-button.secondary { background: var(--bg-tertiary); color: var(--text-primary); } .ovms-button.connect { background: #4caf50; color: white; } .ovms-button.connect:hover { background: #45a049; } .ovms-button.disconnect { background: #f44336; color: white; } .ovms-button.disconnect:hover { background: #da190b; } .ovms-metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 20px; } .ovms-metric-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; } .ovms-metric-name { font-weight: 600; color: var(--scheme-primary); font-size: 13px; margin-bottom: 8px; } .ovms-metric-value { font-size: 24px; font-weight: 700; font-family: 'Menlo', Monaco, 'Courier New', monospace; color: var(--text-primary); } .ovms-metric-unit { font-size: 12px; color: var(--text-secondary); margin-top: 4px; } .ovms-status-panel { padding: 20px; } .ovms-status-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); } .ovms-status-item:last-child { border-bottom: none; } .ovms-status-label { font-weight: 600; color: var(--text-primary); } .ovms-status-value { color: var(--text-secondary); } .ovms-status-value.connected { color: #4caf50; } .ovms-status-value.error { color: #f44336; }"
 // }
 // === END_EXTENSION_CONFIG ===
 
@@ -64,40 +64,53 @@ class OVMSExtension {
 
     try {
       this.state.ovms.isLoading = true
-      const result = await this.device.execute('from lib.OVMS_helpers import getOVMSConfig; getOVMSConfig()')
-      if (!result || result.trim() === '') {
-        this.state.ovms.isLoading = false
-        this.state.ovms.configLoaded = true
-        return this.state.ovms.config || {}
+      
+      // Read config file directly from device
+      try {
+        const configData = await this.device.device.loadFile('/config/OVMS.json')
+        if (configData && configData.length > 0) {
+          const configStr = new TextDecoder().decode(configData)
+          const parsed = JSON.parse(configStr)
+          this.state.ovms.config = parsed || {}
+        }
+      } catch (e) {
+        // Config file doesn't exist yet, use defaults
+        console.log('[OVMS] Config file not found, using defaults')
       }
-      const parsed = this.device.parseJSON(result)
-      if (parsed && typeof parsed === 'object') {
-        this.state.ovms.config = parsed || {}
-        this.state.ovms.configLoaded = true
-        this.emit('render')
-      } else {
-        // Mark as loaded even if response is invalid to prevent infinite retries
-        this.state.ovms.configLoaded = true
+      
+      // Get available vehicle types
+      try {
+        const result = await this.device.execute('from vehicle import list_vehicles; import json; print(json.dumps(list_vehicles()))')
+        const vehicles = this.device.parseJSON(result)
+        this.state.ovms.config.available_vehicles = vehicles
+      } catch (e) {
+        // Fallback if vehicle module not available
+        this.state.ovms.config.available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
       }
+      
+      this.state.ovms.configLoaded = true
       this.state.ovms.isLoading = false
-      return parsed || this.state.ovms.config || {}
+      this.emit('render')
+      return this.state.ovms.config || {}
     } catch (e) {
       console.error('[OVMS] Error getting config:', e)
       this.state.ovms.isLoading = false
-      this.state.ovms.configLoaded = true // Mark as loaded even on error to prevent infinite retries
+      this.state.ovms.configLoaded = true
       return this.state.ovms.config || {}
     }
   }
 
   async setOVMSConfig(config) {
     try {
-      const configStr = JSON.stringify(config)
-      const result = await this.device.execute(`from lib.OVMS_helpers import setOVMSConfig; setOVMSConfig(${configStr})`)
-      const parsed = this.device.parseJSON(result)
-      if (parsed && parsed.success) {
-        await this.getOVMSConfig()
-      }
-      return parsed || {}
+      // Write config file directly to device
+      const configStr = JSON.stringify(config, null, 2)
+      const configData = new TextEncoder().encode(configStr)
+      await this.device.device.saveFile('/config/OVMS.json', configData)
+      
+      // Update local state
+      this.state.ovms.config = config
+      this.emit('render')
+      return { success: true }
     } catch (e) {
       console.error('[OVMS] Error setting config:', e)
       return { error: e.message }
@@ -170,6 +183,36 @@ class OVMSExtension {
     }
   }
 
+  async testOVMSConnectivity() {
+    try {
+      this.state.ovms.isLoading = true
+      this.emit('render')
+      
+      // Save config first to ensure server address is saved
+      await this.setOVMSConfig(this.state.ovms.config)
+      
+      const result = await this.device.execute('from lib.OVMS_helpers import testOVMSConnectivity; testOVMSConnectivity()')
+      const parsed = this.device.parseJSON(result)
+      
+      this.state.ovms.isLoading = false
+      this.emit('render')
+      
+      if (parsed && parsed.success) {
+        alert(`✓ ${parsed.message || 'Connection test successful'}`)
+      } else {
+        alert(`✗ ${parsed.error || 'Connection test failed'}`)
+      }
+      
+      return parsed || {}
+    } catch (e) {
+      console.error('[OVMS] Error testing connectivity:', e)
+      this.state.ovms.isLoading = false
+      this.emit('render')
+      alert(`✗ Connection test error: ${e.message}`)
+      return { error: e.message }
+    }
+  }
+
   // === Panel Renderers ===
 
   renderConfig() {
@@ -181,13 +224,52 @@ class OVMSExtension {
         });
       }, 0)
     }
+    
+    // Auto-refresh status periodically
+    if (this.state.isConnected && !this.state.ovms.isLoading) {
+      const now = Date.now()
+      if (!this.state.ovms.lastStatusRefresh || (now - this.state.ovms.lastStatusRefresh) > 2000) {
+        setTimeout(() => {
+          this.getOVMSStatus()
+          this.state.ovms.lastStatusRefresh = Date.now()
+        }, 0)
+      }
+    }
 
     const config = this.state.ovms.config
+    const status = this.state.ovms.status || {}
+    const isOVMSConnected = status.state === 'connected'
 
     return this.html`
       <div class="system-panel">
         <div class="panel-header">
           <h2>OVMS Configuration</h2>
+          <div style="display: flex; gap: 8px;">
+            <button 
+              class="ovms-button ${isOVMSConnected ? 'disconnect' : 'connect'}"
+              onclick=${() => isOVMSConnected ? this.stopOVMS() : this.startOVMS()}
+              disabled=${!this.state.isConnected || this.state.ovms.isLoading || !config.enabled}
+              style="min-width: 120px;"
+            >
+              ${isOVMSConnected ? 'Disconnect' : 'Connect'}
+            </button>
+            <button 
+              class="ovms-button"
+              onclick=${() => this.saveConfig()}
+              disabled=${!this.state.isConnected || this.state.ovms.isLoading}
+              style="min-width: 120px;"
+            >
+              Save
+            </button>
+            <button 
+              class="ovms-button secondary"
+              onclick=${() => this.testOVMSConnectivity()}
+              disabled=${!this.state.isConnected || this.state.ovms.isLoading || !config.server || !config.vehicleid || !config.password}
+              title="Test connection to OVMS server"
+            >
+              Test Connection
+            </button>
+          </div>
         </div>
         <div class="ovms-section" style="padding: 20px;">
           <div class="ovms-field">
@@ -283,23 +365,6 @@ class OVMSExtension {
                 <option value="zombie_vcu" ${config.vehicle_type === 'zombie_vcu' ? 'selected' : ''}>ZombieVerter VCU</option>
               `}
             </select>
-          </div>
-
-          <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <button 
-              class="ovms-button"
-              onclick=${() => this.saveConfig()}
-              disabled=${!this.state.isConnected || this.state.ovms.isLoading}
-            >
-              Save Configuration
-            </button>
-            <button 
-              class="ovms-button secondary"
-              onclick=${() => this.getOVMSConfig()}
-              disabled=${!this.state.isConnected || this.state.ovms.isLoading}
-            >
-              Reload
-            </button>
           </div>
         </div>
       </div>
@@ -423,7 +488,37 @@ class OVMSExtension {
   }
 
   async saveConfig() {
-    await this.setOVMSConfig(this.state.ovms.config)
+    try {
+      this.state.ovms.isLoading = true
+      this.emit('render')
+      
+      // If OVMS is being disabled, stop the service first
+      if (!this.state.ovms.config.enabled) {
+        try {
+          await this.stopOVMS()
+        } catch (e) {
+          console.warn('[OVMS] Error stopping service:', e)
+        }
+      }
+      
+      const result = await this.setOVMSConfig(this.state.ovms.config)
+      
+      this.state.ovms.isLoading = false
+      
+      if (result.success) {
+        // Show success message
+        alert('✓ Configuration saved successfully!')
+      } else {
+        // Show error message
+        alert('✗ Failed to save configuration: ' + (result.error || 'Unknown error'))
+      }
+      
+      this.emit('render')
+    } catch (e) {
+      this.state.ovms.isLoading = false
+      alert('✗ Failed to save configuration: ' + e.message)
+      this.emit('render')
+    }
   }
 
   // === Main Render Method ===

@@ -6,12 +6,12 @@ This module provides OVMS v2 server client functionality for sending
 OpenInverter metrics to an OVMS server.
 
 Client-callable functions:
-- getOVMSConfig()          - Get current OVMS configuration
-- setOVMSConfig(args)      - Set OVMS configuration
 - getOVMSMetrics()          - Get current metrics store
 - startOVMS()              - Start OVMS client
 - stopOVMS()               - Stop OVMS client
 - getOVMSStatus()          - Get connection status
+- testOVMSConnectivity()   - Test connection to OVMS server without starting service
+- listVehicles()           - List available vehicle types
 """
 
 try:
@@ -24,7 +24,7 @@ try:
     import base64
     import sys
     # Silent - module initialization should not produce output
-    from esp32 import webrepl
+    import webrepl_binary as webrepl
     # Silent - module initialization should not produce output
 except Exception as e:
     # Silent - import errors should fail fast, not produce output
@@ -119,9 +119,12 @@ def _load_config():
     """Load configuration from file or use defaults"""
     global _config
     try:
-        with open('/ovms_config.json', 'r') as f:
+        config_file = '/config/OVMS.json'
+        with open(config_file, 'r') as f:
             saved_config = json.loads(f.read())
             _config.update(saved_config)
+    except OSError:
+        pass  # File doesn't exist, use defaults
     except Exception as e:
         pass  # Use defaults
 
@@ -129,7 +132,19 @@ def _load_config():
 def _save_config():
     """Save configuration to file"""
     try:
-        with open('/ovms_config.json', 'w') as f:
+        import os
+        # Ensure /config directory exists
+        try:
+            os.listdir('/config')
+        except OSError:
+            # Directory doesn't exist, create it
+            try:
+                os.mkdir('/config')
+            except OSError:
+                pass  # May already exist (race condition) or can't create
+        
+        config_file = '/config/OVMS.json'
+        with open(config_file, 'w') as f:
             f.write(json.dumps(_config))
     except Exception as e:
         pass  # Silent - errors handled by return
@@ -142,76 +157,6 @@ def listVehicles():
         _send_response('vehicles_list', vehicles)
     except Exception as e:
         _send_error(f'Failed to list vehicles: {e}')
-
-def getOVMSConfig():
-    """Get current OVMS configuration"""
-    _load_config()
-    try:
-        from vehicle import list_vehicles
-        available_vehicles = list_vehicles()
-    except ImportError as e:
-        # Fallback if vehicle module can't be imported
-        # Send error via M2M_LOG (opcode 0x03) instead of print()
-        try:
-            webrepl.send_m2m(f"[OVMS] Failed to import vehicle module: {e}", 0x03)
-        except:
-            pass
-        available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
-    except Exception as e:
-        # Log error but provide fallback
-        # Send error via M2M_LOG (opcode 0x03) instead of print()
-        try:
-            webrepl.send_m2m(f"[OVMS] Error loading vehicle config: {e}", 0x03)
-        except:
-            pass
-        available_vehicles = {'zombie_vcu': 'ZombieVerter VCU'}
-    
-    config_with_vehicles = _config.copy()
-    config_with_vehicles['available_vehicles'] = available_vehicles
-    print(json.dumps(config_with_vehicles))
-
-
-def setOVMSConfig(args):
-    """Set OVMS configuration
-    
-    Args:
-        args: Dictionary with config keys:
-            - enabled (bool)
-            - server (string)
-            - port (int)
-            - vehicleid (string)
-            - password (string)
-            - tls (bool)
-            - pollinterval (int)
-    """
-    global _config
-    
-    if not isinstance(args, dict):
-        print(json.dumps({'success': False, 'error': 'Config must be a dictionary'}))
-        return
-    
-    # Update config with provided values
-    for key in ['enabled', 'server', 'port', 'vehicleid', 'password', 'tls', 'pollinterval', 'vehicle_type']:
-        if key in args:
-            _config[key] = args[key]
-    
-    # Reload vehicle config if vehicle type changed
-    if 'vehicle_type' in args:
-        global _vehicle_config
-        _vehicle_config = None  # Force reload
-    
-    _save_config()
-    
-    # Restart if enabled and was running
-    if _config['enabled'] and _ovms_connected:
-        stopOVMS()
-        time.sleep(1)
-        startOVMS()
-    elif not _config['enabled']:
-        stopOVMS()
-    
-    print(json.dumps({'success': True}))
-
 
 def getOVMSMetrics():
     """Get current metrics store"""
@@ -467,8 +412,14 @@ def _send_login():
         token_bytes = os.urandom(22)
         _ovms_token = base64.b64encode(token_bytes).decode('ascii')[:22]
         
-        # Send login: MP-0 L <vehicleid> <token>
-        login_msg = f"MP-0 L {_config['vehicleid']} {_ovms_token}\n"
+        # Generate client digest (HMAC-MD5 of token with password)
+        h = hmac.new(_config['password'].encode('ascii'), 
+                   _ovms_token.encode('ascii'), 
+                   hashlib.md5)
+        client_digest = base64.b64encode(h.digest()).decode('ascii')
+        
+        # Send login: MP-C 0 <token> <digest> <vehicleid>
+        login_msg = f"MP-C 0 {_ovms_token} {client_digest} {_config['vehicleid']}\r\n"
         _ovms_socket.send(login_msg.encode('ascii'))
         
         _ovms_state = 'connecting'
@@ -519,6 +470,9 @@ def _handle_server_response(data):
                         _ovms_connected = True
                         _ovms_state = 'connected'
                         _ovms_status = 'Connected to OVMS server'
+                        
+                        # Send initial status messages to make the app show as connected
+                        _send_initial_messages()
                     else:
                         _ovms_state = 'error'
                         _ovms_status = 'Authentication failed'
@@ -531,6 +485,59 @@ def _handle_server_response(data):
     except Exception as e:
         # Silent - errors handled by state/status
         pass
+
+
+def _send_initial_messages():
+    """Send initial status messages after authentication to show device as connected"""
+    global _ovms_socket, _ovms_crypto_tx
+    
+    if not _ovms_connected or not _ovms_socket:
+        return
+    
+    try:
+        # Send Firmware message (F) - minimal required info
+        msg = "MP-0 F,,,0,,,,,-1,-1,,"
+        _transmit_encrypted(msg)
+        
+        # Send Environment message (D) - doors/status
+        msg = "MP-0 D0,0,5,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0"
+        _transmit_encrypted(msg)
+        
+        # Send Stats message (S) - battery stats  
+        msg = "MP-0 S0,K,0,0,stopped,standard,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
+        _transmit_encrypted(msg)
+        
+    except Exception as e:
+        # Silent - errors handled by state/status
+        pass
+
+
+def _transmit_encrypted(msg):
+    """Encrypt and transmit a message to OVMS server"""
+    global _ovms_socket, _ovms_crypto_tx
+    
+    if not _ovms_connected or not _ovms_socket or not _ovms_crypto_tx:
+        return False
+    
+    try:
+        print(f"[OVMS] Sending: {msg}")
+        
+        # Encrypt message with RC4
+        msg_bytes = msg.encode('ascii')
+        encrypted = _rc4_crypt(_ovms_crypto_tx, msg_bytes)
+        
+        # Base64 encode
+        encoded = base64.b64encode(encrypted).decode('ascii')
+        
+        print(f"[OVMS] Encrypted: {encoded[:50]}...")
+        
+        # Send with CRLF
+        final_msg = encoded + '\r\n'
+        _ovms_socket.send(final_msg.encode('ascii'))
+        return True
+    except Exception as e:
+        print(f"[OVMS] Transmit error: {e}")
+        return False
 
 
 def _send_metrics_to_server():
@@ -642,6 +649,176 @@ def pollMetrics():
         _send_error(f'Poll error: {e}')
 
 
+def testOVMSConnectivity():
+    """Test connectivity to OVMS server without starting the service
+    
+    Returns JSON with success status and message
+    """
+    global _ovms_socket, _ovms_connected, _ovms_state
+    
+    # If there's an existing connection from a previous test, clean it up
+    if _ovms_socket:
+        try:
+            _ovms_socket.close()
+        except:
+            pass
+        _ovms_socket = None
+    
+    # Reset connection state
+    _ovms_connected = False
+    _ovms_state = 'disconnected'
+    
+    _load_config()
+    
+    if not _config['server']:
+        print(json.dumps({'success': False, 'error': 'Server address not configured'}))
+        return
+    
+    if not _config['vehicleid']:
+        print(json.dumps({'success': False, 'error': 'Vehicle ID not configured'}))
+        return
+    
+    if not _config['password']:
+        print(json.dumps({'success': False, 'error': 'Password not configured'}))
+        return
+    
+    test_socket = None
+    try:
+        # Resolve server address
+        try:
+            addr = socket.getaddrinfo(_config['server'], _config['port'])[0][-1]
+        except Exception as e:
+            print(json.dumps({'success': False, 'error': f'Failed to resolve server address: {e}'}))
+            return
+        
+        # Create socket and connect
+        test_socket = socket.socket()
+        test_socket.settimeout(10.0)  # 10 second timeout for test
+        
+        # Debug: log connection attempt
+        try:
+            webrepl.log(f"[OVMS] Connecting to {addr[0]}:{addr[1]}", level=1)
+        except:
+            pass
+            
+        test_socket.connect(addr)
+        
+        # Debug: log successful connection
+        try:
+            webrepl.log(f"[OVMS] Connected successfully", level=1)
+        except:
+            pass
+        
+        # Generate test token
+        import os
+        token_bytes = os.urandom(22)
+        test_token = base64.b64encode(token_bytes).decode('ascii')[:22]
+        
+        # Generate client digest (HMAC-MD5 of token with password)
+        h = hmac.new(_config['password'].encode('ascii'), 
+                   test_token.encode('ascii'), 
+                   hashlib.md5)
+        client_digest = base64.b64encode(h.digest()).decode('ascii')
+        
+        # Send login message: MP-C 0 <token> <digest> <vehicleid>
+        login_msg = f"MP-C 0 {test_token} {client_digest} {_config['vehicleid']}\r\n"
+        test_socket.send(login_msg.encode('ascii'))
+        
+        # Debug: log what we sent
+        try:
+            webrepl.log(f"[OVMS] Sent: {login_msg.strip()}", level=1)
+        except:
+            pass
+        
+        # Wait for server response
+        try:
+            data = test_socket.recv(4096)
+            if data:
+                # Debug: log what we received
+                try:
+                    webrepl.log(f"[OVMS] Received: {data[:100]}", level=1)
+                except:
+                    pass
+                response = data.decode('ascii').strip()
+                if response.startswith('MP-S 0 '):
+                    # Server responded with authentication challenge
+                    parts = response[7:].split(' ', 1)
+                    if len(parts) == 2:
+                        server_token = parts[0]
+                        server_digest = parts[1]
+                        
+                        # Verify digest
+                        h = hmac.new(_config['password'].encode('ascii'), 
+                                   server_token.encode('ascii'), 
+                                   hashlib.md5)
+                        expected_digest = base64.b64encode(h.digest()).decode('ascii')
+                        
+                        if expected_digest == server_digest:
+                            print(json.dumps({
+                                'success': True, 
+                                'message': f'Successfully connected to {_config["server"]}:{_config["port"]} and authenticated'
+                            }))
+                        else:
+                            print(json.dumps({
+                                'success': False, 
+                                'error': 'Authentication failed - password may be incorrect'
+                            }))
+                    else:
+                        print(json.dumps({
+                            'success': False, 
+                            'error': 'Invalid server response format'
+                        }))
+                else:
+                    print(json.dumps({
+                        'success': False, 
+                        'error': f'Unexpected server response: {response[:100]}'
+                    }))
+            else:
+                print(json.dumps({
+                    'success': False, 
+                    'error': 'No response from server'
+                }))
+        except socket.timeout:
+            print(json.dumps({
+                'success': False, 
+                'error': 'Connection timeout - server did not respond'
+            }))
+        except Exception as e:
+            print(json.dumps({
+                'success': False, 
+                'error': f'Error reading server response: {e}'
+            }))
+    
+    except OSError as e:
+        if e.errno == 113:  # EHOSTUNREACH
+            print(json.dumps({
+                'success': False, 
+                'error': f'Cannot reach server {_config["server"]}:{_config["port"]} - check network connectivity'
+            }))
+        elif e.errno == 111:  # ECONNREFUSED
+            print(json.dumps({
+                'success': False, 
+                'error': f'Connection refused by {_config["server"]}:{_config["port"]} - server may be down or port incorrect'
+            }))
+        else:
+            print(json.dumps({
+                'success': False, 
+                'error': f'Connection error: {e}'
+            }))
+    except Exception as e:
+        print(json.dumps({
+            'success': False, 
+            'error': f'Test failed: {e}'
+        }))
+    finally:
+        # CRITICAL: Always close test socket and ensure no state pollution
+        if test_socket:
+            try:
+                test_socket.close()
+            except:
+                pass
+
+
 def startOVMS():
     """Start OVMS client connection"""
     global _ovms_socket, _ovms_connected, _ovms_state, _ovms_status, _poll_task
@@ -692,7 +869,7 @@ def startOVMS():
         # Do initial poll
         _poll_loop()
         
-            print(json.dumps({'status': _ovms_state}))
+        print(json.dumps({'status': _ovms_state}))
     except Exception as e:
         _ovms_state = 'error'
         _ovms_status = f'Connection error: {e}'
@@ -761,7 +938,7 @@ def getOVMSStatus():
             'metrics_count': len(_metrics),
             'last_poll': _last_poll_time
         }
-            print(json.dumps(status))
+        print(json.dumps(status))
     except Exception as e:
         # Catch any unexpected exceptions and send error response
         # Send error via M2M_LOG (opcode 0x03) instead of print()
