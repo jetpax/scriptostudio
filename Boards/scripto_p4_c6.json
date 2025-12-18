@@ -2,7 +2,7 @@
   "board_id": "scripto_p4_c6",
   "board_name": "Scripto P4+C6",
   "chip": "ESP32-P4",
-  "version": "1.3",
+  "version": "1.4",
   "description": "ESP32-P4 development board with Ethernet, CAN, and NeoPixel status LED",
   
   "hardware": {
@@ -25,8 +25,9 @@
     },
     "status_led": {
       "type": "neopixel",
-      "pin": 48,
-      "description": "Onboard RGB status LED (WS2812)"
+      "pin": 1,
+      "pixel_order": "RGB",
+      "description": "Onboard Neopixel - RGB order"
     },
     "boot_control": {
       "pins": {
@@ -34,13 +35,13 @@
       },
       "description": "Boot mode selection pin (GPIO35) - controlled by auto-reset circuit via RTS signal for bootloader entry"
     },
-    "uart1": {
-      "pins": {
-        "tx": 17,
-        "rx": 18
-      },
-      "description": "Additional UART"
-    },
+    "uart0": {
+        "pins": {
+          "tx": 37,
+          "rx": 38
+        },
+        "description": "Primary UART"
+      },    
     "can": {
       "pins": {
         "tx": 20,

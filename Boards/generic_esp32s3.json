@@ -5,5 +5,32 @@
   "version": "1.0",
   "description": "Generic ESP32-S3 board with no fixed hardware",
   
-  "hardware": {}
+  "hardware": {
+    "boot_control": {
+        "pins": {
+          "boot": 0
+        },
+        "description": "Boot mode selection pin (GPIO35) - controlled by auto-reset circuit via RTS signal for bootloader entry"
+      },
+      "uart0": {
+        "pins": {
+          "tx": 43,
+          "rx": 44
+        },
+        "description": "Primary UART"
+      },      
+    "status_led": {
+      "type": "neopixel",
+      "pin": 48,
+      "pixel_order": "GRB",
+      "description": "Onboard RGB status LED - GRB order"
+    }
+  },
+  "can": {
+    "pins": {
+      "tx": 20,
+      "rx": 21
+    },
+    "description": "CAN bus (TWAI)"
+  },
 }

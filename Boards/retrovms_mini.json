@@ -9,7 +9,8 @@
     "status_led": {
       "type": "neopixel",
       "pin": 48,
-      "description": "Onboard RGB status LED"
+      "pixel_order": "GRB",
+      "description": "Onboard RGB status LED - GRB order"
     },
     "can": {
       "pins": {
