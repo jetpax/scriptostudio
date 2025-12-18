@@ -168,7 +168,7 @@ def getOVMSConfig():
     
     config_with_vehicles = _config.copy()
     config_with_vehicles['available_vehicles'] = available_vehicles
-    _send_response('config', config_with_vehicles)
+    print(json.dumps(config_with_vehicles))
 
 
 def setOVMSConfig(args):
@@ -187,7 +187,7 @@ def setOVMSConfig(args):
     global _config
     
     if not isinstance(args, dict):
-        _send_error('Config must be a dictionary')
+        print(json.dumps({'success': False, 'error': 'Config must be a dictionary'}))
         return
     
     # Update config with provided values
@@ -210,12 +210,12 @@ def setOVMSConfig(args):
     elif not _config['enabled']:
         stopOVMS()
     
-    _send_response('config_updated', {'success': True})
+    print(json.dumps({'success': True}))
 
 
 def getOVMSMetrics():
     """Get current metrics store"""
-    _send_response('metrics', _metrics.copy())
+    print(json.dumps(_metrics.copy()))
 
 
 def _load_vehicle_config():
@@ -647,17 +647,17 @@ def startOVMS():
     global _ovms_socket, _ovms_connected, _ovms_state, _ovms_status, _poll_task
     
     if _ovms_connected:
-        _send_response('status', {'status': 'already_connected'})
+        print(json.dumps({'status': 'already_connected'}))
         return
     
     _load_config()
     
     if not _config['enabled']:
-        _send_error('OVMS is not enabled in configuration')
+        print(json.dumps({'success': False, 'error': 'OVMS is not enabled in configuration'}))
         return
     
     if not _config['server'] or not _config['vehicleid'] or not _config['password']:
-        _send_error('Server, vehicle ID, and password must be configured')
+        print(json.dumps({'success': False, 'error': 'Server, vehicle ID, and password must be configured'}))
         return
     
     try:
@@ -692,7 +692,7 @@ def startOVMS():
         # Do initial poll
         _poll_loop()
         
-        _send_response('started', {'status': _ovms_state})
+            print(json.dumps({'status': _ovms_state}))
     except Exception as e:
         _ovms_state = 'error'
         _ovms_status = f'Connection error: {e}'
@@ -702,7 +702,7 @@ def startOVMS():
             except:
                 pass
             _ovms_socket = None
-        _send_error(f'Failed to start: {e}')
+        print(json.dumps({'success': False, 'error': f'Failed to start: {e}'}))
 
 
 def stopOVMS():
@@ -738,7 +738,7 @@ def stopOVMS():
     _ovms_crypto_rx = None
     _ovms_crypto_tx = None
     
-    _send_response('stopped', {'status': 'stopped'})
+    print(json.dumps({'status': 'stopped'}))
 
 
 def getOVMSStatus():
@@ -761,7 +761,7 @@ def getOVMSStatus():
             'metrics_count': len(_metrics),
             'last_poll': _last_poll_time
         }
-        _send_response('status', status)
+            print(json.dumps(status))
     except Exception as e:
         # Catch any unexpected exceptions and send error response
         # Send error via M2M_LOG (opcode 0x03) instead of print()

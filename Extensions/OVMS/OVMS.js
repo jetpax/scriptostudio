@@ -71,8 +71,8 @@ class OVMSExtension {
         return this.state.ovms.config || {}
       }
       const parsed = this.device.parseJSON(result)
-      if (parsed && parsed.CMD === 'OVMS-CONFIG') {
-        this.state.ovms.config = parsed.ARG || {}
+      if (parsed && typeof parsed === 'object') {
+        this.state.ovms.config = parsed || {}
         this.state.ovms.configLoaded = true
         this.emit('render')
       } else {
@@ -80,7 +80,7 @@ class OVMSExtension {
         this.state.ovms.configLoaded = true
       }
       this.state.ovms.isLoading = false
-      return parsed?.ARG || this.state.ovms.config || {}
+      return parsed || this.state.ovms.config || {}
     } catch (e) {
       console.error('[OVMS] Error getting config:', e)
       this.state.ovms.isLoading = false
@@ -94,10 +94,10 @@ class OVMSExtension {
       const configStr = JSON.stringify(config)
       const result = await this.device.execute(`from lib.OVMS_helpers import setOVMSConfig; setOVMSConfig(${configStr})`)
       const parsed = this.device.parseJSON(result)
-      if (parsed.CMD === 'OVMS-CONFIG-UPDATED') {
+      if (parsed && parsed.success) {
         await this.getOVMSConfig()
       }
-      return parsed.ARG || {}
+      return parsed || {}
     } catch (e) {
       console.error('[OVMS] Error setting config:', e)
       return { error: e.message }
@@ -108,11 +108,11 @@ class OVMSExtension {
     try {
       const result = await this.device.execute('from lib.OVMS_helpers import getOVMSMetrics; getOVMSMetrics()')
       const parsed = this.device.parseJSON(result)
-      if (parsed.CMD === 'OVMS-METRICS') {
-        this.state.ovms.metrics = parsed.ARG
+      if (parsed && typeof parsed === 'object') {
+        this.state.ovms.metrics = parsed
         this.emit('render')
       }
-      return parsed.ARG || {}
+      return parsed || {}
     } catch (e) {
       console.error('[OVMS] Error getting metrics:', e)
       return {}
@@ -123,11 +123,11 @@ class OVMSExtension {
     try {
       const result = await this.device.execute('from lib.OVMS_helpers import getOVMSStatus; getOVMSStatus()')
       const parsed = this.device.parseJSON(result)
-      if (parsed.CMD === 'OVMS-STATUS') {
-        this.state.ovms.status = parsed.ARG
+      if (parsed && typeof parsed === 'object') {
+        this.state.ovms.status = parsed
         this.emit('render')
       }
-      return parsed.ARG || {}
+      return parsed || {}
     } catch (e) {
       console.error('[OVMS] Error getting status:', e)
       return {}
@@ -143,7 +143,7 @@ class OVMSExtension {
       await this.getOVMSStatus()
       this.state.ovms.isLoading = false
       this.emit('render')
-      return parsed.ARG || {}
+      return parsed || {}
     } catch (e) {
       console.error('[OVMS] Error starting:', e)
       this.state.ovms.isLoading = false
@@ -161,7 +161,7 @@ class OVMSExtension {
       await this.getOVMSStatus()
       this.state.ovms.isLoading = false
       this.emit('render')
-      return parsed.ARG || {}
+      return parsed || {}
     } catch (e) {
       console.error('[OVMS] Error stopping:', e)
       this.state.ovms.isLoading = false
