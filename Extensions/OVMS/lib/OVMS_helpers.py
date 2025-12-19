@@ -605,6 +605,7 @@ def _send_initial_messages():
         voltage = int(_metrics['udc']['value'])
         current = int(_metrics['idc']['value'])
         power_kw = _metrics['power']['value']
+        voltage_12v = _metrics['U12V']['value']  # 12V battery voltage from ZombieVerter
         
         # Determine charge state from current/power
         if power_kw < -0.5:  # Charging (negative power)
@@ -620,8 +621,8 @@ def _send_initial_messages():
         _transmit_encrypted(msg)
         
         # Send Environment message (D) - format: MP-0 D<doors1>,<doors2>,<lockunlock>,<temp_pem>,<temp_motor>,<temp_battery>,<trip>,<odometer>,<speed>,<park_time>,<ambient_temp>,<doors3>,<stale_temps>,<stale_ambient>,<vehicle12v>,<doors4>,<alarm_sounding>,<alarm_duration>,<tpms_health>,<tpms_alert>
-        # Use real temps and speed from metrics
-        msg = f"MP-0 D0,0,5,{temp_inverter},{temp_motor},{temp_battery},0,0,{speed_kph},0,25,0,0,0,0,0,0,0,0,0"
+        # Use real temps, speed, and 12V voltage from metrics
+        msg = f"MP-0 D0,0,5,{temp_inverter},{temp_motor},{temp_battery},0,0,{speed_kph},0,25,0,0,0,{voltage_12v},0,0,0,0,0"
         _transmit_encrypted(msg)
         
         # Send Stats message (S) - format: MP-0 S<soc>,<units>,<linevoltage>,<chargecurrent>,<chargestate>,<chargemode>,<idealrange>,<estimrange>,<soh>,<cac>,...
