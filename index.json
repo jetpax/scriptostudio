@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1766108589,
+  "updated": 1766242736,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -428,6 +428,23 @@
       "license": "MIT",
       "docs": "https://docs.micropython.org",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ScriptOs%20-%20Template.py"
+    },
+    {
+      "name": "Async Tasks Test",
+      "filename": "Test - Async Tasks.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "ScriptO Studio",
+      "description": "Tests multiple concurrent async tasks using bg_tasks. Shows interleaved output from tasks A and B.",
+      "category": "Testing",
+      "tags": [
+        "testing"
+      ],
+      "license": "MIT",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20Async%20Tasks.py"
     },
     {
       "name": "Test - Handler Direct",

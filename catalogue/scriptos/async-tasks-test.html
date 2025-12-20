@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Tasks Test - ScriptO Registry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #1f1f1f;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #db5201 0%, #ff6b35 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+        
+        .header a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+        
+        .header a:hover {
+            opacity: 1;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .detail-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .detail-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-header h1 {
+            color: #db5201;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-description {
+            margin: 1.5rem 0;
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .scripto-tag {
+            padding: 0.5rem 1rem;
+            background: #ffe8e0;
+            color: #db5201;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .detail-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #db5201;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #b84401;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .install-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html">← Back to ScriptO Registry</a>
+    </div>
+    
+    <div class="container">
+        <div class="detail-card">
+            <div class="detail-header">
+                <h1>Async Tasks Test</h1>
+                <div class="detail-meta">
+                    by ScriptO Studio • Version 1.0.0 • License: MIT
+                </div>
+            </div>
+            
+            <div class="detail-description">
+                Tests multiple concurrent async tasks using bg_tasks. Shows interleaved output from tasks A and B.
+            </div>
+            
+            <div class="detail-tags">
+                <span class="scripto-tag">testing</span>
+            </div>
+            
+            <div class="detail-info">
+                <div class="info-item">
+                    <span class="info-label">Author</span>
+                    <span class="info-value">ScriptO Studio</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Version</span>
+                    <span class="info-value">1.0.0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">License</span>
+                    <span class="info-value">MIT</span>
+                </div>
+                
+            </div>
+            
+            <div class="detail-actions">
+                <a href="http://localhost:5174/?configure=https%3A//raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%2520-%2520Async%2520Tasks.py" class="btn btn-primary">Open in ScriptO Studio</a>
+                
+                <a href="https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Test%20-%20Async%20Tasks.py" target="_blank" class="btn btn-secondary">View Source</a>
+            </div>
+            
+            <div class="install-note">
+                <strong>Note:</strong> The "Open in ScriptO Studio" button will only work if ScriptO Studio is running on localhost:5174. 
+                Otherwise, copy the ScriptO URL and paste it into ScriptO Studio manually to configure it.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
