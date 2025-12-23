@@ -65,17 +65,16 @@ class OVMSExtension {
     try {
       this.state.ovms.isLoading = true
       
-      // Read config file directly from device
+      // Load config from settings module via helper function
       try {
-        const configData = await this.device.device.loadFile('/config/OVMS.json')
-        if (configData && configData.length > 0) {
-          const configStr = new TextDecoder().decode(configData)
-          const parsed = JSON.parse(configStr)
-          this.state.ovms.config = parsed || {}
+        const result = await this.device.execute('from lib.OVMS_helpers import getOVMSConfig; getOVMSConfig()')
+        const parsed = this.device.parseJSON(result)
+        if (parsed && typeof parsed === 'object') {
+          this.state.ovms.config = parsed
         }
       } catch (e) {
-        // Config file doesn't exist yet, use defaults
-        console.log('[OVMS] Config file not found, using defaults')
+        // Config not available yet, use defaults
+        console.log('[OVMS] Config not available, using defaults')
       }
       
       // Get available vehicle types
@@ -102,15 +101,14 @@ class OVMSExtension {
 
   async setOVMSConfig(config) {
     try {
-      // Write config file directly to device
-      const configStr = JSON.stringify(config, null, 2)
-      const configData = new TextEncoder().encode(configStr)
-      await this.device.device.saveFile('/config/OVMS.json', configData)
+      // Use helper function to save via settings module
+      const result = await this.device.execute(`from lib.OVMS_helpers import setOVMSConfig; setOVMSConfig(${JSON.stringify(config)})`)
+      const parsed = this.device.parseJSON(result)
       
       // Update local state
       this.state.ovms.config = config
       this.emit('render')
-      return { success: true }
+      return parsed || { success: true }
     } catch (e) {
       console.error('[OVMS] Error setting config:', e)
       return { error: e.message }

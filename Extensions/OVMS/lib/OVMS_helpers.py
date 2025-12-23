@@ -30,6 +30,8 @@ try:
     import sys
     # Silent - module initialization should not produce output
     import webrepl_binary as webrepl
+    # Import settings module for configuration management
+    from lib import settings
     # Silent - module initialization should not produce output
 except Exception as e:
     # Silent - import errors should fail fast, not produce output
@@ -58,18 +60,7 @@ _ovms_can_connected = False
 _vehicle_config = None  # Loaded from vehicle.py
 
 
-# Configuration storage
-_config = {
-    'enabled': False,
-    'server': '',
-    'port': 6867,
-    'vehicleid': '',
-    'password': '',
-    'tls': False,
-    'updatetime_connected': 60,  # Seconds between updates when apps connected (default: 60)
-    'updatetime_idle': 600,      # Seconds between updates when no apps (default: 600)
-    'vehicle_type': 'zombie_vcu'  # Default vehicle type
-}
+# Configuration is now managed entirely via settings module (no local cache needed)
 
 # Metrics store
 _metrics = {}
@@ -130,41 +121,6 @@ def _send_error(message, msg_type='error'):
     """Internal helper to send error response"""
     _send_response(msg_type, {'error': message})
 
-
-def _load_config():
-    """Load configuration from file or use defaults"""
-    global _config
-    try:
-        config_file = '/config/OVMS.json'
-        with open(config_file, 'r') as f:
-            saved_config = json.loads(f.read())
-            _config.update(saved_config)
-    except OSError:
-        pass  # File doesn't exist, use defaults
-    except Exception as e:
-        pass  # Use defaults
-
-
-def _save_config():
-    """Save configuration to file"""
-    try:
-        import os
-        # Ensure /config directory exists
-        try:
-            os.listdir('/config')
-        except OSError:
-            # Directory doesn't exist, create it
-            try:
-                os.mkdir('/config')
-            except OSError:
-                pass  # May already exist (race condition) or can't create
-        
-        config_file = '/config/OVMS.json'
-        with open(config_file, 'w') as f:
-            f.write(json.dumps(_config))
-    except Exception as e:
-        pass  # Silent - errors handled by return
-
 def listVehicles():
     """List available vehicles (command handler for testing)"""
     try:
@@ -173,6 +129,43 @@ def listVehicles():
         _send_response('vehicles_list', vehicles)
     except Exception as e:
         _send_error(f'Failed to list vehicles: {e}')
+
+def getOVMSConfig():
+    """Get current OVMS configuration from settings"""
+    config = {
+        'enabled': settings.get('ovms.enabled', False),
+        'server': settings.get('ovms.server', ''),
+        'port': settings.get('ovms.port', 6867),
+        'vehicleid': settings.get('ovms.vehicleid', ''),
+        'password': settings.get('ovms.password', ''),
+        'tls': settings.get('ovms.tls', False),
+        'updatetime_connected': settings.get('ovms.updatetime_connected', 60),
+        'updatetime_idle': settings.get('ovms.updatetime_idle', 600),
+        'vehicle_type': settings.get('ovms.vehicle_type', 'zombie_vcu')
+    }
+    print(json.dumps(config))
+
+def setOVMSConfig(config_dict):
+    """Set OVMS configuration via settings module
+    
+    Args:
+        config_dict: Dictionary with configuration values
+    
+    Returns:
+        JSON response with success status
+    """
+    try:
+        # Update settings
+        for key, value in config_dict.items():
+            settings.set(f'ovms.{key}', value)
+        
+        # Save to disk
+        if settings.save():
+            print(json.dumps({'success': True}))
+        else:
+            print(json.dumps({'success': False, 'error': 'Failed to save settings'}))
+    except Exception as e:
+        print(json.dumps({'success': False, 'error': str(e)}))
 
 def getOVMSMetrics():
     """Get current metrics store"""
@@ -188,7 +181,7 @@ def _load_vehicle_config():
     
     try:
         from vehicle import get_vehicle_config, list_vehicles
-        vehicle_type = _config.get('vehicle_type', 'zombie_vcu')
+        vehicle_type = settings.get('ovms.vehicle_type', 'zombie_vcu')
         _vehicle_config = get_vehicle_config(vehicle_type)
         if _vehicle_config is None:
                         _vehicle_config = get_vehicle_config('zombie_vcu')
@@ -214,7 +207,8 @@ def _init_can_for_ovms():
     
     # Import CAN module
     try:
-        import CAN
+        import CAN as CAN_MODULE
+        CAN = CAN_MODULE
         CAN_AVAILABLE = True
     except ImportError:
         # Silent - errors handled by return False
@@ -231,33 +225,22 @@ def _init_can_for_ovms():
     # Note: GVRET and CAN module now use unified CAN manager - no need to stop GVRET
     # The manager handles coordination between multiple CAN clients
     
-    # Read CAN configuration from /config/can.json (with fallback to main.py)
+    # Get CAN pin configuration from board API (hardware definition)
     try:
-        import os
-        config_dir = '/config'
-        if not os.path.exists(config_dir):
-            config_dir = '/store/config'
-        config_file = config_dir + '/can.json'
+        from lib import board
+        if not board.has("can"):
+            # Board doesn't have CAN bus
+            return False
         
-        if os.path.exists(config_file):
-            with open(config_file, 'r') as f:
-                can_config = json.load(f)
-            tx_pin = can_config.get('txPin', 5)
-            rx_pin = can_config.get('rxPin', 4)
-            bitrate = can_config.get('bitrate', 500000)
-        else:
-            # Fallback to main.py
-            import sys
-            sys.path.insert(0, '/device scripts')
-            from main import CAN_TX_PIN, CAN_RX_PIN, CAN_BITRATE
-            tx_pin = CAN_TX_PIN
-            rx_pin = CAN_RX_PIN
-            bitrate = CAN_BITRATE
+        can_bus = board.can("twai")
+        tx_pin = can_bus.tx
+        rx_pin = can_bus.rx
     except Exception as e:
-        # Silent - errors handled by return False
-        tx_pin = 5
-        rx_pin = 4
-        bitrate = 500000
+        # Board API not available or no CAN bus defined
+        return False
+    
+    # Get CAN runtime configuration from settings (user preferences)
+    bitrate = settings.get('can.bitrate', 500000)
     
     # Initialize CAN device
     try:
@@ -365,7 +348,7 @@ def _poll_loop():
     """Periodic polling loop for metrics - called periodically"""
     global _poll_task
     
-    if not _config['enabled']:
+    if not settings.get('ovms.enabled', False):
         _poll_task = None
         return
     
@@ -432,13 +415,15 @@ def _send_login():
         _ovms_token = base64.b64encode(token_bytes).decode('ascii')[:22]
         
         # Generate client digest (HMAC-MD5 of token with password)
-        h = hmac.new(_config['password'].encode('ascii'), 
+        password = settings.get('ovms.password', '')
+        h = hmac.new(password.encode('ascii'), 
                    _ovms_token.encode('ascii'), 
                    hashlib.md5)
         client_digest = base64.b64encode(h.digest()).decode('ascii')
         
         # Send login: MP-C 0 <token> <digest> <vehicleid>
-        login_msg = f"MP-C 0 {_ovms_token} {client_digest} {_config['vehicleid']}\r\n"
+        vehicleid = settings.get('ovms.vehicleid', '')
+        login_msg = f"MP-C 0 {_ovms_token} {client_digest} {vehicleid}\r\n"
         _ovms_socket.send(login_msg.encode('ascii'))
         
         _ovms_state = 'connecting'
@@ -468,7 +453,8 @@ def _handle_server_response(data):
                     
                     # Verify digest
                     # HMAC-MD5 of token with password
-                    h = hmac.new(_config['password'].encode('ascii'), 
+                    password = settings.get('ovms.password', '')
+                    h = hmac.new(password.encode('ascii'), 
                                server_token.encode('ascii'), 
                                hashlib.md5)
                     expected_digest = base64.b64encode(h.digest()).decode('ascii')
@@ -477,7 +463,7 @@ def _handle_server_response(data):
                         # Setup encryption
                         # CRITICAL: Server token THEN client token (matches Perl demo line 179-180)
                         shared_key = server_token + _ovms_token
-                        h = hmac.new(_config['password'].encode('ascii'),
+                        h = hmac.new(password.encode('ascii'),
                                    shared_key.encode('ascii'),
                                    hashlib.md5)
                         crypto_key = h.digest()
@@ -835,7 +821,7 @@ def pollMetrics():
     """Manually trigger metrics polling and send to server"""
     global _poll_task
     
-    if not _config['enabled']:
+    if not settings.get('ovms.enabled', False):
         _send_error('OVMS is not enabled')
         return
     
@@ -871,9 +857,13 @@ def testOVMSConnectivity():
     _ovms_state = 'disconnected'
     _ovms_status = ''
     
-    _load_config()
+    # Get config from settings
+    server = settings.get('ovms.server', '')
+    port = settings.get('ovms.port', 6867)
+    vehicleid = settings.get('ovms.vehicleid', '')
+    password = settings.get('ovms.password', '')
     
-    if not _config['server']:
+    if not server:
         print(json.dumps({'success': False, 'error': 'Server address not configured'}))
         # Restore state
         _ovms_state = saved_state
@@ -881,7 +871,7 @@ def testOVMSConnectivity():
         _ovms_connected = saved_connected
         return
     
-    if not _config['vehicleid']:
+    if not vehicleid:
         print(json.dumps({'success': False, 'error': 'Vehicle ID not configured'}))
         # Restore state
         _ovms_state = saved_state
@@ -889,7 +879,7 @@ def testOVMSConnectivity():
         _ovms_connected = saved_connected
         return
     
-    if not _config['password']:
+    if not password:
         print(json.dumps({'success': False, 'error': 'Password not configured'}))
         # Restore state
         _ovms_state = saved_state
@@ -901,7 +891,7 @@ def testOVMSConnectivity():
     try:
         # Resolve server address
         try:
-            addr = socket.getaddrinfo(_config['server'], _config['port'])[0][-1]
+            addr = socket.getaddrinfo(server, port)[0][-1]
         except Exception as e:
             print(json.dumps({'success': False, 'error': f'Failed to resolve server address: {e}'}))
             # Restore state
@@ -934,13 +924,13 @@ def testOVMSConnectivity():
         test_token = base64.b64encode(token_bytes).decode('ascii')[:22]
         
         # Generate client digest (HMAC-MD5 of token with password)
-        h = hmac.new(_config['password'].encode('ascii'), 
+        h = hmac.new(password.encode('ascii'), 
                    test_token.encode('ascii'), 
                    hashlib.md5)
         client_digest = base64.b64encode(h.digest()).decode('ascii')
         
         # Send login message: MP-C 0 <token> <digest> <vehicleid>
-        login_msg = f"MP-C 0 {test_token} {client_digest} {_config['vehicleid']}\r\n"
+        login_msg = f"MP-C 0 {test_token} {client_digest} {vehicleid}\r\n"
         test_socket.send(login_msg.encode('ascii'))
         
         # Debug: log what we sent
@@ -967,7 +957,7 @@ def testOVMSConnectivity():
                         server_digest = parts[1]
                         
                         # Verify digest
-                        h = hmac.new(_config['password'].encode('ascii'), 
+                        h = hmac.new(password.encode('ascii'), 
                                    server_token.encode('ascii'), 
                                    hashlib.md5)
                         expected_digest = base64.b64encode(h.digest()).decode('ascii')
@@ -975,7 +965,7 @@ def testOVMSConnectivity():
                         if expected_digest == server_digest:
                             print(json.dumps({
                                 'success': True, 
-                                'message': f'Successfully connected to {_config["server"]}:{_config["port"]} and authenticated'
+                                'message': f'Successfully connected to {server}:{port} and authenticated'
                             }))
                         else:
                             print(json.dumps({
@@ -1012,12 +1002,12 @@ def testOVMSConnectivity():
         if e.errno == 113:  # EHOSTUNREACH
             print(json.dumps({
                 'success': False, 
-                'error': f'Cannot reach server {_config["server"]}:{_config["port"]} - check network connectivity'
+                'error': f'Cannot reach server {server}:{port} - check network connectivity'
             }))
         elif e.errno == 111:  # ECONNREFUSED
             print(json.dumps({
                 'success': False, 
-                'error': f'Connection refused by {_config["server"]}:{_config["port"]} - server may be down or port incorrect'
+                'error': f'Connection refused by {server}:{port} - server may be down or port incorrect'
             }))
         else:
             print(json.dumps({
@@ -1051,23 +1041,28 @@ def startOVMS():
         print(json.dumps({'status': 'already_connected'}))
         return
     
-    _load_config()
+    # Get config from settings
+    enabled = settings.get('ovms.enabled', False)
+    server = settings.get('ovms.server', '')
+    port = settings.get('ovms.port', 6867)
+    vehicleid = settings.get('ovms.vehicleid', '')
+    password = settings.get('ovms.password', '')
     
-    if not _config['enabled']:
+    if not enabled:
         print(json.dumps({'success': False, 'error': 'OVMS is not enabled in configuration'}))
         return
     
-    if not _config['server'] or not _config['vehicleid'] or not _config['password']:
+    if not server or not vehicleid or not password:
         print(json.dumps({'success': False, 'error': 'Server, vehicle ID, and password must be configured'}))
         return
     
     try:
         _ovms_state = 'connecting'
-        _ovms_status = f"Connecting to {_config['server']}:{_config['port']}..."
+        _ovms_status = f"Connecting to {server}:{port}..."
         _ovms_connected = False  # CRITICAL: Don't set connected until authenticated!
         
         # Create socket connection
-        addr = socket.getaddrinfo(_config['server'], _config['port'])[0][-1]
+        addr = socket.getaddrinfo(server, port)[0][-1]
         _ovms_socket = socket.socket()
         _ovms_socket.connect(addr)
         
@@ -1164,10 +1159,10 @@ def getOVMSStatus():
         # Use peer-based update intervals like OVMS v3:
         # - 60s when apps connected (peers > 0)
         # - 600s when idle (peers == 0)
-        if _config['enabled'] and _ovms_connected:
+        if settings.get('ovms.enabled', False) and _ovms_connected:
             current_time = time.time()
             # Choose interval based on peer count
-            update_interval = _config['updatetime_connected'] if _ovms_peers > 0 else _config['updatetime_idle']
+            update_interval = settings.get('ovms.updatetime_connected', 60) if _ovms_peers > 0 else settings.get('ovms.updatetime_idle', 600)
             
             if _last_poll_time == 0 or (current_time - _last_poll_time) >= update_interval:
                 _poll_loop()
@@ -1195,11 +1190,4 @@ def getOVMSStatus():
             pass
 
 
-# Initialize config on module load
-try:
-    # Silent - module initialization should not produce output
-    _load_config()
-    # Silent - module initialization should not produce output
-except Exception as e:
-    # Silent - module load errors fail silently
-    pass
+# Config is now loaded on-demand from settings module (no initialization needed)
