@@ -4,18 +4,19 @@
     "name": "Scripto P4+C6",
     "vendor": "scripto",
     "chip": "ESP32-P4",
-    "revision": "2.0.0",
+    "revision": "2.0.1",
     "description": "ESP32-P4 development board with Ethernet, CAN, and NeoPixel status LED"
   },
 
-  "capabilities": {
-    "ethernet": true,
-    "can": true,
-    "sdcard": true,
-    "audio": true,
-    "neopixel": true,
-    "coprocessor": true
-  },
+"capabilities": {
+  "ethernet": true,
+  "can": true,
+  "sdcard": true,
+  "audio": true,
+  "neopixel": true,
+  "coprocessor": true,
+  "status_led": true
+}
 
   "resources": {
     "pins": {

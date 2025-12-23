@@ -12,7 +12,8 @@
     "can": true,
     "spi": true,
     "i2c": true,
-    "neopixel": true,
+    "neopixel": true,,
+    "status_led": true,
     "digital_inputs": true,
     "digital_outputs": true
   },
