@@ -7,7 +7,7 @@ dict(
     
     info = dict(
         name        = 'Stop Button Test',
-        version     = [1, 2, 0],
+        version     = [1, 2, 1],
         category    = 'Testing',
         description = 'Simple infinite counter to test the Stop button. Counts up forever until stopped. Also demonstrates logging if enabled',
         author      = 'ScriptO Studio'
@@ -66,7 +66,6 @@ if args.enable_logging:
 
 # Always print to terminal
 print('Counter starting... Press Stop button to halt.')
-print('Interval: %.1f seconds' % args.interval)
 if logger:
     logger.info('Counter starting... Press Stop button to halt.')
     logger.info('Interval: %.1f seconds' % args.interval)
@@ -84,8 +83,7 @@ try:
 
 except KeyboardInterrupt:
     print('')
-    print('Stopped at count: %d' % counter)
-    print('Stop button works!')
+
     if logger:
         logger.info('Stopped at count: %d' % counter)
         logger.info('Stop button works!')
