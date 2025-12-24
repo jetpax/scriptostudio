@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1766535718,
+  "updated": 1766536338,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -880,11 +880,12 @@
   "boards": [
     {
       "board_id": "generic_esp32s3",
-      "board_name": "generic_esp32s3",
-      "chip": "ESP32",
-      "version": "1.0",
+      "board_name": "Generic ESP32-S3",
+      "chip": "ESP32-S3",
+      "version": "2.0.0",
       "filename": "generic_esp32s3.json",
-      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Boards/generic_esp32s3.json"
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Boards/generic_esp32s3.json",
+      "description": "Generic ESP32-S3 board with no fixed hardware"
     }
   ]
 }
