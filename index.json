@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1766542161,
+  "updated": 1767394728,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -410,6 +410,24 @@
       ],
       "license": "MIT",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/SD%20Card%20Test.py"
+    },
+    {
+      "name": "Syslog Test",
+      "filename": "ScriptOs - Syslog Test.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "jetpax",
+      "description": "Test syslog functionality by sending messages at different severity levels.\n                         \n                         Configure your syslog server address and port, then send test messages.\n                         Messages will be sent via UDP to the syslog server (RFC 3164 format).\n                         \n                         If syslog is not configured, messages will be silently ignored (no-op).\n                      ",
+      "category": "Testing",
+      "tags": [
+        "testing"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax/scripto-studio",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/ScriptOs%20-%20Syslog%20Test.py"
     },
     {
       "name": "Script Object template ",
