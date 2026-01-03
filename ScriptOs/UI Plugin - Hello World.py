@@ -8,7 +8,7 @@ dict(
     
     info = dict(
         name        = 'UI Plugin - Hello World',
-        version     = [1, 1, 0],
+        version     = [1, 2, 0],
         category    = 'UI Plugins',
         description = '''Minimal demonstration of the ScriptO UI Plugin Architecture.
                          
@@ -43,13 +43,14 @@ dict(
 # === END_CONFIG_PARAMETERS ===
 
 import httpserver
-import webrepl_binary as webrepl
+import webrepl_rtc as webrepl
 import network
+import json
 
 # Get device IP once at module level
 _device_ip = str(network.WLAN(network.STA_IF).ifconfig()[0])
 
-def hello_ui(uri, post_data=None):
+def hello_ui(uri, post_data=None, remote_addr=None):
     """
     HTTP handler that returns a self-contained HTML page.
     All CSS and JavaScript are embedded inline.
@@ -227,11 +228,12 @@ def hello_ui(uri, post_data=None):
             }
         </script>
     </div>
-</body>
+    </body>
 </html>"""
     
-    return html
-
+    # Use httpserver.send() to set correct Content-Type: text/html
+    # Returning the string directly sets Content-Type to application/json
+    httpserver.send(html)
 
 # Main execution
 print("\n" + "="*60)
@@ -281,7 +283,6 @@ try:
     title = args.ui_title  # Use the user-configured title
     
     # Send notification with display_ui payload
-    import json
     result = webrepl.notify(json.dumps({"display_ui": {"url": url, "title": title}}))
     if result:
         print(f"✓ UI display command sent to Studio")
