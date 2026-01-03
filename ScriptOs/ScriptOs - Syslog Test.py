@@ -15,6 +15,11 @@ dict(
                          Configure your syslog server address and port, then send test messages.
                          Messages will be sent via UDP to the syslog server (RFC 3164 format).
                          
+                         IMPORTANT: rsyslog must be configured to accept remote UDP messages:
+                         1. Edit /etc/rsyslog.conf
+                         2. Uncomment: module(load="imudp") and input(type="imudp" port="514")
+                         3. Restart: sudo systemctl restart rsyslog
+                         
                          If syslog is not configured, messages will be silently ignored (no-op).
                       ''',
         author      = 'jetpax',
@@ -53,7 +58,11 @@ dict(
         # ----------------------------------------------------------------------
         send_all_levels = dict( label    = 'Send All Severity Levels:',
                                type     = bool,
-                               value    = True )
+                               value    = True ),
+        # ----------------------------------------------------------------------
+        debug_mode = dict( label    = 'Enable Debug Output:',
+                          type     = bool,
+                          value    = True )
         # ----------------------------------------------------------------------
     )
 
@@ -94,17 +103,53 @@ if SYSLOG_AVAILABLE:
     print(f"Configuring syslog:")
     print(f"  Server: {args.syslog_host}:{args.syslog_port}")
     print(f"  Facility: {args.facility} ({facility_code})")
+    print(f"  Debug mode: {args.debug_mode}")
+    print()
+    print("NOTE: Make sure rsyslog is restarted after config changes:")
+    print("  sudo systemctl restart rsyslog")
     print()
     
     # Configure syslog
     syslog.configure(
         host=args.syslog_host,
         port=args.syslog_port,
-        facility=facility_code
+        facility=facility_code,
+        debug=args.debug_mode
     )
     
     print("Syslog configured successfully!")
     print()
+    
+    # Test connection
+    print("Testing connection...")
+    success, error = syslog.test_connection()
+    if success:
+        print("✓ Connection test successful!")
+    else:
+        print(f"✗ Connection test failed: {error}")
+        print()
+        print("Troubleshooting:")
+        print("  1. Verify rsyslog is running:")
+        print("     sudo systemctl status rsyslog")
+        print("  2. Restart rsyslog if needed:")
+        print("     sudo systemctl restart rsyslog")
+        print("  3. Verify syslog server is listening on UDP port 514:")
+        print("     sudo netstat -ulnp | grep 514")
+        print("     or: sudo ss -ulnp | grep 514")
+        print("  4. Check firewall allows UDP port 514:")
+        print("     sudo ufw status")
+        print("  5. Test with netcat listener (on server):")
+        print("     sudo nc -ul 514")
+        print("  6. Check rsyslog logs for errors:")
+        print("     sudo journalctl -u rsyslog -n 50")
+        print()
+        if args.debug_mode:
+            errors = syslog.get_last_errors()
+            if errors:
+                print("Recent errors:")
+                for err in errors:
+                    print(f"  - {err}")
+        print()
     
     if args.send_all_levels:
         print("Sending test messages at all severity levels...")
@@ -145,8 +190,17 @@ if SYSLOG_AVAILABLE:
     print("Test complete!")
     print("=" * 60)
     print()
-    print("Check your syslog server to verify messages were received.")
-    print(f"Look for messages from source 'scripto-test' on port {args.syslog_port}")
+    print("Messages sent successfully!")
+    print()
+    print("If messages don't appear in /var/log/syslog, add this rule:")
+    print("  Create /etc/rsyslog.d/30-remote-local0.conf:")
+    print("  local0.*    /var/log/syslog")
+    print()
+    print("Then restart rsyslog:")
+    print("  sudo systemctl restart rsyslog")
+    print()
+    print("Or test with netcat to verify UDP reception:")
+    print("  sudo nc -ul 514")
     print()
     
 else:

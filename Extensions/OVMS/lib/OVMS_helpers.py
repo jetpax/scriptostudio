@@ -105,7 +105,7 @@ def _send_response(msg_type, data):
         
         # Send via notify (INFO event)
         if hasattr(webrepl, 'notify'):
-            webrepl.notify({"ovms": {"type": msg_type, "data": data}})
+            webrepl.notify(json.dumps({"ovms": {"type": msg_type, "data": data}}))
         else:
             # Fallback for older firmware - use log
             webrepl.log(f"[OVMS] {msg_type}: {json.dumps(data)}")

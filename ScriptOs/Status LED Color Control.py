@@ -491,7 +491,7 @@ try:
     title = args.ui_title  # Use the user-configured title
     
     # Send notification with display_ui payload
-    result = webrepl.notify({"display_ui": {"url": url, "title": title}})
+    result = webrepl.notify(json.dumps({"display_ui": {"url": url, "title": title}}))
     if result:
         print(f"✓ UI display command sent to Studio")
         print(f"  URL: {url}")
