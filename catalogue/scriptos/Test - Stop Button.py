@@ -45,24 +45,37 @@ from time import sleep
 logger = None
 if args.enable_logging:
     import logging
-    import webrepl_binary as webrepl
     
-    # Get log level
-    log_level_map = {
-        'DEBUG': logging.DEBUG,
-        'INFO': logging.INFO,
-        'WARNING': logging.WARNING,
-        'ERROR': logging.ERROR
-    }
-    level = log_level_map.get(args.log_level, logging.INFO)
+    # Try to import webrepl module (works with both WebSocket and WebRTC)
+    webrepl = None
+    try:
+        import webrepl_rtc as webrepl
+    except ImportError:
+        try:
+            import webrepl_binary as webrepl
+        except ImportError:
+            print("ERROR: Neither webrepl_rtc nor webrepl_binary available")
+            webrepl = None
     
-    # Setup logger
-    logger = logging.getLogger("stop_button_test")
-    logger.handlers.clear()
-    logger.propagate = False
-    handler = webrepl.logHandler(level)
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
+    if webrepl is None or not hasattr(webrepl, 'logHandler'):
+        print("ERROR: WebREPL logging not available (module missing or logHandler not found)")
+    else:
+        # Get log level
+        log_level_map = {
+            'DEBUG': logging.DEBUG,
+            'INFO': logging.INFO,
+            'WARNING': logging.WARNING,
+            'ERROR': logging.ERROR
+        }
+        level = log_level_map.get(args.log_level, logging.INFO)
+        
+        # Setup logger
+        logger = logging.getLogger("stop_button_test")
+        logger.handlers.clear()
+        logger.propagate = False
+        handler = webrepl.logHandler(level)
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
 
 # Always print to terminal
 print('Counter starting... Press Stop button to halt.')
