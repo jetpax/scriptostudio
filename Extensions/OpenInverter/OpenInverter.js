@@ -12,7 +12,7 @@
 //     { "id": "overview", "label": "Overview" },
 //     { "id": "deviceselector", "label": "Device Selector" }
 //   ],
-//   "styles": ":root { --oi-blue: #1e88e5; --oi-blue-dark: #1565c0; --oi-blue-light: #e3f2fd; --oi-orange: #ff8c00; --oi-orange-light: #ffa726; --oi-beige: #fef8f0; --oi-yellow: #ffd54f; --oi-status-success: #4caf50; --oi-status-warning: #ff9800; --oi-status-error: #f44336; --oi-status-info: #1e88e5; --text-muted: #999; } .tabs-container { display: flex; flex-direction: column; height: 100%; } .tabs-header { border-bottom: 2px solid var(--border-color); background: var(--bg-secondary); } .tabs-nav { display: flex; gap: 0; overflow-x: auto; } .tab-button { background: transparent; border: none; padding: 16px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; } .tab-button:hover:not(:disabled) { color: var(--oi-blue); background: var(--oi-blue-light); } border-bottom-color: var(--oi-blue); } .tab-button:disabled { opacity: 0.5; cursor: not-allowed; } .tabs-content { flex: 1; overflow-y: auto; } .system-panel { background: var(--bg-secondary); border-radius: 8px; overflow: hidden; margin-bottom: 24px; } .panel-header { background: var(--oi-blue); color: white; padding: 20px; border-bottom: 1px solid var(--border-color); } .panel-message { padding: 40px 20px; text-align: center; color: var(--text-secondary); } .btn-primary { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-primary:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; } .btn-secondary { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-secondary:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; } .secondary-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .secondary-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .secondary-button:disabled { opacity: 0.5; cursor: not-allowed; } .primary-button { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .primary-button:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .primary-button:disabled { opacity: 0.5; cursor: not-allowed; } .refresh-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .refresh-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .spot-values-categories { display: flex; flex-direction: column; gap: 2rem; } .spot-values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; } .oi-category-section { margin-bottom: 2rem; } .oi-category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-blue); } .oi-spotvalues-container { padding: 20px; } .oi-spotvalue-card { background: var(--bg-secondary); border: 2px solid transparent; border-radius: 6px; padding: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 0.75rem; } .oi-spotvalue-card:hover { border-color: var(--oi-blue); background: var(--oi-blue-light); } .oi-spotvalue-name { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.25rem; } .oi-spotvalue-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); font-family: 'Monaco', 'Courier New', monospace; } #device-parameters { padding: 20px; } .parameters-grid { display: flex; flex-direction: column; gap: 1.5rem; } .parameter-category { border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background: var(--bg-secondary); transition: padding 0.2s; } .parameter-category.collapsed { padding: 1.5rem; } .parameter-category.collapsed .category-title { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } .category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-beige); display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: all 0.2s; cursor: pointer; } .category-title:hover { color: var(--oi-blue-dark); } .collapse-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; font-size: 0.8rem; color: var(--oi-blue); transition: transform 0.2s; } .param-count { margin-left: auto; font-size: 0.85rem; font-weight: normal; color: var(--text-muted); } .parameters-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; } .parameter-item { display: flex; flex-direction: column; gap: 0.5rem; } .parameter-header { display: flex; justify-content: space-between; align-items: baseline; } .parameter-label { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0; } .parameter-unit { color: var(--text-muted); font-weight: normal; font-size: 0.85rem; } .parameter-input-group { display: flex; flex-direction: column; gap: 0.25rem; } .parameter-input-group input[type=\"number\"], .parameter-input-group select { padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); width: 100%; } .parameter-input-group input[type=\"number\"]:focus, .parameter-input-group select:focus { outline: none; border-color: var(--oi-blue); } .parameter-hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.3; } .form-group { margin-bottom: 1.5rem; } .form-group label { display: block; font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.5rem; } .form-group input[type=\"text\"] { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); } .form-group input[type=\"text\"]:focus { outline: none; border-color: var(--oi-blue); } .form-group .hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; } .button-group { display: flex; gap: 0.75rem; flex-wrap: wrap; } .section-header { font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; cursor: pointer; } .can-mappings-container { display: flex; flex-direction: column; gap: 2rem; } .mapping-section { margin-bottom: 1.5rem; } .mapping-section h3 { margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-primary); } .no-mappings { color: var(--text-secondary); font-style: italic; padding: 1rem; background: var(--bg-secondary); border-radius: 4px; } .mappings-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 8px; overflow: hidden; } .mappings-table thead { background: var(--bg-secondary); } .mappings-table th { padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); } .mappings-table td { padding: 0.75rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); } .mappings-table tbody tr:last-child td { border-bottom: none; } .mappings-table tbody tr:hover { background: var(--bg-secondary); } .btn-remove { background: var(--oi-status-error); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; } .btn-remove:hover { background: #c82333; } .add-mapping-section { margin-top: 2rem; } .btn-add { background: var(--oi-blue); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background 0.2s; } .btn-add:hover { background: var(--oi-blue-dark); } .add-mapping-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-mapping-form h3 { margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary); } .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; } .form-row label { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-primary); font-weight: 500; } .form-row input, .form-row select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; } .form-row input:focus, .form-row select:focus { outline: none; border-color: var(--oi-blue); } .form-actions { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end; } .btn-cancel { background: #6c757d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; } .btn-cancel:hover { background: #5a6268; } .btn-save { background: var(--oi-status-success); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: background 0.2s; } .btn-save:hover:not(:disabled) { background: #218838; } .btn-save:disabled { background: #ccc; cursor: not-allowed; opacity: 0.6; } .error-message { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; border: 1px solid #f5c6cb; } .oi-compact-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); } .oi-compact-header h2 { margin: 0; font-size: 24px; color: white; } .oi-button-row { display: flex; gap: 0.75rem; }"
+//   "styles": ":root { --oi-blue: #1e88e5; --oi-blue-dark: #1565c0; --oi-blue-light: #e3f2fd; --oi-orange: #ff8c00; --oi-orange-light: #ffa726; --oi-beige: #fef8f0; --oi-yellow: #ffd54f; --oi-status-success: #4caf50; --oi-status-warning: #ff9800; --oi-status-error: #f44336; --oi-status-info: #1e88e5; --text-muted: #999; } .tabs-container { display: flex; flex-direction: column; height: 100%; } .tabs-header { border-bottom: 2px solid var(--border-color); background: var(--bg-secondary); } .tabs-nav { display: flex; gap: 0; overflow-x: auto; } .tab-button { background: transparent; border: none; padding: 16px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; } .tab-button:hover:not(:disabled) { color: var(--oi-blue); background: var(--oi-blue-light); } border-bottom-color: var(--oi-blue); } .tab-button:disabled { opacity: 0.5; cursor: not-allowed; } .tabs-content { flex: 1; overflow-y: auto; } .system-panel { background: var(--bg-secondary); border-radius: 8px; overflow: hidden; margin-bottom: 24px; } .panel-header { background: var(--oi-blue); color: white; padding: 20px; border-bottom: 1px solid var(--border-color); } .panel-message { padding: 40px 20px; text-align: center; color: var(--text-secondary); } .btn-primary { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-primary:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; } .btn-secondary { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-secondary:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; } .secondary-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .secondary-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .secondary-button:disabled { opacity: 0.5; cursor: not-allowed; } .primary-button { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .primary-button:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .primary-button:disabled { opacity: 0.5; cursor: not-allowed; } .refresh-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .refresh-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .spot-values-categories { display: flex; flex-direction: column; gap: 2rem; } .spot-values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; } .oi-category-section { margin-bottom: 2rem; } .oi-category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-blue); } .oi-spotvalues-container { padding: 20px; } .oi-spotvalue-card { background: var(--bg-secondary); border: 2px solid transparent; border-radius: 6px; padding: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 0.75rem; } .oi-spotvalue-card:hover { border-color: var(--oi-blue); background: var(--oi-blue-light); } .oi-spotvalue-name { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.25rem; } .oi-spotvalue-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); font-family: 'Monaco', 'Courier New', monospace; } #device-parameters { padding: 20px; } .parameters-grid { display: flex; flex-direction: column; gap: 1.5rem; } .parameter-category { border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background: var(--bg-secondary); transition: padding 0.2s; } .parameter-category.collapsed { padding: 1.5rem; } .parameter-category.collapsed .category-title { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } .category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-beige); display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: all 0.2s; cursor: pointer; } .category-title:hover { color: var(--oi-blue-dark); } .collapse-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; font-size: 0.8rem; color: var(--oi-blue); transition: transform 0.2s; } .param-count { margin-left: auto; font-size: 0.85rem; font-weight: normal; color: var(--text-muted); } .parameters-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; } .parameter-item { display: flex; flex-direction: column; gap: 0.5rem; } .parameter-header { display: flex; justify-content: space-between; align-items: baseline; } .parameter-label { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0; } .parameter-unit { color: var(--text-muted); font-weight: normal; font-size: 0.85rem; } .parameter-input-group { display: flex; flex-direction: column; gap: 0.25rem; } .parameter-input-group input[type=\"number\"], .parameter-input-group select { padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); width: 100%; } .parameter-input-group input[type=\"number\"]:focus, .parameter-input-group select:focus { outline: none; border-color: var(--oi-blue); } .parameter-hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.3; } .form-group { margin-bottom: 1.5rem; } .form-group label { display: block; font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.5rem; } .form-group input[type=\"text\"] { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); } .form-group input[type=\"text\"]:focus { outline: none; border-color: var(--oi-blue); } .form-group .hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; } .button-group { display: flex; gap: 0.75rem; flex-wrap: wrap; } .section-header { font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; cursor: pointer; } .can-mappings-container { display: flex; flex-direction: column; gap: 2rem; } .mapping-section { margin-bottom: 1.5rem; } .mapping-section h3 { margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-primary); } .no-mappings { color: var(--text-secondary); font-style: italic; padding: 1rem; background: var(--bg-secondary); border-radius: 4px; } .mappings-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 8px; overflow: hidden; } .mappings-table thead { background: var(--bg-secondary); } .mappings-table th { padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); } .mappings-table td { padding: 0.75rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); } .mappings-table tbody tr:last-child td { border-bottom: none; } .mappings-table tbody tr:hover { background: var(--bg-secondary); } .btn-remove { background: var(--oi-status-error); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; } .btn-remove:hover { background: #c82333; } .add-mapping-section { margin-top: 2rem; } .btn-add { background: var(--oi-blue); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background 0.2s; } .btn-add:hover { background: var(--oi-blue-dark); } .add-mapping-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-mapping-form h3 { margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary); } .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; } .form-row label { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-primary); font-weight: 500; } .form-row input, .form-row select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; } .form-row input:focus, .form-row select:focus { outline: none; border-color: var(--oi-blue); } .form-actions { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end; } .btn-cancel { background: #6c757d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; } .btn-cancel:hover { background: #5a6268; } .btn-save { background: var(--oi-status-success); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: background 0.2s; } .btn-save:hover:not(:disabled) { background: #218838; } .btn-save:disabled { background: #ccc; cursor: not-allowed; opacity: 0.6; } .error-message { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; border: 1px solid #f5c6cb; } .oi-compact-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); } .oi-compact-header h2 { margin: 0; font-size: 24px; color: white; } .oi-button-row { display: flex; gap: 0.75rem; } .can-io-control { background: var(--bg-secondary, #f8f9fa); border-radius: 8px; padding: 20px; margin-bottom: 2rem; } .can-io-control h3 { margin: 0 0 20px 0; color: var(--text-primary); font-size: 18px; border-bottom: 2px solid var(--oi-blue); padding-bottom: 8px; } .can-io-section { margin-bottom: 20px; } .can-io-section h4 { margin: 0 0 12px 0; color: var(--text-secondary); font-size: 14px; font-weight: 600; } .can-io-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; } .can-io-row label { min-width: 140px; color: var(--text-secondary); font-size: 14px; } .can-io-row input[type=\"text\"], .can-io-row input[type=\"number\"] { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px; } .can-io-row input[type=\"range\"] { flex: 1; min-width: 200px; } .can-io-row .value { min-width: 50px; font-weight: 600; color: var(--oi-blue); } .can-io-row .hint { color: var(--text-muted); font-size: 12px; font-style: italic; } .can-io-flags { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; } .can-io-checkbox { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: white; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; transition: all 0.2s; } .can-io-checkbox:hover:not(:has(input:disabled)) { border-color: var(--oi-blue); background: var(--oi-blue-light); } .can-io-checkbox input[type=\"checkbox\"] { width: 18px; height: 18px; cursor: pointer; } .can-io-checkbox input[type=\"checkbox\"]:disabled { cursor: not-allowed; } .can-io-checkbox span { font-size: 14px; color: var(--text-primary); user-select: none; } .can-io-actions { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); } .can-io-actions button { padding: 10px 24px; font-size: 14px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; } .can-io-actions button:disabled { opacity: 0.5; cursor: not-allowed; } .can-io-actions .start-btn { background: #28a745; color: white; } .can-io-actions .start-btn:hover:not(:disabled) { background: #218838; } .can-io-actions .stop-btn { background: #dc3545; color: white; } .can-io-actions .stop-btn:hover:not(:disabled) { background: #c82333; } .can-io-status-indicator { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #d4edda; color: #155724; border-radius: 4px; font-size: 14px; font-weight: 500; } .can-io-status-indicator .pulse { width: 10px; height: 10px; background: #28a745; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } } #can-message-sender { padding: 1.5rem; } .message-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); } .message-section:last-child { border-bottom: none; } .message-section h3 { margin-bottom: 0.5rem; color: var(--text-primary); } .section-description { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; } .message-form { background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; } .form-row { margin-bottom: 1rem; } .form-row:last-child { margin-bottom: 0; } .form-row label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary); } .form-row input { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; } .input-hex { max-width: 200px; } .input-data { max-width: 400px; letter-spacing: 0.1em; } .input-hint { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: system-ui, -apple-system, sans-serif; font-style: italic; } .form-actions { margin-top: 1rem; display: flex; gap: 0.5rem; } .btn-send, .btn-start, .btn-stop, .btn-add, .btn-save, .btn-cancel, .btn-remove { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; } .btn-send { background-color: var(--oi-blue); color: white; } .btn-send:hover:not(:disabled) { background-color: var(--oi-blue-dark); } .btn-send:disabled { background-color: #ccc; cursor: not-allowed; } .btn-start { background-color: #28a745; color: white; } .btn-start:hover:not(:disabled) { background-color: #218838; } .btn-stop { background-color: #dc3545; color: white; } .btn-stop:hover:not(:disabled) { background-color: #c82333; } .btn-add { background-color: var(--oi-blue); color: white; margin-top: 1rem; } .btn-add:hover { background-color: var(--oi-blue-dark); } .btn-save { background-color: var(--oi-status-success); color: white; } .btn-save:hover { background-color: #218838; } .btn-cancel { background-color: #6c757d; color: white; } .btn-cancel:hover { background-color: #5a6268; } .btn-remove { background-color: #dc3545; color: white; } .btn-remove:hover:not(:disabled) { background-color: #c82333; } .btn-remove:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; } .no-messages { color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center; } .messages-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; background: white; } .messages-table thead { background-color: var(--bg-secondary); } .messages-table th, .messages-table td { padding: 0.75rem; text-align: left; border: 1px solid var(--border-color); } .messages-table th { font-weight: 600; color: var(--text-primary); } .data-cell { font-family: 'Courier New', monospace; font-size: 0.9rem; } .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 500; } .status-active { background-color: #d4edda; color: #155724; } .status-inactive { background-color: #f8d7da; color: #721c24; } .action-buttons { display: flex; gap: 0.5rem; } .add-message-section { margin-top: 1rem; } .add-message-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-message-form h4 { margin-bottom: 1rem; color: var(--text-primary); }"
 // }
 // === END_EXTENSION_CONFIG ===
 
@@ -59,6 +59,40 @@ class OpenInverterExtension {
     }
     if (!this.state.selectedChartParams) {
       this.state.selectedChartParams = new Set()
+    }
+    
+    // Initialize CAN Messages state
+    if (!this.state.canMessages) {
+      this.state.canMessages = {
+        canId: '3F',
+        dataBytes: '00 00 00 00 00 00 00 00',
+        periodicMessages: [],
+        showAddPeriodicForm: false,
+        periodicFormData: {
+          canId: '',
+          data: '',
+          interval: 100
+        }
+      }
+    }
+    
+    // Initialize CAN IO Control state
+    if (!this.state.canIo) {
+      this.state.canIo = {
+        active: false,
+        canId: '3F',
+        interval: 100,
+        cruise: false,
+        start: false,
+        brake: false,
+        forward: false,
+        reverse: false,
+        bms: false,
+        throttlePercent: 0,
+        cruisespeed: 0,
+        regenpreset: 0,
+        useCrc: true
+      }
     }
   }
 
@@ -468,6 +502,619 @@ class OpenInverterExtension {
     const result = await this.device.execute('from lib.OI_helpers import getAllParamsWithIds; getAllParamsWithIds()')
     const parsed = this.device.parseJSON(result)
     return parsed
+  }
+
+  /**
+   * Get CAN bus configuration (pins, bitrate)
+   * Tries to get from device config, falls back to defaults
+   */
+  async getCanConfig() {
+    try {
+      // Try to get from device config
+      const pythonCode = `
+import json
+import os
+
+config = {}
+config_dir = '/config'
+if not os.path.exists(config_dir):
+    config_dir = '/store/config'
+config_file = config_dir + '/can.json'
+
+if os.path.exists(config_file):
+    with open(config_file, 'r') as f:
+        config = json.load(f)
+else:
+    # Fallback to main.py
+    try:
+        import sys
+        sys.path.insert(0, '/device scripts')
+        from main import CAN_TX_PIN, CAN_RX_PIN, CAN_BITRATE
+        config = {
+            'txPin': CAN_TX_PIN,
+            'rxPin': CAN_RX_PIN,
+            'bitrate': CAN_BITRATE
+        }
+    except:
+        pass
+
+# Use defaults if not found
+result = {
+    'txPin': config.get('txPin', 5),
+    'rxPin': config.get('rxPin', 4),
+    'bitrate': config.get('bitrate', 500000)
+}
+print(json.dumps(result))
+`
+      const result = await this.device.execute(pythonCode)
+      return this.device.parseJSON(result)
+    } catch (error) {
+      console.warn('[CAN] Failed to get config, using defaults:', error)
+      // Fallback to defaults
+      return { txPin: 5, rxPin: 4, bitrate: 500000 }
+    }
+  }
+
+  // === CAN Message Helper Methods ===
+
+  /**
+   * Format hex input to hex byte mask (XX XX XX XX XX XX XX XX)
+   */
+  formatHexBytes(input) {
+    // Remove all non-hex characters
+    const cleaned = input.replace(/[^0-9A-Fa-f]/g, '').toUpperCase()
+
+    // Split into pairs and join with spaces
+    const pairs = []
+    for (let i = 0; i < cleaned.length && i < 16; i += 2) {
+      if (i + 1 < cleaned.length) {
+        pairs.push(cleaned.substring(i, i + 2))
+      } else {
+        pairs.push(cleaned.substring(i, i + 1))
+      }
+    }
+
+    return pairs.join(' ')
+  }
+
+  /**
+   * Parse hex string to number
+   */
+  parseHex(hex) {
+    const cleaned = hex.trim().replace(/^0x/i, '')
+    return parseInt(cleaned, 16)
+  }
+
+  /**
+   * Parse data bytes string to array
+   */
+  parseDataBytes(data) {
+    const bytes = data
+      .trim()
+      .split(/\s+/)
+      .map(b => {
+        const cleaned = b.replace(/^0x/i, '')
+        return parseInt(cleaned, 16)
+      })
+      .filter(b => !isNaN(b))
+
+    // Pad or truncate to 8 bytes
+    while (bytes.length < 8) bytes.push(0)
+    return bytes.slice(0, 8)
+  }
+
+  /**
+   * Validate CAN ID
+   */
+  validateCanId(id) {
+    const parsed = this.parseHex(id)
+    return !isNaN(parsed) && parsed >= 0 && parsed <= 0x7FF
+  }
+
+  /**
+   * Validate data bytes
+   */
+  validateDataBytes(data) {
+    const bytes = this.parseDataBytes(data)
+    return bytes.every(b => b >= 0 && b <= 0xFF)
+  }
+
+  /**
+   * Send one-shot CAN message
+   */
+  async handleSendOneShot() {
+    if (!this.state.oiDeviceConnected) {
+      alert('Not connected to device')
+      return
+    }
+
+    const canId = this.state.canMessages.canId || ''
+    const dataBytes = this.state.canMessages.dataBytes || ''
+
+    if (!this.validateCanId(canId)) {
+      alert('Invalid CAN ID (must be 0x000 to 0x7FF)')
+      return
+    }
+
+    if (!this.validateDataBytes(dataBytes)) {
+      alert('Invalid data bytes')
+      return
+    }
+
+    const parsedCanId = this.parseHex(canId)
+    const parsedData = this.parseDataBytes(dataBytes)
+
+    try {
+      const canConfig = await this.getCanConfig()
+      
+      // Build Python code inline - send CAN message directly
+      const pythonCode = `
+import CAN
+import json
+
+# Get CAN config
+tx_pin = ${canConfig.txPin}
+rx_pin = ${canConfig.rxPin}
+bitrate = ${canConfig.bitrate}
+
+# Initialize CAN (reuse if exists, otherwise create new)
+try:
+    # Try to reuse existing CAN device
+    if 'can_dev' in globals() and can_dev is not None:
+        can = can_dev
+    else:
+        can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, bitrate=bitrate, mode=CAN.NORMAL, auto_restart=False)
+        can_dev = can
+except Exception as e:
+    # If reuse fails, create new
+    can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, bitrate=bitrate, mode=CAN.NORMAL, auto_restart=False)
+    can_dev = can
+
+# Send message
+can.send(${JSON.stringify(parsedData)}, ${parsedCanId})
+
+# Return success
+print(json.dumps({'success': True, 'can_id': ${parsedCanId}}))
+`
+      
+      const result = await this.device.execute(pythonCode)
+      const parsed = this.device.parseJSON(result)
+      
+      if (parsed && parsed.error) {
+        alert(`Failed to send CAN message: ${parsed.error}`)
+      } else {
+        alert(`CAN message sent: ID 0x${parsedCanId.toString(16).toUpperCase()}`)
+      }
+    } catch (error) {
+      console.error('[CAN] Send error:', error)
+      alert('Failed to send CAN message: ' + error.message)
+    }
+  }
+
+  /**
+   * Add periodic message
+   */
+  handleAddPeriodic() {
+    const formData = this.state.canMessages.periodicFormData || {}
+
+    if (!this.validateCanId(formData.canId)) {
+      alert('Invalid CAN ID (must be 0x000 to 0x7FF)')
+      return
+    }
+
+    if (!this.validateDataBytes(formData.data)) {
+      alert('Invalid data bytes')
+      return
+    }
+
+    if (formData.interval < 10 || formData.interval > 10000) {
+      alert('Interval must be between 10ms and 10000ms')
+      return
+    }
+
+    const newMessage = {
+      id: `msg_${Date.now()}`,
+      canId: this.parseHex(formData.canId),
+      data: this.parseDataBytes(formData.data),
+      interval: formData.interval,
+      active: false
+    }
+
+    if (!this.state.canMessages.periodicMessages) {
+      this.state.canMessages.periodicMessages = []
+    }
+    this.state.canMessages.periodicMessages.push(newMessage)
+    this.state.canMessages.showAddPeriodicForm = false
+    this.state.canMessages.periodicFormData = { canId: '', data: '', interval: 100 }
+    this.emit('render')
+  }
+
+  /**
+   * Toggle periodic message (start/stop)
+   */
+  async handleTogglePeriodic(message) {
+    if (!this.state.oiDeviceConnected) {
+      alert('Not connected to device')
+      return
+    }
+
+    const newActive = !message.active
+
+    try {
+      if (newActive) {
+        // Start interval - create timer that sends periodic messages
+        const canConfig = await this.getCanConfig()
+        
+        const pythonCode = `
+import CAN
+import json
+from machine import Timer
+
+# Store intervals globally
+if 'can_intervals' not in globals():
+    can_intervals = {}
+
+interval_id = '${message.id}'
+can_id = ${message.canId}
+data = ${JSON.stringify(message.data)}
+interval_ms = ${message.interval}
+
+# Get CAN config
+tx_pin = ${canConfig.txPin}
+rx_pin = ${canConfig.rxPin}
+bitrate = ${canConfig.bitrate}
+
+# Initialize CAN (reuse if exists)
+try:
+    if 'can_dev' in globals() and can_dev is not None:
+        can = can_dev
+    else:
+        can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, bitrate=bitrate, mode=CAN.NORMAL, auto_restart=False)
+        can_dev = can
+except Exception as e:
+    can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, bitrate=bitrate, mode=CAN.NORMAL, auto_restart=False)
+    can_dev = can
+
+# Stop existing interval if running
+if interval_id in can_intervals:
+    try:
+        timer = can_intervals[interval_id]['timer']
+        timer.deinit()
+    except:
+        pass
+    del can_intervals[interval_id]
+
+# Timer callback
+def send_periodic(timer):
+    try:
+        can_dev.send(data, can_id)
+    except Exception as e:
+        # Silently fail - timer will continue
+        pass
+
+# Create and start timer (use Timer 0-3, find available one)
+timer_num = 0
+for i in range(4):
+    try:
+        timer = Timer(i)
+        timer.init(period=interval_ms, mode=Timer.PERIODIC, callback=send_periodic)
+        timer_num = i
+        break
+    except:
+        continue
+else:
+    raise Exception('No available timer')
+
+# Store timer
+can_intervals[interval_id] = {'timer': timer, 'active': True, 'can_id': can_id, 'data': data, 'interval': interval_ms}
+
+print(json.dumps({'success': True, 'interval_id': interval_id}))
+`
+        
+        await this.device.execute(pythonCode)
+      } else {
+        // Stop interval
+        const pythonCode = `
+import json
+
+interval_id = '${message.id}'
+
+if 'can_intervals' in globals() and interval_id in can_intervals:
+    try:
+        timer = can_intervals[interval_id]['timer']
+        timer.deinit()
+    except:
+        pass
+    del can_intervals[interval_id]
+    print(json.dumps({'success': True, 'interval_id': interval_id}))
+else:
+    print(json.dumps({'error': 'Interval not found'}))
+`
+        
+        await this.device.execute(pythonCode)
+      }
+
+      // Update UI
+      const msg = this.state.canMessages.periodicMessages.find(m => m.id === message.id)
+      if (msg) {
+        msg.active = newActive
+        this.emit('render')
+      }
+    } catch (error) {
+      console.error('[CAN] Toggle periodic error:', error)
+      alert('Failed to ' + (newActive ? 'start' : 'stop') + ' periodic message: ' + error.message)
+    }
+  }
+
+  /**
+   * Remove periodic message
+   */
+  async handleRemovePeriodic(messageId) {
+    const message = this.state.canMessages.periodicMessages.find(m => m.id === messageId)
+    
+    if (message && message.active) {
+      // Stop it first
+      try {
+        const pythonCode = `
+import json
+
+interval_id = '${messageId}'
+
+if 'can_intervals' in globals() and interval_id in can_intervals:
+    try:
+        timer = can_intervals[interval_id]['timer']
+        timer.deinit()
+    except:
+        pass
+    del can_intervals[interval_id]
+    print(json.dumps({'success': True}))
+else:
+    print(json.dumps({'success': True}))
+`
+        await this.device.execute(pythonCode)
+      } catch (error) {
+        console.error('[CAN] Stop before remove error:', error)
+      }
+    }
+
+    this.state.canMessages.periodicMessages = this.state.canMessages.periodicMessages.filter(m => m.id !== messageId)
+    this.emit('render')
+  }
+
+  /**
+   * Toggle CAN IO (start/stop)
+   */
+  async toggleCanIo() {
+    if (!this.state.oiDeviceConnected) {
+      alert('Not connected to device')
+      return
+    }
+
+    const canIo = this.state.canIo || {}
+    const isActive = canIo.active || false
+
+    try {
+      if (isActive) {
+        // Stop CAN IO - deinit timer
+        const pythonCode = `
+import json
+
+if 'can_io_timer' in globals():
+    try:
+        can_io_timer.deinit()
+    except:
+        pass
+    del can_io_timer
+    print(json.dumps({'success': True}))
+else:
+    print(json.dumps({'success': True}))
+`
+        await this.device.execute(pythonCode)
+        this.state.canIo.active = false
+        this.emit('render')
+        alert('CAN IO stopped')
+      } else {
+        // Start CAN IO
+        const parsedCanId = this.parseHex(canIo.canId || '3F')
+        if (isNaN(parsedCanId) || parsedCanId < 0 || parsedCanId > 0x7FF) {
+          alert('Invalid CAN ID (must be 0x000 to 0x7FF)')
+          return
+        }
+
+        // Calculate canio flags
+        let canio = 0
+        if (canIo.cruise) canio |= 0x01
+        if (canIo.start) canio |= 0x02
+        if (canIo.brake) canio |= 0x04
+        if (canIo.forward) canio |= 0x08
+        if (canIo.reverse) canio |= 0x10
+        if (canIo.bms) canio |= 0x20
+
+        // Scale throttle percent (assuming pot1min=0, pot1max=4095 for now)
+        // TODO: Get actual pot min/max from parameters
+        const pot = Math.round(0 + (canIo.throttlePercent / 100) * (4095 - 0))
+        const pot2 = pot // Use same value for pot2
+
+        const canConfig = await this.getCanConfig()
+        const interval = canIo.interval || 100
+        const useCrc = canIo.useCrc !== false
+        
+        const pythonCode = `
+import CAN
+import json
+from machine import Timer
+
+# Stop existing timer if running
+if 'can_io_timer' in globals():
+    try:
+        can_io_timer.deinit()
+    except:
+        pass
+
+can_id = ${parsedCanId}
+pot = ${pot}
+pot2 = ${pot2}
+canio = ${canio}
+cruisespeed = ${canIo.cruisespeed || 0}
+regenpreset = ${canIo.regenpreset || 0}
+use_crc = ${useCrc}
+interval_ms = ${interval}
+
+# Get CAN config
+tx_pin = ${canConfig.txPin}
+rx_pin = ${canConfig.rxPin}
+bitrate = ${canConfig.bitrate}
+
+# Initialize CAN (reuse if exists)
+try:
+    if 'can_dev' in globals() and can_dev is not None:
+        can = can_dev
+    else:
+        can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, bitrate=bitrate, mode=CAN.NORMAL, auto_restart=False)
+        can_dev = can
+except Exception as e:
+    can = CAN(0, extframe=False, tx=tx_pin, rx=rx_pin, bitrate=bitrate, mode=CAN.NORMAL, auto_restart=False)
+    can_dev = can
+
+# Store config globally for update function
+can_io_config = {
+    'can_id': can_id,
+    'pot': pot,
+    'pot2': pot2,
+    'canio': canio,
+    'cruisespeed': cruisespeed,
+    'regenpreset': regenpreset,
+    'use_crc': use_crc
+}
+
+# CAN IO message construction
+def send_can_io(timer):
+    try:
+        pot_val = can_io_config['pot'] & 0xFFFF
+        pot2_val = can_io_config['pot2'] & 0xFFFF
+        canio_val = can_io_config['canio'] & 0xFF
+        cruisespeed_val = can_io_config['cruisespeed'] & 0x3FFF
+        regenpreset_val = can_io_config['regenpreset'] & 0xFF
+        
+        data = [
+            pot_val & 0xFF,
+            (pot_val >> 8) & 0xFF,
+            pot2_val & 0xFF,
+            (pot2_val >> 8) & 0xFF,
+            canio_val,
+            cruisespeed_val & 0xFF,
+            (cruisespeed_val >> 8) & 0xFF,
+            regenpreset_val
+        ]
+        
+        # If CRC enabled, calculate simple checksum
+        if can_io_config['use_crc']:
+            crc = sum(data[:7]) & 0xFF
+            data[7] = crc
+        
+        can_dev.send(data, can_io_config['can_id'])
+    except Exception as e:
+        # Silently fail - timer will continue
+        pass
+
+# Create timer (use Timer 1 for CAN IO)
+try:
+    can_io_timer = Timer(1)
+    can_io_timer.init(period=interval_ms, mode=Timer.PERIODIC, callback=send_can_io)
+except Exception as e:
+    # Try Timer 2 if Timer 1 is busy
+    can_io_timer = Timer(2)
+    can_io_timer.init(period=interval_ms, mode=Timer.PERIODIC, callback=send_can_io)
+
+# Send initial message immediately
+send_can_io(None)
+
+print(json.dumps({'success': True, 'interval_ms': interval_ms}))
+`
+        
+        await this.device.execute(pythonCode)
+        this.state.canIo.active = true
+        this.emit('render')
+        alert(`CAN IO started (${interval}ms interval)`)
+      }
+    } catch (error) {
+      console.error('[CAN IO] Toggle error:', error)
+      alert('Failed to ' + (isActive ? 'stop' : 'start') + ' CAN IO: ' + error.message)
+    }
+  }
+
+  /**
+   * Update CAN IO flags while running
+   */
+  async updateCanIoFlags() {
+    if (!this.state.oiDeviceConnected || !this.state.canIo.active) {
+      return
+    }
+
+    const canIo = this.state.canIo || {}
+
+    try {
+      // Calculate canio flags
+      let canio = 0
+      if (canIo.cruise) canio |= 0x01
+      if (canIo.start) canio |= 0x02
+      if (canIo.brake) canio |= 0x04
+      if (canIo.forward) canio |= 0x08
+      if (canIo.reverse) canio |= 0x10
+      if (canIo.bms) canio |= 0x20
+
+      // Scale throttle percent
+      const pot = Math.round(0 + (canIo.throttlePercent / 100) * (4095 - 0))
+      const pot2 = pot
+
+      // Update the global config that the timer callback uses
+      const pythonCode = `
+import json
+
+# Update global config
+if 'can_io_config' in globals():
+    can_io_config['pot'] = ${pot}
+    can_io_config['pot2'] = ${pot2}
+    can_io_config['canio'] = ${canio}
+    can_io_config['cruisespeed'] = ${canIo.cruisespeed || 0}
+    can_io_config['regenpreset'] = ${canIo.regenpreset || 0}
+    
+    # Send updated message immediately
+    try:
+        pot_val = can_io_config['pot'] & 0xFFFF
+        pot2_val = can_io_config['pot2'] & 0xFFFF
+        canio_val = can_io_config['canio'] & 0xFF
+        cruisespeed_val = can_io_config['cruisespeed'] & 0x3FFF
+        regenpreset_val = can_io_config['regenpreset'] & 0xFF
+        
+        data = [
+            pot_val & 0xFF,
+            (pot_val >> 8) & 0xFF,
+            pot2_val & 0xFF,
+            (pot2_val >> 8) & 0xFF,
+            canio_val,
+            cruisespeed_val & 0xFF,
+            (cruisespeed_val >> 8) & 0xFF,
+            regenpreset_val
+        ]
+        
+        if can_io_config['use_crc']:
+            crc = sum(data[:7]) & 0xFF
+            data[7] = crc
+        
+        can_dev.send(data, can_io_config['can_id'])
+    except:
+        pass
+    
+    print(json.dumps({'success': True}))
+else:
+    print(json.dumps({'error': 'CAN IO not running'}))
+`
+      
+      await this.device.execute(pythonCode)
+    } catch (error) {
+      console.error('[CAN IO] Update flags error:', error)
+    }
   }
 
   async addCanMapping(args) {
@@ -3003,15 +3650,449 @@ class OpenInverterExtension {
   }
 
   renderCanmessagesContent() {
+    if (!this.state.oiDeviceConnected) {
+      return this.html`
+        <section id="can-messages" class="card">
+          <h2 class="section-header">CAN Messages</h2>
+          <div style="padding: 60px 20px; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;">📨</div>
+            <p style="font-size: 16px; color: var(--text-secondary); margin: 0;">
+              Connect to a device to send CAN messages
+            </p>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 8px 0 0;">
+              Use the Device Selector to scan and connect
+            </p>
+          </div>
+        </section>
+      `
+    }
+
     return this.html`
-      <div style="padding: 60px 20px; text-align: center;">
-        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;">📨</div>
-        <p style="font-size: 16px; color: var(--text-secondary); margin: 0;">
-          CAN Message interface coming soon
-        </p>
-        <p style="font-size: 13px; color: var(--text-secondary); margin: 8px 0 0;">
-          This panel will allow you to send arbitrary CAN messages and monitor CAN bus traffic
-        </p>
+      <section id="can-messages" style="padding: 1.5rem;">
+        <h2 class="section-header" style="margin-bottom: 1.5rem; color: var(--text-primary);">CAN Messages</h2>
+
+        <!-- CAN IO Control Section -->
+        ${this.renderCanIoControl()}
+
+        <!-- CAN Message Sender Section -->
+        ${this.renderCanMessageSender()}
+      </section>
+    `
+  }
+
+  /**
+   * Render CAN IO Control section (Inverter control)
+   */
+  renderCanIoControl() {
+    const canIo = this.state.canIo || {}
+    const isActive = canIo.active || false
+    const isConnected = this.state.oiDeviceConnected || false
+
+    return this.html`
+      <div class="can-io-control" style="background: var(--bg-secondary, #f8f9fa); border-radius: 8px; padding: 20px; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 20px 0; color: var(--text-primary); font-size: 18px; border-bottom: 2px solid var(--oi-blue); padding-bottom: 8px;">
+          CAN IO Control (Inverter)
+        </h3>
+
+        <!-- Configuration -->
+        <div class="can-io-section" style="margin-bottom: 20px;">
+          <h4 style="margin: 0 0 12px 0; color: var(--text-secondary); font-size: 14px; font-weight: 600;">Configuration</h4>
+          
+          <div class="can-io-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="min-width: 140px; color: var(--text-secondary); font-size: 14px;">CAN ID (hex):</label>
+            <input
+              type="text"
+              value=${canIo.canId || '3F'}
+              oninput=${(e) => {
+                this.state.canIo.canId = e.target.value.toUpperCase()
+                this.emit('render')
+              }}
+              disabled=${isActive}
+              placeholder="3F"
+              maxlength="3"
+              style="padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px; font-family: 'Courier New', monospace;"
+            />
+          </div>
+
+          <div class="can-io-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="min-width: 140px; color: var(--text-secondary); font-size: 14px;">Interval (ms):</label>
+            <input
+              type="number"
+              value=${canIo.interval || 100}
+              oninput=${(e) => {
+                this.state.canIo.interval = parseInt(e.target.value) || 100
+                this.emit('render')
+              }}
+              disabled=${isActive}
+              min="10"
+              max="500"
+              style="padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px;"
+            />
+            <span class="hint" style="color: var(--text-muted); font-size: 12px; font-style: italic;">10-500ms (recommended: 50-100ms)</span>
+          </div>
+
+          <div class="can-io-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input
+                type="checkbox"
+                checked=${canIo.useCrc !== false}
+                onchange=${(e) => {
+                  this.state.canIo.useCrc = e.target.checked
+                  this.emit('render')
+                }}
+                disabled=${isActive}
+                style="width: 18px; height: 18px; cursor: pointer;"
+              />
+              <span style="font-size: 14px; color: var(--text-primary);">Use CRC-32 (controlcheck=1)</span>
+            </label>
+            <span class="hint" style="color: var(--text-muted); font-size: 12px; font-style: italic;">Disable for counter-only mode (controlcheck=0)</span>
+          </div>
+        </div>
+
+        <!-- Control Flags -->
+        <div class="can-io-section" style="margin-bottom: 20px;">
+          <h4 style="margin: 0 0 12px 0; color: var(--text-secondary); font-size: 14px; font-weight: 600;">Control Flags</h4>
+          <div class="can-io-flags" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+            ${['cruise', 'start', 'brake', 'forward', 'reverse', 'bms'].map(flag => {
+              const flagLabels = {
+                cruise: { label: 'Cruise (0x01)', bit: 0x01 },
+                start: { label: 'Start (0x02)', bit: 0x02 },
+                brake: { label: 'Brake (0x04)', bit: 0x04 },
+                forward: { label: 'Forward (0x08)', bit: 0x08 },
+                reverse: { label: 'Reverse (0x10)', bit: 0x10 },
+                bms: { label: 'BMS (0x20)', bit: 0x20 }
+              }
+              const info = flagLabels[flag]
+              return this.html`
+                <label class="can-io-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: white; border: 1px solid var(--border-color); border-radius: 4px; cursor: ${isActive ? 'pointer' : 'not-allowed'}; transition: all 0.2s;">
+                  <input
+                    type="checkbox"
+                    checked=${canIo[flag] || false}
+                    onchange=${(e) => {
+                      this.state.canIo[flag] = e.target.checked
+                      this.emit('render')
+                      if (isActive) {
+                        this.updateCanIoFlags()
+                      }
+                    }}
+                    disabled=${!isActive}
+                    style="width: 18px; height: 18px; cursor: ${isActive ? 'pointer' : 'not-allowed'};"
+                  />
+                  <span style="font-size: 14px; color: var(--text-primary); user-select: none;">${info.label}</span>
+                </label>
+              `
+            })}
+          </div>
+        </div>
+
+        <!-- Throttle & Parameters -->
+        <div class="can-io-section" style="margin-bottom: 20px;">
+          <h4 style="margin: 0 0 12px 0; color: var(--text-secondary); font-size: 14px; font-weight: 600;">Throttle & Parameters</h4>
+          
+          <div class="can-io-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="min-width: 140px; color: var(--text-secondary); font-size: 14px;">Throttle (%):</label>
+            <input
+              type="range"
+              value=${canIo.throttlePercent || 0}
+              oninput=${(e) => {
+                this.state.canIo.throttlePercent = parseInt(e.target.value) || 0
+                this.emit('render')
+                if (isActive) {
+                  this.updateCanIoFlags()
+                }
+              }}
+              disabled=${!isActive}
+              min="0"
+              max="100"
+              style="flex: 1; min-width: 200px;"
+            />
+            <span class="value" style="min-width: 50px; font-weight: 600; color: var(--oi-blue);">${canIo.throttlePercent || 0}%</span>
+          </div>
+
+          <div class="can-io-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="min-width: 140px; color: var(--text-secondary); font-size: 14px;">Cruise Speed:</label>
+            <input
+              type="number"
+              value=${canIo.cruisespeed || 0}
+              oninput=${(e) => {
+                this.state.canIo.cruisespeed = parseInt(e.target.value) || 0
+                this.emit('render')
+                if (isActive) {
+                  this.updateCanIoFlags()
+                }
+              }}
+              disabled=${!isActive}
+              min="0"
+              max="16383"
+              style="padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px;"
+            />
+            <span class="hint" style="color: var(--text-muted); font-size: 12px; font-style: italic;">0-16383</span>
+          </div>
+
+          <div class="can-io-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="min-width: 140px; color: var(--text-secondary); font-size: 14px;">Regen Preset:</label>
+            <input
+              type="number"
+              value=${canIo.regenpreset || 0}
+              oninput=${(e) => {
+                this.state.canIo.regenpreset = parseInt(e.target.value) || 0
+                this.emit('render')
+                if (isActive) {
+                  this.updateCanIoFlags()
+                }
+              }}
+              disabled=${!isActive}
+              min="0"
+              max="255"
+              style="padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px;"
+            />
+            <span class="hint" style="color: var(--text-muted); font-size: 12px; font-style: italic;">0-255</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="can-io-actions" style="display: flex; align-items: center; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+          <button
+            onclick=${() => this.toggleCanIo()}
+            disabled=${!isConnected}
+            class="${isActive ? 'stop-btn' : 'start-btn'}"
+            style="padding: 10px 24px; font-size: 14px; font-weight: 600; border: none; border-radius: 6px; cursor: ${isConnected ? 'pointer' : 'not-allowed'}; transition: all 0.2s; background: ${isActive ? '#dc3545' : '#28a745'}; color: white; opacity: ${isConnected ? '1' : '0.5'};"
+          >
+            ${isActive ? 'Stop CAN IO' : 'Start CAN IO'}
+          </button>
+          ${isActive ? this.html`
+            <div class="can-io-status-indicator" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #d4edda; color: #155724; border-radius: 4px; font-size: 14px; font-weight: 500;">
+              <span class="pulse" style="width: 10px; height: 10px; background: #28a745; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite;"></span>
+              Active (${canIo.interval || 100}ms interval)
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `
+  }
+
+  /**
+   * Render CAN Message Sender section
+   */
+  renderCanMessageSender() {
+    const canMessages = this.state.canMessages || {}
+    const isConnected = this.state.oiDeviceConnected || false
+
+    return this.html`
+      <div id="can-message-sender" style="padding: 1.5rem; background: var(--bg-secondary, #f8f9fa); border-radius: 8px;">
+        <h2 class="section-header" style="margin-bottom: 1.5rem; color: var(--text-primary);">CAN Message Sender</h2>
+
+        <!-- One-Shot Messages -->
+        <div class="message-section" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color);">
+          <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">One-Shot Message</h3>
+          <p class="section-description" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+            Send a single CAN message immediately
+          </p>
+
+          <div class="message-form" style="background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+            <div class="form-row" style="margin-bottom: 1rem;">
+              <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                CAN ID (hex):
+                <input
+                  type="text"
+                  placeholder="0x180"
+                  value=${canMessages.canId || ''}
+                  oninput=${(e) => {
+                    this.state.canMessages.canId = e.target.value.toUpperCase()
+                    this.emit('render')
+                  }}
+                  class="input-hex"
+                  style="width: 100%; max-width: 200px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; margin-top: 0.5rem;"
+                />
+              </label>
+            </div>
+
+            <div class="form-row" style="margin-bottom: 1rem;">
+              <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                Data Bytes (hex):
+                <input
+                  type="text"
+                  placeholder="00 00 00 00 00 00 00 00"
+                  value=${canMessages.dataBytes || ''}
+                  oninput=${(e) => {
+                    const formatted = this.formatHexBytes(e.target.value)
+                    this.state.canMessages.dataBytes = formatted
+                    this.emit('render')
+                  }}
+                  class="input-data"
+                  maxlength="23"
+                  style="width: 100%; max-width: 400px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; letter-spacing: 0.1em; margin-top: 0.5rem;"
+                />
+              </label>
+            </div>
+
+            <div class="form-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+              <button
+                class="btn-send"
+                onclick=${() => this.handleSendOneShot()}
+                disabled=${!isConnected}
+                style="padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: ${isConnected ? 'pointer' : 'not-allowed'}; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; background-color: var(--oi-blue); color: white; opacity: ${isConnected ? '1' : '0.5'};"
+              >
+                Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Periodic Messages -->
+        <div class="message-section">
+          <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Periodic Messages</h3>
+          <p class="section-description" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+            Configure messages to be sent at regular intervals
+          </p>
+
+          ${canMessages.periodicMessages && canMessages.periodicMessages.length > 0 ? this.html`
+            <table class="messages-table" style="width: 100%; border-collapse: collapse; margin-bottom: 1rem; background: white;">
+              <thead style="background-color: var(--bg-secondary);">
+                <tr>
+                  <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">CAN ID</th>
+                  <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">Data</th>
+                  <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">Interval (ms)</th>
+                  <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">Status</th>
+                  <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${canMessages.periodicMessages.map((message) => this.html`
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; color: var(--text-primary); font-family: 'Courier New', monospace;">0x${message.canId.toString(16).toUpperCase().padStart(3, '0')}</td>
+                    <td class="data-cell" style="padding: 0.75rem; font-family: 'Courier New', monospace; font-size: 0.9rem;">${message.data.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ')}</td>
+                    <td style="padding: 0.75rem; color: var(--text-primary);">${message.interval}</td>
+                    <td style="padding: 0.75rem;">
+                      <span class="status-badge" style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 500; background-color: ${message.active ? '#d4edda' : '#f8d7da'}; color: ${message.active ? '#155724' : '#721c24'};">
+                        ${message.active ? 'Active' : 'Stopped'}
+                      </span>
+                    </td>
+                    <td style="padding: 0.75rem;">
+                      <div class="action-buttons" style="display: flex; gap: 0.5rem;">
+                        <button
+                          class="${message.active ? 'btn-stop' : 'btn-start'}"
+                          onclick=${() => this.handleTogglePeriodic(message)}
+                          disabled=${!isConnected}
+                          style="padding: 0.4rem 0.8rem; border: none; border-radius: 4px; cursor: ${isConnected ? 'pointer' : 'not-allowed'}; font-size: 0.9rem; transition: background 0.2s; background-color: ${message.active ? '#dc3545' : '#28a745'}; color: white; opacity: ${isConnected ? '1' : '0.5'};"
+                        >
+                          ${message.active ? 'Stop' : 'Start'}
+                        </button>
+                        <button
+                          class="btn-remove"
+                          onclick=${() => this.handleRemovePeriodic(message.id)}
+                          disabled=${message.active}
+                          style="padding: 0.4rem 0.8rem; border: none; border-radius: 4px; cursor: ${message.active ? 'not-allowed' : 'pointer'}; font-size: 0.9rem; transition: background 0.2s; background-color: ${message.active ? '#ccc' : '#dc3545'}; color: white; opacity: ${message.active ? '0.6' : '1'};"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `)}
+              </tbody>
+            </table>
+          ` : this.html`
+            <p class="no-messages" style="color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center;">
+              No periodic messages configured
+            </p>
+          `}
+
+          <!-- Add Periodic Message Form -->
+          <div class="add-message-section" style="margin-top: 1rem;">
+            ${!canMessages.showAddPeriodicForm ? this.html`
+              <button
+                class="btn-add"
+                onclick=${() => {
+                  this.state.canMessages.showAddPeriodicForm = true
+                  this.emit('render')
+                }}
+                style="padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background 0.2s; background-color: var(--oi-blue); color: white; margin-top: 1rem;"
+              >
+                Add Periodic Message
+              </button>
+            ` : this.html`
+              <div class="add-message-form" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--text-primary);">Add New Periodic Message</h4>
+
+                <div class="form-row" style="margin-bottom: 1rem;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    CAN ID (hex):
+                    <input
+                      type="text"
+                      placeholder="0x180"
+                      value=${canMessages.periodicFormData.canId || ''}
+                      oninput=${(e) => {
+                        this.state.canMessages.periodicFormData.canId = e.target.value.toUpperCase()
+                        this.emit('render')
+                      }}
+                      class="input-hex"
+                      style="width: 100%; max-width: 200px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; margin-top: 0.5rem;"
+                    />
+                  </label>
+                </div>
+
+                <div class="form-row" style="margin-bottom: 1rem;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    Data Bytes (hex):
+                    <input
+                      type="text"
+                      placeholder="00 00 00 00 00 00 00 00"
+                      value=${canMessages.periodicFormData.data || ''}
+                      oninput=${(e) => {
+                        const formatted = this.formatHexBytes(e.target.value)
+                        this.state.canMessages.periodicFormData.data = formatted
+                        this.emit('render')
+                      }}
+                      class="input-data"
+                      maxlength="23"
+                      style="width: 100%; max-width: 400px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; letter-spacing: 0.1em; margin-top: 0.5rem;"
+                    />
+                  </label>
+                </div>
+
+                <div class="form-row" style="margin-bottom: 1rem;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    Interval (ms):
+                    <input
+                      type="number"
+                      min="10"
+                      max="10000"
+                      step="10"
+                      value=${canMessages.periodicFormData.interval || 100}
+                      oninput=${(e) => {
+                        this.state.canMessages.periodicFormData.interval = parseInt(e.target.value) || 100
+                        this.emit('render')
+                      }}
+                      style="width: 100%; max-width: 200px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; margin-top: 0.5rem;"
+                    />
+                  </label>
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
+                  <button
+                    class="btn-cancel"
+                    onclick=${() => {
+                      this.state.canMessages.showAddPeriodicForm = false
+                      this.state.canMessages.periodicFormData = { canId: '', data: '', interval: 100 }
+                      this.emit('render')
+                    }}
+                    style="padding: 0.6rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; background: #6c757d; color: white;"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    class="btn-save"
+                    onclick=${() => this.handleAddPeriodic()}
+                    style="padding: 0.6rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: background 0.2s; background: var(--oi-status-success); color: white;"
+                  >
+                    Add Message
+                  </button>
+                </div>
+              </div>
+            `}
+          </div>
+        </div>
       </div>
     `
   }
