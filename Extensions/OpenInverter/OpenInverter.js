@@ -9,10 +9,9 @@
 //   "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-bolt\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11\" /></svg>",
 //   "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib",
 //   "menu": [
-//     { "id": "overview", "label": "Overview" },
-//     { "id": "deviceselector", "label": "Device Selector" }
+//     { "id": "deviceselector", "label": "Device Manager" }
 //   ],
-//   "styles": ":root { --oi-blue: #1e88e5; --oi-blue-dark: #1565c0; --oi-blue-light: #e3f2fd; --oi-orange: #ff8c00; --oi-orange-light: #ffa726; --oi-beige: #fef8f0; --oi-yellow: #ffd54f; --oi-status-success: #4caf50; --oi-status-warning: #ff9800; --oi-status-error: #f44336; --oi-status-info: #1e88e5; --text-muted: #999; } .tabs-container { display: flex; flex-direction: column; height: 100%; } .tabs-header { border-bottom: 2px solid var(--border-color); background: var(--bg-secondary); } .tabs-nav { display: flex; gap: 0; overflow-x: auto; } .tab-button { background: transparent; border: none; padding: 16px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; } .tab-button:hover:not(:disabled) { color: var(--oi-blue); background: var(--oi-blue-light); } border-bottom-color: var(--oi-blue); } .tab-button:disabled { opacity: 0.5; cursor: not-allowed; } .tabs-content { flex: 1; overflow-y: auto; } .system-panel { background: var(--bg-secondary); border-radius: 8px; overflow: hidden; margin-bottom: 24px; } .panel-header { background: var(--oi-blue); color: white; padding: 20px; border-bottom: 1px solid var(--border-color); } .panel-message { padding: 40px 20px; text-align: center; color: var(--text-secondary); } .btn-primary { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-primary:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; } .btn-secondary { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-secondary:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; } .secondary-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .secondary-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .secondary-button:disabled { opacity: 0.5; cursor: not-allowed; } .primary-button { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .primary-button:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .primary-button:disabled { opacity: 0.5; cursor: not-allowed; } .refresh-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .refresh-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .spot-values-categories { display: flex; flex-direction: column; gap: 2rem; } .spot-values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; } .oi-category-section { margin-bottom: 2rem; } .oi-category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-blue); } .oi-spotvalues-container { padding: 20px; } .oi-spotvalue-card { background: var(--bg-secondary); border: 2px solid transparent; border-radius: 6px; padding: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 0.75rem; } .oi-spotvalue-card:hover { border-color: var(--oi-blue); background: var(--oi-blue-light); } .oi-spotvalue-name { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.25rem; } .oi-spotvalue-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); font-family: 'Monaco', 'Courier New', monospace; } #device-parameters { padding: 20px; } .parameters-grid { display: flex; flex-direction: column; gap: 1.5rem; } .parameter-category { border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background: var(--bg-secondary); transition: padding 0.2s; } .parameter-category.collapsed { padding: 1.5rem; } .parameter-category.collapsed .category-title { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } .category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-beige); display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: all 0.2s; cursor: pointer; } .category-title:hover { color: var(--oi-blue-dark); } .collapse-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; font-size: 0.8rem; color: var(--oi-blue); transition: transform 0.2s; } .param-count { margin-left: auto; font-size: 0.85rem; font-weight: normal; color: var(--text-muted); } .parameters-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; } .parameter-item { display: flex; flex-direction: column; gap: 0.5rem; } .parameter-header { display: flex; justify-content: space-between; align-items: baseline; } .parameter-label { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0; } .parameter-unit { color: var(--text-muted); font-weight: normal; font-size: 0.85rem; } .parameter-input-group { display: flex; flex-direction: column; gap: 0.25rem; } .parameter-input-group input[type=\"number\"], .parameter-input-group select { padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); width: 100%; } .parameter-input-group input[type=\"number\"]:focus, .parameter-input-group select:focus { outline: none; border-color: var(--oi-blue); } .parameter-hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.3; } .form-group { margin-bottom: 1.5rem; } .form-group label { display: block; font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.5rem; } .form-group input[type=\"text\"] { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); } .form-group input[type=\"text\"]:focus { outline: none; border-color: var(--oi-blue); } .form-group .hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; } .button-group { display: flex; gap: 0.75rem; flex-wrap: wrap; } .section-header { font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; cursor: pointer; } .can-mappings-container { display: flex; flex-direction: column; gap: 2rem; } .mapping-section { margin-bottom: 1.5rem; } .mapping-section h3 { margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-primary); } .no-mappings { color: var(--text-secondary); font-style: italic; padding: 1rem; background: var(--bg-secondary); border-radius: 4px; } .mappings-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 8px; overflow: hidden; } .mappings-table thead { background: var(--bg-secondary); } .mappings-table th { padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); } .mappings-table td { padding: 0.75rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); } .mappings-table tbody tr:last-child td { border-bottom: none; } .mappings-table tbody tr:hover { background: var(--bg-secondary); } .btn-remove { background: var(--oi-status-error); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; } .btn-remove:hover { background: #c82333; } .add-mapping-section { margin-top: 2rem; } .btn-add { background: var(--oi-blue); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background 0.2s; } .btn-add:hover { background: var(--oi-blue-dark); } .add-mapping-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-mapping-form h3 { margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary); } .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; } .form-row label { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-primary); font-weight: 500; } .form-row input, .form-row select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; } .form-row input:focus, .form-row select:focus { outline: none; border-color: var(--oi-blue); } .form-actions { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end; } .btn-cancel { background: #6c757d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; } .btn-cancel:hover { background: #5a6268; } .btn-save { background: var(--oi-status-success); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: background 0.2s; } .btn-save:hover:not(:disabled) { background: #218838; } .btn-save:disabled { background: #ccc; cursor: not-allowed; opacity: 0.6; } .error-message { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; border: 1px solid #f5c6cb; } .oi-compact-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); } .oi-compact-header h2 { margin: 0; font-size: 24px; color: white; } .oi-button-row { display: flex; gap: 0.75rem; } .can-io-control { background: var(--bg-secondary, #f8f9fa); border-radius: 8px; padding: 20px; margin-bottom: 2rem; } .can-io-control h3 { margin: 0 0 20px 0; color: var(--text-primary); font-size: 18px; border-bottom: 2px solid var(--oi-blue); padding-bottom: 8px; } .can-io-section { margin-bottom: 20px; } .can-io-section h4 { margin: 0 0 12px 0; color: var(--text-secondary); font-size: 14px; font-weight: 600; } .can-io-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; } .can-io-row label { min-width: 140px; color: var(--text-secondary); font-size: 14px; } .can-io-row input[type=\"text\"], .can-io-row input[type=\"number\"] { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px; } .can-io-row input[type=\"range\"] { flex: 1; min-width: 200px; } .can-io-row .value { min-width: 50px; font-weight: 600; color: var(--oi-blue); } .can-io-row .hint { color: var(--text-muted); font-size: 12px; font-style: italic; } .can-io-flags { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; } .can-io-checkbox { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: white; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; transition: all 0.2s; } .can-io-checkbox:hover:not(:has(input:disabled)) { border-color: var(--oi-blue); background: var(--oi-blue-light); } .can-io-checkbox input[type=\"checkbox\"] { width: 18px; height: 18px; cursor: pointer; } .can-io-checkbox input[type=\"checkbox\"]:disabled { cursor: not-allowed; } .can-io-checkbox span { font-size: 14px; color: var(--text-primary); user-select: none; } .can-io-actions { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); } .can-io-actions button { padding: 10px 24px; font-size: 14px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; } .can-io-actions button:disabled { opacity: 0.5; cursor: not-allowed; } .can-io-actions .start-btn { background: #28a745; color: white; } .can-io-actions .start-btn:hover:not(:disabled) { background: #218838; } .can-io-actions .stop-btn { background: #dc3545; color: white; } .can-io-actions .stop-btn:hover:not(:disabled) { background: #c82333; } .can-io-status-indicator { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #d4edda; color: #155724; border-radius: 4px; font-size: 14px; font-weight: 500; } .can-io-status-indicator .pulse { width: 10px; height: 10px; background: #28a745; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } } #can-message-sender { padding: 1.5rem; } .message-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); } .message-section:last-child { border-bottom: none; } .message-section h3 { margin-bottom: 0.5rem; color: var(--text-primary); } .section-description { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; } .message-form { background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; } .form-row { margin-bottom: 1rem; } .form-row:last-child { margin-bottom: 0; } .form-row label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary); } .form-row input { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; } .input-hex { max-width: 200px; } .input-data { max-width: 400px; letter-spacing: 0.1em; } .input-hint { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: system-ui, -apple-system, sans-serif; font-style: italic; } .form-actions { margin-top: 1rem; display: flex; gap: 0.5rem; } .btn-send, .btn-start, .btn-stop, .btn-add, .btn-save, .btn-cancel, .btn-remove { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; } .btn-send { background-color: var(--oi-blue); color: white; } .btn-send:hover:not(:disabled) { background-color: var(--oi-blue-dark); } .btn-send:disabled { background-color: #ccc; cursor: not-allowed; } .btn-start { background-color: #28a745; color: white; } .btn-start:hover:not(:disabled) { background-color: #218838; } .btn-stop { background-color: #dc3545; color: white; } .btn-stop:hover:not(:disabled) { background-color: #c82333; } .btn-add { background-color: var(--oi-blue); color: white; margin-top: 1rem; } .btn-add:hover { background-color: var(--oi-blue-dark); } .btn-save { background-color: var(--oi-status-success); color: white; } .btn-save:hover { background-color: #218838; } .btn-cancel { background-color: #6c757d; color: white; } .btn-cancel:hover { background-color: #5a6268; } .btn-remove { background-color: #dc3545; color: white; } .btn-remove:hover:not(:disabled) { background-color: #c82333; } .btn-remove:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; } .no-messages { color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center; } .messages-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; background: white; } .messages-table thead { background-color: var(--bg-secondary); } .messages-table th, .messages-table td { padding: 0.75rem; text-align: left; border: 1px solid var(--border-color); } .messages-table th { font-weight: 600; color: var(--text-primary); } .data-cell { font-family: 'Courier New', monospace; font-size: 0.9rem; } .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 500; } .status-active { background-color: #d4edda; color: #155724; } .status-inactive { background-color: #f8d7da; color: #721c24; } .action-buttons { display: flex; gap: 0.5rem; } .add-message-section { margin-top: 1rem; } .add-message-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-message-form h4 { margin-bottom: 1rem; color: var(--text-primary); }"
+//   "styles": ":root { --oi-blue: #1e88e5; --oi-blue-dark: #1565c0; --oi-blue-light: #e3f2fd; --oi-orange: #ff8c00; --oi-orange-light: #ffa726; --oi-beige: #fef8f0; --oi-yellow: #ffd54f; --oi-status-success: #4caf50; --oi-status-warning: #ff9800; --oi-status-error: #f44336; --oi-status-info: #1e88e5; --text-muted: #999; } .tabs-container { display: flex; flex-direction: column; height: 100%; } .tabs-header { border-bottom: 2px solid var(--border-color); background: var(--bg-secondary); } .tabs-nav { display: flex; gap: 0; overflow-x: auto; } .tab-button { background: transparent; border: none; padding: 16px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; } .tab-button:hover:not(:disabled) { color: var(--oi-blue); background: var(--oi-blue-light); } border-bottom-color: var(--oi-blue); } .tab-button:disabled { opacity: 0.5; cursor: not-allowed; } .tabs-content { flex: 1; overflow-y: auto; } .system-panel { background: var(--bg-secondary); border-radius: 8px; overflow: hidden; margin-bottom: 24px; } .panel-header { background: var(--oi-blue); color: white; padding: 20px; border-bottom: 1px solid var(--border-color); } .panel-message { padding: 40px 20px; text-align: center; color: var(--text-secondary); } .btn-primary { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-primary:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; } .btn-secondary { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .btn-secondary:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; } .secondary-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .secondary-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .secondary-button:disabled { opacity: 0.5; cursor: not-allowed; } .primary-button { background: var(--oi-blue); color: white; border: 2px solid var(--oi-blue); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .primary-button:hover:not(:disabled) { background: var(--oi-blue-dark); border-color: var(--oi-blue-dark); } .primary-button:disabled { opacity: 0.5; cursor: not-allowed; } .refresh-button { background: var(--oi-beige); color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .refresh-button:hover:not(:disabled) { background: #f0e4d0; border-color: var(--oi-blue); color: var(--oi-blue); } .spot-values-categories { display: flex; flex-direction: column; gap: 2rem; } .spot-values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; } .oi-category-section { margin-bottom: 2rem; } .oi-category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-blue); } .oi-spotvalues-container { padding: 20px; } .oi-spotvalue-card { background: var(--bg-secondary); border: 2px solid transparent; border-radius: 6px; padding: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 0.75rem; } .oi-spotvalue-card:hover { border-color: var(--oi-blue); background: var(--oi-blue-light); } .oi-spotvalue-name { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.25rem; } .oi-spotvalue-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); font-family: 'Monaco', 'Courier New', monospace; } #device-parameters { padding: 20px; } .parameters-grid { display: flex; flex-direction: column; gap: 1.5rem; } .parameter-category { border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background: var(--bg-secondary); transition: padding 0.2s; } .parameter-category.collapsed { padding: 1.5rem; } .parameter-category.collapsed .category-title { margin-bottom: 0; padding-bottom: 0; border-bottom: none; } .category-title { font-size: 1.1rem; font-weight: 600; color: var(--oi-blue); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--oi-beige); display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: all 0.2s; cursor: pointer; } .category-title:hover { color: var(--oi-blue-dark); } .collapse-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; font-size: 0.8rem; color: var(--oi-blue); transition: transform 0.2s; } .param-count { margin-left: auto; font-size: 0.85rem; font-weight: normal; color: var(--text-muted); } .parameters-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; } .parameter-item { display: flex; flex-direction: column; gap: 0.5rem; } .parameter-header { display: flex; justify-content: space-between; align-items: baseline; } .parameter-label { font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0; } .parameter-unit { color: var(--text-muted); font-weight: normal; font-size: 0.85rem; } .parameter-input-group { display: flex; flex-direction: column; gap: 0.25rem; } .parameter-input-group input[type=\"number\"], .parameter-input-group select { padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); width: 100%; } .parameter-input-group input[type=\"number\"]:focus, .parameter-input-group select:focus { outline: none; border-color: var(--oi-blue); } .parameter-hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.3; } .form-group { margin-bottom: 1.5rem; } .form-group label { display: block; font-weight: 500; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.5rem; } .form-group input[type=\"text\"] { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); } .form-group input[type=\"text\"]:focus { outline: none; border-color: var(--oi-blue); } .form-group .hint { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; } .button-group { display: flex; gap: 0.75rem; flex-wrap: wrap; } .section-header { font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; cursor: pointer; } .can-mappings-container { display: flex; flex-direction: column; gap: 2rem; } .mapping-section { margin-bottom: 1.5rem; } .mapping-section h3 { margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-primary); } .no-mappings { color: var(--text-secondary); font-style: italic; padding: 1rem; background: var(--bg-secondary); border-radius: 4px; } .mappings-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 8px; overflow: hidden; } .mappings-table thead { background: var(--bg-secondary); } .mappings-table th { padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); } .mappings-table td { padding: 0.75rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); } .mappings-table tbody tr:last-child td { border-bottom: none; } .mappings-table tbody tr:hover { background: var(--bg-secondary); } .btn-remove { background: var(--oi-status-error); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; } .btn-remove:hover { background: #c82333; } .add-mapping-section { margin-top: 2rem; } .btn-add { background: var(--oi-blue); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background 0.2s; } .btn-add:hover { background: var(--oi-blue-dark); } .add-mapping-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-mapping-form h3 { margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary); } .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; } .form-row label { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-primary); font-weight: 500; } .form-row input, .form-row select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; } .form-row input:focus, .form-row select:focus { outline: none; border-color: var(--oi-blue); } .form-actions { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end; } .btn-cancel { background: #6c757d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; } .btn-cancel:hover { background: #5a6268; } .btn-save { background: var(--oi-status-success); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: background 0.2s; } .btn-save:hover:not(:disabled) { background: #218838; } .btn-save:disabled { background: #ccc; cursor: not-allowed; opacity: 0.6; } .error-message { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; border: 1px solid #f5c6cb; } .oi-compact-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); } .oi-compact-header h2 { margin: 0; font-size: 24px; color: white; } .oi-button-row { display: flex; gap: 0.75rem; } .can-io-control { background: var(--bg-secondary, #f8f9fa); border-radius: 8px; padding: 20px; margin-bottom: 2rem; } .can-io-control h3 { margin: 0 0 20px 0; color: var(--text-primary); font-size: 18px; border-bottom: 2px solid var(--oi-blue); padding-bottom: 8px; } .can-io-section { margin-bottom: 20px; } .can-io-section h4 { margin: 0 0 12px 0; color: var(--text-secondary); font-size: 14px; font-weight: 600; } .can-io-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; } .can-io-row label { min-width: 140px; color: var(--text-secondary); font-size: 14px; } .can-io-row input[type=\"text\"], .can-io-row input[type=\"number\"] { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; width: 100px; } .can-io-row input[type=\"range\"] { flex: 1; min-width: 200px; } .can-io-row .value { min-width: 50px; font-weight: 600; color: var(--oi-blue); } .can-io-row .hint { color: var(--text-muted); font-size: 12px; font-style: italic; } .can-io-flags { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; } .can-io-checkbox { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: white; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; transition: all 0.2s; } .can-io-checkbox:hover:not(:has(input:disabled)) { border-color: var(--oi-blue); background: var(--oi-blue-light); } .can-io-checkbox input[type=\"checkbox\"] { width: 18px; height: 18px; cursor: pointer; } .can-io-checkbox input[type=\"checkbox\"]:disabled { cursor: not-allowed; } .can-io-checkbox span { font-size: 14px; color: var(--text-primary); user-select: none; } .can-io-actions { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); } .can-io-actions button { padding: 10px 24px; font-size: 14px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; } .can-io-actions button:disabled { opacity: 0.5; cursor: not-allowed; } .can-io-actions .start-btn { background: #28a745; color: white; } .can-io-actions .start-btn:hover:not(:disabled) { background: #218838; } .can-io-actions .stop-btn { background: #dc3545; color: white; } .can-io-actions .stop-btn:hover:not(:disabled) { background: #c82333; } .can-io-status-indicator { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #d4edda; color: #155724; border-radius: 4px; font-size: 14px; font-weight: 500; } .can-io-status-indicator .pulse { width: 10px; height: 10px; background: #28a745; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } } #can-message-sender { padding: 1.5rem; } .message-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); } .message-section:last-child { border-bottom: none; } .message-section h3 { margin-bottom: 0.5rem; color: var(--text-primary); } .section-description { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; } .message-form { background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; } .form-row { margin-bottom: 1rem; } .form-row:last-child { margin-bottom: 0; } .form-row label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary); } .form-row input { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95rem; } .input-hex { max-width: 200px; } .input-data { max-width: 400px; letter-spacing: 0.1em; } .input-hint { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: system-ui, -apple-system, sans-serif; font-style: italic; } .form-actions { margin-top: 1rem; display: flex; gap: 0.5rem; } .btn-send, .btn-start, .btn-stop, .btn-add, .btn-save, .btn-cancel, .btn-remove { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; } .btn-send { background-color: var(--oi-blue); color: white; } .btn-send:hover:not(:disabled) { background-color: var(--oi-blue-dark); } .btn-send:disabled { background-color: #ccc; cursor: not-allowed; } .btn-start { background-color: #28a745; color: white; } .btn-start:hover:not(:disabled) { background-color: #218838; } .btn-stop { background-color: #dc3545; color: white; } .btn-stop:hover:not(:disabled) { background-color: #c82333; } .btn-add { background-color: var(--oi-blue); color: white; margin-top: 1rem; } .btn-add:hover { background-color: var(--oi-blue-dark); } .btn-save { background-color: var(--oi-status-success); color: white; } .btn-save:hover { background-color: #218838; } .btn-cancel { background-color: #6c757d; color: white; } .btn-cancel:hover { background-color: #5a6268; } .btn-remove { background-color: #dc3545; color: white; } .btn-remove:hover:not(:disabled) { background-color: #c82333; } .btn-remove:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; } .no-messages { color: var(--text-muted); font-style: italic; padding: 1rem; text-align: center; } .messages-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; background: white; } .messages-table thead { background-color: var(--bg-secondary); } .messages-table th, .messages-table td { padding: 0.75rem; text-align: left; border: 1px solid var(--border-color); } .messages-table th { font-weight: 600; color: var(--text-primary); } .data-cell { font-family: 'Courier New', monospace; font-size: 0.9rem; } .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 500; } .status-active { background-color: #d4edda; color: #155724; } .status-inactive { background-color: #f8d7da; color: #721c24; } .action-buttons { display: flex; gap: 0.5rem; } .add-message-section { margin-top: 1rem; } .add-message-form { background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin-top: 1rem; } .add-message-form h4 { margin-bottom: 1rem; color: var(--text-primary); } .device-card { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; gap: 1rem; position: relative; } .device-card:hover { border-color: var(--oi-blue); box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2); transform: translateY(-2px); } .btn-danger { background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; } .btn-danger:hover { background: #c82333; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3); }"
 // }
 // === END_EXTENSION_CONFIG ===
 
@@ -1153,10 +1152,6 @@ else:
   /**
    * Render Overview - System-level overview or device panel if device selected
    */
-  renderOverview() {
-    return this.renderSystemOverview()
-  }
-
   /**
    * Catch-all render methods for device panels
    * These handle device0, device1, device2, etc.
@@ -1206,93 +1201,6 @@ else:
   }
 
   /**
-   * Render system overview (all devices as cards)
-   */
-  renderSystemOverview() {
-    return this.html`
-      <div class="system-panel">
-        <div class="panel-header" style="padding: 20px; border-bottom: 1px solid var(--border-color);">
-          <h2 style="margin: 0; font-size: 24px; color: var(--scheme-primary);">System Overview</h2>
-          <p style="margin: 8px 0 0; color: var(--text-secondary); font-size: 14px;">
-            Scan and manage OpenInverter devices on your CAN bus
-          </p>
-        </div>
-        
-        <div style="padding: 20px;">
-          ${this.state.discoveredDevices && this.state.discoveredDevices.length > 0 ? this.html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-              ${this.state.discoveredDevices.map(device => this.html`
-                <div 
-                  style="
-                    background: var(--bg-secondary);
-                    border: 2px solid var(--border-color);
-                    border-radius: 8px;
-                    padding: 20px;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                  "
-                  onclick=${() => this.selectDeviceFromOverview(device)}
-                  onmouseover=${(e) => { e.currentTarget.style.borderColor = 'var(--oi-blue)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                  onmouseout=${(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.transform = 'translateY(0)' }}>
-                  
-                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${device.online ? '#4caf50' : '#999'};"></div>
-                    <h3 style="margin: 0; font-size: 18px; color: var(--text-primary);">
-                      ${device.name || `Device ${device.nodeId}`}
-                    </h3>
-                  </div>
-                  
-                  <div style="color: var(--text-secondary); font-size: 13px; line-height: 1.6;">
-                    <div><strong>Serial:</strong> ${device.serial ? device.serial.substring(0, 16) + '...' : 'Unknown'}</div>
-                    <div><strong>Node ID:</strong> ${device.nodeId}</div>
-                    <div><strong>Firmware:</strong> ${device.firmware || 'Unknown'}</div>
-                    <div style="margin-top: 8px;">
-                      <span style="
-                        display: inline-block;
-                        padding: 4px 12px;
-                        border-radius: 12px;
-                        font-size: 11px;
-                        font-weight: 600;
-                        background: ${device.online ? 'rgba(76, 175, 80, 0.1)' : 'rgba(153, 153, 153, 0.1)'};
-                        color: ${device.online ? '#4caf50' : '#999'};
-                      ">
-                        ${device.online ? 'Online' : 'Offline'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              `)}
-            </div>
-          ` : this.html`
-            <div class="panel-message">
-              <p style="font-size: 16px; margin-bottom: 16px;">No devices found</p>
-              <p style="font-size: 14px; color: var(--text-secondary);">
-                Use the <strong>Device Selector</strong> to scan for OpenInverter devices on the CAN bus
-              </p>
-            </div>
-          `}
-        </div>
-      </div>
-    `
-  }
-
-  /**
-   * Select device from overview page - different from sidebar selection
-   */
-  selectDeviceFromOverview(device) {
-    this.state.selectedDeviceSerial = device.serial
-    this.state.selectedNodeId = device.nodeId
-    this.state.activeDeviceTab = 'overview'
-    
-    // Connect to device if not already connected
-    if (!this.state.oiDeviceConnected || this.state.currentDeviceSerial !== device.serial) {
-      this.connectToDevice(device.nodeId, device.serial)
-    }
-    
-    this.emit('render')
-  }
-
-  /**
    * Render Device Selector panel
    * Modern device connection and selection interface
    */
@@ -1310,174 +1218,295 @@ else:
     if (this.state.isScanning === undefined) {
       this.state.isScanning = false
     }
-    if (!this.state.savedDevices) {
-      this.state.savedDevices = []
+    if (!this.state.discoveredDevices) {
+      this.state.discoveredDevices = []
+    }
+    if (!this.state.editingDeviceName) {
+      this.state.editingDeviceName = null
     }
 
     return this.html`
       <div class="system-panel">
         <div class="panel-header" style="padding: 20px; border-bottom: 1px solid var(--border-color);">
-          <h2 style="margin: 0; font-size: 24px; color: var(--scheme-primary);">Device Connection</h2>
-          <p style="margin: 8px 0 0; color: var(--text-secondary); font-size: 14px;">
-            Connect to an OpenInverter device via CAN bus
+          <h2 style="margin: 0; font-size: 24px;">Device Manager</h2>
+          <p style="margin: 8px 0 0; font-size: 14px;">
+            Scan and manage Open Inverter devices via CAN bus
           </p>
         </div>
         
-        <div style="padding: 20px;">
-          <!-- Connection Status -->
-          <div style="background: var(--bg-secondary); border: 2px solid ${this.state.oiDeviceConnected ? '#4ade80' : '#ef4444'}; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 16px; height: 16px; border-radius: 50%; background: ${this.state.oiDeviceConnected ? '#4ade80' : '#ef4444'};"></div>
-                <div>
-                  <div style="font-weight: 600; font-size: 16px; color: ${this.state.oiDeviceConnected ? '#4ade80' : '#ef4444'};">
-                    ${this.state.oiDeviceConnected ? 'Connected' : 'Disconnected'}
-                  </div>
-                  ${this.state.oiDeviceConnected ? this.html`
-                    <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
-                      Node ID: ${this.state.selectedNodeId}
-                      ${this.state.currentDeviceSerial ? this.html` • Serial: ${this.state.currentDeviceSerial}` : ''}
-                    </div>
-                  ` : this.html`
-                    <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
-                      No OpenInverter device connected
-                    </div>
-                  `}
-                </div>
-              </div>
-              
-              ${this.state.oiDeviceConnected ? this.html`
-                <button 
-                  class="secondary-button" 
-                  onclick=${() => this.disconnectDevice()}
-                  style="padding: 8px 16px;">
-                  Disconnect
-                </button>
-              ` : ''}
-            </div>
-          </div>
 
-          <!-- CAN Bus Scanner -->
-          ${!this.state.oiDeviceConnected ? this.html`
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; margin: 0; color: var(--text-primary);">Scan for Devices</h3>
-                <div style="display: flex; gap: 8px;">
-                  <button 
-                    class="secondary-button" 
-                    onclick=${() => this.scanCanBus(false)}
-                    disabled=${!this.state.isConnected || this.state.isScanning}
-                    style="padding: 8px 16px; font-size: 13px;">
-                    ${this.state.isScanning ? 'Scanning...' : 'Quick Scan (1-10)'}
-                  </button>
-                  <button 
-                    class="secondary-button" 
-                    onclick=${() => this.scanCanBus(true)}
-                    disabled=${!this.state.isConnected || this.state.isScanning}
-                    style="padding: 8px 16px; font-size: 13px;">
-                    Full Scan (1-127)
-                  </button>
-                </div>
+
+          <!-- Saved Devices List -->
+          ${this.state.discoveredDevices.length > 0 ? this.html`
+            <div style="margin-bottom: 24px;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                ${this.state.discoveredDevices.map(device => this.renderDeviceCard(device))}
               </div>
-              
-              ${!this.state.isConnected ? this.html`
-                <div style="text-align: center; padding: 24px; color: #ef4444; font-size: 14px; background: rgba(239, 68, 68, 0.1); border-radius: 4px;">
-                  <p style="margin: 0;">⚠️ Please connect to ESP32 device via WebREPL first</p>
-                  <p style="margin: 8px 0 0; font-size: 12px; color: var(--text-secondary);">
-                    Use the Connection panel to connect to your ESP32
-                  </p>
-                </div>
-              ` : this.state.isScanning ? this.html`
-                <div style="padding: 24px;">
-                  <div style="text-align: center; color: var(--text-secondary); font-size: 14px;">
-                    <p style="margin: 0;">Scanning CAN bus for devices...</p>
-                    <p style="font-size: 12px; margin: 8px 0 0;">This may take a few seconds</p>
-                  </div>
-                </div>
-              ` : this.state.scanMessage ? this.html`
-                <div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 14px; background: var(--bg-tertiary); border-radius: 4px;">
-                  <p style="margin: 0;">${this.state.scanMessage}</p>
-                </div>
-              ` : this.state.canScanResults.length === 0 ? this.html`
-                <div style="text-align: center; padding: 24px; color: var(--text-secondary); font-size: 14px;">
-                  <p style="margin: 0;">No scan results yet</p>
-                  <p style="font-size: 12px; margin: 8px 0 0;">Click Quick Scan or Full Scan to find devices</p>
-                </div>
-              ` : this.html`
-                <div style="border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden;">
-                  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead>
-                      <tr style="background: var(--scheme-primary); color: white;">
-                        <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Node ID</th>
-                        <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Serial Number</th>
-                        <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${this.state.canScanResults.map(device => this.html`
-                        <tr style="border-top: 1px solid var(--border-color); transition: background 0.2s;" onmouseover=${(e) => e.currentTarget.style.background = 'var(--bg-tertiary)'} onmouseout=${(e) => e.currentTarget.style.background = 'transparent'}>
-                          <td style="padding: 12px;">${device.nodeId}</td>
-                          <td style="padding: 12px; font-family: monospace; font-size: 12px;">${device.serialNumber || '—'}</td>
-                          <td style="padding: 12px; text-align: right;">
-                            <button 
-                              class="primary-button" 
-                              onclick=${() => this.connectToDevice(device.nodeId, device.serialNumber)}
-                              style="padding: 6px 16px; font-size: 13px;">
-                              Connect
-                            </button>
-                          </td>
-                        </tr>
-                      `)}
-                    </tbody>
-                  </table>
-                </div>
-              `}
             </div>
           ` : ''}
 
+          <!-- CAN Bus Scanner -->
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="font-size: 16px; margin: 0; color: var(--text-primary);">Scan for Devices</h3>
+              <div style="display: flex; gap: 8px;">
+                <button 
+                  class="secondary-button" 
+                  onclick=${() => this.scanCanBus(false)}
+                  disabled=${!this.state.isConnected || this.state.isScanning}
+                  style="padding: 8px 16px; font-size: 13px;">
+                  ${this.state.isScanning ? 'Scanning...' : 'Quick Scan (1-10)'}
+                </button>
+                <button 
+                  class="secondary-button" 
+                  onclick=${() => this.scanCanBus(true)}
+                  disabled=${!this.state.isConnected || this.state.isScanning}
+                  style="padding: 8px 16px; font-size: 13px;">
+                  Full Scan (1-127)
+                </button>
+              </div>
+            </div>
+            
+            ${!this.state.isConnected ? this.html`
+              <div style="text-align: center; padding: 24px; color: #ef4444; font-size: 14px; background: rgba(239, 68, 68, 0.1); border-radius: 4px;">
+                <p style="margin: 0;">⚠️ Please connect to ESP32 device via WebREPL first</p>
+                <p style="margin: 8px 0 0; font-size: 12px; color: var(--text-secondary);">
+                  Use the Connection panel to connect to your ESP32
+                </p>
+              </div>
+            ` : this.state.isScanning ? this.html`
+              <div style="padding: 24px;">
+                <div style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                  <p style="margin: 0;">Scanning CAN bus for devices...</p>
+                  <p style="font-size: 12px; margin: 8px 0 0;">This may take a few seconds</p>
+                </div>
+              </div>
+            ` : this.state.scanMessage ? this.html`
+              <div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 14px; background: var(--bg-tertiary); border-radius: 4px;">
+                <p style="margin: 0;">${this.state.scanMessage}</p>
+              </div>
+            ` : this.state.canScanResults.length === 0 ? this.html`
+              <div style="text-align: center; padding: 24px; color: var(--text-secondary); font-size: 14px;">
+                <p style="margin: 0;">No scan results yet</p>
+                <p style="font-size: 12px; margin: 8px 0 0;">Click Quick Scan or Full Scan to find devices</p>
+              </div>
+            ` : this.html`
+              <div style="border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                  <thead>
+                    <tr style="background: var(--scheme-primary); color: white;">
+                      <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Node ID</th>
+                      <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Serial Number</th>
+                      <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${this.state.canScanResults.map(device => this.html`
+                      <tr style="border-top: 1px solid var(--border-color); transition: background 0.2s;" onmouseover=${(e) => e.currentTarget.style.background = 'var(--bg-tertiary)'} onmouseout=${(e) => e.currentTarget.style.background = 'transparent'}>
+                        <td style="padding: 12px;">${device.nodeId}</td>
+                        <td style="padding: 12px; font-family: monospace; font-size: 12px;">${device.serialNumber || '—'}</td>
+                        <td style="padding: 12px; text-align: right;">
+                          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                            <button 
+                              class="secondary-button" 
+                              onclick=${(e) => { e.stopPropagation(); this.addDeviceFromScan(device); }}
+                              style="padding: 6px 12px; font-size: 13px;">
+                              Add
+                            </button>
+                            <button 
+                              class="primary-button" 
+                              onclick=${(e) => { e.stopPropagation(); this.connectToDevice(device.nodeId, device.serialNumber); }}
+                              style="padding: 6px 16px; font-size: 13px;">
+                              Connect
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `)}
+                  </tbody>
+                </table>
+              </div>
+            `}
+          </div>
+
           <!-- Manual Connection -->
-          ${!this.state.oiDeviceConnected ? this.html`
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px;">
-              <h3 style="font-size: 16px; margin: 0 0 16px 0; color: var(--text-primary);">Manual Connection</h3>
-              <div style="display: flex; gap: 12px; align-items: center;">
-                <div style="flex: 1;">
-                  <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
-                    Node ID
-                  </label>
-                  <input 
-                    type="number" 
-                    min="1" 
-                    max="255"
-                    value="${this.state.selectedNodeId || 1}"
-                    oninput=${(e) => { this.state.selectedNodeId = parseInt(e.target.value) || 1 }}
-                    style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"
-                  />
-                </div>
-                <div style="flex: 2;">
-                  <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
-                    Serial Number (optional)
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g., ABC123..."
-                    value="${this.state.manualSerial || ''}"
-                    oninput=${(e) => { this.state.manualSerial = e.target.value }}
-                    style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"
-                  />
-                </div>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px;">
+            <h3 style="font-size: 16px; margin: 0 0 16px 0; color: var(--text-primary);">Manual Connection</h3>
+            <div style="display: flex; gap: 12px; align-items: flex-end;">
+              <div style="flex: 1;">
+                <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
+                  Node ID
+                </label>
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="255"
+                  value="${this.state.selectedNodeId || 1}"
+                  oninput=${(e) => { this.state.selectedNodeId = parseInt(e.target.value) || 1 }}
+                  style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"
+                />
+              </div>
+              <div style="flex: 2;">
+                <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
+                  Serial Number (optional)
+                </label>
+                <input 
+                  type="text" 
+                  placeholder="e.g., ABC123..."
+                  value="${this.state.manualSerial || ''}"
+                  oninput=${(e) => { this.state.manualSerial = e.target.value }}
+                  style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"
+                />
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button 
+                  class="secondary-button" 
+                  onclick=${() => this.addDeviceManually()}
+                  disabled=${this.state.selectedNodeId <= 127 && !this.state.isConnected}
+                  style="min-width: 100px;">
+                  Add Device
+                </button>
                 <button 
                   class="primary-button" 
                   onclick=${() => this.connectToDevice(this.state.selectedNodeId, this.state.manualSerial)}
                   disabled=${this.state.selectedNodeId <= 127 && !this.state.isConnected}
-                  style="margin-top: 20px; min-width: 120px;">
+                  style="min-width: 120px;">
                   Connect
                 </button>
               </div>
-              <p style="font-size: 12px; color: var(--text-secondary); margin: 12px 0 0;">
-                Enter a Node ID (1-127) to connect to a real device, or >127 (e.g., 200, 201) for mock/demo devices.
-              </p>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin: 12px 0 0;">
+              Enter a Node ID (1-127) to connect to a real device, or >127 (e.g., 200, 201) for mock/demo devices.
+            </p>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  /**
+   * Render a device card for the saved devices list
+   */
+  renderDeviceCard(device) {
+    const isConnected = this.state.oiDeviceConnected && 
+                       this.state.currentDeviceSerial === device.serial &&
+                       this.state.selectedNodeId === device.nodeId
+    const isEditing = this.state.editingDeviceName === device.serial
+
+    return this.html`
+      <div 
+        class="device-card"
+        style="
+          background: white;
+          border: 2px solid ${isConnected ? 'var(--oi-blue)' : '#e0e0e0'};
+          border-radius: 8px;
+          padding: 1.5rem;
+          cursor: pointer;
+          transition: all 0.3s;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          position: relative;
+        "
+        onclick=${() => this.selectDeviceFromCard(device)}
+        onmouseover=${(e) => { if (!isConnected) e.currentTarget.style.borderColor = 'var(--oi-blue)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(30, 136, 229, 0.2)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+        onmouseout=${(e) => { if (!isConnected) e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none'; }}
+      >
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: ${device.online !== false ? '#4caf50' : '#999'};"></div>
+          <div style="font-size: 1.2rem; font-weight: 600; color: #333; flex: 1;">
+            ${isEditing ? this.html`
+              <input 
+                type="text"
+                value="${device.name || ''}"
+                oninput=${(e) => { this.state.editingDeviceNameValue = e.target.value }}
+                onkeydown=${(e) => {
+                  if (e.key === 'Enter') {
+                    this.saveDeviceName(device)
+                  } else if (e.key === 'Escape') {
+                    this.state.editingDeviceName = null
+                    this.emit('render')
+                  }
+                }}
+                onclick=${(e) => e.stopPropagation()}
+                style="width: 100%; padding: 4px 8px; border: 1px solid var(--oi-blue); border-radius: 4px; font-size: 1rem;"
+                autofocus
+              />
+            ` : device.name || `Device ${device.nodeId}`}
+          </div>
+          ${isConnected ? this.html`
+            <span style="background: var(--oi-orange); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 500; text-transform: uppercase;">
+              Connected
+            </span>
+          ` : ''}
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+          <div style="color: var(--text-secondary);">
+            Serial: <span style="font-family: monospace;">${device.serial || 'Unknown'}</span>
+          </div>
+          <div style="color: var(--text-secondary);">
+            Node ID: ${device.nodeId}
+          </div>
+          ${device.firmware ? this.html`
+            <div style="color: var(--text-secondary);">
+              Firmware: ${device.firmware}
             </div>
           ` : ''}
+          <div style="color: ${device.online !== false ? '#4caf50' : '#999'}; font-weight: 500;">
+            ${device.online !== false ? 'Online' : 'Offline'}
+          </div>
+        </div>
+
+        <div style="position: absolute; bottom: 0.75rem; right: 0.75rem; display: flex; gap: 0.5rem; z-index: 1;">
+          ${isEditing ? this.html`
+            <button 
+              class="secondary-button"
+              onclick=${(e) => { e.stopPropagation(); this.saveDeviceName(device); }}
+              style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px;"
+              title="Save"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </button>
+            <button 
+              class="secondary-button"
+              onclick=${(e) => { e.stopPropagation(); this.state.editingDeviceName = null; this.emit('render'); }}
+              style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px;"
+              title="Cancel"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          ` : this.html`
+            ${device.name ? this.html`
+              <button 
+                class="secondary-button"
+                onclick=${(e) => { e.stopPropagation(); this.startEditingDeviceName(device); }}
+                style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px;"
+                title="Edit"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+            ` : ''}
+            <button 
+              class="btn-danger"
+              onclick=${(e) => { e.stopPropagation(); this.deleteDevice(device); }}
+              style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px; background: #dc3545; color: white; border: none;"
+              title="Delete"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          `}
         </div>
       </div>
     `
@@ -2067,77 +2096,9 @@ else:
   }
 
   /**
-   * Render Overview panel
+   * Render Overview content (used in device tabs)
    * Modern spot values display with inline charts
    */
-  renderOverview() {
-    // Initialize state
-    if (!this.state.spotValues) {
-      this.state.spotValues = {}
-    }
-    if (!this.state.spotValueHistory) {
-      this.state.spotValueHistory = {}
-    }
-    if (!this.state.selectedChartParams) {
-      this.state.selectedChartParams = new Set()
-    }
-    if (this.state.spotValueInterval === undefined) {
-      this.state.spotValueInterval = 1000 // Default 1 second
-    }
-    if (this.state.isStreamingSpotValues === undefined) {
-      this.state.isStreamingSpotValues = false
-    }
-
-    // Auto-load spot values when connected
-    if (!this.state.oiSpotValues && !this.state.isLoadingOiSpotValues && this.state.oiDeviceConnected) {
-      setTimeout(() => this.refreshSpotValues(), 0)
-    }
-
-    return this.html`
-      <div class="system-panel">
-        <div class="panel-header" style="padding: 20px; border-bottom: 1px solid var(--border-color);">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <h2 style="margin: 0; font-size: 24px; color: var(--scheme-primary);">Overview</h2>
-              <p style="margin: 8px 0 0; color: var(--text-secondary); font-size: 14px;">
-                Live spot values and performance metrics
-              </p>
-            </div>
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <label style="font-size: 13px; color: var(--text-secondary);">Refresh Interval:</label>
-                <select 
-                  onchange=${(e) => { this.state.spotValueInterval = parseInt(e.target.value); this.emit('render') }}
-                  style="padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-secondary); color: var(--text-primary);">
-                  <option value="500" ${this.state.spotValueInterval === 500 ? 'selected' : ''}>500ms</option>
-                  <option value="1000" ${this.state.spotValueInterval === 1000 ? 'selected' : ''}>1s</option>
-                  <option value="2000" ${this.state.spotValueInterval === 2000 ? 'selected' : ''}>2s</option>
-                  <option value="5000" ${this.state.spotValueInterval === 5000 ? 'selected' : ''}>5s</option>
-                </select>
-              </div>
-              <button 
-                class="${this.state.isStreamingSpotValues ? 'secondary-button' : 'primary-button'}" 
-                onclick=${() => this.toggleSpotValueStreaming()}
-                disabled=${!this.state.oiDeviceConnected}
-                style="padding: 8px 16px;">
-                ${this.state.isStreamingSpotValues ? 'Stop' : 'Start'} Streaming
-              </button>
-              <button 
-                class="secondary-button" 
-                onclick=${() => this.refreshSpotValues()}
-                disabled=${!this.state.oiDeviceConnected || this.state.isStreamingSpotValues}
-                style="padding: 8px 16px;">
-                Refresh Now
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        ${this.renderOverviewContent()}
-      </div>
-    `
-  }
-
   renderOverviewContent() {
     // Initialize auto-refresh state if needed
     if (typeof this.state.autoRefreshInterval === 'undefined') {
@@ -5289,9 +5250,8 @@ else:
       }
       
       // Store serial if provided
-      if (serial) {
-        this.state.currentDeviceSerial = serial
-      }
+      const deviceSerial = serial || `NODE-${this.state.selectedNodeId}-${Date.now().toString(36).slice(-4).toUpperCase()}`
+      this.state.currentDeviceSerial = deviceSerial
       
       const args = JSON.stringify({ node_id: this.state.selectedNodeId })
       const result = await this.device.execute(`from lib.OI_helpers import initializeDevice; initializeDevice(${args})`)
@@ -5299,9 +5259,42 @@ else:
 
       if (parsed.success) {
         this.state.oiDeviceConnected = true
+        
+        // Add/update device in discovered devices list
+        if (!this.state.discoveredDevices) {
+          this.state.discoveredDevices = []
+        }
+        
+        const existingIndex = this.state.discoveredDevices.findIndex(
+          d => d.serial === deviceSerial || d.nodeId === this.state.selectedNodeId
+        )
+        
+        const realDevice = {
+          nodeId: this.state.selectedNodeId,
+          serial: deviceSerial,
+          name: null, // Will be set by user later
+          firmware: parsed.firmware || 'Unknown',
+          online: true
+        }
+        
+        if (existingIndex >= 0) {
+          // Update existing device
+          this.state.discoveredDevices[existingIndex] = {
+            ...this.state.discoveredDevices[existingIndex],
+            ...realDevice,
+            name: this.state.discoveredDevices[existingIndex].name || null
+          }
+        } else {
+          // Add new device
+          this.state.discoveredDevices.push(realDevice)
+        }
+        
+        // Update extension menu
+        this.updateExtensionMenu()
+        
         console.log('[OI Connection] Connected to device:', {
           nodeId: this.state.selectedNodeId,
-          serial: this.state.currentDeviceSerial
+          serial: deviceSerial
         })
       } else {
         console.error('[OI Connection] Connection failed:', parsed)
@@ -5328,8 +5321,7 @@ else:
     
     // Start with base menu items
     const baseMenu = [
-      { id: 'overview', label: 'Overview' },
-      { id: 'deviceselector', label: 'Device Selector' }
+      { id: 'deviceselector', label: 'Device Manager' }
     ]
     
     // Add devices section header if we have devices
@@ -5368,6 +5360,168 @@ else:
       console.error('[OI Connection] Disconnect error:', error)
     }
 
+    this.emit('render')
+  }
+
+  /**
+   * Add a device from scan results to the saved devices list
+   */
+  addDeviceFromScan(scanDevice) {
+    if (!this.state.discoveredDevices) {
+      this.state.discoveredDevices = []
+    }
+
+    // Check if device already exists
+    const existingIndex = this.state.discoveredDevices.findIndex(
+      d => d.serial === scanDevice.serialNumber || 
+           (d.nodeId === scanDevice.nodeId && !scanDevice.serialNumber)
+    )
+
+    const deviceToAdd = {
+      nodeId: scanDevice.nodeId,
+      serial: scanDevice.serialNumber || `NODE-${scanDevice.nodeId}-${Date.now().toString(36).slice(-4).toUpperCase()}`,
+      name: null, // Will prompt for name when connecting
+      firmware: scanDevice.firmware || 'Unknown',
+      online: true
+    }
+
+    if (existingIndex >= 0) {
+      // Update existing device
+      this.state.discoveredDevices[existingIndex] = {
+        ...this.state.discoveredDevices[existingIndex],
+        ...deviceToAdd,
+        name: this.state.discoveredDevices[existingIndex].name || null
+      }
+    } else {
+      // Add new device
+      this.state.discoveredDevices.push(deviceToAdd)
+    }
+
+    this.updateExtensionMenu()
+    this.emit('render')
+  }
+
+  /**
+   * Add a device manually from manual connection form
+   */
+  addDeviceManually() {
+    if (!this.state.discoveredDevices) {
+      this.state.discoveredDevices = []
+    }
+
+    const serial = this.state.manualSerial || 
+                   (this.state.selectedNodeId > 127 
+                     ? `MOCK-${String(this.state.selectedNodeId).padStart(3, '0')}-${Date.now().toString(36).slice(-4).toUpperCase()}`
+                     : `NODE-${this.state.selectedNodeId}-${Date.now().toString(36).slice(-4).toUpperCase()}`)
+
+    // Check if device already exists
+    const existingIndex = this.state.discoveredDevices.findIndex(
+      d => d.nodeId === this.state.selectedNodeId
+    )
+
+    const deviceToAdd = {
+      nodeId: this.state.selectedNodeId,
+      serial: serial,
+      name: this.state.selectedNodeId > 127 ? `Test Inverter ${this.state.selectedNodeId}` : null,
+      firmware: this.state.selectedNodeId > 127 ? 'v4.2.0-mock' : 'Unknown',
+      online: false
+    }
+
+    if (existingIndex >= 0) {
+      // Update existing device
+      this.state.discoveredDevices[existingIndex] = {
+        ...this.state.discoveredDevices[existingIndex],
+        ...deviceToAdd,
+        name: this.state.discoveredDevices[existingIndex].name || deviceToAdd.name
+      }
+    } else {
+      // Add new device
+      this.state.discoveredDevices.push(deviceToAdd)
+    }
+
+    this.updateExtensionMenu()
+    this.emit('render')
+  }
+
+  /**
+   * Select a device from a device card
+   */
+  selectDeviceFromCard(device) {
+    // If clicking on edit/delete buttons, don't select
+    if (this.state.editingDeviceName === device.serial) {
+      return
+    }
+
+    this.state.selectedDeviceSerial = device.serial
+    this.state.selectedNodeId = device.nodeId
+    this.state.activeDeviceTab = 'overview'
+    
+    // Connect to device if not already connected
+    if (!this.state.oiDeviceConnected || this.state.currentDeviceSerial !== device.serial) {
+      this.connectToDevice(device.nodeId, device.serial)
+    }
+    
+    this.emit('render')
+  }
+
+  /**
+   * Start editing a device name
+   */
+  startEditingDeviceName(device) {
+    this.state.editingDeviceName = device.serial
+    this.state.editingDeviceNameValue = device.name || ''
+    this.emit('render')
+  }
+
+  /**
+   * Save device name after editing
+   */
+  saveDeviceName(device) {
+    const newName = this.state.editingDeviceNameValue || null
+    
+    if (!this.state.discoveredDevices) {
+      this.state.discoveredDevices = []
+    }
+
+    const deviceIndex = this.state.discoveredDevices.findIndex(d => d.serial === device.serial)
+    if (deviceIndex >= 0) {
+      this.state.discoveredDevices[deviceIndex] = {
+        ...this.state.discoveredDevices[deviceIndex],
+        name: newName
+      }
+    }
+
+    this.state.editingDeviceName = null
+    this.updateExtensionMenu()
+    this.emit('render')
+  }
+
+  /**
+   * Delete a device from the saved devices list
+   */
+  deleteDevice(device) {
+    if (!confirm(`Delete device "${device.name || device.serial}"?`)) {
+      return
+    }
+
+    if (!this.state.discoveredDevices) {
+      this.state.discoveredDevices = []
+    }
+
+    // Remove device from list
+    this.state.discoveredDevices = this.state.discoveredDevices.filter(d => d.serial !== device.serial)
+
+    // If this was the connected device, disconnect
+    if (this.state.currentDeviceSerial === device.serial) {
+      this.disconnectDevice()
+    }
+
+    // Clear selection if this was selected
+    if (this.state.selectedDeviceSerial === device.serial) {
+      this.state.selectedDeviceSerial = null
+    }
+
+    this.updateExtensionMenu()
     this.emit('render')
   }
 
