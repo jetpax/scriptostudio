@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1767845072,
+  "updated": 1767848436,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -863,12 +863,8 @@
       "icon": "sliders",
       "menu": [
         {
-          "id": "overview",
-          "label": "Overview"
-        },
-        {
           "id": "deviceselector",
-          "label": "Device Selector"
+          "label": "Device Manager"
         }
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/OpenInverter/OpenInverter.js",
