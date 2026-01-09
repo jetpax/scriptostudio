@@ -68,56 +68,9 @@ param_db_cache = None
 streaming_active = False
 
 
-# --- Global Parameters/Spot Values Store (Demo Data or from device) ---
-# This will be replaced with actual device data when connected
-# IDs are included from the start (matching reference mock-server.js pattern)
-parameters = {
-    # Spot values (isparam=False) - matching reference mock-server.js
-    'voltage': {
-        'value': 350.5, 'unit': 'V', 'isparam': False, 'category': 'Electrical',
-        'id': 0x1001,  # ID included from start (like reference)
-        'canId': 500, 'canPosition': 0, 'canBits': 16, 'canGain': 0.1, 'isTx': True
-    },
-    'current': {
-        'value': 45.2, 'unit': 'A', 'isparam': False, 'category': 'Electrical',
-        'id': 0x1002  # ID included from start
-    },
-    'power': {
-        'value': 15850, 'unit': 'W', 'isparam': False, 'category': 'Electrical',
-        'id': 0x1003  # ID included from start
-    },
-    'rpm': {
-        'value': 3000, 'unit': 'rpm', 'isparam': False, 'category': 'Motor',
-        'id': 0x1004  # ID included from start
-    },
-    'temp': {
-        'value': 65, 'unit': '°C', 'isparam': False, 'category': 'Thermal',
-        'id': 0x1005,  # ID included from start
-        'canId': 500, 'canPosition': 16, 'canBits': 8, 'canGain': 1.0, 'isTx': True
-    },
-    
-    # Parameters (isparam=True) - common OpenInverter parameters
-    'fslipspnt': {
-        'value': 2.0, 'unit': 'Hz', 'isparam': True, 'category': 'Motor',
-        'id': 0x2001,  # ID included from start
-        'minimum': 0, 'maximum': 10, 'default': 1.5
-    },
-    'opmode': {
-        'value': 1, 'unit': '', 'isparam': True, 'category': 'Control',
-        'id': 0x2002,  # ID included from start
-        'enums': {0: 'Off', 1: 'Manual', 2: 'Auto'}, 'default': 0
-    },
-    'kp': {
-        'value': 100, 'unit': '', 'isparam': True, 'category': 'Control',
-        'id': 0x2003,  # ID included from start
-        'minimum': 0, 'maximum': 1000, 'default': 150
-    },
-    'ki': {
-        'value': 50, 'unit': '', 'isparam': True, 'category': 'Control',
-        'id': 0x2004,  # ID included from start
-        'minimum': 0, 'maximum': 500, 'default': 80
-    }
-}
+# --- Global Parameters/Spot Values Store ---
+# Populated from device when connected
+parameters = {}
 
 
 def _send_response(cmd, arg):
@@ -145,9 +98,7 @@ def initializeDevice(args=None):
     Initialize CAN bus and connect to OpenInverter device.
     
     Args (dict, optional):
-        node_id: CANopen node ID (default: 1)
-            - Node ID > 127: Mock/demo device mode (no actual CAN hardware)
-            - Node ID 1-127: Real device mode (requires CAN hardware)
+        node_id: CANopen node ID (default: 1, must be 1-127)
         bitrate: CAN bus bitrate (default: 500000)
         tx_pin: TX GPIO pin (default: 5)
         rx_pin: RX GPIO pin (default: 4)
@@ -164,25 +115,7 @@ def initializeDevice(args=None):
     
     node_id = args.get('node_id', 1)
     
-    # Handle mock device mode (node ID > 127)
-    # Mock devices don't require CAN hardware - just set connected flag
-    if node_id > 127:
-        device_connected = True
-        device_node_id = node_id
-        device_bitrate = args.get('bitrate', 500000)
-        can_dev = None  # No actual CAN device for mock mode
-        sdo_client = None  # No SDO client for mock mode
-        
-        _send_response('DEVICE-INITIALIZED', {
-            'success': True,
-            'node_id': node_id,
-            'bitrate': device_bitrate,
-            'connected': True,
-            'mock': True
-        })
-        return
-    
-    # Real device mode (node ID 1-127) - requires CAN hardware
+    # Real device mode - requires CAN hardware
     # Check if CAN module is available
     if CAN is None:
         _send_error("CAN module not available on this platform", 'INIT-DEVICE-ERROR')
@@ -318,24 +251,7 @@ def fetchParameterDatabase():
     global param_db_cache, parameters
     
     if not device_connected or sdo_client is None:
-        # Return demo parameter database when not connected
-        # This ensures demo parameters have IDs for CAN mapping
-        # Don't send response here - this is an internal helper function
-        # The caller (getAllParamsWithIds) will send the final response
-        demo_db = {
-            'voltage': {'id': 0x1001, 'unit': 'V', 'isparam': False, 'category': 'Electrical'},
-            'current': {'id': 0x1002, 'unit': 'A', 'isparam': False, 'category': 'Electrical'},
-            'power': {'id': 0x1003, 'unit': 'W', 'isparam': False, 'category': 'Electrical'},
-            'rpm': {'id': 0x1004, 'unit': 'rpm', 'isparam': False, 'category': 'Motor'},
-            'temp': {'id': 0x1005, 'unit': '°C', 'isparam': False, 'category': 'Thermal'},
-            'fslipspnt': {'id': 0x2001, 'unit': 'Hz', 'isparam': True, 'category': 'Motor', 'minimum': 0, 'maximum': 10, 'default': 1.5},
-            'opmode': {'id': 0x2002, 'unit': '', 'isparam': True, 'category': 'Control', 'default': 0},
-            'kp': {'id': 0x2003, 'unit': '', 'isparam': True, 'category': 'Control', 'minimum': 0, 'maximum': 1000, 'default': 150},
-            'ki': {'id': 0x2004, 'unit': '', 'isparam': True, 'category': 'Control', 'minimum': 0, 'maximum': 500, 'default': 80}
-        }
-        param_db_cache = demo_db
-        loadParameterDatabase(demo_db)
-        # Silent return - don't send response for internal calls
+        _send_error("Device not connected", 'FETCH-PARAM-DB-ERROR')
         return
     
     try:
@@ -460,39 +376,32 @@ def getOiParams():
     Get list of all parameters (isparam=True).
     Sends the result directly to the WebREPL client as JSON.
     
-    If connected to real device, reads current values via SDO.
-    Otherwise, returns demo data.
+    Reads current values via SDO from connected device.
     """
+    if not device_connected or sdo_client is None or CAN is None:
+        _send_error("Device not connected", 'GET-PARAMS-ERROR')
+        return
+    
     param_list = {}
     
-    # If connected to device, read actual values
-    if device_connected and sdo_client and CAN is not None:
-        try:
-            for key, item in parameters.items():
-                if item.get('isparam') == True:
-                    # Read current value from device
-                    param_id = item.get('id')
-                    if param_id is not None:
-                        try:
-                            index, subindex = param_id_to_sdo(param_id)
-                            raw_value = sdo_client.read(index, subindex)
-                            item['value'] = fixed_to_float(raw_value)
-                        except (SDOTimeoutError, SDOAbortError) as e:
-                            # Keep existing value
-                            pass
-                    
-                    param_list[key] = item
-        except Exception as e:
-            # Silent - errors sent via _send_error()
-            # Fall back to cached values
-            for key, item in parameters.items():
-                if item.get('isparam') == True:
-                    param_list[key] = item
-    else:
-        # Use demo/cached data
+    try:
         for key, item in parameters.items():
             if item.get('isparam') == True:
+                # Read current value from device
+                param_id = item.get('id')
+                if param_id is not None:
+                    try:
+                        index, subindex = param_id_to_sdo(param_id)
+                        raw_value = sdo_client.read(index, subindex)
+                        item['value'] = fixed_to_float(raw_value)
+                    except (SDOTimeoutError, SDOAbortError) as e:
+                        # Keep existing value
+                        pass
+                
                 param_list[key] = item
+    except Exception as e:
+        _send_error(str(e), 'GET-PARAMS-ERROR')
+        return
     
     # Always send response, even if empty
     try:
@@ -540,23 +449,26 @@ def setParameter(args):
             return
         
                 
-        # If connected to device, write via SDO
-        if device_connected and sdo_client and CAN is not None:
-            param_id = param_def.get('id')
-            if param_id is not None:
-                try:
-                    index, subindex = param_id_to_sdo(param_id)
-                    fixed_value = float_to_fixed(param_value)
-                    sdo_client.write(index, subindex, fixed_value)
-                except SDOTimeoutError as e:
-                    _send_error(f"Timeout writing parameter: {str(e)}", 'SET-PARAMETER-ERROR')
-                    return
-                except SDOAbortError as e:
-                    _send_error(f"Device rejected parameter: {str(e)}", 'SET-PARAMETER-ERROR')
-                    return
-                except Exception as e:
-                    _send_error(f"Error writing parameter: {str(e)}", 'SET-PARAMETER-ERROR')
-                    return
+        # Write via SDO
+        if not device_connected or sdo_client is None or CAN is None:
+            _send_error("Device not connected", 'SET-PARAMETER-ERROR')
+            return
+        
+        param_id = param_def.get('id')
+        if param_id is not None:
+            try:
+                index, subindex = param_id_to_sdo(param_id)
+                fixed_value = float_to_fixed(param_value)
+                sdo_client.write(index, subindex, fixed_value)
+            except SDOTimeoutError as e:
+                _send_error(f"Timeout writing parameter: {str(e)}", 'SET-PARAMETER-ERROR')
+                return
+            except SDOAbortError as e:
+                _send_error(f"Device rejected parameter: {str(e)}", 'SET-PARAMETER-ERROR')
+                return
+            except Exception as e:
+                _send_error(f"Error writing parameter: {str(e)}", 'SET-PARAMETER-ERROR')
+                return
         
         # Update cached value
         parameters[param_name]['value'] = param_value
@@ -590,17 +502,18 @@ def getAllParamsWithIds():
     """
     global parameters
     
+    if not device_connected or sdo_client is None:
+        _send_error("Device not connected", 'GET-ALL-PARAMS-ERROR')
+        return
+    
     # If parameter database hasn't been loaded, try to fetch it
-    # This ensures spot values have IDs
-    # fetchParameterDatabase() now handles both connected and demo cases
     if param_db_cache is None:
         try:
-            # Try to fetch parameter database from device (or load demo cache)
-            # This will populate IDs for both parameters and spot values
             fetchParameterDatabase()
         except Exception:
-            # If fetch fails, continue with existing parameters
-            pass
+            # If fetch fails, return error
+            _send_error("Failed to fetch parameter database", 'GET-ALL-PARAMS-ERROR')
+            return
     
     all_params = {}
     
@@ -676,50 +589,32 @@ def getSpotValues():
     Get list of all spot values (isparam=False).
     Sends the result directly to the WebREPL client as JSON.
     
-    If connected to real device, reads current values via SDO.
-    Otherwise, returns demo data with random variation.
+    Reads current values via SDO from connected device.
     """
+    if not device_connected or sdo_client is None or CAN is None:
+        _send_error("Device not connected", 'GET-SPOT-VALUES-ERROR')
+        return
+    
     spot_list = {}
     
-    # If connected to device, read actual values
-    if device_connected and sdo_client and CAN is not None:
-        try:
-            for key, item in parameters.items():
-                if item.get('isparam') != True:
-                    # Read current value from device
-                    param_id = item.get('id')
-                    if param_id is not None:
-                        try:
-                            index, subindex = param_id_to_sdo(param_id)
-                            raw_value = sdo_client.read(index, subindex)
-                            item['value'] = fixed_to_float(raw_value)
-                        except (SDOTimeoutError, SDOAbortError) as e:
-                            # Keep existing value
-                            pass
-                    
-                    spot_list[key] = item
-        except Exception as e:
-            # Silent - errors sent via _send_error()
-            # Fall back to cached values
-            for key, item in parameters.items():
-                if item.get('isparam') != True:
-                    spot_list[key] = item
-    else:
-        # Use demo/cached data with random variation (simulates live values)
-        import random
+    try:
         for key, item in parameters.items():
             if item.get('isparam') != True:
-                # Create a copy to avoid modifying the original
-                spot_value = item.copy()
+                # Read current value from device
+                param_id = item.get('id')
+                if param_id is not None:
+                    try:
+                        index, subindex = param_id_to_sdo(param_id)
+                        raw_value = sdo_client.read(index, subindex)
+                        item['value'] = fixed_to_float(raw_value)
+                    except (SDOTimeoutError, SDOAbortError) as e:
+                        # Keep existing value
+                        pass
                 
-                # Add small random variation to numeric values (±2%)
-                if isinstance(spot_value.get('value'), (int, float)):
-                    base_value = spot_value['value']
-                    if base_value != 0:
-                        variation = (random.random() - 0.5) * base_value * 0.02
-                        spot_value['value'] = base_value + variation
-                
-                spot_list[key] = spot_value
+                spot_list[key] = item
+    except Exception as e:
+        _send_error(str(e), 'GET-SPOT-VALUES-ERROR')
+        return
     
     _send_response('SPOT-VALUES-LIST', spot_list)
 
@@ -746,49 +641,35 @@ def getPlotData(args):
     response_values = {}
     current_time = int(time.time())  # Unix timestamp
     
+    if not device_connected or sdo_client is None or CAN is None:
+        _send_error("Device not connected", 'PLOT-DATA-ERROR')
+        return
+    
     if isinstance(args, list) and len(args) > 0:
-        # If connected to device, read fresh values
-        if device_connected and sdo_client and CAN is not None:
-            for var_name in args:
-                if var_name in parameters:
-                    item = parameters[var_name]
-                    param_id = item.get('id')
-                    
-                    if param_id is not None:
-                        try:
-                            index, subindex = param_id_to_sdo(param_id)
-                            raw_value = sdo_client.read(index, subindex)
-                            value = fixed_to_float(raw_value)
-                            
-                            # Update cached value
-                            item['value'] = value
-                            response_values[var_name] = value
-                        except (SDOTimeoutError, SDOAbortError):
-                            # Use cached value on error
-                            value = item.get('value')
-                            if isinstance(value, (int, float)):
-                                response_values[var_name] = value
-                    else:
-                        # No param ID, use cached value
+        for var_name in args:
+            if var_name in parameters:
+                item = parameters[var_name]
+                param_id = item.get('id')
+                
+                if param_id is not None:
+                    try:
+                        index, subindex = param_id_to_sdo(param_id)
+                        raw_value = sdo_client.read(index, subindex)
+                        value = fixed_to_float(raw_value)
+                        
+                        # Update cached value
+                        item['value'] = value
+                        response_values[var_name] = value
+                    except (SDOTimeoutError, SDOAbortError):
+                        # Use cached value on error
                         value = item.get('value')
                         if isinstance(value, (int, float)):
                             response_values[var_name] = value
-        else:
-            # Use demo/cached data with random variation (simulates live values)
-            import random
-            for var_name in args:
-                if var_name in parameters:
-                    item = parameters[var_name]
+                else:
+                    # No param ID, use cached value
                     value = item.get('value')
-                    
-                    # Make sure it's a number that can be plotted
                     if isinstance(value, (int, float)):
-                        # Add random variation (±5% for more visible changes in plots)
-                        if value != 0:
-                            variation = (random.random() - 0.5) * value * 0.05
-                            response_values[var_name] = value + variation
-                        else:
-                            response_values[var_name] = value
+                        response_values[var_name] = value
         
         # Construct the response payload
         response_payload = {
@@ -814,10 +695,8 @@ def getCanMap(args=None):
     - TX map list: 0x3000 + n
     - RX map list: 0x3100 + n
     """
-    # If not connected to real device, return empty mappings (mock devices handled in JavaScript)
     if not device_connected or sdo_client is None:
-        mappings = {'tx': [], 'rx': []}
-        _send_response('CAN-MAP-LIST', mappings)
+        _send_error("Device not connected", 'GET-CAN-MAP-ERROR')
         return
     
     direction = args.get('direction', 'both') if args else 'both'
@@ -995,20 +874,8 @@ def addCanMapping(args):
         _send_error(f"Parameter {param_name} has no ID", 'CAN-MAP-ADD-ERROR')
         return
     
-    # If not connected to real device, just acknowledge (mock devices handled in JavaScript)
     if not device_connected or sdo_client is None:
-        _send_response('CAN-MAP-ADDED', {
-            'success': True,
-            'can_id': can_id,
-            'param_name': param_name,
-            'param_id': param_id,
-            'position': position,
-            'length': length,
-            'gain': gain,
-            'offset': offset,
-            'is_tx': is_tx,
-            'is_extended': is_extended
-        })
+        _send_error("Device not connected", 'CAN-MAP-ADD-ERROR')
         return
     
     try:
@@ -1065,14 +932,8 @@ def removeCanMapping(args):
         _send_error("Missing direction, msg_index, or param_index", 'CAN-MAP-REMOVE-ERROR')
         return
     
-    # If not connected to real device, just acknowledge (mock devices handled in JavaScript)
     if not device_connected or sdo_client is None:
-        _send_response('CAN-MAP-REMOVED', {
-            'success': True,
-            'direction': direction,
-            'msg_index': msg_index,
-            'param_index': param_index
-        })
+        _send_error("Device not connected", 'CAN-MAP-REMOVE-ERROR')
         return
     
     try:
@@ -1327,15 +1188,7 @@ def getDeviceInfo():
     Get device information (firmware version, uptime, etc).
     """
     if not device_connected or sdo_client is None:
-        # Return demo data when not connected
-        demo_info = {
-            'connected': False,
-            'serialNumber': 'DEMO-DEVICE',
-            'nodeId': 1,
-            'bitrate': 500000,
-            'uptime': 123456
-        }
-        _send_response('DEVICE-INFO', demo_info)
+        _send_error("Device not connected", 'DEVICE-INFO-ERROR')
         return
     
     try:
@@ -1378,12 +1231,7 @@ def getErrorLog():
     Error times at SDO 0x2001, error codes at 0x2002.
     """
     if not device_connected or sdo_client is None:
-        # Return demo error log when not connected
-        demo_errors = [
-            {'timestamp': '2024-01-15 10:23:45', 'code': 'E001', 'description': 'Demo: Overvoltage warning'},
-            {'timestamp': '2024-01-15 09:12:33', 'code': 'W005', 'description': 'Demo: Temperature high'},
-        ]
-        _send_response('ERROR-LOG', demo_errors)
+        _send_error("Device not connected", 'ERROR-LOG-ERROR')
         return
     
     try:
