@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1768194588,
+  "updated": 1768195159,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -802,7 +802,7 @@
       "filename": "DBE.js",
       "version": [
         0,
-        1,
+        2,
         0
       ],
       "author": "JetPax",

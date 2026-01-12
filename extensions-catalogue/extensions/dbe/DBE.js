@@ -2,7 +2,7 @@
 // {
 //   "name": "DBE",
 //   "id": "dbe",
-//   "version": [0, 1, 0],
+//   "version": [0, 2, 0],
 //   "author": "JetPax",
 //   "description": "Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management systems. Bridges EV battery packs to solar inverters.",
 //   "icon": "battery-charging",
