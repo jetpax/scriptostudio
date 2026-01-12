@@ -35,12 +35,19 @@ jobs:
           --repo-url https://github.com/${{ github.repository }} \
           --branch ${{ github.ref_name }}
     
-    - name: Generate HTML catalogue
+    - name: Generate ScriptOs HTML catalogue
       run: |
         python3 tools/generate_catalogue.py \
           --index ${{ env.OUTPUT_DIR }}/index.json \
           --output ${{ env.OUTPUT_DIR }}/catalogue \
           --scriptos-dir ScriptOs
+    
+    - name: Generate Extensions HTML catalogue
+      run: |
+        python3 tools/generate_extensions_catalogue.py \
+          --index ${{ env.OUTPUT_DIR }}/index.json \
+          --output ${{ env.OUTPUT_DIR }}/extensions-catalogue \
+          --extensions-dir Extensions
     
     - name: Prepare gh-pages
       run: |
@@ -64,25 +71,29 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         
         git add .
-        git commit -m "Update ScriptOs registry from ${{ github.sha }}" || exit 0
+        git commit -m "Update registry from ${{ github.sha }}" || exit 0
         
         git push origin gh-pages
     
-    - name: Output registry URL
+    - name: Output registry URLs
       run: |
         REPO_OWNER=$(echo ${{ github.repository }} | cut -d'/' -f1)
         REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)
         INDEX_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/index.json"
-        CATALOGUE_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/catalogue/"
+        SCRIPTOS_CATALOGUE_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/catalogue/"
+        EXTENSIONS_CATALOGUE_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/extensions-catalogue/"
         
         echo ""
         echo "=========================================="
-        echo "ScriptO Registry Published!"
+        echo "ScriptO Studio Registry Published!"
         echo "=========================================="
         echo ""
         echo "Index URL: ${INDEX_URL}"
-        echo "Catalogue URL: ${CATALOGUE_URL}"
+        echo "ScriptOs Catalogue: ${SCRIPTOS_CATALOGUE_URL}"
+        echo "Extensions Catalogue: ${EXTENSIONS_CATALOGUE_URL}"
         echo ""
         echo "Install ScriptO via URL:"
         echo "  ?install=github:${REPO_OWNER}/${REPO_NAME}/ScriptOs/Name.py"
+        echo ""
+        echo "Install Extension via ScriptO Studio Extensions modal"
         echo ""
