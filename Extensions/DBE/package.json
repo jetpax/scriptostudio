@@ -1,0 +1,7 @@
+{
+  "name": "DBE",
+  "version": "0.1.0",
+  "description": "Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management",
+  "author": "JetPax",
+  "license": "MIT"
+}
