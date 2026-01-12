@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1767980227,
+  "updated": 1768188010,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -796,6 +796,35 @@
     }
   ],
   "extensions": [
+    {
+      "name": "DBE",
+      "id": "dbe",
+      "filename": "DBE.js",
+      "version": [
+        0,
+        1,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management systems. Bridges EV battery packs to solar inverters.",
+      "icon": "battery-charging",
+      "menu": [
+        {
+          "id": "config",
+          "label": "Configuration"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "metrics",
+          "label": "Metrics"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/DBE/DBE.js",
+      "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/DBE/lib"
+    },
     {
       "name": "GVRET",
       "id": "gvret-manager",
