@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1768274301,
+  "updated": 1768279110,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -97,14 +97,14 @@
       "filename": "CAN Speed Test.py",
       "version": [
         1,
-        0,
+        1,
         0
       ],
       "author": "jetpax",
       "description": "Measures CAN bus throughput using loopback mode.\n                         Tests transmission and reception speed with various frame sizes.\n                         Useful for benchmarking CAN performance and validating hardware setup.\n                      ",
-      "category": "Diagnostics",
+      "category": "CAN/TWAI",
       "tags": [
-        "diagnostics"
+        "can/twai"
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax/mpDirect",

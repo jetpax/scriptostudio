@@ -11,8 +11,8 @@ dict(
     info    = dict(
         # ----------------------------------------------------------------------
         name        = 'CAN Speed Test',
-        version     = [1, 0, 0],
-        category    = 'Diagnostics',
+        version     = [1, 1, 0],
+        category    = 'CAN/TWAI',
         description = '''Measures CAN bus throughput using loopback mode.
                          Tests transmission and reception speed with various frame sizes.
                          Useful for benchmarking CAN performance and validating hardware setup.
@@ -24,6 +24,13 @@ dict(
     ),
     
     args    = dict(
+        # ----------------------------------------------------------------------
+        test_mode        = dict( label    = 'Test mode:',
+                                type     = dict,
+                                items    = dict( mode_both = "TX + RX (loopback)",
+                                                mode_tx   = "TX only (no callback)",
+                                                mode_rx   = "RX only (listen)" ),
+                                value    = 'mode_both' ),
         # ----------------------------------------------------------------------
         bitrate          = dict( label    = 'CAN bitrate:',
                                 type     = dict,
@@ -69,6 +76,7 @@ print("="*60)
 print("CAN Speed Test - Loopback Mode")
 print("="*60)
 print(f"Configuration:")
+print(f"  Test mode: {args.test_mode.replace('mode_', '').upper()}")
 print(f"  Bitrate: {bitrate // 1000} kbps")
 print(f"  Duration: {args.test_duration}s")
 print(f"  Frame size: {data_size} bytes")
@@ -94,7 +102,7 @@ print(f"✓ CAN initialized ({bitrate // 1000} kbps, LOOPBACK mode)")
 handle = CAN.register(CAN.TX_ENABLED)
 print(f"✓ Registered client: {handle}")
 
-# Setup RX callback to count frames
+# Setup RX callback to count frames (only if testing RX)
 rx_count = 0
 rx_bytes = 0
 
@@ -103,9 +111,15 @@ def on_rx(frame):
     rx_count += 1
     rx_bytes += len(frame['data'])
 
-CAN.set_rx_callback(handle, on_rx)
+# Set callback based on test mode
+if args.test_mode in ['mode_both', 'mode_rx']:
+    CAN.set_rx_callback(handle, on_rx)
+    print("✓ RX callback enabled")
+else:
+    print("✓ RX callback disabled (TX-only test)")
+
 CAN.activate(handle)
-print("✓ Client activated with RX callback")
+print(f"✓ Client activated")
 
 # Prepare test frame
 test_data = bytes([i & 0xFF for i in range(data_size)])
@@ -122,25 +136,31 @@ errors = 0
 
 end_time = start_time + (args.test_duration * 1000)
 
-while time.ticks_ms() < end_time:
-    frame = {
-        'id': base_id + (tx_count % 256),
-        'data': test_data,
-        'extended': args.use_extended
-    }
-    
-    try:
-        CAN.transmit(handle, frame)
-        tx_count += 1
-        tx_bytes += data_size
-    except Exception as e:
-        errors += 1
-        if errors < 5:  # Only print first few errors
-            print(f"TX error: {e}")
-    
-    # Small delay to prevent overwhelming the queue
-    if tx_count % 100 == 0:
-        time.sleep_ms(1)
+# TX test (if enabled)
+if args.test_mode in ['mode_both', 'mode_tx']:
+    while time.ticks_ms() < end_time:
+        frame = {
+            'id': base_id + (tx_count % 256),
+            'data': test_data,
+            'extended': args.use_extended
+        }
+        
+        try:
+            CAN.transmit(handle, frame)
+            tx_count += 1
+            tx_bytes += data_size
+        except Exception as e:
+            errors += 1
+            if errors < 5:  # Only print first few errors
+                print(f"TX error: {e}")
+        
+        # Small delay to prevent overwhelming the queue
+        if tx_count % 100 == 0:
+            time.sleep_ms(1)
+else:
+    # RX-only mode: just wait for the duration
+    print("RX-only mode: waiting for incoming frames...")
+    time.sleep_ms(args.test_duration * 1000)
 
 # Wait for pending RX
 time.sleep_ms(200)
