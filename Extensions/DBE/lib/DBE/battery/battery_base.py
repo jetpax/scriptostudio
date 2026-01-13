@@ -20,7 +20,7 @@ class BatteryBase:
         """Initialize with CAN manager handle
         
         Args:
-            can_handle: Handle from CAN.can_register()
+            can_handle: Handle from CAN.register()
         """
         self.can_handle = can_handle
         self.battery_data = {
@@ -79,7 +79,7 @@ class BatteryBase:
     def transmit_can(self, current_time_ms):
         """Send keep-alive/control messages via CAN manager
         
-        Uses CAN.can_transmit(self.can_handle, can_id, data)
+        Uses CAN.transmit(self.can_handle, {'id': can_id, 'data': data})
         
         Args:
             current_time_ms: Current time from time.ticks_ms()
@@ -132,4 +132,4 @@ class BatteryBase:
             data = bytes(data)
         
         # Transmit via CAN manager
-        CAN.can_transmit(self.can_handle, can_id, data)
+        CAN.transmit(self.can_handle, {'id': can_id, 'data': data})

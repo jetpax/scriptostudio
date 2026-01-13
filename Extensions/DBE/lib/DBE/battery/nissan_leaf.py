@@ -38,7 +38,7 @@ class NissanLeafBattery(BatteryBase):
         """Initialize Nissan LEAF battery protocol
         
         Args:
-            can_handle: CAN manager handle from CAN.can_register()
+            can_handle: CAN manager handle from CAN.register()
         """
         super().__init__(can_handle)
         

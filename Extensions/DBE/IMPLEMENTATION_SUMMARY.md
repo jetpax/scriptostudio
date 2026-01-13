@@ -148,17 +148,17 @@ lib/DBE/
 **Two-Stage Registration**:
 ```python
 # Stage 1: Register (bus stays STOPPED)
-can_handle = CAN.can_register(needs_tx=True, force_listen_only=False)
+can_handle = CAN.register(CAN.TX_ENABLED)
 
 # Set RX callback
-CAN.can_set_rx_callback(can_handle, battery_rx_callback)
+CAN.set_rx_callback(can_handle, battery_rx_callback)
 
 # Stage 2: Activate (bus starts in NORMAL mode)
-CAN.can_activate(can_handle)
+CAN.activate(can_handle)
 
 # Cleanup
-CAN.can_deactivate(can_handle)
-CAN.can_unregister(can_handle)
+CAN.deactivate(can_handle)
+CAN.unregister(can_handle)
 ```
 
 **Benefits**:
@@ -276,7 +276,7 @@ CAN.can_unregister(can_handle)
 
 **CAN Communication**:
 - C++ direct TWAI driver → Python CAN manager API
-- C++ `transmit_can_frame()` → Python `CAN.can_transmit(handle, id, data)`
+- C++ `transmit_can_frame()` → Python `CAN.transmit(handle, {'id': can_id, 'data': data})`
 - C++ polling loop → Python callback-based RX
 
 **Timing**:

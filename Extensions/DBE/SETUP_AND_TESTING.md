@@ -87,8 +87,8 @@ import CAN
 import time
 
 # Initialize CAN in loopback mode for testing
-can_handle = CAN.can_register(needs_tx=True, force_listen_only=False)
-CAN.can_activate(can_handle)
+can_handle = CAN.register(CAN.TX_ENABLED)
+CAN.activate(can_handle)
 
 # Import battery protocol
 from lib.DBE.battery.nissan_leaf import NissanLeafBattery
@@ -100,11 +100,11 @@ def test_rx_callback(frame):
     print(f"RX: ID=0x{frame['id']:03X}, Data={frame['data'].hex()}")
     battery.handle_incoming_can_frame(frame['id'], frame['data'])
 
-CAN.can_set_rx_callback(can_handle, test_rx_callback)
+CAN.set_rx_callback(can_handle, test_rx_callback)
 
 # Send test frame (0x1DB - voltage/current)
 test_frame = bytes([0x00, 0x00, 0x90, 0x00, 0x00, 0x00, 0x00, 0x00])
-CAN.can_transmit(can_handle, 0x1DB, test_frame)
+CAN.transmit(can_handle, {'id': 0x1DB, 'data': test_frame})
 
 # Check parsed data
 time.sleep(0.1)
@@ -118,7 +118,7 @@ battery.transmit_can(current_time)
 # Should send 0x1F2 message
 
 # Cleanup
-CAN.can_deactivate(can_handle)
+CAN.deactivate(can_handle)
 CAN.can_unregister(can_handle)
 ```
 

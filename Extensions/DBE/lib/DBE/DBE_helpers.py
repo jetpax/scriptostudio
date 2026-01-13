@@ -113,7 +113,7 @@ def startDBE():
         # === CAN Manager Integration ===
         
         # Stage 1: Register with CAN manager (bus stays STOPPED)
-        _dbe_can_handle = CAN.can_register(needs_tx=True, force_listen_only=False)
+        _dbe_can_handle = CAN.register(CAN.TX_ENABLED)
         
         # Initialize battery protocol
         if battery_type == 'nissan_leaf':
@@ -135,10 +135,10 @@ def startDBE():
             except Exception as e:
                 _dbe_status['error'] = f"RX error: {e}"
         
-        CAN.can_set_rx_callback(_dbe_can_handle, battery_rx_callback)
+        CAN.set_rx_callback(_dbe_can_handle, battery_rx_callback)
         
         # Stage 2: Activate client (bus starts in NORMAL mode)
-        CAN.can_activate(_dbe_can_handle)
+        CAN.activate(_dbe_can_handle)
         
         # Initialize inverter protocol
         if inverter_protocol == 'pylon_can':
@@ -207,8 +207,8 @@ def startDBE():
         
         if _dbe_can_handle is not None:
             try:
-                CAN.can_deactivate(_dbe_can_handle)
-                CAN.can_unregister(_dbe_can_handle)
+                CAN.deactivate(_dbe_can_handle)
+                CAN.unregister(_dbe_can_handle)
             except:
                 pass
             _dbe_can_handle = None
@@ -254,7 +254,7 @@ def _dbe_loop():
             # 1. CAN RX handled by CAN manager callback (no polling needed!)
             
             # 2. Send keep-alive to battery (if needed by protocol and not paused)
-            #    Battery protocol uses CAN.can_transmit(handle, id, data)
+            #    Battery protocol uses CAN.transmit(handle, frame_dict)
             if not _dbe_paused:
                 _dbe_battery.transmit_can(current_time_ms)
             
@@ -332,10 +332,10 @@ def stopDBE():
         
         if _dbe_can_handle is not None:
             # Deactivate client (bus may go to LISTEN_ONLY or STOPPED)
-            CAN.can_deactivate(_dbe_can_handle)
+            CAN.deactivate(_dbe_can_handle)
             
             # Unregister client (removes from manager)
-            CAN.can_unregister(_dbe_can_handle)
+            CAN.unregister(_dbe_can_handle)
             
             _dbe_can_handle = None
         

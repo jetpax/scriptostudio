@@ -256,7 +256,7 @@ import CAN
 import time
 
 # Setup
-can_handle = CAN.can_register(needs_tx=True, force_listen_only=False)
+can_handle = CAN.register(CAN.TX_ENABLED)
 from lib.DBE.battery.{battery_name} import {BatteryName}Battery
 battery = {BatteryName}Battery(can_handle)
 battery.setup()
@@ -264,8 +264,8 @@ battery.setup()
 def test_rx(frame):
     battery.handle_incoming_can_frame(frame['id'], frame['data'])
 
-CAN.can_set_rx_callback(can_handle, test_rx)
-CAN.can_activate(can_handle)
+CAN.set_rx_callback(can_handle, test_rx)
+CAN.activate(can_handle)
 
 # Send test frames (from C++ test data or real captures)
 test_frames = [
@@ -274,7 +274,7 @@ test_frames = [
 ]
 
 for can_id, data in test_frames:
-    CAN.can_transmit(can_handle, can_id, data)
+    CAN.transmit(can_handle, {'id': can_id, 'data': data})
     time.sleep(0.01)
 
 # Check parsed data
@@ -287,8 +287,8 @@ current_time = time.ticks_ms()
 battery.transmit_can(current_time)
 
 # Cleanup
-CAN.can_deactivate(can_handle)
-CAN.can_unregister(can_handle)
+CAN.deactivate(can_handle)
+CAN.unregister(can_handle)
 ```
 
 **Integration Test** (real hardware):
