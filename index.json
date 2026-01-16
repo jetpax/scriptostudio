@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1768279110,
+  "updated": 1768540498,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -216,6 +216,24 @@
       "license": "MIT",
       "docs": "https://github.com/jczic",
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/I2C%20Slaves%20Scan.py"
+    },
+    {
+      "name": "Input Demo",
+      "filename": "Input Demo.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "jetpax",
+      "description": "Interactive input demonstration for WebREPL.\n                         This ScriptO demonstrates the input() function working correctly over WebREPL.\n                         It shows various input scenarios including:\n                         - Basic input with prompts\n                         - Input in a loop\n                         - Simple number guessing game",
+      "category": "Demos",
+      "tags": [
+        "demos"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax/scripto-studio",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/Input%20Demo.py"
     },
     {
       "name": "KT403A MP3 Player",
