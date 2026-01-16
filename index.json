@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1768540498,
+  "updated": 1768602857,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -832,6 +832,34 @@
     }
   ],
   "extensions": [
+    {
+      "name": "CCS",
+      "id": "ccs",
+      "filename": "CCS.js",
+      "version": [
+        0,
+        1,
+        0
+      ],
+      "author": "JetPax",
+      "description": "CCS/NACS DC Fast Charging - EVSE emulator for contactor closure",
+      "icon": "⚡",
+      "menu": [
+        {
+          "id": "config",
+          "label": "Configuration"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "v2g",
+          "label": "V2G Session"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/CCS/CCS.js"
+    },
     {
       "name": "DBE",
       "id": "dbe",
