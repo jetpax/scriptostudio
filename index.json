@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1768602857,
+  "updated": 1769286497,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -79,7 +79,7 @@
       "filename": "CAN Loopback Test.py",
       "version": [
         1,
-        1,
+        2,
         0
       ],
       "author": "JetPax",

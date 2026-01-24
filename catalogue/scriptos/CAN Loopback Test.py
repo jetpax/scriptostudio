@@ -9,7 +9,7 @@ dict(
     info    = dict(
         # ----------------------------------------------------------------------
         name        = 'CAN/TWAI Loopback Test',
-        version     = [1, 1, 0],
+        version     = [1, 2, 0],
         category    = 'CAN/TWAI',
         description = 'Test the CAN/TWAI module with internal loopback mode. This test verifies that the CAN module is properly integrated and working. No external hardware is required - the test uses internal loopback mode within the ESP32\'s TWAI controller. Pin configuration is automatically detected from your board definition. For real CAN bus communication with OpenInverter, you\'ll need: A CAN transceiver (SN65HVD230 recommended for 3.3V), 120Ω termination resistors at both ends of the bus, and use mode=NORMAL instead of LOOPBACK.',
         author      = 'JetPax',
@@ -65,7 +65,7 @@ dict(
 
 import CAN
 import time
-from lib.can_helpers import get_can_config
+from lib.sys import board, settings
 
 termWidth=40
 
@@ -73,14 +73,39 @@ print("="*termWidth)
 print("CAN/TWAI Loopback Test")
 print("="*termWidth)
 
-# Map bus selection to index
-bus_map = {'bus0': 0, 'bus1': 1, 'bus2': 2}
-bus_id = bus_map.get(args.can_bus, 0)
+# Check CAN capability
+if not board.has("can"):
+    print("❌ ERROR: This board does not have CAN capability")
+    raise RuntimeError("Board does not have CAN capability")
 
-# Get board-defined CAN configuration
-can_config = get_can_config(bus_id)
-tx_pin = can_config['txPin']
-rx_pin = can_config['rxPin']
+# Map bus selection to bus name in board.json
+# Most boards use "twai", multi-CAN boards (ESP32-P4) use "can0", "can1", "can2"
+bus_names = {
+    'bus0': ["twai", "can0"],  # Try twai first, then can0
+    'bus1': ["can1"],
+    'bus2': ["can2"]
+}
+
+# Find the CAN bus configuration from board definition
+can_bus = None
+bus_label = args.can_bus
+for name in bus_names.get(bus_label, ["twai"]):
+    try:
+        can_bus = board.can(name)
+        break
+    except KeyError:
+        continue
+
+if can_bus is None:
+    print(f"❌ ERROR: No CAN bus '{bus_label}' defined in board configuration")
+    raise RuntimeError(f"Board has no CAN bus for '{bus_label}'")
+
+# Hardware pins from board definition (immutable)
+tx_pin = can_bus.tx
+rx_pin = can_bus.rx
+
+# Get bus ID for CAN constructor (0, 1, or 2)
+bus_id = {'bus0': 0, 'bus1': 1, 'bus2': 2}.get(bus_label, 0)
 
 # Map bitrate IDs to actual values
 bitrate_map = {
@@ -97,7 +122,7 @@ mode_map = {
     'silent': CAN.SILENT
 }
 
-# Get configuration values
+# Get configuration values from args (overrides settings for this test)
 selected_mode = mode_map[args.can_mode]
 selected_bitrate = bitrate_map[args.bitrate]
 mode_name = args.can_mode.upper()
