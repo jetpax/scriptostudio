@@ -46,16 +46,17 @@ handler = webrepl.logHandler(logging.INFO)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-# CAN and OBD2 imports - will be imported when needed
+# CAN and UDS imports - will be imported when needed
+# Note: UDS library provides OBD2Client/OBD2TimeoutError/OBD2AbortError as compatibility aliases
 CAN_AVAILABLE = None
 CAN = None
-OBD2Client = None
-OBD2TimeoutError = None
-OBD2AbortError = None
+UDSClient = None  # Used as OBD2Client alias
+UDSTimeoutError = None
+UDSNegativeResponseError = None
 
 # OVMS CAN connection state
 _ovms_can_dev = None
-_ovms_obd2_client = None
+_ovms_uds_client = None
 _ovms_can_connected = False
 _vehicle_config = None  # Loaded from vehicle.py
 
@@ -193,8 +194,8 @@ def _load_vehicle_config():
 
 def _init_can_for_ovms():
     """Initialize CAN bus for OVMS based on vehicle configuration"""
-    global _ovms_can_dev, _ovms_obd2_client, _ovms_can_connected, CAN, CAN_AVAILABLE
-    global OBD2Client, OBD2TimeoutError, OBD2AbortError, _vehicle_config
+    global _ovms_can_dev, _ovms_uds_client, _ovms_can_connected, CAN, CAN_AVAILABLE
+    global UDSClient, UDSTimeoutError, UDSNegativeResponseError, _vehicle_config
     
     if _ovms_can_connected:
         return True
@@ -215,9 +216,9 @@ def _init_can_for_ovms():
         CAN_AVAILABLE = False
         return False
     
-    # Import OBD2 client
+    # Import UDS client from pyDirect core library (provides OBD2 compatibility)
     try:
-        from obd2_client import OBD2Client, OBD2TimeoutError, OBD2AbortError
+        from lib.uds_client import UDSClient, UDSTimeoutError, UDSNegativeResponseError
     except ImportError:
         # Silent - errors handled by return False
         return False
@@ -249,7 +250,7 @@ def _init_can_for_ovms():
         # Initialize OBD2 client based on vehicle config
         tx_id = _vehicle_config.get('can_tx_id', 0x7DF)
         rx_id = _vehicle_config.get('can_rx_id', 0x7E8)
-        _ovms_obd2_client = OBD2Client(_ovms_can_dev, tx_id=tx_id, rx_id=rx_id, timeout=1.0)
+        _ovms_uds_client = UDSClient(_ovms_can_dev, tx_id=tx_id, rx_id=rx_id, p2_timeout=1000)
         
         _ovms_can_connected = True
         return True
@@ -261,8 +262,8 @@ def _init_can_for_ovms():
 
 def _get_spot_values_direct():
 
-    global _ovms_can_connected, _ovms_obd2_client, _vehicle_config
-    global OBD2TimeoutError, OBD2AbortError
+    global _ovms_can_connected, _ovms_uds_client, _vehicle_config
+    global UDSTimeoutError, UDSNegativeResponseError
     
     # Load vehicle config
     if _vehicle_config is None:
@@ -298,7 +299,7 @@ def _get_spot_values_direct():
                 
                 try:
                     # Send OBD2 request
-                    response_data = _ovms_obd2_client.read_parameter(poll_type, pid)
+                    response_data = _ovms_uds_client.read_obd2_pid(poll_type, pid)
                     
                     # Parse response using vehicle-specific parse function
                     value = parse_func(response_data)
@@ -308,7 +309,7 @@ def _get_spot_values_direct():
                         'unit': metric_config.get('unit', ''),
                         'timestamp': time.time()
                     }
-                except (OBD2TimeoutError, OBD2AbortError) as e:
+                except (UDSTimeoutError, UDSNegativeResponseError) as e:
                     # Skip this value
                     pass
                 except Exception as e:
@@ -1133,7 +1134,7 @@ def stopOVMS():
         except:
             pass
         _ovms_can_dev = None
-        _ovms_obd2_client = None
+        _ovms_uds_client = None
         _ovms_can_connected = False
     
     _ovms_connected = False
