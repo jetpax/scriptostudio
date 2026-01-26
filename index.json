@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1769286497,
+  "updated": 1769456085,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -743,6 +743,42 @@
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UART%20Test.py"
     },
     {
+      "name": "UDS Client Demo",
+      "filename": "UDS Client Demo.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Demonstrates UDS (Unified Diagnostic Services) client for reading data from ECUs.\n                         \n                         Uses ISO 15765-2 (ISO-TP) for transport and ISO 14229 (UDS) for services.\n                         Supports ReadDataByIdentifier (0x22), DiagnosticSessionControl (0x10),\n                         TesterPresent (0x3E), and OBD2 modes for compatibility.\n                         \n                         Configure TX/RX CAN IDs for your ECU. Common configurations:\n                         • Standard OBD2: TX=0x7DF (broadcast), RX=0x7E8\n                         • Physical addressing: TX=0x7E0, RX=0x7E8\n                         • OpenInverter: TX=0x7E0, RX=0x7E8\n                      ",
+      "category": "CAN/TWAI",
+      "tags": [
+        "can/twai"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UDS%20Client%20Demo.py"
+    },
+    {
+      "name": "UDS Server Demo",
+      "filename": "UDS Server Demo.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Demonstrates UDS (Unified Diagnostic Services) server to make your device diagnosable.\n                         \n                         Turns your ESP32/pyDirect device into a diagnosable ECU that responds to UDS requests.\n                         Useful for:\n                         • Custom ECU simulation\n                         • BMS/EVSE diagnostics\n                         • Development and testing\n                         • Learning UDS protocol\n                         \n                         Supports DiagnosticSessionControl (0x10), TesterPresent (0x3E),\n                         ReadDataByIdentifier (0x22), WriteDataByIdentifier (0x2E), \n                         SecurityAccess (0x27), and RoutineControl (0x31).\n                      ",
+      "category": "CAN/TWAI",
+      "tags": [
+        "can/twai"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax",
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/ScriptOs/UDS%20Server%20Demo.py"
+    },
+    {
       "name": "UI Plugin - Hello World",
       "filename": "UI Plugin - Hello World.py",
       "version": [
@@ -892,6 +928,42 @@
       ],
       "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/DBE/DBE.js",
       "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/DBE/lib"
+    },
+    {
+      "name": "DTC",
+      "id": "dtc",
+      "filename": "DTC.js",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Diagnostic Trouble Codes - Read, display, and clear DTCs from vehicle ECUs via UDS/OBD2. Includes 12,000+ code descriptions.",
+      "icon": "alert-triangle",
+      "menu": [
+        {
+          "id": "connection",
+          "label": "Connection"
+        },
+        {
+          "id": "dtcs",
+          "label": "DTCs"
+        },
+        {
+          "id": "readiness",
+          "label": "Readiness"
+        },
+        {
+          "id": "livedata",
+          "label": "Live Data"
+        },
+        {
+          "id": "service",
+          "label": "Service Builder"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scripto-studio-registry/main/Extensions/DTC/DTC.js"
     },
     {
       "name": "GVRET",
