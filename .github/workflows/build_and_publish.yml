@@ -1,12 +1,13 @@
-name: Build and Publish ScriptO Registry
+name: Build ScriptO Registry
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
+    paths:
+      - 'registry/ScriptOs/**'
+      - 'registry/Extensions/**'
+      - 'tools/**'
   workflow_dispatch:
-
-env:
-  OUTPUT_DIR: dist
 
 jobs:
   build:
@@ -28,72 +29,43 @@ jobs:
     - name: Build index.json
       run: |
         python3 tools/build_index.py \
-          --scriptos-dir ScriptOs \
-          --extensions-dir Extensions \
-          --boards-dir Boards \
-          --output ${{ env.OUTPUT_DIR }}/index.json \
+          --scriptos-dir registry/ScriptOs \
+          --extensions-dir registry/Extensions \
+          --output registry/index.json \
           --repo-url https://github.com/${{ github.repository }} \
           --branch ${{ github.ref_name }}
     
     - name: Generate ScriptOs HTML catalogue
       run: |
         python3 tools/generate_catalogue.py \
-          --index ${{ env.OUTPUT_DIR }}/index.json \
-          --output ${{ env.OUTPUT_DIR }}/catalogue \
-          --scriptos-dir ScriptOs
+          --index registry/index.json \
+          --output registry/catalogue \
+          --scriptos-dir registry/ScriptOs
     
     - name: Generate Extensions HTML catalogue
       run: |
         python3 tools/generate_extensions_catalogue.py \
-          --index ${{ env.OUTPUT_DIR }}/index.json \
-          --output ${{ env.OUTPUT_DIR }}/extensions-catalogue \
-          --extensions-dir Extensions
+          --index registry/index.json \
+          --output registry/extensions-catalogue \
+          --extensions-dir registry/Extensions
     
-    - name: Prepare gh-pages
+    - name: Commit updated registry
       run: |
-        if git fetch --depth=1 origin gh-pages; then
-          git worktree add gh-pages gh-pages
-        else
-          echo "Creating gh-pages branch..."
-          git worktree add --force gh-pages HEAD
-          cd gh-pages
-          git switch --orphan gh-pages
-          git rm -rf . || true
-        fi
-    
-    - name: Deploy to gh-pages
-      run: |
-        # Copy generated files to gh-pages
-        cp -r ${{ env.OUTPUT_DIR }}/* gh-pages/
-        
-        cd gh-pages
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         
-        git add .
-        git commit -m "Update registry from ${{ github.sha }}" || exit 0
-        
-        git push origin gh-pages
+        git add registry/index.json registry/catalogue registry/extensions-catalogue
+        git diff --staged --quiet || git commit -m "Build registry from ${{ github.sha }}"
+        git push origin main
     
     - name: Output registry URLs
       run: |
-        REPO_OWNER=$(echo ${{ github.repository }} | cut -d'/' -f1)
-        REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)
-        INDEX_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/index.json"
-        SCRIPTOS_CATALOGUE_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/catalogue/"
-        EXTENSIONS_CATALOGUE_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/extensions-catalogue/"
-        
         echo ""
         echo "=========================================="
-        echo "ScriptO Studio Registry Published!"
+        echo "ScriptO Studio Registry Updated!"
         echo "=========================================="
         echo ""
-        echo "Index URL: ${INDEX_URL}"
-        echo "ScriptOs Catalogue: ${SCRIPTOS_CATALOGUE_URL}"
-        echo "Extensions Catalogue: ${EXTENSIONS_CATALOGUE_URL}"
-        echo ""
-        echo "Install ScriptO via URL:"
-        echo "  ?install=github:${REPO_OWNER}/${REPO_NAME}/ScriptOs/Name.py"
-        echo ""
-        echo "Install Extension via ScriptO Studio Extensions modal"
+        echo "Index: https://scriptostudio.com/registry/index.json"
+        echo "ScriptOs: https://scriptostudio.com/registry/catalogue/"
+        echo "Extensions: https://scriptostudio.com/registry/extensions-catalogue/"
         echo ""
