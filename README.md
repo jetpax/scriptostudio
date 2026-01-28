@@ -14,6 +14,8 @@ Program embedded devices with natural language. No firmware updates required.
 
 ScriptO Studio is a next-generation Integrated Development and Execution Environment (IDEE) for embedded devices running MicroPython.
 
+Describe in natural language what you want your device to do — and watch it happen instantly. Add a temperature sensor, configure CAN bus logging, or build a custom vehicle monitoring system, all without compiling code or flashing firmware. Your changes take effect immediately, and when you disconnect, your device keeps running autonomously.
+
 Delivered as a PWA that runs in any modern browser, ScriptO Studio communicates over a secure link to the device, providing a rich extensible UI that takes no processing power or resources on the device.
 
 ---
@@ -31,13 +33,15 @@ pyDirect provides C-native "fast path" acceleration for performance-critical ope
 | **HTTP/HTTPS** | TLS encryption and WebSocket protocols |
 | **Husarnet VPN** | Zero-config global device connectivity |
 
-Python makes it easy. Native code makes it fast. Best of both worlds.
+Python makes it easy. Native code makes it fast. You get the best of both worlds.
 
 ---
 
 ## ✨ Key Features
 
 ### 🛡️ Fast, Secure Development
+
+![ScriptO Studio Connect](.github/images/connect.png)
 Real-time code execution and debugging with no firmware updates required. Works in all modern browsers, and on iOS and Android as a Progressive Web App.
 
 ### ✏️ Smart Python Editor
@@ -118,12 +122,13 @@ Your device keeps running the Extension autonomously. Access its web UI directly
 
 ## 🌐 The Ecosystem
 
-| Component | What It Does |
-|-----------|--------------|
+| Component | Description |
+|-----------|-------------|
 | **[ScriptO Studio](https://app.scriptostudio.com)** | Web IDE + Extension loader |
-| **[pyDirect](https://github.com/jetpax/pyDirect)** | ESP32 firmware — fast-path C modules |
 | **[Registry](https://registry.scriptostudio.com)** | Catalogue of Extensions and ScriptOs |
+| **[pyDirect](https://github.com/jetpax/pyDirect)** | MicroPython fast-path C modules |
 | **[WebREPL Binary Protocol](https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md)** | IANA-registered sub-protocol |
+| **[MicroPython](https://micropython.org)** | Python for microcontrollers |
 
 ---
 

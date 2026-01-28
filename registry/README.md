@@ -57,4 +57,14 @@ See the main [README](../README.md#-development) for contribution guidelines.
 
 ---
 
+## 🌐 The Ecosystem
+
+| Component | Description |
+|-----------|-------------|
+| **[ScriptO Studio](https://app.scriptostudio.com)** | Web IDE + Extension loader |
+| **[Registry](https://registry.scriptostudio.com)** | Catalogue of Extensions and ScriptOs |
+| **[pyDirect](https://github.com/jetpax/pyDirect)** | MicroPython fast-path C modules |
+| **[MicroPython](https://micropython.org)** | Python for microcontrollers |
+---
+
 **Made with ❤️ for the Embedded Python community**
