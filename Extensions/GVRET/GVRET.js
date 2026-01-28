@@ -132,9 +132,10 @@ class GVRETExtension {
     const s = this.state.gvret
     try {
       const result = await this.device.execute(`
-from lib.can_helpers import ensure_can_initialized, check_can_available, get_can_config, reconfigure_can_bitrate
+from lib.sys import board, settings
 import gvret
 import json
+import twai
 
 # Check if already running
 try:
@@ -145,22 +146,25 @@ try:
         raise ValueError('Not running')
 except:
     # Not running, proceed with start
-    available, reason = check_can_available()
-    if not available:
-        print(json.dumps({'success': False, 'error': f'CAN not available: {reason}'}))
+    # Get CAN pins from board configuration
+    if not board.has('can'):
+        print(json.dumps({'success': False, 'error': 'Board has no CAN capability'}))
     else:
-        can_dev = ensure_can_initialized()
-        if can_dev is None:
-            print(json.dumps({'success': False, 'error': 'Failed to initialize CAN'}))
+        can_bus = board.can('twai')  # or 'can0' depending on board definition
+        if can_bus is None:
+            print(json.dumps({'success': False, 'error': 'CAN bus not defined in board.json'}))
         else:
-            config = get_can_config()
+            tx_pin = can_bus.tx
+            rx_pin = can_bus.rx
+            bitrate = settings.get('can.bitrate', 500000)
             
             def on_bitrate_change(new_bitrate):
-                reconfigure_can_bitrate(new_bitrate)
+                twai.deinit()
+                twai.init(tx=tx_pin, rx=rx_pin, baudrate=new_bitrate)
             
             gvret.set_bitrate_change_callback(on_bitrate_change)
             
-            if gvret.start(config['txPin'], config['rxPin'], config['bitrate']):
+            if gvret.start(tx_pin, rx_pin, bitrate):
                 print(json.dumps({'success': True, 'status': 'started'}))
             else:
                 print(json.dumps({'success': False, 'error': 'gvret.start() returned False'}))

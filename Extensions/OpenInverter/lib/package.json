@@ -1,7 +1,6 @@
 {
   "urls": [
-    ["OI_helpers.py", "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib/OI_helpers.py"],
-    ["canopen_sdo.py", "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib/canopen_sdo.py"]
+    ["OI_helpers.py", "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib/OI_helpers.py"]
   ],
-  "version": "1.99.0"
+  "version": "2.0.0"
 }

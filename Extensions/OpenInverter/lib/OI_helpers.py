@@ -55,8 +55,8 @@ except ImportError:
     CAN = None
 
 # SDO library is guaranteed to be present in extension (same package)
-from canopen_sdo import SDOClient, fixed_to_float, float_to_fixed, param_id_to_sdo
-from canopen_sdo import SDOTimeoutError, SDOAbortError
+from lib.canopen_sdo import SDOClient, fixed_to_float, float_to_fixed, param_id_to_sdo
+from lib.canopen_sdo import SDOTimeoutError, SDOAbortError
 
 # --- Global CAN and Device State ---
 can_dev = None
