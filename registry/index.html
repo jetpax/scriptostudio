@@ -1,11 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=catalogue/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ScriptO Registry</title>
+  <style>
+    :root { --bg: #0f1419; --text: #e6e6e6; --accent: #00d4aa; --card: #1e2836; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--accent); }
+    p { color: #8b949e; margin-bottom: 2rem; }
+    .cards { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .card { background: var(--card); border-radius: 12px; padding: 2rem; text-decoration: none; color: var(--text); border: 1px solid #2d3a4d; transition: all 0.2s; min-width: 200px; text-align: center; }
+    .card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .card .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .card h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .card span { color: #8b949e; font-size: 0.9rem; }
+    .back { margin-top: 2rem; color: #8b949e; text-decoration: none; font-size: 0.9rem; }
+    .back:hover { color: var(--accent); }
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="catalogue/">catalogue</a>...</p>
+  <h1>ScriptO Registry</h1>
+  <p>Browse reusable code for ScriptO Studio</p>
+  <div class="cards">
+    <a href="catalogue/" class="card">
+      <div class="icon">🐍</div>
+      <h2>ScriptOs</h2>
+      <span>Python scripts & automations</span>
+    </a>
+    <a href="extensions-catalogue/" class="card">
+      <div class="icon">🔌</div>
+      <h2>Extensions</h2>
+      <span>Full-featured applications</span>
+    </a>
+  </div>
+  <a href="/" class="back">← Back to ScriptO Studio</a>
 </body>
 </html>
