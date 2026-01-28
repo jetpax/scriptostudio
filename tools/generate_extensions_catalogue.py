@@ -721,9 +721,9 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(description='Generate Extensions HTML catalogue')
-    parser.add_argument('--index', default='index.json', help='Input index.json file')
-    parser.add_argument('--output', default='extensions-catalogue', help='Output directory')
-    parser.add_argument('--extensions-dir', default='Extensions', help='Extensions source directory')
+    parser.add_argument('--index', default='registry/index.json', help='Input index.json file')
+    parser.add_argument('--output', default='registry/extensions-catalogue', help='Output directory')
+    parser.add_argument('--extensions-dir', default='registry/Extensions', help='Extensions source directory')
     
     args = parser.parse_args()
     

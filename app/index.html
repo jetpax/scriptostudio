@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f5f7" id="theme-color-meta">
+    <meta name="description" content="ScriptO Studio - Natural Language Programming for Robots">
+    <link rel="icon" href="/assets/favicon-CmaffBQr.svg" type="image/svg+xml">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/assets/manifest-D3DJsOUO.json">
+    
+    <!-- iOS PWA Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ScriptO">
+    <!-- Note: iOS home screen icons require PNG (SVG not reliably supported for apple-touch-icon) -->
+    <link rel="apple-touch-icon" sizes="192x192" href="/media/icon-192.png">
+    
+    <title>ScriptO Studio - MicroPython WebREPL Editor</title>
+
+    <!-- Styles -->
+    <!-- Note: xterm.css is now imported via vendor.js ES module -->
+    
+    <!-- Note: CodeMirror 6 styles are bundled via JS -->
+
+
+    <!-- Libs ES Module Entry Point -->
+    
+    <script type="text/javascript">
+      // Update theme-color meta tag to match OS theme
+      // Titlebar always follows OS theme (it's a system UI element)
+      const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      function updateThemeColor() {
+        const isDark = systemThemeQuery.matches;
+        
+        // macOS Sequoia native titlebar colors
+        const lightColor = '#f5f5f7';
+        const darkColor = '#2E2732';
+        
+        const color = isDark ? darkColor : lightColor;
+        
+        let meta = document.getElementById('theme-color-meta');
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.name = 'theme-color';
+          meta.id = 'theme-color-meta';
+          document.head.insertBefore(meta, document.head.firstChild);
+        }
+        
+        if (meta.content !== color) {
+          meta.content = color;
+        }
+      }
+      
+      // Update on load
+      updateThemeColor();
+      
+      // Listen for OS theme changes
+      systemThemeQuery.addEventListener('change', updateThemeColor);
+      
+      // Listen for app theme changes (for consistency, though titlebar follows OS)
+      window.addEventListener('theme-changed', updateThemeColor);
+      
+      console.log('%c🚀 ScriptO Studio', 'background: #9b59b6; color: #fff; font-size: 16px; padding: 5px; font-weight: bold;');
+      console.log('Natural Language Programming for Robots');
+
+
+      // Global keyboard shortcuts (Ctrl/Cmd + key)
+      document.addEventListener('keydown', (e) => {
+        const ctrl = e.ctrlKey || e.metaKey;
+        if (ctrl && e.key === 's') {
+          e.preventDefault();
+          if (window.appInstance) window.appInstance.emitter.emit('save');
+        } else if (ctrl && e.key === 'n') {
+          e.preventDefault();
+          if (window.appInstance) window.appInstance.emitter.emit('open-new-file-dialog');
+        } else if (ctrl && e.key === 'r') {
+          e.preventDefault();
+          if (window.appInstance) window.appInstance.emitter.emit('execute');
+        } else if (ctrl && e.shiftKey && e.key === 'c') {
+          e.preventDefault();
+          if (window.appInstance) window.appInstance.emitter.emit('connect');
+        } else if (ctrl && e.key === 'l') {
+          e.preventDefault();
+          if (window.appInstance) window.appInstance.emitter.emit('clear-terminal');
+        }
+      });
+
+      window.launchApp = async (url, fallbackUrl) => {
+        window.open(url || fallbackUrl, '_blank');
+      };
+
+      // Set a default disk navigation root to bypass the folder selection dialog
+      localStorage.setItem('diskNavigationRoot', '/demo-workspace');
+    </script>
+
+    <!-- CodeMirror 6 is bundled via ES modules in editor.js -->
+
+    <!-- 3rd party dependencies -->
+    <!-- Patch canvas getContext to use willReadFrequently before xterm.js loads -->
+    <script>
+      (function() {
+        const originalGetContext = HTMLCanvasElement.prototype.getContext
+        HTMLCanvasElement.prototype.getContext = function(type, attributes) {
+          if (type === '2d') {
+            const opts = attributes || {}
+            opts.willReadFrequently = true
+            return originalGetContext.call(this, type, opts)
+          }
+          return originalGetContext.call(this, type, attributes)
+        }
+      })()
+    </script>
+    
+    <!-- Vendor bundle - provides Component, Terminal, choo, html etc from npm -->
+    <!-- Note: This is a module and is deferred. Views that need these must also be modules -->
+    <!-- or we need to convert them to defer until this loads -->
+    
+    <!-- Icon Sprite (must load before button.js) -->
+    
+    <!-- Elements (these need Component from vendor.js - convert to modules) -->
+
+    <!-- Components (loaded as modules to ensure Component is available) -->
+
+    <!-- System Panels -->
+
+    <!-- Views -->
+
+    
+    <!-- Internationalization translations -->
+    
+    <!-- Stores ES Module Entry Point -->
+    <!-- Panel constants (needed by store.js) -->
+    <script type="text/javascript">
+      window.PANEL_CLOSED = 45
+      window.PANEL_TOO_SMALL = 65
+      window.PANEL_DEFAULT = 320
+    </script>
+
+
+
+    <!-- Application source code (modules to ensure all deps are loaded) -->
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        // Skip service worker in development with self-signed certificates
+        // Service workers require trusted certificates to work properly
+        const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (isDevelopment) {
+          console.log('[Service Worker] Skipped in development mode (self-signed certificate)');
+          // Unregister any existing service workers from previous sessions
+          navigator.serviceWorker.getRegistrations().then((registrations) => {
+            registrations.forEach((registration) => {
+              registration.unregister();
+              console.log('[Service Worker] Unregistered existing service worker');
+            });
+          });
+        } else {
+          // Delay service worker registration until after page is fully loaded
+          // This prevents interference with initial page load
+          window.addEventListener('load', () => {
+            // Small delay to ensure page is completely ready
+            setTimeout(() => {
+              navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                  console.log('[Service Worker] Registered successfully:', registration.scope);
+                  
+                  // Wait for service worker to be ready
+                  return navigator.serviceWorker.ready;
+                })
+                .then((registration) => {
+                  console.log('[Service Worker] Ready and active');
+                  
+                  // Only claim clients after a delay to avoid interfering with initial load
+                  if (registration.active) {
+                    registration.active.postMessage({ type: 'SKIP_WAITING' });
+                  }
+                  
+                  // Check for updates periodically
+                  setInterval(() => {
+                    registration.update();
+                  }, 60000); // Check every minute
+                  
+                  // Listen for beforeinstallprompt event
+                  window.addEventListener('beforeinstallprompt', (e) => {
+                    console.log('[PWA] Install prompt available');
+                    e.preventDefault();
+                    window.deferredPrompt = e;
+                    // You can show a custom install button here if needed
+                  });
+                  
+                  // Listen for app installed event
+                  window.addEventListener('appinstalled', () => {
+                    console.log('[PWA] App installed successfully');
+                    window.deferredPrompt = null;
+                  });
+                })
+                .catch((error) => {
+                  console.error('[Service Worker] Registration failed:', error);
+                });
+            }, 100);
+          });
+        }
+      } else {
+        console.warn('[Service Worker] Not supported in this browser');
+      }
+    </script>
+
+    <script type="module" crossorigin src="/assets/main-BpKHVvze.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-CeCKEaxg.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-CvLOqXLY.js">
+    <link rel="stylesheet" crossorigin href="/assets/vendor-BCSJppCe.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

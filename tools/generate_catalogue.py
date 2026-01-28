@@ -711,9 +711,9 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(description='Generate ScriptOs HTML catalogue')
-    parser.add_argument('--index', default='index.json', help='Input index.json file')
-    parser.add_argument('--output', default='catalogue', help='Output directory')
-    parser.add_argument('--scriptos-dir', default='ScriptOs', help='ScriptOs source directory')
+    parser.add_argument('--index', default='registry/index.json', help='Input index.json file')
+    parser.add_argument('--output', default='registry/catalogue', help='Output directory')
+    parser.add_argument('--scriptos-dir', default='registry/ScriptOs', help='ScriptOs source directory')
     
     args = parser.parse_args()
     

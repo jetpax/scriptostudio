@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScriptO Studio - Program Embedded Devices with Natural Language</title>
+  <meta name="description" content="ScriptO Studio - A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <link rel="icon" href="app/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0f1419;
+      --bg-tertiary: #1a2332;
+      --panel-bg: #1e2836;
+      --border-color: #2d3a4d;
+      --text-primary: #e6e6e6;
+      --text-secondary: #8b949e;
+      --scheme-primary: #00d4aa;
+      --scheme-primary-light: #00ffcc;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: var(--bg-tertiary);
+      position: relative;
+    }
+
+    .hero-logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1.5rem;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--scheme-primary) 0%, var(--scheme-primary-light) 50%, var(--scheme-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: glow 2s ease-in-out infinite alternate;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-tagline {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    @keyframes glow {
+      from { filter: brightness(1) drop-shadow(0 0 5px var(--scheme-primary)); }
+      to { filter: brightness(1.1) drop-shadow(0 0 20px var(--scheme-primary-light)); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* CTA Buttons */
+    .cta-section {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .cta-btn {
+      background: var(--scheme-primary);
+      color: var(--bg-primary);
+      border: none;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 212, 170, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 255, 204, 0.5);
+      background: var(--scheme-primary-light);
+    }
+
+    .cta-btn-secondary {
+      background: var(--panel-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      box-shadow: none;
+    }
+
+    .cta-btn-secondary:hover {
+      border-color: var(--scheme-primary);
+      box-shadow: 0 4px 15px rgba(0, 212, 170, 0.2);
+      background: var(--panel-bg);
+    }
+
+    /* Features Section */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 32px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 600px) {
+      .features { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .features { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .feature-card {
+      background: var(--panel-bg);
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--scheme-primary), var(--scheme-primary-light), var(--scheme-primary));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+      border-color: var(--scheme-primary-light);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-card h3 {
+      color: var(--scheme-primary);
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .feature-card:nth-child(odd) {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .feature-card:nth-child(even) {
+      animation: float 6s ease-in-out infinite reverse;
+    }
+
+    /* Ecosystem Section */
+    .ecosystem {
+      background: var(--bg-tertiary);
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .ecosystem h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--scheme-primary);
+      font-family: 'Orbitron', monospace;
+    }
+
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .ecosystem-item {
+      background: var(--panel-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .ecosystem-item:hover {
+      border-color: var(--scheme-primary);
+      transform: translateY(-4px);
+    }
+
+    .ecosystem-item h4 {
+      color: var(--scheme-primary-light);
+      margin-bottom: 8px;
+    }
+
+    .ecosystem-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--scheme-primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <img src="app/favicon.svg" alt="ScriptO Studio" class="hero-logo">
+    <h1>ScriptO Studio</h1>
+    <p class="hero-tagline">Program embedded devices with natural language. No firmware updates required.</p>
+    <div class="cta-section">
+      <a href="/app/" class="cta-btn">🚀 Launch Studio</a>
+      <a href="https://github.com/jetpax/scriptostudio" class="cta-btn cta-btn-secondary">View on GitHub</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>🛡️ Fast, Secure Development</h3>
+      <p>Real-time code execution and debugging with no firmware updates required. Works in modern browsers and as an installable PWA on iOS and Android.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>✏️ Smart Python Editor</h3>
+      <p>Agentic code editor for MicroPython with syntax highlighting and seamless deployment. Describe what you want and the AI agent does the rest.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>🧩 ScriptO Automations</h3>
+      <p>Reusable Script Objects that combine code with contextual configuration. Choose from a library of ScriptOs or create your own.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>📦 System Extensions</h3>
+      <p>Add major features at the touch of a button. Load GVRET, OVMS, OpenInverter, or Dala's Battery Emulator — or create your own.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>⚙️ Device Management</h3>
+      <p>Connect and manage devices, configure board settings, manage files, and network settings. Access devices anywhere via secure P2P VPN.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>🐞 Visual Debugger</h3>
+      <p>Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics.</p>
+    </div>
+  </section>
+
+  <section class="ecosystem">
+    <h2>The Ecosystem</h2>
+    <div class="ecosystem-grid">
+      <a href="/app/" class="ecosystem-item">
+        <h4>ScriptO Studio</h4>
+        <p>Web IDE + Extension loader</p>
+      </a>
+      <a href="https://github.com/jetpax/pyDirect" class="ecosystem-item">
+        <h4>pyDirect</h4>
+        <p>MicroPython firmware with fast-path C modules</p>
+      </a>
+      <a href="/registry/" class="ecosystem-item">
+        <h4>Registry</h4>
+        <p>Cloud catalogue of Extensions and ScriptOs</p>
+      </a>
+      <a href="https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md" class="ecosystem-item">
+        <h4>WebREPL Protocol</h4>
+        <p>IANA-registered binary sub-protocol</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="/docs/">Documentation</a>
+      <a href="/registry/">Registry</a>
+      <a href="https://github.com/jetpax/pyDirect">pyDirect</a>
+    </div>
+    <p>Made with ❤️ for the Embedded Python community</p>
+  </footer>
+</body>
+</html>

@@ -9,7 +9,7 @@ __pycache__/
 # Test files
 test-index.json
 test-catalogue/
-dist/
+dist/  # Legacy - use app/ for Studio builds
 
 # OS
 .DS_Store
