@@ -14,7 +14,7 @@
 //     { "id": "livedata", "label": "Live Data" },
 //     { "id": "service", "label": "Service Builder" }
 //   ],
-//   "styles": ".dtc-panel { padding: 16px; } .dtc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; } .dtc-summary { display: flex; gap: 16px; margin-bottom: 12px; font-size: 14px; } .dtc-summary-item { display: flex; align-items: center; gap: 4px; } .dtc-active { color: #ef4444; } .dtc-history { color: #6b7280; } .dtc-pending { color: #f59e0b; } .dtc-table { width: 100%; border-collapse: collapse; font-size: 14px; } .dtc-table th { text-align: left; padding: 8px 12px; background: var(--bg-secondary); border-bottom: 2px solid var(--border-color); font-weight: 600; } .dtc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); } .dtc-table tr:hover { background: var(--bg-tertiary); cursor: pointer; } .dtc-table tr.expanded { background: var(--bg-tertiary); } .dtc-status { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; } .dtc-status.active { background: #fef2f2; color: #ef4444; } .dtc-status.history { background: #f3f4f6; color: #6b7280; } .dtc-status.pending { background: #fffbeb; color: #f59e0b; } .dtc-details { padding: 16px; background: var(--bg-secondary); border-radius: 8px; margin: 8px 0; } .dtc-details-grid { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 13px; } .dtc-details-label { font-weight: 600; color: var(--text-secondary); } .dtc-freeze-frame { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); } .dtc-button { padding: 8px 16px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .dtc-button.primary { background: var(--scheme-primary); color: white; } .dtc-button.primary:hover { opacity: 0.9; } .dtc-button.danger { background: #ef4444; color: white; } .dtc-button.danger:hover { background: #dc2626; } .dtc-button:disabled { opacity: 0.5; cursor: not-allowed; } .dtc-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; } .dtc-field label { font-size: 13px; font-weight: 600; } .dtc-field input, .dtc-field select { padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--input-bg); font-size: 14px; } .dtc-monitor { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-color); } .dtc-monitor-status { font-size: 18px; } .dtc-monitor-name { flex: 1; font-weight: 500; } .dtc-monitor-info { color: var(--text-secondary); font-size: 13px; } .dtc-live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; } .dtc-live-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; } .dtc-live-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; } .dtc-live-value { font-size: 24px; font-weight: 700; font-family: monospace; } .dtc-live-unit { font-size: 12px; color: var(--text-secondary); } .dtc-empty { text-align: center; padding: 48px; color: var(--text-secondary); } .dtc-empty-icon { font-size: 48px; margin-bottom: 16px; }"
+//   "styles": ".dtc-panel { padding: 16px; } .dtc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; } .dtc-summary { display: flex; gap: 16px; margin-bottom: 12px; font-size: 14px; } .dtc-summary-item { display: flex; align-items: center; gap: 4px; } .dtc-active { color: #ef4444; } .dtc-history { color: #6b7280; } .dtc-pending { color: #f59e0b; } .dtc-table { width: 100%; border-collapse: collapse; font-size: 14px; } .dtc-table th { text-align: left; padding: 8px 12px; background: var(--bg-secondary); border-bottom: 2px solid var(--border-color); font-weight: 600; } .dtc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); } .dtc-table tr:hover { background: var(--bg-tertiary); cursor: pointer; } .dtc-table tr.expanded { background: var(--bg-tertiary); } .dtc-status { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; } .dtc-status.active { background: #fef2f2; color: #ef4444; } .dtc-status.history { background: #f3f4f6; color: #6b7280; } .dtc-status.pending { background: #fffbeb; color: #f59e0b; } .dtc-details { padding: 16px; background: var(--bg-secondary); border-radius: 8px; margin: 8px 0; } .dtc-details-grid { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 13px; } .dtc-details-label { font-weight: 600; color: var(--text-secondary); } .dtc-freeze-frame { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); } .dtc-button { padding: 8px 16px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .dtc-button.primary { background: var(--scheme-primary); color: white; } .dtc-button.primary:hover { opacity: 0.9; } .dtc-button.danger { background: #ef4444; color: white; } .dtc-button.danger:hover { background: #dc2626; } .dtc-button:disabled { opacity: 0.5; cursor: not-allowed; } .dtc-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; } .dtc-field label { font-size: 13px; font-weight: 600; } .dtc-field input, .dtc-field select { padding: 8px 12px; color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 6px; background: var(--input-bg); font-size: 14px; } .dtc-monitor { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-color); } .dtc-monitor-status { font-size: 18px; } .dtc-monitor-name { flex: 1; font-weight: 500; } .dtc-monitor-info { color: var(--text-secondary); font-size: 13px; } .dtc-live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; } .dtc-live-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; } .dtc-live-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; } .dtc-live-value { font-size: 24px; font-weight: 700; font-family: monospace; } .dtc-live-unit { font-size: 12px; color: var(--text-secondary); } .dtc-empty { text-align: center; padding: 48px; color: var(--text-secondary); } .dtc-empty-icon { font-size: 48px; margin-bottom: 16px; }"
 // }
 // === END_EXTENSION_CONFIG ===
 
@@ -30,13 +30,11 @@ class DTCExtension {
     // Initialize state
     if (!state.dtc) {
       state.dtc = {
-        connection: {
-          txId: '7E0',
-          rxId: '7E8',
-          bitrate: 500000,
-          mode: 'loopback',
-          connected: false
-        },
+        // UDS addressing (OBD2 default)
+        txId: '7DF',  // Functional broadcast
+        rxId: '7E8',  // ECU response
+        // CAN config is loaded from device /config/can.json
+        canConfig: null,
         dtcs: [],
         readiness: [],
         liveData: {},
@@ -127,32 +125,44 @@ class DTCExtension {
     try {
       await this.loadDtcDatabase()
 
-      const { txId, rxId, bitrate, mode } = this.state.dtc.connection
-      const txIdNum = parseInt(txId, 16)
-      const rxIdNum = parseInt(rxId, 16)
+      const { txId, rxId } = this.state.dtc
 
-      // Execute on device
+      // Execute on device - pins from board.json, bitrate from settings
       const code = `
-import CAN
+from lib.sys import settings
 from lib.sys import board
 from lib.uds_client import UDSClient, UDSTimeoutError, UDSNegativeResponseError
 
-can_bus = board.can("twai")
-can = CAN(0, tx=can_bus.tx, rx=can_bus.rx, mode=CAN.${mode.toUpperCase()}, bitrate=${bitrate})
-client = UDSClient(can, tx_id=0x${txId}, rx_id=0x${rxId}, p2_timeout=2000)
-
+# Hardware pins from board.json
 try:
-    # Read DTCs by status mask (0xFF = all)
-    response = client.read_dtc_information(0x02, 0xFF)
-    print(response.hex() if response else '')
-except UDSTimeoutError:
-    print('TIMEOUT')
-except UDSNegativeResponseError as e:
-    print(f'NRC:{e.nrc:02X}')
-except Exception as e:
-    print(f'ERROR:{e}')
-finally:
-    can.deinit()
+    can_bus = board.can("can0")
+    tx_pin = can_bus.tx
+    rx_pin = can_bus.rx
+except:
+    tx_pin = None
+    rx_pin = None
+
+bitrate = settings.get("can.bitrate", 500000)
+
+if tx_pin is None or rx_pin is None:
+    print('ERROR:CAN not configured in board.json')
+else:
+    import CAN
+    can = CAN(0, tx=tx_pin, rx=rx_pin, mode=CAN.NORMAL, bitrate=bitrate)
+    client = UDSClient(can, tx_id=0x${txId}, rx_id=0x${rxId}, p2_timeout=2000)
+
+    try:
+        # Read DTCs by status mask (0xFF = all)
+        response = client.read_dtc_information(0x02, 0xFF)
+        print(response.hex() if response else '')
+    except UDSTimeoutError:
+        print('TIMEOUT')
+    except UDSNegativeResponseError as e:
+        print(f'NRC:{e.nrc:02X}')
+    except Exception as e:
+        print(f'ERROR:{e}')
+    finally:
+        can.deinit()
 `
 
       const result = await this.device.execute(code)
@@ -214,28 +224,42 @@ finally:
     this.emit('render')
 
     try {
-      const { txId, rxId, bitrate, mode } = this.state.dtc.connection
+      const { txId, rxId } = this.state.dtc
 
       const code = `
-import CAN
+from lib.sys import settings
 from lib.sys import board
 from lib.uds_client import UDSClient, UDSTimeoutError, UDSNegativeResponseError
 
-can_bus = board.can("twai")
-can = CAN(0, tx=can_bus.tx, rx=can_bus.rx, mode=CAN.${mode.toUpperCase()}, bitrate=${bitrate})
-client = UDSClient(can, tx_id=0x${txId}, rx_id=0x${rxId}, p2_timeout=2000)
-
+# Hardware pins from board.json
 try:
-    response = client.clear_diagnostic_information(0xFFFFFF)
-    print('OK')
-except UDSTimeoutError:
-    print('TIMEOUT')
-except UDSNegativeResponseError as e:
-    print(f'NRC:{e.nrc:02X}')
-except Exception as e:
-    print(f'ERROR:{e}')
-finally:
-    can.deinit()
+    can_bus = board.can("can0")
+    tx_pin = can_bus.tx
+    rx_pin = can_bus.rx
+except:
+    tx_pin = None
+    rx_pin = None
+
+bitrate = settings.get("can.bitrate", 500000)
+
+if tx_pin is None or rx_pin is None:
+    print('ERROR:CAN not configured in board.json')
+else:
+    import CAN
+    can = CAN(0, tx=tx_pin, rx=rx_pin, mode=CAN.NORMAL, bitrate=bitrate)
+    client = UDSClient(can, tx_id=0x${txId}, rx_id=0x${rxId}, p2_timeout=2000)
+
+    try:
+        response = client.clear_diagnostic_information(0xFFFFFF)
+        print('OK')
+    except UDSTimeoutError:
+        print('TIMEOUT')
+    except UDSNegativeResponseError as e:
+        print(f'NRC:{e.nrc:02X}')
+    except Exception as e:
+        print(f'ERROR:{e}')
+    finally:
+        can.deinit()
 `
 
       const result = await this.device.execute(code)
@@ -261,41 +285,82 @@ finally:
 
   // === Panel Renderers ===
 
+  async loadCanConfig() {
+    try {
+      // Pins come from board.json (immutable hardware), prefs from settings (user choice)
+      const code = `
+from lib.sys import settings
+from lib.sys import board
+import json
+
+# Hardware pins from board.json
+try:
+    can_bus = board.can("can0")
+    tx_pin = can_bus.tx
+    rx_pin = can_bus.rx
+except:
+    tx_pin = None
+    rx_pin = None
+
+# User preferences from settings
+config = {
+    'txPin': tx_pin,
+    'rxPin': rx_pin,
+    'bitrate': settings.get("can.bitrate", 500000),
+    'enabled': settings.get("can.enabled", False)
+}
+print(json.dumps(config))
+`
+      const config = await this.device.execute(code)
+      if (config) {
+        this.state.dtc.canConfig = config
+        this.emit('render')
+      }
+    } catch (e) {
+      console.error('[DTC] Failed to load CAN config:', e)
+      // Set empty config so we don't keep retrying
+      this.state.dtc.canConfig = { enabled: false, bitrate: 500000 }
+    }
+  }
+
+  navigateToCan() {
+    // Emit event to navigate to Networks > CAN panel
+    // This works because Scripto Studio exposes emit() which forwards to the store emitter
+    if (typeof window !== 'undefined' && window.app && window.app.emitter) {
+      window.app.emitter.emit('change-network-panel', 'can')
+    } else {
+      // Fallback: try using the emit function
+      this.emit('change-network-panel', 'can')
+    }
+  }
+
   renderConnection() {
-    const { connection } = this.state.dtc
+    const { txId, rxId, canConfig } = this.state.dtc
+    
+    // Load CAN config if not already loaded
+    if (!canConfig) {
+      this.loadCanConfig()
+    }
+
+    const bitrateKbps = canConfig?.bitrate ? (canConfig.bitrate / 1000) : '?'
+    const enabled = canConfig?.enabled ? '✅ Enabled' : '⚠️ Disabled'
+    const hasPins = canConfig?.txPin != null && canConfig?.rxPin != null
+    const pins = hasPins ? `TX:GPIO${canConfig.txPin} RX:GPIO${canConfig.rxPin}` : '⚠️ Pins not configured'
+
     return this.html`
       <div class="dtc-panel">
-        <h3>CAN Connection</h3>
+        <h3>UDS Addressing</h3>
         
         <div class="dtc-field">
           <label>TX CAN ID (hex)</label>
-          <input type="text" value="${connection.txId}" 
-            onchange=${e => { connection.txId = e.target.value; this.emit('render') }} />
+          <input type="text" value="${txId}" 
+            onchange=${e => { this.state.dtc.txId = e.target.value; this.emit('render') }} />
         </div>
 
         <div class="dtc-field">
           <label>RX CAN ID (hex)</label>
-          <input type="text" value="${connection.rxId}"
-            onchange=${e => { connection.rxId = e.target.value; this.emit('render') }} />
-        </div>
-
-        <div class="dtc-field">
-          <label>Bitrate</label>
-          <select value="${connection.bitrate}"
-            onchange=${e => { connection.bitrate = parseInt(e.target.value); this.emit('render') }}>
-            <option value="250000" selected=${connection.bitrate === 250000}>250 kbps</option>
-            <option value="500000" selected=${connection.bitrate === 500000}>500 kbps</option>
-            <option value="1000000" selected=${connection.bitrate === 1000000}>1 Mbps</option>
-          </select>
-        </div>
-
-        <div class="dtc-field">
-          <label>Mode</label>
-          <select value="${connection.mode}"
-            onchange=${e => { connection.mode = e.target.value; this.emit('render') }}>
-            <option value="loopback" selected=${connection.mode === 'loopback'}>Loopback (test)</option>
-            <option value="normal" selected=${connection.mode === 'normal'}>Normal (real ECU)</option>
-          </select>
+          <input type="text" value="${rxId}"
+            onchange=${e => { this.state.dtc.rxId = e.target.value; this.emit('render') }} />
         </div>
 
         <p style="font-size: 13px; color: var(--text-secondary); margin-top: 16px;">
@@ -303,6 +368,19 @@ finally:
           • OBD2 Broadcast: TX=7DF, RX=7E8<br/>
           • Physical ECU: TX=7E0, RX=7E8
         </p>
+
+        <div style="margin-top: 24px; padding: 12px; background: var(--bg-secondary); border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+             onclick=${() => this.navigateToCan()}
+             onmouseover=${e => e.currentTarget.style.background = 'var(--bg-tertiary)'}
+             onmouseout=${e => e.currentTarget.style.background = 'var(--bg-secondary)'}>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>CAN Bus Configuration</strong>
+            <span style="font-size: 12px; color: var(--scheme-primary);">→ Open</span>
+          </div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">
+            ${enabled} • ${bitrateKbps} kbps • ${pins}
+          </div>
+        </div>
       </div>
     `
   }
@@ -490,9 +568,14 @@ finally:
       case 'connection': return this.renderConnection()
       case 'dtcs': return this.renderDtcs()
       case 'readiness': return this.renderReadiness()
-      case 'livedata': return this.renderLiveData()
+      case 'livedata': return this.renderLivedata()
       case 'service': return this.renderService()
       default: return this.html`<div>Unknown panel: ${panelId}</div>`
     }
+  }
+
+  // Alias for livedata panel (Scripto Studio looks for renderLivedata)
+  renderLivedata() {
+    return this.renderLiveData()
   }
 }

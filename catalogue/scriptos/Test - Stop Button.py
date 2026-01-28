@@ -47,14 +47,16 @@ if args.enable_logging:
     import logging
     
     # Try to import webrepl module (works with both WebSocket and WebRTC)
+    # NOTE: Import order matters! webrepl_binary handles WebSocket, webrepl_rtc handles WebRTC.
+    # Try binary first since WebSocket is more common.
     webrepl = None
     try:
-        import webrepl_rtc as webrepl
+        import webrepl_binary as webrepl
     except ImportError:
         try:
-            import webrepl_binary as webrepl
+            import webrepl_rtc as webrepl
         except ImportError:
-            print("ERROR: Neither webrepl_rtc nor webrepl_binary available")
+            print("ERROR: Neither webrepl_binary nor webrepl_rtc available")
             webrepl = None
     
     if webrepl is None or not hasattr(webrepl, 'logHandler'):
