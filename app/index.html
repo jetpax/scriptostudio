@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ScriptO">
     <!-- Note: iOS home screen icons require PNG (SVG not reliably supported for apple-touch-icon) -->
-    <link rel="apple-touch-icon" sizes="192x192" href="/app/media/icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="media/icon-192.png">
     
     <title>ScriptO Studio - MicroPython WebREPL Editor</title>
 
@@ -164,7 +164,7 @@
           window.addEventListener('load', () => {
             // Small delay to ensure page is completely ready
             setTimeout(() => {
-              navigator.serviceWorker.register('/sw.js')
+              navigator.serviceWorker.register('sw.js')
                 .then((registration) => {
                   console.log('[Service Worker] Registered successfully:', registration.scope);
                   
