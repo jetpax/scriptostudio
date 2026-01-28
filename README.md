@@ -24,14 +24,18 @@ Delivered as a PWA that runs in any modern browser, ScriptO Studio communicates 
 
 That's where **[pyDirect](https://github.com/jetpax/pyDirect)** comes in.
 
-pyDirect provides C-native "fast path" acceleration for performance-critical operations. Python handles the application logic, while time-sensitive protocols run at native speed:
+pyDirect provides native C "fast path" accelerators for performance-critical operations. Python handles the application logic, while time-sensitive protocols run at native speed:
 
-| Fast Path | What It Accelerates |
-|-----------|---------------------|
-| **CAN/GVRET** | 1Mbps CAN bus with SavvyCAN-compatible logging |
-| **WebRTC** | Real-time P2P communication with NAT traversal |
-| **HTTP/HTTPS** | TLS encryption and WebSocket protocols |
-| **Husarnet VPN** | Zero-config global device connectivity |
+| |Fast Path | What It Accelerates |
+|---|-----------|---------------------|
+| ✅| **HTTP/HTTPS** | TLS encryption and SecureWebSocket protocols |
+| ✅| **WebREPL** | Secure Binary WebREPL over WebRTC/wss |
+| ✅| **Husarnet VPN** | Zero-config global peer-to-peer device connectivity |
+| ✅| **USBmodem** | USB modem connectivity for 4G/5G networks|
+| ✅| **PLC** | DIN 70121 and SLAC protocol responder for CCS/NACS vehicle communication |
+| ✅| **CAN** | Multi user CAN bus manager |
+| ✅| **WebRTC** | Real-time P2P communication with NAT traversal |
+| ✅| **GVRET** | Direct CAN <> Wifi bridge |
 
 Python makes it easy. Native code makes it fast. You get the best of both worlds.
 
@@ -41,28 +45,28 @@ Python makes it easy. Native code makes it fast. You get the best of both worlds
 
 ### 🛡️ Fast, Secure Development
 
+All device acces is through hw accelerated TLS and WebRTC, so it's fast and secure.
 ![ScriptO Studio Connect](.github/images/connect.png)
-Real-time code execution and debugging with no firmware updates required. Works in all modern browsers, and on iOS and Android as a Progressive Web App.
 
 ### ✏️ Smart Python Editor
+
+Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. Just describe what you want, and the AI agent does the rest.
 ![ScriptO Studio AI](.github/images/AI.png)
 
-Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. Just describe what you want, and the AI agent does the rest.
-
 ### 🧩 ScriptO Automations
-![ScriptO Studio ScriptO](.github/images/scripto.png)
 
 Script Objects are the ultimate device customization tool. Choose from a [library of ScriptOs](https://registry.scriptostudio.com/catalogue/) to get started, or create your own with the Smart Editor.
+![ScriptO Studio ScriptO](.github/images/scripto.png)
 
 ### 📦 System Extensions
-![ScriptO Studio OI](.github/images/OI.png)
 
 Add major new features at the touch of a button. Load [Extensions](https://registry.scriptostudio.com/extensions-catalogue/) like **OVMS**, **OpenInverter**, **GVRET**, or **Dala's Battery Emulator**.
+![ScriptO Studio OI](.github/images/OI.png)
 
 ### ⚙️ Device Management
-![ScriptO SysInfo](.github/images/sysinfo.png)
 
 Connect and manage devices, configure board settings, manage files, and network settings. Access your devices from anywhere over a secure P2P VPN.
+![ScriptO SysInfo](.github/images/sysinfo.png)
 
 ### 🐞 Visual Debugger
 Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics.
