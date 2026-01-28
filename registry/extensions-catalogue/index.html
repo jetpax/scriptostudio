@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extensions Catalogue - ScriptO Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #1f1f1f;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #008184 0%, #00a8ab 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            margin-bottom: 1rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #008184;
+        }
+        
+        .stats {
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .extensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .extension-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .extension-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .extension-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .extension-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        .extension-title {
+            flex: 1;
+        }
+        
+        .extension-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #008184;
+            margin-bottom: 0.25rem;
+        }
+        
+        .extension-author {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .extension-description {
+            color: #444;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            min-height: 3em;
+        }
+        
+        .extension-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #666;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .extension-version {
+            font-weight: 600;
+            color: #008184;
+        }
+        
+        .extension-has-lib {
+            background: #e8f5f5;
+            color: #008184;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            margin-top: 3rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .extensions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔌 Extensions Catalogue</h1>
+        <p>Full-featured applications for ScriptO Studio</p>
+    </div>
+    
+    <div class="container">
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search extensions by name, description, or author...">
+            </div>
+            <div class="stats" id="stats">
+                Showing <span id="count">6</span> of 6 Extensions
+            </div>
+        </div>
+        
+        <div class="extensions-grid" id="extensions-grid">
+            <a href="extensions/ccs.html" class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-icon">🔌</div>
+                    <div class="extension-title">
+                        <div class="extension-name">CCS</div>
+                        <div class="extension-author">by JetPax</div>
+                    </div>
+                </div>
+                <div class="extension-description">
+                    CCS/NACS DC Fast Charging - EVSE emulator for contactor closure
+                </div>
+                <div class="extension-meta">
+                    <span class="extension-version">v0.1.0</span>
+                    
+                </div>
+            </a>
+            <a href="extensions/dbe.html" class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-icon">🔌</div>
+                    <div class="extension-title">
+                        <div class="extension-name">DBE</div>
+                        <div class="extension-author">by JetPax</div>
+                    </div>
+                </div>
+                <div class="extension-description">
+                    Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management systems. Bridges EV battery packs to solar inverters.
+                </div>
+                <div class="extension-meta">
+                    <span class="extension-version">v0.2.2</span>
+                    <span class="extension-has-lib">📦 Device Library</span>
+                </div>
+            </a>
+            <a href="extensions/dtc.html" class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-icon">🔌</div>
+                    <div class="extension-title">
+                        <div class="extension-name">DTC</div>
+                        <div class="extension-author">by JetPax</div>
+                    </div>
+                </div>
+                <div class="extension-description">
+                    Diagnostic Trouble Codes - Read, display, and clear DTCs from vehicle ECUs via UDS/OBD2. Includes 12,000+ code descriptions.
+                </div>
+                <div class="extension-meta">
+                    <span class="extension-version">v1.0.0</span>
+                    
+                </div>
+            </a>
+            <a href="extensions/gvret-manager.html" class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-icon">🔌</div>
+                    <div class="extension-title">
+                        <div class="extension-name">GVRET</div>
+                        <div class="extension-author">by JetPax</div>
+                    </div>
+                </div>
+                <div class="extension-description">
+                    High-performance GVRET implementation for MicroPython. Enables SavvyCAN connection over TCP/IP (mpDirect) for vehicle network analysis.
+                </div>
+                <div class="extension-meta">
+                    <span class="extension-version">v1.3.0</span>
+                    
+                </div>
+            </a>
+            <a href="extensions/ovms.html" class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-icon">🔌</div>
+                    <div class="extension-title">
+                        <div class="extension-name">OVMS</div>
+                        <div class="extension-author">by JetPax</div>
+                    </div>
+                </div>
+                <div class="extension-description">
+                    Pushes vehicle metrics to an OVMS v2 server for remote monitoring.
+                </div>
+                <div class="extension-meta">
+                    <span class="extension-version">v0.8.1</span>
+                    <span class="extension-has-lib">📦 Device Library</span>
+                </div>
+            </a>
+            <a href="extensions/openinverter.html" class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-icon">🔌</div>
+                    <div class="extension-title">
+                        <div class="extension-name">OpenInverter</div>
+                        <div class="extension-author">by JetPax</div>
+                    </div>
+                </div>
+                <div class="extension-description">
+                    Complete OpenInverter suite. Configure parameters, map CAN messages, view spot values, and plot real-time signals from OpenInverter motor controllers.
+                </div>
+                <div class="extension-meta">
+                    <span class="extension-version">v1.99.0</span>
+                    <span class="extension-has-lib">📦 Device Library</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="no-results" id="no-results" style="display: none;">
+            No extensions found matching your search.
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Last updated: 2026-01-28 09:22:55 UTC</p>
+        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #008184;">View on GitHub</a> | 
+           <a href="../catalogue/" style="color: #008184;">Browse ScriptOs</a></p>
+    </div>
+    
+    <script>
+        const extensions = [{"name": "CCS", "id": "ccs", "filename": "CCS.js", "version": [0, 1, 0], "author": "JetPax", "description": "CCS/NACS DC Fast Charging - EVSE emulator for contactor closure", "icon": "\u26a1", "menu": [{"id": "config", "label": "Configuration"}, {"id": "status", "label": "Status"}, {"id": "v2g", "label": "V2G Session"}], "url": "/registry/Extensions/CCS/CCS.js"}, {"name": "DBE", "id": "dbe", "filename": "DBE.js", "version": [0, 2, 2], "author": "JetPax", "description": "Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management systems. Bridges EV battery packs to solar inverters.", "icon": "battery-charging", "menu": [{"id": "config", "label": "Configuration"}, {"id": "status", "label": "Status"}, {"id": "metrics", "label": "Metrics"}, {"id": "mqtt", "label": "MQTT"}], "url": "/registry/Extensions/DBE/DBE.js", "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/DBE/lib"}, {"name": "DTC", "id": "dtc", "filename": "DTC.js", "version": [1, 0, 0], "author": "JetPax", "description": "Diagnostic Trouble Codes - Read, display, and clear DTCs from vehicle ECUs via UDS/OBD2. Includes 12,000+ code descriptions.", "icon": "alert-triangle", "menu": [{"id": "connection", "label": "Connection"}, {"id": "dtcs", "label": "DTCs"}, {"id": "readiness", "label": "Readiness"}, {"id": "livedata", "label": "Live Data"}, {"id": "service", "label": "Service Builder"}], "url": "/registry/Extensions/DTC/DTC.js"}, {"name": "GVRET", "id": "gvret-manager", "filename": "GVRET.js", "version": [1, 3, 0], "author": "JetPax", "description": "High-performance GVRET implementation for MicroPython. Enables SavvyCAN connection over TCP/IP (mpDirect) for vehicle network analysis.", "icon": "radio", "menu": [{"id": "connection", "label": "Connection"}, {"id": "filters", "label": "Filters"}], "url": "/registry/Extensions/GVRET/GVRET.js"}, {"name": "OVMS", "id": "ovms", "filename": "OVMS.js", "version": [0, 8, 1], "author": "JetPax", "description": "Pushes vehicle metrics to an OVMS v2 server for remote monitoring.", "icon": "cloud", "menu": [{"id": "config", "label": "Configuration"}, {"id": "metrics", "label": "Metrics"}, {"id": "status", "label": "Status"}], "url": "/registry/Extensions/OVMS/OVMS.js", "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib"}, {"name": "OpenInverter", "id": "openinverter", "filename": "OpenInverter.js", "version": [1, 99, 0], "author": "JetPax", "description": "Complete OpenInverter suite. Configure parameters, map CAN messages, view spot values, and plot real-time signals from OpenInverter motor controllers.", "icon": "sliders", "menu": [{"id": "deviceselector", "label": "Device Manager"}], "url": "/registry/Extensions/OpenInverter/OpenInverter.js", "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib"}];
+        
+        const searchInput = document.getElementById('search-input');
+        const grid = document.getElementById('extensions-grid');
+        const noResults = document.getElementById('no-results');
+        const statsCount = document.getElementById('count');
+        
+        let searchQuery = '';
+        
+        function formatVersion(version) {
+            if (Array.isArray(version)) {
+                return version.join('.');
+            }
+            return version || '1.0.0';
+        }
+        
+        function matchesSearch(extension, query) {
+            if (!query) return true;
+            const q = query.toLowerCase();
+            return (
+                extension.name.toLowerCase().includes(q) ||
+                (extension.description || '').toLowerCase().includes(q) ||
+                (extension.author || '').toLowerCase().includes(q) ||
+                (extension.id || '').toLowerCase().includes(q)
+            );
+        }
+        
+        function slugify(name) {
+            return name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+        }
+        
+        function generateCardHTML(ext) {
+            const detailUrl = `extensions/${slugify(ext.id || ext.name)}.html`;
+            const version = formatVersion(ext.version);
+            const hasLib = ext.mipPackage ? '<span class="extension-has-lib">📦 Device Library</span>' : '';
+            const icon = ext.iconSvg ? ext.iconSvg : '🔌';
+            
+            return `
+                <a href="${detailUrl}" class="extension-card">
+                    <div class="extension-header">
+                        <div class="extension-icon">${icon}</div>
+                        <div class="extension-title">
+                            <div class="extension-name">${ext.name}</div>
+                            <div class="extension-author">by ${ext.author || 'Unknown'}</div>
+                        </div>
+                    </div>
+                    <div class="extension-description">
+                        ${ext.description || 'No description provided.'}
+                    </div>
+                    <div class="extension-meta">
+                        <span class="extension-version">v${version}</span>
+                        ${hasLib}
+                    </div>
+                </a>
+            `;
+        }
+        
+        function filterExtensions() {
+            const filtered = extensions.filter(e => matchesSearch(e, searchQuery));
+            
+            if (filtered.length > 0) {
+                grid.innerHTML = filtered.map(e => generateCardHTML(e)).join('');
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+            } else {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+            }
+            
+            statsCount.textContent = filtered.length;
+        }
+        
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            filterExtensions();
+        });
+    </script>
+</body>
+</html>
