@@ -1,5 +1,12 @@
 /* Custom styling for ScriptO Studio Docs */
 
+/* Custom primary color - ScriptO Blue */
+:root {
+  --md-primary-fg-color: #2E7BEF;
+  --md-primary-fg-color--light: #5A96F2;
+  --md-primary-fg-color--dark: #1E5BC0;
+}
+
 /* Make navigation section headers more visually distinct */
 .md-nav__item--nested > .md-nav__link {
   font-weight: 700;
