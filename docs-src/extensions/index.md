@@ -2,6 +2,8 @@
 
 Extensions add new functionality to ScriptO Studio through the **JS Configurator** pattern - JavaScript modules that provide custom UI tabs and device-side Python libraries.
 
+![Extensions in ScriptO Studio](../assets/extensions.png)
+
 ## What are Extensions?
 
 Extensions are JavaScript modules (ESM) that integrate into ScriptO Studio to:

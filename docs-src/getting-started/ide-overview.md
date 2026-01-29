@@ -2,6 +2,8 @@
 
 A tour of the ScriptO Studio interface.
 
+![ScriptO Studio IDE](../assets/looknfeel.png)
+
 ## Layout
 
 ```

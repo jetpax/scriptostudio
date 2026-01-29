@@ -2,6 +2,8 @@
 
 Welcome to the ScriptO Studio documentation! This wiki covers everything you need to get started with ScriptO Studio and pyDirect.
 
+![ScriptO Studio AI Assistant](assets/AI.png)
+
 ## 🚀 Quick Start
 
 | Your Situation | Go To |

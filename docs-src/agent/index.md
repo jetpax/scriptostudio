@@ -2,6 +2,8 @@
 
 ScriptO Studio includes an AI-powered coding agent that helps you write, debug, and optimize MicroPython code for your device.
 
+![AI Agent](../assets/AI.png)
+
 ## What is the Agent?
 
 The Agent is an AI assistant integrated into ScriptO Studio that can:

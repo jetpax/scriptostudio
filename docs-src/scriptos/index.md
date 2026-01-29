@@ -2,6 +2,8 @@
 
 This section documents the built-in ScriptOs available in the ScriptO Studio registry.
 
+![ScriptOs Panel](../assets/scripto.png)
+
 ## ScriptOs vs Extensions
 
 Both ScriptOs and [Extensions](../extensions/index.md) expand ScriptO Studio functionality:
