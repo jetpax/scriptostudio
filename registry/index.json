@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1769620975,
+  "updated": 1769645675,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -18,7 +18,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/1-Wire%20Slaves%20Scan.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/1-Wire%20Slaves%20Scan.py"
     },
     {
       "name": "ADC Reader",
@@ -36,7 +36,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/ADC%20Reader.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/ADC%20Reader.py"
     },
     {
       "name": "BLE Scan",
@@ -54,7 +54,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/BLE%20Scan.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/BLE%20Scan.py"
     },
     {
       "name": "BLE iBeacon",
@@ -72,7 +72,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/BLE%20iBeacon.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/BLE%20iBeacon.py"
     },
     {
       "name": "CAN/TWAI Loopback Test",
@@ -90,7 +90,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax",
-      "url": "/registry/ScriptOs/CAN%20Loopback%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/CAN%20Loopback%20Test.py"
     },
     {
       "name": "CAN Speed Test",
@@ -108,7 +108,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax/mpDirect",
-      "url": "/registry/ScriptOs/CAN%20Speed%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/CAN%20Speed%20Test.py"
     },
     {
       "name": "CANopen Bus Scanner",
@@ -126,7 +126,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/straga/micropython-esp32-twai",
-      "url": "/registry/ScriptOs/CANopen%20Bus%20Scanner.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/CANopen%20Bus%20Scanner.py"
     },
     {
       "name": "DAC Output",
@@ -144,7 +144,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/DAC%20Output.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/DAC%20Output.py"
     },
     {
       "name": "ES8311 Play Sound",
@@ -161,7 +161,7 @@
         "audio"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/ES8311%20Play%20Sound.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/ES8311%20Play%20Sound.py"
     },
     {
       "name": "GPIO Input",
@@ -179,7 +179,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/GPIO%20Input.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/GPIO%20Input.py"
     },
     {
       "name": "GPIO Output",
@@ -197,7 +197,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/GPIO%20Output.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/GPIO%20Output.py"
     },
     {
       "name": "I2C Slaves Scan",
@@ -215,7 +215,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/I2C%20Slaves%20Scan.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/I2C%20Slaves%20Scan.py"
     },
     {
       "name": "Input Demo",
@@ -233,7 +233,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax/scripto-studio",
-      "url": "/registry/ScriptOs/Input%20Demo.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Input%20Demo.py"
     },
     {
       "name": "KT403A MP3 Player",
@@ -251,7 +251,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/KT403A%20MP3%20Player.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/KT403A%20MP3%20Player.py"
     },
     {
       "name": "LEDs - DotStar RGB Strip",
@@ -269,7 +269,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/mattytrentini/micropython-dotstar",
-      "url": "/registry/ScriptOs/LEDs%20-%20DotStar%20Strip.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/LEDs%20-%20DotStar%20Strip.py"
     },
     {
       "name": "LEDs - NeoPixel RGB(+W/Y) Strip (Interruptible)",
@@ -286,7 +286,7 @@
         "hardware"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/LEDs%20-%20NeoPixel%20Strip.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/LEDs%20-%20NeoPixel%20Strip.py"
     },
     {
       "name": "Magnet Sensor",
@@ -304,7 +304,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/Magnet%20Sensor.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Magnet%20Sensor.py"
     },
     {
       "name": "Max Threads",
@@ -322,7 +322,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/Max%20Threads.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Max%20Threads.py"
     },
     {
       "name": "Memory Check",
@@ -340,7 +340,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax",
-      "url": "/registry/ScriptOs/Memory%20Check.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Memory%20Check.py"
     },
     {
       "name": "NTP Time Sync",
@@ -358,7 +358,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/NTP%20Time%20Sync.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/NTP%20Time%20Sync.py"
     },
     {
       "name": "PWM & Lighting",
@@ -376,7 +376,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/PWM%20%26%20Lighting.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/PWM%20%26%20Lighting.py"
     },
     {
       "name": "PWM & Servo Motor",
@@ -394,7 +394,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/PWM%20%26%20Servo%20Motor.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/PWM%20%26%20Servo%20Motor.py"
     },
     {
       "name": "SD Card Complete",
@@ -411,7 +411,7 @@
         "hardware tests"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/SD%20Card%20Complete.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/SD%20Card%20Complete.py"
     },
     {
       "name": "SD Card Mount Test",
@@ -428,7 +428,7 @@
         "hardware tests"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/SD%20Card%20Mount%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/SD%20Card%20Mount%20Test.py"
     },
     {
       "name": "SD Card Test",
@@ -445,7 +445,7 @@
         "hardware tests"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/SD%20Card%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/SD%20Card%20Test.py"
     },
     {
       "name": "Syslog Test",
@@ -463,7 +463,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax/scripto-studio",
-      "url": "/registry/ScriptOs/ScriptOs%20-%20Syslog%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/ScriptOs%20-%20Syslog%20Test.py"
     },
     {
       "name": "Script Object template ",
@@ -481,7 +481,7 @@
       ],
       "license": "MIT",
       "docs": "https://docs.micropython.org",
-      "url": "/registry/ScriptOs/ScriptOs%20-%20Template.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/ScriptOs%20-%20Template.py"
     },
     {
       "name": "Status LED Color Control",
@@ -499,7 +499,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jep-scriptomatic",
-      "url": "/registry/ScriptOs/Status%20LED%20Color%20Control.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Status%20LED%20Color%20Control.py"
     },
     {
       "name": "Async Tasks Test",
@@ -516,7 +516,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20Async%20Tasks.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20Async%20Tasks.py"
     },
     {
       "name": "Test - Handler Direct",
@@ -533,7 +533,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20Handler%20Direct.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20Handler%20Direct.py"
     },
     {
       "name": "Test - Logging",
@@ -550,7 +550,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20Logging.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20Logging.py"
     },
     {
       "name": "Test - Manual File Handler",
@@ -567,7 +567,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20Manual%20File%20Handler.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20Manual%20File%20Handler.py"
     },
     {
       "name": "Stop Button Test",
@@ -584,7 +584,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20Stop%20Button.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20Stop%20Button.py"
     },
     {
       "name": "Test - VFS Diagnostics",
@@ -601,7 +601,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20VFS%20Diagnostics.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20VFS%20Diagnostics.py"
     },
     {
       "name": "Test - WebFiles Clean",
@@ -618,7 +618,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Clean.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Clean.py"
     },
     {
       "name": "Test - WebFiles Diagnostic",
@@ -635,7 +635,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Diagnostic.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Diagnostic.py"
     },
     {
       "name": "Test - WebFiles Gzip",
@@ -653,7 +653,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Gzip.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Gzip.py"
     },
     {
       "name": "Test - WebFiles Minimal",
@@ -670,7 +670,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Minimal.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Minimal.py"
     },
     {
       "name": "Test - WebFiles Serving",
@@ -688,7 +688,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jep-scriptomatic",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Serving.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Serving.py"
     },
     {
       "name": "Test - WebFiles Simple",
@@ -706,7 +706,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jep-scriptomatic",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Simple.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Simple.py"
     },
     {
       "name": "WebFiles Speed Test",
@@ -722,7 +722,7 @@
         "testing"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/Test%20-%20WebFiles%20Speed%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Test%20-%20WebFiles%20Speed%20Test.py"
     },
     {
       "name": "UART Test",
@@ -740,7 +740,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/UART%20Test.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/UART%20Test.py"
     },
     {
       "name": "UDS Client Demo",
@@ -758,7 +758,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax",
-      "url": "/registry/ScriptOs/UDS%20Client%20Demo.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/UDS%20Client%20Demo.py"
     },
     {
       "name": "UDS Server Demo",
@@ -776,7 +776,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jetpax",
-      "url": "/registry/ScriptOs/UDS%20Server%20Demo.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/UDS%20Server%20Demo.py"
     },
     {
       "name": "UI Plugin - Hello World",
@@ -794,7 +794,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jep-scriptomatic",
-      "url": "/registry/ScriptOs/UI%20Plugin%20-%20Hello%20World.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/UI%20Plugin%20-%20Hello%20World.py"
     },
     {
       "name": "UI Plugin - LED Color Picker",
@@ -812,7 +812,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jep-scriptomatic",
-      "url": "/registry/ScriptOs/UI%20Plugin%20-%20LED%20Color%20Picker.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/UI%20Plugin%20-%20LED%20Color%20Picker.py"
     },
     {
       "name": "USB Modem Status",
@@ -829,7 +829,7 @@
         "network"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/USB%20Modem%20Status.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/USB%20Modem%20Status.py"
     },
     {
       "name": "Wi-Fi Scan",
@@ -847,7 +847,7 @@
       ],
       "license": "MIT",
       "docs": "https://github.com/jczic",
-      "url": "/registry/ScriptOs/Wi-Fi%20Scan.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Wi-Fi%20Scan.py"
     },
     {
       "name": "iperf3 Server",
@@ -864,7 +864,7 @@
         "network"
       ],
       "license": "MIT",
-      "url": "/registry/ScriptOs/iperf3%20Server.py"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/iperf3%20Server.py"
     }
   ],
   "extensions": [
@@ -894,7 +894,7 @@
           "label": "V2G Session"
         }
       ],
-      "url": "/registry/Extensions/CCS/CCS.js"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/CCS/CCS.js"
     },
     {
       "name": "DBE",
@@ -926,7 +926,7 @@
           "label": "MQTT"
         }
       ],
-      "url": "/registry/Extensions/DBE/DBE.js",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/DBE/DBE.js",
       "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/DBE/lib"
     },
     {
@@ -963,7 +963,7 @@
           "label": "Service Builder"
         }
       ],
-      "url": "/registry/Extensions/DTC/DTC.js"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/DTC/DTC.js"
     },
     {
       "name": "GVRET",
@@ -987,7 +987,7 @@
           "label": "Filters"
         }
       ],
-      "url": "/registry/Extensions/GVRET/GVRET.js"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/GVRET/GVRET.js"
     },
     {
       "name": "OVMS",
@@ -1015,7 +1015,7 @@
           "label": "Status"
         }
       ],
-      "url": "/registry/Extensions/OVMS/OVMS.js",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/OVMS/OVMS.js",
       "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib"
     },
     {
@@ -1036,7 +1036,7 @@
           "label": "Device Manager"
         }
       ],
-      "url": "/registry/Extensions/OpenInverter/OpenInverter.js",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/OpenInverter/OpenInverter.js",
       "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib"
     }
   ]
