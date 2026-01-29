@@ -1,0 +1,36 @@
+/* Custom styling for ScriptO Studio Docs */
+
+/* Make navigation section headers more visually distinct */
+.md-nav__item--nested > .md-nav__link {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--md-primary-fg-color) !important;
+  opacity: 0.9;
+  margin-top: 0.5em;
+}
+
+/* Style for expanded sections */
+.md-nav__item--nested.md-nav__item--active > .md-nav__link {
+  color: var(--md-accent-fg-color) !important;
+}
+
+/* Add subtle separator between major sections */
+.md-nav--primary > .md-nav__list > .md-nav__item--nested {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.4em;
+  margin-top: 0.4em;
+}
+
+/* First section doesn't need top border */
+.md-nav--primary > .md-nav__list > .md-nav__item--nested:first-child {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* Indent child links slightly more for visual hierarchy */
+.md-nav__item--nested .md-nav__item > .md-nav__link {
+  padding-left: 1.2rem;
+}
