@@ -37,8 +37,8 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   
-  // Handle registry and GitHub raw URLs (cross-origin)
-  const isRegistryUrl = url.hostname === 'jetpax.github.io' && url.pathname.includes('/scripto-studio-registry/')
+  // Handle registry URLs (same origin now that registry is on scriptostudio.com)
+  const isRegistryUrl = url.hostname === 'scriptostudio.com' && url.pathname.startsWith('/registry/')
   const isGitHubRaw = url.hostname === 'raw.githubusercontent.com'
   
   // For registry index.json, use stale-while-revalidate
