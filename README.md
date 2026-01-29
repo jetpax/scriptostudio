@@ -45,31 +45,31 @@ Python makes it easy. Native code makes it fast. You get the best of both worlds
 
 ### 🛡️ Fast, Secure Development
 
-All device acces is through hw accelerated TLS and WebRTC, so it's fast and secure.
+All device acces is through hw accelerated TLS and WebRTC, so it's fast and secure. See [Connection](https://github.com/jetpax/scriptostudio/wiki/Connection) for details.
 ![ScriptO Studio Connect](.github/images/connect.png)
 
 ### ✏️ Smart Python Editor
 
-Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. Just describe what you want, and the AI agent does the rest.
+Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. Just describe what you want, and the AI agent does the rest. See [Editor Features](https://github.com/jetpax/scriptostudio/wiki/Editor-Features) and [Using the Agent](https://github.com/jetpax/scriptostudio/wiki/Using-the-Agent).
 ![ScriptO Studio AI](.github/images/AI.png)
 
 ### 🧩 ScriptO Automations
 
-Script Objects are the ultimate device customization tool. Choose from a [library of ScriptOs](https://registry.scriptostudio.com/catalogue/) to get started, or create your own with the Smart Editor.
+Script Objects are the ultimate device customization tool. Choose from a [library of ScriptOs](https://registry.scriptostudio.com/catalogue/) to get started, or create your own with the Smart Editor. See [Writing ScriptOs](https://github.com/jetpax/scriptostudio/wiki/Writing-ScriptOs).
 ![ScriptO Studio ScriptO](.github/images/scripto.png)
 
 ### 📦 System Extensions
 
-Add major new features at the touch of a button. Load [Extensions](https://registry.scriptostudio.com/extensions-catalogue/) like **OVMS**, **OpenInverter**, **GVRET**, or **Dala's Battery Emulator**.
+Add major new features at the touch of a button. Load [Extensions](https://registry.scriptostudio.com/extensions-catalogue/) like **OVMS**, **OpenInverter**, **GVRET**, or **Dala's Battery Emulator**. See [Extensions Overview](https://github.com/jetpax/scriptostudio/wiki/Extensions-Overview).
 ![ScriptO Studio OI](.github/images/OI.png)
 
 ### ⚙️ Device Management
 
-Connect and manage devices, configure board settings, manage files, and network settings. Access your devices from anywhere over a secure P2P VPN.
+Connect and manage devices, configure board settings, manage files, and network settings. Access your devices from anywhere over a secure P2P VPN. See [File Manager](https://github.com/jetpax/scriptostudio/wiki/File-Manager) and [System Information](https://github.com/jetpax/scriptostudio/wiki/System-Information).
 ![ScriptO SysInfo](.github/images/sysinfo.png)
 
 ### 🐞 Visual Debugger
-Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics.
+Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics. See [Debugger Overview](https://github.com/jetpax/scriptostudio/wiki/Debugger-Overview).
 
 ---
 
@@ -100,6 +100,8 @@ Full-featured applications with rich UIs that extend ScriptO Studio's capabiliti
 
 ScriptO Studio runs on any device that runs MicroPython with **[pyDirect](https://github.com/jetpax/pyDirect)** extensions installed. Currently ESP32-S3 and ESP32-P4 are supported, but MicroPython on ZephyrOS is in the pipeline, opening up a world of new devices, such as Raspberry Pi RP2350.
 
+> 📖 **New to ScriptO Studio?** Check out the **[Getting Started Guide](https://github.com/jetpax/scriptostudio/wiki/Getting-Started)** for step-by-step instructions.
+
 ### 1. Flash pyDirect Firmware
 
 <p align="center">
@@ -108,7 +110,7 @@ ScriptO Studio runs on any device that runs MicroPython with **[pyDirect](https:
   </a>
 </p>
 
-Works directly in your browser. No software to install.
+Works directly in your browser. No software to install. See the [Flashing Firmware](https://github.com/jetpax/scriptostudio/wiki/Flashing-Firmware) wiki page for details.
 
 ### 2. Open ScriptO Studio
 
@@ -116,7 +118,7 @@ Visit **[app.scriptostudio.com](https://app.scriptostudio.com)** — works on de
 
 ### 3. Load an Extension
 
-Click **Extensions** → Browse → **Install**. Your device is now running that application.
+Click **Extensions** → Browse → **Install**. Your device is now running that application. See [Extensions Overview](https://github.com/jetpax/scriptostudio/wiki/Extensions-Overview).
 
 ### 4. Disconnect and Go
 
