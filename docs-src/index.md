@@ -20,7 +20,7 @@ Welcome to the ScriptO Studio documentation! This wiki covers everything you nee
 - [File Manager](user-guide/file-manager.md) - Managing device files
 - [Editor Features](user-guide/editor-features.md) - Code editing and syntax highlighting
 - [Terminal & REPL](user-guide/terminal-repl.md) - Interactive Python shell
-- [Extensions](user-guide/extensions.md) - Installing and using extensions
+- [Extensions](extensions/index.md) - Installing and using extensions
 - [Settings](user-guide/settings.md) - Configuring ScriptO Studio
 
 ### Device Setup

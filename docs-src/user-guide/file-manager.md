@@ -109,6 +109,6 @@ Click the **Refresh** icon to reload the file listing from the device.
 
 ## Related
 
-- [Writing ScriptOs](../user-guide/writing-scriptos.md) - Creating Python scripts
+- [Writing ScriptOs](../scriptos/writing-scriptos.md) - Creating Python scripts
 - [Editor Features](../user-guide/editor-features.md) - Editing files
 - [Settings](../user-guide/settings.md) - Device configuration

@@ -105,6 +105,6 @@ See [Using the Agent](../agent/usage.md) for details.
 
 ## Related
 
-- [Writing ScriptOs](../user-guide/writing-scriptos.md) - Script development
+- [Writing ScriptOs](../scriptos/writing-scriptos.md) - Script development
 - [Terminal & REPL](../user-guide/terminal-repl.md) - Interactive programming
 - [Using the Agent](../agent/usage.md) - AI assistance

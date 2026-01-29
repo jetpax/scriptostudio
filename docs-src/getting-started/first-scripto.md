@@ -69,5 +69,5 @@ For interactive development, use the Terminal directly:
 ## Next Steps
 
 - [IDE Overview](../getting-started/ide-overview.md) - Learn the interface
-- [Writing ScriptOs](../user-guide/writing-scriptos.md) - Write more complex scripts
+- [Writing ScriptOs](../scriptos/writing-scriptos.md) - Write more complex scripts
 - [File Manager](../user-guide/file-manager.md) - Managing device files

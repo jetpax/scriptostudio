@@ -37,11 +37,9 @@ nav:
     - Connection: getting-started/connection.md
     - IDE Overview: getting-started/ide-overview.md
   - User Guide:
-    - Writing ScriptOs: user-guide/writing-scriptos.md
     - File Manager: user-guide/file-manager.md
     - Editor Features: user-guide/editor-features.md
     - Terminal & REPL: user-guide/terminal-repl.md
-    - Extensions: user-guide/extensions.md
     - System Information: user-guide/system-info.md
     - Settings: user-guide/settings.md
   - Device Setup:
@@ -57,12 +55,17 @@ nav:
     - Overview: debugging/index.md
     - Setting Breakpoints: debugging/breakpoints.md
     - Debug Console: debugging/debug-console.md
-  - Extensions Development:
+  - Extensions:
+    - Overview: extensions/index.md
     - Writing Extensions: extensions/writing-extensions.md
     - Extension API: extensions/extension-api.md
     - Device Libraries: extensions/device-libraries.md
     - Built-in Extensions: extensions/built-in-extensions.md
     - Versioning: extensions/versioning.md
+  - ScriptOs:
+    - Overview: scriptos/index.md
+    - Writing ScriptOs: scriptos/writing-scriptos.md
+    - UI Plugin - Hello World: scriptos/ui-plugin-hello-world.md
   - Protocol:
     - WebREPL Binary Protocol: protocol/webrepl-binary-protocol.md
     - WebRTC Transport: protocol/webrtc-transport.md

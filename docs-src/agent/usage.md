@@ -153,4 +153,4 @@ Each request builds on the previous context.
 
 - [Agent Overview](../agent/index.md) - What the Agent can do
 - [Agent Setup](../agent/setup.md) - Configure API keys
-- [Writing ScriptOs](../user-guide/writing-scriptos.md) - Manual script development
+- [Writing ScriptOs](../scriptos/writing-scriptos.md) - Manual script development
