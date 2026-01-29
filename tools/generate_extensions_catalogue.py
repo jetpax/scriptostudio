@@ -370,9 +370,18 @@ def generate_detail_page(extension, output_path):
     version = '.'.join(map(str, extension.get('version', [1, 0, 0])))
     author = extension.get('author', 'Unknown')
     description = extension.get('description', 'No description provided.')
-    # Build GitHub source URL from extension ID (directory, not JS file)
-    ext_id = extension.get('id', '')
-    github_url = f"https://github.com/jetpax/scriptostudio/tree/main/registry/Extensions/{ext_id}" if ext_id else extension.get('url', '')
+    # Build GitHub source URL from directory in the url field (preserves correct case)
+    url = extension.get('url', '')
+    # URL can be full GitHub raw URL like:
+    # https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/CCS/CCS.js
+    # Extract the directory name (e.g., "CCS") which preserves correct case
+    dir_name = ''
+    if '/registry/Extensions/' in url:
+        # Split on '/registry/Extensions/' and get the part after it
+        after_extensions = url.split('/registry/Extensions/')[-1]
+        # The directory name is the first path component
+        dir_name = after_extensions.split('/')[0] if after_extensions else ''
+    github_url = f"https://github.com/jetpax/scriptostudio/tree/main/registry/Extensions/{dir_name}" if dir_name else url
     icon = extension.get('iconSvg', '🔌')
     menu = extension.get('menu', [])
     mip_package = extension.get('mipPackage', '')
