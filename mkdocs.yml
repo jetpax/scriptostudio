@@ -1,0 +1,105 @@
+site_name: ScriptO Studio Docs
+site_url: https://scriptostudio.com/docs/
+site_description: Documentation for ScriptO Studio - Program embedded devices with natural language
+site_author: jetpax
+repo_url: https://github.com/jetpax/scriptostudio
+repo_name: jetpax/scriptostudio
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: teal
+    accent: cyan
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Overview: getting-started/index.md
+    - First ScriptO: getting-started/first-scripto.md
+    - Connection: getting-started/connection.md
+    - IDE Overview: getting-started/ide-overview.md
+  - User Guide:
+    - Writing ScriptOs: user-guide/writing-scriptos.md
+    - File Manager: user-guide/file-manager.md
+    - Editor Features: user-guide/editor-features.md
+    - Terminal & REPL: user-guide/terminal-repl.md
+    - Extensions: user-guide/extensions.md
+    - System Information: user-guide/system-info.md
+    - Settings: user-guide/settings.md
+  - Device Setup:
+    - Flashing Firmware: device-setup/flashing-firmware.md
+    - Board Configurations: device-setup/board-configurations.md
+    - Network Setup: device-setup/network-setup.md
+    - Provisioning: device-setup/provisioning.md
+  - AI Agent:
+    - Overview: agent/index.md
+    - Setup: agent/setup.md
+    - Usage: agent/usage.md
+  - Debugging:
+    - Overview: debugging/index.md
+    - Setting Breakpoints: debugging/breakpoints.md
+    - Debug Console: debugging/debug-console.md
+  - Extensions Development:
+    - Writing Extensions: extensions/writing-extensions.md
+    - Extension API: extensions/extension-api.md
+    - Device Libraries: extensions/device-libraries.md
+    - Built-in Extensions: extensions/built-in-extensions.md
+    - Versioning: extensions/versioning.md
+  - Protocol:
+    - WebREPL Binary Protocol: protocol/webrepl-binary-protocol.md
+    - WebRTC Transport: protocol/webrtc-transport.md
+    - WebSocket Transport: protocol/websocket-transport.md
+    - Message Types: protocol/message-types.md
+  - Developer:
+    - Architecture: developer/architecture.md
+    - Building from Source: developer/building-from-source.md
+    - Contributing: developer/contributing.md
+    - ESM Modules: developer/esm-modules.md
+    - Keyboard Shortcuts: developer/shortcuts.md
+    - MicroPython Reference: developer/micropython-reference.md
+    - Registry: developer/registry.md
+  - Troubleshooting:
+    - Connection Issues: troubleshooting/connection.md
+    - Memory & Performance: troubleshooting/memory.md
+    - Common Errors: troubleshooting/errors.md
+    - Debug Logging: troubleshooting/debug-logging.md
+  - Reference:
+    - FAQ: reference/faq.md
+    - Changelog: reference/changelog.md
+    - Roadmap: reference/roadmap.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/jetpax/scriptostudio

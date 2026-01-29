@@ -26,3 +26,7 @@ Thumbs.db
 *.log
 
 .cursorrules
+
+# MkDocs
+site/
+docs_backup/
