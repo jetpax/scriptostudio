@@ -244,7 +244,7 @@ def generate_list_page(extensions, index, output_path):
     
     <div class="footer">
         <p>Last updated: {format_timestamp(index.get('updated', 0))}</p>
-        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #008184;">View on GitHub</a> | 
+        <p><a href="https://github.com/jetpax/scriptostudio/tree/main/registry" style="color: #008184;">View on GitHub</a> | 
            <a href="../catalogue/" style="color: #008184;">Browse ScriptOs</a></p>
     </div>
     
@@ -370,7 +370,9 @@ def generate_detail_page(extension, output_path):
     version = '.'.join(map(str, extension.get('version', [1, 0, 0])))
     author = extension.get('author', 'Unknown')
     description = extension.get('description', 'No description provided.')
-    url = extension.get('url', '')
+    # Build GitHub source URL from extension ID (directory, not JS file)
+    ext_id = extension.get('id', '')
+    github_url = f"https://github.com/jetpax/scriptostudio/tree/main/registry/Extensions/{ext_id}" if ext_id else extension.get('url', '')
     icon = extension.get('iconSvg', '🔌')
     menu = extension.get('menu', [])
     mip_package = extension.get('mipPackage', '')
@@ -655,7 +657,7 @@ def generate_detail_page(extension, output_path):
             {lib_html}
             
             <div class="detail-actions">
-                <a href="{url}" target="_blank" class="btn btn-primary">View Source Code</a>
+                <a href="{github_url}" target="_blank" class="btn btn-primary">View Source Code</a>
                 <a href="../../index.html" class="btn btn-secondary">Back to Catalogue</a>
             </div>
             

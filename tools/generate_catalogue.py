@@ -275,7 +275,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
     
     <div class="footer">
         <p>Last updated: {format_timestamp(index.get('updated', 0))}</p>
-        <p><a href="https://github.com/jetpax/scripto-studio-registry" style="color: #db5201;">View on GitHub</a></p>
+        <p><a href="https://github.com/jetpax/scriptostudio/tree/main/registry" style="color: #db5201;">View on GitHub</a></p>
     </div>
     
     <script>
