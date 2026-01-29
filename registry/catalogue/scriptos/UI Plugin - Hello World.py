@@ -8,7 +8,7 @@ dict(
     
     info = dict(
         name        = 'UI Plugin - Hello World',
-        version     = [1, 2, 0],
+        version     = [1, 3, 0],
         category    = 'UI Plugins',
         description = '''Minimal demonstration of the ScriptO UI Plugin Architecture.
                          
@@ -43,7 +43,7 @@ dict(
 # === END_CONFIG_PARAMETERS ===
 
 import httpserver
-import webrepl_rtc as webrepl
+import webrepl_binary as webrepl
 import network
 import json
 
@@ -278,7 +278,7 @@ except Exception as e:
 # Send DISPLAY-UI command to Studio via webrepl.notify
 try:
     # Use helper to get URL with correct protocol (auto-detects HTTPS)
-    from lib.client_helpers import getDeviceURL
+    from lib.sys.utils import getDeviceURL
     url = getDeviceURL('/hello_ui')
     title = args.ui_title  # Use the user-configured title
     
