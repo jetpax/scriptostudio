@@ -4,7 +4,11 @@ site_description: Documentation for ScriptO Studio - Program embedded devices wi
 site_author: jetpax
 repo_url: https://github.com/jetpax/scriptostudio
 repo_name: jetpax/scriptostudio
-edit_uri: edit/main/docs/
+edit_uri: edit/main/docs-src/
+
+# Source and output directories
+docs_dir: docs-src
+site_dir: docs
 
 theme:
   name: material

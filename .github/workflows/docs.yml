@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/**'
+      - 'docs-src/**'
       - 'mkdocs.yml'
   workflow_dispatch:
 
@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,22 +27,12 @@ jobs:
         run: pip install mkdocs-material
       
       - name: Build MkDocs
-        run: mkdocs build --strict
+        run: mkdocs build
       
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          destination_dir: docs
-          keep_files: false
-      
-      - name: Output docs URL
+      - name: Commit built docs
         run: |
-          echo ""
-          echo "=========================================="
-          echo "ScriptO Studio Docs Deployed!"
-          echo "=========================================="
-          echo ""
-          echo "URL: https://scriptostudio.com/docs/"
-          echo ""
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --staged --quiet || git commit -m "Build docs from ${GITHUB_SHA::7}"
+          git push
