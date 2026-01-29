@@ -7,6 +7,16 @@
   --md-primary-fg-color--dark: #1E5BC0;
 }
 
+/* Override header background */
+.md-header {
+  background-color: #2E7BEF;
+}
+
+/* Override tabs and navigation */
+.md-tabs {
+  background-color: #2E7BEF;
+}
+
 /* Make navigation section headers more visually distinct */
 .md-nav__item--nested > .md-nav__link {
   font-weight: 700;

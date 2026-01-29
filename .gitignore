@@ -30,3 +30,6 @@ Thumbs.db
 # MkDocs
 site/
 docs_backup/
+
+# Local docs preview build
+docs-local/

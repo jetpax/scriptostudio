@@ -18,13 +18,21 @@ Running `mkdocs build` locally will cause git conflicts because:
 - CI commits its own build after your push
 - Your local `docs/` diverges from remote
 
-## Local Preview (Optional)
+## Local Preview
 
-If you want to preview changes locally, use:
+For local preview, use one of these options:
+
+**Option 1: Live server (recommended)**
 ```bash
 mkdocs serve
 ```
-This runs a dev server WITHOUT modifying `docs/`.
+Runs a dev server at `http://localhost:8000` - no files written.
+
+**Option 2: Build to local directory**
+```bash
+mkdocs build -d docs-local
+```
+Builds to `docs-local/` which is gitignored.
 
 ## Files
 
