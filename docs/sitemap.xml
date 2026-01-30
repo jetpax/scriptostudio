@@ -2,190 +2,190 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://scriptostudio.com/docs/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/agent/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/agent/setup/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/agent/usage/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/debugging/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/debugging/breakpoints/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/debugging/debug-console/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/architecture/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/building-from-source/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/contributing/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/esm-modules/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/micropython-reference/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/registry/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/developer/shortcuts/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/device-setup/board-configurations/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/device-setup/flashing-firmware/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/device-setup/network-setup/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/device-setup/provisioning/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/extensions/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/extensions/built-in-extensions/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/extensions/device-libraries/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/extensions/extension-api/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/extensions/versioning/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/extensions/writing-extensions/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/getting-started/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/getting-started/connection/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/getting-started/first-scripto/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/getting-started/ide-overview/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/protocol/message-types/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/protocol/webrepl-binary-protocol/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/protocol/webrtc-transport/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/protocol/websocket-transport/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/reference/changelog/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/reference/faq/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/reference/roadmap/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/scriptos/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/scriptos/ui-plugin-hello-world/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/scriptos/writing-scriptos/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/troubleshooting/connection/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/troubleshooting/debug-logging/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/troubleshooting/errors/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/troubleshooting/memory/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/user-guide/editor-features/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/user-guide/file-manager/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/user-guide/settings/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/user-guide/system-info/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
     <url>
          <loc>https://scriptostudio.com/docs/user-guide/terminal-repl/</loc>
-         <lastmod>2026-01-29</lastmod>
+         <lastmod>2026-01-30</lastmod>
     </url>
 </urlset>
