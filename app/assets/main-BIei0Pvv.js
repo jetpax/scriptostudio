@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-DHQzMx6T.js","assets/vendor-CC2i4e6V.js","assets/vendor-CeCKEaxg.js","assets/vendor-CJJe6HOl.css","assets/index-BalQ1Nwo.js","assets/index-DXz9816u.js","assets/index-C67KyK7a.js","assets/index-BlIhKDWf.js","assets/index-DdUpN0Lu.js","assets/index-ByjkoLU-.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
-import{PANEL_TOO_SMALL as mt,PANEL_CLOSED as Y,PANEL_DEFAULT as qe}from"./vendor-CC2i4e6V.js";import{c as he,C as vt,h as w,a as yt,b as bt}from"./vendor-CeCKEaxg.js";(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const i of document.querySelectorAll('link[rel="modulepreload"]'))o(i);new MutationObserver(i=>{for(const s of i)if(s.type==="childList")for(const c of s.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&o(c)}).observe(document,{childList:!0,subtree:!0});function t(i){const s={};return i.integrity&&(s.integrity=i.integrity),i.referrerPolicy&&(s.referrerPolicy=i.referrerPolicy),i.crossOrigin==="use-credentials"?s.credentials="include":i.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function o(i){if(i.ep)return;i.ep=!0;const s=t(i);fetch(i.href,s)}})();function ce(e){const n="# === START_CONFIG_PARAMETERS ===",t="# === END_CONFIG_PARAMETERS ===",o=e.indexOf(n),i=e.indexOf(t);if(o===-1||i===-1)return console.warn("[ScriptOs Parser] Config markers not found"),null;const s=e.substring(o+n.length,i).trim();try{return wt(s)}catch(c){return console.error("[ScriptOs Parser] Failed to parse config:",c),null}}function wt(e){let n=e.trim();n.startsWith("dict(")&&n.endsWith(")")&&(n=n.substring(5,n.length-1).trim()),n=n.split(`
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-B1PfzF87.js","assets/vendor-Bh16k-ki.js","assets/vendor-CeCKEaxg.js","assets/vendor-CKkK5GWi.css","assets/index-BalQ1Nwo.js","assets/index-DXz9816u.js","assets/index-C67KyK7a.js","assets/index-BlIhKDWf.js","assets/index-DdUpN0Lu.js","assets/index-ByjkoLU-.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
+import{PANEL_TOO_SMALL as mt,PANEL_CLOSED as Y,PANEL_DEFAULT as qe}from"./vendor-Bh16k-ki.js";import{c as he,C as vt,h as w,a as yt,b as bt}from"./vendor-CeCKEaxg.js";(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const i of document.querySelectorAll('link[rel="modulepreload"]'))o(i);new MutationObserver(i=>{for(const s of i)if(s.type==="childList")for(const c of s.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&o(c)}).observe(document,{childList:!0,subtree:!0});function t(i){const s={};return i.integrity&&(s.integrity=i.integrity),i.referrerPolicy&&(s.referrerPolicy=i.referrerPolicy),i.crossOrigin==="use-credentials"?s.credentials="include":i.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function o(i){if(i.ep)return;i.ep=!0;const s=t(i);fetch(i.href,s)}})();function ce(e){const n="# === START_CONFIG_PARAMETERS ===",t="# === END_CONFIG_PARAMETERS ===",o=e.indexOf(n),i=e.indexOf(t);if(o===-1||i===-1)return console.warn("[ScriptOs Parser] Config markers not found"),null;const s=e.substring(o+n.length,i).trim();try{return wt(s)}catch(c){return console.error("[ScriptOs Parser] Failed to parse config:",c),null}}function wt(e){let n=e.trim();n.startsWith("dict(")&&n.endsWith(")")&&(n=n.substring(5,n.length-1).trim()),n=n.split(`
 `).map(i=>{let s=!1,c=null,r=!1;for(let a=0;a<i.length;a++){const l=i[a];if(r){r=!1;continue}if(l==="\\"){r=!0;continue}if((l==='"'||l==="'"||l==="`")&&!s){s=!0,c=l;continue}if(l===c&&s){s=!1,c=null;continue}if(l==="#"&&!s)return i.substring(0,a)}return i}).join(`
 `),n=n.replace(/\\\s*[\r\n]+\s*/g," ");let t="{";const o=de(n,",");for(let i=0;i<o.length;i++){const s=o[i].trim();if(!s)continue;const c=s.indexOf("=");if(c===-1)continue;const r=s.substring(0,c).trim();let a=s.substring(c+1).trim();a=ue(a),i>0&&(t+=","),t+=`"${r}":${a}`}return t+="}",JSON.parse(t)}function de(e,n){const t=[];let o="",i=0,s=!1,c=null,r=!1;for(let a=0;a<e.length;a++){const l=e[a],d=a>0?e[a-1]:"";if(r){o+=l,r=!1;continue}if(l==="\\"){r=!0,o+=l;continue}if((l==='"'||l==="'"||l==="`")&&!s){s=!0,c=l,o+=l;continue}if(l===c&&s&&d!=="\\"){s=!1,c=null,o+=l;continue}if(s){o+=l;continue}if(l==="("||l==="["||l==="{"?i++:(l===")"||l==="]"||l==="}")&&i--,l===n&&i===0){t.push(o),o="";continue}o+=l}return o.trim()&&t.push(o),t}function ue(e){if(e=e.trim(),e==="None")return"null";if(e==="True")return"true";if(e==="False")return"false";if(/^-?\d+(\.\d+)?$/.test(e))return e;if(e.startsWith("[")&&e.endsWith("]")){const n=e.substring(1,e.length-1);return"["+de(n,",").map(i=>ue(i)).join(",")+"]"}if(e.startsWith("(")&&e.endsWith(")")){const n=e.substring(1,e.length-1);return"["+de(n,",").map(i=>ue(i)).join(",")+"]"}if(e.startsWith("dict(")&&e.endsWith(")")){const n=e.substring(5,e.length-1);return Ct(n)}if(e.startsWith("{")&&e.endsWith("}")){const n=e.substring(1,e.length-1);return xt(n)}if(e.includes("+")){const n=e.split("+").map(t=>{const o=t.trim();return o.startsWith("'")||o.startsWith('"')?o.substring(1,o.length-1):o});return JSON.stringify(n.join(""))}if(e.startsWith("'''")||e.startsWith('"""')){e.substring(0,3);let n=e.substring(3,e.length-3);return n=n.replace(/\s+/g," ").trim(),JSON.stringify(n)}return e.startsWith("'")&&e.endsWith("'")||e.startsWith('"')&&e.endsWith('"')?JSON.stringify(e.substring(1,e.length-1)):e==="str"?'"str"':e==="int"?'"int"':e==="float"?'"float"':e==="bool"?'"bool"':e==="list"?'"list"':e==="dict"?'"dict"':JSON.stringify(e)}function Ct(e){let n="{";const t=de(e,",");let o=!0;for(let i=0;i<t.length;i++){const s=t[i].trim();if(!s)continue;const c=s.indexOf("=");if(c===-1)continue;const r=s.substring(0,c).trim();let a=s.substring(c+1).trim();a=ue(a),o||(n+=","),n+=`"${r}":${a}`,o=!1}return n+="}",n}function xt(e){let n="{";const t=de(e,",");let o=!0;for(let i=0;i<t.length;i++){const s=t[i].trim();if(!s)continue;const c=s.indexOf(":");if(c===-1)continue;let r=s.substring(0,c).trim(),a=s.substring(c+1).trim();(r.startsWith("'")&&r.endsWith("'")||r.startsWith('"')&&r.endsWith('"'))&&(r=r.substring(1,r.length-1)),a=ue(a),o||(n+=","),n+=`"${r}":${a}`,o=!1}return n+="}",n}function Qe(e,n,t){const o="# === START_CONFIG_PARAMETERS ===",i="# === END_CONFIG_PARAMETERS ===",s=e.indexOf(o),c=e.indexOf(i);if(s===-1||c===-1)return e;const r=e.substring(0,s).trim(),a=e.substring(c+i.length).trim();if(!n.args||Object.keys(n.args).length===0){const p=n.info||{};let u=`# ${p.name||"ScriptO"}
 `;return p.description&&(u+=`# ${p.description}
@@ -423,7 +423,7 @@ try:
     if _wr and hasattr(_wr, 'process_queue'):
         while _wr.process_queue() > 0: pass
 except: pass
-`;let re=null,Le=null;async function Lt(){if(re&&Le)return re;try{if(!me){console.log("[Debugger] Lazy loading Tree-sitter...");const[e,n,t]=await Promise.all([A(()=>import("./tree-sitter-DHQzMx6T.js"),__vite__mapDeps([0,1,2,3])),A(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),A(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);me=e.Parser,dn=e.Language,un=n.default,Re=t.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await me.init({locateFile:()=>un}),re=new me,console.log("[Debugger] Loading Python grammar..."),!Re)throw new Error("tree-sitter-python.wasm URL not found in imports");return Le=await dn.load(Re),re.setLanguage(Le),console.log("[Debugger] Tree-sitter parser initialized successfully"),re}catch(e){throw console.error("[Debugger] Failed to initialize parser:",e),new Error(`Tree-sitter initialization failed: ${e.message}`)}}async function Mt(e){const n=await Lt();if(!n)return new Map;const t=n.parse(e),o=new Map,i=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],s=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],c=r=>{if(!r)return;let a=!1;const l=r.type;s.includes(l)?a=!1:i.includes(l)?(a=!0,(l==="function_definition"||l==="async_function_definition"||l==="class_definition")&&r.parent&&r.parent.type==="decorated_definition"&&(a=!1),l==="expression_statement"&&r.childCount===1&&r.firstChild.type==="string"&&(a=!1)):l==="decorated_definition"&&(a=!0),a&&o.set(r.startPosition.row,l);for(let d=0;d<r.childCount;d++)c(r.child(d))};return c(t.rootNode),o}function Bt(e,n,t,o,i,s,c=null){let r="";if(c){const a=c.condition?`(${c.condition})`:"True",l=c.hitCount?`"${c.hitCount}"`:"None",d=c.enabled!==!1?"True":"False";r+=`${e}try:
+`;let re=null,Le=null;async function Lt(){if(re&&Le)return re;try{if(!me){console.log("[Debugger] Lazy loading Tree-sitter...");const[e,n,t]=await Promise.all([A(()=>import("./tree-sitter-B1PfzF87.js"),__vite__mapDeps([0,1,2,3])),A(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),A(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);me=e.Parser,dn=e.Language,un=n.default,Re=t.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await me.init({locateFile:()=>un}),re=new me,console.log("[Debugger] Loading Python grammar..."),!Re)throw new Error("tree-sitter-python.wasm URL not found in imports");return Le=await dn.load(Re),re.setLanguage(Le),console.log("[Debugger] Tree-sitter parser initialized successfully"),re}catch(e){throw console.error("[Debugger] Failed to initialize parser:",e),new Error(`Tree-sitter initialization failed: ${e.message}`)}}async function Mt(e){const n=await Lt();if(!n)return new Map;const t=n.parse(e),o=new Map,i=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],s=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],c=r=>{if(!r)return;let a=!1;const l=r.type;s.includes(l)?a=!1:i.includes(l)?(a=!0,(l==="function_definition"||l==="async_function_definition"||l==="class_definition")&&r.parent&&r.parent.type==="decorated_definition"&&(a=!1),l==="expression_statement"&&r.childCount===1&&r.firstChild.type==="string"&&(a=!1)):l==="decorated_definition"&&(a=!0),a&&o.set(r.startPosition.row,l);for(let d=0;d<r.childCount;d++)c(r.child(d))};return c(t.rootNode),o}function Bt(e,n,t,o,i,s,c=null){let r="";if(c){const a=c.condition?`(${c.condition})`:"True",l=c.hitCount?`"${c.hitCount}"`:"None",d=c.enabled!==!1?"True":"False";r+=`${e}try:
 `,r+=`${e}    _ds.us("${t}", ${o}, ${d} and ${a}, ${l})
 `,r+=`${e}except:
 `,r+=`${e}    pass
@@ -457,9 +457,9 @@ _ds.exec("""${S.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/'/g,"\\'")}""
          stroke-width="2" 
          stroke-linecap="round" 
          stroke-linejoin="round">
-      <use xlink:href="${zt}media/tabler-sprite.svg?v=19#tabler-${e}" />
+      <use xlink:href="${zt}media/tabler-sprite.svg?v=23#tabler-${e}" />
     </svg>
-  `}const y={renderIcon:Ut};await A(()=>import("./vendor-CC2i4e6V.js"),__vite__mapDeps([1,2,3]));console.log("[Views] Vendor loaded, Component available:",!!window.Component);function D(e){const{first:n=!1,size:t="",square:o=!1,icon:i="link",onClick:s=O=>{},disabled:c=!1,active:r=!1,tooltip:a,label:l,background:d}=e;let p=html``;a&&(p=html`<div class="tooltip">${a}</div>`),p=html``;let u=r?"active":"",f=r?"selected":"",g=d?"inverted":"",h=n?"first":"",b=o?"square":"",S=c?"inactive":"active",N=t==="small"?"":html`<div class="label ${S} ${f}">${l}</div>`;const _=y.renderIcon(i,{className:""});return html`
+  `}const y={renderIcon:Ut};await A(()=>import("./vendor-Bh16k-ki.js"),__vite__mapDeps([1,2,3]));console.log("[Views] Vendor loaded, Component available:",!!window.Component);function F(e){const{first:n=!1,size:t="",square:o=!1,icon:i="link",onClick:s=O=>{},disabled:c=!1,active:r=!1,tooltip:a,label:l,background:d}=e;let p=html``;a&&(p=html`<div class="tooltip">${a}</div>`),p=html``;let u=r?"active":"",f=r?"selected":"",g=d?"inverted":"",h=n?"first":"",b=o?"square":"",S=c?"inactive":"active",N=t==="small"?"":html`<div class="label ${S} ${f}">${l}</div>`;const _=y.renderIcon(i,{className:""});return html`
      <div class="button ${h}">
        <button disabled=${c} class="${b}${t} ${u} ${g}" onclick=${s}>
          ${_}
@@ -1931,10 +1931,10 @@ Are you sure you want to proceed?`)&&n("trigger-reset",1)}e.isResetDialogOpen&&w
     </div>
   `}function Pi(e,n){const{isConnected:t,selectedFiles:o}=e;return html`
   <div id="file-actions">
-    ${D({icon:"edit",size:"small",disabled:!li({selectedFiles:e.selectedFiles}),onClick:()=>n("open-selected-files")})}
-    ${D({icon:"arrow-left",size:"small",background:"inverted",active:!0,disabled:!ai({isConnected:t,selectedFiles:o}),onClick:()=>n("upload-files")})}
-    ${D({icon:"arrow-right",size:"small",background:"inverted",active:!0,disabled:!ri({isConnected:t,selectedFiles:o}),onClick:()=>n("download-files")})}
-    ${D({icon:"trash",size:"small",disabled:e.selectedFiles.length===0,onClick:()=>n("remove-files")})}
+    ${F({icon:"edit",size:"small",disabled:!li({selectedFiles:e.selectedFiles}),onClick:()=>n("open-selected-files")})}
+    ${F({icon:"arrow-left",size:"small",background:"inverted",active:!0,disabled:!ai({isConnected:t,selectedFiles:o}),onClick:()=>n("upload-files")})}
+    ${F({icon:"arrow-right",size:"small",background:"inverted",active:!0,disabled:!ri({isConnected:t,selectedFiles:o}),onClick:()=>n("download-files")})}
+    ${F({icon:"trash",size:"small",disabled:e.selectedFiles.length===0,onClick:()=>n("remove-files")})}
   </div>
 
   `}const Ii=dt("disk"),Oi=dt("board");function dt(e){return function(t,o){function i(u){u.key.toLowerCase()==="enter"&&u.target.blur(),u.key.toLowerCase()==="escape"&&(u.target.value=null,u.target.blur())}const s=html`
@@ -2016,7 +2016,7 @@ Are you sure you want to proceed?`)&&n("trigger-reset",1)}e.isResetDialogOpen&&w
         <div class="term-operations ${o}">
           ${Di(e,n)}
         </div>
-        ${D({icon:e.panelHeight>Y?"chevron-down":"chevron-up",size:"small",onClick:t})}
+        ${F({icon:e.panelHeight>Y?"chevron-down":"chevron-up",size:"small",onClick:t})}
         
       </div>
       <div class="repl-panel-content">
@@ -2026,43 +2026,45 @@ Are you sure you want to proceed?`)&&n("trigger-reset",1)}e.isResetDialogOpen&&w
         ${e.logs&&e.logs.isOpen?Ni(e,n):""}
       </div>
     </div>
-  `}function Di(e,n){return[D({icon:"copy",size:"small",tooltip:"Copy",onClick:()=>document.execCommand("copy")}),D({icon:"clipboard",size:"small",tooltip:"Paste",onClick:()=>document.execCommand("paste")}),D({icon:"trash",size:"small",tooltip:`Clean (${e.platform==="darwin"?"Cmd":"Ctrl"}+L)`,onClick:()=>n("clear-terminal")}),D({icon:"file-text",size:"small",tooltip:"Toggle Logs",onClick:()=>n("toggle-log-sidebar")})]}function Ai(e,n){const t=html`
+  `}function Di(e,n){return[F({icon:"copy",size:"small",tooltip:"Copy",onClick:()=>document.execCommand("copy")}),F({icon:"clipboard",size:"small",tooltip:"Paste",onClick:()=>document.execCommand("paste")}),F({icon:"trash",size:"small",tooltip:`Clean (${e.platform==="darwin"?"Cmd":"Ctrl"}+L)`,onClick:()=>n("clear-terminal")}),F({icon:"file-text",size:"small",tooltip:"Toggle Logs",onClick:()=>n("toggle-log-sidebar")})]}function Ai(e,n){const t=html`
     <div id="tabs">
       ${e.openFiles.map(i=>qt({text:i.fileName,icon:i.source==="board"?"cpu":"device-desktop",active:i.id===e.editingFile,renaming:i.id===e.renamingTab,hasChanges:i.hasChanges,onSelectTab:()=>n("select-tab",i.id),onCloseTab:()=>n("close-tab",i.id),onStartRenaming:()=>n("rename-tab",i.id),onFinishRenaming:s=>n("finish-renaming-tab",s)}))}
     </div>
   `;return new MutationObserver(i=>{const s=t.querySelector("input");s&&s.focus()}).observe(t,{childList:!0,subtree:!0}),t}function Ri(e,n){const t=lt({isConnected:e.isConnected,openFiles:e.openFiles,editingFile:e.editingFile}),o=_e({isConnected:e.isConnected}),i=e.platform==="darwin"?"Cmd":"Ctrl",s=e.debugger.active||e.debugger.configOpen;return html`
     <div id="navigation-bar">
       <div id="toolbar">
-        ${D({icon:"file-plus",label:"New",tooltip:`New (${i}+N)`,disabled:e.systemSection!="editor"||s,onClick:()=>n("create-new-file"),first:!0})}
+        ${F({icon:"file-plus",label:"New",tooltip:`New (${i}+N)`,disabled:e.systemSection!="editor"||s,onClick:()=>n("create-new-file"),first:!0})}
 
-        ${D({icon:"device-floppy",label:"Save",tooltip:`Save (${i}+S)`,disabled:!t||s,onClick:()=>n("save")})}
+        ${F({icon:"device-floppy",label:"Save",tooltip:`Save (${i}+S)`,disabled:!t||s,onClick:()=>n("save")})}
 
         <div class="separator"></div>
 
+        ${F({icon:"alert-triangle",label:"Reset",tooltip:"Reset Device",disabled:!e.isConnected,onClick:()=>n("open-reset-dialog")})}
+
         ${s?html`
-          ${D({icon:"player-stop",label:"Stop",tooltip:"Stop Debug",onClick:()=>n("debugger:stop")})}
+          ${F({icon:"player-stop",label:"Stop",tooltip:"Stop Debug",onClick:()=>n("debugger:stop")})}
 
-          ${D({icon:"player-play",label:e.debugger.active?"Continue":"Run",tooltip:e.debugger.active?"Continue (F5)":"Start Debugging (F5)",disabled:e.debugger.active&&!e.debugger.halted,onClick:()=>{e.debugger.active?n("debugger:continue",!0):n("debugger:start")}})}
+          ${F({icon:"player-play",label:e.debugger.active?"Continue":"Run",tooltip:e.debugger.active?"Continue (F5)":"Start Debugging (F5)",disabled:e.debugger.active&&!e.debugger.halted,onClick:()=>{e.debugger.active?n("debugger:continue",!0):n("debugger:start")}})}
 
-          ${D({icon:"player-skip-forward",label:"Step",tooltip:"Step Over (F10)",disabled:!e.debugger.active||!e.debugger.halted,onClick:()=>n("debugger:step-over")})}
-          ${D({icon:"step-into",label:"Step In",tooltip:"Step Into (F11)",disabled:!e.debugger.active||!e.debugger.halted,onClick:()=>n("debugger:step-into")})}
-          ${D({icon:"step-out",label:"Step Out",tooltip:"Step Out (F12)",disabled:!e.debugger.active||!e.debugger.halted,onClick:()=>n("debugger:step-out")})}
+          ${F({icon:"player-skip-forward",label:"Step",tooltip:"Step Over (F10)",disabled:!e.debugger.active||!e.debugger.halted,onClick:()=>n("debugger:step-over")})}
+          ${F({icon:"step-into",label:"Step In",tooltip:"Step Into (F11)",disabled:!e.debugger.active||!e.debugger.halted,onClick:()=>n("debugger:step-into")})}
+          ${F({icon:"step-out",label:"Step Out",tooltip:"Step Out (F12)",disabled:!e.debugger.active||!e.debugger.halted,onClick:()=>n("debugger:step-out")})}
         `:html`
-          ${D({icon:"player-stop",label:"Stop",tooltip:`Stop (${i}+H)`,disabled:!o,onClick:()=>n("stop")})}
+          ${F({icon:"player-stop",label:"Stop",tooltip:`Stop (${i}+H)`,disabled:!o,onClick:()=>n("stop")})}
 
-          ${D({icon:"player-play",label:"Run",tooltip:`Run (${i}+R)`,disabled:!o,onClick:c=>{c.altKey?n("run-from-button",!0):n("run-from-button")}})}
-
-          <div class="separator"></div>
-
-          ${e.systemSection==="editor"?D({icon:"bug",label:"Debug",tooltip:"Start Debugging",disabled:!o||!e.editingFile,onClick:()=>n("debugger:open-config")}):""}
+          ${F({icon:"player-play",label:"Run",tooltip:`Run (${i}+R)`,disabled:!o,onClick:c=>{c.altKey?n("run-from-button",!0):n("run-from-button")}})}
 
           <div class="separator"></div>
 
-          ${e.systemSection==="editor"?D({icon:"script",label:"ScriptO",tooltip:"Open ScriptO Library",onClick:()=>n("open-scriptos-modal")}):""}
+          ${e.systemSection==="editor"?F({icon:"bug",label:"Debug",tooltip:"Start Debugging",disabled:!o||!e.editingFile,onClick:()=>n("debugger:open-config")}):""}
 
-          ${e.systemSection==="system"?D({icon:"apps",label:"Extensions",tooltip:"Manage Extensions",onClick:()=>n("open-extensions-modal")}):""}
+          <div class="separator"></div>
 
-          ${e.systemSection==="editor"?D({icon:"robot-face",label:"AI Agent",tooltip:"Open AI Code Assistant",active:e.aiAgent.isOpen,onClick:()=>n("toggle-agent-sidebar")}):""}
+          ${e.systemSection==="editor"?F({icon:"script",label:"ScriptO",tooltip:"Open ScriptO Library",onClick:()=>n("open-scriptos-modal")}):""}
+
+          ${e.systemSection==="system"?F({icon:"apps",label:"Extensions",tooltip:"Manage Extensions",onClick:()=>n("open-extensions-modal")}):""}
+
+          ${e.systemSection==="editor"?F({icon:"robot-face",label:"AI Agent",tooltip:"Open AI Code Assistant",active:e.aiAgent.isOpen,onClick:()=>n("toggle-agent-sidebar")}):""}
         `}
       </div>
     </div>
@@ -2087,14 +2089,6 @@ Are you sure you want to proceed?`)&&n("trigger-reset",1)}e.isResetDialogOpen&&w
       </div>
     `}return html`
     <div id="status-bar">
-      <button
-        class="status-connect-corner icon-only"
-        onclick=${()=>n("disconnect")}
-        title=${e.connectedPort?`Connected to ${e.connectedPort} (click to disconnect)`:"Disconnect"}
-      >
-        ${y.renderIcon("link",{className:"",size:18})}
-      </button>
-
       <div class="status-bar-center">
         <div class="status-item ram">
           <span class="status-label">RAM</span>
@@ -5205,8 +5199,8 @@ print('KEY_OK')
     <div class="sidebar-header">
       <div
         class="sidebar-header-logo connection-${e.connectionMode||"none"}"
-        onclick=${()=>{e.isConnected?n("open-reset-dialog"):n("connect")}}
-        title=${e.isConnected?"Reset Device":"Connect to Device"}
+        onclick=${()=>{e.isConnected?n("disconnect"):n("connect")}}
+        title=${e.isConnected?"Disconnect from Device":"Connect to Device"}
         style="color: ${t}"
       >
         <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -5226,7 +5220,7 @@ print('KEY_OK')
         </main>
       </div>
     </div>
-    ${Bi(e,n)}
+    ${Bi(e)}
     ${Jt(e,n)}
     ${Ci(e,n)}
     ${ci(e,n)}
@@ -5310,7 +5304,7 @@ print('KEY_OK')
         </div>
       `:""}
     </div>
-  `,b=C=>{if(C.iconSvg)try{const z=new DOMParser().parseFromString(C.iconSvg,"image/svg+xml").querySelector("svg");if(z){const P=z.getAttribute("viewBox")||"0 0 24 24",F=Array.from(z.querySelectorAll("path"));return w`
+  `,b=C=>{if(C.iconSvg)try{const z=new DOMParser().parseFromString(C.iconSvg,"image/svg+xml").querySelector("svg");if(z){const P=z.getAttribute("viewBox")||"0 0 24 24",D=Array.from(z.querySelectorAll("path"));return w`
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               class="icon icon-extension icon-tabler" 
@@ -5324,16 +5318,16 @@ print('KEY_OK')
               stroke-linejoin="round"
               style="vertical-align: middle; border: none !important; outline: none !important; box-shadow: none !important; display: block;"
             >
-              ${F.map(q=>{const oe=q.getAttribute("d")||"",De=q.getAttribute("fill")||"none",Ae=q.getAttribute("stroke");return oe==="M0 0h24v24H0z"||Ae==="none"?w`<path d="${oe}" stroke="none" fill="none" />`:w`<path d="${oe}" stroke="currentColor" fill="${De}" />`})}
+              ${D.map(q=>{const oe=q.getAttribute("d")||"",De=q.getAttribute("fill")||"none",Ae=q.getAttribute("stroke");return oe==="M0 0h24v24H0z"||Ae==="none"?w`<path d="${oe}" stroke="none" fill="none" />`:w`<path d="${oe}" stroke="currentColor" fill="${De}" />`})}
             </svg>
-          `}}catch(T){console.warn("[System] Failed to parse extension icon SVG:",T)}const R=C.icon||"settings";return y.renderIcon(R,{className:"",size:20})},S=(e.installedExtensions||[]).map(C=>{const R=e.expandedExtensions[C.id],T=e.activeExtension===C.id,W=C.devices===!0;let z=null;if(W&&R)if(!e.loadedExtensions[C.id])console.warn("[System] Extension not loaded:",C.id);else{const P=e.loadedExtensions[C.id];if(!P.instance)try{const F=P.data.content,oe=new Function("DeviceAPI","html","emit","state",`
-              ${F}
-              const classMatch = ${JSON.stringify(F)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
+          `}}catch(T){console.warn("[System] Failed to parse extension icon SVG:",T)}const R=C.icon||"settings";return y.renderIcon(R,{className:"",size:20})},S=(e.installedExtensions||[]).map(C=>{const R=e.expandedExtensions[C.id],T=e.activeExtension===C.id,W=C.devices===!0;let z=null;if(W&&R)if(!e.loadedExtensions[C.id])console.warn("[System] Extension not loaded:",C.id);else{const P=e.loadedExtensions[C.id];if(!P.instance)try{const D=P.data.content,oe=new Function("DeviceAPI","html","emit","state",`
+              ${D}
+              const classMatch = ${JSON.stringify(D)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
               if (!classMatch) {
                 throw new Error('No extension class found');
               }
               return eval(classMatch[1]);
-            `)(DeviceAPI,w,n,e),De=new DeviceAPI(B),Ae=new oe(De,n,e,w);e.loadedExtensions[C.id].instance=Ae}catch(F){console.error(`[System] Error instantiating extension ${C.id}:`,F)}if(P.instance&&typeof P.instance.getMenuItems=="function")try{const F=P.instance.getMenuItems();F&&Array.isArray(F)&&(C.menu=F)}catch(F){console.error(`[System] Error getting menu items for ${C.id}:`,F)}if(P.instance&&typeof P.instance.renderSidebarDevices=="function")try{z=P.instance.renderSidebarDevices()}catch(F){console.error(`[System] Error rendering sidebar devices for ${C.id}:`,F)}else console.warn(`[System] renderSidebarDevices not available for ${C.id}`)}if(R&&e.loadedExtensions[C.id]?.instance){const P=e.loadedExtensions[C.id];if(P.instance&&typeof P.instance.getMenuItems=="function")try{const F=P.instance.getMenuItems();F&&Array.isArray(F)&&(C.menu=F)}catch(F){console.error(`[System] Error getting menu items for ${C.id}:`,F)}}return w`
+            `)(DeviceAPI,w,n,e),De=new DeviceAPI(B),Ae=new oe(De,n,e,w);e.loadedExtensions[C.id].instance=Ae}catch(D){console.error(`[System] Error instantiating extension ${C.id}:`,D)}if(P.instance&&typeof P.instance.getMenuItems=="function")try{const D=P.instance.getMenuItems();D&&Array.isArray(D)&&(C.menu=D)}catch(D){console.error(`[System] Error getting menu items for ${C.id}:`,D)}if(P.instance&&typeof P.instance.renderSidebarDevices=="function")try{z=P.instance.renderSidebarDevices()}catch(D){console.error(`[System] Error rendering sidebar devices for ${C.id}:`,D)}else console.warn(`[System] renderSidebarDevices not available for ${C.id}`)}if(R&&e.loadedExtensions[C.id]?.instance){const P=e.loadedExtensions[C.id];if(P.instance&&typeof P.instance.getMenuItems=="function")try{const D=P.instance.getMenuItems();D&&Array.isArray(D)&&(C.menu=D)}catch(D){console.error(`[System] Error getting menu items for ${C.id}:`,D)}}return w`
       <div class="system-sidebar-extension">
         <div 
           class="system-sidebar-item system-sidebar-toggle ${T?"active-extension":""}"
@@ -5346,9 +5340,9 @@ print('KEY_OK')
         
         ${R?w`
           <div class="system-sidebar-submenu">
-            ${C.menu.map(P=>{const F=e.activeExtension===C.id&&e.activeExtensionPanel===P.id,q=P.disabled===!0;return w`
+            ${C.menu.map(P=>{const D=e.activeExtension===C.id&&e.activeExtensionPanel===P.id,q=P.disabled===!0;return w`
                 <div 
-                  class="system-sidebar-subitem ${F?"active":""} ${q?"disabled":""}"
+                  class="system-sidebar-subitem ${D?"active":""} ${q?"disabled":""}"
                   onclick=${q?null:()=>n("change-extension-panel",{extensionId:C.id,panelId:P.id})}
                   style=${q?"opacity: 0.6; cursor: default; font-weight: 600;":""}
                 >
