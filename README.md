@@ -7,8 +7,8 @@
 Program embedded devices with natural language. No firmware updates required.
 </h4>
 <p align="center">
-  <a href="https://app.scriptostudio.com">
-    <img src="https://img.shields.io/badge/🚀_Launch_App-app.scriptostudio.com-6366f1?style=for-the-badge" alt="Launch ScriptO Studio" />
+  <a href="https://scriptostudio.com/app/">
+    <img src="https://img.shields.io/badge/🚀_Launch_App-scriptostudio.com/app-6366f1?style=for-the-badge" alt="Launch ScriptO Studio" />
   </a>
 </p>
 
@@ -55,12 +55,12 @@ Agentic code editor for MicroPython with syntax highlighting, file management, a
 
 ### 🧩 ScriptO Automations
 
-Script Objects are the ultimate device customization tool. Choose from a [library of ScriptOs](https://registry.scriptostudio.com/catalogue/) to get started, or create your own with the Smart Editor. See [Writing ScriptOs](/docs/user-guide/writing-scriptos/).
+Script Objects are the ultimate device customization tool. Choose from a [library of ScriptOs](https://scriptostudio.com/registry/catalogue/) to get started, or create your own with the Smart Editor. See [Writing ScriptOs](/docs/user-guide/writing-scriptos/).
 ![ScriptO Studio ScriptO](.github/images/scripto.png)
 
 ### 📦 System Extensions
 
-Add major new features at the touch of a button. Load [Extensions](https://registry.scriptostudio.com/extensions-catalogue/) like **OVMS**, **OpenInverter**, **GVRET**, or **Dala's Battery Emulator**. See [Extensions Overview](/docs/user-guide/extensions/).
+Add major new features at the touch of a button. Load [Extensions](https://scriptostudio.com/registry/extensions-catalogue/) like **OVMS**, **OpenInverter**, **GVRET**, or **Dala's Battery Emulator**. See [Extensions Overview](/docs/user-guide/extensions/).
 ![ScriptO Studio OI](.github/images/OI.png)
 
 ### ⚙️ Device Management
@@ -80,7 +80,7 @@ The registry provides a curated collection of reusable code:
 ### 🐍 ScriptOs (Python Scripts)
 Python scripts that run directly on your ESP32 device — hardware drivers, protocol implementations, and utility libraries.
 
-**Browse:** [registry.scriptostudio.com/catalogue/](https://registry.scriptostudio.com/catalogue/)
+**Browse:** [scriptostudio.com/registry/catalogue/](https://scriptostudio.com/registry/catalogue/)
 
 ### 🔌 Extensions (JavaScript + Python)
 Full-featured applications with rich UIs that extend ScriptO Studio's capabilities.
@@ -92,7 +92,7 @@ Full-featured applications with rich UIs that extend ScriptO Studio's capabiliti
 | **OpenInverter** | [openinverter.org](https://openinverter.org/) | 🚧 In development |
 | **Battery Emulator** | [Dala's Battery Emulator](https://github.com/dalathegreat/Battery-Emulator) | 🚧 In development |
 
-**Browse:** [registry.scriptostudio.com/extensions-catalogue/](https://registry.scriptostudio.com/extensions-catalogue/)
+**Browse:** [scriptostudio.com/registry/extensions-catalogue/](https://scriptostudio.com/registry/extensions-catalogue/)
 
 ---
 
@@ -114,7 +114,7 @@ Works directly in your browser. No software to install. See the [Flashing Firmwa
 
 ### 2. Open ScriptO Studio
 
-Visit **[app.scriptostudio.com](https://app.scriptostudio.com)** — works on desktop, tablet, or phone.
+Visit **[scriptostudio.com/app/](https://scriptostudio.com/app/)** — works on desktop, tablet, or phone.
 
 ### 3. Load an Extension
 
@@ -130,8 +130,8 @@ Your device keeps running the Extension autonomously. Access its web UI directly
 
 | Component | Description |
 |-----------|-------------|
-| **[ScriptO Studio](https://app.scriptostudio.com)** | Web IDE + Extension loader |
-| **[Registry](https://registry.scriptostudio.com)** | Catalogue of Extensions and ScriptOs |
+| **[ScriptO Studio](https://scriptostudio.com/app/)** | Web IDE + Extension loader |
+| **[Registry](https://scriptostudio.com/registry/)** | Catalogue of Extensions and ScriptOs |
 | **[pyDirect](https://github.com/jetpax/pyDirect)** | MicroPython fast-path C modules |
 | **[WebREPL Binary Protocol](https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md)** | IANA-registered sub-protocol |
 | **[MicroPython](https://micropython.org)** | Python for microcontrollers |
@@ -156,9 +156,9 @@ This repository hosts:
 
 | Path | Description | URL |
 |------|-------------|-----|
-| `/app/` | ScriptO Studio IDE | [app.scriptostudio.com](https://app.scriptostudio.com) |
-| `/registry/` | ScriptOs & Extensions catalogue | [registry.scriptostudio.com](https://registry.scriptostudio.com) |
-| `/docs/` | Documentation | [docs.scriptostudio.com](https://docs.scriptostudio.com) |
+| `/app/` | ScriptO Studio IDE | [scriptostudio.com/app/](https://scriptostudio.com/app/) |
+| `/registry/` | ScriptOs & Extensions catalogue | [scriptostudio.com/registry/](https://scriptostudio.com/registry/) |
+| `/docs/` | Documentation | [scriptostudio.com/docs/](https://scriptostudio.com/docs/) |
 
 ---
 
