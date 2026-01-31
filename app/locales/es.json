@@ -158,7 +158,7 @@
     "connectDevice": "Conectar Dispositivo",
     "connectHint": "Conecta tu ESP32 por USB y haz clic en Conectar.",
     "disconnect": "Desconectar",
-    "backToScenarios": "Volver a Escenarios",
+    "back": "← Atrás",
     "statusLog": "Registro de Estado",
     "readyToFlash": "Listo para Flashear",
     "pyDirectDetected": "pyDirect Detectado",
@@ -194,6 +194,16 @@
     "openDeviceSetup": "Abrir Configuración del Dispositivo",
     "done": "Hecho",
     "generatingCerts": "Esto generará nuevos certificados y reiniciará el dispositivo en modo configuración.",
-    "checkTerminal": "Revisa el terminal de abajo para ver el progreso."
+    "checkTerminal": "Revisa el terminal de abajo para ver el progreso.",
+    "selectFirmware": "Select Firmware",
+    "flashButton": "Flash Firmware",
+    "loadingFirmware": "Loading firmware options...",
+    "downloading": "Downloading...",
+    "flashing": "Flashing...",
+    "flashComplete": "Flash Complete",
+    "flashSuccess": "Firmware installed successfully!",
+    "flashSuccessHint": "Your device is ready for WiFi configuration.",
+    "configureWifi": "Configure WiFi",
+    "skipForNow": "Skip for now"
   }
 }
