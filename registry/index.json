@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1769913678,
+  "updated": 1769982959,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -482,6 +482,24 @@
       ],
       "license": "MIT",
       "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/SD%20Card%20Test.py"
+    },
+    {
+      "name": "ST7789 Display Demo",
+      "filename": "ST7789 Display Demo.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Display demo for ST7789-based LCD screens. Shows colorful graphics, \n                         text, and animations. Reads pin configuration from board.json \n                         for maximum portability across different boards.",
+      "category": "Display",
+      "tags": [
+        "display"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/ST7789%20Display%20Demo.py"
     },
     {
       "name": "Syslog Test",
