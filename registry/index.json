@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1769982959,
+  "updated": 1769983158,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -145,6 +145,24 @@
       "license": "MIT",
       "docs": "https://github.com/jczic",
       "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/DAC%20Output.py"
+    },
+    {
+      "name": "Display Benchmark",
+      "filename": "Display Benchmark.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Benchmarks display performance. Measures FPS for various \n                         operations: full screen fills, partial updates, rectangles,\n                         text rendering, and SPI throughput.",
+      "category": "Display",
+      "tags": [
+        "display"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Display%20Benchmark.py"
     },
     {
       "name": "ES8311 Play Sound",
