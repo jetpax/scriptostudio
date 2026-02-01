@@ -13,7 +13,7 @@ The **pyDirect Setup** tool at [pydirect.com](https://pydirect.com) provides a u
 | **New Device** | Flash fresh firmware onto a blank ESP32 |
 | **Forgot Credentials** | View saved hostname and password |
 | **Change WiFi** | Update network settings on existing device |
-| **Re-provision** | Fresh start with new certificates |
+| **Re-provision** | Generate new certificates for HTTPS |
 
 ## New Device Setup
 
@@ -24,12 +24,19 @@ If you have a brand new ESP32 chip without firmware:
 3. Click **Connect Device**
 4. Select **New Device** when the chip is detected
 5. Flash the firmware (automatically selected for your chip)
-6. Configure WiFi when prompted
-7. Device reboots and redirects you to the device's web interface
-8. **Accept the browser security warning** (self-signed certificate) - click Advanced → Proceed
-9. **Enter an access password** - this is stored on the device and used for all future connections
-10. You'll be redirected to ScriptO Studio
-11. When ScriptO Studio prompts for connection, **use the same password** you set in step 9
+6. **Configure WiFi** when the network modal appears
+   - Select your network from the list (shows signal strength in dBm)
+   - Enter the WiFi password
+   - Device connects and saves settings
+   - You're returned to the scenarios screen
+7. Select **Re-provision Device** to generate certificates
+   - Certificate is generated and installed
+   - Device resets and connects to WiFi
+8. **Accept the security warning modal** and click to open device
+9. **Accept the browser security warning** (click Advanced → Proceed)
+10. **Set an access password** on the device's web interface
+11. You'll be redirected to ScriptO Studio
+12. When ScriptO Studio prompts for connection, **use the same password** you set in step 10
 
 > [!IMPORTANT]
 > The password you set during provisioning is used both for the device's local web interface AND for ScriptO Studio connections. Remember this password!
@@ -60,19 +67,27 @@ To update network settings on an existing device:
 1. **Go to [pydirect.com](https://pydirect.com)**
 2. Connect via USB and click **Connect Device**
 3. Select **Change WiFi**
-4. Choose from the list of detected networks
-5. Enter the WiFi password
-6. Device connects to the new network and generates a new certificate
+4. A modal shows available networks with signal strength (dBm)
+5. Select your network and enter the WiFi password
+6. Device connects and you're returned to scenarios
+
+> [!NOTE]
+> Change WiFi only updates network settings. If you need new HTTPS certificates, 
+> select **Re-provision Device** afterward.
 
 ## Re-provision
 
-For a complete fresh start with new certificates:
+To generate new HTTPS certificates:
 
 1. **Go to [pydirect.com](https://pydirect.com)**
 2. Connect via USB and click **Connect Device**
-3. Select **Re-provision**
-4. Enter a new password when prompted
-5. Device generates new certificates and restarts
+3. Select **Re-provision Device**
+4. New certificate is generated and installed
+5. Device resets and connects to WiFi
+6. A modal explains the security warning you'll see
+7. Click **Connect to [hostname]** to open device in new tab
+8. Accept the browser security warning
+9. Set a new password on the device's web interface
 
 ## Connection Requirements
 
