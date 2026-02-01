@@ -209,12 +209,25 @@
       }
     </script>
 
-    <script type="module" crossorigin src="/app/assets/main-D2Mi4nbY.js"></script>
+    <script type="module" crossorigin src="/app/assets/main-jEHvBDx6.js"></script>
     <link rel="modulepreload" crossorigin href="/app/assets/vendor-CeCKEaxg.js">
-    <link rel="modulepreload" crossorigin href="/app/assets/vendor-QvVPN6l_.js">
-    <link rel="stylesheet" crossorigin href="/app/assets/vendor-CbBHggdi.css">
+    <link rel="modulepreload" crossorigin href="/app/assets/vendor-q986QTyb.js">
+    <link rel="stylesheet" crossorigin href="/app/assets/vendor-BUfYhZ2z.css">
   </head>
   <body>
+    <!-- Inline SVG sprite for icon references -->
+    <div id="svg-sprite-container" style="display: none;"></div>
+    <script>
+      // Load and embed the SVG sprite inline for <use> references to work
+      fetch('media/tabler-sprite.svg?v=24')
+        .then(r => r.text())
+        .then(svg => {
+          // Remove the display:none from the loaded SVG
+          const cleaned = svg.replace('style="display: none;"', '');
+          document.getElementById('svg-sprite-container').innerHTML = cleaned;
+        })
+        .catch(e => console.warn('[Sprite] Failed to load:', e));
+    </script>
     <div id="app"></div>
   </body>
 </html>

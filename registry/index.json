@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1769706202,
+  "updated": 1769913678,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -198,6 +198,42 @@
       "license": "MIT",
       "docs": "https://github.com/jczic",
       "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/GPIO%20Output.py"
+    },
+    {
+      "name": "Board Hardware Test",
+      "filename": "Hardware Test.py",
+      "version": [
+        3,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Tests only the hardware features defined in your board.json. Reads the manifest and validates each enabled capability - skips anything not configured.",
+      "category": "Hardware",
+      "tags": [
+        "hardware"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/Hardware%20Test.py"
+    },
+    {
+      "name": "I2C Detect",
+      "filename": "I2C Detect.py",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Scan the I2C bus and display detected devices in Linux i2cdetect format. Shows a grid of all addresses 0x00-0x77 with -- for no device and the address for detected devices.",
+      "category": "Hardware",
+      "tags": [
+        "hardware"
+      ],
+      "license": "MIT",
+      "docs": "https://github.com/jetpax",
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/I2C%20Detect.py"
     },
     {
       "name": "I2C Slaves Scan",
