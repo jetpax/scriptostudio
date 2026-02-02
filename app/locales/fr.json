@@ -162,7 +162,7 @@
     "statusLog": "Journal d'État",
     "readyToFlash": "Prêt à Flasher",
     "pyDirectDetected": "pyDirect Détecté",
-    "newDevice": "Nouvel Appareil",
+    "newDevice": "Flasher l'appareil",
     "newDeviceDesc": "Flasher un nouveau firmware sur un ESP32 vierge",
     "forgotCredentials": "Identifiants Oubliés",
     "forgotCredentialsDesc": "Afficher le nom d'hôte et le mot de passe enregistrés",
