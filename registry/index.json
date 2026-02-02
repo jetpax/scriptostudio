@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1769983158,
+  "updated": 1770004986,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -221,7 +221,7 @@
       "name": "Board Hardware Test",
       "filename": "Hardware Test.py",
       "version": [
-        3,
+        4,
         0,
         0
       ],
