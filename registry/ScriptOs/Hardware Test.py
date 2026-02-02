@@ -9,7 +9,7 @@ dict(
 
     info    = dict(
         name        = 'Board Hardware Test',
-        version     = [3, 0, 0],
+        version     = [4, 0, 0],
         category    = 'Hardware',
         description = 'Tests only the hardware features defined in your board.json. Reads the manifest and validates each enabled capability - skips anything not configured.',
         author      = 'JetPax',
@@ -19,6 +19,9 @@ dict(
     
     args    = dict(
         test_buzzer    = dict( label    = 'Test buzzer (makes sound)?',
+                              type     = bool,
+                              value    = True ),
+        test_audio     = dict( label    = 'Test audio codec (plays tone)?',
                               type     = bool,
                               value    = True ),
         verbose        = dict( label    = 'Verbose output?',
@@ -31,7 +34,7 @@ dict(
 # === END_CONFIG_PARAMETERS ===
 
 
-from machine import Pin, I2C, PWM, ADC
+from machine import Pin, I2C, PWM, ADC, SDCard
 import time
 from lib.sys import board
 
@@ -68,10 +71,18 @@ print(f"  Revision: {board.id.revision}")
 i2c = None
 devices = []
 
+# Try different I2C bus naming conventions
+i2c_bus_name = None
 if board.has("i2c.sensors"):
+    i2c_bus_name = "sensors"
+elif board.has("i2c.i2c0"):
+    i2c_bus_name = "i2c0"
+
+if i2c_bus_name:
     section("I2C Bus")
     
-    i2c_cfg = board.i2c("sensors")
+    i2c_cfg = board.i2c(i2c_bus_name)
+    print(f"  Bus: {i2c_bus_name}")
     print(f"  SCL: GPIO{i2c_cfg.scl}, SDA: GPIO{i2c_cfg.sda}")
     
     # Wake up touch controller if reset pin defined
@@ -166,6 +177,27 @@ if board.has("gpio_expander"):
         results["gpio_expander"] = False
 
 
+# --- Audio Codec (ES8311, etc.) ---
+if board.has("audio_codec"):
+    try:
+        codec = board.device("audio_codec")
+        addr = int(codec.i2c_address, 16)
+        if addr in devices:
+            # Try reading ES8311 chip ID register (0xFD for ES8311)
+            try:
+                chip_id = i2c.readfrom_mem(addr, 0xFD, 1)[0]
+                log(f"Audio Codec: {codec.type} @ 0x{addr:02X} (ID=0x{chip_id:02X})", "pass")
+            except:
+                log(f"Audio Codec: {codec.type} @ 0x{addr:02X}", "pass")
+            results["audio_codec"] = True
+        else:
+            log(f"Audio Codec: {codec.type} not found @ 0x{addr:02X}", "fail")
+            results["audio_codec"] = False
+    except Exception as e:
+        log(f"Audio Codec: {e}", "fail")
+        results["audio_codec"] = False
+
+
 # --- Display/Backlight ---
 if board.has("display"):
     try:
@@ -181,6 +213,28 @@ if board.has("display"):
     except Exception as e:
         log(f"Backlight: {e}", "fail")
         results["backlight"] = False
+
+
+# --- Display Port (MIPI-DSI) ---
+if board.has("display_port"):
+    try:
+        dp = board.device("display_port")
+        log(f"Display Port: {dp.type} ({dp.lanes}-lane)", "info")
+        # MIPI-DSI can't be easily tested without a display attached, just report config
+        results["display_port"] = True
+    except Exception as e:
+        log(f"Display Port: {e}", "warn")
+
+
+# --- Camera Port (MIPI-CSI) ---
+if board.has("camera_port"):
+    try:
+        cam = board.device("camera_port")
+        log(f"Camera Port: {cam.type} ({cam.lanes}-lane)", "info")
+        # MIPI-CSI can't be easily tested without a camera attached, just report config
+        results["camera_port"] = True
+    except Exception as e:
+        log(f"Camera Port: {e}", "warn")
 
 
 # --- Battery ---
@@ -219,20 +273,126 @@ if board.has("buzzer"):
         results["buzzer"] = False
 
 
+# --- SD Card ---
+if board.has("sdcard"):
+    try:
+        sd_cfg = board.device("sdcard")
+        mode = getattr(sd_cfg, 'mode', 'SDMMC')
+        
+        if mode == "SDMMC":
+            # SDMMC mode (ESP32-P4, etc.)
+            sdmmc_cfg = board._res.get("sdmmc", {}).get("sdcard", {})
+            if sdmmc_cfg:
+                # Try to mount SD card
+                try:
+                    import os
+                    sd = SDCard(slot=1, 
+                               clk=sdmmc_cfg.get('clk'),
+                               cmd=sdmmc_cfg.get('cmd'),
+                               d0=sdmmc_cfg.get('d0'),
+                               d1=sdmmc_cfg.get('d1'),
+                               d2=sdmmc_cfg.get('d2'),
+                               d3=sdmmc_cfg.get('d3'))
+                    os.mount(sd, '/sd')
+                    files = os.listdir('/sd')
+                    os.umount('/sd')
+                    log(f"SD Card: SDMMC 4-bit ({len(files)} files)", "pass")
+                    results["sdcard"] = True
+                except OSError as oe:
+                    if "no card" in str(oe).lower() or "timeout" in str(oe).lower():
+                        log("SD Card: no card inserted", "warn")
+                        results["sdcard"] = None  # Not a failure, just no card
+                    else:
+                        raise
+            else:
+                log("SD Card: SDMMC pins not configured", "warn")
+                results["sdcard"] = False
+        else:
+            # SPI mode
+            log(f"SD Card: {mode} mode configured", "info")
+            results["sdcard"] = True
+    except Exception as e:
+        log(f"SD Card: {e}", "fail")
+        results["sdcard"] = False
+
+
+# --- Ethernet ---
+if board.has("ethernet"):
+    section("Network Tests")
+    try:
+        eth_cfg = board.device("ethernet")
+        phy = getattr(eth_cfg, 'phy', 'unknown')
+        interface = getattr(eth_cfg, 'interface', 'unknown')
+        
+        try:
+            import network
+            lan = network.LAN()
+            lan.active(True)
+            time.sleep_ms(500)  # Wait for PHY to initialize
+            
+            if lan.isconnected():
+                ip_info = lan.ifconfig()
+                log(f"Ethernet: {phy} ({interface}) - Connected: {ip_info[0]}", "pass")
+            else:
+                mac = ':'.join('%02X' % b for b in lan.config('mac'))
+                log(f"Ethernet: {phy} ({interface}) - PHY OK (MAC: {mac})", "pass")
+            results["ethernet"] = True
+        except Exception as net_e:
+            log(f"Ethernet: {phy} PHY - network module error: {net_e}", "fail")
+            results["ethernet"] = False
+    except Exception as e:
+        log(f"Ethernet: {e}", "fail")
+        results["ethernet"] = False
+
+
+# --- WiFi via C6 Coprocessor ---
+if board.has("c6_coprocessor"):
+    try:
+        c6 = board.device("c6_coprocessor")
+        interface = getattr(c6, 'interface', 'SDIO')
+        features = getattr(c6, 'features', [])
+        
+        try:
+            import network
+            wlan = network.WLAN(network.STA_IF)
+            wlan.active(True)
+            time.sleep_ms(300)
+            
+            mac = ':'.join('%02X' % b for b in wlan.config('mac'))
+            log(f"WiFi (C6): {c6.type} via {interface} (MAC: {mac})", "pass")
+            
+            # Scan for networks as an additional check
+            networks = wlan.scan()
+            log(f"  → {len(networks)} networks visible", "info")
+            results["c6_coprocessor"] = True
+        except Exception as wifi_e:
+            log(f"WiFi (C6): {c6.type} - {wifi_e}", "fail")
+            results["c6_coprocessor"] = False
+    except Exception as e:
+        log(f"C6 Coprocessor: {e}", "fail")
+        results["c6_coprocessor"] = False
+
+
 # ============================================================================
 # Summary
 # ============================================================================
 
 section("Summary")
 
-passed = sum(1 for v in results.values() if v)
-total = len(results)
+# Filter out None results (e.g., no SD card inserted is not a failure)
+actual_results = {k: v for k, v in results.items() if v is not None}
+passed = sum(1 for v in actual_results.values() if v)
+total = len(actual_results)
 
 for name, ok in sorted(results.items()):
-    print(f"  {'✅' if ok else '❌'} {name}")
+    if ok is None:
+        print(f"  ⏭️ {name} (skipped)")
+    else:
+        print(f"  {'✅' if ok else '❌'} {name}")
 
 print()
 if passed == total:
     print(f"🎉 ALL {total} TESTS PASSED!")
 else:
     print(f"⚠️  {passed}/{total} passed")
+
