@@ -1,0 +1,238 @@
+#!/usr/bin/env node
+/**
+ * Extension Bundler Tool
+ * 
+ * Bundles V2 extensions from modular source into distributable bundles.
+ * 
+ * Usage:
+ *   node bundle_extensions.js --extensions-dir registry/Extensions --output-dir registry/bundles
+ * 
+ * Expects each extension to have:
+ *   extension.json  - metadata
+ *   src/index.js    - entry point (exports default class)
+ *   device/         - optional files for device deployment
+ *   styles.css      - optional scoped styles
+ */
+
+import * as esbuild from 'esbuild'
+import * as fs from 'fs'
+import * as path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// Parse CLI args
+function parseArgs() {
+  const args = process.argv.slice(2)
+  const result = {
+    extensionsDir: 'registry/Extensions',
+    outputDir: 'registry/bundles',
+    verbose: false
+  }
+  
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--extensions-dir' && args[i + 1]) {
+      result.extensionsDir = args[++i]
+    } else if (args[i] === '--output-dir' && args[i + 1]) {
+      result.outputDir = args[++i]
+    } else if (args[i] === '--verbose' || args[i] === '-v') {
+      result.verbose = true
+    }
+  }
+  
+  return result
+}
+
+// Check if extension uses V2 format (has extension.json + src/)
+function isV2Extension(extDir) {
+  return fs.existsSync(path.join(extDir, 'extension.json')) &&
+         fs.existsSync(path.join(extDir, 'src', 'index.js'))
+}
+
+// Read and encode device files
+function collectDeviceFiles(extDir, meta) {
+  const deviceFiles = {}
+  const deviceDir = path.join(extDir, 'device')
+  
+  if (!fs.existsSync(deviceDir)) {
+    return deviceFiles
+  }
+  
+  // If devicePaths defined in meta, use that mapping
+  if (meta.devicePaths) {
+    for (const [srcPath, targetPath] of Object.entries(meta.devicePaths)) {
+      const fullPath = path.join(deviceDir, srcPath)
+      if (fs.existsSync(fullPath)) {
+        const content = fs.readFileSync(fullPath, 'utf-8')
+        deviceFiles[targetPath] = Buffer.from(content).toString('base64')
+      }
+    }
+  } else {
+    // Auto-discover: walk device/ directory
+    walkDir(deviceDir, (filePath) => {
+      const relativePath = path.relative(deviceDir, filePath)
+      const content = fs.readFileSync(filePath, 'utf-8')
+      // Default target path: /lib/ext/{id}/{relativePath}
+      const targetPath = `/lib/ext/${meta.id}/${relativePath}`
+      deviceFiles[targetPath] = Buffer.from(content).toString('base64')
+    })
+  }
+  
+  return deviceFiles
+}
+
+// Recursive directory walker
+function walkDir(dir, callback) {
+  const files = fs.readdirSync(dir)
+  for (const file of files) {
+    const filePath = path.join(dir, file)
+    const stat = fs.statSync(filePath)
+    if (stat.isDirectory()) {
+      walkDir(filePath, callback)
+    } else {
+      callback(filePath)
+    }
+  }
+}
+
+// Read optional styles.css
+function getStyles(extDir) {
+  const stylesPath = path.join(extDir, 'styles.css')
+  if (fs.existsSync(stylesPath)) {
+    return fs.readFileSync(stylesPath, 'utf-8')
+  }
+  return null
+}
+
+// Bundle a single V2 extension
+async function bundleExtension(extDir, outputDir, verbose) {
+  const metaPath = path.join(extDir, 'extension.json')
+  const entryPath = path.join(extDir, 'src', 'index.js')
+  
+  // Read metadata
+  const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
+  const extName = meta.name || path.basename(extDir)
+  const extId = meta.id || extName.toLowerCase()
+  
+  if (verbose) {
+    console.log(`  📦 Bundling ${extName} (${extId})...`)
+  }
+  
+  // Bundle JS with esbuild
+  const jsResult = await esbuild.build({
+    entryPoints: [entryPath],
+    bundle: true,
+    format: 'esm',
+    write: false,
+    minify: true,
+    target: ['es2020']
+  })
+  
+  const bundledJs = jsResult.outputFiles[0].text
+  
+  // Collect device files
+  const deviceFiles = collectDeviceFiles(extDir, meta)
+  
+  // Get optional styles
+  const styles = getStyles(extDir)
+  if (styles) {
+    meta.styles = styles
+  }
+  
+  // Generate bundle output
+  const bundle = generateBundle(meta, bundledJs, deviceFiles)
+  
+  // Write to output
+  const outputPath = path.join(outputDir, `${extId}.bundle.js`)
+  fs.writeFileSync(outputPath, bundle)
+  
+  const stats = {
+    jsSize: bundledJs.length,
+    deviceFileCount: Object.keys(deviceFiles).length,
+    totalSize: bundle.length
+  }
+  
+  if (verbose) {
+    console.log(`    ✓ JS: ${(stats.jsSize / 1024).toFixed(1)}KB, Files: ${stats.deviceFileCount}, Total: ${(stats.totalSize / 1024).toFixed(1)}KB`)
+  }
+  
+  return { id: extId, name: extName, outputPath, stats }
+}
+
+// Generate the final bundle format
+function generateBundle(meta, jsCode, deviceFiles) {
+  // Format meta as escaped JSON
+  const metaJson = JSON.stringify(meta, null, 2)
+  const deviceFilesJson = JSON.stringify(deviceFiles, null, 2)
+  
+  return `// === EXTENSION_BUNDLE_V2 ===
+// Generated by bundle_extensions.js
+// Do not edit - regenerated on each build
+
+export const __EXTENSION_META__ = ${metaJson};
+
+export const __DEVICE_FILES__ = ${deviceFilesJson};
+
+// Bundled extension code
+${jsCode}
+`
+}
+
+// Main
+async function main() {
+  const args = parseArgs()
+  
+  console.log('🔧 Extension Bundler V2')
+  console.log(`   Extensions: ${args.extensionsDir}`)
+  console.log(`   Output: ${args.outputDir}`)
+  console.log('')
+  
+  // Ensure output directory exists
+  if (!fs.existsSync(args.outputDir)) {
+    fs.mkdirSync(args.outputDir, { recursive: true })
+  }
+  
+  // Find all extension directories
+  const extDirs = fs.readdirSync(args.extensionsDir)
+    .map(name => path.join(args.extensionsDir, name))
+    .filter(dir => fs.statSync(dir).isDirectory())
+  
+  const results = { v2: [], v1: [], failed: [] }
+  
+  for (const extDir of extDirs) {
+    const extName = path.basename(extDir)
+    
+    if (isV2Extension(extDir)) {
+      try {
+        const result = await bundleExtension(extDir, args.outputDir, args.verbose)
+        results.v2.push(result)
+        console.log(`✅ ${result.name}`)
+      } catch (err) {
+        console.log(`❌ ${extName}: ${err.message}`)
+        results.failed.push({ name: extName, error: err.message })
+      }
+    } else {
+      // V1 extension - skip or copy as-is
+      results.v1.push({ name: extName })
+      if (args.verbose) {
+        console.log(`⏭️  ${extName} (V1 format, skipping)`)
+      }
+    }
+  }
+  
+  // Summary
+  console.log('')
+  console.log('─'.repeat(40))
+  console.log(`Bundled: ${results.v2.length} V2 extensions`)
+  if (results.v1.length) {
+    console.log(`Skipped: ${results.v1.length} V1 extensions`)
+  }
+  if (results.failed.length) {
+    console.log(`Failed: ${results.failed.length} extensions`)
+  }
+}
+
+main().catch(err => {
+  console.error('Fatal error:', err)
+  process.exit(1)
+})

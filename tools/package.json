@@ -1,0 +1,12 @@
+{
+  "name": "scriptostudio-tools",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Build tools for ScriptO Studio registry",
+  "scripts": {
+    "bundle": "node bundle_extensions.js --extensions-dir ../registry/Extensions --output-dir ../registry/bundles --verbose"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  }
+}
