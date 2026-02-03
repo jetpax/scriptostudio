@@ -12,6 +12,9 @@ import { renderSpotValuesTab } from './tabs/SpotValuesTab.js'
 import { renderCanMappingsTab } from './tabs/CanMappingsTab.js'
 import { renderCanMessagesTab } from './tabs/CanMessagesTab.js'
 import { renderOtaUpdateTab } from './tabs/OtaUpdateTab.js'
+import { renderCommandsTab } from './tabs/CommandsTab.js'
+import { renderPlotTab } from './tabs/PlotTab.js'
+import { renderErrorsTab } from './tabs/ErrorsTab.js'
 
 class OpenInverterExtension {
   // Embedded Tabler Icons for self-contained extension (no dependency on SS sprite)
@@ -314,6 +317,30 @@ class OpenInverterExtension {
   }
 
   /**
+   * Render method: Device Control / Commands Tab
+   * Delegates to renderCommandsTab() function (defined in tabs/CommandsTab.js)
+   */
+  renderCommands() {
+    return renderCommandsTab.call(this)
+  }
+
+  /**
+   * Render method: Live Plot Tab 
+   * Delegates to renderPlotTab() function (defined in tabs/PlotTab.js)
+   */
+  renderPlot() {
+    return renderPlotTab.call(this)
+  }
+
+  /**
+   * Render method: Error Log Tab
+   * Delegates to renderErrorsTab() function (defined in tabs/ErrorsTab.js)
+   */
+  renderErrors() {
+    return renderErrorsTab.call(this)
+  }
+
+  /**
    * Render an embedded Tabler icon as a data URI for use in img tags
    * @param {string} name - Icon name from ICONS
    * @param {number} size - Icon size in pixels (default 24)
@@ -496,6 +523,304 @@ class OpenInverterExtension {
         return this.html`<div class="panel-message">Unknown tab</div>`
     }
   }
+
+  // === Connection Management Methods (from original) ===
+
+  async scanCanBus(fullScan = false) {
+    this.state.isScanning = true
+    this.state.canScanResults = []
+    this.state.scanProgress = null
+    this.emit('render')
+
+    try {
+      const scanArgs = JSON.stringify({ quick: !fullScan })
+      const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus(${scanArgs})`)
+      const parsed = this.device.parseJSON(result)
+      
+      if (parsed.ARG && parsed.ARG.error) {
+        this.state.scanMessage = `Error: ${parsed.ARG.error}`
+        this.state.canScanResults = []
+      } else if (parsed.ARG && parsed.ARG.devices) {
+        this.state.canScanResults = parsed.ARG.devices
+        
+        if (this.state.canScanResults.length === 0) {
+          this.state.scanMessage = fullScan 
+            ? `No devices found (scanned all 127 node IDs)`
+            : `No devices found (scanned node IDs 1-10). Try "Full Scan" to check all 127 node IDs.`
+        } else {
+          this.state.scanMessage = null
+        }
+      } else {
+        this.state.scanMessage = 'Scan completed but received unexpected response format'
+      }
+    } catch (error) {
+      console.error('[OI Connection] Scan failed:', error)
+      this.state.scanMessage = `Scan failed: ${error.message}`
+      this.state.canScanResults = []
+    } finally {
+      this.state.isScanning = false
+      this.state.scanProgress = null
+      this.emit('render')
+    }
+  }
+
+  async connectToDevice() {
+    try {
+      const args = JSON.stringify({ node_id: this.state.selectedNodeId })
+      const result = await this.device.execute(`from lib.OI_helpers import initializeDevice; initializeDevice(${args})`)
+      const parsed = this.device.parseJSON(result)
+      
+      if (parsed.success || (parsed.ARG && parsed.ARG.success)) {
+        this.state.oiDeviceConnected = true
+      } else {
+        console.error('[OI Connection] Connection failed:', parsed)
+        alert('Failed to connect to device. Check console for details.')
+      }
+    } catch (error) {
+      console.error('[OI Connection] Connection error:', error)
+      alert('Failed to connect: ' + error.message)
+    }
+    
+    this.emit('render')
+  }
+
+  async connectToNode(nodeId) {
+    this.state.selectedNodeId = nodeId
+    await this.connectToDevice()
+  }
+
+  async disconnectDevice() {
+    try {
+      await this.device.execute('from lib.OI_helpers import disconnectDevice; disconnectDevice()')
+      this.state.oiDeviceConnected = false
+    } catch (error) {
+      console.error('[OI Connection] Disconnect error:', error)
+    }
+    
+    this.emit('render')
+  }
+
+  // === Device Command Methods (from original) ===
+
+  async deviceSave() {
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceSave; deviceSave()')
+      alert('Parameters saved to flash')
+    } catch (error) {
+      alert('Failed to save parameters: ' + error.message)
+    }
+  }
+
+  async deviceLoad() {
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceLoad; deviceLoad()')
+      alert('Parameters loaded from flash')
+    } catch (error) {
+      alert('Failed to load parameters: ' + error.message)
+    }
+  }
+
+  async deviceLoadDefaults() {
+    if (!confirm('Load factory defaults? This will overwrite all current parameters.')) return
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceLoadDefaults; deviceLoadDefaults()')
+      alert('Factory defaults loaded')
+    } catch (error) {
+      alert('Failed to load defaults: ' + error.message)
+    }
+  }
+
+  async deviceStart() {
+    const mode = document.getElementById('oi-start-mode')?.value || '1'
+    try {
+      await this.device.execute(`from lib.OI_helpers import deviceStart; deviceStart({'mode': ${mode}})`)
+      alert('Device started in mode ' + mode)
+    } catch (error) {
+      alert('Failed to start device: ' + error.message)
+    }
+  }
+
+  async deviceStop() {
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceStop; deviceStop()')
+      alert('Device stopped')
+    } catch (error) {
+      alert('Failed to stop device: ' + error.message)
+    }
+  }
+
+  async deviceReset() {
+    if (!confirm('Reset device? This will restart the controller.')) return
+    try {
+      await this.device.execute('from lib.OI_helpers import deviceReset; deviceReset()')
+      alert('Device reset command sent')
+    } catch (error) {
+      alert('Failed to reset device: ' + error.message)
+    }
+  }
+
+  // === Plot Methods (from original) ===
+
+  togglePlotVariable(varName, isChecked) {
+    if (isChecked) {
+      if (!this.state.plotState.selectedVars.includes(varName)) {
+        this.state.plotState.selectedVars.push(varName)
+      }
+    } else {
+      this.state.plotState.selectedVars = this.state.plotState.selectedVars.filter(v => v !== varName)
+    }
+    this.emit('render')
+  }
+
+  async startPlot() {
+    if (this.state.plotState.selectedVars.length === 0) {
+      alert('Please select at least one variable to plot')
+      return
+    }
+
+    this.state.plotState.isPlotting = true
+    this.state.plotState.isPaused = false
+    this.emit('render')
+
+    setTimeout(() => this.initializeChart(), 100)
+  }
+
+  initializeChart() {
+    const canvas = document.getElementById('oi-plot-canvas')
+    if (!canvas) {
+      console.error('[OI Plot] Canvas not found')
+      return
+    }
+
+    if (this.state.plotState.chart) {
+      this.state.plotState.chart.destroy()
+    }
+
+    const ctx = canvas.getContext('2d')
+    const colors = [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)', 
+      'rgb(255, 159, 64)',
+      'rgb(153, 102, 255)',
+      'rgb(255, 205, 86)',
+      'rgb(75, 192, 192)'
+    ]
+
+    const datasets = this.state.plotState.selectedVars.map((varName, idx) => ({
+      label: varName,
+      data: [],
+      borderColor: colors[idx % colors.length],
+      backgroundColor: colors[idx % colors.length],
+      fill: false,
+      pointRadius: 0,
+      borderWidth: 2
+    }))
+
+    this.state.plotState.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        scales: {
+          x: { display: true, title: { display: true, text: 'Time (s)' } },
+          y: { display: true, title: { display: true, text: 'Value' } }
+        },
+        plugins: { legend: { display: true, position: 'top' } }
+      }
+    })
+
+    this.state.plotState.dataTime = 0
+    this.acquirePlotData()
+  }
+
+  async acquirePlotData() {
+    if (!this.state.plotState.isPlotting || this.state.plotState.isPaused) {
+      return
+    }
+
+    try {
+      const varNames = this.state.plotState.selectedVars
+      const argsStr = JSON.stringify(varNames)
+      const result = await this.device.execute(`from lib.OI_helpers import getPlotData; getPlotData(${argsStr})`)
+      const parsed = this.device.parseJSON(result)
+      const plotData = parsed.ARG || parsed
+
+      if (plotData && this.state.plotState.chart) {
+        const chart = this.state.plotState.chart
+        this.state.plotState.dataTime += this.state.plotState.updateInterval / 1000
+        chart.data.labels.push(this.state.plotState.dataTime.toFixed(1))
+
+        varNames.forEach((varName, idx) => {
+          const value = plotData[varName] !== undefined ? plotData[varName] : 0
+          chart.data.datasets[idx].data.push(value)
+        })
+
+        // Limit data points
+        while (chart.data.labels.length > this.state.plotState.maxDataPoints) {
+          chart.data.labels.shift()
+          chart.data.datasets.forEach(ds => ds.data.shift())
+        }
+
+        chart.update('none')
+      }
+    } catch (error) {
+      console.error('[OI Plot] Data acquisition error:', error)
+    }
+
+    setTimeout(() => this.acquirePlotData(), this.state.plotState.updateInterval)
+  }
+
+  pauseResumePlot() {
+    this.state.plotState.isPaused = !this.state.plotState.isPaused
+    this.emit('render')
+    
+    if (!this.state.plotState.isPaused) {
+      this.acquirePlotData()
+    }
+  }
+
+  stopPlot() {
+    this.state.plotState.isPlotting = false
+    this.state.plotState.isPaused = false
+    
+    if (this.state.plotState.chart) {
+      this.state.plotState.chart.destroy()
+      this.state.plotState.chart = null
+    }
+    
+    this.emit('render')
+  }
+
+  // === Device Info Methods (from original) ===
+
+  async loadDeviceInfo() {
+    this.state.isLoadingDeviceInfo = true
+    this.emit('render')
+
+    try {
+      const infoResult = await this.device.execute('from lib.OI_helpers import getDeviceInfo; getDeviceInfo()')
+      const info = this.device.parseJSON(infoResult)
+      this.state.oiDeviceInfo = info.ARG || info
+
+      const errorResult = await this.device.execute('from lib.OI_helpers import getErrorLog; getErrorLog()')
+      const errors = this.device.parseJSON(errorResult)
+      const errorList = errors.ARG || errors
+      this.state.oiErrorLog = Array.isArray(errorList) ? errorList : []
+    } catch (error) {
+      console.error('[OI App] Failed to load device info:', error)
+      this.state.oiDeviceInfo = null
+      this.state.oiErrorLog = []
+    } finally {
+      this.state.isLoadingDeviceInfo = false
+      this.emit('render')
+    }
+  }
 }
+
 
 export { OpenInverterExtension as default }
