@@ -320,3 +320,5 @@ function handleDeletePeriodicMessage(index) {
     this.emit('render')
   }
 }
+
+export { renderCanMessagesTab }

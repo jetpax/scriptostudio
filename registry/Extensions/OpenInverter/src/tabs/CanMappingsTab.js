@@ -5,6 +5,8 @@
  * Maps parameters to CAN message positions.
  */
 
+import { getCanMappings, getAllParamsWithIds, addCanMapping, removeCanMapping } from '../utils/oiHelpers.js'
+
 /**
  * Render the CAN Mappings tab
  * @this {OpenInverterExtension}
@@ -668,3 +670,5 @@ async function refreshCanMappings() {
     alert(`Failed to load CAN mappings: ${error.message}`)
   }
 }
+
+export { renderCanMappingsTab }

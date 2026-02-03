@@ -363,3 +363,5 @@ async function pollFirmwareProgress() {
 
   throw new Error('Upgrade timeout')
 }
+
+export { renderOtaUpdateTab }

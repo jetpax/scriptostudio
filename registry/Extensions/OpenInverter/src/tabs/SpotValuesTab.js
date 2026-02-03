@@ -11,6 +11,8 @@
  * - Click to toggle chart display
  */
 
+import { getSpotValues } from '../utils/oiHelpers.js'
+
 /**
  * Render the Spot Values tab (Overview)
  * @this {OpenInverterExtension}
@@ -141,7 +143,7 @@ function renderSpotValuesTab() {
                 ${category}
                 <span class="param-count">(${spots.length})</span>
               </h3>
-              <div class="parameters-list">
+              <div class="parameters-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
                 ${spots.map(spot => renderSpotValueCard.call(this, spot))}
               </div>
             </div>
@@ -674,3 +676,5 @@ function formatParameterValue(spot, value) {
   // Add unit
   return converted.unit ? `${formatted} ${converted.unit}` : formatted
 }
+
+export { renderSpotValuesTab }

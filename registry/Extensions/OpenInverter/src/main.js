@@ -5,6 +5,14 @@
  * The actual rendering is delegated to specialized tab modules.
  */
 
+// Import tab render functions
+import { renderDeviceSelectorTab, renderDevicePanel } from './tabs/DeviceSelectorTab.js'
+import { renderParametersTab } from './tabs/ParametersTab.js'
+import { renderSpotValuesTab } from './tabs/SpotValuesTab.js'
+import { renderCanMappingsTab } from './tabs/CanMappingsTab.js'
+import { renderCanMessagesTab } from './tabs/CanMessagesTab.js'
+import { renderOtaUpdateTab } from './tabs/OtaUpdateTab.js'
+
 class OpenInverterExtension {
   // Embedded Tabler Icons for self-contained extension (no dependency on SS sprite)
   static ICONS = {

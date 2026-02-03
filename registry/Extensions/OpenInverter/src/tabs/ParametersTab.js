@@ -5,6 +5,8 @@
  * Displays all configurable parameters organized by category with edit capabilities.
  */
 
+import { getOiParams, setParameter } from '../utils/oiHelpers.js'
+
 /**
  * Render the Parameters tab
  * @this {OpenInverterExtension}
@@ -607,3 +609,5 @@ function normalizeEnumValue(value) {
   }
   return String(Math.round(Number(value)))
 }
+
+export { renderParametersTab }

@@ -647,3 +647,17 @@ print(json.dumps({
   const result = await this.device.execute(pythonCode)
   return this.device.parseJSON(result)
 }
+
+// Export all utility functions used by tab components
+export {
+  getOiParams,
+  setParameter,
+  getSpotValues,
+  getCanMappings,
+  getAllParamsWithIds,
+  addCanMapping,
+  removeCanMapping,
+  scanCanBus,
+  getCanConfig,
+  isMockDevice
+}

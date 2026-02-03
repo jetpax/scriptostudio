@@ -9,6 +9,13 @@
  * - Saved devices display
  */
 
+// Import other tabs for renderDeviceTabContent
+import { renderParametersTab } from './ParametersTab.js'
+import { renderSpotValuesTab } from './SpotValuesTab.js'
+import { renderCanMappingsTab } from './CanMappingsTab.js'
+import { renderCanMessagesTab } from './CanMessagesTab.js'
+import { renderOtaUpdateTab } from './OtaUpdateTab.js'
+
 /**
  * Render the Device Selector tab
  * @this {OpenInverterExtension}
@@ -741,3 +748,5 @@ function deleteDevice(device) {
 
   this.emit('render')
 }
+
+export { renderDeviceSelectorTab, renderDevicePanel }
