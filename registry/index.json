@@ -971,7 +971,6 @@
     {
       "name": "DBE",
       "id": "dbe",
-      "filename": "DBE.js",
       "version": [
         0,
         2,
@@ -998,8 +997,7 @@
           "label": "MQTT"
         }
       ],
-      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/DBE/DBE.js",
-      "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/DBE/lib"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/DBE/dbe.bundle.js"
     },
     {
       "name": "DTC",
