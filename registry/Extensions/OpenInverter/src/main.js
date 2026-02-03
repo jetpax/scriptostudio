@@ -139,6 +139,36 @@ class OpenInverterExtension {
     // Set up dynamic render methods for device panels (must be last)
     this._setupDynamicDevicePanels()
   }
+
+  // === Installation ===
+
+  /**
+   * Install device files to the device.
+   * Uses this.deviceFiles which is injected by the loader.
+   */
+  async onInstall() {
+    if (!this.state.isConnected) return false
+    
+    console.log('[OpenInverter] Installing device files...')
+    
+    try {
+      // Create directory
+      await this.device.mkdir('/lib/ext/openinverter')
+      
+      // Write OI_helpers.py from the bundle
+      for (const [targetPath, content] of Object.entries(this.deviceFiles)) {
+        const filename = targetPath.split('/').pop()
+        console.log(`[OpenInverter] Writing ${filename}...`)
+        await this.device.saveFile(targetPath, content)
+      }
+      
+      console.log('[OpenInverter] Installation complete! Device may need restart to use extension.')
+      return true
+    } catch (e) {
+      console.error('[OpenInverter] Installation failed:', e)
+      return false
+    }
+  }
   
   /**
    * Set up dynamic render methods for device panels
@@ -459,3 +489,5 @@ class OpenInverterExtension {
     }
   }
 }
+
+export { OpenInverterExtension as default }

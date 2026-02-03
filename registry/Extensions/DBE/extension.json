@@ -1,0 +1,31 @@
+{
+  "name": "DBE",
+  "id": "dbe",
+  "version": [0, 2, 2],
+  "author": "JetPax",
+  "description": "Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management systems. Bridges EV battery packs to solar inverters.",
+  "icon": "battery-charging",
+  "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-battery-charging\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M16 7h1a2 2 0 0 1 2 2v.5a.5 .5 0 0 0 .5 .5a.5 .5 0 0 1 .5 .5v3a.5 .5 0 0 1 -.5 .5a.5 .5 0 0 0 -.5 .5v.5a2 2 0 0 1 -2 2h-2\" /><path d=\"M8 7h-2a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h1\" /><path d=\"M12 8l-2 4h3l-2 4\" /></svg>",
+  "menu": [
+    { "id": "config", "label": "Configuration" },
+    { "id": "status", "label": "Status" },
+    { "id": "metrics", "label": "Metrics" },
+    { "id": "mqtt", "label": "MQTT" }
+  ],
+  "styles": ".dbe-section h3 { font-size: 18px; font-weight: 600; color: var(--scheme-primary); margin-bottom: 12px; } .dbe-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; } .dbe-field label { font-size: 14px; font-weight: 600; color: var(--text-primary); } .dbe-field input, .dbe-field select { padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 6px; background: var(--input-bg); color: var(--text-primary); font-size: 14px; } .dbe-field input:focus, .dbe-field select:focus { outline: none; border-color: var(--scheme-primary); box-shadow: 0 0 0 3px var(--scheme-primary-light); opacity: 0.2; } .dbe-button { text-transform: uppercase; letter-spacing: 0.5px; width: auto; padding: 10px 20px; border: none; border-radius: 6px; background: var(--scheme-primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .dbe-button:hover:not(:disabled) { background: var(--scheme-primary-dark); transform: translateY(-1px); } .dbe-button:disabled { opacity: 0.5; cursor: not-allowed; } .dbe-button.secondary { background: var(--button-bg); color: var(--text-primary); border: 1px solid var(--border-color); } .dbe-button.secondary:hover:not(:disabled) { background: var(--button-hover); } .dbe-button.start { background: #4caf50; color: white; } .dbe-button.start:hover:not(:disabled) { background: #45a049; } .dbe-button.stop { background: #f44336; color: white; } .dbe-button.stop:hover:not(:disabled) { background: #da190b; } .dbe-metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 20px; } .dbe-metric-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; } .dbe-metric-name { font-weight: 600; color: var(--scheme-primary); font-size: 13px; margin-bottom: 8px; } .dbe-metric-value { font-size: 24px; font-weight: 700; font-family: 'Menlo', Monaco, 'Courier New', monospace; color: var(--text-primary); } .dbe-metric-unit { font-size: 12px; color: var(--text-secondary); margin-top: 4px; } .dbe-status-panel { padding: 20px; } .dbe-status-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); } .dbe-status-item:last-child { border-bottom: none; } .dbe-status-label { font-weight: 600; color: var(--text-primary); } .dbe-status-value { color: var(--text-secondary); } .dbe-status-value.running { color: #4caf50; font-weight: 600; } .dbe-status-value.error { color: #f44336; font-weight: 600; } .dbe-soc-gauge { width: 100%; height: 40px; background: var(--bg-tertiary); border: 2px solid var(--border-color); border-radius: 20px; overflow: hidden; position: relative; margin: 16px 0; } .dbe-soc-fill { height: 100%; background: linear-gradient(90deg, #4caf50, var(--scheme-primary)); transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; } .dbe-alarm-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin: 4px; } .dbe-alarm-badge.warning { background: #ff9800; color: white; } .dbe-alarm-badge.error { background: #f44336; color: white; }",
+  "devicePaths": {
+    "lib/DBE/__init__.py": "/lib/ext/dbe/__init__.py",
+    "lib/DBE/DBE_helpers.py": "/lib/ext/dbe/DBE_helpers.py",
+    "lib/DBE/mqtt_client.py": "/lib/ext/dbe/mqtt_client.py",
+    "lib/DBE/mqtt_commands.py": "/lib/ext/dbe/mqtt_commands.py",
+    "lib/DBE/mqtt_ha_discovery.py": "/lib/ext/dbe/mqtt_ha_discovery.py",
+    "lib/DBE/mqtt_publisher.py": "/lib/ext/dbe/mqtt_publisher.py",
+    "lib/DBE/battery/__init__.py": "/lib/ext/dbe/battery/__init__.py",
+    "lib/DBE/battery/base.py": "/lib/ext/dbe/battery/base.py",
+    "lib/DBE/battery/nissan_leaf.py": "/lib/ext/dbe/battery/nissan_leaf.py",
+    "lib/DBE/charger/__init__.py": "/lib/ext/dbe/charger/__init__.py",
+    "lib/DBE/inverter/__init__.py": "/lib/ext/dbe/inverter/__init__.py",
+    "lib/DBE/inverter/base.py": "/lib/ext/dbe/inverter/base.py",
+    "lib/DBE/inverter/pylon_can.py": "/lib/ext/dbe/inverter/pylon_can.py"
+  }
+}

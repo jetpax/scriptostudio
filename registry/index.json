@@ -1091,7 +1091,6 @@
     {
       "name": "OpenInverter",
       "id": "openinverter",
-      "filename": "OpenInverter.js",
       "version": [
         1,
         99,
@@ -1106,8 +1105,7 @@
           "label": "Device Manager"
         }
       ],
-      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/OpenInverter/OpenInverter.js",
-      "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OpenInverter/lib"
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/OpenInverter/openinverter.bundle.js"
     }
   ]
 }

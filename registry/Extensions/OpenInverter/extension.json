@@ -1,0 +1,17 @@
+{
+  "name": "OpenInverter",
+  "id": "openinverter",
+  "version": [1, 99, 0],
+  "author": "JetPax",
+  "description": "Complete OpenInverter suite. Configure parameters, map CAN messages, view spot values, and plot real-time signals from OpenInverter motor controllers.",
+  "icon": "bolt",
+  "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-bolt\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11\" /></svg>",
+  "menu": [
+    { "id": "deviceselector", "label": "Device Manager" }
+  ],
+  "devices": true,
+  "styles": ":root { --oi-blue: #1e88e5; --oi-blue-dark: #1565c0; --oi-blue-light: #e3f2fd; --oi-orange: #ff8c00; --oi-orange-light: #ffa726; --oi-beige: #fef8f0; --oi-yellow: #ffd54f; --oi-status-success: #4caf50; --oi-status-warning: #ff9800; --oi-status-error: #f44336; --oi-status-info: #1e88e5; --text-muted: #999; } .tabs-container { display: flex; flex-direction: column; height: 100%; } .tabs-header { border-bottom: 2px solid var(--border-color); background: var(--bg-secondary); } .tabs-nav { display: flex; gap: 0; overflow-x: auto; } .tab-button { background: transparent; border: none; border-radius: 0; padding: 16px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; } .tab-button:hover:not(:disabled) { color: var(--oi-blue); background: var(--oi-blue-light); } .tab-button.active { border-bottom-color: var(--oi-blue); } .tab-button:disabled { opacity: 0.5; cursor: not-allowed; }",
+  "devicePaths": {
+    "lib/OI_helpers.py": "/lib/ext/openinverter/OI_helpers.py"
+  }
+}
