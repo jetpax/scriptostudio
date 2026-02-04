@@ -77,9 +77,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScriptO Registry - Browse & Install</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
@@ -88,12 +86,12 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         }}
         
         :root {{
-            --primary: #e85d04;
-            --primary-dark: #d45403;
-            --primary-light: #ff7b2e;
-            --primary-glow: rgba(232, 93, 4, 0.3);
-            --accent: #f9844a;
-            --bg-dark: #0f0f0f;
+            --primary: #008184;
+            --primary-dark: #006668;
+            --primary-light: #00a5a8;
+            --primary-glow: rgba(0, 129, 132, 0.3);
+            --accent: #03aeb2;
+            --bg-dark: #0a0f0f;
             --bg-card: rgba(255, 255, 255, 0.03);
             --bg-card-hover: rgba(255, 255, 255, 0.06);
             --text-primary: #ffffff;
@@ -104,7 +102,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         }}
         
         body {{
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
@@ -121,8 +119,8 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
+                radial-gradient(ellipse at 80% 10%, rgba(0, 129, 132, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 90%, rgba(3, 174, 178, 0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }}
@@ -132,29 +130,6 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             padding: 3rem 2rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }}
-        
-        .header::before {{
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.02) 10px,
-                rgba(255,255,255,0.02) 20px
-            );
-            animation: shimmer 20s linear infinite;
-        }}
-        
-        @keyframes shimmer {{
-            0% {{ transform: translateX(-50%) translateY(-50%) rotate(0deg); }}
-            100% {{ transform: translateX(-50%) translateY(-50%) rotate(360deg); }}
         }}
         
         .header-content {{
@@ -658,9 +633,7 @@ def generate_detail_page(scripto, output_path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{scripto['name']} - ScriptO Registry</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
@@ -669,12 +642,12 @@ def generate_detail_page(scripto, output_path):
         }}
         
         :root {{
-            --primary: #e85d04;
-            --primary-dark: #d45403;
-            --primary-light: #ff7b2e;
-            --primary-glow: rgba(232, 93, 4, 0.3);
-            --accent: #f9844a;
-            --bg-dark: #0f0f0f;
+            --primary: #008184;
+            --primary-dark: #006668;
+            --primary-light: #00a5a8;
+            --primary-glow: rgba(0, 129, 132, 0.3);
+            --accent: #03aeb2;
+            --bg-dark: #0a0f0f;
             --bg-card: rgba(255, 255, 255, 0.03);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
@@ -683,7 +656,7 @@ def generate_detail_page(scripto, output_path):
         }}
         
         body {{
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
@@ -699,8 +672,8 @@ def generate_detail_page(scripto, output_path):
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
+                radial-gradient(ellipse at 80% 10%, rgba(0, 129, 132, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 90%, rgba(3, 174, 178, 0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }}

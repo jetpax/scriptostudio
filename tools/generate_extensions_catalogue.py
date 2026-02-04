@@ -8,6 +8,7 @@ Reads index.json and generates:
 
 import json
 import os
+import re
 import shutil
 from pathlib import Path
 from urllib.parse import quote
@@ -39,9 +40,7 @@ def generate_list_page(extensions, index, output_path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extensions Catalogue - ScriptO Studio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
@@ -50,12 +49,12 @@ def generate_list_page(extensions, index, output_path):
         }}
         
         :root {{
-            --primary: #8e44ad;
-            --primary-dark: #7d3c98;
-            --primary-light: #a569bd;
-            --primary-glow: rgba(142, 68, 173, 0.3);
-            --accent: #9b59b6;
-            --bg-dark: #0a0a0f;
+            --primary: #e85d04;
+            --primary-dark: #d45403;
+            --primary-light: #ff7b2e;
+            --primary-glow: rgba(232, 93, 4, 0.3);
+            --accent: #f9844a;
+            --bg-dark: #0f0f0f;
             --bg-card: rgba(255, 255, 255, 0.03);
             --bg-card-hover: rgba(255, 255, 255, 0.06);
             --text-primary: #ffffff;
@@ -66,7 +65,7 @@ def generate_list_page(extensions, index, output_path):
         }}
         
         body {{
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
@@ -83,8 +82,8 @@ def generate_list_page(extensions, index, output_path):
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 80% 10%, rgba(142, 68, 173, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 90%, rgba(155, 89, 182, 0.08) 0%, transparent 50%);
+                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }}
@@ -94,29 +93,6 @@ def generate_list_page(extensions, index, output_path):
             padding: 3rem 2rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }}
-        
-        .header::before {{
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.02) 10px,
-                rgba(255,255,255,0.02) 20px
-            );
-            animation: shimmer 20s linear infinite;
-        }}
-        
-        @keyframes shimmer {{
-            0% {{ transform: translateX(-50%) translateY(-50%) rotate(0deg); }}
-            100% {{ transform: translateX(-50%) translateY(-50%) rotate(360deg); }}
         }}
         
         .header-content {{
@@ -262,6 +238,11 @@ def generate_list_page(extensions, index, output_path):
             flex-shrink: 0;
         }}
         
+        .extension-icon svg {{
+            width: 32px;
+            height: 32px;
+        }}
+        
         .extension-title {{
             flex: 1;
             min-width: 0;
@@ -380,7 +361,7 @@ def generate_list_page(extensions, index, output_path):
 <body>
     <div class="header">
         <div class="header-content">
-            <h1>🔌 Extensions Catalogue</h1>
+            <h1><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -0.2em;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Extensions Catalogue</h1>
             <p>Full-featured applications and integrations for <a href="https://scriptostudio.com" style="color: inherit; text-decoration: underline;">ScriptO Studio</a></p>
         </div>
     </div>
@@ -450,7 +431,7 @@ def generate_list_page(extensions, index, output_path):
             const detailUrl = `extensions/${{slugify(ext.id || ext.name)}}.html`;
             const version = formatVersion(ext.version);
             const hasLib = ext.mipPackage ? '<span class="extension-badge">📦 Device Library</span>' : '';
-            const icon = ext.iconSvg ? ext.iconSvg : '🔌';
+            const icon = ext.iconSvg || '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
             
             return `
                 <a href="${{detailUrl}}" class="extension-card">
@@ -508,7 +489,7 @@ def generate_card_html(extension):
     detail_url = f"extensions/{slug}.html"
     version = '.'.join(map(str, extension.get('version', [1, 0, 0])))
     has_lib = '<span class="extension-badge">📦 Device Library</span>' if extension.get('mipPackage') else ''
-    icon = extension.get('iconSvg', '🔌')
+    icon = extension.get('iconSvg', '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>')
     
     return f"""            <a href="{detail_url}" class="extension-card">
                 <div class="extension-header">
@@ -543,7 +524,7 @@ def generate_detail_page(extension, output_path):
         after_extensions = url.split('/registry/Extensions/')[-1]
         dir_name = after_extensions.split('/')[0] if after_extensions else ''
     github_url = f"https://github.com/jetpax/scriptostudio/tree/main/registry/Extensions/{dir_name}" if dir_name else url
-    icon = extension.get('iconSvg', '🔌')
+    icon = extension.get('iconSvg', '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>')
     menu = extension.get('menu', [])
     mip_package = extension.get('mipPackage', '')
     
@@ -580,9 +561,7 @@ def generate_detail_page(extension, output_path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{extension['name']} - Extensions Catalogue</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
@@ -591,12 +570,12 @@ def generate_detail_page(extension, output_path):
         }}
         
         :root {{
-            --primary: #8e44ad;
-            --primary-dark: #7d3c98;
-            --primary-light: #a569bd;
-            --primary-glow: rgba(142, 68, 173, 0.3);
-            --accent: #9b59b6;
-            --bg-dark: #0a0a0f;
+            --primary: #e85d04;
+            --primary-dark: #d45403;
+            --primary-light: #ff7b2e;
+            --primary-glow: rgba(232, 93, 4, 0.3);
+            --accent: #f9844a;
+            --bg-dark: #0f0f0f;
             --bg-card: rgba(255, 255, 255, 0.03);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
@@ -605,7 +584,7 @@ def generate_detail_page(extension, output_path):
         }}
         
         body {{
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
@@ -621,8 +600,8 @@ def generate_detail_page(extension, output_path):
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 80% 10%, rgba(142, 68, 173, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 90%, rgba(155, 89, 182, 0.08) 0%, transparent 50%);
+                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }}

@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extensions Catalogue - ScriptO Studio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,12 +13,12 @@
         }
         
         :root {
-            --primary: #8e44ad;
-            --primary-dark: #7d3c98;
-            --primary-light: #a569bd;
-            --primary-glow: rgba(142, 68, 173, 0.3);
-            --accent: #9b59b6;
-            --bg-dark: #0a0a0f;
+            --primary: #e85d04;
+            --primary-dark: #d45403;
+            --primary-light: #ff7b2e;
+            --primary-glow: rgba(232, 93, 4, 0.3);
+            --accent: #f9844a;
+            --bg-dark: #0f0f0f;
             --bg-card: rgba(255, 255, 255, 0.03);
             --bg-card-hover: rgba(255, 255, 255, 0.06);
             --text-primary: #ffffff;
@@ -31,7 +29,7 @@
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
@@ -48,8 +46,8 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 80% 10%, rgba(142, 68, 173, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 90%, rgba(155, 89, 182, 0.08) 0%, transparent 50%);
+                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -59,29 +57,6 @@
             padding: 3rem 2rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.02) 10px,
-                rgba(255,255,255,0.02) 20px
-            );
-            animation: shimmer 20s linear infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
-            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
         }
         
         .header-content {
@@ -227,6 +202,11 @@
             flex-shrink: 0;
         }
         
+        .extension-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+        
         .extension-title {
             flex: 1;
             min-width: 0;
@@ -345,7 +325,7 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <h1>🔌 Extensions Catalogue</h1>
+            <h1><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -0.2em;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Extensions Catalogue</h1>
             <p>Full-featured applications and integrations for <a href="https://scriptostudio.com" style="color: inherit; text-decoration: underline;">ScriptO Studio</a></p>
         </div>
     </div>
@@ -510,7 +490,7 @@
             const detailUrl = `extensions/${slugify(ext.id || ext.name)}.html`;
             const version = formatVersion(ext.version);
             const hasLib = ext.mipPackage ? '<span class="extension-badge">📦 Device Library</span>' : '';
-            const icon = ext.iconSvg ? ext.iconSvg : '🔌';
+            const icon = ext.iconSvg || '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
             
             return `
                 <a href="${detailUrl}" class="extension-card">
