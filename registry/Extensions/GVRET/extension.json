@@ -1,0 +1,14 @@
+{
+  "name": "GVRET",
+  "id": "gvret",
+  "version": [1, 3, 0],
+  "author": "JetPax",
+  "description": "High-performance GVRET implementation for MicroPython. Enables SavvyCAN connection over TCP/IP (mpDirect) for vehicle network analysis.",
+  "icon": "radio",
+  "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-topology-bus\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M14 10a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z\" /><path d=\"M6 10a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z\" /><path d=\"M22 10a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z\" /><path d=\"M2 16h20\" /><path d=\"M4 12v4\" /><path d=\"M12 12v4\" /><path d=\"M20 12v4\" /></svg>",
+  "menu": [
+    { "id": "connection", "label": "Connection" },
+    { "id": "filters", "label": "Filters" }
+  ],
+  "styles": ".gvret-container { padding: 20px; } .gvret-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 20px; } .gvret-card h3 { margin-top: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; } .gvret-form-row { display: flex; gap: 16px; margin-bottom: 12px; align-items: center; } .gvret-form-row label { width: 100px; } .gvret-input { padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); } .gvret-btn { padding: 8px 16px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; } .gvret-btn-primary { background: var(--scheme-primary); color: white; } .gvret-btn-danger { background: #ef4444; color: white; } .gvret-filter-list { display: flex; flex-direction: column; gap: 8px; } .gvret-filter-item { display: flex; gap: 12px; padding: 8px; background: var(--bg-primary); border-radius: 4px; align-items: center; } .gvret-stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; } .gvret-stat-card { background: var(--bg-primary); padding: 12px; border-radius: 4px; text-align: center; } .gvret-stat-value { font-size: 24px; font-weight: bold; color: var(--scheme-primary); } .gvret-stat-label { font-size: 12px; color: var(--text-secondary); }"
+}

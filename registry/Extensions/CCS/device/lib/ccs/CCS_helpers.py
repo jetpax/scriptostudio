@@ -48,7 +48,7 @@ _state = {
 def getCCSConfig():
     """Get current CCS configuration from settings"""
     try:
-        from lib import settings
+        from lib.sys import settings
         return json.dumps({
             'success': True,
             'config': {
@@ -62,7 +62,7 @@ def getCCSConfig():
 def setCCSConfig(config_dict):
     """Set CCS configuration via settings module"""
     try:
-        from lib import settings
+        from lib.sys import settings
         
         if 'cpPin' in config_dict:
             settings.set('ccs_cp_pin', config_dict['cpPin'])
@@ -314,7 +314,7 @@ def _process_v2g_message(data):
 def _init():
     """Initialize CCS module on boot"""
     try:
-        from lib import settings
+        from lib.sys import settings
         
         # Load saved config
         _state['cp_pin'] = settings.get('ccs_cp_pin', 4)

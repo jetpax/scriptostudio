@@ -1,20 +1,3 @@
-// === START_EXTENSION_CONFIG ===
-// {
-//   "name": "CCS",
-//   "id": "ccs",
-//   "version": [0, 1, 0],
-//   "author": "JetPax",
-//   "description": "CCS/NACS DC Fast Charging - EVSE emulator for contactor closure",
-//   "icon": "⚡",
-//   "menu": [
-//     { "id": "config", "label": "Configuration" },
-//     { "id": "status", "label": "Status" },
-//     { "id": "v2g", "label": "V2G Session" }
-//   ],
-//   "autoInstallPackage": "github:jetpax/scripto-ccs"
-// }
-// === END_EXTENSION_CONFIG ===
-
 /**
  * CCS Extension - CCS/NACS DC Fast Charging EVSE Emulator
  * 
@@ -60,6 +43,34 @@ class CCSExtension {
 
     // Status refresh interval
     this.statusInterval = null
+  }
+
+  /**
+   * Install device files to the device.
+   * Uses this.deviceFiles which is injected by the loader.
+   */
+  async onInstall() {
+    if (!this.state.isConnected) return false
+    
+    console.log('[CCS] Installing device files...')
+    
+    try {
+      // Create directories
+      await this.device.mkdir('/lib/ext/ccs')
+      
+      // Write all device files from the bundle
+      for (const [targetPath, content] of Object.entries(this.deviceFiles)) {
+        const filename = targetPath.split('/').pop()
+        console.log(`[CCS] Writing ${filename}...`)
+        await this.device.saveFile(targetPath, content)
+      }
+      
+      console.log('[CCS] Installation complete! Device may need restart to use extension.')
+      return true
+    } catch (e) {
+      console.error('[CCS] Installation failed:', e)
+      return false
+    }
   }
 
   // ===== Device API Calls =====
@@ -158,7 +169,7 @@ print('stopped')
   async getV2GSession() {
     try {
       const result = await this.device.exec(`
-from lib.CCS.CCS_helpers import getV2GSession
+from lib.ext.ccs.CCS_helpers import getV2GSession
 print(getV2GSession())
 `)
       if (result) {
@@ -237,23 +248,6 @@ print(getV2GSession())
           </div>
         </div>
       </div>
-
-      <style>
-        .panel { padding: 16px; }
-        .section { margin: 16px 0; padding: 12px; background: var(--bg-secondary); border-radius: 8px; }
-        .section h4 { margin: 0 0 12px 0; color: var(--text-secondary); }
-        .info-row { display: flex; justify-content: space-between; margin: 4px 0; }
-        .label { color: var(--text-secondary); }
-        .value { font-family: monospace; }
-        .warning { color: #ff9800; padding: 8px; background: rgba(255, 152, 0, 0.1); border-radius: 4px; }
-        .form-row { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
-        .form-row label { min-width: 140px; }
-        .form-row input[type="number"] { width: 60px; padding: 4px 8px; }
-        .button-row { display: flex; gap: 8px; }
-        button { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; }
-        button.primary { background: #4caf50; color: white; }
-        button.danger { background: #f44336; color: white; }
-      </style>
     `
   }
 
@@ -320,23 +314,6 @@ print(getV2GSession())
           </button>
         </div>
       </div>
-
-      <style>
-        .panel { padding: 16px; }
-        .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; }
-        .status-card { background: var(--bg-secondary); padding: 16px; border-radius: 8px; text-align: center; }
-        .status-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
-        .status-value { font-size: 18px; font-weight: bold; }
-        .status-value.mono { font-family: monospace; font-size: 14px; }
-        .status-value.success { color: #4caf50; }
-        .section { margin: 16px 0; padding: 12px; background: var(--bg-secondary); border-radius: 8px; }
-        .success-banner { background: rgba(76, 175, 80, 0.1); border: 1px solid #4caf50; }
-        .success-banner.highlight { background: rgba(76, 175, 80, 0.2); animation: pulse 2s infinite; }
-        .success-banner h4 { color: #4caf50; margin: 0 0 8px 0; }
-        .success-banner p { margin: 0; color: var(--text-secondary); }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        button { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; background: var(--bg-tertiary); }
-      </style>
     `
   }
 
@@ -404,24 +381,6 @@ print(getV2GSession())
           </button>
         </div>
       </div>
-
-      <style>
-        .panel { padding: 16px; }
-        .section { margin: 16px 0; padding: 12px; background: var(--bg-secondary); border-radius: 8px; }
-        .section h4 { margin: 0 0 8px 0; }
-        .warning { background: rgba(255, 152, 0, 0.1); border: 1px solid #ff9800; }
-        .warning p { margin: 4px 0; }
-        .hint { font-size: 12px; color: var(--text-secondary); }
-        .v2g-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; }
-        .v2g-card { background: var(--bg-secondary); padding: 16px; border-radius: 8px; text-align: center; }
-        .v2g-card.wide { grid-column: span 2; }
-        .v2g-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
-        .v2g-value { font-size: 20px; font-weight: bold; }
-        .v2g-value.mono { font-family: monospace; font-size: 12px; }
-        .progress-bar { height: 20px; background: var(--bg-tertiary); border-radius: 10px; overflow: hidden; margin-top: 8px; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); transition: width 0.3s; }
-        button { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; background: var(--bg-tertiary); }
-      </style>
     `
   }
 
@@ -445,3 +404,5 @@ print(getV2GSession())
     }
   }
 }
+
+export default CCSExtension
