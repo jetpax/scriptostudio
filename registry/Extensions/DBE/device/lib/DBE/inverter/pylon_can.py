@@ -14,7 +14,7 @@ Reference: Battery-Emulator/Software/src/inverter/PYLON-CAN.cpp
 """
 
 import struct
-from lib.DBE.inverter.inverter_base import InverterBase
+from lib.ext.dbe.inverter.inverter_base import InverterBase
 from lib import settings
 
 

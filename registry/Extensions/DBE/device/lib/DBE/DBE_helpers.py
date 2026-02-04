@@ -20,7 +20,7 @@ Client-callable functions:
 import json
 import time
 import CAN
-from lib import settings
+from lib.sys import settings
 
 # Global state
 _dbe_running = False
@@ -117,7 +117,7 @@ def startDBE():
         
         # Initialize battery protocol
         if battery_type == 'nissan_leaf':
-            from lib.DBE.battery.nissan_leaf import NissanLeafBattery
+            from lib.ext.dbe.battery.nissan_leaf import NissanLeafBattery
             _dbe_battery = NissanLeafBattery(_dbe_can_handle)
         else:
             raise ValueError(f"Unsupported battery type: {battery_type}")
@@ -142,7 +142,7 @@ def startDBE():
         
         # Initialize inverter protocol
         if inverter_protocol == 'pylon_can':
-            from lib.DBE.inverter.pylon_can import PylonCANProtocol
+            from lib.ext.dbe.inverter.pylon_can import PylonCANProtocol
             _dbe_inverter = PylonCANProtocol()
         else:
             raise ValueError(f"Unsupported inverter protocol: {inverter_protocol}")
@@ -164,7 +164,7 @@ def startDBE():
         
         if _mqtt_enabled:
             try:
-                from lib.DBE import mqtt_client, mqtt_commands, mqtt_ha_discovery
+                from lib.ext.dbe import mqtt_client, mqtt_commands, mqtt_ha_discovery
                 
                 if mqtt_client.init_mqtt():
                     if mqtt_client.connect():
@@ -237,7 +237,7 @@ def _dbe_loop():
             # === MQTT Connection Management ===
             
             if _mqtt_enabled:
-                from lib.DBE import mqtt_client
+                from lib.ext.dbe import mqtt_client
                 
                 # Check if connected, attempt reconnect if needed
                 if not mqtt_client.is_connected():
@@ -280,7 +280,7 @@ def _dbe_loop():
             if _mqtt_enabled and mqtt_client.is_connected():
                 # Publish telemetry at configured interval
                 if time.ticks_diff(current_time_ms, _mqtt_last_publish_ms) > _mqtt_publish_interval_ms:
-                    from lib.DBE import mqtt_publisher
+                    from lib.ext.dbe import mqtt_publisher
                     
                     # Get publish settings
                     publish_cell_voltages = settings.get('dbe.mqtt_publish_cell_voltages', True)
@@ -322,7 +322,7 @@ def stopDBE():
         
         if _mqtt_enabled:
             try:
-                from lib.DBE import mqtt_client
+                from lib.ext.dbe import mqtt_client
                 mqtt_client.disconnect()
                 print("[DBE] MQTT disconnected")
             except Exception as e:
@@ -452,7 +452,7 @@ def setMqttConfig(config_dict):
             
             # If MQTT is being enabled, initialize it
             if _mqtt_enabled and _dbe_running:
-                from lib.DBE import mqtt_client, mqtt_commands, mqtt_ha_discovery
+                from lib.ext.dbe import mqtt_client, mqtt_commands, mqtt_ha_discovery
                 
                 if mqtt_client.init_mqtt():
                     if mqtt_client.connect():
@@ -485,7 +485,7 @@ def getMqttStatus():
     Returns JSON string with status information
     """
     try:
-        from lib.DBE import mqtt_client
+        from lib.ext.dbe import mqtt_client
         stats = mqtt_client.get_stats()
         print(json.dumps(stats))
     except Exception as e:
@@ -498,7 +498,7 @@ def testMqtt():
     Returns JSON string with test result
     """
     try:
-        from lib.DBE import mqtt_client
+        from lib.ext.dbe import mqtt_client
         
         # Initialize if needed
         if not mqtt_client.init_mqtt():
@@ -576,7 +576,7 @@ def setLimitsDBE(limits):
 def _init_mqtt_commands():
     """Initialize MQTT command handlers (called by startDBE)"""
     try:
-        from lib.DBE import mqtt_commands
+        from lib.ext.dbe import mqtt_commands
         
         # Set control functions for MQTT commands
         control_functions = {

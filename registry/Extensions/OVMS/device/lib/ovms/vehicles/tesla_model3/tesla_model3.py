@@ -6,7 +6,7 @@ Vehicle-specific configuration for Tesla Model 3.
 Uses raw CAN frames (not OBD2) - listens to CAN bus messages directly.
 """
 
-from vehicle import PROTOCOL_CAN_RAW
+from lib.ext.ovms.vehicle import PROTOCOL_CAN_RAW
 
 # Tesla Model 3 uses raw CAN frames, not OBD2 polling
 # This is a placeholder - actual implementation would need CAN frame handlers

@@ -19,7 +19,7 @@ Integration with DBE_helpers.py:
 """
 
 import json
-from lib.DBE import mqtt_client
+from lib.ext.dbe import mqtt_client
 
 # Global reference to DBE control functions (set by DBE_helpers.py)
 _dbe_control = None

@@ -8,7 +8,7 @@ Uses standard OBD-II PIDs over CAN bus.
 Based on OVMS v3 vehicle_obdii module.
 """
 
-from vehicle import PROTOCOL_OBD2
+from lib.ext.ovms.vehicle import PROTOCOL_OBD2
 
 # Generic OBDII configuration
 VEHICLE_CONFIG = {

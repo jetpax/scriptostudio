@@ -21,11 +21,11 @@
     "lib/DBE/mqtt_ha_discovery.py": "/lib/ext/dbe/mqtt_ha_discovery.py",
     "lib/DBE/mqtt_publisher.py": "/lib/ext/dbe/mqtt_publisher.py",
     "lib/DBE/battery/__init__.py": "/lib/ext/dbe/battery/__init__.py",
-    "lib/DBE/battery/base.py": "/lib/ext/dbe/battery/base.py",
+    "lib/DBE/battery/battery_base.py": "/lib/ext/dbe/battery/battery_base.py",
     "lib/DBE/battery/nissan_leaf.py": "/lib/ext/dbe/battery/nissan_leaf.py",
     "lib/DBE/charger/__init__.py": "/lib/ext/dbe/charger/__init__.py",
     "lib/DBE/inverter/__init__.py": "/lib/ext/dbe/inverter/__init__.py",
-    "lib/DBE/inverter/base.py": "/lib/ext/dbe/inverter/base.py",
+    "lib/DBE/inverter/inverter_base.py": "/lib/ext/dbe/inverter/inverter_base.py",
     "lib/DBE/inverter/pylon_can.py": "/lib/ext/dbe/inverter/pylon_can.py"
   }
 }

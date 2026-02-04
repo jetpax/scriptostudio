@@ -19,7 +19,7 @@ Performance Considerations:
 """
 
 import json
-from lib.DBE import mqtt_client
+from lib.ext.dbe import mqtt_client
 
 
 def publish_status(online=True):

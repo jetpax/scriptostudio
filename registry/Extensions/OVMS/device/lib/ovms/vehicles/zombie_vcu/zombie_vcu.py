@@ -8,7 +8,7 @@ Uses OBD2 Mode 0x2A protocol to read OpenInverter parameters.
 Based on OVMS v3 vehicle_zombie_vcu module.
 """
 
-from vehicle import PROTOCOL_OBD2
+from lib.ext.ovms.vehicle import PROTOCOL_OBD2
 
 # ZombieVerter VCU configuration
 VEHICLE_CONFIG = {

@@ -534,7 +534,7 @@ class OpenInverterExtension {
 
     try {
       const scanArgs = JSON.stringify({ quick: !fullScan })
-      const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus(${scanArgs})`)
+      const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import scanCanBus; scanCanBus(${scanArgs})`)
       const parsed = this.device.parseJSON(result)
       
       if (parsed.ARG && parsed.ARG.error) {
@@ -567,7 +567,7 @@ class OpenInverterExtension {
   async connectToDevice() {
     try {
       const args = JSON.stringify({ node_id: this.state.selectedNodeId })
-      const result = await this.device.execute(`from lib.OI_helpers import initializeDevice; initializeDevice(${args})`)
+      const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import initializeDevice; initializeDevice(${args})`)
       const parsed = this.device.parseJSON(result)
       
       if (parsed.success || (parsed.ARG && parsed.ARG.success)) {
@@ -591,7 +591,7 @@ class OpenInverterExtension {
 
   async disconnectDevice() {
     try {
-      await this.device.execute('from lib.OI_helpers import disconnectDevice; disconnectDevice()')
+      await this.device.execute('from lib.ext.openinverter.OI_helpers import disconnectDevice; disconnectDevice()')
       this.state.oiDeviceConnected = false
     } catch (error) {
       console.error('[OI Connection] Disconnect error:', error)
@@ -604,7 +604,7 @@ class OpenInverterExtension {
 
   async deviceSave() {
     try {
-      await this.device.execute('from lib.OI_helpers import deviceSave; deviceSave()')
+      await this.device.execute('from lib.ext.openinverter.OI_helpers import deviceSave; deviceSave()')
       alert('Parameters saved to flash')
     } catch (error) {
       alert('Failed to save parameters: ' + error.message)
@@ -613,7 +613,7 @@ class OpenInverterExtension {
 
   async deviceLoad() {
     try {
-      await this.device.execute('from lib.OI_helpers import deviceLoad; deviceLoad()')
+      await this.device.execute('from lib.ext.openinverter.OI_helpers import deviceLoad; deviceLoad()')
       alert('Parameters loaded from flash')
     } catch (error) {
       alert('Failed to load parameters: ' + error.message)
@@ -623,7 +623,7 @@ class OpenInverterExtension {
   async deviceLoadDefaults() {
     if (!confirm('Load factory defaults? This will overwrite all current parameters.')) return
     try {
-      await this.device.execute('from lib.OI_helpers import deviceLoadDefaults; deviceLoadDefaults()')
+      await this.device.execute('from lib.ext.openinverter.OI_helpers import deviceLoadDefaults; deviceLoadDefaults()')
       alert('Factory defaults loaded')
     } catch (error) {
       alert('Failed to load defaults: ' + error.message)
@@ -633,7 +633,7 @@ class OpenInverterExtension {
   async deviceStart() {
     const mode = document.getElementById('oi-start-mode')?.value || '1'
     try {
-      await this.device.execute(`from lib.OI_helpers import deviceStart; deviceStart({'mode': ${mode}})`)
+      await this.device.execute(`from lib.ext.openinverter.OI_helpers import deviceStart; deviceStart({'mode': ${mode}})`)
       alert('Device started in mode ' + mode)
     } catch (error) {
       alert('Failed to start device: ' + error.message)
@@ -642,7 +642,7 @@ class OpenInverterExtension {
 
   async deviceStop() {
     try {
-      await this.device.execute('from lib.OI_helpers import deviceStop; deviceStop()')
+      await this.device.execute('from lib.ext.openinverter.OI_helpers import deviceStop; deviceStop()')
       alert('Device stopped')
     } catch (error) {
       alert('Failed to stop device: ' + error.message)
@@ -652,7 +652,7 @@ class OpenInverterExtension {
   async deviceReset() {
     if (!confirm('Reset device? This will restart the controller.')) return
     try {
-      await this.device.execute('from lib.OI_helpers import deviceReset; deviceReset()')
+      await this.device.execute('from lib.ext.openinverter.OI_helpers import deviceReset; deviceReset()')
       alert('Device reset command sent')
     } catch (error) {
       alert('Failed to reset device: ' + error.message)
@@ -746,7 +746,7 @@ class OpenInverterExtension {
     try {
       const varNames = this.state.plotState.selectedVars
       const argsStr = JSON.stringify(varNames)
-      const result = await this.device.execute(`from lib.OI_helpers import getPlotData; getPlotData(${argsStr})`)
+      const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import getPlotData; getPlotData(${argsStr})`)
       const parsed = this.device.parseJSON(result)
       const plotData = parsed.ARG || parsed
 
@@ -803,11 +803,11 @@ class OpenInverterExtension {
     this.emit('render')
 
     try {
-      const infoResult = await this.device.execute('from lib.OI_helpers import getDeviceInfo; getDeviceInfo()')
+      const infoResult = await this.device.execute('from lib.ext.openinverter.OI_helpers import getDeviceInfo; getDeviceInfo()')
       const info = this.device.parseJSON(infoResult)
       this.state.oiDeviceInfo = info.ARG || info
 
-      const errorResult = await this.device.execute('from lib.OI_helpers import getErrorLog; getErrorLog()')
+      const errorResult = await this.device.execute('from lib.ext.openinverter.OI_helpers import getErrorLog; getErrorLog()')
       const errors = this.device.parseJSON(errorResult)
       const errorList = errors.ARG || errors
       this.state.oiErrorLog = Array.isArray(errorList) ? errorList : []

@@ -94,7 +94,7 @@ class DBEExtension {
     try {
       this.state.dbe.isLoading = true
       
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import getDBEConfig; getDBEConfig()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import getDBEConfig; getDBEConfig()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.dbe.config = parsed
@@ -114,7 +114,7 @@ class DBEExtension {
 
   async setDBEConfig(config) {
     try {
-      const result = await this.device.execute(`from lib.DBE.DBE_helpers import setDBEConfig; setDBEConfig(${JSON.stringify(config)})`)
+      const result = await this.device.execute(`from lib.ext.dbe.DBE_helpers import setDBEConfig; setDBEConfig(${JSON.stringify(config)})`)
       const parsed = this.device.parseJSON(result)
       
       // Update local state
@@ -129,7 +129,7 @@ class DBEExtension {
 
   async getDBEMetrics() {
     try {
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import getDBEMetrics; getDBEMetrics()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import getDBEMetrics; getDBEMetrics()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.dbe.metrics = parsed
@@ -144,7 +144,7 @@ class DBEExtension {
 
   async getDBEStatus() {
     try {
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import getDBEStatus; getDBEStatus()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import getDBEStatus; getDBEStatus()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.dbe.status = parsed
@@ -161,7 +161,7 @@ class DBEExtension {
     try {
       this.state.dbe.isLoading = true
       this.emit('render')
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import startDBE; startDBE()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import startDBE; startDBE()')
       const parsed = this.device.parseJSON(result)
       await this.getDBEStatus()
       this.state.dbe.isLoading = false
@@ -179,7 +179,7 @@ class DBEExtension {
     try {
       this.state.dbe.isLoading = true
       this.emit('render')
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import stopDBE; stopDBE()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import stopDBE; stopDBE()')
       const parsed = this.device.parseJSON(result)
       await this.getDBEStatus()
       this.state.dbe.isLoading = false
@@ -203,7 +203,7 @@ class DBEExtension {
 
     try {
       this.state.dbe.isLoading = true
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import getMqttConfig; getMqttConfig()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import getMqttConfig; getMqttConfig()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.dbe.mqttConfig = parsed
@@ -226,7 +226,7 @@ class DBEExtension {
       this.emit('render')
       
       const config = this.state.dbe.mqttConfig
-      const result = await this.device.execute(`from lib.DBE.DBE_helpers import setMqttConfig; setMqttConfig(${JSON.stringify(config)})`)
+      const result = await this.device.execute(`from lib.ext.dbe.DBE_helpers import setMqttConfig; setMqttConfig(${JSON.stringify(config)})`)
       const parsed = this.device.parseJSON(result)
       
       this.state.dbe.isLoading = false
@@ -250,7 +250,7 @@ class DBEExtension {
       this.state.dbe.isLoading = true
       this.emit('render')
       
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import testMqtt; testMqtt()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import testMqtt; testMqtt()')
       const parsed = this.device.parseJSON(result)
       
       this.state.dbe.isLoading = false
@@ -271,7 +271,7 @@ class DBEExtension {
 
   async refreshMqttStatus() {
     try {
-      const result = await this.device.execute('from lib.DBE.DBE_helpers import getMqttStatus; getMqttStatus()')
+      const result = await this.device.execute('from lib.ext.dbe.DBE_helpers import getMqttStatus; getMqttStatus()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.dbe.mqttStatus = parsed

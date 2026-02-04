@@ -1,0 +1,32 @@
+{
+  "name": "OVMS",
+  "id": "ovms",
+  "version": [0, 9, 0],
+  "author": "JetPax",
+  "description": "Pushes vehicle metrics to an OVMS v2 server for remote monitoring.",
+  "icon": "cloud",
+  "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-car\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /><path d=\"M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /><path d=\"M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5\" /></svg>",
+  "menu": [
+    { "id": "config", "label": "Configuration" },
+    { "id": "metrics", "label": "Metrics" },
+    { "id": "status", "label": "Status" }
+  ],
+  "styles": ".ovms-section { margin-bottom: 24px; } .ovms-section h3 { font-size: 18px; font-weight: 600; color: var(--scheme-primary); margin-bottom: 12px; } .ovms-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; } .ovms-field label { font-size: 14px; font-weight: 600; color: var(--text-primary); } .ovms-field input, .ovms-field select { padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 6px; background: var(--input-bg); color: var(--text-primary); font-size: 14px; } .ovms-field input:focus, .ovms-field select:focus { outline: none; border-color: var(--scheme-primary); box-shadow: 0 0 0 3px rgba(0, 129, 132, 0.2); } .ovms-button { text-transform: uppercase; letter-spacing: 0.5px; width: auto; padding: 10px 20px; border: none; border-radius: 6px; background: var(--scheme-primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .ovms-button:hover { opacity: 0.9; transform: translateY(-1px); } .ovms-button:disabled { opacity: 0.5; cursor: not-allowed; } .ovms-button.secondary { background: var(--bg-tertiary); color: var(--text-primary); } .ovms-button.connect { background: #4caf50; color: white; } .ovms-button.connect:hover { background: #45a049; } .ovms-button.disconnect { background: #f44336; color: white; } .ovms-button.disconnect:hover { background: #da190b; } .ovms-metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 20px; } .ovms-metric-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; } .ovms-metric-name { font-weight: 600; color: var(--scheme-primary); font-size: 13px; margin-bottom: 8px; } .ovms-metric-value { font-size: 24px; font-weight: 700; font-family: 'Menlo', Monaco, 'Courier New', monospace; color: var(--text-primary); } .ovms-metric-unit { font-size: 12px; color: var(--text-secondary); margin-top: 4px; } .ovms-status-panel { padding: 20px; } .ovms-status-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); } .ovms-status-item:last-child { border-bottom: none; } .ovms-status-label { font-weight: 600; color: var(--text-primary); } .ovms-status-value { color: var(--text-secondary); } .ovms-status-value.connected { color: #4caf50; } .ovms-status-value.error { color: #f44336; }",
+  "devicePaths": {
+    "lib/ovms/__init__.py": "/lib/ext/ovms/__init__.py",
+    "lib/ovms/OVMS_helpers.py": "/lib/ext/ovms/OVMS_helpers.py",
+    "lib/ovms/vehicle.py": "/lib/ext/ovms/vehicle.py",
+    "lib/ovms/base64.py": "/lib/ext/ovms/base64.py",
+    "lib/ovms/binascii.py": "/lib/ext/ovms/binascii.py",
+    "lib/ovms/hmac.py": "/lib/ext/ovms/hmac.py",
+    "lib/ovms/vehicles/__init__.py": "/lib/ext/ovms/vehicles/__init__.py",
+    "lib/ovms/vehicles/zombie_vcu/__init__.py": "/lib/ext/ovms/vehicles/zombie_vcu/__init__.py",
+    "lib/ovms/vehicles/zombie_vcu/zombie_vcu.py": "/lib/ext/ovms/vehicles/zombie_vcu/zombie_vcu.py",
+    "lib/ovms/vehicles/obdii/__init__.py": "/lib/ext/ovms/vehicles/obdii/__init__.py",
+    "lib/ovms/vehicles/obdii/obdii.py": "/lib/ext/ovms/vehicles/obdii/obdii.py",
+    "lib/ovms/vehicles/tesla_model3/__init__.py": "/lib/ext/ovms/vehicles/tesla_model3/__init__.py",
+    "lib/ovms/vehicles/tesla_model3/tesla_model3.py": "/lib/ext/ovms/vehicles/tesla_model3/tesla_model3.py",
+    "lib/ovms/vehicles/headless_zombie/__init__.py": "/lib/ext/ovms/vehicles/headless_zombie/__init__.py",
+    "lib/ovms/vehicles/headless_zombie/headless_zombie.py": "/lib/ext/ovms/vehicles/headless_zombie/headless_zombie.py"
+  }
+}

@@ -473,7 +473,7 @@ async function handleScanDevices(fullScan) {
 
   try {
     const result = await this.device.execute(`
-from lib.OI_helpers import scanCanBus
+from lib.ext.openinverter.OI_helpers import scanCanBus
 import json
 results = scanCanBus(${fullScan ? 'True' : 'False'})
 print(json.dumps(results))

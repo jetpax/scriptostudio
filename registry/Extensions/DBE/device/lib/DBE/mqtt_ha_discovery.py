@@ -20,7 +20,7 @@ Performance:
 
 import json
 import time
-from lib.DBE import mqtt_client
+from lib.ext.dbe import mqtt_client
 
 # Discovery published flag
 _discovery_published = False

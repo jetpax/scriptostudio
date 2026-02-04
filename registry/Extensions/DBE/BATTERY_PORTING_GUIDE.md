@@ -51,7 +51,7 @@ Reference: Battery-Emulator/Software/src/battery/{BATTERY}-BATTERY.cpp
 """
 
 import time
-from lib.DBE.battery.battery_base import BatteryBase
+from lib.ext.dbe.battery.battery_base import BatteryBase
 
 # Constants (from C++ header)
 CONSTANT_1 = 0x123
@@ -228,10 +228,10 @@ def startDBE():
     # ... existing code ...
     
     if battery_type == 'nissan_leaf':
-        from lib.DBE.battery.nissan_leaf import NissanLeafBattery
+        from lib.ext.dbe.battery.nissan_leaf import NissanLeafBattery
         _dbe_battery = NissanLeafBattery(_dbe_can_handle)
     elif battery_type == 'tesla_model3':  # ADD THIS
-        from lib.DBE.battery.tesla_model3 import TeslaModel3Battery
+        from lib.ext.dbe.battery.tesla_model3 import TeslaModel3Battery
         _dbe_battery = TeslaModel3Battery(_dbe_can_handle)
     # ... etc
 ```
@@ -257,7 +257,7 @@ import time
 
 # Setup
 can_handle = CAN.register(CAN.TX_ENABLED)
-from lib.DBE.battery.{battery_name} import {BatteryName}Battery
+from lib.ext.dbe.battery.{battery_name} import {BatteryName}Battery
 battery = {BatteryName}Battery(can_handle)
 battery.setup()
 
@@ -295,7 +295,7 @@ CAN.unregister(can_handle)
 
 ```python
 # Start full bridge
-from lib.DBE.DBE_helpers import startDBE, getDBEMetrics
+from lib.ext.dbe.DBE_helpers import startDBE, getDBEMetrics
 startDBE()
 
 # Monitor for 30 seconds
@@ -305,7 +305,7 @@ for i in range(30):
     time.sleep(1)
 
 # Stop
-from lib.DBE.DBE_helpers import stopDBE
+from lib.ext.dbe.DBE_helpers import stopDBE
 stopDBE()
 ```
 

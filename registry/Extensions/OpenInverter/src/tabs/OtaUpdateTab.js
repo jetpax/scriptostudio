@@ -243,7 +243,7 @@ async function startFirmwareUpgrade() {
     }
 
     const argsStr = JSON.stringify(args)
-    const result = await this.device.execute(`from lib.OI_helpers import startFirmwareUpgrade; startFirmwareUpgrade(${argsStr})`)
+    const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import startFirmwareUpgrade; startFirmwareUpgrade(${argsStr})`)
     const parsed = this.device.parseJSON(result)
 
     if (parsed.error) {
@@ -312,7 +312,7 @@ async function uploadFirmwareData(bytes) {
     const chunk = Array.from(bytes.slice(start, end))
 
     const args = JSON.stringify({ chunk, offset: start })
-    await this.device.execute(`from lib.OI_helpers import uploadFirmwareChunk; uploadFirmwareChunk(${args})`)
+    await this.device.execute(`from lib.ext.openinverter.OI_helpers import uploadFirmwareChunk; uploadFirmwareChunk(${args})`)
 
     fw.progress = (i / totalChunks) * 30 // First 30% is upload
     fw.status = `Uploading firmware... ${fw.progress.toFixed(0)}%`
@@ -333,7 +333,7 @@ async function pollFirmwareProgress() {
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     try {
-      const result = await this.device.execute('from lib.OI_helpers import getFirmwareUpgradeStatus; getFirmwareUpgradeStatus()')
+      const result = await this.device.execute('from lib.ext.openinverter.OI_helpers import getFirmwareUpgradeStatus; getFirmwareUpgradeStatus()')
       const parsed = this.device.parseJSON(result)
       const status = parsed
 

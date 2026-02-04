@@ -10,7 +10,7 @@ Reference: Battery-Emulator/Software/src/battery/NISSAN-LEAF-BATTERY.cpp
 """
 
 import time
-from lib.DBE.battery.battery_base import BatteryBase
+from lib.ext.dbe.battery.battery_base import BatteryBase
 
 # Constants
 WH_PER_GID = 80  # Wh per GID (Nissan's internal capacity unit)

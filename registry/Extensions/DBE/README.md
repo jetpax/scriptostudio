@@ -226,9 +226,9 @@ All Python code is in `/lib/DBE/` module:
 
 ### Import Paths
 ```python
-from lib.DBE.DBE_helpers import startDBE, stopDBE
-from lib.DBE.battery.nissan_leaf import NissanLeafBattery
-from lib.DBE.inverter.pylon_can import PylonCANProtocol
+from lib.ext.dbe.DBE_helpers import startDBE, stopDBE
+from lib.ext.dbe.battery.nissan_leaf import NissanLeafBattery
+from lib.ext.dbe.inverter.pylon_can import PylonCANProtocol
 ```
 
 ## Development

@@ -573,7 +573,7 @@ async function saveParametersToFlash() {
   }
 
   try {
-    const result = await this.device.execute('from lib.OI_helpers import saveToFlash; saveToFlash()')
+    const result = await this.device.execute('from lib.ext.openinverter.OI_helpers import saveToFlash; saveToFlash()')
     const parsed = this.device.parseJSON(result)
     
     if (parsed && parsed.success) {

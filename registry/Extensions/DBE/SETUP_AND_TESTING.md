@@ -49,7 +49,7 @@
 
 ```python
 # 1. Test configuration
-from lib.DBE.DBE_helpers import getDBEConfig, setDBEConfig
+from lib.ext.dbe.DBE_helpers import getDBEConfig, setDBEConfig
 getDBEConfig()
 # Should return: {"enabled": false, "battery_type": "nissan_leaf", ...}
 
@@ -58,22 +58,22 @@ setDBEConfig({"enabled": True, "battery_type": "nissan_leaf", "rs485_baudrate": 
 # Should return: {"success": true}
 
 # 3. Test start (with CAN hardware)
-from lib.DBE.DBE_helpers import startDBE
+from lib.ext.dbe.DBE_helpers import startDBE
 startDBE()
 # Should return: {"success": true, "status": "started"}
 
 # 4. Test status
-from lib.DBE.DBE_helpers import getDBEStatus
+from lib.ext.dbe.DBE_helpers import getDBEStatus
 getDBEStatus()
 # Should return: {"state": "running", "running": true, ...}
 
 # 5. Test metrics
-from lib.DBE.DBE_helpers import getDBEMetrics
+from lib.ext.dbe.DBE_helpers import getDBEMetrics
 getDBEMetrics()
 # Should return: {"voltage_dV": 3600, "current_dA": 0, "soc_percent": 80, ...}
 
 # 6. Test stop
-from lib.DBE.DBE_helpers import stopDBE
+from lib.ext.dbe.DBE_helpers import stopDBE
 stopDBE()
 # Should return: {"success": true, "status": "stopped"}
 ```
@@ -91,7 +91,7 @@ can_handle = CAN.register(CAN.TX_ENABLED)
 CAN.activate(can_handle)
 
 # Import battery protocol
-from lib.DBE.battery.nissan_leaf import NissanLeafBattery
+from lib.ext.dbe.battery.nissan_leaf import NissanLeafBattery
 battery = NissanLeafBattery(can_handle)
 battery.setup()
 
@@ -127,7 +127,7 @@ CAN.can_unregister(can_handle)
 **Test Pylon CAN protocol** (RS485 loopback):
 
 ```python
-from lib.DBE.inverter.pylon_can import PylonCANProtocol
+from lib.ext.dbe.inverter.pylon_can import PylonCANProtocol
 import time
 
 # Initialize inverter protocol
@@ -163,7 +163,7 @@ if commands:
 
 ```python
 # Start DBE bridge
-from lib.DBE.DBE_helpers import startDBE, getDBEStatus, getDBEMetrics
+from lib.ext.dbe.DBE_helpers import startDBE, getDBEStatus, getDBEMetrics
 startDBE()
 
 # Monitor status (run multiple times)
@@ -183,7 +183,7 @@ getDBEStatus()
 # Check: frames_rx increased, no errors
 
 # Stop bridge
-from lib.DBE.DBE_helpers import stopDBE
+from lib.ext.dbe.DBE_helpers import stopDBE
 stopDBE()
 ```
 
@@ -222,7 +222,7 @@ stopDBE()
 1. **DBE + OVMS**:
    ```python
    # Start both
-   from lib.DBE.DBE_helpers import startDBE
+   from lib.ext.dbe.DBE_helpers import startDBE
    from lib.OVMS_helpers import startOVMS
    
    startDBE()
@@ -258,7 +258,7 @@ os.listdir('/lib/DBE/battery')
 # Should show: nissan_leaf.py, battery_base.py, __init__.py
 
 # Try importing manually
-from lib.DBE.battery.nissan_leaf import NissanLeafBattery
+from lib.ext.dbe.battery.nissan_leaf import NissanLeafBattery
 # Should not raise ImportError
 ```
 
@@ -308,7 +308,7 @@ uart.write(b"TEST")
 **Solution**:
 ```python
 # Check status for error
-from lib.DBE.DBE_helpers import getDBEStatus
+from lib.ext.dbe.DBE_helpers import getDBEStatus
 getDBEStatus()
 # Check 'error' field
 
@@ -339,7 +339,7 @@ mem_before = gc.mem_free()
 print(f"Memory before: {mem_before} bytes")
 
 # Start DBE
-from lib.DBE.DBE_helpers import startDBE
+from lib.ext.dbe.DBE_helpers import startDBE
 startDBE()
 
 # Check memory after start
@@ -350,7 +350,7 @@ print(f"Memory after: {mem_after} bytes")
 print(f"Memory used: {mem_before - mem_after} bytes")
 
 # Monitor loop timing
-from lib.DBE.DBE_helpers import getDBEStatus
+from lib.ext.dbe.DBE_helpers import getDBEStatus
 for i in range(10):
     start = time.ticks_ms()
     getDBEStatus()

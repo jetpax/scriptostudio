@@ -1,24 +1,7 @@
-// === START_EXTENSION_CONFIG ===
-// IMPORTANT: Version must match package.json version (currently 0.8.1)
-// ScriptO Studio checks this version for extension updates
-// {
-//   "name": "OVMS",
-//   "id": "ovms",
-//   "version": [0, 8, 1],
-//   "author": "JetPax",
-//   "description": "Pushes vehicle metrics to an OVMS v2 server for remote monitoring.",
-//   "icon": "cloud",
-//   "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-car\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /><path d=\"M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /><path d=\"M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5\" /></svg>",
-//   "mipPackage": "github:jetpax/scripto-studio-registry/Extensions/OVMS/lib",
-//   "menu": [
-//     { "id": "config", "label": "Configuration" },
-//     { "id": "metrics", "label": "Metrics" },
-//     { "id": "status", "label": "Status" }
-//   ],
-//   "styles": ".ovms-section { margin-bottom: 24px; } .ovms-section h3 { font-size: 18px; font-weight: 600; color: var(--scheme-primary); margin-bottom: 12px; } .ovms-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; } .ovms-field label { font-size: 14px; font-weight: 600; color: var(--text-primary); } .ovms-field input, .ovms-field select { padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 6px; background: var(--input-bg); color: var(--text-primary); font-size: 14px; } .ovms-field input:focus, .ovms-field select:focus { outline: none; border-color: var(--scheme-primary); box-shadow: 0 0 0 3px rgba(0, 129, 132, 0.2); } .ovms-button { text-transform: uppercase;     letter-spacing: 0.5px; width: auto; padding: 10px 20px; border: none; border-radius: 6px; background: var(--scheme-primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; } .ovms-button:hover { opacity: 0.9; transform: translateY(-1px); } .ovms-button:disabled { opacity: 0.5; cursor: not-allowed; } .ovms-button.secondary { background: var(--bg-tertiary); color: var(--text-primary); } .ovms-button.connect { background: #4caf50; color: white; } .ovms-button.connect:hover { background: #45a049; } .ovms-button.disconnect { background: #f44336; color: white; } .ovms-button.disconnect:hover { background: #da190b; } .ovms-metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 20px; } .ovms-metric-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; } .ovms-metric-name { font-weight: 600; color: var(--scheme-primary); font-size: 13px; margin-bottom: 8px; } .ovms-metric-value { font-size: 24px; font-weight: 700; font-family: 'Menlo', Monaco, 'Courier New', monospace; color: var(--text-primary); } .ovms-metric-unit { font-size: 12px; color: var(--text-secondary); margin-top: 4px; } .ovms-status-panel { padding: 20px; } .ovms-status-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); } .ovms-status-item:last-child { border-bottom: none; } .ovms-status-label { font-weight: 600; color: var(--text-primary); } .ovms-status-value { color: var(--text-secondary); } .ovms-status-value.connected { color: #4caf50; } .ovms-status-value.error { color: #f44336; }"
-// }
-// === END_EXTENSION_CONFIG ===
-
+/**
+ * OVMS Extension
+ * Pushes vehicle metrics to an OVMS v2 server for remote monitoring.
+ */
 
 class OVMSExtension {
   constructor(deviceAPI, emit, state, html) {
@@ -53,6 +36,43 @@ class OVMSExtension {
     }
   }
 
+  /**
+   * Install device files to the device.
+   * Uses this.deviceFiles which is injected by the loader.
+   */
+  async onInstall() {
+    if (!this.state.isConnected) return false
+    
+    console.log('[OVMS] Installing device files...')
+    
+    try {
+      // Create /lib/ext package if it doesn't exist (enables lib.ext.X imports)
+      await this.device.mkdir('/lib/ext')
+      await this.device.saveFile('/lib/ext/__init__.py', '# Extension packages\n')
+      
+      // Create extension directories
+      await this.device.mkdir('/lib/ext/ovms')
+      await this.device.mkdir('/lib/ext/ovms/vehicles')
+      await this.device.mkdir('/lib/ext/ovms/vehicles/zombie_vcu')
+      await this.device.mkdir('/lib/ext/ovms/vehicles/obdii')
+      await this.device.mkdir('/lib/ext/ovms/vehicles/tesla_model3')
+      await this.device.mkdir('/lib/ext/ovms/vehicles/headless_zombie')
+      
+      // Write all device files from the bundle
+      for (const [targetPath, content] of Object.entries(this.deviceFiles)) {
+        const filename = targetPath.split('/').pop()
+        console.log(`[OVMS] Writing ${filename}...`)
+        await this.device.saveFile(targetPath, content)
+      }
+      
+      console.log('[OVMS] Installation complete! Device may need restart to use extension.')
+      return true
+    } catch (e) {
+      console.error('[OVMS] Installation failed:', e)
+      return false
+    }
+  }
+
   // === Helper Methods for OVMS_helpers.py ===
 
   async getOVMSConfig() {
@@ -67,7 +87,7 @@ class OVMSExtension {
       
       // Load config from settings module via helper function
       try {
-        const result = await this.device.execute('from lib.OVMS_helpers import getOVMSConfig; getOVMSConfig()')
+        const result = await this.device.execute('from lib.ext.ovms.OVMS_helpers import getOVMSConfig; getOVMSConfig()')
         const parsed = this.device.parseJSON(result)
         if (parsed && typeof parsed === 'object') {
           this.state.ovms.config = parsed
@@ -79,7 +99,7 @@ class OVMSExtension {
       
       // Get available vehicle types
       try {
-        const result = await this.device.execute('from vehicle import list_vehicles; import json; print(json.dumps(list_vehicles()))')
+        const result = await this.device.execute('from lib.ext.ovms.vehicle import list_vehicles; import json; print(json.dumps(list_vehicles()))')
         const vehicles = this.device.parseJSON(result)
         this.state.ovms.config.available_vehicles = vehicles
       } catch (e) {
@@ -102,7 +122,7 @@ class OVMSExtension {
   async setOVMSConfig(config) {
     try {
       // Use helper function to save via settings module
-      const result = await this.device.execute(`from lib.OVMS_helpers import setOVMSConfig; setOVMSConfig(${JSON.stringify(config)})`)
+      const result = await this.device.execute(`from lib.ext.ovms.OVMS_helpers import setOVMSConfig; setOVMSConfig(${JSON.stringify(config)})`)
       const parsed = this.device.parseJSON(result)
       
       // Update local state
@@ -117,7 +137,7 @@ class OVMSExtension {
 
   async getOVMSMetrics() {
     try {
-      const result = await this.device.execute('from lib.OVMS_helpers import getOVMSMetrics; getOVMSMetrics()')
+      const result = await this.device.execute('from lib.ext.ovms.OVMS_helpers import getOVMSMetrics; getOVMSMetrics()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.ovms.metrics = parsed
@@ -132,7 +152,7 @@ class OVMSExtension {
 
   async getOVMSStatus() {
     try {
-      const result = await this.device.execute('from lib.OVMS_helpers import getOVMSStatus; getOVMSStatus()')
+      const result = await this.device.execute('from lib.ext.ovms.OVMS_helpers import getOVMSStatus; getOVMSStatus()')
       const parsed = this.device.parseJSON(result)
       if (parsed && typeof parsed === 'object') {
         this.state.ovms.status = parsed
@@ -149,7 +169,7 @@ class OVMSExtension {
     try {
       this.state.ovms.isLoading = true
       this.emit('render')
-      const result = await this.device.execute('from lib.OVMS_helpers import startOVMS; startOVMS()')
+      const result = await this.device.execute('from lib.ext.ovms.OVMS_helpers import startOVMS; startOVMS()')
       const parsed = this.device.parseJSON(result)
       await this.getOVMSStatus()
       this.state.ovms.isLoading = false
@@ -167,7 +187,7 @@ class OVMSExtension {
     try {
       this.state.ovms.isLoading = true
       this.emit('render')
-      const result = await this.device.execute('from lib.OVMS_helpers import stopOVMS; stopOVMS()')
+      const result = await this.device.execute('from lib.ext.ovms.OVMS_helpers import stopOVMS; stopOVMS()')
       const parsed = this.device.parseJSON(result)
       await this.getOVMSStatus()
       this.state.ovms.isLoading = false
@@ -189,7 +209,7 @@ class OVMSExtension {
       // Save config first to ensure server address is saved
       await this.setOVMSConfig(this.state.ovms.config)
       
-      const result = await this.device.execute('from lib.OVMS_helpers import testOVMSConnectivity; testOVMSConnectivity()')
+      const result = await this.device.execute('from lib.ext.ovms.OVMS_helpers import testOVMSConnectivity; testOVMSConnectivity()')
       const parsed = this.device.parseJSON(result)
       
       this.state.ovms.isLoading = false
@@ -536,3 +556,5 @@ class OVMSExtension {
     }
   }
 }
+
+export { OVMSExtension as default }

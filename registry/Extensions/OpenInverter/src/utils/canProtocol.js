@@ -2,7 +2,7 @@
  * CAN Protocol Utilities
  * 
  * Helper functions for interacting with OpenInverter CAN protocol.
- * These wrap device-side Python functions from lib.OI_helpers and lib.canopen_sdo.
+ * These wrap device-side Python functions from lib.ext.openinverter.OI_helpers and lib.canopen_sdo.
  */
 
 /**
@@ -459,7 +459,7 @@ async function getOiParams() {
     return getMockParameters()
   }
   
-  const result = await this.device.execute('from lib.OI_helpers import getOiParams; getOiParams()')
+  const result = await this.device.execute('from lib.ext.openinverter.OI_helpers import getOiParams; getOiParams()')
   const parsed = this.device.parseJSON(result)
   // Enrich with descriptions from DOCSTRINGS
   return enrichWithDescriptions(parsed)
@@ -492,7 +492,7 @@ async function setParameter(args, value) {
   }
   
   const argsStr = JSON.stringify(paramObj)
-  const result = await this.device.execute(`from lib.OI_helpers import setParameter; setParameter(${argsStr})`)
+  const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import setParameter; setParameter(${argsStr})`)
   const parsed = this.device.parseJSON(result)
   return parsed
 }
@@ -509,7 +509,7 @@ async function getSpotValues() {
     return getMockSpotValues()
   }
   
-  const result = await this.device.execute('from lib.OI_helpers import getSpotValues; getSpotValues()')
+  const result = await this.device.execute('from lib.ext.openinverter.OI_helpers import getSpotValues; getSpotValues()')
   const parsed = this.device.parseJSON(result)
   // Enrich with descriptions from DOCSTRINGS
   return enrichWithDescriptions(parsed)
@@ -528,7 +528,7 @@ async function getCanMappings() {
     return { tx: [], rx: [] }
   }
   
-  const result = await this.device.execute('from lib.OI_helpers import getCanMap; getCanMap()')
+  const result = await this.device.execute('from lib.ext.openinverter.OI_helpers import getCanMap; getCanMap()')
   console.log('[OI] getCanMappings raw result:', result)
   const parsed = this.device.parseJSON(result)
   console.log('[OI] getCanMappings parsed:', parsed)
@@ -548,7 +548,7 @@ async function getAllParamsWithIds() {
     return getMockAllParamsWithIds()
   }
   
-  const result = await this.device.execute('from lib.OI_helpers import getAllParamsWithIds; getAllParamsWithIds()')
+  const result = await this.device.execute('from lib.ext.openinverter.OI_helpers import getAllParamsWithIds; getAllParamsWithIds()')
   const parsed = this.device.parseJSON(result)
   // Enrich with descriptions from DOCSTRINGS
   return enrichWithDescriptions(parsed)
@@ -574,7 +574,7 @@ async function addCanMapping(mapping) {
   }
   
   const argsStr = JSON.stringify(mapping)
-  const result = await this.device.execute(`from lib.OI_helpers import addCanMapping; import json; addCanMapping(json.loads('${argsStr.replace(/'/g, "\\'")}'))`)
+  const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import addCanMapping; import json; addCanMapping(json.loads('${argsStr.replace(/'/g, "\\'")}'))`)
   const parsed = this.device.parseJSON(result)
   return parsed
 }
@@ -597,7 +597,7 @@ async function removeCanMapping(direction, msgIndex, paramIndex) {
   
   const args = { direction, msg_index: msgIndex, param_index: paramIndex }
   const argsStr = JSON.stringify(args)
-  const result = await this.device.execute(`from lib.OI_helpers import removeCanMapping; import json; removeCanMapping(json.loads('${argsStr.replace(/'/g, "\\'")}'))`)
+  const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import removeCanMapping; import json; removeCanMapping(json.loads('${argsStr.replace(/'/g, "\\'")}'))`)
   const parsed = this.device.parseJSON(result)
   return parsed
 }
@@ -614,7 +614,7 @@ async function removeCanMapping(direction, msgIndex, paramIndex) {
  */
 async function scanCanBus(options = {}) {
   const scanArgs = JSON.stringify(options)
-  const result = await this.device.execute(`from lib.OI_helpers import scanCanBus; scanCanBus('${scanArgs}')`)
+  const result = await this.device.execute(`from lib.ext.openinverter.OI_helpers import scanCanBus; scanCanBus('${scanArgs}')`)
   const parsed = this.device.parseJSON(result)
   return parsed
 }

@@ -22,6 +22,7 @@ Update behavior (matches OVMS v3):
 try:
     # Silent - module initialization should not produce output
     import json
+    import logging
     import time
     import socket
     import struct
@@ -31,14 +32,14 @@ try:
     # Silent - module initialization should not produce output
     import webrepl_binary as webrepl
     # Import settings module for configuration management
-    from lib import settings
+    from lib.sys import settings
     # Silent - module initialization should not produce output
 except Exception as e:
     # Silent - import errors should fail fast, not produce output
     raise  # Re-raise to fail fast
 
-# Import hmac module from local lib directory
-import lib.hmac as hmac
+# Import hmac module from pyDirect core lib
+import hmac
 
 # Create a logger for OVMS
 logger = logging.getLogger("OVMS")
@@ -125,7 +126,7 @@ def _send_error(message, msg_type='error'):
 def listVehicles():
     """List available vehicles (command handler for testing)"""
     try:
-        from vehicle import list_vehicles
+        from lib.ext.ovms.vehicle import list_vehicles
         vehicles = list_vehicles()
         _send_response('vehicles_list', vehicles)
     except Exception as e:
@@ -181,7 +182,7 @@ def _load_vehicle_config():
         return _vehicle_config
     
     try:
-        from vehicle import get_vehicle_config, list_vehicles
+        from lib.ext.ovms.vehicle import get_vehicle_config, list_vehicles
         vehicle_type = settings.get('ovms.vehicle_type', 'zombie_vcu')
         _vehicle_config = get_vehicle_config(vehicle_type)
         if _vehicle_config is None:
@@ -285,7 +286,7 @@ def _get_spot_values_direct():
     
     try:
         # Import parse functions from vehicles module
-        from vehicle import PARSE_FUNCTIONS
+        from lib.ext.ovms.vehicle import PARSE_FUNCTIONS
         
         # Read each metric via OBD2
         for name, metric_config in metrics.items():
