@@ -40,6 +40,35 @@ def format_timestamp(timestamp):
         return dt.strftime('%Y-%m-%d %H:%M:%S UTC')
     return 'Unknown'
 
+# Tag icons mapping
+TAG_ICONS = {
+    'hardware': '🔧',
+    'networking': '🌐',
+    'display': '🖥️',
+    'sensor': '📡',
+    'leds': '💡',
+    'storage': '💾',
+    'test': '🧪',
+    'demos': '🎮',
+    'communication': '📨',
+    'bluetooth': '📶',
+    'can': '🚗',
+    'audio': '🔊',
+    'motor': '⚡',
+    'gpio': '🔌',
+    'i2c': '🔗',
+    'spi': '🔗',
+    'uart': '📟',
+    'wifi': '📡',
+    'usb': '🔌',
+    'diagnostics': '🔍',
+    'utility': '🛠️',
+}
+
+def get_tag_icon(tag):
+    """Get icon for a tag"""
+    return TAG_ICONS.get(tag.lower(), '📦')
+
 def generate_list_page(scriptos, all_tags, index, output_path):
     """Generate main list page (like /packages)"""
     html = f"""<!DOCTYPE html>
@@ -48,6 +77,9 @@ def generate_list_page(scriptos, all_tags, index, output_path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScriptO Registry - Browse & Install</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
@@ -55,227 +87,409 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             box-sizing: border-box;
         }}
         
+        :root {{
+            --primary: #e85d04;
+            --primary-dark: #d45403;
+            --primary-light: #ff7b2e;
+            --primary-glow: rgba(232, 93, 4, 0.3);
+            --accent: #f9844a;
+            --bg-dark: #0f0f0f;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+        }}
+        
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #1f1f1f;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            zoom: 0.75;
+        }}
+        
+        /* Animated background */
+        body::before {{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }}
         
         .header {{
-            background: linear-gradient(135deg, #db5201 0%, #ff6b35 100%);
-            color: white;
-            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 3rem 2rem;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .header::before {{
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.02) 10px,
+                rgba(255,255,255,0.02) 20px
+            );
+            animation: shimmer 20s linear infinite;
+        }}
+        
+        @keyframes shimmer {{
+            0% {{ transform: translateX(-50%) translateY(-50%) rotate(0deg); }}
+            100% {{ transform: translateX(-50%) translateY(-50%) rotate(360deg); }}
+        }}
+        
+        .header-content {{
+            position: relative;
+            z-index: 1;
         }}
         
         .header h1 {{
-            font-size: 2.5rem;
+            font-size: 2.75rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
         }}
         
         .header p {{
             opacity: 0.9;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            font-weight: 400;
         }}
         
         .container {{
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
         }}
         
         .controls {{
-            background: white;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            border: 1px solid var(--border);
             margin-bottom: 2rem;
         }}
         
         .search-box {{
-            margin-bottom: 1rem;
+            position: relative;
         }}
         
         .search-input {{
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            padding-left: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }}
+        
+        .search-input::placeholder {{
+            color: var(--text-muted);
         }}
         
         .search-input:focus {{
             outline: none;
-            border-color: #db5201;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }}
+        
+        .search-icon {{
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            opacity: 0.5;
         }}
         
         .tag-filters {{
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-top: 1rem;
+            margin-top: 1.25rem;
         }}
         
         .tag-filter {{
             padding: 0.5rem 1rem;
-            background: #f0f0f0;
-            border: 2px solid #e0e0e0;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 100px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
             text-decoration: none;
-            color: #333;
+            color: var(--text-secondary);
+            font-weight: 500;
         }}
         
         .tag-filter:hover {{
-            background: #e0e0e0;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-hover);
+            color: var(--text-primary);
         }}
         
         .tag-filter.active {{
-            background: #db5201;
+            background: var(--primary);
             color: white;
-            border-color: #db5201;
+            border-color: var(--primary);
         }}
         
         .stats {{
             margin-top: 1rem;
-            color: #666;
+            color: var(--text-muted);
             font-size: 0.9rem;
         }}
         
-        .scriptos-table {{
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .scriptos-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+        }}
+        
+        .scripto-card {{
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            position: relative;
             overflow: hidden;
         }}
         
-        table {{
-            width: 100%;
-            border-collapse: collapse;
+        .scripto-card::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }}
         
-        thead {{
-            background: #f8f9fa;
+        .scripto-card:hover {{
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px var(--primary-glow);
         }}
         
-        th {{
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #e0e0e0;
-            cursor: pointer;
-            user-select: none;
+        .scripto-card:hover::before {{
+            opacity: 1;
         }}
         
-        th:hover {{
-            background: #f0f0f0;
+        .scripto-header {{
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
         }}
         
-        td {{
-            padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
+        .scripto-icon {{
+            font-size: 1.75rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            flex-shrink: 0;
         }}
         
-        tr:hover {{
-            background: #f8f9fa;
+        .scripto-title {{
+            flex: 1;
+            min-width: 0;
         }}
         
         .scripto-name {{
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #db5201;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }}
         
-        .scripto-name a {{
-            color: #db5201;
-            text-decoration: none;
-        }}
-        
-        .scripto-name a:hover {{
-            text-decoration: underline;
+        .scripto-author {{
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }}
         
         .scripto-description {{
-            color: #666;
+            color: var(--text-secondary);
             font-size: 0.9rem;
-            max-width: 400px;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        }}
+        
+        .scripto-footer {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
         }}
         
         .scripto-tags {{
             display: flex;
             flex-wrap: wrap;
-            gap: 0.25rem;
+            gap: 0.375rem;
         }}
         
         .scripto-tag {{
-            padding: 0.25rem 0.5rem;
-            background: #ffe8e0;
-            color: #db5201;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            padding: 0.25rem 0.625rem;
+            background: rgba(232, 93, 4, 0.15);
+            color: var(--accent);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }}
+        
+        .scripto-version {{
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }}
         
         .footer {{
             text-align: center;
-            padding: 2rem;
-            color: #666;
-            margin-top: 3rem;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+        }}
+        
+        .footer a {{
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }}
+        
+        .footer a:hover {{
+            color: var(--primary-light);
+        }}
+        
+        .footer-links {{
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 0.75rem;
         }}
         
         .no-results {{
             text-align: center;
-            padding: 3rem;
-            color: #666;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }}
+        
+        .no-results-icon {{
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }}
+        
+        @media (max-width: 768px) {{
+            .header h1 {{
+                font-size: 2rem;
+            }}
+            
+            .scriptos-grid {{
+                grid-template-columns: 1fr;
+            }}
+            
+            .footer-links {{
+                flex-direction: column;
+                gap: 0.75rem;
+            }}
         }}
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📦 ScriptO Registry</h1>
-        <p>Browse and install ScriptOs for MicroPython</p>
+        <div class="header-content">
+            <h1>📜 ScriptO Registry</h1>
+            <p>Easy to configure scripts for <a href="https://scriptostudio.com" style="color: inherit; text-decoration: underline;">ScriptO Studio</a></p>
+        </div>
     </div>
     
     <div class="container">
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="search-input" class="search-input" placeholder="🔎 Search ScriptOs by name, description, or tags...">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input" placeholder="Search ScriptOs by name, description, or tags...">
             </div>
             <div class="tag-filters" id="tag-filters">
                 <a href="#" class="tag-filter active" data-tag="all">All</a>
-{chr(10).join(f'                <a href="#" class="tag-filter" data-tag="{tag}">{tag}</a>' for tag in all_tags)}
+{chr(10).join(f'                <a href="#" class="tag-filter" data-tag="{tag}">{get_tag_icon(tag)} {tag}</a>' for tag in all_tags)}
             </div>
             <div class="stats" id="stats">
                 Showing <span id="count">{len(scriptos)}</span> of {len(scriptos)} ScriptOs
             </div>
         </div>
         
-        <div class="scriptos-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th data-sort="name">Name</th>
-                        <th data-sort="description">Description</th>
-                        <th data-sort="tags">Tags</th>
-                        <th data-sort="version">Version</th>
-                    </tr>
-                </thead>
-                <tbody id="scriptos-tbody">
-{chr(10).join(generate_table_row(scripto) for scripto in scriptos)}
-                </tbody>
-            </table>
+        <div class="scriptos-grid" id="scriptos-grid">
+{chr(10).join(generate_card_html(scripto) for scripto in scriptos)}
+        </div>
+        
+        <div class="no-results" id="no-results" style="display: none;">
+            <div class="no-results-icon">🔍</div>
+            <p>No ScriptOs found matching your search.</p>
         </div>
     </div>
     
     <div class="footer">
         <p>Last updated: {format_timestamp(index.get('updated', 0))}</p>
-        <p><a href="https://github.com/jetpax/scriptostudio/tree/main/registry" style="color: #db5201;">View on GitHub</a></p>
+        <div class="footer-links">
+            <a href="https://github.com/jetpax/scriptostudio/tree/main/registry">View on GitHub</a>
+            <a href="../extensions-catalogue/">Browse Extensions</a>
+        </div>
     </div>
     
     <script>
@@ -284,13 +498,12 @@ def generate_list_page(scriptos, all_tags, index, output_path):
         
         const searchInput = document.getElementById('search-input');
         const tagFilters = document.querySelectorAll('.tag-filter');
-        const tbody = document.getElementById('scriptos-tbody');
+        const grid = document.getElementById('scriptos-grid');
+        const noResults = document.getElementById('no-results');
         const statsCount = document.getElementById('count');
         
         let activeTag = 'all';
         let searchQuery = '';
-        let sortBy = 'name';
-        let sortAsc = true;
         
         function formatVersion(version) {{
             if (Array.isArray(version)) {{
@@ -318,70 +531,57 @@ def generate_list_page(scriptos, all_tags, index, output_path):
             return name.replace(/[^a-z0-9]/gi, '-').toLowerCase().replace(/\\.py$/, '');
         }}
         
-        function generateRowHTML(scripto) {{
+        function getTagIcon(tag) {{
+            const icons = {json.dumps(TAG_ICONS)};
+            return icons[tag.toLowerCase()] || '📦';
+        }}
+        
+        function generateCardHTML(scripto) {{
             const detailUrl = `scriptos/${{slugify(scripto.name)}}.html`;
-            const tags = (scripto.tags || []).map(t => `<span class="scripto-tag">${{t}}</span>`).join('');
+            const tags = (scripto.tags || []).slice(0, 2).map(t => `<span class="scripto-tag">${{t}}</span>`).join('');
             const version = formatVersion(scripto.version);
             const desc = scripto.description || '';
-            const descShort = desc.length > 100 ? desc.substring(0, 100) + '...' : desc;
+            const descShort = desc.length > 80 ? desc.substring(0, 80) + '...' : desc;
+            const icon = scripto.tags && scripto.tags[0] ? getTagIcon(scripto.tags[0]) : '📜';
             
             return `
-                <tr>
-                    <td class="scripto-name"><a href="${{detailUrl}}">${{scripto.name}}</a></td>
-                    <td class="scripto-description">${{descShort}}</td>
-                    <td><div class="scripto-tags">${{tags}}</div></td>
-                    <td>v${{version}}</td>
-                </tr>
+                <a href="${{detailUrl}}" class="scripto-card">
+                    <div class="scripto-header">
+                        <div class="scripto-icon">${{icon}}</div>
+                        <div class="scripto-title">
+                            <div class="scripto-name">${{scripto.name}}</div>
+                            <div class="scripto-author">by ${{scripto.author || 'Unknown'}}</div>
+                        </div>
+                    </div>
+                    <div class="scripto-description">${{descShort}}</div>
+                    <div class="scripto-footer">
+                        <div class="scripto-tags">${{tags}}</div>
+                        <span class="scripto-version">v${{version}}</span>
+                    </div>
+                </a>
             `;
         }}
         
-        function filterAndSort() {{
+        function filterAndDisplay() {{
             let filtered = scriptos.filter(s => 
                 matchesSearch(s, searchQuery) && matchesTag(s, activeTag)
             );
             
-            // Sort
-            filtered.sort((a, b) => {{
-                let aVal = a[sortBy];
-                let bVal = b[sortBy];
-                
-                if (sortBy === 'version') {{
-                    // Compare version arrays
-                    aVal = a.version || [0, 0, 0];
-                    bVal = b.version || [0, 0, 0];
-                    for (let i = 0; i < 3; i++) {{
-                        if (aVal[i] !== bVal[i]) {{
-                            return sortAsc ? aVal[i] - bVal[i] : bVal[i] - aVal[i];
-                        }}
-                    }}
-                    return 0;
-                }}
-                
-                if (sortBy === 'tags') {{
-                    aVal = (a.tags || []).join(', ');
-                    bVal = (b.tags || []).join(', ');
-                }}
-                
-                if (typeof aVal === 'string') {{
-                    aVal = aVal.toLowerCase();
-                    bVal = bVal.toLowerCase();
-                }}
-                
-                if (aVal < bVal) return sortAsc ? -1 : 1;
-                if (aVal > bVal) return sortAsc ? 1 : -1;
-                return 0;
-            }});
-            
-            tbody.innerHTML = filtered.length > 0
-                ? filtered.map(s => generateRowHTML(s)).join('')
-                : '<tr><td colspan="4" class="no-results">No ScriptOs found</td></tr>';
+            if (filtered.length > 0) {{
+                grid.innerHTML = filtered.map(s => generateCardHTML(s)).join('');
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+            }} else {{
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+            }}
             
             statsCount.textContent = filtered.length;
         }}
         
         searchInput.addEventListener('input', (e) => {{
             searchQuery = e.target.value;
-            filterAndSort();
+            filterAndDisplay();
         }});
         
         tagFilters.forEach(filter => {{
@@ -390,21 +590,7 @@ def generate_list_page(scriptos, all_tags, index, output_path):
                 tagFilters.forEach(f => f.classList.remove('active'));
                 filter.classList.add('active');
                 activeTag = filter.dataset.tag;
-                filterAndSort();
-            }});
-        }});
-        
-        // Sort functionality
-        document.querySelectorAll('th[data-sort]').forEach(th => {{
-            th.addEventListener('click', () => {{
-                const newSort = th.dataset.sort;
-                if (sortBy === newSort) {{
-                    sortAsc = !sortAsc;
-                }} else {{
-                    sortBy = newSort;
-                    sortAsc = true;
-                }}
-                filterAndSort();
+                filterAndDisplay();
             }});
         }});
     </script>
@@ -418,22 +604,34 @@ def generate_list_page(scriptos, all_tags, index, output_path):
     
     print(f"✓ Generated {html_file}")
 
-def generate_table_row(scripto):
-    """Generate table row HTML for list page"""
+def generate_card_html(scripto):
+    """Generate card HTML for list page"""
     slug = slugify(scripto['name'])
     detail_url = f"scriptos/{slug}.html"
-    tags_html = ''.join(f'<span class="scripto-tag">{tag}</span>' for tag in scripto.get('tags', []))
     version = '.'.join(map(str, scripto.get('version', [1, 0, 0])))
-    description = (scripto.get('description', '') or '')[:100]
-    if len(scripto.get('description', '') or '') > 100:
+    tags = scripto.get('tags', [])
+    tags_html = ''.join(f'<span class="scripto-tag">{tag}</span>' for tag in tags[:2])
+    description = (scripto.get('description', '') or '')[:80]
+    if len(scripto.get('description', '') or '') > 80:
         description += '...'
     
-    return f"""                    <tr>
-                        <td class="scripto-name"><a href="{detail_url}">{scripto['name']}</a></td>
-                        <td class="scripto-description">{description}</td>
-                        <td><div class="scripto-tags">{tags_html}</div></td>
-                        <td>v{version}</td>
-                    </tr>"""
+    # Get icon based on first tag
+    icon = get_tag_icon(tags[0]) if tags else '📜'
+    
+    return f"""            <a href="{detail_url}" class="scripto-card">
+                <div class="scripto-header">
+                    <div class="scripto-icon">{icon}</div>
+                    <div class="scripto-title">
+                        <div class="scripto-name">{scripto['name']}</div>
+                        <div class="scripto-author">by {scripto.get('author', 'Unknown')}</div>
+                    </div>
+                </div>
+                <div class="scripto-description">{description}</div>
+                <div class="scripto-footer">
+                    <div class="scripto-tags">{tags_html}</div>
+                    <span class="scripto-version">v{version}</span>
+                </div>
+            </a>"""
 
 def generate_detail_page(scripto, output_path):
     """Generate individual detail page (like /packages/aioble)"""
@@ -442,15 +640,17 @@ def generate_detail_page(scripto, output_path):
     detail_dir.mkdir(exist_ok=True)
     
     version = '.'.join(map(str, scripto.get('version', [1, 0, 0])))
-    tags_html = ''.join(f'<span class="scripto-tag">{tag}</span>' for tag in scripto.get('tags', []))
+    tags = scripto.get('tags', [])
+    tags_html = ''.join(f'<span class="scripto-tag">{get_tag_icon(tag)} {tag}</span>' for tag in tags)
     author = scripto.get('author', 'Unknown')
     description = scripto.get('description', '')
     docs = scripto.get('docs', '')
     url = scripto.get('url', '')
     license = scripto.get('license', 'MIT')
+    icon = get_tag_icon(tags[0]) if tags else '📜'
     
-    # Configure URL for ScriptO Studio
-    configure_url = f"http://localhost:5174/?configure={quote(url)}" if url else "#"
+    # Configure URL for ScriptO Studio (production)
+    configure_url = f"https://scriptostudio.com/app/?configure={quote(url)}" if url else "#"
     
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -458,6 +658,9 @@ def generate_detail_page(scripto, output_path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{scripto['name']} - ScriptO Registry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
@@ -465,153 +668,269 @@ def generate_detail_page(scripto, output_path):
             box-sizing: border-box;
         }}
         
+        :root {{
+            --primary: #e85d04;
+            --primary-dark: #d45403;
+            --primary-light: #ff7b2e;
+            --primary-glow: rgba(232, 93, 4, 0.3);
+            --accent: #f9844a;
+            --bg-dark: #0f0f0f;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border: rgba(255, 255, 255, 0.08);
+        }}
+        
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #1f1f1f;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            zoom: 0.75;
+        }}
+        
+        body::before {{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 10% 20%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(249, 132, 74, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }}
         
         .header {{
-            background: linear-gradient(135deg, #db5201 0%, #ff6b35 100%);
-            color: white;
-            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 1.25rem 2rem;
+            position: relative;
+            overflow: hidden;
         }}
         
         .header a {{
             color: white;
             text-decoration: none;
-            opacity: 0.9;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
         }}
         
         .header a:hover {{
-            opacity: 1;
+            opacity: 0.8;
         }}
         
         .container {{
             max-width: 900px;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }}
         
         .detail-card {{
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .detail-card::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
         }}
         
         .detail-header {{
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
         }}
         
-        .detail-header h1 {{
-            color: #db5201;
+        .detail-icon {{
+            font-size: 2.5rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            flex-shrink: 0;
+        }}
+        
+        .detail-title {{
+            flex: 1;
+        }}
+        
+        .detail-title h1 {{
             font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }}
         
         .detail-meta {{
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }}
+        
+        .detail-meta span {{
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
         }}
         
         .detail-description {{
             margin: 1.5rem 0;
             line-height: 1.8;
-            color: #444;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
         }}
         
         .detail-tags {{
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin: 1rem 0;
+            margin: 1.5rem 0;
         }}
         
         .scripto-tag {{
             padding: 0.5rem 1rem;
-            background: #ffe8e0;
-            color: #db5201;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            background: rgba(232, 93, 4, 0.15);
+            color: var(--accent);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
         }}
         
         .detail-info {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
             padding: 1.5rem;
-            background: #f8f9fa;
-            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid var(--border);
         }}
         
         .info-item {{
             display: flex;
             flex-direction: column;
+            gap: 0.25rem;
         }}
         
         .info-label {{
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }}
         
         .info-value {{
             font-weight: 600;
-            color: #333;
+            color: var(--text-primary);
+        }}
+        
+        .info-value a {{
+            color: var(--primary);
+            text-decoration: none;
+        }}
+        
+        .info-value a:hover {{
+            text-decoration: underline;
         }}
         
         .detail-actions {{
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             padding-top: 2rem;
-            border-top: 2px solid #f0f0f0;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
         }}
         
         .btn {{
-            padding: 0.75rem 1.5rem;
+            padding: 0.875rem 1.75rem;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
         }}
         
         .btn-primary {{
-            background: #db5201;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
+            box-shadow: 0 4px 15px var(--primary-glow);
         }}
         
         .btn-primary:hover {{
-            background: #b84401;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--primary-glow);
         }}
         
         .btn-secondary {{
-            background: #f0f0f0;
-            color: #333;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }}
         
         .btn-secondary:hover {{
-            background: #e0e0e0;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
         }}
         
-        .install-note {{
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 6px;
-            padding: 1rem;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #856404;
+        @media (max-width: 768px) {{
+            .detail-header {{
+                flex-direction: column;
+                text-align: center;
+            }}
+            
+            .detail-title h1 {{
+                font-size: 1.5rem;
+            }}
+            
+            .detail-meta {{
+                justify-content: center;
+            }}
+            
+            .detail-actions {{
+                flex-direction: column;
+            }}
+            
+            .btn {{
+                width: 100%;
+                justify-content: center;
+            }}
         }}
     </style>
 </head>
@@ -623,9 +942,14 @@ def generate_detail_page(scripto, output_path):
     <div class="container">
         <div class="detail-card">
             <div class="detail-header">
-                <h1>{scripto['name']}</h1>
-                <div class="detail-meta">
-                    by {author} • Version {version} • License: {license}
+                <div class="detail-icon">{icon}</div>
+                <div class="detail-title">
+                    <h1>{scripto['name']}</h1>
+                    <div class="detail-meta">
+                        <span>👤 {author}</span>
+                        <span>📦 v{version}</span>
+                        <span>📄 {license}</span>
+                    </div>
                 </div>
             </div>
             
@@ -634,7 +958,7 @@ def generate_detail_page(scripto, output_path):
             </div>
             
             <div class="detail-tags">
-                {tags_html if tags_html else '<span class="scripto-tag">Uncategorized</span>'}
+                {tags_html if tags_html else '<span class="scripto-tag">📦 Uncategorized</span>'}
             </div>
             
             <div class="detail-info">
@@ -654,14 +978,9 @@ def generate_detail_page(scripto, output_path):
             </div>
             
             <div class="detail-actions">
-                <a href="{configure_url}" class="btn btn-primary">Open in ScriptO Studio</a>
-                {f'<a href="{docs}" target="_blank" class="btn btn-secondary">Documentation</a>' if docs else ''}
-                <a href="{url}" target="_blank" class="btn btn-secondary">View Source</a>
-            </div>
-            
-            <div class="install-note">
-                <strong>Note:</strong> The "Open in ScriptO Studio" button will only work if ScriptO Studio is running on localhost:5174. 
-                Otherwise, copy the ScriptO URL and paste it into ScriptO Studio manually to configure it.
+                <a href="{configure_url}" class="btn btn-primary">🚀 Open in ScriptO Studio</a>
+                {f'<a href="{docs}" target="_blank" class="btn btn-secondary">📖 Documentation</a>' if docs else ''}
+                <a href="{url}" target="_blank" class="btn btn-secondary">📄 View Source</a>
             </div>
         </div>
     </div>
