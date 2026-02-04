@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1770173691,
+  "updated": 1770173822,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -939,5 +939,195 @@
       "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/iperf3%20Server.py"
     }
   ],
-  "extensions": []
+  "extensions": [
+    {
+      "name": "CCS",
+      "id": "ccs",
+      "filename": "ccs.bundle.js",
+      "version": [
+        0,
+        1,
+        0
+      ],
+      "author": "JetPax",
+      "description": "CCS/NACS DC Fast Charging - EVSE emulator for contactor closure",
+      "icon": "bolt",
+      "menu": [
+        {
+          "id": "config",
+          "label": "Configuration"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "V2G",
+          "label": "V2G Session"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/CCS/ccs.bundle.js",
+      "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-bolt\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11\" /></svg>"
+    },
+    {
+      "name": "DBE",
+      "id": "dbe",
+      "filename": "dbe.bundle.js",
+      "version": [
+        0,
+        2,
+        2
+      ],
+      "author": "JetPax",
+      "description": "Dala The Great's Battery Emulator - CAN-to-RS485 bridge for battery management systems. Bridges EV battery packs to solar inverters.",
+      "icon": "battery-charging",
+      "menu": [
+        {
+          "id": "config",
+          "label": "Configuration"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "metrics",
+          "label": "Metrics"
+        },
+        {
+          "id": "mqtt",
+          "label": "MQTT"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/DBE/dbe.bundle.js",
+      "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-battery-charging\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M16 7h1a2 2 0 0 1 2 2v.5a.5 .5 0 0 0 .5 .5a.5 .5 0 0 1 .5 .5v3a.5 .5 0 0 1 -.5 .5a.5 .5 0 0 0 -.5 .5v.5a2 2 0 0 1 -2 2h-2\" /><path d=\"M8 7h-2a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h1\" /><path d=\"M12 8l-2 4h3l-2 4\" /></svg>"
+    },
+    {
+      "name": "DTC",
+      "id": "dtc",
+      "filename": "dtc.bundle.js",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Diagnostic Trouble Codes - Read, display, and clear DTCs from vehicle ECUs via UDS/OBD2. Includes 12,000+ code descriptions.",
+      "icon": "alert-triangle",
+      "menu": [
+        {
+          "id": "connection",
+          "label": "Connection"
+        },
+        {
+          "id": "dtcs",
+          "label": "DTCs"
+        },
+        {
+          "id": "readiness",
+          "label": "Readiness"
+        },
+        {
+          "id": "livedata",
+          "label": "Live Data"
+        },
+        {
+          "id": "service",
+          "label": "Service Builder"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/DTC/dtc.bundle.js",
+      "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>"
+    },
+    {
+      "name": "GVRET",
+      "id": "gvret",
+      "filename": "gvret.bundle.js",
+      "version": [
+        1,
+        3,
+        0
+      ],
+      "author": "JetPax",
+      "description": "High-performance GVRET implementation for MicroPython. Enables SavvyCAN connection over TCP/IP (mpDirect) for vehicle network analysis.",
+      "icon": "radio",
+      "menu": [
+        {
+          "id": "connection",
+          "label": "Connection"
+        },
+        {
+          "id": "filters",
+          "label": "Filters"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/GVRET/gvret.bundle.js",
+      "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-topology-bus\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M14 10a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z\" /><path d=\"M6 10a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z\" /><path d=\"M22 10a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z\" /><path d=\"M2 16h20\" /><path d=\"M4 12v4\" /><path d=\"M12 12v4\" /><path d=\"M20 12v4\" /></svg>"
+    },
+    {
+      "name": "OVMS",
+      "id": "ovms",
+      "filename": "ovms.bundle.js",
+      "version": [
+        0,
+        9,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Pushes vehicle metrics to an OVMS v2 server for remote monitoring.",
+      "icon": "cloud",
+      "menu": [
+        {
+          "id": "config",
+          "label": "Configuration"
+        },
+        {
+          "id": "metrics",
+          "label": "Metrics"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/OVMS/ovms.bundle.js",
+      "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-car\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /><path d=\"M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /><path d=\"M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5\" /></svg>"
+    },
+    {
+      "name": "OpenInverter",
+      "id": "openinverter",
+      "filename": "openinverter.bundle.js",
+      "version": [
+        1,
+        99,
+        0
+      ],
+      "author": "JetPax",
+      "description": "Complete OpenInverter suite. Configure parameters, map CAN messages, view spot values, and plot real-time signals from OpenInverter motor controllers.",
+      "icon": "bolt",
+      "menu": [
+        {
+          "id": "deviceselector",
+          "label": "Device Manager"
+        },
+        {
+          "id": "commands",
+          "label": "Device Control",
+          "icon": "zap"
+        },
+        {
+          "id": "errors",
+          "label": "Error Log",
+          "icon": "alert-triangle"
+        },
+        {
+          "id": "plot",
+          "label": "Live Plot",
+          "icon": "trending-up"
+        }
+      ],
+      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/Extensions/OpenInverter/openinverter.bundle.js",
+      "iconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"icon icon-tabler icon-tabler-bolt\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11\" /></svg>"
+    }
+  ]
 }

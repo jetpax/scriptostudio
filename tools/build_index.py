@@ -346,27 +346,68 @@ def build_index(scriptos_dir=SCRIPTOS_DIR, extensions_dir=EXTENSIONS_DIR, output
         if entry:
             scriptos.append(entry)
     
-    # Scan Extensions (including subdirectories)
+    # Scan Extensions (look for extension.json files in subdirectories)
     extensions = []
     if extensions_path.exists():
         print(f"\nScanning {extensions_dir}...")
-        # Search recursively for .js files in subdirectories (excluding lib directories)
-        all_js_files = list(extensions_path.glob('**/*.js'))
-        # Filter out files in lib/ directories
-        js_files = [f for f in all_js_files if 'lib' not in f.parts]
+        # Search for extension.json files in subdirectories
+        extension_configs = list(extensions_path.glob('*/extension.json'))
         
-        if js_files:
-            print(f"Found {len(js_files)} Extension files")
+        if extension_configs:
+            print(f"Found {len(extension_configs)} Extension(s)")
             
-            for js_file in sorted(js_files):
-                print(f"Processing {js_file.name}...")
-                entry = parse_extension_file(js_file, repo_url, branch, extensions_base_dir=extensions_path)
-                if entry:
-                    extensions.append(entry)
+            for config_file in sorted(extension_configs):
+                ext_dir = config_file.parent
+                ext_name = ext_dir.name
+                print(f"Processing {ext_name}...")
+                
+                try:
+                    with open(config_file, 'r', encoding='utf-8') as f:
+                        config = json.load(f)
+                    
+                    # Extract metadata from extension.json
+                    name = config.get('name', ext_name)
+                    extension_id = config.get('id', name.lower().replace(' ', '-'))
+                    version = config.get('version', [1, 0, 0])
+                    author = config.get('author', '')
+                    description = config.get('description', '')
+                    icon = config.get('icon', 'sliders')
+                    icon_svg = config.get('iconSvg', None)
+                    menu = config.get('menu', [])
+                    
+                    # Generate URL for bundle file
+                    bundle_filename = f"{extension_id}.bundle.js"
+                    if repo_url:
+                        if 'raw.githubusercontent.com' in repo_url:
+                            url = f"{repo_url}/{branch}/registry/Extensions/{ext_name}/{bundle_filename}"
+                        else:
+                            url = f"{repo_url}/raw/{branch}/registry/Extensions/{ext_name}/{bundle_filename}"
+                    else:
+                        url = f"/registry/Extensions/{ext_name}/{bundle_filename}"
+                    
+                    # Build Extension entry
+                    extension_entry = {
+                        "name": name,
+                        "id": extension_id,
+                        "filename": bundle_filename,
+                        "version": version,
+                        "author": author,
+                        "description": description,
+                        "icon": icon,
+                        "menu": menu,
+                        "url": url
+                    }
+                    
+                    # Add iconSvg if present
+                    if icon_svg:
+                        extension_entry["iconSvg"] = icon_svg
+                    
+                    extensions.append(extension_entry)
+                    
+                except Exception as e:
+                    print(f"  ✗ Error parsing {config_file}: {e}")
         else:
-            print(f"No extension files found in {extensions_dir}")
-    else:
-        print(f"\nExtensions directory not found: {extensions_dir} (skipping)")
+            print(f"No extension.json files found in {extensions_dir}")
     
     # Build index
     index = {
