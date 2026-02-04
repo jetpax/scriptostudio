@@ -34,8 +34,8 @@ function renderSpotValuesTab() {
 
   // autoRefreshInterval is initialized in constructor, no need to check here
 
-  // Start auto-refresh if not already running and not editing interval
-  if (!this.state.spotValueRefreshTimer && !this.state.isEditingInterval) {
+  // Start auto-refresh if not already running
+  if (!this.state.spotValueRefreshTimer) {
     startSpotValueAutoRefresh.call(this)
   }
 
@@ -86,29 +86,18 @@ function renderSpotValuesTab() {
             </label>
             <input 
               type="number"
-              value=${this.state.isEditingInterval ? (this.state.editingIntervalValue || this.state.autoRefreshInterval) : this.state.autoRefreshInterval}
+              value=${this.state.autoRefreshInterval}
               onfocus=${(e) => {
-                // Store that we're editing and the current value
-                this.state.isEditingInterval = true
-                this.state.editingIntervalValue = e.target.value
-                // Stop auto-refresh while editing to prevent re-renders
+                // Stop auto-refresh while editing to prevent unnecessary polling
                 if (this.state.spotValueRefreshTimer) {
                   stopSpotValueAutoRefresh.call(this)
                 }
               }}
-              oninput=${(e) => {
-                // Update the editing value without triggering re-render
-                this.state.editingIntervalValue = e.target.value
-              }}
               onchange=${(e) => {
-                const newValue = e.target.value
-                // Update interval (this will restart timer and set isEditingInterval = false internally)
-                updateRefreshInterval.call(this, newValue)
+                updateRefreshInterval.call(this, e.target.value)
               }}
               onblur=${(e) => {
-                const newValue = e.target.value
-                // Update interval (this will restart timer and set isEditingInterval = false internally)
-                updateRefreshInterval.call(this, newValue)
+                updateRefreshInterval.call(this, e.target.value)
               }}
               min="100"
               max="10000"
@@ -524,9 +513,8 @@ async function refreshSpotValues() {
     
     this.state.isLoadingOiSpotValues = false
     
-    // Only emit render if telemetry tab is currently active AND not editing interval
-    // This prevents unnecessary re-renders when tab is not visible or user is editing
-    if (this.state.activeDeviceTab === 'telemetry' && !this.state.isEditingInterval) {
+    // Only emit render if telemetry tab is currently active
+    if (this.state.activeDeviceTab === 'telemetry') {
       this.emit('render')
     }
   } catch (error) {
@@ -542,21 +530,11 @@ async function refreshSpotValues() {
 function updateRefreshInterval(value) {
   const interval = parseInt(value, 10)
   if (!isNaN(interval) && interval >= 100 && interval <= 10000) {
-    // Stop editing flag BEFORE updating state
-    const wasEditing = this.state.isEditingInterval
-    this.state.isEditingInterval = false
-    delete this.state.editingIntervalValue
-    
     this.state.autoRefreshInterval = interval
     
-    // Always restart timer with new interval (it may have been stopped during editing)
+    // Restart timer with new interval (it may have been stopped during editing)
     stopSpotValueAutoRefresh.call(this)
     startSpotValueAutoRefresh.call(this)
-    
-    // Only emit render if we weren't editing (prevents render during input)
-    if (!wasEditing) {
-      this.emit('render')
-    }
   }
 }
 
