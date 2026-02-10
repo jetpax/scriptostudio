@@ -6,6 +6,7 @@ on:
     paths:
       - 'registry/ScriptOs/**'
       - 'registry/Extensions/**'
+      - 'boards/manifests/**'
       - 'tools/**'
   workflow_dispatch:
 

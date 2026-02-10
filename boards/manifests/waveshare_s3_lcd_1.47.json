@@ -1,0 +1,108 @@
+{
+  "identity": {
+    "id": "waveshare_s3_lcd_1.47",
+    "name": "Waveshare ESP32-S3 LCD 1.47",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3 N16R8 with 1.47\" ST7789V2 SPI LCD, SDMMC SD card, NeoPixel RGB LED"
+  },
+
+  "network": {
+    "hostname_pattern": "pyDirect-{mac_suffix}",
+    "mdns_enabled": true,
+    "ap_ssid_pattern": "pyDirect-{mac_suffix}",
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": true,
+    "status_led": true,
+    "usb_otg": false,
+    "display": true,
+    "touch": false,
+    "sdcard": true
+  },
+
+  "resources": {
+    "pins": {
+      "status_led": 38,
+      "boot": 0
+    },
+
+    "spi": {
+      "lcd": {
+        "sck": 40,
+        "mosi": 45,
+        "dc": 41,
+        "cs": 42,
+        "rst": 39
+      }
+    },
+
+    "sdmmc": {
+      "sdcard": {
+        "clk": 14,
+        "cmd": 15,
+        "d0": 16,
+        "d1": 18,
+        "d2": 17,
+        "d3": 21
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+
+    "gpio": {
+      "bl_pwm": 48
+    }
+  },
+
+  "devices": {
+    "display": {
+      "type": "ST7789",
+      "driver": "st7789",
+      "bus": "spi.lcd",
+      "width": 172,
+      "height": 320,
+      "offset_x": 34,
+      "offset_y": 0,
+      "color_bits": 16,
+      "backlight": {
+        "pin": 48,
+        "active_high": true,
+        "pwm_capable": true,
+        "circuit": "N-channel MOSFET (SI2302CDS) sinks LEDK when gate driven high"
+      },
+      "description": "1.47\" 172x320 IPS LCD (ST7789V2)"
+    },
+
+    "status_led": {
+      "type": "neopixel",
+      "pin": 38,
+      "pixel_order": "GRB",
+      "description": "Onboard RGB NeoPixel LED on GPIO38"
+    },
+
+    "sdcard": {
+      "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "bus_width": 4,
+      "description": "TF/microSD card (SDMMC 4-bit mode)"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}

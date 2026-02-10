@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set Device Password</title>
+
+<style>
+:root {
+    --bg: #0f172a;
+    --panel: #111827;
+    --border: #1f2937;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --accent: #38bdf8;
+    --error: #f87171;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.panel {
+    width: 100%;
+    max-width: 380px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+}
+
+h1 {
+    margin: 0 0 4px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 6px;
+}
+
+input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #020617;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+input[type="password"]:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+button {
+    margin-top: 16px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #020617;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+.error {
+    margin-top: 12px;
+    font-size: 0.875rem;
+    color: var(--error);
+    display: none;
+}
+</style>
+</head>
+
+<body>
+<form class="panel" method="POST" action="/set-password">
+    <h1>Set Password</h1>
+    <div class="subtitle">Create a password for local access</div>
+
+    <label for="pw1">Password</label>
+    <input id="pw1" name="password" type="password" required>
+
+    <label for="pw2">Confirm password</label>
+    <input id="pw2" type="password" required>
+
+    <div class="hint">Minimum 8 characters recommended</div>
+
+    <button id="submit" type="submit" disabled>Save password</button>
+
+    <div class="error" id="error">Passwords do not match</div>
+</form>
+
+<script>
+const pw1 = document.getElementById("pw1");
+const pw2 = document.getElementById("pw2");
+const submit = document.getElementById("submit");
+const error = document.getElementById("error");
+
+function check() {
+    if (!pw1.value || !pw2.value) {
+        submit.disabled = true;
+        error.style.display = "none";
+        return;
+    }
+
+    if (pw1.value === pw2.value) {
+        submit.disabled = false;
+        error.style.display = "none";
+    } else {
+        submit.disabled = true;
+        error.style.display = "block";
+    }
+}
+
+pw1.addEventListener("input", check);
+pw2.addEventListener("input", check);
+</script>
+</body>
+</html>

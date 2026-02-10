@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-02-10",
+  "boards": [
+    {
+      "id": "generic_esp32s3",
+      "name": "Generic ESP32-S3",
+      "chip": "ESP32-S3",
+      "vendor": "espressif",
+      "description": "Generic ESP32-S3 dev board with RGB LED on GPIO48"
+    },
+    {
+      "id": "generic_esp32p4",
+      "name": "Generic ESP32-P4",
+      "chip": "ESP32-P4",
+      "vendor": "espressif",
+      "description": "Generic ESP32-P4 dev board with C6 WiFi coprocessor"
+    },
+    {
+      "id": "retrovms_mini",
+      "name": "RetroVMS Mini",
+      "chip": "ESP32-S3",
+      "vendor": "retrovms",
+      "description": "Vehicle control module with 24 inputs, 12 outputs, and CAN bus"
+    },
+    {
+      "id": "scripto_p4_c6",
+      "name": "Scripto P4+C6",
+      "chip": "ESP32-P4",
+      "vendor": "scripto",
+      "description": "ESP32-P4 development board with Ethernet, CAN, and NeoPixel status LED"
+    },
+    {
+      "id": "waveshare_lcd_1.46",
+      "name": "Waveshare ESP32-S3 Touch LCD 1.46",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N16R8 with 1.46\" SPD2010 QSPI LCD+touch, IMU, audio, SD, RTC"
+    },
+    {
+      "id": "waveshare_lcd_1.69",
+      "name": "Waveshare ESP32-S3 Touch LCD 1.69",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N16R8 with 1.69\" ST7789 LCD, CST816T touch, QMI8658 IMU, PCF85063 RTC, buzzer"
+    },
+    {
+      "id": "waveshare_p4_poe",
+      "name": "Waveshare ESP32-P4-WIFI6-POE-ETH",
+      "chip": "ESP32-P4",
+      "vendor": "waveshare",
+      "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, PoE Ethernet, MIPI-DSI/CSI, Audio codec"
+    },
+    {
+      "id": "waveshare_s3_lcd_1.47",
+      "name": "Waveshare ESP32-S3 LCD 1.47",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N16R8 with 1.47\" ST7789V2 SPI LCD, SDMMC SD card, NeoPixel RGB LED"
+    }
+  ]
+}

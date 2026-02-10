@@ -83,4 +83,5 @@ ScriptOs that provide their own web-based user interfaces, displayed in modal wi
 ## Getting Started
 
 - [Writing ScriptOs](writing-scriptos.md) - Create your own ScriptOs
+- [VM Sharing & Async](vm-sharing.md) - How scripts share the MicroPython VM
 - [UI Plugin - Hello World](ui-plugin-hello-world.md) - Example with custom UI

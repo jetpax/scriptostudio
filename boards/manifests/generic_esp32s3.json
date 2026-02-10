@@ -1,0 +1,83 @@
+{
+  "identity": {
+    "id": "generic_esp32s3",
+    "name": "Generic ESP32-S3",
+    "vendor": "espressif",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "Generic ESP32-S3 dev board with RGB LED on GPIO48"
+  },
+
+  "network": {
+    "hostname_pattern": "pyDirect-{mac_suffix}",
+    "mdns_enabled": true,
+    "ap_ssid_pattern": "pyDirect-{mac_suffix}",
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": true,
+    "status_led": true,
+    "usb_otg": true,
+    "can": true
+  },
+
+  "resources": {
+    "pins": {
+      "status_led": 48,
+      "boot": 0
+    },
+
+    "can": {
+      "can0": {
+        "tx": 5,
+        "rx": 4
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+
+    "i2c": {
+      "i2c0": {
+        "sda": 8,
+        "scl": 9
+      }
+    },
+
+    "spi": {
+      "spi2": {
+        "mosi": 11,
+        "miso": 13,
+        "sclk": 12,
+        "cs": 10
+      }
+    },
+
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    }
+  },
+
+  "devices": {
+    "status_led": {
+      "type": "neopixel",
+      "pixel_order": "GRB",
+      "description": "Onboard RGB LED (WS2812) on GPIO48"
+    }
+  },
+
+  "memory": {
+    "flash_size": "8MB",
+    "psram_size": "2MB",
+    "psram_mode": "octal"
+  }
+}

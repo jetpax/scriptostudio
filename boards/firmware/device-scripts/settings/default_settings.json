@@ -1,0 +1,45 @@
+{
+  "setup_mode": true,
+  "wifi": {
+    "ssid": "Paxnet",
+    "password": "rtyu4567",
+    "hostname_prefix": "pyDirect"
+  },
+  "ethernet": {
+    "dhcp": true,
+    "static_ip": null
+  },
+  "wwan": {
+    "apn": "",
+    "username": "",
+    "password": "",
+    "mobile_data_enabled": false
+  },
+  "server": {
+    "webrepl_password": "password",
+    "http_port": 80,
+    "https_enabled": true,
+    "https_cert_file": "/certs/servercert.pem",
+    "https_key_file": "/certs/prvtkey.pem"
+  },
+  "network": {
+    "timeout": 5,
+    "retries": 3
+  },
+  "led": {
+    "brightness": 0.3,
+    "status": "on"
+  },
+  "can": {
+    "enabled": false,
+    "bitrate": 500000,
+    "mode": "NORMAL"
+  },
+  "ntp": {
+    "enabled": true,
+    "server": "pool.ntp.org",
+    "auto_detect_tz": true,
+    "tz_offset": 0.0,
+    "timezone": "UTC"
+  }
+}

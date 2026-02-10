@@ -1,0 +1,211 @@
+{
+  "identity": {
+    "id": "waveshare_p4_poe",
+    "name": "Waveshare ESP32-P4-WIFI6-POE-ETH",
+    "vendor": "waveshare",
+    "chip": "ESP32-P4",
+    "revision": "1.0.0",
+    "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, PoE Ethernet, MIPI-DSI/CSI, Audio codec"
+  },
+
+  "network": {
+    "hostname_pattern": "pyDirect-{mac_suffix}",
+    "mdns_enabled": true,
+    "ap_ssid_pattern": "pyDirect-{mac_suffix}",
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "ethernet": true,
+    "poe": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "camera": true,
+    "audio": true,
+    "microphone": true,
+    "sdcard": true,
+    "coprocessor": true
+  },
+
+  "resources": {
+    "pins": {
+      "boot": 35
+    },
+
+    "i2c": {
+      "i2c0": {
+        "scl": 8,
+        "sda": 7
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 37,
+        "rx": 38
+      },
+      "c6_debug": {
+        "description": "ESP32-C6 debug UART (exposed on SH1.0 connector)"
+      }
+    },
+
+    "sdmmc": {
+      "sdcard": {
+        "clk": 43,
+        "cmd": 44,
+        "d0": 39,
+        "d1": 40,
+        "d2": 41,
+        "d3": 42
+      },
+      "c6_sdio": {
+        "clk": 18,
+        "cmd": 19,
+        "d0": 14,
+        "d1": 15,
+        "d2": 16,
+        "d3": 17
+      }
+    },
+
+    "rmii": {
+      "ethernet": {
+        "txd0": 35,
+        "txd1": 34,
+        "rxd0": 29,
+        "rxd1": 30,
+        "tx_en": 49,
+        "crs_dv": 28,
+        "ref_clk": 50,
+        "mdc": 31,
+        "mdio": 52,
+        "reset": 51
+      }
+    },
+
+    "i2s": {
+      "audio": {
+        "mclk": 13,
+        "sclk": 12,
+        "lrck": 10,
+        "dout": 11,
+        "din": 9,
+        "description": "ES8311 codec I2S interface"
+      }
+    },
+
+    "mipi": {
+      "dsi": {
+        "lanes": 2,
+        "description": "MIPI-DSI 2-lane display interface, up to 1.5Gbps per lane"
+      },
+      "csi": {
+        "lanes": 2,
+        "description": "MIPI-CSI 2-lane camera interface, 1080P @30fps"
+      }
+    },
+
+    "usb": {
+      "otg": {
+        "type": "Type-A",
+        "speed": "HS",
+        "description": "USB 2.0 OTG High Speed"
+      },
+      "uart": {
+        "type": "Type-C",
+        "description": "USB Type-C for power, flashing, and debugging via UART"
+      }
+    }
+  },
+
+  "devices": {
+    "ethernet": {
+      "phy": "IP101",
+      "interface": "rmii",
+      "phy_addr": 1,
+      "pins": {
+        "mdc": 31,
+        "mdio": 52,
+        "reset": 51
+      },
+      "poe_capable": true,
+      "speed": "100Mbps",
+      "description": "IP101GRI Ethernet PHY with RMII interface and PoE support"
+    },
+
+    "c6_coprocessor": {
+      "type": "ESP32-C6-MINI-1U-H8",
+      "interface": "sdio",
+      "features": ["wifi6", "bluetooth5_le"],
+      "antenna": "IPEX_3",
+      "description": "ESP32-C6 coprocessor for WiFi 6 (2.4GHz) and Bluetooth 5 LE via SDIO"
+    },
+
+    "audio_codec": {
+      "type": "ES8311",
+      "driver": "es8311",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x18",
+      "i2s_bus": "i2s.audio",
+      "description": "ES8311 mono audio codec with I2S interface"
+    },
+
+    "audio_amplifier": {
+      "type": "NS4150B",
+      "output": "speaker",
+      "connector": "MX1.25_2P",
+      "speaker_spec": "8Ω 2W",
+      "description": "Class-D mono audio power amplifier"
+    },
+
+    "microphone": {
+      "type": "SMD_MEMS",
+      "description": "Onboard SMD MEMS microphone"
+    },
+
+    "headphone_jack": {
+      "type": "3.5mm",
+      "description": "3.5mm stereo headphone jack"
+    },
+
+    "sdcard": {
+      "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "interface": "SDIO3.0",
+      "bus_width": 4,
+      "power_control": {
+        "pin": 45,
+        "active_low": true
+      },
+      "description": "MicroSD/TF card slot with 4-bit SDMMC interface"
+    },
+
+    "display_port": {
+      "type": "MIPI-DSI",
+      "lanes": 2,
+      "max_resolution": "1280x800",
+      "features": ["PPA", "2D_DMA", "JPEG_decode"],
+      "description": "MIPI-DSI 2-lane display connector for high-definition screens"
+    },
+
+    "camera_port": {
+      "type": "MIPI-CSI",
+      "lanes": 2,
+      "max_resolution": "1080P",
+      "features": ["ISP", "H264_encode", "JPEG_encode"],
+      "compatible_cameras": ["OV5647", "SC2336"],
+      "description": "MIPI-CSI 2-lane camera connector with integrated ISP"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "32MB",
+    "psram_mode": "octal"
+  }
+}

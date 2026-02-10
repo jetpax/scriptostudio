@@ -1,0 +1,135 @@
+{
+  "identity": {
+    "id": "waveshare_lcd_1.69",
+    "name": "Waveshare ESP32-S3 Touch LCD 1.69",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "2.1",
+    "description": "ESP32-S3 N16R8 with 1.69\" ST7789 LCD, CST816T touch, QMI8658 IMU, PCF85063 RTC, buzzer"
+  },
+
+  "network": {
+    "hostname_pattern": "pyDirect-{mac_suffix}",
+    "mdns_enabled": true,
+    "ap_ssid_pattern": "pyDirect-{mac_suffix}",
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": true,
+    "imu": true,
+    "buzzer": true,
+    "sdcard": false,
+    "rtc": true,
+    "battery": true,
+    "gpio_expander": false
+  },
+
+  "resources": {
+    "pins": {
+      "boot": 0
+    },
+
+    "spi": {
+      "lcd": {
+        "sck": 6,
+        "mosi": 7,
+        "dc": 4,
+        "cs": 5,
+        "rst": 8
+      }
+    },
+
+    "i2c": {
+      "sensors": {
+        "scl": 10,
+        "sda": 11
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+
+    "gpio": {
+      "bl_pwm": 15,
+      "bat_adc": 1,
+      "touch_int": 14,
+      "touch_rst": 13,
+      "rtc_int": 39,
+      "buzzer": 42
+    }
+  },
+
+  "devices": {
+    "display": {
+      "type": "ST7789",
+      "driver": "st7789",
+      "bus": "spi.lcd",
+      "width": 240,
+      "height": 280,
+      "color_bits": 16,
+      "description": "1.69\" 240x280 IPS LCD"
+    },
+
+    "touch": {
+      "type": "CST816T",
+      "driver": "cst816",
+      "bus": "i2c.sensors",
+      "i2c_address": "0x15",
+      "int_pin": 14,
+      "rst_pin": 13,
+      "description": "Capacitive touch controller"
+    },
+
+    "imu": {
+      "type": "QMI8658C",
+      "driver": "qmi8658",
+      "bus": "i2c.sensors",
+      "i2c_address": "0x6B",
+      "description": "6-axis accelerometer/gyroscope"
+    },
+
+    "rtc": {
+      "type": "PCF85063ATL",
+      "driver": "pcf85063",
+      "bus": "i2c.sensors",
+      "i2c_address": "0x51",
+      "int_pin": 39,
+      "description": "Real-time clock with alarm"
+    },
+
+    "buzzer": {
+      "type": "PWM",
+      "pin": 42,
+      "description": "Piezo buzzer"
+    },
+
+    "battery": {
+      "type": "ADC",
+      "adc_pin": 1,
+      "description": "LiPo battery voltage monitoring"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}

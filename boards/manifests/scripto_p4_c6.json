@@ -1,0 +1,117 @@
+{
+  "identity": {
+    "id": "scripto_p4_c6",
+    "name": "Scripto P4+C6",
+    "vendor": "scripto",
+    "chip": "ESP32-P4",
+    "revision": "2.0.1",
+    "description": "ESP32-P4 development board with Ethernet, CAN, and NeoPixel status LED"
+  },
+
+  "capabilities": {
+    "ethernet": true,
+    "can": true,
+    "sdcard": true,
+    "audio": true,
+    "neopixel": true,
+    "coprocessor": true,
+    "status_led": true
+  },
+
+  "resources": {
+    "pins": {
+      "status_led": 1,
+      "boot": 35
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 37,
+        "rx": 38
+      }
+    },
+
+    "i2c": {
+      "i2c0": {
+        "sda": 7,
+        "scl": 8
+      }
+    },
+
+    "can": {
+      "twai": {
+        "tx": 20,
+        "rx": 21
+      }
+    },
+
+    "sdmmc": {
+      "sdcard": {
+        "cmd": 44,
+        "clk": 43,
+        "d0": 39,
+        "d1": 40,
+        "d2": 41,
+        "d3": 42
+      },
+      "slot1": {
+        "cmd": 19,
+        "clk": 18,
+        "d0": 14,
+        "d1": 15,
+        "d2": 16,
+        "d3": 17
+      }
+    }
+  },
+
+  "devices": {
+    "ethernet": {
+      "phy": "IP101",
+      "interface": "rmii",
+      "phy_addr": 1,
+      "pins": {
+        "mdc": 31,
+        "mdio": 52,
+        "reset": 51
+      },
+      "description": "IP101 Ethernet PHY with RMII interface"
+    },
+
+    "status_led": {
+      "type": "neopixel",
+      "pixel_order": "RGB",
+      "description": "Onboard Neopixel - RGB order"
+    },
+
+    "sdcard": {
+      "mode": "SDMMC",
+      "power_control": {
+        "pin": 45,
+        "active_low": true
+      },
+      "description": "SD card slot"
+    },
+
+    "c6_coprocessor": {
+      "type": "ESP32-C6",
+      "interface": "sdio",
+      "slot": "slot1",
+      "description": "ESP32-C6 coprocessor connected via SDIO on SD2/SLOT1"
+    },
+
+    "audio_codec": {
+      "type": "ES8311",
+      "i2c_bus": "i2c0",
+      "i2c_address": "0x18",
+      "i2s": {
+        "dsdin": 9,
+        "lrck": 10,
+        "asdout": 11,
+        "sclk": 12,
+        "mclk": 13
+      },
+      "description": "ES8311 mono audio codec with I2S interface"
+    }
+  }
+}

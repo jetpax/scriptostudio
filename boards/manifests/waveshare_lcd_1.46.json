@@ -1,0 +1,201 @@
+{
+  "identity": {
+    "id": "waveshare_lcd_1.46",
+    "name": "Waveshare ESP32-S3 Touch LCD 1.46",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3 N16R8 with 1.46\" SPD2010 QSPI LCD+touch, IMU, audio, SD, RTC"
+  },
+
+  "network": {
+    "hostname_pattern": "pyDirect-{mac_suffix}",
+    "mdns_enabled": true,
+    "ap_ssid_pattern": "pyDirect-{mac_suffix}",
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": true,
+    "imu": true,
+    "audio": true,
+    "microphone": true,
+    "sdcard": true,
+    "rtc": true,
+    "battery": true,
+    "gpio_expander": true
+  },
+
+  "resources": {
+    "pins": {
+      "boot": 0
+    },
+
+    "qspi": {
+      "lcd": {
+        "sck": 40,
+        "data0": 46,
+        "data1": 45,
+        "data2": 42,
+        "data3": 41,
+        "cs": 21,
+        "te": 18
+      }
+    },
+
+    "spi": {
+      "sdcard": {
+        "sclk": 14,
+        "mosi": 17,
+        "miso": 16
+      }
+    },
+
+    "i2c": {
+      "sensors": {
+        "scl": 10,
+        "sda": 11
+      }
+    },
+
+    "i2s": {
+      "audio": {
+        "bck": 48,
+        "lrck": 38,
+        "din": 47
+      },
+      "mic": {
+        "sck": 15,
+        "ws": 2,
+        "sd": 39
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+
+    "adc": {
+      "battery": 8
+    },
+
+    "gpio": {
+      "bl_pwm": 5,
+      "bat_control": 7,
+      "bat_key": 6,
+      "rtc_int": 9,
+      "tp_int": 4
+    },
+
+    "expander": {
+      "chip": "TCA9554PWR",
+      "i2c_bus": "sensors",
+      "pins": {
+        "tp_rst": 1,
+        "lcd_rst": 2,
+        "sd_cs": 3,
+        "imu_int2": 4,
+        "imu_int1": 5
+      }
+    }
+  },
+
+  "devices": {
+    "display": {
+      "type": "SPD2010",
+      "driver": "spd2010",
+      "bus": "qspi.lcd",
+      "width": 412,
+      "height": 412,
+      "interface": "qspi",
+      "spi_mode": 3,
+      "color_bits": 16,
+      "description": "1.46\" 412x412 round AMOLED with integrated touch"
+    },
+
+    "touch": {
+      "type": "SPD2010",
+      "driver": "spd2010",
+      "bus": "i2c.sensors",
+      "i2c_address": "0x53",
+      "int_pin": 4,
+      "rst_expander_pin": 1,
+      "description": "Integrated capacitive touch controller (SPD2010)"
+    },
+
+    "imu": {
+      "type": "QMI8658C",
+      "driver": "qmi8658",
+      "bus": "i2c.sensors",
+      "int1_expander_pin": 5,
+      "int2_expander_pin": 4,
+      "description": "6-axis accelerometer/gyroscope"
+    },
+
+    "rtc": {
+      "type": "PCF85063ATL",
+      "driver": "pcf85063",
+      "bus": "i2c.sensors",
+      "int_pin": 9,
+      "description": "Real-time clock with alarm"
+    },
+
+    "audio_codec": {
+      "type": "ES8311",
+      "driver": "es8311",
+      "bus": "i2c.sensors",
+      "i2s_bus": "i2s.audio",
+      "description": "Audio codec for speaker output"
+    },
+
+    "microphone": {
+      "type": "I2S_PDM",
+      "bus": "i2s.mic",
+      "description": "Digital PDM microphone"
+    },
+
+    "sdcard": {
+      "mode": "SPI",
+      "bus": "spi.sdcard",
+      "cs_expander_pin": 3,
+      "description": "TF/microSD card (SPI mode required - CS on expander, SDMMC not supported)"
+    },
+
+    "battery": {
+      "charger": "ETA6003",
+      "adc_pin": 8,
+      "control_pin": 7,
+      "key_pin": 6,
+      "description": "LiPo battery charging and monitoring"
+    },
+
+    "gpio_expander": {
+      "type": "TCA9554PWR",
+      "bus": "i2c.sensors",
+      "i2c_address": "0x20",
+      "pins_used": 5,
+      "description": "8-bit I2C GPIO expander for peripheral control"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}
