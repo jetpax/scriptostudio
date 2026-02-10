@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "updated": 1770245082,
+  "updated": 1770756651,
   "scriptos": [
     {
       "name": "1-Wire Devices Scan",
@@ -451,49 +451,15 @@
       "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/PWM%20%26%20Servo%20Motor.py"
     },
     {
-      "name": "SD Card Complete",
-      "filename": "SD Card Complete.py",
+      "name": "SD Card Test",
+      "filename": "SD Card Test.py",
       "version": [
-        1,
+        2,
         0,
         0
       ],
       "author": "jetpax",
-      "description": "Complete SD card init, mount, and test",
-      "category": "Hardware Tests",
-      "tags": [
-        "hardware tests"
-      ],
-      "license": "MIT",
-      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/SD%20Card%20Complete.py"
-    },
-    {
-      "name": "SD Card Mount Test",
-      "filename": "SD Card Mount Test.py",
-      "version": [
-        1,
-        1,
-        0
-      ],
-      "author": "jetpax",
-      "description": "Mount SD card and test read/write",
-      "category": "Hardware Tests",
-      "tags": [
-        "hardware tests"
-      ],
-      "license": "MIT",
-      "url": "https://raw.githubusercontent.com/jetpax/scriptostudio/main/registry/ScriptOs/SD%20Card%20Mount%20Test.py"
-    },
-    {
-      "name": "SD Card Test",
-      "filename": "SD Card Test.py",
-      "version": [
-        1,
-        1,
-        0
-      ],
-      "author": "jetpax",
-      "description": "Test SD card on Scripto P4+C6 - Diagnostics",
+      "description": "Mount SD card, test read/write, stress test (uses board manifest)",
       "category": "Hardware Tests",
       "tags": [
         "hardware tests"
