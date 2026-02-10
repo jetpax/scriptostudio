@@ -1,6 +1,7 @@
 {
   "language": "Language",
   "sidebar": {
+    "home": "Home",
     "about": "About",
     "editor": "Editor",
     "files": "Files",

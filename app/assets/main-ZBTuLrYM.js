@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-BsaLF5Mi.js","assets/vendor-BK_VqgbY.js","assets/vendor-BgmjMNkd.js","assets/vendor-o4mWrww4.css","assets/index-DX8WB_Mh.js","assets/index-CN9oGm0v.js","assets/index-Ct0B6E_D.js","assets/index-CC_OnImC.js","assets/index-uUR0fcff.js","assets/index-fKr_TzPR.js","assets/index-DhGTJQR7.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
-import{PANEL_TOO_SMALL as PANEL_TOO_SMALL$1,PANEL_CLOSED as PANEL_CLOSED$1,PANEL_DEFAULT as PANEL_DEFAULT$1}from"./vendor-BK_VqgbY.js";import{c as cborExports,C as CBOR,h as html$1,a as Component$1,b as Choo}from"./vendor-BgmjMNkd.js";(function(){const i=document.createElement("link").relList;if(i&&i.supports&&i.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))r(s);new MutationObserver(s=>{for(const a of s)if(a.type==="childList")for(const c of a.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&r(c)}).observe(document,{childList:!0,subtree:!0});function o(s){const a={};return s.integrity&&(a.integrity=s.integrity),s.referrerPolicy&&(a.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?a.credentials="include":s.crossOrigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function r(s){if(s.ep)return;s.ep=!0;const a=o(s);fetch(s.href,a)}})();function parseScriptOsConfig(n){const i="# === START_CONFIG_PARAMETERS ===",o="# === END_CONFIG_PARAMETERS ===",r=n.indexOf(i),s=n.indexOf(o);if(r===-1||s===-1)return console.warn("[ScriptOs Parser] Config markers not found"),null;const a=n.substring(r+i.length,s).trim();try{return parsePythonDict(a)}catch(c){return console.error("[ScriptOs Parser] Failed to parse config:",c),null}}function parsePythonDict(n){let i=n.trim();i.startsWith("dict(")&&i.endsWith(")")&&(i=i.substring(5,i.length-1).trim()),i=i.split(`
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-C11OGzyA.js","assets/vendor-DBsAqGKK.js","assets/vendor-BgmjMNkd.js","assets/vendor-ccdApEFz.css","assets/index-DX8WB_Mh.js","assets/index-CN9oGm0v.js","assets/index-Ct0B6E_D.js","assets/index-CC_OnImC.js","assets/index-uUR0fcff.js","assets/index-fKr_TzPR.js","assets/index-DhGTJQR7.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
+import{PANEL_TOO_SMALL as PANEL_TOO_SMALL$1,PANEL_CLOSED as PANEL_CLOSED$1,PANEL_DEFAULT as PANEL_DEFAULT$1}from"./vendor-DBsAqGKK.js";import{c as cborExports,C as CBOR,h as html$1,a as Component$1,b as Choo}from"./vendor-BgmjMNkd.js";(function(){const i=document.createElement("link").relList;if(i&&i.supports&&i.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))r(s);new MutationObserver(s=>{for(const a of s)if(a.type==="childList")for(const c of a.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&r(c)}).observe(document,{childList:!0,subtree:!0});function o(s){const a={};return s.integrity&&(a.integrity=s.integrity),s.referrerPolicy&&(a.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?a.credentials="include":s.crossOrigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function r(s){if(s.ep)return;s.ep=!0;const a=o(s);fetch(s.href,a)}})();function parseScriptOsConfig(n){const i="# === START_CONFIG_PARAMETERS ===",o="# === END_CONFIG_PARAMETERS ===",r=n.indexOf(i),s=n.indexOf(o);if(r===-1||s===-1)return console.warn("[ScriptOs Parser] Config markers not found"),null;const a=n.substring(r+i.length,s).trim();try{return parsePythonDict(a)}catch(c){return console.error("[ScriptOs Parser] Failed to parse config:",c),null}}function parsePythonDict(n){let i=n.trim();i.startsWith("dict(")&&i.endsWith(")")&&(i=i.substring(5,i.length-1).trim()),i=i.split(`
 `).map(s=>{let a=!1,c=null,l=!1;for(let d=0;d<s.length;d++){const u=s[d];if(l){l=!1;continue}if(u==="\\"){l=!0;continue}if((u==='"'||u==="'"||u==="`")&&!a){a=!0,c=u;continue}if(u===c&&a){a=!1,c=null;continue}if(u==="#"&&!a)return s.substring(0,d)}return s}).join(`
 `),i=i.replace(/\\\s*[\r\n]+\s*/g," ");let o="{";const r=smartSplit(i,",");for(let s=0;s<r.length;s++){const a=r[s].trim();if(!a)continue;const c=a.indexOf("=");if(c===-1)continue;const l=a.substring(0,c).trim();let d=a.substring(c+1).trim();d=convertPythonValue(d),s>0&&(o+=","),o+=`"${l}":${d}`}return o+="}",JSON.parse(o)}function smartSplit(n,i){const o=[];let r="",s=0,a=!1,c=null,l=!1;for(let d=0;d<n.length;d++){const u=n[d],p=d>0?n[d-1]:"";if(l){r+=u,l=!1;continue}if(u==="\\"){l=!0,r+=u;continue}if((u==='"'||u==="'"||u==="`")&&!a){a=!0,c=u,r+=u;continue}if(u===c&&a&&p!=="\\"){a=!1,c=null,r+=u;continue}if(a){r+=u;continue}if(u==="("||u==="["||u==="{"?s++:(u===")"||u==="]"||u==="}")&&s--,u===i&&s===0){o.push(r),r="";continue}r+=u}return r.trim()&&o.push(r),o}function convertPythonValue(n){if(n=n.trim(),n==="None")return"null";if(n==="True")return"true";if(n==="False")return"false";if(/^-?\d+(\.\d+)?$/.test(n))return n;if(n.startsWith("[")&&n.endsWith("]")){const i=n.substring(1,n.length-1);return"["+smartSplit(i,",").map(s=>convertPythonValue(s)).join(",")+"]"}if(n.startsWith("(")&&n.endsWith(")")){const i=n.substring(1,n.length-1);return"["+smartSplit(i,",").map(s=>convertPythonValue(s)).join(",")+"]"}if(n.startsWith("dict(")&&n.endsWith(")")){const i=n.substring(5,n.length-1);return convertDictContent(i)}if(n.startsWith("{")&&n.endsWith("}")){const i=n.substring(1,n.length-1);return convertDictLiteral(i)}if(n.includes("+")){const i=n.split("+").map(o=>{const r=o.trim();return r.startsWith("'")||r.startsWith('"')?r.substring(1,r.length-1):r});return JSON.stringify(i.join(""))}if(n.startsWith("'''")||n.startsWith('"""')){n.substring(0,3);let i=n.substring(3,n.length-3);return i=i.replace(/\s+/g," ").trim(),JSON.stringify(i)}return n.startsWith("'")&&n.endsWith("'")||n.startsWith('"')&&n.endsWith('"')?JSON.stringify(n.substring(1,n.length-1)):n==="str"?'"str"':n==="int"?'"int"':n==="float"?'"float"':n==="bool"?'"bool"':n==="list"?'"list"':n==="dict"?'"dict"':JSON.stringify(n)}function convertDictContent(n){let i="{";const o=smartSplit(n,",");let r=!0;for(let s=0;s<o.length;s++){const a=o[s].trim();if(!a)continue;const c=a.indexOf("=");if(c===-1)continue;const l=a.substring(0,c).trim();let d=a.substring(c+1).trim();d=convertPythonValue(d),r||(i+=","),i+=`"${l}":${d}`,r=!1}return i+="}",i}function convertDictLiteral(n){let i="{";const o=smartSplit(n,",");let r=!0;for(let s=0;s<o.length;s++){const a=o[s].trim();if(!a)continue;const c=a.indexOf(":");if(c===-1)continue;let l=a.substring(0,c).trim(),d=a.substring(c+1).trim();(l.startsWith("'")&&l.endsWith("'")||l.startsWith('"')&&l.endsWith('"'))&&(l=l.substring(1,l.length-1)),d=convertPythonValue(d),r||(i+=","),i+=`"${l}":${d}`,r=!1}return i+="}",i}function generateScriptOsCode(n,i,o){const r="# === START_CONFIG_PARAMETERS ===",s="# === END_CONFIG_PARAMETERS ===",a=n.indexOf(r),c=n.indexOf(s);if(a===-1||c===-1)return n;const l=n.substring(0,a).trim(),d=n.substring(c+s.length).trim();if(!i.args||Object.keys(i.args).length===0){const g=i.info||{};let f=`# ${g.name||"ScriptO"}
 `;return g.description&&(f+=`# ${g.description}
@@ -17,7 +17,7 @@ import{PANEL_TOO_SMALL as PANEL_TOO_SMALL$1,PANEL_CLOSED as PANEL_CLOSED$1,PANEL
 `,p+=`class args:
 `;for(const g in i.args){const f=i.args[g];let h=o[g];h==null&&(h=f.value);let m;h==null?m="None":typeof h=="string"?m=`'${escapePythonString(h)}'`:typeof h=="boolean"?m=h?"True":"False":typeof h=="number"?m=h.toString():Array.isArray(h)?m="["+h.map(v=>typeof v=="string"?`'${escapePythonString(v)}'`:v).join(", ")+"]":m="None",p+=`    ${g} = ${m}
 `}return p+=`
-`,d&&(p+=d),p}function escapePythonString(n){return String(n).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\t/g,"\\t")}class IndexedDBFileBridge{constructor(){this.DB_NAME="scripto-studio-files",this.DB_VERSION=1,this.STORE_FILES="files",this.rootPath="/"}async _initDB(){return new Promise((i,o)=>{const r=indexedDB.open(this.DB_NAME,this.DB_VERSION);r.onerror=()=>o(r.error),r.onsuccess=()=>i(r.result),r.onupgradeneeded=s=>{const a=s.target.result;a.objectStoreNames.contains(this.STORE_FILES)||a.createObjectStore(this.STORE_FILES)}})}_normalizePath(i){return i?(i=i.replace(this.rootPath,""),i.startsWith("/")||(i="/"+i),i!=="/"&&i.endsWith("/")&&(i=i.slice(0,-1)),i):"/"}async _getFilesInDirectory(i){const o=this._normalizePath(i),r=o==="/"?"/":o+"/",s=await this._initDB();return new Promise((a,c)=>{const u=s.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).openCursor(),p=[],g=new Set;u.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key,v=h.value;if(m.startsWith(r)){const y=m.substring(r.length);if(m.endsWith("/")&&v.type==="folder"){const b=y.slice(0,-1);b&&!b.includes("/")&&!g.has(b)&&(g.add(b),p.push({path:b,type:"folder"}))}else if(y&&!y.includes("/"))p.push({path:y,type:v.type||"file",content:v.content,timestamp:v.timestamp,size:v.size});else if(y.includes("/")){const b=y.split("/")[0];g.has(b)||(g.add(b),p.push({path:b,type:"folder"}))}}h.continue()}else p.sort((m,v)=>m.type===v.type?m.path.localeCompare(v.path):m.type==="folder"?-1:1),a(p)},u.onerror=()=>c(u.error)})}async initialize(){try{return await this._initDB(),!0}catch(i){return console.error("[IDB FS] Error initializing:",i),!1}}isSupported(){return"indexedDB"in window}async openFolder(){const i=await this.ilistFiles("/");return{folder:this.rootPath,files:i}}async ilistFiles(i){try{return(await this._getFilesInDirectory(i)).map(r=>{let s=r.size;return s===void 0&&r.type==="file"&&(r.content?typeof r.content=="string"?s=new TextEncoder().encode(r.content).length:r.content instanceof ArrayBuffer?s=r.content.byteLength:r.content instanceof Uint8Array?s=r.content.length:r.content instanceof Blob&&(s=r.content.size):s=0),{path:r.path,type:r.type,size:s}})}catch(o){return console.error("[IDB FS] Error listing files:",o),[]}}async ilistAllFiles(i){try{const o=this._normalizePath(i),r=o==="/"?"/":o+"/",s=await this._initDB();return new Promise((a,c)=>{const u=s.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).openCursor(),p=[],g=new Set;u.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key,v=h.value;if(m.startsWith(r)){const y=m.substring(r.length);if(y){const b=y.split("/");let C=r.slice(0,-1);for(let S=0;S<b.length;S++)C+="/"+b[S],g.has(C)||(g.add(C),S===b.length-1&&v.type==="file"?p.push({path:C,type:"file"}):S<b.length-1&&p.push({path:C,type:"folder"}))}}h.continue()}else a(p)},u.onerror=()=>c(u.error)})}catch(o){return console.error("[IDB FS] Error listing all files:",o),[]}}async loadFile(i){try{const o=this._normalizePath(i),r=await this._initDB();return new Promise((s,a)=>{const d=r.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).get(o);d.onsuccess=()=>{const u=d.result;if(!u||u.type!=="file"){a(new Error(`File not found: ${i}`));return}const p=u.content||"",f=new TextEncoder().encode(p).buffer;console.log("[IDB FS] Loaded file:",i,"(",f.byteLength,"bytes)"),s(f)},d.onerror=()=>a(d.error)})}catch(o){throw console.error("[IDB FS] Error loading file:",o),new Error(`Failed to load file: ${o.message}`)}}async saveFileContent(i,o){try{const r=this._normalizePath(i);let s=o;o instanceof Uint8Array?s=new TextDecoder().decode(o):o instanceof ArrayBuffer?s=new TextDecoder().decode(new Uint8Array(o)):o instanceof Blob?s=await o.text():typeof o!="string"&&(s=String(o));const a=await this._initDB();return new Promise((c,l)=>{const p=a.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).put({type:"file",content:s,timestamp:Date.now(),size:new TextEncoder().encode(s).length},r);p.onsuccess=()=>{console.log("[IDB FS] Saved file:",i),c(!0)},p.onerror=()=>l(p.error)})}catch(r){throw console.error("[IDB FS] Error saving file:",r),new Error(`Failed to save file: ${r.message}`)}}async importFiles(i="/"){return new Promise((o,r)=>{const s=document.createElement("input");s.type="file",s.multiple=!0,s.accept="*/*",s.onchange=async a=>{try{const c=Array.from(a.target.files);if(c.length===0){o([]);return}const l=[];for(const d of c){const u=await d.text(),p=this.getFullPath(i,"",d.name);await this.saveFileContent(p,u),l.push({name:d.name,path:p,size:d.size}),console.log("[IDB FS] Imported file:",d.name,"→",p)}o(l)}catch(c){console.error("[IDB FS] Error importing files:",c),r(c)}},s.oncancel=()=>{o([])},s.click()})}async fileExists(i){try{const o=this._normalizePath(i),r=await this._initDB();return new Promise((s,a)=>{const d=r.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).get(o);d.onsuccess=()=>{const u=d.result;s(u&&u.type==="file")},d.onerror=()=>a(d.error)})}catch{return!1}}async folderExists(i){try{const o=this._normalizePath(i),r=o.endsWith("/")?o:o+"/",s=o==="/"?"/":o+"/",a=await this._initDB();return new Promise((c,l)=>{const u=a.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES),p=u.get(r);p.onsuccess=()=>{if(p.result&&p.result.type==="folder"){c(!0);return}const g=u.openCursor();g.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key;if(m.startsWith(s)&&m!==r){c(!0);return}h.continue()}else c(!1)},g.onerror=()=>l(g.error)},p.onerror=()=>l(p.error)})}catch{return!1}}async removeFile(i){try{const o=this._normalizePath(i),r=await this._initDB();return new Promise((s,a)=>{const d=r.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).delete(o);d.onsuccess=()=>{console.log("[IDB FS] Removed file:",i),s(!0)},d.onerror=()=>a(d.error)})}catch(o){throw console.error("[IDB FS] Error removing file:",o),new Error(`Failed to remove file: ${o.message}`)}}async renameFile(i,o){try{const r=this._normalizePath(i),s=this._normalizePath(o),a=await this.loadFile(i);return await this.saveFileContent(o,a),await this.removeFile(i),console.log("[IDB FS] Renamed file:",i,"->",o),!0}catch(r){throw console.error("[IDB FS] Error renaming file:",r),new Error(`Failed to rename file: ${r.message}`)}}async createFolder(i){try{const o=this._normalizePath(i),r=o.endsWith("/")?o:o+"/",s=await this._initDB();return new Promise((a,c)=>{const d=s.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES),u=d.get(r);u.onsuccess=()=>{if(u.result){console.log("[IDB FS] Folder already exists:",i),a(!0);return}const p=d.put({type:"folder",timestamp:Date.now()},r);p.onsuccess=()=>{console.log("[IDB FS] Created folder:",i),a(!0)},p.onerror=()=>c(p.error)},u.onerror=()=>c(u.error)})}catch(o){throw console.error("[IDB FS] Error creating folder:",o),new Error(`Failed to create folder: ${o.message}`)}}async removeFolder(i){try{const o=this._normalizePath(i),r=o==="/"?"/":o+"/",s=o.endsWith("/")?o:o+"/",a=await this._initDB();return new Promise((c,l)=>{const p=a.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).openCursor(),g=[];p.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key;(m.startsWith(r)||m===o||m===s)&&g.push(h.delete()),h.continue()}else Promise.all(g).then(()=>{console.log("[IDB FS] Removed folder:",i),c(!0)}).catch(l)},p.onerror=()=>l(p.error)})}catch(o){throw console.error("[IDB FS] Error removing folder:",o),new Error(`Failed to remove folder: ${o.message}`)}}async listFiles(i){return this.ilistFiles(i)}getFullPath(i,o,r){let s=i||"/";return o&&o!=="/"&&(s+=(s.endsWith("/")?"":"/")+o.replace(/^\//,"")),r&&(s+=(s.endsWith("/")?"":"/")+r),s.startsWith("/")||(s="/"+s),s}getNavigationPath(i,o){if(o===".."){const r=i.split("/").filter(s=>s);return r.pop(),"/"+r.join("/")}return i==="/"?"/"+o:i+"/"+o}async getAppPath(){return this.rootPath}async clearWorkspace(){try{const i=await this._initDB();return new Promise((o,r)=>{const c=i.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).clear();c.onsuccess=()=>{console.log("[IDB FS] Workspace cleared"),o()},c.onerror=()=>r(c.error)})}catch(i){console.error("[IDB FS] Error clearing workspace:",i)}}async listScriptOsFiles(){try{const i="/ScriptOs",o=await this.ilistFiles(i),r=[];console.log(`[IDB FS] Found ${o.length} items in ScriptOs directory`);for(const s of o)if(s.type==="file"&&s.path.endsWith(".py"))try{const a=i+"/"+s.path,c=await this.loadFile(a),l=new TextDecoder().decode(new Uint8Array(c)),d=parseScriptOsConfig(l);d?(r.push({filename:s.path,fullPath:a,content:l,config:d}),console.log(`[IDB FS] Loaded ScriptO: ${d.info?.name||s.path}`)):console.warn(`[IDB FS] No valid config found in: ${s.path}`)}catch(a){console.error(`[IDB FS] Error loading ScriptO ${s.path}:`,a)}return console.log(`[IDB FS] Successfully loaded ${r.length} ScriptOs`),r}catch(i){return console.error("[IDB FS] Error listing ScriptOs files:",i),[]}}async hasOnboardedDevices(){try{return(await this.ilistFiles("/onboarded")).some(o=>o.type==="file"&&o.path.endsWith(".json"))}catch{return!1}}async getOnboardedDevices(){try{const i=await this.ilistFiles("/onboarded"),o=[];for(const r of i)if(r.type==="file"&&r.path.endsWith(".json"))try{const s=await this.loadFile("/onboarded/"+r.path),a=new TextDecoder().decode(new Uint8Array(s));o.push(JSON.parse(a))}catch(s){console.warn("[IDB FS] Error parsing device file:",r.path,s)}return o}catch(i){return console.error("[IDB FS] Error listing onboarded devices:",i),[]}}async addOnboardedDevice(i,o){try{await this.createFolder("/onboarded");const s="/onboarded/"+(i.replace(/:/g,"")+".json");await this.saveFileContent(s,JSON.stringify(o,null,2)),console.log("[IDB FS] Added onboarded device:",o.hostname||i)}catch(r){throw console.error("[IDB FS] Error adding onboarded device:",r),r}}}const BridgeDisk=new IndexedDBFileBridge,AIAgentSystemPrompt=`You are an expert MicroPython developer specializing in ESP32 microcontrollers.
+`,d&&(p+=d),p}function escapePythonString(n){return String(n).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\t/g,"\\t")}class IndexedDBFileBridge{constructor(){this.DB_NAME="scripto-studio-files",this.DB_VERSION=1,this.STORE_FILES="files",this.rootPath="/"}async _initDB(){return new Promise((i,o)=>{const r=indexedDB.open(this.DB_NAME,this.DB_VERSION);r.onerror=()=>o(r.error),r.onsuccess=()=>i(r.result),r.onupgradeneeded=s=>{const a=s.target.result;a.objectStoreNames.contains(this.STORE_FILES)||a.createObjectStore(this.STORE_FILES)}})}_normalizePath(i){return i?(i=i.replace(this.rootPath,""),i.startsWith("/")||(i="/"+i),i!=="/"&&i.endsWith("/")&&(i=i.slice(0,-1)),i):"/"}async _getFilesInDirectory(i){const o=this._normalizePath(i),r=o==="/"?"/":o+"/",s=await this._initDB();return new Promise((a,c)=>{const u=s.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).openCursor(),p=[],g=new Set;u.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key,v=h.value;if(m.startsWith(r)){const y=m.substring(r.length);if(m.endsWith("/")&&v.type==="folder"){const b=y.slice(0,-1);b&&!b.includes("/")&&!g.has(b)&&(g.add(b),p.push({path:b,type:"folder"}))}else if(y&&!y.includes("/"))p.push({path:y,type:v.type||"file",content:v.content,timestamp:v.timestamp,size:v.size});else if(y.includes("/")){const b=y.split("/")[0];g.has(b)||(g.add(b),p.push({path:b,type:"folder"}))}}h.continue()}else p.sort((m,v)=>m.type===v.type?m.path.localeCompare(v.path):m.type==="folder"?-1:1),a(p)},u.onerror=()=>c(u.error)})}async initialize(){try{return await this._initDB(),!0}catch(i){return console.error("[IDB FS] Error initializing:",i),!1}}isSupported(){return"indexedDB"in window}async openFolder(){const i=await this.ilistFiles("/");return{folder:this.rootPath,files:i}}async ilistFiles(i){try{return(await this._getFilesInDirectory(i)).map(r=>{let s=r.size;return s===void 0&&r.type==="file"&&(r.content?typeof r.content=="string"?s=new TextEncoder().encode(r.content).length:r.content instanceof ArrayBuffer?s=r.content.byteLength:r.content instanceof Uint8Array?s=r.content.length:r.content instanceof Blob&&(s=r.content.size):s=0),{path:r.path,type:r.type,size:s}})}catch(o){return console.error("[IDB FS] Error listing files:",o),[]}}async ilistAllFiles(i){try{const o=this._normalizePath(i),r=o==="/"?"/":o+"/",s=await this._initDB();return new Promise((a,c)=>{const u=s.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).openCursor(),p=[],g=new Set;u.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key,v=h.value;if(m.startsWith(r)){const y=m.substring(r.length);if(y){const b=y.split("/");let S=r.slice(0,-1);for(let C=0;C<b.length;C++)S+="/"+b[C],g.has(S)||(g.add(S),C===b.length-1&&v.type==="file"?p.push({path:S,type:"file"}):C<b.length-1&&p.push({path:S,type:"folder"}))}}h.continue()}else a(p)},u.onerror=()=>c(u.error)})}catch(o){return console.error("[IDB FS] Error listing all files:",o),[]}}async loadFile(i){try{const o=this._normalizePath(i),r=await this._initDB();return new Promise((s,a)=>{const d=r.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).get(o);d.onsuccess=()=>{const u=d.result;if(!u||u.type!=="file"){a(new Error(`File not found: ${i}`));return}const p=u.content||"",f=new TextEncoder().encode(p).buffer;console.log("[IDB FS] Loaded file:",i,"(",f.byteLength,"bytes)"),s(f)},d.onerror=()=>a(d.error)})}catch(o){throw console.error("[IDB FS] Error loading file:",o),new Error(`Failed to load file: ${o.message}`)}}async saveFileContent(i,o){try{const r=this._normalizePath(i);let s=o;o instanceof Uint8Array?s=new TextDecoder().decode(o):o instanceof ArrayBuffer?s=new TextDecoder().decode(new Uint8Array(o)):o instanceof Blob?s=await o.text():typeof o!="string"&&(s=String(o));const a=await this._initDB();return new Promise((c,l)=>{const p=a.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).put({type:"file",content:s,timestamp:Date.now(),size:new TextEncoder().encode(s).length},r);p.onsuccess=()=>{console.log("[IDB FS] Saved file:",i),c(!0)},p.onerror=()=>l(p.error)})}catch(r){throw console.error("[IDB FS] Error saving file:",r),new Error(`Failed to save file: ${r.message}`)}}async importFiles(i="/"){return new Promise((o,r)=>{const s=document.createElement("input");s.type="file",s.multiple=!0,s.accept="*/*",s.onchange=async a=>{try{const c=Array.from(a.target.files);if(c.length===0){o([]);return}const l=[];for(const d of c){const u=await d.text(),p=this.getFullPath(i,"",d.name);await this.saveFileContent(p,u),l.push({name:d.name,path:p,size:d.size}),console.log("[IDB FS] Imported file:",d.name,"→",p)}o(l)}catch(c){console.error("[IDB FS] Error importing files:",c),r(c)}},s.oncancel=()=>{o([])},s.click()})}async fileExists(i){try{const o=this._normalizePath(i),r=await this._initDB();return new Promise((s,a)=>{const d=r.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).get(o);d.onsuccess=()=>{const u=d.result;s(u&&u.type==="file")},d.onerror=()=>a(d.error)})}catch{return!1}}async folderExists(i){try{const o=this._normalizePath(i),r=o.endsWith("/")?o:o+"/",s=o==="/"?"/":o+"/",a=await this._initDB();return new Promise((c,l)=>{const u=a.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES),p=u.get(r);p.onsuccess=()=>{if(p.result&&p.result.type==="folder"){c(!0);return}const g=u.openCursor();g.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key;if(m.startsWith(s)&&m!==r){c(!0);return}h.continue()}else c(!1)},g.onerror=()=>l(g.error)},p.onerror=()=>l(p.error)})}catch{return!1}}async removeFile(i){try{const o=this._normalizePath(i),r=await this._initDB();return new Promise((s,a)=>{const d=r.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).delete(o);d.onsuccess=()=>{console.log("[IDB FS] Removed file:",i),s(!0)},d.onerror=()=>a(d.error)})}catch(o){throw console.error("[IDB FS] Error removing file:",o),new Error(`Failed to remove file: ${o.message}`)}}async renameFile(i,o){try{const r=this._normalizePath(i),s=this._normalizePath(o),a=await this.loadFile(i);return await this.saveFileContent(o,a),await this.removeFile(i),console.log("[IDB FS] Renamed file:",i,"->",o),!0}catch(r){throw console.error("[IDB FS] Error renaming file:",r),new Error(`Failed to rename file: ${r.message}`)}}async createFolder(i){try{const o=this._normalizePath(i),r=o.endsWith("/")?o:o+"/",s=await this._initDB();return new Promise((a,c)=>{const d=s.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES),u=d.get(r);u.onsuccess=()=>{if(u.result){console.log("[IDB FS] Folder already exists:",i),a(!0);return}const p=d.put({type:"folder",timestamp:Date.now()},r);p.onsuccess=()=>{console.log("[IDB FS] Created folder:",i),a(!0)},p.onerror=()=>c(p.error)},u.onerror=()=>c(u.error)})}catch(o){throw console.error("[IDB FS] Error creating folder:",o),new Error(`Failed to create folder: ${o.message}`)}}async removeFolder(i){try{const o=this._normalizePath(i),r=o==="/"?"/":o+"/",s=o.endsWith("/")?o:o+"/",a=await this._initDB();return new Promise((c,l)=>{const p=a.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).openCursor(),g=[];p.onsuccess=f=>{const h=f.target.result;if(h){const m=h.key;(m.startsWith(r)||m===o||m===s)&&g.push(h.delete()),h.continue()}else Promise.all(g).then(()=>{console.log("[IDB FS] Removed folder:",i),c(!0)}).catch(l)},p.onerror=()=>l(p.error)})}catch(o){throw console.error("[IDB FS] Error removing folder:",o),new Error(`Failed to remove folder: ${o.message}`)}}async listFiles(i){return this.ilistFiles(i)}getFullPath(i,o,r){let s=i||"/";return o&&o!=="/"&&(s+=(s.endsWith("/")?"":"/")+o.replace(/^\//,"")),r&&(s+=(s.endsWith("/")?"":"/")+r),s.startsWith("/")||(s="/"+s),s}getNavigationPath(i,o){if(o===".."){const r=i.split("/").filter(s=>s);return r.pop(),"/"+r.join("/")}return i==="/"?"/"+o:i+"/"+o}async getAppPath(){return this.rootPath}async clearWorkspace(){try{const i=await this._initDB();return new Promise((o,r)=>{const c=i.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).clear();c.onsuccess=()=>{console.log("[IDB FS] Workspace cleared"),o()},c.onerror=()=>r(c.error)})}catch(i){console.error("[IDB FS] Error clearing workspace:",i)}}async listScriptOsFiles(){try{const i="/ScriptOs",o=await this.ilistFiles(i),r=[];console.log(`[IDB FS] Found ${o.length} items in ScriptOs directory`);for(const s of o)if(s.type==="file"&&s.path.endsWith(".py"))try{const a=i+"/"+s.path,c=await this.loadFile(a),l=new TextDecoder().decode(new Uint8Array(c)),d=parseScriptOsConfig(l);d?(r.push({filename:s.path,fullPath:a,content:l,config:d}),console.log(`[IDB FS] Loaded ScriptO: ${d.info?.name||s.path}`)):console.warn(`[IDB FS] No valid config found in: ${s.path}`)}catch(a){console.error(`[IDB FS] Error loading ScriptO ${s.path}:`,a)}return console.log(`[IDB FS] Successfully loaded ${r.length} ScriptOs`),r}catch(i){return console.error("[IDB FS] Error listing ScriptOs files:",i),[]}}async hasOnboardedDevices(){try{return(await this.ilistFiles("/onboarded")).some(o=>o.type==="file"&&o.path.endsWith(".json"))}catch{return!1}}async getOnboardedDevices(){try{const i=await this.ilistFiles("/onboarded"),o=[];for(const r of i)if(r.type==="file"&&r.path.endsWith(".json"))try{const s=await this.loadFile("/onboarded/"+r.path),a=new TextDecoder().decode(new Uint8Array(s));o.push(JSON.parse(a))}catch(s){console.warn("[IDB FS] Error parsing device file:",r.path,s)}return o}catch(i){return console.error("[IDB FS] Error listing onboarded devices:",i),[]}}async addOnboardedDevice(i,o){try{await this.createFolder("/onboarded");const s="/onboarded/"+(i.replace(/:/g,"")+".json");await this.saveFileContent(s,JSON.stringify(o,null,2)),console.log("[IDB FS] Added onboarded device:",o.hostname||i)}catch(r){throw console.error("[IDB FS] Error adding onboarded device:",r),r}}}const BridgeDisk=new IndexedDBFileBridge,AIAgentSystemPrompt=`You are an expert MicroPython developer specializing in ESP32 microcontrollers.
 
 CRITICAL: MicroPython is NOT standard Python - it has a LIMITED subset of modules.
 - Many CPython modules do NOT exist (display, matplotlib, numpy, pandas, PIL, tkinter, pygame, etc.)
@@ -432,7 +432,7 @@ try:
     if _wr and hasattr(_wr, 'process_queue'):
         while _wr.process_queue() > 0: pass
 except: pass
-`;let parserInstance=null,pythonLanguage=null;async function getParser(){if(parserInstance&&pythonLanguage)return parserInstance;try{if(!Parser){console.log("[Debugger] Lazy loading Tree-sitter...");const[n,i,o]=await Promise.all([__vitePreload(()=>import("./tree-sitter-BsaLF5Mi.js"),__vite__mapDeps([0,1,2,3])),__vitePreload(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),__vitePreload(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);Parser=n.Parser,Language=n.Language,wasmUrl=i.default,pythonWasmImportUrl=o.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await Parser.init({locateFile:()=>wasmUrl}),parserInstance=new Parser,console.log("[Debugger] Loading Python grammar..."),!pythonWasmImportUrl)throw new Error("tree-sitter-python.wasm URL not found in imports");return pythonLanguage=await Language.load(pythonWasmImportUrl),parserInstance.setLanguage(pythonLanguage),console.log("[Debugger] Tree-sitter parser initialized successfully"),parserInstance}catch(n){throw console.error("[Debugger] Failed to initialize parser:",n),new Error(`Tree-sitter initialization failed: ${n.message}`)}}async function identifyCodeRows(n){const i=await getParser();if(!i)return new Map;const o=i.parse(n),r=new Map,s=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],a=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],c=l=>{if(!l)return;let d=!1;const u=l.type;a.includes(u)?d=!1:s.includes(u)?(d=!0,(u==="function_definition"||u==="async_function_definition"||u==="class_definition")&&l.parent&&l.parent.type==="decorated_definition"&&(d=!1),u==="expression_statement"&&l.childCount===1&&l.firstChild.type==="string"&&(d=!1)):u==="decorated_definition"&&(d=!0),d&&r.set(l.startPosition.row,u);for(let p=0;p<l.childCount;p++)c(l.child(p))};return c(o.rootNode),r}function generateDebugBlock(n,i,o,r,s,a,c=null){let l="";if(c){const d=c.condition?`(${c.condition})`:"True",u=c.hitCount?`"${c.hitCount}"`:"None",p=c.enabled!==!1?"True":"False";l+=`${n}try:
+`;let parserInstance=null,pythonLanguage=null;async function getParser(){if(parserInstance&&pythonLanguage)return parserInstance;try{if(!Parser){console.log("[Debugger] Lazy loading Tree-sitter...");const[n,i,o]=await Promise.all([__vitePreload(()=>import("./tree-sitter-C11OGzyA.js"),__vite__mapDeps([0,1,2,3])),__vitePreload(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),__vitePreload(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);Parser=n.Parser,Language=n.Language,wasmUrl=i.default,pythonWasmImportUrl=o.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await Parser.init({locateFile:()=>wasmUrl}),parserInstance=new Parser,console.log("[Debugger] Loading Python grammar..."),!pythonWasmImportUrl)throw new Error("tree-sitter-python.wasm URL not found in imports");return pythonLanguage=await Language.load(pythonWasmImportUrl),parserInstance.setLanguage(pythonLanguage),console.log("[Debugger] Tree-sitter parser initialized successfully"),parserInstance}catch(n){throw console.error("[Debugger] Failed to initialize parser:",n),new Error(`Tree-sitter initialization failed: ${n.message}`)}}async function identifyCodeRows(n){const i=await getParser();if(!i)return new Map;const o=i.parse(n),r=new Map,s=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],a=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],c=l=>{if(!l)return;let d=!1;const u=l.type;a.includes(u)?d=!1:s.includes(u)?(d=!0,(u==="function_definition"||u==="async_function_definition"||u==="class_definition")&&l.parent&&l.parent.type==="decorated_definition"&&(d=!1),u==="expression_statement"&&l.childCount===1&&l.firstChild.type==="string"&&(d=!1)):u==="decorated_definition"&&(d=!0),d&&r.set(l.startPosition.row,u);for(let p=0;p<l.childCount;p++)c(l.child(p))};return c(o.rootNode),r}function generateDebugBlock(n,i,o,r,s,a,c=null){let l="";if(c){const d=c.condition?`(${c.condition})`:"True",u=c.hitCount?`"${c.hitCount}"`:"None",p=c.enabled!==!1?"True":"False";l+=`${n}try:
 `,l+=`${n}    _ds.us("${o}", ${r}, ${p} and ${d}, ${u})
 `,l+=`${n}except:
 `,l+=`${n}    pass
@@ -449,14 +449,14 @@ except: pass
 `,l+=`${n}except Exception as _debug_e:
 `,l+=`${n}    _ds.d["w"]["${u}"] = str(_debug_e)
 `}),l+=`${n}_ds.st()
-`,l}async function instrumentCodeForExec(n,i={}){const{watches:o={},conditionalBP:r={},fileName:s="main.py"}=i,a=performance.now(),c=await identifyCodeRows(n);console.log(`[Debugger] Identified ${c.size} code rows in ${performance.now()-a}ms`);let l=n.split(/\r?\n/);const d=new Map,u=o[""]||[],p=o[s]||[],g=[...new Set([...u,...p])],f=r[""]||[],h=r[s]||[],m=[...new Set([...f,...h])],v=Array.from(c.keys()).sort(($,w)=>$-w);for(const $ of v){const w=l[$],k=c.get($);if(w===void 0)continue;const x=/# ●/.test(w),P=i.breakpoints&&i.breakpoints[s]?i.breakpoints[s][$+1]:null;(x||P)&&console.log(`[Debugger] Breakpoint detected at line ${$+1}: ${w}`);const T=w.match(/^(\s*)/)[1];let E=generateDebugBlock(T,x,s,$+1,g,m,P);k==="function_definition"?E+=`${T}@_ds.wrap
-`:k==="async_function_definition"&&(E+=`${T}@_ds.awrap
-`),x&&console.log(`[Debugger] Generated instrumentation for row ${$+1} (${k})`),d.set($,E)}let y=[];for(let $=0;$<l.length;$++)d.has($)&&y.push(d.get($)),y.push(l[$]);const b=y.join(`
-`),C=`${DEBUG_STATE_MODULE}
+`,l}async function instrumentCodeForExec(n,i={}){const{watches:o={},conditionalBP:r={},fileName:s="main.py"}=i,a=performance.now(),c=await identifyCodeRows(n);console.log(`[Debugger] Identified ${c.size} code rows in ${performance.now()-a}ms`);let l=n.split(/\r?\n/);const d=new Map,u=o[""]||[],p=o[s]||[],g=[...new Set([...u,...p])],f=r[""]||[],h=r[s]||[],m=[...new Set([...f,...h])],v=Array.from(c.keys()).sort((k,w)=>k-w);for(const k of v){const w=l[k],_=c.get(k);if(w===void 0)continue;const x=/# ●/.test(w),P=i.breakpoints&&i.breakpoints[s]?i.breakpoints[s][k+1]:null;(x||P)&&console.log(`[Debugger] Breakpoint detected at line ${k+1}: ${w}`);const T=w.match(/^(\s*)/)[1];let E=generateDebugBlock(T,x,s,k+1,g,m,P);_==="function_definition"?E+=`${T}@_ds.wrap
+`:_==="async_function_definition"&&(E+=`${T}@_ds.awrap
+`),x&&console.log(`[Debugger] Generated instrumentation for row ${k+1} (${_})`),d.set(k,E)}let y=[];for(let k=0;k<l.length;k++)d.has(k)&&y.push(d.get(k)),y.push(l[k]);const b=y.join(`
+`),S=`${DEBUG_STATE_MODULE}
 
 # Execute isolated code
 _ds.exec("""${b.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/'/g,"\\'")}""")
-`,S=performance.now()-a;return console.log(`[Debugger] Instrumentation complete in ${S.toFixed(0)}ms`),C}console.log("[Libs] ES modules loaded");function renderIcon(n,i={}){const{className:o="",size:r=24,color:s="currentColor"}=i;return html$1`
+`,C=performance.now()-a;return console.log(`[Debugger] Instrumentation complete in ${C.toFixed(0)}ms`),S}console.log("[Libs] ES modules loaded");function renderIcon(n,i={}){const{className:o="",size:r=24,color:s="currentColor"}=i;return html$1`
     <svg class="icon icon-tabler ${o}" 
          width="${r}" 
          height="${r}" 
@@ -468,12 +468,12 @@ _ds.exec("""${b.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/'/g,"\\'")}""
          stroke-linejoin="round">
       <use href="#tabler-${n}" />
     </svg>
-  `}const IconSprite={renderIcon};await __vitePreload(()=>import("./vendor-BK_VqgbY.js"),__vite__mapDeps([1,2,3]));console.log("[Views] Vendor loaded, Component available:",!!window.Component);function Button(n){const{first:i=!1,size:o="",square:r=!1,icon:s="link",onClick:a=$=>{},disabled:c=!1,active:l=!1,tooltip:d,label:u,background:p}=n;let g=html``;d&&(g=html`<div class="tooltip">${d}</div>`),g=html``;let f=l?"active":"",h=l?"selected":"",m=p?"inverted":"",v=i?"first":"",y=r?"square":"",b=c?"inactive":"active",C=o==="small"?"":html`<div class="label ${b} ${h}">${u}</div>`;const S=IconSprite.renderIcon(s,{className:""});return html`
+  `}const IconSprite={renderIcon};await __vitePreload(()=>import("./vendor-DBsAqGKK.js"),__vite__mapDeps([1,2,3]));console.log("[Views] Vendor loaded, Component available:",!!window.Component);function Button(n){const{first:i=!1,size:o="",square:r=!1,icon:s="link",onClick:a=k=>{},disabled:c=!1,active:l=!1,tooltip:d,label:u,background:p}=n;let g=html``;d&&(g=html`<div class="tooltip">${d}</div>`),g=html``;let f=l?"active":"",h=l?"selected":"",m=p?"inverted":"",v=i?"first":"",y=r?"square":"",b=c?"inactive":"active",S=o==="small"?"":html`<div class="label ${b} ${h}">${u}</div>`;const C=IconSprite.renderIcon(s,{className:""});return html`
      <div class="button ${v}">
        <button disabled=${c} class="${y}${o} ${f} ${m}" onclick=${a}>
-         ${S}
+         ${C}
        </button>
-       ${C}
+       ${S}
        ${g}
      </div>
    `}let cm6Loaded=!1,EditorView,EditorState,Compartment,python,json,keymap,highlightActiveLine,lineNumbers,gutter,GutterMarker,search,searchKeymap,highlightSelectionMatches,foldGutter,foldKeymap,indentOnInput,syntaxHighlighting,defaultHighlightStyle,bracketMatching,closeBrackets,closeBracketsKeymap,indentWithTab,defaultKeymap,history,historyKeymap,baseTheme=null,themes=null,BreakpointMarkerClass=null;async function loadCM6(){if(!cm6Loaded)try{const[n,i,o,r,s,a,c,l,d,u]=await Promise.all([__vitePreload(()=>import("./vendor-BgmjMNkd.js").then(y=>y.ai),[]),__vitePreload(()=>import("./vendor-BgmjMNkd.js").then(y=>y.ah),[]),__vitePreload(()=>import("./index-DX8WB_Mh.js"),__vite__mapDeps([4,5,2,6])),__vitePreload(()=>import("./index-CC_OnImC.js"),__vite__mapDeps([7,5,2])),__vitePreload(()=>import("./index-uUR0fcff.js"),__vite__mapDeps([8,2])),__vitePreload(()=>import("./vendor-BgmjMNkd.js").then(y=>y.aj),[]),__vitePreload(()=>import("./index-Ct0B6E_D.js"),__vite__mapDeps([6,2])),__vitePreload(()=>import("./index-fKr_TzPR.js"),__vite__mapDeps([9,2])),__vitePreload(()=>import("./vendor-BgmjMNkd.js").then(y=>y.ak),[]),__vitePreload(()=>import("./index-DhGTJQR7.js"),__vite__mapDeps([10,2]))]);EditorView=n.EditorView,keymap=n.keymap,highlightActiveLine=n.highlightActiveLine,lineNumbers=n.lineNumbers,gutter=n.gutter,GutterMarker=n.GutterMarker,EditorState=i.EditorState,Compartment=i.Compartment,python=o.python,json=r.json,search=s.search,searchKeymap=s.searchKeymap,highlightSelectionMatches=s.highlightSelectionMatches,foldGutter=a.foldGutter,foldKeymap=a.foldKeymap,indentOnInput=a.indentOnInput,syntaxHighlighting=a.syntaxHighlighting,defaultHighlightStyle=a.defaultHighlightStyle,bracketMatching=a.bracketMatching,closeBrackets=c.closeBrackets,closeBracketsKeymap=c.closeBracketsKeymap,indentWithTab=l.indentWithTab,defaultKeymap=l.defaultKeymap,history=l.history,historyKeymap=l.historyKeymap,BreakpointMarkerClass=class extends GutterMarker{constructor(y=!0){super(),this.enabled=y}toDOM(){const y=document.createElement("span");return y.className="cm-breakpoint"+(this.enabled?"":" cm-breakpoint-disabled"),y.textContent="●",y}},baseTheme=EditorView.theme({"&":{height:"100%",fontSize:"14px"},".cm-scroller":{fontFamily:"var(--font-mono)",overflow:"auto"},".cm-content":{caretColor:"currentColor"},".cm-cursor":{borderLeftColor:"currentColor"},".cm-gutters":{backgroundColor:"transparent !important",borderRight:"none"},".cm-gutter.cm-lineNumbers":{backgroundColor:"transparent !important"},"&.cm-focused .cm-selectionBackground, ::selection":{backgroundColor:"rgba(100, 100, 100, 0.3)"},".cm-foldGutter .cm-gutterElement":{cursor:"pointer",padding:"0 3px"},".cm-breakpoint-gutter":{width:"20px !important",minWidth:"20px !important"},".cm-breakpoint-gutter .cm-gutterElement":{display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:"0"},".cm-breakpoint":{color:"#e63946",fontSize:"14px",lineHeight:"1",paddingRight:"9px"},".cm-breakpoint-disabled":{opacity:"0.3"},".cm-panels":{fontSize:"14px"},".cm-panels input, .cm-panels button":{fontSize:"14px"}});const{cobalt:p,solarizedLight:g,coolGlow:f,clouds:h}=d,{xcodeDark:m,xcodeLight:v}=u;themes={cobalt:p,"solarized-light":g,"xcode-dark":m,"xcode-light":v,coolglow:f,clouds:h},cm6Loaded=!0,console.debug("[Editor] Lazy loaded CM6 modules")}catch(n){throw console.error("[Editor] Failed to load CM6:",n),n}}class CodeMirrorEditor extends Component{constructor(){super(),this.view=null,this.content="# empty file",this.fileName=null,this.scrollTop=0,this.currentTheme=null,this.themeCompartment=null,this.readOnlyCompartment=null,this.languageCompartment=null}createElement(i){return i&&(this.content=i),html`<div id="code-editor"></div>`}load(i){loadCM6().then(()=>this.createEditor(i)).catch(o=>{console.error("[Editor] Failed to initialize:",o),i.innerHTML='<div style="color:red;padding:10px;">Editor failed to load. Check console for errors.</div>'})}createEditor(i){this.themeCompartment=new Compartment,this.readOnlyCompartment=new Compartment,this.languageCompartment=new Compartment;const o=this.getEditorTheme();if(this.currentTheme=o,this.fileName&&typeof this.fileName=="string"&&this.fileName.toLowerCase().endsWith(".json")){const d=this._tryFormatJson(this.content);d!==null&&(this.content=d)}const r=window.appState?.debugger?.active||window.appState?.debugger?.configOpen||!1,s=this.getLanguageMode(),a=this,c=gutter({class:"cm-breakpoint-gutter",lineMarker:(d,u)=>{const p=d.state.doc.lineAt(u.from).number,g=d.state.doc.line(p).text;if(/# ●/.test(g)){const h=(window.appState?.debugger?.breakpoints?.[a.fileName]||{})[p],m=h?h.enabled!==!1:!0;return new BreakpointMarkerClass(m)}return null},domEventHandlers:{click:(d,u)=>{const p=d.state.doc.lineAt(u.from).number,g=d.state.doc.line(p).text;return/# ●/.test(g)?window.appInstance.emitter.emit("debugger:edit-breakpoint",{file:a.fileName,line:p}):a.toggleBreakpoint(p-1),!0}}}),l=EditorState.create({doc:this.content||"",extensions:[lineNumbers(),history(),foldGutter({openText:"▼",closedText:"▶"}),indentOnInput(),bracketMatching(),closeBrackets(),highlightActiveLine(),highlightSelectionMatches(),syntaxHighlighting(defaultHighlightStyle,{fallback:!0}),search({top:!0}),keymap.of([...defaultKeymap,...historyKeymap,...closeBracketsKeymap,...foldKeymap,...searchKeymap,indentWithTab]),this.languageCompartment.of(s),baseTheme,this.themeCompartment.of(themes[o]||themes.cobalt),this.readOnlyCompartment.of(EditorState.readOnly.of(r)),c,EditorView.updateListener.of(d=>{d.docChanged&&(this.content=d.state.doc.toString(),this.onChange()),d.geometryChanged&&(this.scrollTop=this.view?.scrollDOM.scrollTop||0)})]});this.view=new EditorView({state:l,parent:i}),setTimeout(()=>{this.view&&this.scrollTop>0&&(this.view.scrollDOM.scrollTop=this.scrollTop)},10),this.themeObserver=new MutationObserver(()=>{this.updateTheme()}),this.themeObserver.observe(document.documentElement,{attributes:!0,attributeFilter:["data-theme"]}),this.editorThemeHandler=()=>this.updateTheme(),window.addEventListener("editor-theme-changed",this.editorThemeHandler),this.breakpointsUpdatedHandler=d=>{d.file===this.fileName&&this.syncBreakpointsFromStore()},window.appInstance.emitter.on("debugger:breakpoints-updated",this.breakpointsUpdatedHandler)}getLanguageMode(){return this.fileName&&typeof this.fileName=="string"&&this.fileName.toLowerCase().endsWith(".json")?json():python()}getEditorTheme(){const i=document.documentElement.getAttribute("data-theme")==="dark";switch(localStorage.getItem("editorTheme")||"auto"){case"cobalt":return i?"cobalt":"solarized-light";case"xcode":return i?"xcode-dark":"xcode-light";case"coolglow":return i?"coolglow":"clouds";case"auto":default:return i?"cobalt":"solarized-light"}}updateTheme(){if(!this.view||!themes)return;const i=this.getEditorTheme();i!==this.currentTheme&&(this.currentTheme=i,this.view.dispatch({effects:this.themeCompartment.reconfigure(themes[i]||themes.cobalt)}))}update(i){if(this.view&&window.appState?.debugger){const o=window.appState.debugger.active||window.appState.debugger.configOpen;this.view.state.facet(EditorState.readOnly)!==o&&(this.view.dispatch({effects:this.readOnlyCompartment.reconfigure(EditorState.readOnly.of(o))}),this.view.dom.style.opacity=o?"0.7":"1.0")}return!1}unload(){this.themeObserver&&(this.themeObserver.disconnect(),this.themeObserver=null),this.editorThemeHandler&&(window.removeEventListener("editor-theme-changed",this.editorThemeHandler),this.editorThemeHandler=null),this.breakpointsUpdatedHandler&&(window.appInstance.emitter.removeListener("debugger:breakpoints-updated",this.breakpointsUpdatedHandler),this.breakpointsUpdatedHandler=null),this.view&&(this.scrollTop=this.view.scrollDOM.scrollTop,this.view.destroy(),this.view=null)}updateScrollPosition(i){this.scrollTop=i.target.scrollTop}onChange(){return!1}_tryFormatJson(i){if(typeof i!="string")return null;const o=i.trim();if(!o)return null;const r=o[0];if(r!=="{"&&r!=="[")return null;try{const s=JSON.parse(o);return JSON.stringify(s,null,2)+`
@@ -735,7 +735,7 @@ _recursive_delete(${JSON.stringify(n)})
           <p>Fetching ScriptOs from the cloud registry</p>
         </div>
       </div>
-    `;const o=f=>f.registryEntry?{name:f.registryEntry.name||f.filename,description:f.registryEntry.description||"",tags:f.registryEntry.tags||[],author:f.registryEntry.author||"",version:f.registryEntry.version||[1,0,0]}:f.config&&f.config.info?{name:f.config.info.name||f.filename,description:f.config.info.description||"",tags:f.config.info.category?[f.config.info.category]:[],author:f.config.info.author||"",version:f.config.info.version||[1,0,0]}:{name:f.filename,description:"",tags:[],author:"",version:[1,0,0]},r=new Set;n.scriptOsList.forEach(f=>{o(f).tags.forEach(m=>r.add(m))});const s=Array.from(r).sort(),a=(n.scriptOsSearchQuery||"").toLowerCase(),c=n.scriptOsFilterTags||[],l=n.scriptOsList.filter(f=>{const h=o(f),m=h.name.toLowerCase(),v=h.description.toLowerCase(),y=h.tags.join(" ").toLowerCase(),b=!a||m.includes(a)||v.includes(a)||y.includes(a),C=c.length===0||c.every(S=>h.tags.includes(S));return b&&C}),d={},u=[];l.forEach(f=>{const h=o(f),m=h.tags.length>0?h.tags[0]:null;m?(d[m]||(d[m]=[]),d[m].push(f)):u.push(f)});const p=Object.keys(d).sort(),g=f=>{n.scriptOsCategoryCollapse[f]=!n.scriptOsCategoryCollapse[f],i("render")};return html`
+    `;const o=f=>f.registryEntry?{name:f.registryEntry.name||f.filename,description:f.registryEntry.description||"",tags:f.registryEntry.tags||[],author:f.registryEntry.author||"",version:f.registryEntry.version||[1,0,0]}:f.config&&f.config.info?{name:f.config.info.name||f.filename,description:f.config.info.description||"",tags:f.config.info.category?[f.config.info.category]:[],author:f.config.info.author||"",version:f.config.info.version||[1,0,0]}:{name:f.filename,description:"",tags:[],author:"",version:[1,0,0]},r=new Set;n.scriptOsList.forEach(f=>{o(f).tags.forEach(m=>r.add(m))});const s=Array.from(r).sort(),a=(n.scriptOsSearchQuery||"").toLowerCase(),c=n.scriptOsFilterTags||[],l=n.scriptOsList.filter(f=>{const h=o(f),m=h.name.toLowerCase(),v=h.description.toLowerCase(),y=h.tags.join(" ").toLowerCase(),b=!a||m.includes(a)||v.includes(a)||y.includes(a),S=c.length===0||c.every(C=>h.tags.includes(C));return b&&S}),d={},u=[];l.forEach(f=>{const h=o(f),m=h.tags.length>0?h.tags[0]:null;m?(d[m]||(d[m]=[]),d[m].push(f)):u.push(f)});const p=Object.keys(d).sort(),g=f=>{n.scriptOsCategoryCollapse[f]=!n.scriptOsCategoryCollapse[f],i("render")};return html`
     <div class="scriptos-library">
       <div class="scriptos-header-sticky">
         <div class="scriptos-header">
@@ -1979,11 +1979,12 @@ print(json.dumps({"ok": True}))
       </div>
       ${o}
     </div>
-  `}function FileActions(n,i){const{isConnected:o,selectedFiles:r}=n;return html`
+  `}function FileActions(n,i){const{isConnected:o,selectedFiles:r}=n,s=r.some(a=>a.type==="file");return html`
   <div id="file-actions">
     ${Button({icon:"edit",size:"small",disabled:!canEdit({selectedFiles:n.selectedFiles}),onClick:()=>i("open-selected-files")})}
     ${Button({icon:"arrow-left",size:"small",background:"inverted",active:!0,disabled:!canUpload({isConnected:o,selectedFiles:r}),onClick:()=>i("upload-files")})}
     ${Button({icon:"arrow-right",size:"small",background:"inverted",active:!0,disabled:!canDownload({isConnected:o,selectedFiles:r}),onClick:()=>i("download-files")})}
+    ${Button({icon:"arrow-down",size:"small",background:"inverted",active:!0,disabled:!s,onClick:()=>i("export-files")})}
     ${Button({icon:"trash",size:"small",disabled:n.selectedFiles.length===0,onClick:()=>i("remove-files")})}
   </div>
 
@@ -2009,14 +2010,14 @@ print(json.dumps({"ok": True}))
           onclick=${x=>!1}
           ondblclick=${x=>!1}
           />
-      `,v=o.selectedFiles.find(x=>x.fileName===f.fileName&&x.source===n);function y(x){return x.preventDefault(),r("rename-file",n,f),!1}function b(){o.renamingFile||r(`navigate-${n}-folder`,f.fileName)}function C(){o.renamingFile||r("open-file",n,f)}let S=f.fileName;const $=o.selectedFiles.find(x=>x.fileName===S);o.renamingFile==n&&$&&(S=m);function w(x){if(x==null)return"";if(x===0)return"0 B";const P=1024,T=["B","KB","MB","GB"],E=Math.floor(Math.log(x)/Math.log(P));return parseFloat((x/Math.pow(P,E)).toFixed(1))+" "+T[E]}const k=f.type==="file"?w(f.size):"";return f.type==="folder"?html`
+      `,v=o.selectedFiles.find(x=>x.fileName===f.fileName&&x.source===n);function y(x){return x.preventDefault(),r("rename-file",n,f),!1}function b(){o.renamingFile||r(`navigate-${n}-folder`,f.fileName)}function S(){o.renamingFile||r("open-file",n,f)}let C=f.fileName;const k=o.selectedFiles.find(x=>x.fileName===C);o.renamingFile==n&&k&&(C=m);function w(x){if(x==null)return"";if(x===0)return"0 B";const P=1024,T=["B","KB","MB","GB"],E=Math.floor(Math.log(x)/Math.log(P));return parseFloat((x/Math.pow(P,E)).toFixed(1))+" "+T[E]}const _=f.type==="file"?w(f.size):"";return f.type==="folder"?html`
           <div
             class="item ${v?"selected":""}"
             onclick=${x=>r("toggle-file-selection",f,n,x)}
             ondblclick=${b}
             >
             ${IconSprite.renderIcon("folder",{className:"icon"})}
-            <div class="text">${S}</div>
+            <div class="text">${C}</div>
             <div class="options" onclick=${y}>
               ${IconSprite.renderIcon("cursor-text",{className:""})}
             </div>
@@ -2025,12 +2026,12 @@ print(json.dumps({"ok": True}))
           <div
             class="item ${v?"selected":""}"
             onclick=${x=>r("toggle-file-selection",f,n,x)}
-            ondblclick=${C}
+            ondblclick=${S}
             >
             ${IconSprite.renderIcon("file",{className:"icon"})}
             <div class="text" style="display: flex; justify-content: space-between; padding-right: 10px;">
-              <span>${S}</span>
-              <span class="file-size">${k}</span>
+              <span>${C}</span>
+              <span class="file-size">${_}</span>
             </div>
             <div class="options" onclick=${y}>
               ${IconSprite.renderIcon("cursor-text",{className:""})}
@@ -2179,7 +2180,7 @@ print(json.dumps({"ok": True}))
         `)}
       </select>
     </div>
-  `}typeof window<"u"&&(window.LanguageSelector=LanguageSelector);function AppearancePanel(n,i){const o=window.i18n?window.i18n.t:r=>r;return html`
+  `}typeof window<"u"&&(window.LanguageSelector=LanguageSelector);function AppearancePanel(n,i){const o=window.i18n?window.i18n.t:c=>c;n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config");const r=n.networksInfo?.eth!==null,s=n.networksInfo?.wwan!==null,a=n.networkInterfacesConfig||{wifi:!0,ethernet:!0,wwan:!0};return html`
     <div class="panel-container">
       <div class="appearance-content">
         
@@ -2241,6 +2242,33 @@ print(json.dumps({"ok": True}))
           </div>
         </div>
         
+        <!-- Network Interfaces Section (only show when connected) -->
+        ${n.isConnected?html`
+          <div class="appearance-section">
+            <h3>Network Interfaces</h3>
+            <p class="appearance-hint">Enable or disable network interfaces. Disabled interfaces will not start on boot. At least one interface must remain enabled.</p>
+            
+            ${n.isLoadingNetworkInterfacesConfig?html`
+              <p style="color: var(--text-secondary);">Loading configuration...</p>
+            `:html`
+              <div class="network-interfaces-grid">
+                ${renderNetworkInterfaceOption("wifi","WiFi",a.wifi,n,i)}
+                ${r?renderNetworkInterfaceOption("ethernet","Ethernet",a.ethernet,n,i):""}
+                ${s?renderNetworkInterfaceOption("wwan","WWAN (4G)",a.wwan,n,i):""}
+              </div>
+              
+              <button 
+                class="save-button" 
+                style="margin-top: 16px;"
+                onclick=${()=>{const c={wifi:n.networkInterfacesConfig?.wifi??!0,ethernet:n.networkInterfacesConfig?.ethernet??!0,wwan:n.networkInterfacesConfig?.wwan??!0};i("save-network-interfaces-config",c)}}
+                disabled=${!n.isConnected||n.isSavingNetworkInterfacesConfig===!0}
+              >
+                ${n.isSavingNetworkInterfacesConfig?"Saving...":"Save Network Settings"}
+              </button>
+            `}
+          </div>
+        `:""}
+        
       </div>
     </div>
   `}function renderThemeOption(n,i,o,r){const s=o.theme===n;return html`
@@ -2300,6 +2328,23 @@ print(json.dumps({"ok": True}))
         <div class="editor-theme-desc">${o}</div>
       </div>
     </div>
+  `}function renderNetworkInterfaceOption(n,i,o,r,s){return html`
+    <div class="network-interface-option">
+      <div class="network-interface-info">
+        <span class="network-interface-label">${i}</span>
+        <span class="network-interface-status ${o?"enabled":"disabled"}">
+          ${o?"Enabled":"Disabled"}
+        </span>
+      </div>
+      <label class="toggle-switch">
+        <input 
+          type="checkbox" 
+          checked=${o}
+          onchange=${a=>{r.networkInterfacesConfig||(r.networkInterfacesConfig={wifi:!0,ethernet:!0,wwan:!0}),r.networkInterfacesConfig[n]=a.target.checked,s("render")}}
+        />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
   `}function SysInfoPanel(n,i){const o=window.i18n?window.i18n.t:s=>s;if(!n.systemInfo&&n.isConnected&&!n.isLoadingSystemInfo&&!n.systemInfoAttempted&&(n.systemInfoAttempted=!0,i("refresh-system-info")),!n.systemInfo)return n.isConnected?html`
       <div class="panel-container">
         <div class="panel-header">
@@ -2310,249 +2355,12 @@ print(json.dumps({"ok": True}))
         </div>
       </div>
     `:html`
-        <div class="panel-container" style="padding: 0; overflow-y: auto;">
-          <style>
-            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-
-            .demo-features {
-                display: grid;
-                grid-template-columns: repeat(1, 1fr);
-                gap: 32px;
-                padding: 20px;
-                margin: 0;
-                background: var(--bg-primary);
-            }
-
-            @media (min-width: 600px) {
-                .demo-features {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-            }
-
-            @media (min-width: 1024px) {
-                .demo-features {
-                    grid-template-columns: repeat(3, 1fr);
-                }
-            }
-
-            .feature-card {
-                background: var(--panel-bg);
-                border-radius: 16px;
-                padding: 32px;
-                border: 1px solid var(--border-color);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            }
-
-            .feature-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 3px;
-                background: linear-gradient(90deg, var(--scheme-primary), var(--scheme-primary-light), var(--scheme-primary));
-                transform: scaleX(0);
-                transition: transform 0.3s ease;
-            }
-
-            .feature-card:hover {
-                transform: translateY(-8px) scale(1.02);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-                border-color: var(--scheme-primary-light);
-            }
-
-            .feature-card:hover::before {
-                transform: scaleX(1);
-            }
-
-            .feature-card h3 {
-                color: var(--scheme-primary);
-                margin-top: 0;
-                margin-bottom: 20px;
-                font-size: 1.25rem;
-                font-weight: 600;
-                position: relative;
-                z-index: 1;
-            }
-
-            .feature-card p {
-                color: var(--text-primary);
-                line-height: 1.7;
-                position: relative;
-                z-index: 1;
-            }
-
-            /* Floating animation for cards */
-            .feature-card:nth-child(odd) {
-                animation: float 6s ease-in-out infinite;
-            }
-
-            .feature-card:nth-child(even) {
-                animation: float 6s ease-in-out infinite reverse;
-            }
-
-            @keyframes float {
-                0%, 100% { transform: translateY(0px); }
-                50% { transform: translateY(-10px); }
-            }
-
-            .demo-header {
-                text-align: center;
-                padding: 40px 20px;
-                position: relative;
-                background: var(--bg-tertiary);
-
-            }
-
-
-            .demo-header h2 {
-                font-size: 3.5rem;
-                margin-bottom: 10px;
-                background: linear-gradient(135deg, var(--scheme-primary) 0%, var(--scheme-primary-light) 50%, var(--scheme-primary) 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                animation: glow 2s ease-in-out infinite alternate;
-                font-family: 'Orbitron', monospace;
-                font-weight: 700;
-                letter-spacing: 0.05em;
-            }
-
-            @keyframes glow {
-                from { filter: brightness(1) drop-shadow(0 0 5px var(--scheme-primary)); }
-                to { filter: brightness(1.1) drop-shadow(0 0 20px var(--scheme-primary-light)); }
-            }
-
-            .demo-header p {
-                font-size: 1.2rem;
-                color: var(--text-secondary);
-                max-width: 500px;
-                margin: 0 auto;
-                line-height: 1.7;
-                opacity: 0.9;
-            }
-
-            .demo-cta {
-                text-align: center;
-                position: relative;
-                background: var(--bg-primary);
-                padding-bottom: 700px;
-            }
-
-            .pulse-circle {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 120px;
-                height: 120px;
-                border: 2px solid var(--scheme-primary);
-                border-radius: 50%;
-                opacity: 0.3;
-                animation: pulse 2s infinite;
-            }
-
-            .pulse-delay {
-                animation-delay: 1s;
-            }
-
-            @keyframes pulse {
-                0% {
-                    transform: translate(-50%, -50%) scale(0.8);
-                    opacity: 1;
-                }
-                100% {
-                    transform: translate(-50%, -50%) scale(2);
-                    opacity: 0;
-                }
-            }
-
-            .interactive-btn {
-                background: var(--scheme-primary);
-                color: white;
-                border: none;
-                padding: 16px 32px;
-                border-radius: 50px;
-                font-size: 1.1rem;
-                font-weight: 600;
-                cursor: pointer;
-                position: relative;
-                z-index: 2;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 15px var(--scheme-primary);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                opacity: 0.9;
-            }
-
-            .interactive-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px var(--scheme-primary-light);
-                background: var(--scheme-primary-light);
-                opacity: 1;
-            }
-
-            .interactive-btn:active {
-                transform: translateY(0);
-            }
-
-            .demo-tagline {
-                color: var(--text-secondary);
-                margin-top: 20px;
-                font-style: italic;
-            }
-          </style>
-
-          <div class="demo-header">
-              <h2>${o("sysinfo.demoTitle")}</h2>
-              <p class="demo-tagline">
-                  ${o("sysinfo.demoTagline")}
-              </p>
+        <div class="panel-container">
+          <div class="panel-header">
+            <h2>${o("sysinfo.title")}</h2>
           </div>
-
-          <section class="demo-features">
-              <div class="feature-card">
-                  <h3>${o("sysinfo.featureFast")}</h3>
-                  <p>${o("sysinfo.featureFastDesc")}</p>
-              </div>
-
-              <div class="feature-card">
-                  <h3>${o("sysinfo.featureEditor")}</h3>
-                    <p>${o("sysinfo.featureEditorDesc")}</p>
-                </div>
-
-              <div class="feature-card">
-                  <h3>${o("sysinfo.featureScripto")}</h3>
-                  <p>${o("sysinfo.featureScriptoDesc")}</p>
-              </div>
-
-              <div class="feature-card">
-                  <h3>${o("sysinfo.featureExtensions")}</h3>
-                  <p>${o("sysinfo.featureExtensionsDesc")}</p>
-              </div>
-
-              <div class="feature-card">
-                  <h3>${o("sysinfo.featureManagement")}</h3>
-                  <p>${o("sysinfo.featureManagementDesc")}</p>
-              </div>
-
-              <div class="feature-card">
-                  <h3>${o("sysinfo.featureMonitoring")}</h3>
-                  <p>${o("sysinfo.featureMonitoringDesc")}</p>
-              </div>
-          </section>
-
-          <div class="demo-cta">
-              <div style="display: inline-block; position: relative;">
-                  <div class="pulse-circle"></div>
-                  <div class="pulse-circle pulse-delay"></div>
-                  <button class="interactive-btn" onclick=${()=>i("connect")}>
-                      ${o("sysinfo.connectDevice")}
-                  </button>
-              </div>
+          <div class="panel-message">
+            <p>Connect to a device to view system information.</p>
           </div>
         </div>
       `;const r=n.systemInfo;return html`
@@ -2670,7 +2478,7 @@ print(json.dumps({"ok": True}))
           `})}
       </div>
     </div>
-  `}function getPartitionType(n,i){return{0:"APP",1:"DATA"}[n]||`Type ${n}`}function getPartitionIcon(n){if(!n)return"📦";const i=n.toLowerCase();return i.includes("ota")?"🔄":i.includes("nvs")?"💾":i.includes("www")?"🌐":i.includes("vfs")?"📁":i.includes("data")?"💿":i.includes("factory")?"🏭":"📦"}function formatBytes$1(n){return n?n<1024?n+" B":n<1024*1024?(n/1024).toFixed(1)+" KB":(n/(1024*1024)).toFixed(2)+" MB":"N/A"}function WiFiPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),!n.networksInfo)return html`
+  `}function getPartitionType(n,i){return{0:"APP",1:"DATA"}[n]||`Type ${n}`}function getPartitionIcon(n){if(!n)return"📦";const i=n.toLowerCase();return i.includes("ota")?"🔄":i.includes("nvs")?"💾":i.includes("www")?"🌐":i.includes("vfs")?"📁":i.includes("data")?"💿":i.includes("factory")?"🏭":"📦"}function formatBytes$1(n){return n?n<1024?n+" B":n<1024*1024?(n/1024).toFixed(1)+" KB":(n/(1024*1024)).toFixed(2)+" MB":"N/A"}function WiFiPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config"),!n.networksInfo)return html`
       <div class="panel-container">
         <div class="panel-header">
           <h2>WiFi Configuration</h2>
@@ -2679,21 +2487,21 @@ print(json.dumps({"ok": True}))
           ${n.isConnected?"Loading WiFi information...":"Connect to device to view WiFi configuration"}
         </div>
       </div>
-    `;const o=n.networksInfo;return html`
+    `;const o=n.networksInfo,r=n.networkInterfacesConfig?.wifi===!1;return html`
     <div class="panel-container">
       <div class="panel-header">
         <h2>WiFi Configuration</h2>
       </div>
       
-      ${WiFiSTASection(o.wifiSTA)}
+      ${WiFiSTASection(o.wifiSTA,r)}
       ${WiFiAPSection(o.wifiAP)}
     </div>
-  `}function WiFiSTASection(n){return n?html`
+  `}function WiFiSTASection(n,i=!1){if(!n)return"";const o=i?"status-disabled":n.active?"status-active":"status-inactive",r=i?"Disabled":n.active?"Active":"Inactive";return html`
     <div class="panel-section">
       <div class="section-header">
         <h3 class="panel-section-title">Wi-Fi Client Interface</h3>
-        <div class="status-badge ${n.active?"status-active":"status-inactive"}">
-          ${n.active?"Active":"Inactive"}
+        <div class="status-badge ${o}">
+          ${r}
         </div>
       </div>
       
@@ -2744,7 +2552,7 @@ print(json.dumps({"ok": True}))
         </div>
       `}
     </div>
-  `:""}function WiFiAPSection(n){return n?html`
+  `}function WiFiAPSection(n){return n?html`
     <div class="panel-section">
       <div class="section-header">
         <h3 class="panel-section-title">Wi-Fi Access Point Interface</h3>
@@ -2792,7 +2600,7 @@ print(json.dumps({"ok": True}))
         </button>
       </div>
     </div>
-  `:""}function EthernetPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),n.isConnected&&!n.ethConfigLoaded&&!n.isLoadingEthConfig&&i("load-eth-config"),!n.networksInfo)return html`
+  `:""}function EthernetPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),n.isConnected&&!n.ethConfigLoaded&&!n.isLoadingEthConfig&&i("load-eth-config"),n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config"),!n.networksInfo)return html`
       <div class="panel-container">
         <div class="panel-header">
           <h2>Ethernet Configuration</h2>
@@ -2801,7 +2609,19 @@ print(json.dumps({"ok": True}))
           ${n.isConnected?"Loading Ethernet information...":"Connect to device to view Ethernet configuration"}
         </div>
       </div>
-    `;const o=n.networksInfo.eth,r=n.ethStatus,s=r&&r.initialized?r:o&&o.mac?o:r||o,a=n.ethConfig||{},c=o!==null,l=s&&(s.mac||s.enabled||s.enable||s.initialized),d=s&&s.ip&&s.ip!=="0.0.0.0",u=s&&s.linkup===!0,p=d;return c?html`
+    `;const o=n.networksInfo.eth,r=n.ethStatus,s=r&&r.initialized?r:o&&o.mac?o:r||o,a=n.ethConfig||{},c=o!==null,l=n.networkInterfacesConfig?.ethernet===!1,d=s&&(s.mac||s.enabled||s.enable||s.initialized),u=s&&s.ip&&s.ip!=="0.0.0.0",p=s&&s.linkup===!0,g=u;if(!c)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>Ethernet Configuration</h2>
+        </div>
+        <div class="panel-message">
+          <p>Ethernet is not available on this device.</p>
+          <p style="color: var(--text-secondary); font-size: 0.9em; margin-top: 8px;">
+            This chip may not have an internal EMAC, or the firmware was built without Ethernet support.
+          </p>
+        </div>
+      </div>
+    `;const f=l?"status-disabled":g?"status-active":p?"status-warning":"status-inactive",h=l?"Disabled":g?"Connected":p?"Link Up (No IP)":d?"No Link":"Not Initialized";return html`
     <div class="panel-container">
       <div class="panel-header">
         <h2>Ethernet Configuration</h2>
@@ -2810,12 +2630,12 @@ print(json.dumps({"ok": True}))
       <div class="panel-section">
         <div class="section-header">
           <h3 class="panel-section-title">Ethernet PHY Interface</h3>
-          <div class="status-badge ${p?"status-active":u?"status-warning":"status-inactive"}">
-            ${p?"Connected":u?"Link Up (No IP)":l?"No Link":"Not Initialized"}
+          <div class="status-badge ${f}">
+            ${h}
           </div>
         </div>
         
-        ${l?html`
+        ${d?html`
           <div class="info-grid">
             <div class="info-item">
               <span class="info-label">MAC Address:</span>
@@ -2829,11 +2649,11 @@ print(json.dumps({"ok": True}))
             </div>
             <div class="info-item">
               <span class="info-label">Link:</span>
-              <span class="info-value ${u?"status-yes":"status-no"}">
-                ${u?"Cable Connected":"No Cable"}
+              <span class="info-value ${p?"status-yes":"status-no"}">
+                ${p?"Cable Connected":"No Cable"}
               </span>
             </div>
-            ${d?html`
+            ${u?html`
               <div class="info-item">
                 <span class="info-label">IP Address:</span>
                 <span class="info-value info-mono">${s.ip||"0.0.0.0"}</span>
@@ -2859,7 +2679,7 @@ print(json.dumps({"ok": True}))
         `}
         
         <div class="config-actions" style="margin-top: 16px;">
-          ${l?"":html`
+          ${d?"":html`
             <button 
               class="primary-button" 
               onclick=${()=>i("init-ethernet")}
@@ -2924,19 +2744,7 @@ print(json.dumps({"ok": True}))
         </div>
       </div>
     </div>
-  `:html`
-      <div class="panel-container">
-        <div class="panel-header">
-          <h2>Ethernet Configuration</h2>
-        </div>
-        <div class="panel-message">
-          <p>Ethernet is not available on this device.</p>
-          <p style="color: var(--text-secondary); font-size: 0.9em; margin-top: 8px;">
-            This chip may not have an internal EMAC, or the firmware was built without Ethernet support.
-          </p>
-        </div>
-      </div>
-    `}function VPNPanel(n,i){n.isConnected&&!n.vpnConfigLoaded&&!n.isLoadingVpnConfig&&i("load-vpn-config");const o=n.vpnConfig||{hostname:"",join_code:"",auto_connect:!1},r=n.networksInfo?.vpn,s=n.isConnected,a=n.networksInfo&&r!==void 0;!a||r.available;const c=a&&r.active;return html`
+  `}function VPNPanel(n,i){n.isConnected&&!n.vpnConfigLoaded&&!n.isLoadingVpnConfig&&i("load-vpn-config");const o=n.vpnConfig||{hostname:"",join_code:"",auto_connect:!1},r=n.networksInfo?.vpn,s=n.isConnected,a=n.networksInfo&&r!==void 0;!a||r.available;const c=a&&r.active;return html`
     <div class="panel-container">
       <div class="panel-header">
         <h2>VPN Configuration</h2>
@@ -3180,7 +2988,25 @@ print(json.dumps({"ok": True}))
           <p>Bluetooth LE information not available.</p>
         </div>
       </div>
-    `}function WWANPanel(n,i){n.isConnected&&!n.wwanConfigLoaded&&!n.isLoadingWwanConfig&&i("load-wwan-config"),n.isConnected&&!n.modemStatusLoaded&&!n.isLoadingModemStatus&&i("load-modem-status");const o=n.wwanConfig||{},r=n.modemStatus||{},s=r.ppp||{};let a="Disabled",c="status-disabled";return o.mobile_data_enabled&&(s.connected?(a="Connected",c="status-connected"):s.connecting?(a="Connecting...",c="status-connecting"):r.connected?(a="Standby (WiFi OK)",c="status-standby"):(a="Waiting for modem...",c="status-waiting")),html`
+    `}function WWANPanel(n,i){if(n.isConnected&&!n.wwanConfigLoaded&&!n.isLoadingWwanConfig&&i("load-wwan-config"),n.isConnected&&!n.modemStatusLoaded&&!n.isLoadingModemStatus&&i("load-modem-status"),n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config"),n.networkInterfacesConfig?.wwan===!1)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>WWAN/Mobile Data</h2>
+        </div>
+        <div class="panel-section">
+          <div class="section-header">
+            <h3 class="panel-section-title">Interface Status</h3>
+            <div class="status-badge status-disabled">Disabled</div>
+          </div>
+          <div class="panel-message" style="margin: 16px 0;">
+            <p>WWAN interface is disabled in system settings.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9em; margin-top: 8px;">
+              To enable, go to System → Settings → Network Interfaces.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;const r=n.wwanConfig||{},s=n.modemStatus||{},a=s.ppp||{};let c="Disabled",l="status-disabled";return r.mobile_data_enabled&&(a.connected?(c="Connected",l="status-connected"):a.connecting?(c="Connecting...",l="status-connecting"):s.connected?(c="Standby (WiFi OK)",l="status-standby"):(c="Waiting for modem...",l="status-waiting")),html`
     <div class="panel-container">
       <div class="panel-header">
         <h2>WWAN/Mobile Data</h2>
@@ -3194,11 +3020,11 @@ print(json.dumps({"ok": True}))
         
         <div class="mobile-data-control">
           <div class="toggle-row">
-            <label class="toggle-switch ${s.connected?"ppp-active":s.connecting?"ppp-connecting":""}">
+            <label class="toggle-switch ${a.connected?"ppp-active":a.connecting?"ppp-connecting":""}">
               <input 
                 type="checkbox" 
-                ${o.mobile_data_enabled?"checked":""}
-                onchange=${l=>{l.target.checked?i("enable-mobile-data"):i("disable-mobile-data")}}
+                ${r.mobile_data_enabled?"checked":""}
+                onchange=${d=>{d.target.checked?i("enable-mobile-data"):i("disable-mobile-data")}}
                 disabled=${!n.isConnected}
               />
               <span class="toggle-slider"></span>
@@ -3208,13 +3034,13 @@ print(json.dumps({"ok": True}))
           
           <div class="status-row">
             <span class="status-label">Status:</span>
-            <span class="status-value ${c}">${a}</span>
+            <span class="status-value ${l}">${c}</span>
           </div>
           
-          ${s.connected&&s.ip?html`
+          ${a.connected&&a.ip?html`
             <div class="ip-row">
               <span class="ip-label">IP Address:</span>
-              <span class="ip-value">${s.ip}</span>
+              <span class="ip-value">${a.ip}</span>
             </div>
           `:""}
           
@@ -3230,7 +3056,7 @@ print(json.dumps({"ok": True}))
           <h3 class="panel-section-title">GPRS Settings</h3>
         </div>
         
-        <form class="config-form" onsubmit=${l=>{l.preventDefault();const d=new FormData(l.target),u={apn:d.get("apn")||"",username:d.get("username")||"",password:d.get("password")||"",auto_init_modem:d.get("auto_init_modem")==="on",mobile_data_enabled:o.mobile_data_enabled||!1};i("save-wwan-config",u)}}>
+        <form class="config-form" onsubmit=${d=>{d.preventDefault();const u=new FormData(d.target),p={apn:u.get("apn")||"",username:u.get("username")||"",password:u.get("password")||"",auto_init_modem:u.get("auto_init_modem")==="on",mobile_data_enabled:r.mobile_data_enabled||!1};i("save-wwan-config",p)}}>
           <div class="form-group">
             <label for="wwan-apn">
               GPRS APN
@@ -3247,7 +3073,7 @@ print(json.dumps({"ok": True}))
               type="text" 
               id="wwan-apn" 
               name="apn" 
-              value=${o.apn||""}
+              value=${r.apn||""}
               placeholder="e.g., internet"
             />
           </div>
@@ -3268,7 +3094,7 @@ print(json.dumps({"ok": True}))
               type="text" 
               id="wwan-username" 
               name="username" 
-              value=${o.username||""}
+              value=${r.username||""}
               placeholder="Optional"
             />
           </div>
@@ -3289,7 +3115,7 @@ print(json.dumps({"ok": True}))
               type="password" 
               id="wwan-password" 
               name="password" 
-              value=${o.password||""}
+              value=${r.password||""}
               placeholder="Optional"
             />
           </div>
@@ -3299,7 +3125,7 @@ print(json.dumps({"ok": True}))
               <input 
                 type="checkbox" 
                 name="auto_init_modem" 
-                ${o.auto_init_modem!==!1?"checked":""}
+                ${r.auto_init_modem!==!1?"checked":""}
               />
               <span>
                 Auto-initialize USB Modem on Boot
@@ -3644,7 +3470,7 @@ print(json.dumps({"ok": True}))
         </div>
       `}
     </div>
-  `}function NTPPanel(n,i){n.isConnected&&!n.ntpConfigLoaded&&!n.isLoadingNtpConfig&&i("load-ntp-config");const o=n.ntpConfig||{server:"pool.ntp.org",timezone:"UTC",autoDetect:!1,autoSync:!1},r=n.ntpSyncResult||null,s=l=>{if(!l)return"--:--:--";const{year:d,month:u,day:p,hour:g,minute:f,second:h}=l;return`${String(g).padStart(2,"0")}:${String(f).padStart(2,"0")}:${String(h).padStart(2,"0")}`},a=l=>{if(!l)return"";const{year:d,month:u,day:p}=l;return`${d}-${String(u).padStart(2,"0")}-${String(p).padStart(2,"0")}`},c=[{value:"UTC",offset:0,label:"UTC (Coordinated Universal Time)"},{value:"EST",offset:-5,label:"EST (Eastern Standard Time)"},{value:"CST",offset:-6,label:"CST (Central Standard Time)"},{value:"MST",offset:-7,label:"MST (Mountain Standard Time)"},{value:"PST",offset:-8,label:"PST (Pacific Standard Time)"},{value:"GMT",offset:0,label:"GMT (Greenwich Mean Time)"},{value:"CET",offset:1,label:"CET (Central European Time)"},{value:"EET",offset:2,label:"EET (Eastern European Time)"},{value:"JST",offset:9,label:"JST (Japan Standard Time)"},{value:"AEST",offset:10,label:"AEST (Australian Eastern Standard Time)"}];return html`
+  `}function NTPPanel(n,i){n.isConnected&&!n.ntpConfigLoaded&&!n.isLoadingNtpConfig&&i("load-ntp-config");const o=n.ntpConfig||{server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1,autoSync:!1},r=n.ntpSyncResult||null,s=u=>{if(!u)return"--:--:--";const{year:p,month:g,day:f,hour:h,minute:m,second:v}=u;return`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(v).padStart(2,"0")}`},a=u=>{if(!u)return"";const{year:p,month:g,day:f}=u;return`${p}-${String(g).padStart(2,"0")}-${String(f).padStart(2,"0")}`},c=[{value:"UTC",offset:0,label:"UTC (Coordinated Universal Time)"},{value:"EST",offset:-5,label:"EST (Eastern Standard Time)"},{value:"CST",offset:-6,label:"CST (Central Standard Time)"},{value:"MST",offset:-7,label:"MST (Mountain Standard Time)"},{value:"PST",offset:-8,label:"PST (Pacific Standard Time)"},{value:"GMT",offset:0,label:"GMT (Greenwich Mean Time)"},{value:"CET",offset:1,label:"CET (Central European Time)"},{value:"EET",offset:2,label:"EET (Eastern European Time)"},{value:"JST",offset:9,label:"JST (Japan Standard Time)"},{value:"AEST",offset:10,label:"AEST (Australian Eastern Standard Time)"}],l=o.timezone,d=[...c];return l&&!c.find(u=>u.value===l)&&d.unshift({value:l,offset:o.tzOffset||0,label:`${l} (Detected)`}),html`
     <div class="panel-container">
       <div class="panel-header">
         <h2>NTP Time Synchronization</h2>
@@ -3657,15 +3483,15 @@ print(json.dumps({"ok": True}))
         
         <div class="info-grid">
           <div class="info-item">
-            <span class="info-label">UTC Time:</span>
-            <span class="info-value">
-              ${r&&r.utc?`${a(r.utc)} ${s(r.utc)}`:"--:--:--"}
-            </span>
-          </div>
-          <div class="info-item">
             <span class="info-label">Local Time:</span>
             <span class="info-value">
               ${r&&r.local?`${a(r.local)} ${s(r.local)}`:"--:--:--"}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">UTC Time:</span>
+            <span class="info-value">
+              ${r&&r.utc?`${a(r.utc)} ${s(r.utc)}`:"--:--:--"}
             </span>
           </div>
         </div>
@@ -3681,7 +3507,7 @@ print(json.dumps({"ok": True}))
           <h3 class="panel-section-title">NTP Configuration</h3>
         </div>
         
-        <form class="config-form" onsubmit=${async l=>{l.preventDefault();const d=new FormData(l.target),u=d.get("server")||"pool.ntp.org",p=d.get("timezone")||"UTC",g=d.get("auto_detect")==="on",f=d.get("auto_sync")==="on",h=c.find(y=>y.value===p),m=h?h.offset:0,v={server:u,tz_offset:m,timezone:p,auto_detect:g,auto_sync:f};try{await new Promise((y,b)=>{const C=setTimeout(()=>b(new Error("Save timeout")),1e4),S=()=>{clearTimeout(C),window.appInstance.emitter.removeListener("ntp-config-saved",$),window.appInstance.emitter.removeListener("ntp-config-save-error",w)},$=()=>{S(),y()},w=k=>{S(),b(k)};window.appInstance.emitter.once("ntp-config-saved",$),window.appInstance.emitter.once("ntp-config-save-error",w),i("save-ntp-config",v)}),i("sync-ntp-time",u,m,g,f)}catch(y){console.error("[NTP] Failed to save config before sync:",y),alert(`Failed to save NTP configuration: ${y.message}`)}}}>
+        <form class="config-form" onsubmit=${async u=>{u.preventDefault();const p=new FormData(u.target),g=p.get("server")||"pool.ntp.org",f=p.get("timezone")||"UTC",h=p.get("auto_detect")==="on",m=p.get("auto_sync")==="on",v=d.find(S=>S.value===f),y=v?v.offset:0,b={server:g,tz_offset:y,timezone:f,auto_detect:h,auto_sync:m};try{await new Promise((S,C)=>{const k=setTimeout(()=>C(new Error("Save timeout")),1e4),w=()=>{clearTimeout(k),window.appInstance.emitter.removeListener("ntp-config-saved",_),window.appInstance.emitter.removeListener("ntp-config-save-error",x)},_=()=>{w(),S()},x=P=>{w(),C(P)};window.appInstance.emitter.once("ntp-config-saved",_),window.appInstance.emitter.once("ntp-config-save-error",x),i("save-ntp-config",b)}),i("sync-ntp-time",g,y,h,m)}catch(S){console.error("[NTP] Failed to save config before sync:",S),alert(`Failed to save NTP configuration: ${S.message}`)}}}>
           <div class="form-group">
             <label for="ntp-server">
               NTP Server
@@ -3716,9 +3542,9 @@ print(json.dumps({"ok": True}))
               </span>
             </label>
             <select id="ntp-timezone" name="timezone">
-              ${c.map(l=>html`
-                <option value=${l.value} ${o.timezone===l.value?"selected":""}>
-                  ${l.label}
+              ${d.map(u=>html`
+                <option value=${u.value} ${o.timezone===u.value?"selected":""}>
+                  ${u.label}
                 </option>
               `)}
             </select>
@@ -3768,7 +3594,7 @@ print(json.dumps({"ok": True}))
           
           <div class="config-actions">
             <button type="submit" class="primary-button" disabled=${!n.isConnected}>
-              Synchronize Time
+              Save
             </button>
           </div>
         </form>
@@ -4331,116 +4157,79 @@ print(json.dumps({"ok": True}))
       
       ${BoardSDCardHardwareSection(r)}
       
-      <div class="panel-section">
-        <div class="section-header">
-          <h3 class="panel-section-title">SD Card Settings</h3>
-        </div>
-        
-        <form class="config-form" onsubmit=${async a=>{a.preventDefault();const c=new FormData(a.target),l={mountPoint:c.get("mount_point")||"/sd",autoMount:c.get("auto_mount")==="on"};i("save-sdcard-config",l)}}>
-          <div class="form-group">
-            <label for="sdcard-mount-point">
-              Mount Point <span class="required">*</span>
-              <span class="label-tooltip">
-                ${IconSprite.renderIcon("info-circle",{className:"label-tooltip-icon",size:16})}
-                <span class="tooltip">Filesystem mount point path (e.g., /sd)</span>
-              </span>
-            </label>
-            <input 
-              type="text" 
-              id="sdcard-mount-point"
-              name="mount_point" 
-              value=${s.mountPoint||"/sd"}
-              required
-              pattern="^/[a-zA-Z0-9_\-/]*$"
-              placeholder="/sd"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input 
-                type="checkbox" 
-                name="auto_mount" 
-                ${s.autoMount?"checked":""}
-              />
-              <span>
-                Auto-mount on boot
-                <span class="label-tooltip">
-                  <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="16" x2="12" y2="12"/>
-                    <line x1="12" y1="8" x2="12.01" y2="8"/>
-                  </svg>
-                  <span class="tooltip">Automatically mount SD card when device boots</span>
-                </span>
-              </span>
-            </label>
-          </div>
-          
-          <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px;">
-            <button type="submit" class="scriptos-update-btn">
-              Save Settings
-            </button>
-          </div>
-        </form>
-      </div>
-      
-      ${n.sdcardInfo?html`
-        <div class="panel-section">
-          <div class="section-header">
+      <div class="sdcard-layout">
+        ${n.sdcardInfo?html`
+          <div class="panel-section">
             <h3 class="panel-section-title">
               ${n.sdcardInfo.error?"SD Card Status":"Storage Information"}
             </h3>
+            ${n.sdcardInfo.error?html`
+              <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1; border-left: 3px solid #dc3545;">
+                  <span class="info-label">Not Mounted</span>
+                  <span class="info-value">${n.sdcardInfo.error}</span>
+                </div>
+              </div>
+            `:html`
+              <div class="info-grid">
+                ${n.sdcardInfo.cardCapacity?html`
+                  <div class="info-item">
+                    <span class="info-label">Card Capacity</span>
+                    <span class="info-value">${formatBytes(n.sdcardInfo.cardCapacity)}</span>
+                  </div>
+                `:""}
+                <div class="info-item">
+                  <span class="info-label">Partition</span>
+                  <span class="info-value">${formatBytes(n.sdcardInfo.totalSize)}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Free</span>
+                  <span class="info-value">${formatBytes(n.sdcardInfo.freeSize)}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Used</span>
+                  <span class="info-value">${formatBytes(n.sdcardInfo.usedSize)}</span>
+                </div>
+              </div>
+            `}
           </div>
-          
-          ${n.sdcardInfo.error?html`
-            <div style="padding: 16px; background: var(--bg-error); border-radius: 4px; border: 1px solid #dc3545; color: var(--text-error);">
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                ${IconSprite.renderIcon("alert-circle",{size:20})}
-                <strong>Not Mounted</strong>
-              </div>
-              <div style="font-size: 14px;">${n.sdcardInfo.error}</div>
-              <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(220, 53, 69, 0.3); font-size: 13px;">
-                Click the <strong>Mount</strong> button above to mount the SD card.
-              </div>
-            </div>
-          `:html`
-            <div style="padding: 16px; background: var(--bg-secondary); border-radius: 4px; border: 1px solid var(--border-color);">
-              ${n.sdcardInfo.totalSize!==void 0?html`
-                <div style="margin-bottom: 8px;">
-                  <span style="color: var(--text-secondary);">Total Size: </span>
-                  <span style="color: var(--text-primary); font-weight: 600;">${formatBytes(n.sdcardInfo.totalSize)}</span>
-                </div>
-              `:""}
-              ${n.sdcardInfo.freeSize!==void 0?html`
-                <div style="margin-bottom: 8px;">
-                  <span style="color: var(--text-secondary);">Free Space: </span>
-                  <span style="color: var(--text-primary); font-weight: 600;">${formatBytes(n.sdcardInfo.freeSize)}</span>
-                </div>
-              `:""}
-              ${n.sdcardInfo.usedSize!==void 0?html`
-                <div style="margin-bottom: 8px;">
-                  <span style="color: var(--text-secondary);">Used Space: </span>
-                  <span style="color: var(--text-primary); font-weight: 600;">${formatBytes(n.sdcardInfo.usedSize)}</span>
-                </div>
-              `:""}
-              ${n.sdcardInfo.mountPoint?html`
-                <div>
-                  <span style="color: var(--text-secondary);">Mount Point: </span>
-                  <span style="color: var(--text-primary); font-weight: 600;">${n.sdcardInfo.mountPoint}</span>
-                </div>
-              `:""}
-            </div>
-          `}
-        </div>
-      `:n.isLoadingSdcardInfo?html`
+        `:n.isLoadingSdcardInfo?html`
+          <div class="panel-section">
+            <div class="panel-loading">Loading storage information...</div>
+          </div>
+        `:""}
+        
         <div class="panel-section">
-          <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
-            ${IconSprite.renderIcon("loader",{size:24,className:"spinner"})}
-            <div style="margin-top: 8px;">Loading storage information...</div>
-          </div>
+          <h3 class="panel-section-title">SD Card Settings</h3>
+          <form class="config-form" onsubmit=${async a=>{a.preventDefault();const c=new FormData(a.target);i("save-sdcard-config",{mountPoint:c.get("mount_point")||"/sd",autoMount:c.get("auto_mount")==="on"})}}>
+            <div class="form-group">
+              <label for="sdcard-mount-point">
+                Mount Point <span class="required">*</span>
+                <span class="label-tooltip">
+                  ${IconSprite.renderIcon("info-circle",{className:"label-tooltip-icon",size:16})}
+                  <span class="tooltip">Filesystem mount point path (e.g., /sd)</span>
+                </span>
+              </label>
+              <input type="text" id="sdcard-mount-point" name="mount_point" 
+                value=${s.mountPoint||"/sd"} required placeholder="/sd" />
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="auto_mount" ${s.autoMount?"checked":""} />
+                <span>Auto-mount on boot
+                  <span class="label-tooltip">
+                    ${IconSprite.renderIcon("info-circle",{className:"label-tooltip-icon",size:16})}
+                    <span class="tooltip">Automatically mount SD card when device boots</span>
+                  </span>
+                </span>
+              </label>
+            </div>
+            <div class="config-actions">
+              <button type="submit" class="scriptos-update-btn">Save Settings</button>
+            </div>
+          </form>
         </div>
-      `:""}
+      </div>
     </div>
   `:html`
       <div class="panel-container">
@@ -4471,7 +4260,7 @@ print(json.dumps({"ok": True}))
           </div>
         </div>
       </div>
-    `}function BoardSDCardHardwareSection(n){if(!n)return"";const i=n.pins||{},o=n.power_control||{},r=n.mode||"SD";let s=1;i.d3!==void 0?s=4:i.d0!==void 0?s=1:r==="SD"&&(s=4);const a=r==="SD"?"SDMMC":r;return html`
+    `}function BoardSDCardHardwareSection(n){if(!n)return"";const i=n.pins||{},o=n.power_control||{},r=n.mode||"SD";let s=n.bus_width||1;n.bus_width||(i.d3!==void 0?s=4:i.d0!==void 0?s=1:r==="SD"&&(s=4));const a=r==="SD"?"SDMMC":r;return html`
     <div class="panel-section">
       <div class="section-header">
         <h3 class="panel-section-title">Board Hardware Configuration</h3>
@@ -5408,7 +5197,7 @@ print('KEY_OK')
     ${ResetDialog(n,i)}
     ${ExtensionsModal(n,i)}
     ${BreakpointModal(n,i)}
-  `}function SystemSidebar(n,i){const o=window.i18n?window.i18n.t:w=>w,r=[{id:"sysinfo",label:o("sidebar.about"),icon:"info-circle"}],s=[{id:"editor",label:o("sidebar.editor"),icon:"code"},{id:"file-manager",label:o("sidebar.files"),icon:"folder"}],a=[{id:"settings",label:o("sidebar.settings"),icon:"adjustments-alt"},{id:"ai-agent",label:o("sidebar.aiAgent"),icon:"robot-face"},{id:"firmware",label:o("sidebar.firmware"),icon:"file-download"}],c=[{id:"wifi",label:o("sidebar.wifi"),icon:"wifi"},{id:"ethernet",label:o("sidebar.ethernet"),icon:"cloud-network"},{id:"vpn",label:o("sidebar.vpn"),icon:"shield-chevron"},{id:"btle",label:o("sidebar.btle"),icon:"bluetooth"},{id:"wwan",label:o("sidebar.wwan"),icon:"cell"},{id:"mqtt",label:o("sidebar.mqtt"),icon:"message-2"},{id:"ntp",label:o("sidebar.ntp"),icon:"clock-cog"},{id:"can",label:o("sidebar.can"),icon:"car-crash"}],l=[{id:"gps",label:o("sidebar.gps"),icon:"gps"},{id:"4g-modem",label:o("sidebar.modem"),icon:"signal-4g"},{id:"sdcard",label:o("sidebar.sdcard"),icon:"device-sd-card"}],d=r.map(w=>renderSidebarItem(w,n,i)),u=s.map(w=>renderSidebarItem(w,n,i)),p=n.expandedSystem!==!1,g=html$1`
+  `}function SystemSidebar(n,i){const o=window.i18n?window.i18n.t:w=>w,r=[{id:"home",label:o("sidebar.home"),icon:"home"}],s=[{id:"editor",label:o("sidebar.editor"),icon:"code"},{id:"file-manager",label:o("sidebar.files"),icon:"folder"}],a=[{id:"about",label:o("sidebar.about"),icon:"info-circle"},{id:"settings",label:o("sidebar.settings"),icon:"adjustments-alt"},{id:"ai-agent",label:o("sidebar.aiAgent"),icon:"robot-face"},{id:"firmware",label:o("sidebar.firmware"),icon:"file-download"}],c=[{id:"wifi",label:o("sidebar.wifi"),icon:"wifi"},{id:"ethernet",label:o("sidebar.ethernet"),icon:"cloud-network"},{id:"vpn",label:o("sidebar.vpn"),icon:"shield-chevron"},{id:"btle",label:o("sidebar.btle"),icon:"bluetooth"},{id:"wwan",label:o("sidebar.wwan"),icon:"cell"},{id:"mqtt",label:o("sidebar.mqtt"),icon:"message-2"},{id:"ntp",label:o("sidebar.ntp"),icon:"clock-cog"},{id:"can",label:o("sidebar.can"),icon:"car-crash"}],l=[{id:"gps",label:o("sidebar.gps"),icon:"gps"},{id:"4g-modem",label:o("sidebar.modem"),icon:"signal-4g"},{id:"sdcard",label:o("sidebar.sdcard"),icon:"device-sd-card"}],d=r.map(w=>renderSidebarItem(w,n,i)),u=s.map(w=>renderSidebarItem(w,n,i)),p=n.expandedSystem!==!1,g=html$1`
     <div class="system-sidebar-extension">
       <div 
         class="system-sidebar-item system-sidebar-toggle"
@@ -5421,9 +5210,9 @@ print('KEY_OK')
       
       ${p?html$1`
         <div class="system-sidebar-submenu">
-          ${a.map(w=>{const k=n.activeSystemPanel===w.id;return html$1`
+          ${a.map(w=>{const _=n.activeSystemPanel===w.id;return html$1`
               <div 
-                class="system-sidebar-subitem ${k?"active":""}"
+                class="system-sidebar-subitem ${_?"active":""}"
                 onclick=${()=>i("change-system-panel",w.id)}
               >
                 ${IconSprite.renderIcon(w.icon,{className:"",size:16})}
@@ -5446,9 +5235,9 @@ print('KEY_OK')
       
       ${f?html$1`
         <div class="system-sidebar-submenu">
-          ${c.map(w=>{const k=n.activeNetworkPanel===w.id;return html$1`
+          ${c.map(w=>{const _=n.activeNetworkPanel===w.id;return html$1`
               <div 
-                class="system-sidebar-subitem ${k?"active":""}"
+                class="system-sidebar-subitem ${_?"active":""}"
                 onclick=${()=>i("change-network-panel",w.id)}
               >
                 ${IconSprite.renderIcon(w.icon,{className:"",size:16})}
@@ -5471,9 +5260,9 @@ print('KEY_OK')
       
       ${m?html$1`
         <div class="system-sidebar-submenu">
-          ${l.map(w=>{const k=n.activePeripheralsPanel===w.id;return html$1`
+          ${l.map(w=>{const _=n.activePeripheralsPanel===w.id;return html$1`
               <div 
-                class="system-sidebar-subitem ${k?"active":""}"
+                class="system-sidebar-subitem ${_?"active":""}"
                 onclick=${()=>i("change-peripherals-panel",w.id)}
               >
                 ${IconSprite.renderIcon(w.icon,{className:"",size:16})}
@@ -5483,7 +5272,7 @@ print('KEY_OK')
         </div>
       `:""}
     </div>
-  `,y=w=>{if(w.iconSvg)try{const T=new DOMParser().parseFromString(w.iconSvg,"image/svg+xml").querySelector("svg");if(T){const E=T.getAttribute("viewBox")||"0 0 24 24",_=Array.from(T.querySelectorAll("path"));return html$1`
+  `,y=w=>{if(w.iconSvg)try{const T=new DOMParser().parseFromString(w.iconSvg,"image/svg+xml").querySelector("svg");if(T){const E=T.getAttribute("viewBox")||"0 0 24 24",$=Array.from(T.querySelectorAll("path"));return html$1`
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               class="icon icon-extension icon-tabler" 
@@ -5497,16 +5286,16 @@ print('KEY_OK')
               stroke-linejoin="round"
               style="vertical-align: middle; border: none !important; outline: none !important; box-shadow: none !important; display: block;"
             >
-              ${_.map(I=>{const N=I.getAttribute("d")||"",F=I.getAttribute("fill")||"none",O=I.getAttribute("stroke");return N==="M0 0h24v24H0z"||O==="none"?html$1`<path d="${N}" stroke="none" fill="none" />`:html$1`<path d="${N}" stroke="currentColor" fill="${F}" />`})}
+              ${$.map(I=>{const N=I.getAttribute("d")||"",O=I.getAttribute("fill")||"none",F=I.getAttribute("stroke");return N==="M0 0h24v24H0z"||F==="none"?html$1`<path d="${N}" stroke="none" fill="none" />`:html$1`<path d="${N}" stroke="currentColor" fill="${O}" />`})}
             </svg>
-          `}}catch(x){console.warn("[System] Failed to parse extension icon SVG:",x)}const k=w.icon||"settings";return IconSprite.renderIcon(k,{className:"",size:20})},b=(n.installedExtensions||[]).map(w=>{const k=n.expandedExtensions[w.id],x=n.activeExtension===w.id,P=w.devices===!0;let T=null;if(P&&k)if(!n.loadedExtensions[w.id])console.warn("[System] Extension not loaded:",w.id);else{const E=n.loadedExtensions[w.id];if(!E.instance)try{const _=E.data.content,N=new Function("DeviceAPI","html","emit","state",`
-              ${_}
-              const classMatch = ${JSON.stringify(_)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
+          `}}catch(x){console.warn("[System] Failed to parse extension icon SVG:",x)}const _=w.icon||"settings";return IconSprite.renderIcon(_,{className:"",size:20})},b=(n.installedExtensions||[]).map(w=>{const _=n.expandedExtensions[w.id],x=n.activeExtension===w.id,P=w.devices===!0;let T=null;if(P&&_)if(!n.loadedExtensions[w.id])console.warn("[System] Extension not loaded:",w.id);else{const E=n.loadedExtensions[w.id];if(!E.instance)try{const $=E.data.content,N=new Function("DeviceAPI","html","emit","state",`
+              ${$}
+              const classMatch = ${JSON.stringify($)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
               if (!classMatch) {
                 throw new Error('No extension class found');
               }
               return eval(classMatch[1]);
-            `)(DeviceAPI,html$1,i,n),F=new DeviceAPI(BridgeDevice),O=new N(F,i,n,html$1);n.loadedExtensions[w.id].instance=O}catch(_){console.error(`[System] Error instantiating extension ${w.id}:`,_)}if(E.instance&&typeof E.instance.getMenuItems=="function")try{const _=E.instance.getMenuItems();_&&Array.isArray(_)&&(w.menu=_)}catch(_){console.error(`[System] Error getting menu items for ${w.id}:`,_)}if(E.instance&&typeof E.instance.renderSidebarDevices=="function")try{T=E.instance.renderSidebarDevices()}catch(_){console.error(`[System] Error rendering sidebar devices for ${w.id}:`,_)}else console.warn(`[System] renderSidebarDevices not available for ${w.id}`)}if(k&&n.loadedExtensions[w.id]?.instance){const E=n.loadedExtensions[w.id];if(E.instance&&typeof E.instance.getMenuItems=="function")try{const _=E.instance.getMenuItems();_&&Array.isArray(_)&&(w.menu=_)}catch(_){console.error(`[System] Error getting menu items for ${w.id}:`,_)}}return html$1`
+            `)(DeviceAPI,html$1,i,n),O=new DeviceAPI(BridgeDevice),F=new N(O,i,n,html$1);n.loadedExtensions[w.id].instance=F}catch($){console.error(`[System] Error instantiating extension ${w.id}:`,$)}if(E.instance&&typeof E.instance.getMenuItems=="function")try{const $=E.instance.getMenuItems();$&&Array.isArray($)&&(w.menu=$)}catch($){console.error(`[System] Error getting menu items for ${w.id}:`,$)}if(E.instance&&typeof E.instance.renderSidebarDevices=="function")try{T=E.instance.renderSidebarDevices()}catch($){console.error(`[System] Error rendering sidebar devices for ${w.id}:`,$)}else console.warn(`[System] renderSidebarDevices not available for ${w.id}`)}if(_&&n.loadedExtensions[w.id]?.instance){const E=n.loadedExtensions[w.id];if(E.instance&&typeof E.instance.getMenuItems=="function")try{const $=E.instance.getMenuItems();$&&Array.isArray($)&&(w.menu=$)}catch($){console.error(`[System] Error getting menu items for ${w.id}:`,$)}}return html$1`
       <div class="system-sidebar-extension">
         <div 
           class="system-sidebar-item system-sidebar-toggle ${x?"active-extension":""}"
@@ -5514,14 +5303,14 @@ print('KEY_OK')
         >
           ${y(w)}
           <span>${w.name}</span>
-          ${IconSprite.renderIcon("chevron-down",{className:`expand-icon ${k?"expanded":""}`,size:16})}
+          ${IconSprite.renderIcon("chevron-down",{className:`expand-icon ${_?"expanded":""}`,size:16})}
         </div>
         
-        ${k?html$1`
+        ${_?html$1`
           <div class="system-sidebar-submenu">
-            ${w.menu.map(E=>{const _=n.activeExtension===w.id&&n.activeExtensionPanel===E.id,I=E.disabled===!0;return html$1`
+            ${w.menu.map(E=>{const $=n.activeExtension===w.id&&n.activeExtensionPanel===E.id,I=E.disabled===!0;return html$1`
                 <div 
-                  class="system-sidebar-subitem ${_?"active":""} ${I?"disabled":""}"
+                  class="system-sidebar-subitem ${$?"active":""} ${I?"disabled":""}"
                   onclick=${I?null:()=>i("change-extension-panel",{extensionId:w.id,panelId:E.id})}
                   style=${I?"opacity: 0.6; cursor: default; font-weight: 600;":""}
                 >
@@ -5544,7 +5333,7 @@ print('KEY_OK')
           </div>
         `:""}
       </div>
-    `}),C=html$1`
+    `}),S=html$1`
     <div class="system-sidebar-extensions-header">
       <span>${o("extensions")}</span>
       <button 
@@ -5555,9 +5344,9 @@ print('KEY_OK')
         +
       </button>
     </div>
-  `,S=html$1`
+  `,C=html$1`
     <div class="system-sidebar-divider"></div>
-  `,$=html$1`
+  `,k=html$1`
     <div class="sidebar-footer">
       ${window.LanguageSelector?window.LanguageSelector(n,i):""}
     </div>
@@ -5568,10 +5357,10 @@ print('KEY_OK')
       ${h}
       ${v}
       ${g}
-      ${S}
       ${C}
+      ${S}
       ${b}
-      ${$}
+      ${k}
     </div>
   `}function renderSidebarItem(n,i,o){const r=i.systemSection===n.id,a=["editor","file-manager"].includes(n.id)?"change-view":"change-system-section";return html$1`
     <div
@@ -5581,7 +5370,7 @@ print('KEY_OK')
       ${IconSprite.renderIcon(n.icon,{className:"",size:20})}
       <span>${n.label}</span>
     </div>
-  `}function renderActivePanel(n,i){const o=n.systemSection;if(o==="editor")return EditorContent(n,i);if(o==="file-manager")return FileManagerContent(n,i);if(o==="landing")return LandingView(n,i);if(o?.startsWith("extension:"))return ExtensionContainer(n,i,html$1);if(o?.startsWith("network:"))switch(o.split(":")[1]){case"wifi":return WiFiPanel(n,i);case"ethernet":return EthernetPanel(n,i);case"vpn":return VPNPanel(n,i);case"btle":return BTLEPanel(n,i);case"wwan":return WWANPanel(n,i);case"mqtt":return MQTTPanel(n,i);case"ntp":return NTPPanel(n,i);case"can":return CANPanel(n,i);default:return WiFiPanel(n,i)}if(o?.startsWith("peripherals:"))switch(o.split(":")[1]){case"gps":return GPSPanel(n,i);case"4g-modem":return ModemPanel(n,i);case"sdcard":return SDCardPanel(n,i);default:return GPSPanel(n,i)}if(o?.startsWith("system:"))switch(o.split(":")[1]){case"settings":return AppearancePanel(n,i);case"ai-agent":return AIAgentPanel(n,i);case"firmware":return FirmwarePanel(n);default:return AppearancePanel(n,i)}return n.isConnected?SysInfoPanel(n,i):LandingView(n,i)}const cacheBuster=Date.now();window.i18nReady=Promise.all([fetch(`locales/en.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/de.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/es.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/fr.json?v=${cacheBuster}`).then(n=>n.json())]).then(([n,i,o,r])=>{if(window.i18n){window.i18n.initTranslations(n,i,o,r);const s=localStorage.getItem("locale")||"en";window.i18n.setLocale(s),console.log("[i18n] Translations loaded, locale set to:",s),window.appInstance&&window.appInstance.emitter.emit("render")}else console.warn("[i18n] window.i18n not available yet");return!0}).catch(n=>(console.error("[i18n] Failed to load translations:",n),!1));const newFileContent=`# This program was created in ScriptO Studio for MicroPython
+  `}function renderActivePanel(n,i){const o=n.systemSection;if(o==="editor")return EditorContent(n,i);if(o==="file-manager")return FileManagerContent(n,i);if(o==="landing")return LandingView(n,i);if(o?.startsWith("extension:"))return ExtensionContainer(n,i,html$1);if(o?.startsWith("network:"))switch(o.split(":")[1]){case"wifi":return WiFiPanel(n,i);case"ethernet":return EthernetPanel(n,i);case"vpn":return VPNPanel(n,i);case"btle":return BTLEPanel(n,i);case"wwan":return WWANPanel(n,i);case"mqtt":return MQTTPanel(n,i);case"ntp":return NTPPanel(n,i);case"can":return CANPanel(n,i);default:return WiFiPanel(n,i)}if(o?.startsWith("peripherals:"))switch(o.split(":")[1]){case"gps":return GPSPanel(n,i);case"4g-modem":return ModemPanel(n,i);case"sdcard":return SDCardPanel(n,i);default:return GPSPanel(n,i)}if(o?.startsWith("system:"))switch(o.split(":")[1]){case"about":return SysInfoPanel(n,i);case"settings":return AppearancePanel(n,i);case"ai-agent":return AIAgentPanel(n,i);case"firmware":return FirmwarePanel(n);default:return AppearancePanel(n,i)}return LandingView(n,i)}const cacheBuster=Date.now();window.i18nReady=Promise.all([fetch(`locales/en.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/de.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/es.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/fr.json?v=${cacheBuster}`).then(n=>n.json())]).then(([n,i,o,r])=>{if(window.i18n){window.i18n.initTranslations(n,i,o,r);const s=localStorage.getItem("locale")||"en";window.i18n.setLocale(s),console.log("[i18n] Translations loaded, locale set to:",s),window.appInstance&&window.appInstance.emitter.emit("render")}else console.warn("[i18n] window.i18n not available yet");return!0}).catch(n=>(console.error("[i18n] Failed to load translations:",n),!1));const newFileContent=`# This program was created in ScriptO Studio for MicroPython
 
 print('Hello, ')
 print('ScriptO!') # ●
@@ -5596,31 +5385,70 @@ print('ScriptO!') # ●
           <div class="transfer-progress-text">${c}%</div>
         </div>
       </div>
-    `}o?(i.classList.remove("closed"),i.classList.add("open"),i.innerHTML=r):(i.classList.remove("open"),i.classList.add("closed"))}class RegistryCache{constructor(){this.DB_NAME="scripto-studio-registry-cache",this.DB_VERSION=1,this.STORE_SCRIPTOS="scriptos",this.STORE_INDEX="index",this.INDEX_CACHE_KEY="index",this.INDEX_CACHE_EXPIRY=24*60*60*1e3}async _initDB(){return new Promise((i,o)=>{const r=indexedDB.open(this.DB_NAME,this.DB_VERSION);r.onerror=()=>o(r.error),r.onsuccess=()=>i(r.result),r.onupgradeneeded=s=>{const a=s.target.result;a.objectStoreNames.contains(this.STORE_SCRIPTOS)||a.createObjectStore(this.STORE_SCRIPTOS),a.objectStoreNames.contains(this.STORE_INDEX)||a.createObjectStore(this.STORE_INDEX)}})}async getIndex(){try{const i=await this._initDB();return new Promise((o,r)=>{const c=i.transaction([this.STORE_INDEX],"readonly").objectStore(this.STORE_INDEX).get(this.INDEX_CACHE_KEY);c.onsuccess=()=>{const l=c.result;if(l&&l.data){const d=Date.now()-l.timestamp;d<this.INDEX_CACHE_EXPIRY?(console.log("[Registry Cache] Using cached index (age:",Math.round(d/1e3/60),"minutes)"),o(l.data)):(console.log("[Registry Cache] Index cache expired"),o(null))}else o(null)},c.onerror=()=>r(c.error)})}catch(i){return console.error("[Registry Cache] Error getting index:",i),null}}async saveIndex(i){try{const o=await this._initDB();return new Promise((r,s)=>{const l=o.transaction([this.STORE_INDEX],"readwrite").objectStore(this.STORE_INDEX).put({data:i,timestamp:Date.now()},this.INDEX_CACHE_KEY);l.onsuccess=()=>{console.log("[Registry Cache] Saved index"),r()},l.onerror=()=>s(l.error)})}catch(o){console.error("[Registry Cache] Error saving index:",o)}}async getScriptO(i){try{const o=await this._initDB();return new Promise((r,s)=>{const l=o.transaction([this.STORE_SCRIPTOS],"readonly").objectStore(this.STORE_SCRIPTOS).get(i);l.onsuccess=()=>{const d=l.result;d&&d.content?(console.log("[Registry Cache] Using cached ScriptO:",i),r(d)):r(null)},l.onerror=()=>s(l.error)})}catch(o){return console.error("[Registry Cache] Error getting ScriptO:",o),null}}async saveScriptO(i,o,r){try{const s=await this._initDB();return new Promise((a,c)=>{const u=s.transaction([this.STORE_SCRIPTOS],"readwrite").objectStore(this.STORE_SCRIPTOS).put({url:i,content:o,config:r,timestamp:Date.now()},i);u.onsuccess=()=>{console.log("[Registry Cache] Saved ScriptO:",i),a()},u.onerror=()=>c(u.error)})}catch(s){console.error("[Registry Cache] Error saving ScriptO:",s)}}}async function initializeState(state,emitter,createNewTab){const disk=BridgeDisk;state.platform=navigator.platform.indexOf("Mac")>-1?"darwin":"linux",state.systemSection=null,state.diskNavigationPath="/",state.isInitializing=!0,state.commandHistory=[],state.historyIndex=-1,state.cursorPos=0,await disk.initialize(),state.diskNavigationRoot="/",console.log("[Store] Using IndexedDB virtual filesystem, root:",state.diskNavigationRoot),state.isInitializing=!1,emitter.emit("render"),state.diskFiles=[],state.boardNavigationPath="/",state.boardNavigationRoot="/",state.boardFiles=[],state.openFiles=[],state.selectedFiles=[],state.filesLoadedOnce=!1,state.newTabFileName=null,state.editingFile=null,state.creatingFile=null,state.renamingFile=null,state.currentLine="",state.bannerDisplayed=!1,state.creatingFolder=null,state.renamingTab=null,state.fileCounter=1,state.isConnectionDialogOpen=!1,state.isConnecting=!1,state.systemInfo=null,state.networksInfo=null,state.isLoadingSystemInfo=!1,state.isLoadingNetworks=!1,state.expandedNetworks=!1,state.activeNetworkPanel=null,state.expandedPeripherals=!1,state.activePeripheralsPanel=null,state.expandedSystem=!1,state.activeSystemPanel=null,state.sdcardConfig=null,state.isLoadingSdcardConfig=!1,state.sdcardConfigLoaded=!1,state.sdcardInfo=null,state.isLoadingSdcardInfo=!1,state.isMountingSDCard=!1,state.isUnmountingSDCard=!1,state.gpioConfig=null,state.isLoadingGpioConfig=!1,state.gpioConfigLoaded=!1,state.gpioSortBy="usage",state.gpioSortOrder="asc",state.gpioEditingRow=null,state.gpioEditingRowData=null,state.gpioValidationErrors=[],state.mqttConfig=null,state.isLoadingMqttConfig=!1,state.canConfig=null,state.canConfigLoaded=!1,state.isLoadingCanConfig=!1,state.mqttConfigLoaded=!1,state.ntpConfig={server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1,autoSync:!1},state.isLoadingNtpConfig=!1,state.ntpConfigLoaded=!1,state.ntpSyncResult=null,state.wwanConfig=null,state.isLoadingWwanConfig=!1,state.wwanConfigLoaded=!1,state.modemStatus=null,state.isLoadingModemStatus=!1,state.modemStatusLoaded=!1,state.gpsData=null,state.isLoadingGpsData=!1,state.gpsDataLoaded=!1,state.theme=null,state.colorScheme=null,state.effectiveTheme=null,state.locale=localStorage.getItem("locale")||"en",state.isConnected=!1,state.connectedPort=null,state.connectionMode="none",state.needsOnboarding=!1;try{const n=await disk.hasOnboardedDevices();state.needsOnboarding=!n,console.log("[State Init] Onboarding needed:",state.needsOnboarding)}catch(n){console.warn("[State Init] Could not check onboarded devices:",n),state.needsOnboarding=!0}state.statusInfo=null,state.scriptOsList=[],state.selectedScriptOs=null,state.scriptOsModalView="library",state.scriptOsArgs={},state.scriptOsSearchQuery="",state.scriptOsFilterTags=[],state.isScriptOsModalOpen=!1,state.registryUrl="https://scriptostudio.com/registry/index.json",state.isLoadingRegistry=!1,state.scriptOsUiModal={isOpen:!1,url:null,title:null,isLoading:!1,error:null},state.aiAgent={isOpen:!1,messages:[],isGenerating:!1,connectionStatus:null,openRouterModels:[],isLoadingOpenRouterModels:!1,inputValue:"",lastConfiguredArgs:null,lastScriptName:null,settings:{provider:localStorage.getItem("ai-provider")||"openai",apiKey:localStorage.getItem("ai-apikey")||null,model:localStorage.getItem("ai-model")||"gpt-4o",endpoint:localStorage.getItem("ai-endpoint")||null,systemPrompt:localStorage.getItem("ai-system-prompt")||"",anthropicProxyUrl:localStorage.getItem("ai-anthropic-proxy-url")||"http://localhost:3001/api/anthropic"}},state.debugger={active:!1,halted:!1,configOpen:!1,debugFiles:[],breakpoints:{},watchExpressions:{},conditionalBreakpoints:{},breakpointModalOpen:!1,editingBreakpoint:null,currentFile:"",currentLine:0,variables:{},locals:{},memory:0,timing:0},state.extensionRegistry=new ExtensionRegistry,state.installedExtensions=[],state.availableExtensions=[],state.loadedExtensions={},state.activeExtension=null,state.activeExtensionPanel=null,state.expandedExtensions={},state.isExtensionsModalOpen=!1,state.isLoadingExtensions=!1,state.dependencyPrompt=null,state.installingDependencies=null,state.isNewFileDialogOpen=!1,state.isSaving=!1,state.savingProgress=0,state.isTransferring=!1,state.transferringProgress="",state.isRemoving=!1,state.isLoadingFiles=!1,state.dialogs=[],state.shortcutsDisabled=!1,await createNewTab("disk"),state.savedPanelHeight=PANEL_DEFAULT$1,state.panelHeight=PANEL_CLOSED$1,state.dragStartY=0,state.dragStartHeight=0,state.logSidebarWidth=350,state.savedLogSidebarWidth=350;try{state.installedExtensions=await state.extensionRegistry.getInstalledExtensions(),console.log(`[Extension Registry] Found installed extensions: ${state.installedExtensions.length}`)}catch(n){console.error("[Extensions] Failed to load installed extensions:",n),state.installedExtensions=[]}state.cache(XTerm,"terminal"),console.log("[State Init] Terminal component cached"),typeof window<"u"&&(window.dev={state,registry:state.extensionRegistry,updateExtension:async n=>new Promise((i,o)=>{const r=document.createElement("input");r.type="file",r.accept=".js",r.onchange=async s=>{try{const a=await s.target.files[0].text(),c=await state.extensionRegistry.updateExtensionDev(n,a);console.log("✅ Extension updated! Click another panel, then back to reload."),i(c)}catch(a){o(a)}},r.click()}),installExtensionFromFile:async()=>new Promise((resolve,reject)=>{const input=document.createElement("input");input.type="file",input.accept=".js",input.onchange=async e=>{try{const content=await e.target.files[0].text(),result=await state.extensionRegistry.installExtensionFromContent(content);if(console.log(`✅ Extension "${result.config.name}" installed!`),state.installedExtensions=await state.extensionRegistry.getInstalledExtensions(),emitter.emit("render"),hasOnInstallMethod(content)&&state.isConnected){showStyledModal({variant:"",icon:"📦",title:"Installing Extension Files",subtitle:result.config.name,body:"<p>Writing files to device...</p>",buttons:[]});try{const html=(n,...i)=>n.reduce((o,r,s)=>o+r+(i[s]||""),""),deviceAPI=new DeviceAPI$1(BridgeDevice),filesMatch=content.match(/export\s+const\s+__DEVICE_FILES__\s*=\s*(\{[\s\S]*?\});/);let deviceFiles={};if(filesMatch)try{const rawFiles=eval("("+filesMatch[1]+")");for(const[n,i]of Object.entries(rawFiles))try{deviceFiles[n]=atob(i)}catch(o){console.warn(`[Dev Install] Failed to decode ${n}:`,o),deviceFiles[n]=i}}catch(n){console.warn("[Dev Install] Device files parse failed:",n)}const exportMatch=content.match(/export\s*\{\s*(\w+)\s+as\s+default\s*\}/),defaultExportVar=exportMatch?exportMatch[1]:null,evalContent=content.replace(/export\s+(const|default|class|function)/g,"$1").replace(/export\s*\{[^}]*\}\s*;?/g,""),returnLogic=defaultExportVar?`return ${defaultExportVar};`:`if (typeof P !== 'undefined') return P;
+    `}o?(i.classList.remove("closed"),i.classList.add("open"),i.innerHTML=r):(i.classList.remove("open"),i.classList.add("closed"))}class RegistryCache{constructor(){this.DB_NAME="scripto-studio-registry-cache",this.DB_VERSION=1,this.STORE_SCRIPTOS="scriptos",this.STORE_INDEX="index",this.INDEX_CACHE_KEY="index",this.INDEX_CACHE_EXPIRY=24*60*60*1e3}async _initDB(){return new Promise((i,o)=>{const r=indexedDB.open(this.DB_NAME,this.DB_VERSION);r.onerror=()=>o(r.error),r.onsuccess=()=>i(r.result),r.onupgradeneeded=s=>{const a=s.target.result;a.objectStoreNames.contains(this.STORE_SCRIPTOS)||a.createObjectStore(this.STORE_SCRIPTOS),a.objectStoreNames.contains(this.STORE_INDEX)||a.createObjectStore(this.STORE_INDEX)}})}async getIndex(){try{const i=await this._initDB();return new Promise((o,r)=>{const c=i.transaction([this.STORE_INDEX],"readonly").objectStore(this.STORE_INDEX).get(this.INDEX_CACHE_KEY);c.onsuccess=()=>{const l=c.result;if(l&&l.data){const d=Date.now()-l.timestamp;d<this.INDEX_CACHE_EXPIRY?(console.log("[Registry Cache] Using cached index (age:",Math.round(d/1e3/60),"minutes)"),o(l.data)):(console.log("[Registry Cache] Index cache expired"),o(null))}else o(null)},c.onerror=()=>r(c.error)})}catch(i){return console.error("[Registry Cache] Error getting index:",i),null}}async saveIndex(i){try{const o=await this._initDB();return new Promise((r,s)=>{const l=o.transaction([this.STORE_INDEX],"readwrite").objectStore(this.STORE_INDEX).put({data:i,timestamp:Date.now()},this.INDEX_CACHE_KEY);l.onsuccess=()=>{console.log("[Registry Cache] Saved index"),r()},l.onerror=()=>s(l.error)})}catch(o){console.error("[Registry Cache] Error saving index:",o)}}async getScriptO(i){try{const o=await this._initDB();return new Promise((r,s)=>{const l=o.transaction([this.STORE_SCRIPTOS],"readonly").objectStore(this.STORE_SCRIPTOS).get(i);l.onsuccess=()=>{const d=l.result;d&&d.content?(console.log("[Registry Cache] Using cached ScriptO:",i),r(d)):r(null)},l.onerror=()=>s(l.error)})}catch(o){return console.error("[Registry Cache] Error getting ScriptO:",o),null}}async saveScriptO(i,o,r){try{const s=await this._initDB();return new Promise((a,c)=>{const u=s.transaction([this.STORE_SCRIPTOS],"readwrite").objectStore(this.STORE_SCRIPTOS).put({url:i,content:o,config:r,timestamp:Date.now()},i);u.onsuccess=()=>{console.log("[Registry Cache] Saved ScriptO:",i),a()},u.onerror=()=>c(u.error)})}catch(s){console.error("[Registry Cache] Error saving ScriptO:",s)}}}async function initializeState(state,emitter,createNewTab){const disk=BridgeDisk;state.platform=navigator.platform.indexOf("Mac")>-1?"darwin":"linux",state.systemSection=null,state.diskNavigationPath="/",state.isInitializing=!0,state.commandHistory=[],state.historyIndex=-1,state.cursorPos=0,await disk.initialize(),state.diskNavigationRoot="/",console.log("[Store] Using IndexedDB virtual filesystem, root:",state.diskNavigationRoot),state.isInitializing=!1,emitter.emit("render"),state.diskFiles=[],state.boardNavigationPath="/",state.boardNavigationRoot="/",state.boardFiles=[],state.openFiles=[],state.selectedFiles=[],state.filesLoadedOnce=!1,state.newTabFileName=null,state.editingFile=null,state.creatingFile=null,state.renamingFile=null,state.currentLine="",state.bannerDisplayed=!1,state.creatingFolder=null,state.renamingTab=null,state.fileCounter=1,state.isConnectionDialogOpen=!1,state.isConnecting=!1,state.systemInfo=null,state.networksInfo=null,state.isLoadingSystemInfo=!1,state.isLoadingNetworks=!1,state.expandedNetworks=!1,state.activeNetworkPanel=null,state.expandedPeripherals=!1,state.activePeripheralsPanel=null,state.expandedSystem=!1,state.activeSystemPanel=null,state.sdcardConfig=null,state.isLoadingSdcardConfig=!1,state.sdcardConfigLoaded=!1,state.sdcardInfo=null,state.isLoadingSdcardInfo=!1,state.isMountingSDCard=!1,state.isUnmountingSDCard=!1,state.gpioConfig=null,state.isLoadingGpioConfig=!1,state.gpioConfigLoaded=!1,state.gpioSortBy="usage",state.gpioSortOrder="asc",state.gpioEditingRow=null,state.gpioEditingRowData=null,state.gpioValidationErrors=[],state.mqttConfig=null,state.isLoadingMqttConfig=!1,state.canConfig=null,state.canConfigLoaded=!1,state.isLoadingCanConfig=!1,state.mqttConfigLoaded=!1,state.ntpConfig={server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1,autoSync:!1},state.isLoadingNtpConfig=!1,state.ntpConfigLoaded=!1,state.ntpSyncResult=null,state.wwanConfig=null,state.isLoadingWwanConfig=!1,state.wwanConfigLoaded=!1,state.modemStatus=null,state.isLoadingModemStatus=!1,state.modemStatusLoaded=!1,state.gpsData=null,state.isLoadingGpsData=!1,state.gpsDataLoaded=!1,state.theme=null,state.colorScheme=null,state.effectiveTheme=null,state.locale=localStorage.getItem("locale")||"en",state.isConnected=!1,state.connectedPort=null,state.connectionMode="none",state.needsOnboarding=!1;try{const n=await disk.hasOnboardedDevices();state.needsOnboarding=!n,console.log("[State Init] Onboarding needed:",state.needsOnboarding)}catch(n){console.warn("[State Init] Could not check onboarded devices:",n),state.needsOnboarding=!0}state.statusInfo=null,state.scriptOsList=[],state.selectedScriptOs=null,state.scriptOsModalView="library",state.scriptOsArgs={},state.scriptOsSearchQuery="",state.scriptOsFilterTags=[],state.isScriptOsModalOpen=!1,state.registryUrl="https://scriptostudio.com/registry/index.json",state.isLoadingRegistry=!1,state.scriptOsUiModal={isOpen:!1,url:null,title:null,isLoading:!1,error:null},state.aiAgent={isOpen:!1,messages:[],isGenerating:!1,connectionStatus:null,openRouterModels:[],isLoadingOpenRouterModels:!1,inputValue:"",lastConfiguredArgs:null,lastScriptName:null,settings:{provider:localStorage.getItem("ai-provider")||"openai",apiKey:localStorage.getItem("ai-apikey")||null,model:localStorage.getItem("ai-model")||"gpt-4o",endpoint:localStorage.getItem("ai-endpoint")||null,systemPrompt:localStorage.getItem("ai-system-prompt")||"",anthropicProxyUrl:localStorage.getItem("ai-anthropic-proxy-url")||"http://localhost:3001/api/anthropic"}},state.debugger={active:!1,halted:!1,configOpen:!1,debugFiles:[],breakpoints:{},watchExpressions:{},conditionalBreakpoints:{},breakpointModalOpen:!1,editingBreakpoint:null,currentFile:"",currentLine:0,variables:{},locals:{},memory:0,timing:0},state.extensionRegistry=new ExtensionRegistry,state.installedExtensions=[],state.availableExtensions=[],state.loadedExtensions={},state.activeExtension=null,state.activeExtensionPanel=null,state.expandedExtensions={},state.isExtensionsModalOpen=!1,state.isLoadingExtensions=!1,state.dependencyPrompt=null,state.installingDependencies=null,state.isNewFileDialogOpen=!1,state.isSaving=!1,state.savingProgress=0,state.isTransferring=!1,state.transferringProgress="",state.isRemoving=!1,state.isLoadingFiles=!1,state.dialogs=[],state.shortcutsDisabled=!1,await createNewTab("disk"),state.savedPanelHeight=PANEL_DEFAULT$1,state.panelHeight=PANEL_CLOSED$1,state.dragStartY=0,state.dragStartHeight=0,state.logSidebarWidth=350,state.savedLogSidebarWidth=350;try{state.installedExtensions=await state.extensionRegistry.getInstalledExtensions(),console.log(`[Extension Registry] Found installed extensions: ${state.installedExtensions.length}`)}catch(n){console.error("[Extensions] Failed to load installed extensions:",n),state.installedExtensions=[]}state.cache(XTerm,"terminal"),console.log("[State Init] Terminal component cached"),typeof window<"u"&&(window.dev={state,registry:state.extensionRegistry,updateExtension:async n=>new Promise((i,o)=>{const r=document.createElement("input");r.type="file",r.accept=".js",r.onchange=async s=>{try{const a=await s.target.files[0].text(),c=await state.extensionRegistry.updateExtensionDev(n,a);console.log("✅ Extension updated! Click another panel, then back to reload."),i(c)}catch(a){o(a)}},r.click()}),installExtensionFromFile:async()=>new Promise((resolve,reject)=>{const input=document.createElement("input");input.type="file",input.accept=".js",input.onchange=async e=>{try{const content=await e.target.files[0].text(),result=await state.extensionRegistry.installExtensionFromContent(content);if(console.log(`✅ Extension "${result.config.name}" installed!`),state.installedExtensions=await state.extensionRegistry.getInstalledExtensions(),emitter.emit("render"),hasOnInstallMethod(content)&&state.isConnected){showStyledModal({variant:"",icon:"📦",title:"Installing Extension Files",subtitle:result.config.name,body:"<p>Writing files to device...</p>",buttons:[]});try{const html=(n,...i)=>n.reduce((o,r,s)=>o+r+(i[s]||""),""),deviceAPI=new DeviceAPI$1(BridgeDevice),filesMatch=content.match(/export\s+const\s+__DEVICE_FILES__\s*=\s*(\{[\s\S]*?\});/);let deviceFiles={};if(filesMatch)try{const rawFiles=eval("("+filesMatch[1]+")");for(const[n,i]of Object.entries(rawFiles))try{const o=atob(i),r=new Uint8Array(o.length);for(let s=0;s<o.length;s++)r[s]=o.charCodeAt(s);deviceFiles[n]=new TextDecoder("utf-8").decode(r)}catch(o){console.warn(`[Dev Install] Failed to decode ${n}:`,o),deviceFiles[n]=i}}catch(n){console.warn("[Dev Install] Device files parse failed:",n)}const exportMatch=content.match(/export\s*\{\s*(\w+)\s+as\s+default\s*\}/),defaultExportVar=exportMatch?exportMatch[1]:null,evalContent=content.replace(/export\s+(const|default|class|function)/g,"$1").replace(/export\s*\{[^}]*\}\s*;?/g,""),returnLogic=defaultExportVar?`return ${defaultExportVar};`:`if (typeof P !== 'undefined') return P;
                        const classMatch = ${JSON.stringify(evalContent)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
                        if (classMatch) return eval(classMatch[1]);
                        throw new Error('No extension class found in bundle');`,extensionFunction=new Function("DeviceAPI","html","emit","state",`
                     ${evalContent}
                     ${returnLogic}
-                  `),ExtensionClass=extensionFunction(DeviceAPI$1,html,emitter.emit.bind(emitter),state),instance=new ExtensionClass(deviceAPI,emitter.emit.bind(emitter),state,html);instance.deviceFiles=deviceFiles,console.log(`[Dev Install] Loaded with ${Object.keys(deviceFiles).length} device files`);const installResult=await instance.onInstall();if(installResult===!1)throw new Error("onInstall returned false (check console for details)");const version=Array.isArray(result.config.version)?result.config.version.join("."):"0.0.0";await updateDeviceExtensionRegistry(deviceAPI,result.id,version),closeStyledModal(),await showStyledModal({variant:"success",icon:"✅",title:"Extension Ready",subtitle:result.config.name,body:"<p>Extension files have been installed on your device.</p>",buttons:[{id:"done",class:"fw-styled-modal-btn-primary",label:"Done"}]})}catch(n){console.error("[Dev Install] onInstall failed:",n),closeStyledModal(),await showStyledModal({variant:"danger",icon:"❌",title:"Installation Failed",subtitle:result.config.name,body:`<p>Failed to install files: ${n.message}</p>`,buttons:[{id:"close",class:"fw-styled-modal-btn-cancel",label:"Close"}]})}}else hasOnInstallMethod(content)&&await showStyledModal({variant:"warning",icon:"📦",title:"Extension Saved",subtitle:result.config.name,body:"<p>Connect to your device and open the extension to install files.</p>",buttons:[{id:"ok",class:"fw-styled-modal-btn-primary",label:"OK"}]});resolve(result)}catch(n){reject(n)}},input.click()})},console.log('[State Init] Dev utilities exposed: dev.updateExtension("id"), dev.installExtensionFromFile()')),state.resizePanel=function(n){const i=parseFloat(getComputedStyle(document.body).zoom)||1,o=(n.clientY-state.dragStartY)/i;state.panelHeight=state.dragStartHeight-o,state.panelHeight<=PANEL_CLOSED$1?state.savedPanelHeight=PANEL_DEFAULT$1:state.savedPanelHeight=state.panelHeight,emitter.emit("render")},state.resizeLogSidebar=function(n){const r=document.querySelector(".repl-panel-content");if(!r)return;const s=r.getBoundingClientRect(),a=s.width,c=s.right-n.clientX,l=a-600;c>=200&&c<=l&&(state.logSidebarWidth=c,state.savedLogSidebarWidth=c,emitter.emit("render"))}}function detectSystemTheme(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches}catch(n){return console.warn("Failed to detect system theme:",n),!1}}function applyTheme(n){if(n.theme==="device"){const i=detectSystemTheme();n.effectiveTheme=i?"dark":"light"}else n.effectiveTheme=n.theme;n.effectiveTheme==="dark"?document.documentElement.setAttribute("data-theme","dark"):document.documentElement.removeAttribute("data-theme")}function applyColorScheme(n){document.documentElement.setAttribute("data-color-scheme",n.colorScheme)}let darkModeMediaQuery=null;function setupThemeListener(n,i){if(darkModeMediaQuery)try{darkModeMediaQuery.removeListener?darkModeMediaQuery.removeListener(handleSystemThemeChange):darkModeMediaQuery.removeEventListener&&darkModeMediaQuery.removeEventListener("change",handleSystemThemeChange)}catch{}darkModeMediaQuery=window.matchMedia("(prefers-color-scheme: dark)"),darkModeMediaQuery.addListener?darkModeMediaQuery.addListener(()=>handleSystemThemeChange(n,i)):darkModeMediaQuery.addEventListener&&darkModeMediaQuery.addEventListener("change",()=>handleSystemThemeChange(n,i))}function handleSystemThemeChange(n,i){n.theme==="device"&&(applyTheme(n),window.dispatchEvent(new CustomEvent("theme-changed")),i.emit("render"))}function initializeTheme(n,i){const o=localStorage.getItem("theme")||"dark",r=localStorage.getItem("colorScheme")||"green",s=localStorage.getItem("editorTheme")||"auto";n.theme=o,n.colorScheme=r,n.editorTheme=s,applyTheme(n),applyColorScheme(n),setupThemeListener(n,i)}function registerThemeHandlers(n,i){i.on("set-theme",o=>{console.log("set-theme",o),n.theme=o,localStorage.setItem("theme",n.theme),applyTheme(n),window.dispatchEvent(new CustomEvent("theme-changed")),i.emit("render")}),i.on("set-color-scheme",o=>{console.log("set-color-scheme",o),n.colorScheme=o,localStorage.setItem("colorScheme",n.colorScheme),applyColorScheme(n),i.emit("render")}),i.on("set-temperature-unit",o=>{console.log("set-temperature-unit",o),n.temperatureUnit=o,localStorage.setItem("temperatureUnit",n.temperatureUnit),n.isConnected&&n.statusInfo&&updateStatusBarDirectly(n.statusInfo,o||"degC"),i.emit("render")}),i.on("set-editor-theme",o=>{console.log("set-editor-theme",o),n.editorTheme=o,localStorage.setItem("editorTheme",n.editorTheme),window.dispatchEvent(new CustomEvent("editor-theme-changed",{detail:{theme:o}})),i.emit("render")})}function dismissOpenDialogs(n,i,o=null){o&&o.key!="Escape"||(window._dismissDialogsKeyHandler&&(document.removeEventListener("keydown",window._dismissDialogsKeyHandler),window._dismissDialogsKeyHandler=null),n.isConnectionDialogOpen=!1,n.isNewFileDialogOpen=!1,n.scriptOsUiModal&&n.scriptOsUiModal.isOpen&&i.emit("close-scriptos-ui-modal"),i.emit("render"))}function updateDialogDOM(n,i){const o=document.getElementById(n);return o?(i?(o.classList.remove("closed"),o.classList.add("open")):(o.classList.remove("open"),o.classList.add("closed")),!0):!1}function registerDialogHandlers(n,i,o){i.on("open-connection-dialog",async()=>{dismissOpenDialogs(n,i),await o.disconnect(),n.isConnectionDialogOpen=!0,updateDialogDOM("dialog-connection",!0)||i.emit("render");const r=s=>dismissOpenDialogs(n,i,s);document.addEventListener("keydown",r),window._dismissDialogsKeyHandler=r}),i.on("close-connection-dialog",()=>{n.isConnectionDialogOpen=!1,dismissOpenDialogs(n,i),updateDialogDOM("dialog-connection",!1)}),i.on("create-new-file",()=>{console.log("create-new-file"),dismissOpenDialogs(n,i),n.isNewFileDialogOpen=!0,updateDialogDOM("dialog-new-file",!0)||i.emit("render");const r=s=>dismissOpenDialogs(n,i,s);document.addEventListener("keydown",r),window._dismissDialogsKeyHandler=r}),i.on("close-new-file-dialog",()=>{n.isNewFileDialogOpen=!1,dismissOpenDialogs(n,i),updateDialogDOM("dialog-new-file",!1)})}function registerTerminalHandlers(n,i,o,r){let s=!1;function a(){s=!0,setTimeout(()=>{s=!1},500)}function c(p=!1){s||(i.emit("run",p),a())}function l(){canExecute({isConnected:n.isConnected})&&c()}function d(){canExecute({isConnected:n.isConnected})&&c(!0)}function u(){canExecute({isConnected:n.isConnected})&&i.emit("stop")}return i.on("run-from-button",(p=!1)=>{p?d():l()}),i.on("run",async(p=!1)=>{const g=n.openFiles.find(v=>v.id==n.editingFile);if(!g||!g.editor){console.warn("[run] No active file to execute");return}let f=g.editor.content||"";if(p&&g.editor.view){const v=g.editor.view.state,y=v.selection;if(y.ranges.some(C=>C.from!==C.to)){const C=y.ranges.filter(S=>S.from!==S.to).map(S=>v.sliceDoc(S.from,S.to)).join(`
-`);C.trim().length>0&&(f=C)}}let h=!1;if(!p&&f.startsWith("# SCRIPTOS_SILENT: True")&&(h=!0,console.log("[ScriptO] Detected silent mode marker")),!p&&f.includes("# === START_CONFIG_PARAMETERS ==="))try{console.log("[ScriptO] Detected ScriptO file, parsing...");const v=parseScriptOsConfig(f);if(v){h=v.silent===!0,console.log("[ScriptO] Config parsed:",v,"silent:",h);const y={};if(v.args)for(const C in v.args){const S=v.args[C];S.value!==void 0&&(y[C]=S.value)}console.log("[ScriptO] Using default values:",y);const b=generateScriptOsCode(f,v,y);console.log("[ScriptO] Generated code length:",b.length,"original:",f.length),f=b,console.log("[ScriptO] Parsed and generated clean code successfully")}else console.log("[ScriptO] Config parsing returned null")}catch(v){console.error("[ScriptO] Error parsing config:",v)}i.emit("open-panel");let m=document.querySelector(".xterm-helper-textarea");m&&m.focus(),i.emit("render");try{bindTerminalOutput(n);let v=n.cache(r,"terminal").term;v.write(`\r
+                  `),ExtensionClass=extensionFunction(DeviceAPI$1,html,emitter.emit.bind(emitter),state),instance=new ExtensionClass(deviceAPI,emitter.emit.bind(emitter),state,html);instance.deviceFiles=deviceFiles,console.log(`[Dev Install] Loaded with ${Object.keys(deviceFiles).length} device files`);const installResult=await instance.onInstall();if(installResult===!1)throw new Error("onInstall returned false (check console for details)");const version=Array.isArray(result.config.version)?result.config.version.join("."):"0.0.0";await updateDeviceExtensionRegistry(deviceAPI,result.id,version),closeStyledModal(),await showStyledModal({variant:"success",icon:"✅",title:"Extension Ready",subtitle:result.config.name,body:"<p>Extension files have been installed on your device.</p>",buttons:[{id:"done",class:"fw-styled-modal-btn-primary",label:"Done"}]})}catch(n){console.error("[Dev Install] onInstall failed:",n),closeStyledModal(),await showStyledModal({variant:"danger",icon:"❌",title:"Installation Failed",subtitle:result.config.name,body:`<p>Failed to install files: ${n.message}</p>`,buttons:[{id:"close",class:"fw-styled-modal-btn-cancel",label:"Close"}]})}}else hasOnInstallMethod(content)&&await showStyledModal({variant:"warning",icon:"📦",title:"Extension Saved",subtitle:result.config.name,body:"<p>Connect to your device and open the extension to install files.</p>",buttons:[{id:"ok",class:"fw-styled-modal-btn-primary",label:"OK"}]});resolve(result),console.log("[Dev Install] 🔄 Reloading to apply changes..."),setTimeout(()=>location.reload(),500)}catch(n){reject(n)}},input.click()})},console.log('[State Init] Dev utilities exposed: dev.updateExtension("id"), dev.installExtensionFromFile()')),state.resizePanel=function(n){const i=parseFloat(getComputedStyle(document.body).zoom)||1,o=(n.clientY-state.dragStartY)/i;state.panelHeight=state.dragStartHeight-o,state.panelHeight<=PANEL_CLOSED$1?state.savedPanelHeight=PANEL_DEFAULT$1:state.savedPanelHeight=state.panelHeight,emitter.emit("render")},state.resizeLogSidebar=function(n){const r=document.querySelector(".repl-panel-content");if(!r)return;const s=r.getBoundingClientRect(),a=s.width,c=s.right-n.clientX,l=a-600;c>=200&&c<=l&&(state.logSidebarWidth=c,state.savedLogSidebarWidth=c,emitter.emit("render"))}}function detectSystemTheme(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches}catch(n){return console.warn("Failed to detect system theme:",n),!1}}function applyTheme(n){if(n.theme==="device"){const i=detectSystemTheme();n.effectiveTheme=i?"dark":"light"}else n.effectiveTheme=n.theme;n.effectiveTheme==="dark"?document.documentElement.setAttribute("data-theme","dark"):document.documentElement.removeAttribute("data-theme")}function applyColorScheme(n){document.documentElement.setAttribute("data-color-scheme",n.colorScheme)}let darkModeMediaQuery=null;function setupThemeListener(n,i){if(darkModeMediaQuery)try{darkModeMediaQuery.removeListener?darkModeMediaQuery.removeListener(handleSystemThemeChange):darkModeMediaQuery.removeEventListener&&darkModeMediaQuery.removeEventListener("change",handleSystemThemeChange)}catch{}darkModeMediaQuery=window.matchMedia("(prefers-color-scheme: dark)"),darkModeMediaQuery.addListener?darkModeMediaQuery.addListener(()=>handleSystemThemeChange(n,i)):darkModeMediaQuery.addEventListener&&darkModeMediaQuery.addEventListener("change",()=>handleSystemThemeChange(n,i))}function handleSystemThemeChange(n,i){n.theme==="device"&&(applyTheme(n),window.dispatchEvent(new CustomEvent("theme-changed")),i.emit("render"))}function initializeTheme(n,i){const o=localStorage.getItem("theme")||"dark",r=localStorage.getItem("colorScheme")||"green",s=localStorage.getItem("editorTheme")||"auto";n.theme=o,n.colorScheme=r,n.editorTheme=s,applyTheme(n),applyColorScheme(n),setupThemeListener(n,i)}function registerThemeHandlers(n,i){i.on("set-theme",o=>{console.log("set-theme",o),n.theme=o,localStorage.setItem("theme",n.theme),applyTheme(n),window.dispatchEvent(new CustomEvent("theme-changed")),i.emit("render")}),i.on("set-color-scheme",o=>{console.log("set-color-scheme",o),n.colorScheme=o,localStorage.setItem("colorScheme",n.colorScheme),applyColorScheme(n),i.emit("render")}),i.on("set-temperature-unit",o=>{console.log("set-temperature-unit",o),n.temperatureUnit=o,localStorage.setItem("temperatureUnit",n.temperatureUnit),n.isConnected&&n.statusInfo&&updateStatusBarDirectly(n.statusInfo,o||"degC"),i.emit("render")}),i.on("set-editor-theme",o=>{console.log("set-editor-theme",o),n.editorTheme=o,localStorage.setItem("editorTheme",n.editorTheme),window.dispatchEvent(new CustomEvent("editor-theme-changed",{detail:{theme:o}})),i.emit("render")})}function dismissOpenDialogs(n,i,o=null){o&&o.key!="Escape"||(window._dismissDialogsKeyHandler&&(document.removeEventListener("keydown",window._dismissDialogsKeyHandler),window._dismissDialogsKeyHandler=null),n.isConnectionDialogOpen=!1,n.isNewFileDialogOpen=!1,n.scriptOsUiModal&&n.scriptOsUiModal.isOpen&&i.emit("close-scriptos-ui-modal"),i.emit("render"))}function updateDialogDOM(n,i){const o=document.getElementById(n);return o?(i?(o.classList.remove("closed"),o.classList.add("open")):(o.classList.remove("open"),o.classList.add("closed")),!0):!1}function registerDialogHandlers(n,i,o){i.on("open-connection-dialog",async()=>{dismissOpenDialogs(n,i),await o.disconnect(),n.isConnectionDialogOpen=!0,updateDialogDOM("dialog-connection",!0)||i.emit("render");const r=s=>dismissOpenDialogs(n,i,s);document.addEventListener("keydown",r),window._dismissDialogsKeyHandler=r}),i.on("close-connection-dialog",()=>{n.isConnectionDialogOpen=!1,dismissOpenDialogs(n,i),updateDialogDOM("dialog-connection",!1)}),i.on("create-new-file",()=>{console.log("create-new-file"),dismissOpenDialogs(n,i),n.isNewFileDialogOpen=!0,updateDialogDOM("dialog-new-file",!0)||i.emit("render");const r=s=>dismissOpenDialogs(n,i,s);document.addEventListener("keydown",r),window._dismissDialogsKeyHandler=r}),i.on("close-new-file-dialog",()=>{n.isNewFileDialogOpen=!1,dismissOpenDialogs(n,i),updateDialogDOM("dialog-new-file",!1)})}function registerTerminalHandlers(n,i,o,r){let s=!1;function a(){s=!0,setTimeout(()=>{s=!1},500)}function c(p=!1){s||(i.emit("run",p),a())}function l(){canExecute({isConnected:n.isConnected})&&c()}function d(){canExecute({isConnected:n.isConnected})&&c(!0)}function u(){canExecute({isConnected:n.isConnected})&&i.emit("stop")}return i.on("run-from-button",(p=!1)=>{p?d():l()}),i.on("run",async(p=!1)=>{const g=n.openFiles.find(v=>v.id==n.editingFile);if(!g||!g.editor){console.warn("[run] No active file to execute");return}let f=g.editor.content||"";if(p&&g.editor.view){const v=g.editor.view.state,y=v.selection;if(y.ranges.some(S=>S.from!==S.to)){const S=y.ranges.filter(C=>C.from!==C.to).map(C=>v.sliceDoc(C.from,C.to)).join(`
+`);S.trim().length>0&&(f=S)}}let h=!1;if(!p&&f.startsWith("# SCRIPTOS_SILENT: True")&&(h=!0,console.log("[ScriptO] Detected silent mode marker")),!p&&f.includes("# === START_CONFIG_PARAMETERS ==="))try{console.log("[ScriptO] Detected ScriptO file, parsing...");const v=parseScriptOsConfig(f);if(v){h=v.silent===!0,console.log("[ScriptO] Config parsed:",v,"silent:",h);const y={};if(v.args)for(const S in v.args){const C=v.args[S];C.value!==void 0&&(y[S]=C.value)}console.log("[ScriptO] Using default values:",y);const b=generateScriptOsCode(f,v,y);console.log("[ScriptO] Generated code length:",b.length,"original:",f.length),f=b,console.log("[ScriptO] Parsed and generated clean code successfully")}else console.log("[ScriptO] Config parsing returned null")}catch(v){console.error("[ScriptO] Error parsing config:",v)}i.emit("open-panel");let m=document.querySelector(".xterm-helper-textarea");m&&m.focus(),i.emit("render");try{bindTerminalOutput(n);let v=n.cache(r,"terminal").term;v.write(`\r
 `);const y=await o.run(f,h);y&&y.trim()&&h&&v.write(y+`\r
 `),v.write(TERMINAL_PROMPT),v.scrollToBottom()}catch(v){console.log("error",v),bindTerminalOutput(n);let y=n.cache(r,"terminal").term;y.write(`\r
 \x1B[91mError: `+v.message+`\x1B[0m\r
-`),y.write(TERMINAL_PROMPT),y.scrollToBottom()}m=document.querySelector(".cm-content"),m&&m.focus(),i.emit("render")}),i.on("stop",async()=>{if(n.panelHeight<=PANEL_CLOSED$1&&(n.panelHeight=n.savedPanelHeight),i.emit("open-panel"),i.emit("render"),n.isConnected)try{await o.interrupt()}catch(p){console.log("Stop failed:",p)}}),i.on("clear-terminal",()=>{n.cache(r,"terminal").term.clear(),i.emit("log:clear")}),i.on("terminal:write",p=>{n.cache(r,"terminal").term.write(p)}),i.on("terminal:write-prompt",()=>{n.cache(r,"terminal").term.write(TERMINAL_PROMPT)}),i.on("open-panel",()=>{i.emit("stop-resizing-panel"),n.panelHeight=n.savedPanelHeight,i.emit("render"),setTimeout(()=>{n.cache(r,"terminal").resizeTerm()},200)}),i.on("close-panel",()=>{i.emit("stop-resizing-panel"),n.savedPanelHeight=n.panelHeight,n.panelHeight=0,i.emit("render")}),i.on("start-resizing-panel",p=>{n.dragStartY=p.clientY,n.dragStartHeight=n.panelHeight;const g=document.querySelector("#panel");g&&g.classList.add("resizing"),document.body.style.userSelect="none",document.body.style.cursor="grabbing",window.addEventListener("mousemove",n.resizePanel);const f=()=>{i.emit("stop-resizing-panel")};window.addEventListener("mouseup",f,{once:!0}),document.body.addEventListener("mouseleave",f,{once:!0}),document.querySelector("#tabs").addEventListener("mouseenter",f,{once:!0})}),i.on("stop-resizing-panel",()=>{const p=document.querySelector("#panel");p&&p.classList.remove("resizing"),document.body.style.userSelect="",document.body.style.cursor="",window.removeEventListener("mousemove",n.resizePanel),setTimeout(()=>n.cache(r,"terminal").resizeTerm(),50)}),{runCode:l,runCodeSelection:d,stopCode:u}}function registerLogHandlers(n,i){n.logs={isOpen:!1,messages:[],maxMessages:1e3,autoScroll:!0},i.on("toggle-log-sidebar",()=>{n.logs.isOpen=!n.logs.isOpen,i.emit("render"),n.logs.isOpen&&n.logs.autoScroll&&setTimeout(()=>{const o=document.querySelector("#log-terminal .xterm-viewport");o&&(o.scrollTop=o.scrollHeight)},100)}),i.on("log:add",o=>{console.debug("[Log Store] log:add event received:",o),n.logs.messages.push(o),n.logs.messages.length>n.logs.maxMessages&&n.logs.messages.shift();const r=new CustomEvent("log-terminal-write",{detail:o});console.debug("[Log Store] Dispatching log-terminal-write event:",o),window.dispatchEvent(r)}),i.on("log:clear",()=>{n.logs.messages=[];const o=new CustomEvent("log-terminal-clear");window.dispatchEvent(o),i.emit("render")}),i.on("log:toggle-autoscroll",()=>{n.logs.autoScroll=!n.logs.autoScroll,i.emit("render")}),i.on("start-resizing-log-sidebar",()=>{console.log("start-resizing-log-sidebar"),window.addEventListener("mousemove",n.resizeLogSidebar);const o=()=>{i.emit("stop-resizing-log-sidebar")};window.addEventListener("mouseup",o,{once:!0}),document.body.addEventListener("mouseleave",o,{once:!0})}),i.on("stop-resizing-log-sidebar",()=>{window.removeEventListener("mousemove",n.resizeLogSidebar)})}function registerSystemConfigHandlers(n,i){i.on("toggle-system-menu",()=>{n.expandedSystem=!n.expandedSystem,i.emit("render")}),i.on("change-system-panel",o=>{n.activeSystemPanel=o,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`system:${o}`,i.emit("render")})}function registerNetworkConfigHandlers(n,i,o){const r=console.log;i.on("toggle-networks-menu",()=>{r("toggle-networks-menu"),n.expandedNetworks=!n.expandedNetworks,i.emit("render")}),i.on("change-network-panel",s=>{r("change-network-panel:",s),n.activeNetworkPanel=s,n.activeSystemPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`network:${s}`,s==="gps"&&!n.gpsDataLoaded&&n.isConnected&&i.emit("load-gps-data"),i.emit("render")}),i.on("load-ntp-config",async()=>{if(r("load-ntp-config"),!n.isConnected){console.warn("[NTP] Not connected to device");return}if(n.isLoadingNtpConfig){console.log("[NTP] Already loading config, skipping");return}try{n.isLoadingNtpConfig=!0;const a=await o.exec(`
+`),y.write(TERMINAL_PROMPT),y.scrollToBottom()}m=document.querySelector(".cm-content"),m&&m.focus(),i.emit("render")}),i.on("stop",async()=>{if(n.panelHeight<=PANEL_CLOSED$1&&(n.panelHeight=n.savedPanelHeight),i.emit("open-panel"),i.emit("render"),n.isConnected)try{await o.interrupt()}catch(p){console.log("Stop failed:",p)}}),i.on("clear-terminal",()=>{n.cache(r,"terminal").term.clear(),i.emit("log:clear")}),i.on("terminal:write",p=>{n.cache(r,"terminal").term.write(p)}),i.on("terminal:write-prompt",()=>{n.cache(r,"terminal").term.write(TERMINAL_PROMPT)}),i.on("open-panel",()=>{i.emit("stop-resizing-panel"),n.panelHeight=n.savedPanelHeight,i.emit("render"),setTimeout(()=>{n.cache(r,"terminal").resizeTerm()},200)}),i.on("close-panel",()=>{i.emit("stop-resizing-panel"),n.savedPanelHeight=n.panelHeight,n.panelHeight=0,i.emit("render")}),i.on("start-resizing-panel",p=>{n.dragStartY=p.clientY,n.dragStartHeight=n.panelHeight;const g=document.querySelector("#panel");g&&g.classList.add("resizing"),document.body.style.userSelect="none",document.body.style.cursor="grabbing",window.addEventListener("mousemove",n.resizePanel);const f=()=>{i.emit("stop-resizing-panel")};window.addEventListener("mouseup",f,{once:!0}),document.body.addEventListener("mouseleave",f,{once:!0}),document.querySelector("#tabs").addEventListener("mouseenter",f,{once:!0})}),i.on("stop-resizing-panel",()=>{const p=document.querySelector("#panel");p&&p.classList.remove("resizing"),document.body.style.userSelect="",document.body.style.cursor="",window.removeEventListener("mousemove",n.resizePanel),setTimeout(()=>n.cache(r,"terminal").resizeTerm(),50)}),{runCode:l,runCodeSelection:d,stopCode:u}}function registerLogHandlers(n,i){n.logs={isOpen:!1,messages:[],maxMessages:1e3,autoScroll:!0},i.on("toggle-log-sidebar",()=>{n.logs.isOpen=!n.logs.isOpen,i.emit("render"),n.logs.isOpen&&n.logs.autoScroll&&setTimeout(()=>{const o=document.querySelector("#log-terminal .xterm-viewport");o&&(o.scrollTop=o.scrollHeight)},100)}),i.on("log:add",o=>{console.debug("[Log Store] log:add event received:",o),n.logs.messages.push(o),n.logs.messages.length>n.logs.maxMessages&&n.logs.messages.shift();const r=new CustomEvent("log-terminal-write",{detail:o});console.debug("[Log Store] Dispatching log-terminal-write event:",o),window.dispatchEvent(r)}),i.on("log:clear",()=>{n.logs.messages=[];const o=new CustomEvent("log-terminal-clear");window.dispatchEvent(o),i.emit("render")}),i.on("log:toggle-autoscroll",()=>{n.logs.autoScroll=!n.logs.autoScroll,i.emit("render")}),i.on("start-resizing-log-sidebar",()=>{console.log("start-resizing-log-sidebar"),window.addEventListener("mousemove",n.resizeLogSidebar);const o=()=>{i.emit("stop-resizing-log-sidebar")};window.addEventListener("mouseup",o,{once:!0}),document.body.addEventListener("mouseleave",o,{once:!0})}),i.on("stop-resizing-log-sidebar",()=>{window.removeEventListener("mousemove",n.resizeLogSidebar)})}function registerSystemConfigHandlers(n,i,o){i.on("toggle-system-menu",()=>{n.expandedSystem=!n.expandedSystem,i.emit("render")}),i.on("change-system-panel",r=>{n.activeSystemPanel=r,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`system:${r}`,i.emit("render")}),i.on("load-network-interfaces-config",async()=>{if(console.log("[Network Interfaces] Loading config..."),!n.isConnected){console.warn("[Network Interfaces] Not connected to device");return}if(n.isLoadingNetworkInterfacesConfig){console.log("[Network Interfaces] Already loading, skipping");return}try{n.isLoadingNetworkInterfacesConfig=!0;const s=await o.exec(`
 from lib.sys import settings
 import json
 
-# Load config from settings API
 config = {
-    'server': settings.get("ntp.server", "pool.ntp.org"),
-    'tz_offset': settings.get("ntp.tz_offset", 0.0),
-    'timezone': settings.get("ntp.timezone", "UTC"),
-    'auto_detect': settings.get("ntp.auto_detect", False),
-    'auto_sync': settings.get("ntp.auto_sync", False)
+    'wifi': settings.get("network.wifi.enabled", True),
+    'ethernet': settings.get("network.ethernet.enabled", True),
+    'wwan': settings.get("network.wwan.enabled", True)
 }
 
 print(json.dumps({'success': True, 'config': config}))
+`);s&&s.success&&(n.networkInterfacesConfig=s.config,console.log("[Network Interfaces] Config loaded:",n.networkInterfacesConfig))}catch(r){console.error("[Network Interfaces] Failed to load config:",r)}finally{n.isLoadingNetworkInterfacesConfig=!1,i.emit("render")}}),i.on("save-network-interfaces-config",async r=>{if(console.log("[Network Interfaces] Saving config:",r),!n.isConnected){console.warn("[Network Interfaces] Not connected to device");return}if(!r.wifi&&!r.ethernet&&!r.wwan){alert("At least one network interface must be enabled.");return}try{n.isSavingNetworkInterfacesConfig=!0,i.emit("render");const a=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+settings.set("network.wifi.enabled", config.get('wifi', True))
+settings.set("network.ethernet.enabled", config.get('ethernet', True))
+settings.set("network.wwan.enabled", config.get('wwan', True))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'Network interfaces configuration saved. Reboot to apply changes.'}))
+`,c=await o.exec(a);if(c&&c.success)n.networkInterfacesConfig=r,alert("Network interfaces configuration saved. Please reboot the device to apply changes.");else throw new Error(c?.error||"Save failed")}catch(s){console.error("[Network Interfaces] Failed to save config:",s),alert(`Failed to save configuration: ${s.message}`)}finally{n.isSavingNetworkInterfacesConfig=!1,i.emit("render")}})}function registerNetworkConfigHandlers(n,i,o){const r=console.log;i.on("toggle-networks-menu",()=>{r("toggle-networks-menu"),n.expandedNetworks=!n.expandedNetworks,i.emit("render")}),i.on("change-network-panel",s=>{r("change-network-panel:",s),n.activeNetworkPanel=s,n.activeSystemPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`network:${s}`,s==="gps"&&!n.gpsDataLoaded&&n.isConnected&&i.emit("load-gps-data"),i.emit("render")}),i.on("load-ntp-config",async()=>{if(r("load-ntp-config"),!n.isConnected){console.warn("[NTP] Not connected to device");return}if(n.isLoadingNtpConfig){console.log("[NTP] Already loading config, skipping");return}try{n.isLoadingNtpConfig=!0;const a=await o.exec(`
+from lib.sys import settings
+from time import gmtime, localtime, mktime
+import json
+
+# Load config from settings API
+tz_offset = settings.get("ntp.tz_offset", 0.0)
+config = {
+    'server': settings.get("ntp.server", "pool.ntp.org"),
+    'tz_offset': tz_offset,
+    'timezone': settings.get("ntp.timezone", "UTC"),
+    'auto_detect': settings.get("ntp.auto_detect_tz", False),
+    'auto_sync': settings.get("ntp.enabled", True)
+}
+
+# Get current RTC time if synced (year >= 2023)
+utc = gmtime()
+current_time = None
+if utc[0] >= 2023:
+    utc_timestamp = mktime(utc)
+    local_timestamp = utc_timestamp + int(tz_offset * 3600)
+    local = localtime(local_timestamp)
+    current_time = {
+        'utc': {'year': utc[0], 'month': utc[1], 'day': utc[2], 'hour': utc[3], 'minute': utc[4], 'second': utc[5]},
+        'local': {'year': local[0], 'month': local[1], 'day': local[2], 'hour': local[3], 'minute': local[4], 'second': local[5]}
+    }
+
+print(json.dumps({'success': True, 'config': config, 'current_time': current_time}))
 `);o.onNtpConfig&&o.onNtpConfig(a)}catch(s){console.error("[NTP] Failed to load config:",s),n.isLoadingNtpConfig=!1}}),i.on("save-ntp-config",async s=>{if(r("save-ntp-config",s),!n.isConnected){console.warn("[NTP] Not connected to device"),i.emit("ntp-config-save-error",new Error("Not connected"));return}try{const c=`
 from lib.sys import settings
 import json
@@ -5639,8 +5467,8 @@ settings.save()
 
 print(json.dumps({'success': True, 'message': 'NTP configuration saved successfully'}))
 `,l=await o.exec(c);if(l&&l.success)n.ntpConfig={server:s.server||"pool.ntp.org",tzOffset:s.tz_offset??s.tzOffset??0,timezone:s.timezone||"UTC",autoDetect:s.auto_detect??s.autoDetect??!1,autoSync:s.auto_sync??s.autoSync??!1},i.emit("render"),i.emit("ntp-config-saved");else{const d=new Error(l?.error||"Save failed");throw i.emit("ntp-config-save-error",d),d}}catch(a){throw console.error("[NTP] Failed to save config:",a),alert(`Failed to save NTP configuration: ${a.message}`),i.emit("ntp-config-save-error",a),a}}),i.on("sync-ntp-time",async(s,a,c,l)=>{if(r("sync-ntp-time",s,a,c,l),!n.isConnected){console.warn("[NTP] Not connected to device");return}try{const u=`
-from lib.network_helpers import sync_ntp_time
-sync_ntp_time('${s}', ${a}, ${c?"True":"False"}, save_config=False)
+from lib.sys.utils import sync_ntp
+sync_ntp('${s}', ${a}, ${c?"True":"False"}, force=True)
 `,p=await o.exec(u);if(o.onNtpSync){const g={autoDetect:c,autoSync:l,server:s,tzOffset:a};o.onNtpSync(p,g)}}catch(d){console.error("[NTP] Failed to sync time:",d),alert(`Failed to sync NTP time: ${d.message}`)}}),i.on("load-mqtt-config",async()=>{if(r("load-mqtt-config"),!n.isConnected){console.warn("[MQTT] Not connected to device");return}if(n.isLoadingMqttConfig){console.log("[MQTT] Already loading config, skipping");return}try{n.isLoadingMqttConfig=!0;const a=await o.exec(`
 from lib.sys import settings
 import json
@@ -5930,11 +5758,22 @@ import json
 mount_point = '${(n.sdcardConfig||{mountPoint:"/sd"}).mountPoint||"/sd"}'
 
 try:
-    # Unmount the SD card
     os.umount(mount_point)
-    print(json.dumps({'success': True, 'message': 'SD card unmounted successfully'}))
-except Exception as e:
-    print(json.dumps({'success': False, 'error': str(e)}))
+except OSError:
+    pass
+
+# Deinit and remove the global sd object
+try:
+    import builtins
+    if hasattr(builtins, 'sd'):
+        builtins.sd.deinit()
+        del builtins.sd
+except:
+    pass
+
+import gc
+gc.collect()
+print(json.dumps({'success': True, 'message': 'SD card unmounted successfully'}))
 `,l=await o.exec(c);o.onSdcardUnmount&&o.onSdcardUnmount(l)}catch(s){console.error("[SD Card] Failed to unmount:",s),n.isUnmountingSDCard=!1,alert(`Failed to unmount SD card: ${s.message}`),i.emit("render")}}),i.on("sdcard-mount",async()=>{if(r("sdcard-mount"),!n.isConnected){console.warn("[SD Card] Not connected to device");return}if(n.isMountingSDCard){console.log("[SD Card] Already mounting, skipping");return}try{n.isMountingSDCard=!0,i.emit("render");const c=`
 import json
 import time
@@ -6011,8 +5850,10 @@ try:
             sck=pins['clk'],
             cmd=pins['cmd'],
             data=data_pins,
-            freq=400000
+            freq=4000000
         )
+        import builtins
+        builtins.sd = sd
         
         info = sd.info()
         capacity_gb = (info[0] * info[1]) / (1024**3)
@@ -6021,6 +5862,10 @@ try:
         # Mount filesystem
         mount_point = '${(n.sdcardConfig||{mountPoint:"/sd"}).mountPoint||"/sd"}'
         log_msg(f"Mounting to {mount_point}...")
+        try:
+            os.mkdir(mount_point)
+        except OSError:
+            pass
         os.mount(sd, mount_point)
         log_msg("✓ Mounted")
         
@@ -6037,6 +5882,8 @@ try:
         result['success'] = True
         result['info'] = {
             'mountPoint': mount_point,
+            'cardCapacity': info[0],
+            'sectorSize': info[1],
             'totalSize': int(total_mb * 1024 * 1024),
             'freeSize': int(free_mb * 1024 * 1024),
             'usedSize': int(used_mb * 1024 * 1024)
@@ -6059,9 +5906,18 @@ try:
     # Check if mount point exists using os.stat() (NOT listdir - crashes P4+C6)
     os.stat(mount_point)
     
-    # Get filesystem stats - same logic as SD Card Mount Test script
+    # Get physical card capacity from sd.info()
+    card_capacity = 0
+    sector_size = 0
+    try:
+        _ci = sd.info()
+        card_capacity = _ci[0]
+        sector_size = _ci[1]
+    except:
+        pass
+    
+    # Get filesystem stats
     stat = os.statvfs(mount_point)
-    # statvfs returns: (bsize, frsize, blocks, bfree, bavail, files, ffree, favail, flags, namemax)
     block_size = stat[0]
     total_blocks = stat[2]
     free_blocks = stat[3]
@@ -6072,6 +5928,8 @@ try:
     
     info = {
         'mountPoint': mount_point,
+        'cardCapacity': card_capacity,
+        'sectorSize': sector_size,
         'totalSize': total_size,
         'freeSize': free_size,
         'usedSize': used_size,
@@ -6084,7 +5942,7 @@ except OSError as e:
     print(json.dumps({'success': False, 'error': f'SD Card not mounted at {mount_point}'}))
 except Exception as e:
     print(json.dumps({'success': False, 'error': str(e)}))
-`,l=await o.exec(c);o.onSdcardInfo&&o.onSdcardInfo(l)}catch(s){console.error("[SD Card] Failed to get info:",s),n.isLoadingSdcardInfo=!1,n.sdcardInfo={error:`Failed to get storage info: ${s.message}`},i.emit("render")}})}const STATUS_INFO_POLL_INTERVAL=1e4;let statusInfoPollInterval=null,statusInfoPollingEnabled=!1;function startStatusInfoPolling$1(n,i,o){stopStatusInfoPolling$1(),statusInfoPollingEnabled=!0;let r=null;statusInfoPollInterval=setInterval(async()=>{if(!statusInfoPollingEnabled)return;if(!i.isConnected||!n){stopStatusInfoPolling$1();return}const s=i.isTransferring,a=i.installingDependencies,c=n.isFileOperationActive&&n.isFileOperationActive(),l=n.isCommandRunning&&n.isCommandRunning();if(s||a||c||l){const d=s?"transferring":c?"fileOp":l?"command":"deps";d!==r&&(console.log(`[Store] Status info polling paused: ${d}`),r=d);return}r&&(console.log("[Store] Status info polling resuming"),r=null);try{const d=await n.exec("getStatusInfo()");d&&(i.statusInfo=d,updateStatusBarDirectly(d,i.temperatureUnit||"degC"))}catch(d){console.debug("[Store] Status info poll failed:",d.message)}},STATUS_INFO_POLL_INTERVAL)}function stopStatusInfoPolling$1(){statusInfoPollingEnabled=!1,statusInfoPollInterval&&(clearInterval(statusInfoPollInterval),statusInfoPollInterval=null,console.log("[Store] Stopped status info polling"))}function registerConnectionHandlers(n,i,o,r,s){i.on("disconnected",()=>{stopStatusInfoPolling$1(),n.isConnected=!1,n.connectionMode="none",n.panelHeight=PANEL_CLOSED$1,n.boardFiles=[],n.boardNavigationPath="/",n.filesLoadedOnce=!1,n.isTransferring=!1,n.transferringProgress="",n.isSaving=!1,n.savingProgress=0,n.isRemoving=!1,n.bannerDisplayed=!1,n.systemInfoAttempted=!1,i.emit("refresh-files"),i.emit("render"),n.isResettingHard&&(n.isResettingHard=!1,setTimeout(()=>{i.emit("open-connection-dialog")},100))}),i.on("disconnect",async()=>{await o.disconnect()}),i.on("connection-timeout",async()=>{n.isConnected=!1,n.isConnecting=!1,n.isConnectionDialogOpen=!0,i.emit("render")}),i.on("connect",async()=>{i.emit("open-connection-dialog")}),i.on("connect-webrepl",async({wsUrl:a,password:c})=>{a&&localStorage.setItem("webrepl-url",a),c&&localStorage.setItem("webrepl-password",c),n.isConnecting=!0,i.emit("render"),updateOverlayDirectly(n);const l=n.cache(XTerm,"terminal");l&&l.term&&l.bindInput(n,o),s(n);try{await o.connect(a,c),n.isConnecting=!1,n.isConnected=!0,n.connectionMode="webrepl",updateOverlayDirectly(n),n.boardNavigationPath="/",n.connectedPort=a,r(),i.emit("render"),n.systemSection==="file-manager"&&i.emit("refresh-files"),o.onConnectionClosed(()=>i.emit("disconnected")),o.subscribe("status_info",u=>{const p=!n.statusInfo&&u;n.statusInfo=u,p?i.emit("render"):updateStatusBarDirectly(u,n.temperatureUnit||"degC")}),o.subscribe("log",u=>{console.debug("[Connection] LOG event handler called with:",u),i.emit("log:add",u)}),o.onPlotData=u=>{},o.onDisplayUi=u=>{console.log("[ScriptO UI] Display UI command received:",u),i.emit("open-scriptos-ui-modal",u)},o.onWwanStatus=u=>{console.log("[WWAN] Status event received:",u),n.wwanStatus=u,i.emit("render")},o.onMqttConfig=u=>{console.log("[MQTT] Config received:",u),n.isLoadingMqttConfig=!1,n.mqttConfigLoaded=!0,u.success&&u.config?n.mqttConfig=u.config:n.mqttConfig={},i.emit("render")},o.onMqttConfigSave=u=>{console.log("[MQTT] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save MQTT configuration: ${u.error||"Unknown error"}`)},o.onWwanConfig=u=>{console.log("[WWAN] Config received:",u),n.isLoadingWwanConfig=!1,n.wwanConfigLoaded=!0,u.success&&u.config?(n.wwanConfig=u.config,n.wwanConfig.auto_init_modem===void 0&&(n.wwanConfig.auto_init_modem=!0)):n.wwanConfig={auto_init_modem:!0},i.emit("render")},o.onWwanConfigSave=u=>{console.log("[WWAN] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save WWAN configuration: ${u.error||"Unknown error"}`)},o.onModemStatus=u=>{console.log("[Modem] Status received:",u),n.isLoadingModemStatus=!1,n.modemStatusLoaded=!0,n.modemStatus=u,i.emit("render")},o.onNtpSync=(u,p)=>{if(console.log("[NTP] Sync response:",u),u.success){n.ntpConfig||(n.ntpConfig={server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1,autoSync:!1});const g=p?.autoDetect??n.ntpConfig.autoDetect??!1,f=p?.autoSync??n.ntpConfig.autoSync??!1,h=n.ntpConfig.timezone??"UTC";u.ntp_server?n.ntpConfig.server=u.ntp_server:p?.server&&(n.ntpConfig.server=p.server),u.tz_offset!==void 0?n.ntpConfig.tzOffset=u.tz_offset:p?.tzOffset!==void 0&&(n.ntpConfig.tzOffset=p.tzOffset),n.ntpConfig.autoDetect=g,n.ntpConfig.autoSync=f,n.ntpConfig.timezone=h,n.ntpSyncResult={utc:u.utc,local:u.local,timestamp:Date.now()},i.emit("render")}else alert(`NTP sync failed: ${u.error||"Unknown error"}`)},o.onNtpConfig=u=>{console.log("[NTP] Config received:",u),n.isLoadingNtpConfig=!1,n.ntpConfigLoaded=!0,u.success&&u.config&&(n.ntpConfig={server:u.config.server||"pool.ntp.org",tzOffset:u.config.tz_offset||0,timezone:u.config.timezone||"UTC",autoDetect:u.config.auto_detect||!1,autoSync:u.config.auto_sync||!1}),i.emit("render")},o.onNtpConfigSave=u=>{if(console.log("[NTP] Config save response:",u),u.success)i.emit("render");else{const p=new Error(u.error||"Unknown error");i.emit("ntp-config-save-error",p),alert(`Failed to save NTP configuration: ${p.message}`)}},o.onCanConfig=u=>{console.log("[CAN] Config received:",u),n.isLoadingCanConfig=!1,n.canConfigLoaded=!0,u.success&&u.config&&(n.canConfig={txPin:u.config.txPin||5,rxPin:u.config.rxPin||4,bitrate:u.config.bitrate||5e5,enabled:u.config.enabled!==void 0?u.config.enabled:!0,loopback:u.config.loopback||!1},i.emit("render"))},o.onCanConfigSave=u=>{console.log("[CAN] Config save response:",u),u.success?(i.emit("render"),alert("CAN configuration saved successfully. Device restart required for changes to take effect.")):alert(`Failed to save CAN configuration: ${u.error||"Unknown error"}`)},o.onVpnConfig=u=>{console.log("[VPN] Config received:",u),n.isLoadingVpnConfig=!1,n.vpnConfigLoaded=!0,u.success&&u.config?n.vpnConfig={hostname:u.config.hostname||"",join_code:u.config.join_code||"",auto_connect:u.config.auto_connect||!1,enabled:u.config.enabled||!1}:n.vpnConfig={hostname:"",join_code:"",auto_connect:!1,enabled:!1},i.emit("render")},o.onVpnConfigSave=u=>{console.log("[VPN] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save VPN configuration: ${u.error||"Unknown error"}`)},o.onVpnConnect=u=>{console.log("[VPN] Connect response:",u),u.success?(alert(u.message||"Connected to VPN successfully!"),i.emit("refresh-networks")):alert(`Failed to connect to VPN: ${u.error||"Unknown error"}`),i.emit("render")},o.onVpnDisconnect=u=>{console.log("[VPN] Disconnect response:",u),u.success?(alert(u.message||"VPN disconnected."),i.emit("refresh-networks")):alert(`Failed to disconnect VPN: ${u.error||"Unknown error"}`),i.emit("render")},o.onVpnInfo=u=>{console.log("[VPN] Info received:",u),n.networksInfo&&(n.networksInfo.vpn=u),i.emit("render")},o.onSdcardConfig=u=>{console.log("[SD Card] Config received:",u),n.isLoadingSdcardConfig=!1,n.sdcardConfigLoaded=!0,u.success&&u.config?n.sdcardConfig={mountPoint:u.config.mountPoint||"/sd",autoMount:u.config.autoMount||!1}:n.sdcardConfig={mountPoint:"/sd",autoMount:!1},i.emit("render")},o.onSdcardConfigSave=u=>{console.log("[SD Card] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save SD Card configuration: ${u.error||"Unknown error"}`)},o.onSdcardInfo=u=>{console.log("[SD Card] Info received:",u),n.isLoadingSdcardInfo=!1,u.success&&u.info?n.sdcardInfo=u.info:n.sdcardInfo={error:u.error||"Failed to get storage information"},i.emit("render")},o.onSdcardMount=u=>{if(console.log("[SD Card] Mount response:",u),n.isMountingSDCard=!1,u.success){const p=u.log?u.log.join(`
+`,l=await o.exec(c);o.onSdcardInfo&&o.onSdcardInfo(l)}catch(s){console.error("[SD Card] Failed to get info:",s),n.isLoadingSdcardInfo=!1,n.sdcardInfo={error:`Failed to get storage info: ${s.message}`},i.emit("render")}})}const STATUS_INFO_POLL_INTERVAL=1e4;let statusInfoPollInterval=null,statusInfoPollingEnabled=!1;function startStatusInfoPolling$1(n,i,o){stopStatusInfoPolling$1(),statusInfoPollingEnabled=!0;let r=null;statusInfoPollInterval=setInterval(async()=>{if(!statusInfoPollingEnabled)return;if(!i.isConnected||!n){stopStatusInfoPolling$1();return}const s=i.isTransferring,a=i.installingDependencies,c=n.isFileOperationActive&&n.isFileOperationActive(),l=n.isCommandRunning&&n.isCommandRunning();if(s||a||c||l){const d=s?"transferring":c?"fileOp":l?"command":"deps";d!==r&&(console.log(`[Store] Status info polling paused: ${d}`),r=d);return}r&&(console.log("[Store] Status info polling resuming"),r=null);try{const d=await n.exec("getStatusInfo()");d&&(i.statusInfo=d,updateStatusBarDirectly(d,i.temperatureUnit||"degC"))}catch(d){console.debug("[Store] Status info poll failed:",d.message)}},STATUS_INFO_POLL_INTERVAL)}function stopStatusInfoPolling$1(){statusInfoPollingEnabled=!1,statusInfoPollInterval&&(clearInterval(statusInfoPollInterval),statusInfoPollInterval=null,console.log("[Store] Stopped status info polling"))}function registerConnectionHandlers(n,i,o,r,s){i.on("disconnected",()=>{stopStatusInfoPolling$1(),n.isConnected=!1,n.connectionMode="none",n.panelHeight=PANEL_CLOSED$1,n.boardFiles=[],n.boardNavigationPath="/",n.filesLoadedOnce=!1,n.isTransferring=!1,n.transferringProgress="",n.isSaving=!1,n.savingProgress=0,n.isRemoving=!1,n.bannerDisplayed=!1,n.systemInfoAttempted=!1,i.emit("refresh-files"),i.emit("render"),n.isResettingHard&&(n.isResettingHard=!1,setTimeout(()=>{i.emit("open-connection-dialog")},100))}),i.on("disconnect",async()=>{await o.disconnect()}),i.on("connection-timeout",async()=>{n.isConnected=!1,n.isConnecting=!1,n.isConnectionDialogOpen=!0,i.emit("render")}),i.on("connect",async()=>{i.emit("open-connection-dialog")}),i.on("connect-webrepl",async({wsUrl:a,password:c})=>{a&&localStorage.setItem("webrepl-url",a),c&&localStorage.setItem("webrepl-password",c),n.isConnecting=!0,i.emit("render"),updateOverlayDirectly(n);const l=n.cache(XTerm,"terminal");l&&l.term&&l.bindInput(n,o),s(n);try{await o.connect(a,c),n.isConnecting=!1,n.isConnected=!0,n.connectionMode="webrepl",updateOverlayDirectly(n),n.boardNavigationPath="/",n.connectedPort=a,r(),i.emit("render"),n.systemSection==="file-manager"&&i.emit("refresh-files"),o.onConnectionClosed(()=>i.emit("disconnected")),o.subscribe("status_info",u=>{const p=!n.statusInfo&&u;n.statusInfo=u,p?i.emit("render"):updateStatusBarDirectly(u,n.temperatureUnit||"degC")}),o.subscribe("log",u=>{console.debug("[Connection] LOG event handler called with:",u),i.emit("log:add",u)}),o.onPlotData=u=>{},o.onDisplayUi=u=>{console.log("[ScriptO UI] Display UI command received:",u),i.emit("open-scriptos-ui-modal",u)},o.onWwanStatus=u=>{console.log("[WWAN] Status event received:",u),n.wwanStatus=u,i.emit("render")},o.onMqttConfig=u=>{console.log("[MQTT] Config received:",u),n.isLoadingMqttConfig=!1,n.mqttConfigLoaded=!0,u.success&&u.config?n.mqttConfig=u.config:n.mqttConfig={},i.emit("render")},o.onMqttConfigSave=u=>{console.log("[MQTT] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save MQTT configuration: ${u.error||"Unknown error"}`)},o.onWwanConfig=u=>{console.log("[WWAN] Config received:",u),n.isLoadingWwanConfig=!1,n.wwanConfigLoaded=!0,u.success&&u.config?(n.wwanConfig=u.config,n.wwanConfig.auto_init_modem===void 0&&(n.wwanConfig.auto_init_modem=!0)):n.wwanConfig={auto_init_modem:!0},i.emit("render")},o.onWwanConfigSave=u=>{console.log("[WWAN] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save WWAN configuration: ${u.error||"Unknown error"}`)},o.onModemStatus=u=>{console.log("[Modem] Status received:",u),n.isLoadingModemStatus=!1,n.modemStatusLoaded=!0,n.modemStatus=u,i.emit("render")},o.onNtpSync=(u,p)=>{if(console.log("[NTP] Sync response:",u),u.success){n.ntpConfig||(n.ntpConfig={server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1,autoSync:!1});const g=p?.autoDetect??n.ntpConfig.autoDetect??!1,f=p?.autoSync??n.ntpConfig.autoSync??!1,h=n.ntpConfig.timezone??"UTC";u.ntp_server?n.ntpConfig.server=u.ntp_server:p?.server&&(n.ntpConfig.server=p.server),u.tz_offset!==void 0?n.ntpConfig.tzOffset=u.tz_offset:p?.tzOffset!==void 0&&(n.ntpConfig.tzOffset=p.tzOffset),n.ntpConfig.autoDetect=g,n.ntpConfig.autoSync=f,n.ntpConfig.timezone=h,n.ntpSyncResult={utc:u.utc,local:u.local,timestamp:Date.now()},i.emit("render")}else alert(`NTP sync failed: ${u.error||"Unknown error"}`)},o.onNtpConfig=u=>{console.log("[NTP] Config received:",u),n.isLoadingNtpConfig=!1,n.ntpConfigLoaded=!0,u.success&&u.config&&(n.ntpConfig={server:u.config.server||"pool.ntp.org",tzOffset:u.config.tz_offset||0,timezone:u.config.timezone||"UTC",autoDetect:u.config.auto_detect||!1,autoSync:u.config.auto_sync||!1},u.current_time&&(n.ntpSyncResult={utc:u.current_time.utc,local:u.current_time.local,timestamp:Date.now()})),i.emit("render")},o.onNtpConfigSave=u=>{if(console.log("[NTP] Config save response:",u),u.success)i.emit("render");else{const p=new Error(u.error||"Unknown error");i.emit("ntp-config-save-error",p),alert(`Failed to save NTP configuration: ${p.message}`)}},o.onCanConfig=u=>{console.log("[CAN] Config received:",u),n.isLoadingCanConfig=!1,n.canConfigLoaded=!0,u.success&&u.config&&(n.canConfig={txPin:u.config.txPin||5,rxPin:u.config.rxPin||4,bitrate:u.config.bitrate||5e5,enabled:u.config.enabled!==void 0?u.config.enabled:!0,loopback:u.config.loopback||!1},i.emit("render"))},o.onCanConfigSave=u=>{console.log("[CAN] Config save response:",u),u.success?(i.emit("render"),alert("CAN configuration saved successfully. Device restart required for changes to take effect.")):alert(`Failed to save CAN configuration: ${u.error||"Unknown error"}`)},o.onVpnConfig=u=>{console.log("[VPN] Config received:",u),n.isLoadingVpnConfig=!1,n.vpnConfigLoaded=!0,u.success&&u.config?n.vpnConfig={hostname:u.config.hostname||"",join_code:u.config.join_code||"",auto_connect:u.config.auto_connect||!1,enabled:u.config.enabled||!1}:n.vpnConfig={hostname:"",join_code:"",auto_connect:!1,enabled:!1},i.emit("render")},o.onVpnConfigSave=u=>{console.log("[VPN] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save VPN configuration: ${u.error||"Unknown error"}`)},o.onVpnConnect=u=>{console.log("[VPN] Connect response:",u),u.success?(alert(u.message||"Connected to VPN successfully!"),i.emit("refresh-networks")):alert(`Failed to connect to VPN: ${u.error||"Unknown error"}`),i.emit("render")},o.onVpnDisconnect=u=>{console.log("[VPN] Disconnect response:",u),u.success?(alert(u.message||"VPN disconnected."),i.emit("refresh-networks")):alert(`Failed to disconnect VPN: ${u.error||"Unknown error"}`),i.emit("render")},o.onVpnInfo=u=>{console.log("[VPN] Info received:",u),n.networksInfo&&(n.networksInfo.vpn=u),i.emit("render")},o.onSdcardConfig=u=>{console.log("[SD Card] Config received:",u),n.isLoadingSdcardConfig=!1,n.sdcardConfigLoaded=!0,u.success&&u.config?n.sdcardConfig={mountPoint:u.config.mountPoint||"/sd",autoMount:u.config.autoMount||!1}:n.sdcardConfig={mountPoint:"/sd",autoMount:!1},i.emit("render")},o.onSdcardConfigSave=u=>{console.log("[SD Card] Config save response:",u),u.success?i.emit("render"):alert(`Failed to save SD Card configuration: ${u.error||"Unknown error"}`)},o.onSdcardInfo=u=>{console.log("[SD Card] Info received:",u),n.isLoadingSdcardInfo=!1,u.success&&u.info?(!u.info.cardCapacity&&n.sdcardInfo&&n.sdcardInfo.cardCapacity&&(u.info.cardCapacity=n.sdcardInfo.cardCapacity,u.info.sectorSize=n.sdcardInfo.sectorSize),n.sdcardInfo=u.info):n.sdcardInfo={error:u.error||"Failed to get storage information"},i.emit("render")},o.onSdcardMount=u=>{if(console.log("[SD Card] Mount response:",u),n.isMountingSDCard=!1,u.success){const p=u.log?u.log.join(`
 `):"SD card mounted successfully";console.log(`[SD Card] Mount log:
 `+p),u.info&&(n.sdcardInfo=u.info)}else{const p=u.error||"Unknown error",g=u.log?`
 
@@ -6112,7 +5970,7 @@ try:
         if v is not None:
             version = str(v) if not isinstance(v, str) else v
         description = config.get('description') or config.get('identity', {}).get('description')
-        hardware = config.get('hardware')
+        hardware = config.get('devices')
 except Exception as e:
     # Log error for debugging (version will default to '0.0')
     import sys
@@ -6201,7 +6059,7 @@ Continue saving to device?`,"Cancel","OK")!==0){n.renamingTab=null,n.isSaving=!1
 
 `;if(l.forEach(p=>d+=`${p.fileName}
 `),d+=`
-`,d+="Are you sure you want to proceed?",await confirmDialog(d)!==0){n.isTransferring=!1,i.emit("render");return}}try{for(let d in n.selectedFiles){const u=n.selectedFiles[d],p=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,u.fileName),g=r.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,u.fileName);if(u.type=="folder")await downloadFolder(p,g,f=>{n.transferringProgress=f,i.emit("render")});else{const f=await o.loadFile(p,{progressCallback:h=>{n.transferringProgress=`${u.fileName}: ${h}%`,i.emit("render")}});await BridgeDisk.saveFileContent(g,f.buffer)}}n.isTransferring=!1,n.selectedFiles=[],updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}catch(d){console.error("[Download] Transfer failed:",d),n.isTransferring=!1,n.transferringProgress="",updateOverlayDirectly(n),i.emit("render");let u=d.message;u&&u.includes("Transfer already in progress")&&(u="Transfer already in progress. The device may have stale TFTP state from a previous disconnected transfer. Please wait a moment and try again, or disconnect and reconnect."),alert(`Download failed: ${u}`)}}),i.on("navigate-board-folder",l=>{console.log("navigate-board-folder",l),n.boardNavigationPath=getNavigationPath(n.boardNavigationPath,l),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-board-parent",()=>{console.log("navigate-board-parent"),n.boardNavigationPath=getNavigationPath(n.boardNavigationPath,".."),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-disk-folder",l=>{console.log("navigate-disk-folder",l),n.diskNavigationPath=r.getNavigationPath(n.diskNavigationPath,l),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-disk-parent",()=>{console.log("navigate-disk-parent"),n.diskNavigationPath=r.getNavigationPath(n.diskNavigationPath,".."),i.emit("refresh-files"),i.emit("render")})}function debuggerStore(n,i){let o=null;console.log("[Debugger Store] Registering event handlers"),i.on("debugger:open-config",()=>{console.log("[Debugger] Opening config modal"),n.debugger.configOpen=!0,i.emit("render")}),i.on("debugger:close-config",()=>{n.debugger.configOpen=!1,i.emit("render")}),i.on("debugger:toggle-file",r=>{const s=n.debugger.debugFiles.indexOf(r);s>=0?n.debugger.debugFiles.splice(s,1):n.debugger.debugFiles.push(r),i.emit("render")}),i.on("debugger:set-watches",r=>{const s=r.split(`
+`,d+="Are you sure you want to proceed?",await confirmDialog(d)!==0){n.isTransferring=!1,i.emit("render");return}}try{for(let d in n.selectedFiles){const u=n.selectedFiles[d],p=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,u.fileName),g=r.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,u.fileName);if(u.type=="folder")await downloadFolder(p,g,f=>{n.transferringProgress=f,i.emit("render")});else{const f=await o.loadFile(p,{progressCallback:h=>{n.transferringProgress=`${u.fileName}: ${h}%`,i.emit("render")}});await BridgeDisk.saveFileContent(g,f.buffer)}}n.isTransferring=!1,n.selectedFiles=[],updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}catch(d){console.error("[Download] Transfer failed:",d),n.isTransferring=!1,n.transferringProgress="",updateOverlayDirectly(n),i.emit("render");let u=d.message;u&&u.includes("Transfer already in progress")&&(u="Transfer already in progress. The device may have stale TFTP state from a previous disconnected transfer. Please wait a moment and try again, or disconnect and reconnect."),alert(`Download failed: ${u}`)}}),i.on("export-files",async()=>{console.log("export-files");for(const l of n.selectedFiles)if(l.type!=="folder")try{let d;if(l.source==="board"){const m=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l.fileName),v=await o.loadFile(m);d=new Uint8Array(v)}else{const m=r.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l.fileName),v=await r.loadFile(m);d=new Uint8Array(v)}const u=l.fileName.split(".").pop().toLowerCase(),p={png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",gif:"image/gif",py:"text/plain",txt:"text/plain",json:"application/json",md:"text/markdown"},g=new Blob([d],{type:p[u]||"application/octet-stream"}),f=URL.createObjectURL(g),h=document.createElement("a");h.href=f,h.download=l.fileName,document.body.appendChild(h),h.click(),document.body.removeChild(h),URL.revokeObjectURL(f)}catch(d){console.error(`[Export] Failed to export ${l.fileName}:`,d),alert(`Failed to export ${l.fileName}: ${d.message}`)}}),i.on("navigate-board-folder",l=>{console.log("navigate-board-folder",l),n.boardNavigationPath=getNavigationPath(n.boardNavigationPath,l),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-board-parent",()=>{console.log("navigate-board-parent"),n.boardNavigationPath=getNavigationPath(n.boardNavigationPath,".."),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-disk-folder",l=>{console.log("navigate-disk-folder",l),n.diskNavigationPath=r.getNavigationPath(n.diskNavigationPath,l),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-disk-parent",()=>{console.log("navigate-disk-parent"),n.diskNavigationPath=r.getNavigationPath(n.diskNavigationPath,".."),i.emit("refresh-files"),i.emit("render")})}function debuggerStore(n,i){let o=null;console.log("[Debugger Store] Registering event handlers"),i.on("debugger:open-config",()=>{console.log("[Debugger] Opening config modal"),n.debugger.configOpen=!0,i.emit("render")}),i.on("debugger:close-config",()=>{n.debugger.configOpen=!1,i.emit("render")}),i.on("debugger:toggle-file",r=>{const s=n.debugger.debugFiles.indexOf(r);s>=0?n.debugger.debugFiles.splice(s,1):n.debugger.debugFiles.push(r),i.emit("render")}),i.on("debugger:set-watches",r=>{const s=r.split(`
 `).map(a=>a.trim()).filter(a=>a.length>0);n.debugger.watchExpressions[""]=s,i.emit("render")}),i.on("debugger:start",async()=>{try{const r=n.openFiles.find(a=>a.id===n.editingFile);if(!r){console.error("[Debugger] No file open");return}const s=r.editor?r.editor.content:"";if(!s){console.error("[Debugger] No content to debug");return}n.debugger.active=!0,i.emit("render"),o=new DebugSession(n,i),await o.start(s,n.debugger.watchExpressions,n.debugger.conditionalBreakpoints,r.fileName)}catch(r){console.error("[Debugger] Failed to start:",r),n.debugger.active=!1,i.emit("render")}}),i.on("debugger:step-over",async()=>{o&&await o.stepOver()}),i.on("debugger:step-into",async()=>{o&&await o.stepInto()}),i.on("debugger:step-out",async()=>{o&&await o.stepOut()}),i.on("debugger:continue",async(r=!0)=>{o&&await o.continue(r)}),i.on("debugger:stop",async()=>{o&&(await o.stop(),o=null),n.debugger.active=!1,n.debugger.halted=!1,n.debugger.configOpen=!1,i.emit("render")}),i.on("debugger:state-update",r=>{n.debugger.currentFile=r.f,n.debugger.currentLine=r.l,n.debugger.variables=r.w,n.debugger.locals=r.v,n.debugger.memory=r.m,n.debugger.timing=r.t,n.debugger.halted=r.h,i.emit("render")}),i.on("debugger:edit-breakpoint",r=>{const{file:s,line:a}=r;n.debugger.breakpoints[s]||(n.debugger.breakpoints[s]={}),n.debugger.breakpoints[s][a]||(n.debugger.breakpoints[s][a]={condition:"",hitCount:"",enabled:!0}),n.debugger.editingBreakpoint={file:s,line:a},n.debugger.breakpointModalOpen=!0,i.emit("render")}),i.on("debugger:save-breakpoint",r=>{const{file:s,line:a,config:c}=r;n.debugger.breakpoints[s]||(n.debugger.breakpoints[s]={}),n.debugger.breakpoints[s][a]=c,n.debugger.breakpointModalOpen=!1,n.debugger.editingBreakpoint=null,i.emit("debugger:breakpoints-updated",{file:s}),i.emit("render")}),i.on("debugger:delete-breakpoint",r=>{const{file:s,line:a}=r;n.debugger.breakpoints[s]&&delete n.debugger.breakpoints[s][a],n.debugger.breakpointModalOpen=!1,n.debugger.editingBreakpoint=null,i.emit("debugger:breakpoints-updated",{file:s}),i.emit("render")}),i.on("debugger:close-breakpoint-modal",()=>{n.debugger.breakpointModalOpen=!1,n.debugger.editingBreakpoint=null,i.emit("render")})}class DebugSession{constructor(i,o){this.state=i,this.emitter=o,this.device=BridgeDevice}async start(i,o,r,s){if(console.log("[Debugger] Starting debug session for:",s),!instrumentCodeForExec){console.error("[Debugger] instrumentCodeForExec not available - debugger-utils.js may not be loaded"),this.emitter.emit("show-dialog",{title:"Debugger Error",message:"Debugger utilities not loaded. Please refresh the page.",buttons:["OK"]});return}const a=performance.now(),c=await instrumentCodeForExec(i,{watches:this.state.debugger.watchExpressions,conditionalBP:this.state.debugger.conditionalBreakpoints,breakpoints:this.state.debugger.breakpoints,fileName:s});console.log(`[Debugger] Instrumentation took ${(performance.now()-a).toFixed(0)}ms`),await this.device.interrupt(),await sleep(100),this.device.subscribe("debug-state",this.onDebugState.bind(this)),console.log("[Debugger] Executing instrumented code...");try{await this.device.run(c),console.log("[Debugger] Execution completed successfully")}catch(l){console.warn("[Debugger] Code execution ended:",l.message)}finally{this.emitter.emit("terminal:write-prompt"),this.device.unsubscribe("debug-state"),this.state.debugger.active=!1,this.state.debugger.halted=!1,this.emitter.emit("render")}}async stepInto(){console.log("[Debugger] Step Into"),await this.device.sendDebugCommand("S")}async stepOver(){console.log("[Debugger] Step Over"),await this.device.sendDebugCommand("SO")}async stepOut(){console.log("[Debugger] Step Out"),await this.device.sendDebugCommand("ST")}async continue(i=!0){console.log("[Debugger] Continue",i?"(with log)":"(no log)"),await this.device.sendDebugCommand(i?"CW":"CO")}async stop(){console.log("[Debugger] Stop"),await this.device.interrupt(),this.device.unsubscribe("debug-state")}onDebugState(i){console.log("[Debugger] State update:",i),this.emitter.emit("debugger:state-update",i),this.displayDebugState(i)}displayDebugState(i){let o=`
 [DEBUG] Paused at ${i.f}:${i.l}
 `;const r=Object.entries(i.w);r.length>0&&(o+=`
@@ -6223,7 +6081,7 @@ ${c.message}`)}}),i.on("close-extensions-modal",()=>{s("close-extensions-modal")
 ${l.message}`)}});async function a(c,l,d,u,p){const g=c.id,f=Array.isArray(c.version)?c.version.join("."):String(c.version);s(`[Extensions] Running onInstall for ${c.name}...`),showStyledModal({variant:"",icon:"packages",title:"Installing Extension",subtitle:c.name,body:`<p>Installing extension files to device...</p>
              <div style="margin-top: 16px; color: var(--text-secondary);">
                <span class="install-spinner">◐</span> Preparing...
-             </div>`,buttons:[]});try{stopStatusInfoPolling();const h=(v,...y)=>v.reduce((b,C,S)=>b+C+(y[S]||""),""),m=instantiateExtension(l.content,d,u.emit.bind(u),h);if(typeof m.onInstall=="function"){updateModalBody(`<p>Writing files to device...</p>
+             </div>`,buttons:[]});try{stopStatusInfoPolling();const h=(v,...y)=>v.reduce((b,S,C)=>b+S+(y[C]||""),""),m=instantiateExtension(l.content,d,u.emit.bind(u),h);if(typeof m.onInstall=="function"){updateModalBody(`<p>Writing files to device...</p>
           <div style="margin-top: 16px; color: var(--text-secondary);">
             <span class="install-spinner">◐</span> Installing...
           </div>`),await m.onInstall(),updateModalBody(`<p>Updating device registry...</p>
@@ -6257,7 +6115,7 @@ ${a.message}
 Please check your internet connection and try again.`)}}),i.on("select-scriptos",async a=>{if(s("select-scriptos:",a.registryEntry?.name||a.filename),a.url&&!a.content){const c=a.url;console.log("[Registry] Fetching ScriptO from:",c);let l=o?await o.getScriptO(c):null,d,u;const p=l?.config?.info?.version,g=a.registryEntry?.version,f=p&&g&&JSON.stringify(p)===JSON.stringify(g);if(l&&l.content&&f)d=l.content,u=l.config,console.log("[Registry] Using cached ScriptO (version match)");else{l&&!f&&console.log("[Registry] Cache version mismatch, fetching fresh copy");try{const h=await fetch(c);if(!h.ok)throw new Error(`Failed to fetch ScriptO: ${h.status} ${h.statusText}`);if(d=await h.text(),u=parseScriptOsConfig(d),!u)throw new Error("Failed to parse ScriptO configuration");o&&await o.saveScriptO(c,d,u),console.log("[Registry] Fetched and cached ScriptO")}catch(h){console.error("[Registry] Error fetching ScriptO:",h),alert(`Failed to load ScriptO:
 ${h.message}`);return}}a={filename:a.filename,content:d,config:u,url:c}}if(n.selectedScriptOs=a,n.scriptOsArgs={},a.config&&a.config.args)for(const c in a.config.args){const l=a.config.args[c];l.value!==void 0?n.scriptOsArgs[c]=l.value:l.type==="str"?n.scriptOsArgs[c]="":l.type==="int"||l.type==="float"?n.scriptOsArgs[c]=0:l.type==="bool"?n.scriptOsArgs[c]=!1:l.type==="list"?n.scriptOsArgs[c]=l.optional?null:0:l.type==="dict"&&l.items&&(n.scriptOsArgs[c]=Object.keys(l.items)[0])}n.scriptOsModalView="config",i.emit("render")}),i.on("scriptos-update-arg",({argId:a,value:c})=>{n.scriptOsArgs[a]=c}),i.on("scriptos-search",a=>{n.scriptOsSearchQuery=a,i.emit("render")}),i.on("scriptos-toggle-tag",a=>{s("scriptos-toggle-tag:",a);const c=n.scriptOsFilterTags.indexOf(a);c>=0?n.scriptOsFilterTags.splice(c,1):n.scriptOsFilterTags.push(a),i.emit("render")}),i.on("scriptos-clear-tags",()=>{s("scriptos-clear-tags"),n.scriptOsFilterTags=[],i.emit("render")}),i.on("scriptos-back",()=>{s("scriptos-back"),n.scriptOsModalView="library",n.selectedScriptOs=null,i.emit("render")}),i.on("scriptos-execute",async()=>{s("scriptos-execute");const a=n.selectedScriptOs;if(a)try{let c=generateScriptOsCode(a.content,a.config,n.scriptOsArgs);a.config.silent===!0&&(c=`# SCRIPTOS_SILENT: True
 ${c}`),n.isScriptOsModalOpen=!1;const l=a.config.info||{};let d=(l.name||a.filename.replace(".py","")).replace(/[^a-zA-Z0-9]/g,"_")+".py";if(a.isAIGenerated){n.aiAgent.lastConfiguredArgs={...n.scriptOsArgs},n.aiAgent.lastScriptName=l.name,console.log("[AI] Saved configuration values for future updates:",n.aiAgent.lastConfiguredArgs),console.log("[AI] Saved script name:",n.aiAgent.lastScriptName);const u=n.openFiles.find(p=>p.isAIGenerated&&p.source==="disk"&&p.fileName===d);if(u)u.editor.editor.setValue(c),u.hasChanges=!0,n.editingFile=u.id,console.log("[AI] Updated existing AI-generated tab with configured code:",u.fileName);else{const p=d||"AI_Generated.py";if(await r("disk",p,null,c)){const f=n.openFiles[n.openFiles.length-1];f.isAIGenerated=!0,console.log("[AI] Created new AI-generated tab with configured code:",p)}}}else await r("disk",d,null,c),s("[ScriptOs] Generated code in new tab:",d);i.emit("render")}catch(c){console.error("[ScriptOs] Error generating code:",c)}}),i.on("close-scriptos-modal",()=>{s("close-scriptos-modal"),n.isScriptOsModalOpen=!1,n.selectedScriptOs=null,n.scriptOsModalView="library",i.emit("render")}),i.on("open-scriptos-ui-modal",a=>{s("open-scriptos-ui-modal",a),n.scriptOsUiModal&&n.scriptOsUiModal.loadTimeout&&clearTimeout(n.scriptOsUiModal.loadTimeout),n.scriptOsUiModal={isOpen:!0,url:a.url,title:a.title||"ScriptO UI",isLoading:!0,error:null,loadTimeout:null},n.scriptOsUiModal.loadTimeout=setTimeout(()=>{n.scriptOsUiModal&&n.scriptOsUiModal.isLoading&&(console.warn("[ScriptO UI] Load timeout - iframe did not load within 10 seconds"),n.scriptOsUiModal.isLoading=!1,n.scriptOsUiModal.error="Failed to load UI: timeout after 10 seconds. Check if the URL is accessible.",i.emit("render"))},1e4),i.emit("render")}),i.on("close-scriptos-ui-modal",()=>{s("close-scriptos-ui-modal"),n.scriptOsUiModal&&n.scriptOsUiModal.loadTimeout&&clearTimeout(n.scriptOsUiModal.loadTimeout),n.scriptOsUiModal={isOpen:!1,url:null,title:null,isLoading:!1,error:null,loadTimeout:null},i.emit("render")}),i.on("configure-scripto",async a=>{s("configure-scripto",a);try{console.log("[ScriptO] Fetching ScriptO from:",a);const c=await fetch(a);if(!c.ok)throw new Error(`Failed to fetch ScriptO: ${c.status} ${c.statusText}`);const l=await c.text();console.log("[ScriptO] Fetched content, length:",l.length);const d=parseScriptOsConfig(l);if(!d)throw new Error("Failed to parse ScriptO configuration");const u=a.split("/");let p=u[u.length-1];p=decodeURIComponent(p),p=decodeURIComponent(p);let g=p;d.info&&d.info.name&&(g=d.info.name),console.log("[ScriptO] Opening in config modal:",g);const f={filename:g,content:l,config:d};if(n.selectedScriptOs=f,n.scriptOsArgs={},d.args)for(const h in d.args){const m=d.args[h];m.value!==void 0?n.scriptOsArgs[h]=m.value:m.type==="str"?n.scriptOsArgs[h]="":m.type==="int"||m.type==="float"?n.scriptOsArgs[h]=0:m.type==="bool"?n.scriptOsArgs[h]=!1:m.type==="list"?n.scriptOsArgs[h]=m.optional?null:0:m.type==="dict"&&m.items&&(n.scriptOsArgs[h]=Object.keys(m.items)[0])}n.scriptOsModalView="config",n.isScriptOsModalOpen=!0,console.log("[ScriptO] Successfully opened ScriptO in config modal"),i.emit("render")}catch(c){console.error("[ScriptO] Error loading ScriptO:",c),alert(`Failed to load ScriptO from ${a}:
-${c.message}`)}})}console.log("[Stores] ES modules loaded");let CodeMirrorEditorClass=null;async function getCodeMirrorEditor(){return CodeMirrorEditorClass||(CodeMirrorEditorClass=(await __vitePreload(()=>Promise.resolve().then(()=>editor),void 0)).CodeMirrorEditor),CodeMirrorEditorClass}const log=console.log,device=BridgeDevice,disk=BridgeDisk,registryCache=new RegistryCache;async function store(n,i){async function o(a){const{source:c,parentFolder:l,fileName:d,content:u=newFileContent,hasChanges:p=!1}=a,g=generateHash(),f=await getCodeMirrorEditor(),h=n.cache(f,`editor_${g}`);return h.content=u,h.fileName=d,{id:g,source:c,parentFolder:l,fileName:d,editor:h,hasChanges:p}}async function r(a,c=null,l=null,d=null){a=="board"?n.boardNavigationPath:n.diskNavigationPath;const u=await o({fileName:c===null?generateFileName():c,parentFolder:l,source:a,hasChanges:!0,content:d||newFileContent});let p=!1;return l!=null&&(a=="board"?p=await fileExists(BridgeDevice,getFullPath$1(n.boardNavigationRoot,u.parentFolder,u.fileName)):a=="disk"&&(p=await disk.fileExists(disk.getFullPath(n.diskNavigationRoot,u.parentFolder,u.fileName)))),n.openFiles.find(f=>f.parentFolder===u.parentFolder&&f.fileName===u.fileName&&f.source===u.source)||p?(await confirmDialog(`File ${u.fileName} already exists on ${a}. Please choose another name.`),!1):(u.editor.onChange=function(){u.hasChanges=!0,i.emit("render")},n.openFiles.push(u),n.editingFile=u.id,!0)}await initializeState(n,i,r),initializeTheme(n,i),registerThemeHandlers(n,i);const s=()=>{};registerDialogHandlers(n,i,device),registerConnectionHandlers(n,i,device,s,bindTerminalOutput),registerFileOperationHandlers(n,i,device,disk,o,r),registerTerminalHandlers(n,i,device,XTerm),registerAIAgentHandlers(n,i,r),registerLogHandlers(n,i),document.addEventListener("connection-mode-change",a=>{const c=a.detail?.mode||"none";n.connectionMode=c,i.emit("render")}),document.addEventListener("firmware-panel-update",()=>{i.emit("render")}),i.on("navigate",a=>{i.emit("change-system-section",a)}),i.on("change-view",async a=>{a==="file-manager"&&(n.isConnected&&BridgeDevice&&BridgeDevice.isCommandRunning()&&(i.emit("stop"),await sleep(250)),n.filesLoadedOnce||(log("[File Manager] Loading files for first time..."),n.filesLoadedOnce=!0),n.isConnected?i.emit("refresh-files"):i.emit("refresh-disk-files")),n.systemSection!==a&&(n.selectedFiles=[],n.systemSection=a,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,a==="editor"&&n.isConnected&&setTimeout(()=>{bindTerminalOutput(n);const c=n.cache(XTerm,"terminal");c&&c.term&&(i.emit("bind-terminal-input"),i.emit("terminal-focus"))},100),i.emit("render"))}),i.on("launch-app",async(a,c)=>{window.launchApp(a,c)}),i.on("change-system-section",a=>{if(log("change-system-section",a),n.systemSection=a,a.startsWith("network:")){const c=a.split(":")[1];n.activeNetworkPanel=c,n.activeSystemPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else if(a.startsWith("peripherals:")){const c=a.split(":")[1];n.activePeripheralsPanel=c,n.activeNetworkPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else if(a.startsWith("system:")){const c=a.split(":")[1];n.activeSystemPanel=c,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null;(a==="ai-agent"||a==="system:ai-agent")&&n.aiAgent.settings.provider==="openrouter"&&n.aiAgent.settings.apiKey&&n.aiAgent.openRouterModels.length===0&&i.emit("ai-fetch-openrouter-models"),i.emit("render")}),registerNetworkConfigHandlers(n,i,device),registerHardwareConfigHandlers(n,i,device),registerSystemConfigHandlers(n,i),registerExtensionHandlers(n,i,device),registerScriptOsHandlers(n,i,registryCache,r),typeof debuggerStore=="function"?debuggerStore(n,i):console.warn("[Store] Debugger store not loaded"),i.on("change-locale",a=>{n.locale=a,localStorage.setItem("locale",a),window.i18n&&window.i18n.setLocale(a),i.emit("render")}),window.i18n?(window.i18n.setLocale(n.locale),console.log("[i18n] Locale initialized to:",n.locale)):console.warn("[i18n] i18n module not available")}const PANEL_CLOSED=45,PANEL_TOO_SMALL=65,PANEL_DEFAULT=320;typeof window<"u"&&(window.PANEL_CLOSED=PANEL_CLOSED,window.PANEL_TOO_SMALL=PANEL_TOO_SMALL,window.PANEL_DEFAULT=PANEL_DEFAULT);function App(n,i){return n.isInitializing?html$1`
+${c.message}`)}})}console.log("[Stores] ES modules loaded");let CodeMirrorEditorClass=null;async function getCodeMirrorEditor(){return CodeMirrorEditorClass||(CodeMirrorEditorClass=(await __vitePreload(()=>Promise.resolve().then(()=>editor),void 0)).CodeMirrorEditor),CodeMirrorEditorClass}const log=console.log,device=BridgeDevice,disk=BridgeDisk,registryCache=new RegistryCache;async function store(n,i){async function o(a){const{source:c,parentFolder:l,fileName:d,content:u=newFileContent,hasChanges:p=!1}=a,g=generateHash(),f=await getCodeMirrorEditor(),h=n.cache(f,`editor_${g}`);return h.content=u,h.fileName=d,{id:g,source:c,parentFolder:l,fileName:d,editor:h,hasChanges:p}}async function r(a,c=null,l=null,d=null){a=="board"?n.boardNavigationPath:n.diskNavigationPath;const u=await o({fileName:c===null?generateFileName():c,parentFolder:l,source:a,hasChanges:!0,content:d||newFileContent});let p=!1;return l!=null&&(a=="board"?p=await fileExists(BridgeDevice,getFullPath$1(n.boardNavigationRoot,u.parentFolder,u.fileName)):a=="disk"&&(p=await disk.fileExists(disk.getFullPath(n.diskNavigationRoot,u.parentFolder,u.fileName)))),n.openFiles.find(f=>f.parentFolder===u.parentFolder&&f.fileName===u.fileName&&f.source===u.source)||p?(await confirmDialog(`File ${u.fileName} already exists on ${a}. Please choose another name.`),!1):(u.editor.onChange=function(){u.hasChanges=!0,i.emit("render")},n.openFiles.push(u),n.editingFile=u.id,!0)}await initializeState(n,i,r),initializeTheme(n,i),registerThemeHandlers(n,i);const s=()=>{};registerDialogHandlers(n,i,device),registerConnectionHandlers(n,i,device,s,bindTerminalOutput),registerFileOperationHandlers(n,i,device,disk,o,r),registerTerminalHandlers(n,i,device,XTerm),registerAIAgentHandlers(n,i,r),registerLogHandlers(n,i),document.addEventListener("connection-mode-change",a=>{const c=a.detail?.mode||"none";n.connectionMode=c,i.emit("render")}),document.addEventListener("firmware-panel-update",()=>{i.emit("render")}),i.on("navigate",a=>{i.emit("change-system-section",a)}),i.on("change-view",async a=>{a==="file-manager"&&(n.isConnected&&BridgeDevice&&BridgeDevice.isCommandRunning()&&(i.emit("stop"),await sleep(250)),n.filesLoadedOnce||(log("[File Manager] Loading files for first time..."),n.filesLoadedOnce=!0),n.isConnected?i.emit("refresh-files"):i.emit("refresh-disk-files")),n.systemSection!==a&&(n.selectedFiles=[],n.systemSection=a,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,a==="editor"&&n.isConnected&&setTimeout(()=>{bindTerminalOutput(n);const c=n.cache(XTerm,"terminal");c&&c.term&&(i.emit("bind-terminal-input"),i.emit("terminal-focus"))},100),i.emit("render"))}),i.on("launch-app",async(a,c)=>{window.launchApp(a,c)}),i.on("change-system-section",a=>{if(log("change-system-section",a),n.systemSection=a,a.startsWith("network:")){const c=a.split(":")[1];n.activeNetworkPanel=c,n.activeSystemPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else if(a.startsWith("peripherals:")){const c=a.split(":")[1];n.activePeripheralsPanel=c,n.activeNetworkPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else if(a.startsWith("system:")){const c=a.split(":")[1];n.activeSystemPanel=c,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null;(a==="ai-agent"||a==="system:ai-agent")&&n.aiAgent.settings.provider==="openrouter"&&n.aiAgent.settings.apiKey&&n.aiAgent.openRouterModels.length===0&&i.emit("ai-fetch-openrouter-models"),i.emit("render")}),registerNetworkConfigHandlers(n,i,device),registerHardwareConfigHandlers(n,i,device),registerSystemConfigHandlers(n,i,device),registerExtensionHandlers(n,i,device),registerScriptOsHandlers(n,i,registryCache,r),typeof debuggerStore=="function"?debuggerStore(n,i):console.warn("[Store] Debugger store not loaded"),i.on("change-locale",a=>{n.locale=a,localStorage.setItem("locale",a),window.i18n&&window.i18n.setLocale(a),i.emit("render")}),window.i18n?(window.i18n.setLocale(n.locale),console.log("[i18n] Locale initialized to:",n.locale)):console.warn("[i18n] i18n module not available")}const PANEL_CLOSED=45,PANEL_TOO_SMALL=65,PANEL_DEFAULT=320;typeof window<"u"&&(window.PANEL_CLOSED=PANEL_CLOSED,window.PANEL_TOO_SMALL=PANEL_TOO_SMALL,window.PANEL_DEFAULT=PANEL_DEFAULT);function App(n,i){return n.isInitializing?html$1`
       <div id="app" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
         <p>Loading...</p>
       </div>

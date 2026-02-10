@@ -1,6 +1,7 @@
 {
   "language": "Idioma",
   "sidebar": {
+    "home": "Inicio",
     "about": "Acerca de",
     "editor": "Editor",
     "files": "Archivos",

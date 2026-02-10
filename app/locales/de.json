@@ -1,6 +1,7 @@
 {
   "language": "Sprache",
   "sidebar": {
+    "home": "Startseite",
     "about": "Über",
     "editor": "Editor",
     "files": "Dateien",
