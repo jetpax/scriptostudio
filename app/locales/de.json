@@ -162,7 +162,7 @@
     "back": "← Zurück",
     "statusLog": "Status-Protokoll",
     "readyToFlash": "Bereit zum Flashen",
-    "pyDirectDetected": "pyDirect erkannt",
+    "pyDirectDetected": "Gerät erkannt",
     "newDevice": "Gerät Flashen",
     "newDeviceDesc": "Neue Firmware auf leeres ESP32 flashen",
     "forgotCredentials": "Zugangsdaten vergessen",

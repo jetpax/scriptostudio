@@ -162,7 +162,7 @@
     "back": "← Back",
     "statusLog": "Status Log",
     "readyToFlash": "Ready to Flash",
-    "pyDirectDetected": "pyDirect Detected",
+    "pyDirectDetected": "Device Detected",
     "newDevice": "Flash Device",
     "newDeviceDesc": "Flash fresh firmware onto a blank ESP32",
     "forgotCredentials": "Forgot Credentials",
