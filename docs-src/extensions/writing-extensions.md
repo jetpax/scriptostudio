@@ -230,7 +230,6 @@ registry/Extensions/DBE/
 See these extensions for reference patterns:
 
 - **[DBE](../../DBE/)** - Battery emulator with multiple panels
-- **[PFC](../../picoClaw/)** - Agent orchestrator with workspace files
 - **[OpenInverter](../../OpenInverter/)** - Device discovery with dynamic menus
 
 ## Next Steps
