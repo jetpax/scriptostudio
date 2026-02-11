@@ -1,8 +1,8 @@
 {
   "version": "v1.27.0",
-  "updated": "2026-02-11T19:35:48Z",
-  "pyDirect_commit": "594910dbc8e29a9d84c3e321207fe4ef0f33e58f",
-  "scriptostudio_commit": "f77ccf470c38f1bf36c54999f6b7c881c3d554b7",
+  "updated": "2026-02-11T20:51:50Z",
+  "pyDirect_commit": "ae8f6fc16614ba2a5a6471b7fa2fc271eb8f9c7e",
+  "scriptostudio_commit": "c5576493d21b39b3575b69acb6fdec7aba03bbc5",
   "variants": [
     { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "pyDirect-ESP32_S3_8-merged.bin" },
     { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "pyDirect-ESP32_S3_16-merged.bin" },
