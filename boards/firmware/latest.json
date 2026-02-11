@@ -1,12 +1,12 @@
 {
   "version": "v1.27.0",
-  "updated": "2026-02-11T01:34:35Z",
-  "pyDirect_commit": "d618fb644d7a98e38c6d2f69cfe6bb149c7e4ea2",
-  "scriptostudio_commit": "05f375fe1c23643ba9a5fe2b70767af3c333436f",
+  "updated": "2026-02-11T19:35:48Z",
+  "pyDirect_commit": "594910dbc8e29a9d84c3e321207fe4ef0f33e58f",
+  "scriptostudio_commit": "f77ccf470c38f1bf36c54999f6b7c881c3d554b7",
   "variants": [
-    { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin" },
-    { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin" },
-    { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin" },
-    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin" }
+    { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "pyDirect-ESP32_S3_8-merged.bin" },
+    { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "pyDirect-ESP32_S3_16-merged.bin" },
+    { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "pyDirect-ESP32_P4_16-merged.bin" },
+    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "pyDirect-ESP32_P4_32-merged.bin" }
   ]
 }
