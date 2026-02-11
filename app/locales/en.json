@@ -181,7 +181,7 @@
     "loadingFirmware": "Loading firmware options...",
     "downloading": "Downloading...",
     "flashing": "Flashing...",
-    "writingToFlash": "Writing to flash, please wait...",
+    "writingToFlash": "Finishing up, please wait...",
     "flashComplete": "Flash Complete",
     "flashSuccess": "Firmware installed successfully!",
     "flashSuccessHint": "Your device is ready for WiFi configuration.",
