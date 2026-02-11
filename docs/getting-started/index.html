@@ -2557,7 +2557,7 @@
 </tr>
 <tr>
 <td><strong>Re-provision</strong></td>
-<td>Fresh start with new certificates</td>
+<td>Generate new certificates for HTTPS</td>
 </tr>
 </tbody>
 </table>
@@ -2569,12 +2569,19 @@
 <li>Click <strong>Connect Device</strong></li>
 <li>Select <strong>New Device</strong> when the chip is detected</li>
 <li>Flash the firmware (automatically selected for your chip)</li>
-<li>Configure WiFi when prompted</li>
-<li>Device reboots and redirects you to the device's web interface</li>
-<li><strong>Accept the browser security warning</strong> (self-signed certificate) - click Advanced → Proceed</li>
-<li><strong>Enter an access password</strong> - this is stored on the device and used for all future connections</li>
+<li><strong>Configure WiFi</strong> when the network modal appears</li>
+<li>Select your network from the list (shows signal strength in dBm)</li>
+<li>Enter the WiFi password</li>
+<li>Device connects and saves settings</li>
+<li>You're returned to the scenarios screen</li>
+<li>Select <strong>Re-provision Device</strong> to generate certificates</li>
+<li>Certificate is generated and installed</li>
+<li>Device resets and connects to WiFi</li>
+<li><strong>Accept the security warning modal</strong> and click to open device</li>
+<li><strong>Accept the browser security warning</strong> (click Advanced → Proceed)</li>
+<li><strong>Set an access password</strong> on the device's web interface</li>
 <li>You'll be redirected to ScriptO Studio</li>
-<li>When ScriptO Studio prompts for connection, <strong>use the same password</strong> you set in step 9</li>
+<li>When ScriptO Studio prompts for connection, <strong>use the same password</strong> you set in step 10</li>
 </ol>
 <blockquote>
 <p>[!IMPORTANT]
@@ -2603,18 +2610,27 @@ The password you set during provisioning is used both for the device's local web
 <li><strong>Go to <a href="https://pydirect.com">pydirect.com</a></strong></li>
 <li>Connect via USB and click <strong>Connect Device</strong></li>
 <li>Select <strong>Change WiFi</strong></li>
-<li>Choose from the list of detected networks</li>
-<li>Enter the WiFi password</li>
-<li>Device connects to the new network and generates a new certificate</li>
+<li>A modal shows available networks with signal strength (dBm)</li>
+<li>Select your network and enter the WiFi password</li>
+<li>Device connects and you're returned to scenarios</li>
 </ol>
+<blockquote>
+<p>[!NOTE]
+Change WiFi only updates network settings. If you need new HTTPS certificates, 
+select <strong>Re-provision Device</strong> afterward.</p>
+</blockquote>
 <h2 id="re-provision">Re-provision<a class="headerlink" href="#re-provision" title="Permanent link">&para;</a></h2>
-<p>For a complete fresh start with new certificates:</p>
+<p>To generate new HTTPS certificates:</p>
 <ol>
 <li><strong>Go to <a href="https://pydirect.com">pydirect.com</a></strong></li>
 <li>Connect via USB and click <strong>Connect Device</strong></li>
-<li>Select <strong>Re-provision</strong></li>
-<li>Enter a new password when prompted</li>
-<li>Device generates new certificates and restarts</li>
+<li>Select <strong>Re-provision Device</strong></li>
+<li>New certificate is generated and installed</li>
+<li>Device resets and connects to WiFi</li>
+<li>A modal explains the security warning you'll see</li>
+<li>Click <strong>Connect to [hostname]</strong> to open device in new tab</li>
+<li>Accept the browser security warning</li>
+<li>Set a new password on the device's web interface</li>
 </ol>
 <h2 id="connection-requirements">Connection Requirements<a class="headerlink" href="#connection-requirements" title="Permanent link">&para;</a></h2>
 <ul>

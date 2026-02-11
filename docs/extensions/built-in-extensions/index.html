@@ -1132,6 +1132,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Built-in Extensions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1148,6 +1166,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dbe-battery-emulator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DBE (Battery Emulator)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openinverter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenInverter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dtc-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DTC Explorer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ovms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OVMS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gvret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GVRET
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2247,6 +2350,80 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dbe-battery-emulator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DBE (Battery Emulator)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openinverter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenInverter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dtc-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DTC Explorer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ovms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OVMS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gvret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GVRET
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2266,11 +2443,63 @@
 
 
 <h1 id="built-in-extensions">Built-in Extensions<a class="headerlink" href="#built-in-extensions" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Coming Soon</p>
-<p>This page is under construction.</p>
-</div>
-<p>Please check back later or <a href="../../developer/contributing/">contribute to the docs</a>.</p>
+<p>ScriptO Studio includes several pre-built extensions for common use cases.</p>
+<h2 id="dbe-battery-emulator">DBE (Battery Emulator)<a class="headerlink" href="#dbe-battery-emulator" title="Permanent link">&para;</a></h2>
+<p><strong>ID:</strong> <code>dbe</code></p>
+<p>Dala's Battery Emulator - bridges EV battery packs to solar inverters via CAN-to-RS485.</p>
+<p><strong>Features:</strong>
+- Support for Nissan LEAF, BMW i3, and other battery packs
+- Pylon CAN and SMA inverter protocols
+- MQTT integration with Home Assistant auto-discovery
+- Real-time battery metrics and status</p>
+<p><strong>Panels:</strong> Configuration, Status, Metrics, MQTT</p>
+<hr />
+<h2 id="openinverter">OpenInverter<a class="headerlink" href="#openinverter" title="Permanent link">&para;</a></h2>
+<p><strong>ID:</strong> <code>openinverter</code></p>
+<p>Complete suite for OpenInverter motor controllers.</p>
+<p><strong>Features:</strong>
+- Parameter configuration and management
+- CAN message mapping (TX/RX)
+- Spot value monitoring with charts
+- Device discovery on CAN bus</p>
+<p><strong>Panels:</strong> Device Manager, Parameters, Telemetry, CAN Mappings, OTA</p>
+<hr />
+<h2 id="dtc-explorer">DTC Explorer<a class="headerlink" href="#dtc-explorer" title="Permanent link">&para;</a></h2>
+<p><strong>ID:</strong> <code>dtc-explorer</code></p>
+<p>Diagnostic Trouble Code viewer using UDS/ISO 14229.</p>
+<p><strong>Features:</strong>
+- Read and clear DTCs from ECUs
+- Standard code definitions (SAE J2012)
+- Support for manufacturer-specific codes</p>
+<hr />
+<h2 id="ovms">OVMS<a class="headerlink" href="#ovms" title="Permanent link">&para;</a></h2>
+<p><strong>ID:</strong> <code>ovms</code></p>
+<p>Open Vehicle Monitoring System interface.</p>
+<p><strong>Features:</strong>
+- Vehicle telemetry display
+- Remote commands
+- Charge scheduling
+- GPS location</p>
+<hr />
+<h2 id="gvret">GVRET<a class="headerlink" href="#gvret" title="Permanent link">&para;</a></h2>
+<p><strong>ID:</strong> <code>gvret</code></p>
+<p>CAN bus analyzer using GVRET protocol.</p>
+<p><strong>Features:</strong>
+- Live CAN frame capture
+- DBC file parsing
+- Signal decoding
+- Export to CSV/ASC</p>
+<hr />
+<h2 id="source-code">Source Code<a class="headerlink" href="#source-code" title="Permanent link">&para;</a></h2>
+<p>All built-in extensions follow the modular structure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ExtensionName/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── extension.json
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── src/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   └── index.js
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└── device/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    └── lib/
+</code></pre></div>
+<p>View source on GitHub: <a href="https://github.com/jetpax/scriptostudio">scriptostudio/registry/Extensions</a></p>
 
 
 

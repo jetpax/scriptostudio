@@ -1082,6 +1082,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extension-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#built-in-extensions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2346,6 +2357,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extension-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#built-in-extensions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2399,16 +2421,26 @@
 
 
 <h1 id="extensions">Extensions<a class="headerlink" href="#extensions" title="Permanent link">&para;</a></h1>
-<p>Extensions add new functionality to ScriptO Studio through the <strong>JS Configurator</strong> pattern - JavaScript modules that provide custom UI tabs and device-side Python libraries.</p>
+<p>Extensions add new functionality to ScriptO Studio through the <strong>JS Configurator</strong> pattern - JavaScript classes that provide custom UI panels and device-side Python libraries.</p>
 <p><img alt="Extensions in ScriptO Studio" src="../assets/extensions.png" /></p>
 <h2 id="what-are-extensions">What are Extensions?<a class="headerlink" href="#what-are-extensions" title="Permanent link">&para;</a></h2>
-<p>Extensions are JavaScript modules (ESM) that integrate into ScriptO Studio to:</p>
+<p>Extensions are bundled JavaScript modules that integrate into ScriptO Studio to:</p>
 <ul>
 <li>Add new sidebar menu tabs with custom UI</li>
-<li>Bundle device-side Python libraries</li>
+<li>Deploy device-side Python libraries during installation</li>
 <li>Communicate with hardware using the M2M (machine-to-machine) pattern</li>
 <li>Provide specialized tools for specific use cases</li>
 </ul>
+<h2 id="extension-structure">Extension Structure<a class="headerlink" href="#extension-structure" title="Permanent link">&para;</a></h2>
+<p>Extensions use a modular source structure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>MyExtension/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── extension.json      # Metadata and configuration
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── src/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   └── index.js       # Entry point (exports class)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└── device/             # Device-side files (optional)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    └── lib/
+</code></pre></div>
+<p>These are bundled into a single <code>.bundle.js</code> file for distribution.</p>
 <h2 id="built-in-extensions">Built-in Extensions<a class="headerlink" href="#built-in-extensions" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2423,16 +2455,16 @@
 <td>Battery emulator with MQTT integration</td>
 </tr>
 <tr>
-<td><strong>OVMS</strong></td>
-<td>Open Vehicle Monitoring System interface</td>
+<td><strong>OpenInverter</strong></td>
+<td>Motor controller configuration</td>
 </tr>
 <tr>
 <td><strong>DTC Explorer</strong></td>
 <td>Diagnostic Trouble Code viewer</td>
 </tr>
 <tr>
-<td><strong>OpenInverter</strong></td>
-<td>Motor controller configuration</td>
+<td><strong>OVMS</strong></td>
+<td>Open Vehicle Monitoring System interface</td>
 </tr>
 </tbody>
 </table>
@@ -2469,14 +2501,14 @@
 </tr>
 <tr>
 <td><strong>Install</strong></td>
-<td>Via registry + device libs</td>
+<td>Via registry, deploys device libs</td>
 <td>Just run from registry</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Choose Extensions</strong> when you need:
 - Permanent sidebar presence
-- Complex multi-tab interfaces
+- Complex multi-panel interfaces
 - Bundled device-side libraries</p>
 <p><strong>Choose ScriptOs</strong> when you need:
 - Quick one-off scripts
@@ -2486,6 +2518,7 @@
 <ul>
 <li><a href="writing-extensions/">Writing Extensions</a> - Create your own extension</li>
 <li><a href="extension-api/">Extension API</a> - Full API reference</li>
+<li><a href="device-libraries/">Device Libraries</a> - Python libraries for device</li>
 <li><a href="built-in-extensions/">Built-in Extensions</a> - Example implementations</li>
 </ul>
 
