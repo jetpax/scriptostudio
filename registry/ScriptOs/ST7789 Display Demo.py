@@ -75,7 +75,7 @@ class ST7789:
     CMD_MADCTL    = 0x36
     CMD_COLMOD    = 0x3A
     
-    def __init__(self, spi, cs, dc, rst=None, width=240, height=280, rotation=0):
+    def __init__(self, spi, cs, dc, rst=None, width=240, height=280, offset_x=0, offset_y=0, rotation=0):
         self.spi = spi
         self.cs = Pin(cs, Pin.OUT)
         self.dc = Pin(dc, Pin.OUT)
@@ -84,9 +84,9 @@ class ST7789:
         self.height = height
         self.rotation = rotation
         
-        # Offsets for different display sizes (ST7789 is 240x320 internally)
-        self._x_offset = 0
-        self._y_offset = 20 if height == 280 else 0
+        # Offsets from board manifest (ST7789 internal buffer is larger than visible area)
+        self._x_offset = offset_x
+        self._y_offset = offset_y
         
         self.cs.value(1)
         self.dc.value(1)
@@ -422,22 +422,23 @@ def demo_text(display, duration):
     display.fill(rgb565(20, 20, 40))  # Dark blue background
     
     # Title - "pyDirect" = 8 chars × 8px × 3 = 192px, center = (240-192)/2 = 24
-    display.text("pyDirect", 24, 20, CYAN, scale=3)
+    display.text("pyBot", 24, 20, CYAN, scale=3)
     
     # Subtitle - "Display Demo" = 12 chars × 8px × 2 = 192px, center = 24
-    display.text("Display Demo", 24, 60, WHITE, scale=2)
+    display.text("Display", 24, 60, WHITE, scale=2)
+    display.text("Demo", 24, 80, WHITE, scale=2)
     
     # Info
     display.text(f"Size: {display.width}x{display.height}", 20, 100, GREEN)
     
     if USE_BOARD:
-        display.text(f"Board: {board.id.id}", 20, 115, GREEN)
-        display.text(f"Chip: {board.id.chip}", 20, 130, GREEN)
+        display.text(f"Board: {board.id.id}", 20, 135, GREEN)
+        display.text(f"Chip: {board.id.chip}", 20, 150, GREEN)
     
     # Fun message - "MicroPython" = 11 chars × 8px × 2 = 176px, center = 32
-    display.text("MicroPython", 32, 170, YELLOW, scale=2)
+    display.text("MicroPython", 0, 190, YELLOW, scale=2)
     # "Rocks!" = 6 chars × 8px × 2 = 96px, center = 72
-    display.text("Rocks!", 72, 200, MAGENTA, scale=2)
+    display.text("Rocks!", 36, 220, MAGENTA, scale=2)
     
     # Border
     display.rect(5, 5, display.width - 10, display.height - 10, CYAN)
@@ -447,8 +448,8 @@ def demo_text(display, duration):
 
 
 def demo_pylogo(display, duration):
-    """pyDirect logo demo"""
-    print("🐍 pyDirect logo...")
+    """pyBot logo demo"""
+    print("🐍 pyBot logo...")
     display.fill(rgb565(10, 10, 20))
     
     cx, cy = display.width // 2, display.height // 2
@@ -464,7 +465,7 @@ def demo_pylogo(display, duration):
     
     # Center text
     display.fill_rect(cx - 60, cy - 12, 120, 24, rgb565(20, 20, 50))
-    display.text("pyDirect", cx - 48, cy - 8, WHITE, scale=2)
+    display.text("pyBot", cx - 32, cy - 8, WHITE, scale=2)
     
     # Version
     display.text("v1.0", cx - 16, cy + 20, CYAN)
@@ -494,15 +495,24 @@ if USE_BOARD and board.has("display"):
     cs_pin = spi_cfg.cs
     rst_pin = spi_cfg.rst
     
-    # Get display dimensions
+    # Get display device definition from manifest
     disp = board.device("display")
     width = disp.width
     height = disp.height
     
-    # Backlight
-    bl_pin = board._res.get("gpio", {}).get("bl_pwm")
+    # Get display offsets from manifest (defaults to 0 if not specified)
+    offset_x = getattr(disp, 'offset_x', 0)
+    offset_y = getattr(disp, 'offset_y', 0)
+    
+    # Backlight: prefer devices.display.backlight.pin, fall back to resources.gpio.bl_pwm
+    bl_pin = None
+    try:
+        bl_pin = disp.backlight['pin']
+    except (AttributeError, KeyError, TypeError):
+        bl_pin = board._res.get("gpio", {}).get("bl_pwm")
     
     print(f"  Display: {disp.type} {width}x{height}")
+    print(f"  Offsets: x={offset_x}, y={offset_y}")
     print(f"  SPI: SCK={sck_pin}, MOSI={mosi_pin}")
     print(f"  Control: DC={dc_pin}, CS={cs_pin}, RST={rst_pin}")
     if bl_pin:
@@ -517,6 +527,8 @@ else:
     bl_pin = 15
     width = 240
     height = 280
+    offset_x = 0
+    offset_y = 20
 
 print()
 
@@ -524,8 +536,8 @@ print()
 spi = SPI(1, baudrate=40000000, sck=Pin(sck_pin), mosi=Pin(mosi_pin))
 print(f"✅ SPI initialized @ 40MHz")
 
-# Initialize display
-display = ST7789(spi, cs_pin, dc_pin, rst_pin, width, height)
+# Initialize display with offsets from manifest
+display = ST7789(spi, cs_pin, dc_pin, rst_pin, width, height, offset_x, offset_y)
 
 # Set backlight
 if bl_pin:

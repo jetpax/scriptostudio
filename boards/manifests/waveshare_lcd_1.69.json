@@ -81,7 +81,14 @@
       "bus": "spi.lcd",
       "width": 240,
       "height": 280,
+      "offset_x": 0,
+      "offset_y": 20,
       "color_bits": 16,
+      "backlight": {
+        "pin": 15,
+        "active_high": true,
+        "pwm_capable": true
+      },
       "description": "1.69\" 240x280 IPS LCD"
     },
 
