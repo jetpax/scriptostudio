@@ -9,9 +9,7 @@
   },
 
   "network": {
-    "hostname_pattern": "pyDirect-{mac_suffix}",
     "mdns_enabled": true,
-    "ap_ssid_pattern": "pyDirect-{mac_suffix}",
     "ap_password": null,
     "default_services": ["http", "webrepl"]
   },

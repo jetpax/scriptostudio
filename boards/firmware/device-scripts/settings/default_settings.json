@@ -3,7 +3,7 @@
   "wifi": {
     "ssid": "Paxnet",
     "password": "rtyu4567",
-    "hostname_prefix": "pyDirect"
+    "hostname_prefix": "pybot"
   },
   "ethernet": {
     "dhcp": true,
