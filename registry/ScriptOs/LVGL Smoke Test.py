@@ -88,7 +88,7 @@ spi = machine.SPI(
 
 print("🖥️  Initializing ST7789 LVGL driver...")
 gc.collect()
-from st77xx import St7789
+from lib.sys.display.st77xx import St7789
 
 # ST7789 controller is always 240x320 internally
 # The driver handles offset mapping via MADCTL rotation tables
