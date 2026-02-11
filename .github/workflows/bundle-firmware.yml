@@ -20,6 +20,8 @@ jobs:
   bundle:
     name: Build merged firmware
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout scriptostudio
