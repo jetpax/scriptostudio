@@ -1,72 +1,29 @@
+# Bundle Firmware Workflow
+# Merges firmware components (from pyDirect) with VFS device-scripts into deployable .bin files
+#
+# Triggers:
+#   - Push to boards/firmware/components/** (new firmware from pyDirect CI)
+#   - Push to boards/firmware/device-scripts/** (VFS content changes)
+#   - Manual trigger
+
 name: Bundle Firmware
 
-# Triggered by:
-# 1. repository_dispatch from pyDirect after firmware build
-# 2. Push to device-scripts (VFS content changed, re-merge with cached firmware)
-# 3. Manual trigger
 on:
-  repository_dispatch:
-    types: [firmware-update]
   push:
-    branches: [main]
     paths:
+      - 'boards/firmware/components/**'
       - 'boards/firmware/device-scripts/**'
+    branches: [master]
   workflow_dispatch:
-    inputs:
-      pyDirect_run_id:
-        description: 'pyDirect workflow run ID to download artifacts from'
-        required: false
-        type: string
 
 jobs:
   bundle:
+    name: Build merged firmware
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout scriptostudio
         uses: actions/checkout@v4
-
-      - name: Get firmware source info
-        id: firmware-info
-        run: |
-          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
-            echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
-            echo "run_id=${{ github.event.client_payload.run_id }}" >> $GITHUB_OUTPUT
-            echo "Source: repository_dispatch from pyDirect"
-          elif [ -n "${{ inputs.pyDirect_run_id }}" ]; then
-            echo "run_id=${{ inputs.pyDirect_run_id }}" >> $GITHUB_OUTPUT
-            echo "Source: manual trigger with run_id"
-          else
-            echo "Source: device-scripts push (re-merge with cached firmware)"
-            # Use cached firmware components from last dispatch
-          fi
-
-      - name: Download firmware components from pyDirect
-        if: steps.firmware-info.outputs.run_id != ''
-        uses: dawidd6/action-download-artifact@v6
-        with:
-          github_token: ${{ secrets.PYDIRECT_PAT }}
-          repo: jetpax/pyDirect
-          run_id: ${{ steps.firmware-info.outputs.run_id }}
-          name: firmware-.*
-          name_is_regexp: true
-          path: firmware-components/
-
-      - name: Cache firmware components
-        if: steps.firmware-info.outputs.run_id != ''
-        run: |
-          # Save components for future device-scripts-only rebuilds
-          mkdir -p boards/firmware/.components
-          cp -r firmware-components/* boards/firmware/.components/
-
-      - name: Restore cached firmware components
-        if: steps.firmware-info.outputs.run_id == ''
-        run: |
-          if [ ! -d "boards/firmware/.components" ]; then
-            echo "❌ No cached firmware components found. Trigger with a pyDirect run_id."
-            exit 1
-          fi
-          mkdir -p firmware-components
-          cp -r boards/firmware/.components/* firmware-components/
 
       - name: Install tools
         run: |
@@ -79,94 +36,122 @@ jobs:
           # Install esptool
           pip install esptool
 
+      - name: Verify components exist
+        run: |
+          COMPONENTS="boards/firmware/components"
+          if [ ! -d "$COMPONENTS" ] || [ -z "$(ls -A $COMPONENTS 2>/dev/null)" ]; then
+            echo "❌ No firmware components found in $COMPONENTS"
+            echo "   Components are pushed by pyDirect CI. Run the pyDirect build first."
+            exit 1
+          fi
+          echo "📦 Found variants:"
+          ls -1 "$COMPONENTS"
+
       - name: Build merged firmware for each variant
         run: |
+          COMPONENTS="boards/firmware/components"
           DEVICE_SCRIPTS="boards/firmware/device-scripts"
-          
-          # Process each firmware variant
-          for variant_dir in firmware-components/firmware-*/; do
-            VARIANT=$(basename "$variant_dir" | sed 's/firmware-//')
+          FIRMWARE_DIR="boards/firmware"
+
+          for variant_dir in "$COMPONENTS"/*/; do
+            VARIANT=$(basename "$variant_dir")
             echo "📦 Processing variant: $VARIANT"
-            
-            BOOTLOADER="$variant_dir/bootloader/bootloader.bin"
-            PARTITION_TABLE="$variant_dir/partition_table/partition-table.bin"
+
+            BOOTLOADER="$variant_dir/bootloader.bin"
+            PARTITION_TABLE="$variant_dir/partition-table.bin"
             FIRMWARE="$variant_dir/micropython.bin"
-            PARTITION_CSV="$variant_dir/partition-table.csv"
-            
-            # Verify all components exist
-            for f in "$BOOTLOADER" "$PARTITION_TABLE" "$FIRMWARE"; do
+            PARTITION_CSV=$(find "$variant_dir" -name "partitions*.csv" | head -1)
+
+            # Verify all components present
+            for f in "$BOOTLOADER" "$PARTITION_TABLE" "$FIRMWARE" "$PARTITION_CSV"; do
               if [ ! -f "$f" ]; then
                 echo "❌ Missing: $f"
                 exit 1
               fi
             done
-            
+
             # Parse VFS partition offset and size from CSV
             VFS_LINE=$(grep "^vfs," "$PARTITION_CSV")
             VFS_OFFSET=$(echo "$VFS_LINE" | cut -d',' -f4 | xargs)
             VFS_SIZE=$(echo "$VFS_LINE" | cut -d',' -f5 | xargs)
-            
-            # Convert hex size if needed
+
             if [[ "$VFS_SIZE" == 0x* ]]; then
               VFS_SIZE=$((VFS_SIZE))
             fi
-            
-            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE"
-            
-            # Create VFS partition from device-scripts (no board.json)
+
+            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes"
+
+            # Create VFS partition from device-scripts
             VFS_IMAGE="/tmp/vfs-${VARIANT}.bin"
             mklittlefs \
               -c "$DEVICE_SCRIPTS" \
               -b 4096 -p 256 \
               -s "$VFS_SIZE" \
               "$VFS_IMAGE"
-            
-            # Detect chip type
+
+            echo "  ✅ VFS image: $(du -h "$VFS_IMAGE" | cut -f1)"
+
+            # Detect chip and flash size from variant name
             CHIP="esp32s3"
             if [[ "$VARIANT" == *"P4"* ]]; then CHIP="esp32p4"; fi
-            
-            # Detect flash size
-            FLASH_SIZE="8MB"
-            if [[ "$VARIANT" == *"16MB"* ]] || [[ "$VARIANT" == *"P4"* ]]; then
-              FLASH_SIZE="16MB"
+
+            # Detect flash size from variant suffix (ESP32_S3_8=8MB, ESP32_S3_16=16MB, etc.)
+            FLASH_MB=$(echo "$VARIANT" | grep -oE '[0-9]+$')
+            FLASH_SIZE="${FLASH_MB}MB"
+
+            # Detect bootloader offset (P4 uses 0x2000, others use 0x0)
+            BOOT_OFFSET="0x0"
+            if [[ "$CHIP" == "esp32p4" ]]; then
+              BOOT_OFFSET="0x2000"
             fi
-            
-            # Merge all parts
-            MERGED="boards/firmware/pyDirect-${VARIANT}-merged.bin"
+
+            # Merge all parts into deployable firmware
+            MERGED="$FIRMWARE_DIR/pyDirect-${VARIANT}-merged.bin"
             esptool.py --chip "$CHIP" merge_bin \
               --fill-flash-size "$FLASH_SIZE" \
               --flash_mode dio \
               --flash_freq 80m \
               --flash_size "$FLASH_SIZE" \
               -o "$MERGED" \
-              0x0 "$BOOTLOADER" \
+              $BOOT_OFFSET "$BOOTLOADER" \
               0x8000 "$PARTITION_TABLE" \
               0x10000 "$FIRMWARE" \
               $VFS_OFFSET "$VFS_IMAGE"
-            
+
             echo "  ✅ Created: $MERGED ($(du -h "$MERGED" | cut -f1))"
           done
 
       - name: Update firmware metadata
         run: |
-          VERSION="${{ steps.firmware-info.outputs.version || 'unknown' }}"
+          # Read version from components build-info
+          BUILD_INFO="boards/firmware/components/build-info.json"
+          if [ -f "$BUILD_INFO" ]; then
+            VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
+            COMMIT=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['commit'])")
+          else
+            VERSION="unknown"
+            COMMIT="${{ github.sha }}"
+          fi
+
           cat > boards/firmware/latest.json << EOF
           {
             "version": "$VERSION",
             "updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "pyDirect_commit": "$COMMIT",
+            "scriptostudio_commit": "${{ github.sha }}",
             "variants": [
-              { "id": "ESP32_S3", "chip": "esp32s3", "flash": "8MB", "file": "pyDirect-ESP32_S3-merged.bin" },
-              { "id": "ESP32_S3_16MB", "chip": "esp32s3", "flash": "16MB", "file": "pyDirect-ESP32_S3_16MB-merged.bin" },
-              { "id": "ESP32_P4", "chip": "esp32p4", "flash": "16MB", "file": "pyDirect-ESP32_P4-merged.bin" },
-              { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "16MB", "file": "pyDirect-ESP32_P4_32-merged.bin" }
+              { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "pyDirect-ESP32_S3_8-merged.bin" },
+              { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "pyDirect-ESP32_S3_16-merged.bin" },
+              { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "pyDirect-ESP32_P4_16-merged.bin" },
+              { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "pyDirect-ESP32_P4_32-merged.bin" }
             ]
           }
           EOF
 
-      - name: Commit firmware
+      - name: Commit merged firmware
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add boards/firmware/*.bin boards/firmware/latest.json boards/firmware/.components/
-          git commit -m "🤖 Update firmware ${VERSION:-$(date +%Y%m%d)}" || echo "No changes to commit"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add boards/firmware/*.bin boards/firmware/latest.json
+          git commit -m "🤖 Merged firmware $(date -u +%Y-%m-%d)" || echo "No changes"
           git push
