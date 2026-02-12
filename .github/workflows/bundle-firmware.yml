@@ -143,7 +143,7 @@ jobs:
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
-          TAG="firmware-v${VERSION}-$(date -u +%Y%m%d%H%M%S)"
+          TAG="firmware-${VERSION}-$(date -u +%Y%m%d%H%M%S)"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
       - name: Create firmware release
@@ -157,13 +157,57 @@ jobs:
           files: /tmp/*-merged.bin
           make_latest: true
 
-      - name: Update latest.json
+      - name: Build latest.json with CORS-friendly URLs
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           COMMIT="${{ steps.version.outputs.commit }}"
           TAG="${{ steps.version.outputs.tag }}"
           REPO="${{ github.repository }}"
-          DL="https://github.com/${REPO}/releases/download/${TAG}"
+
+          # Wait for release assets to be available
+          sleep 5
+
+          # Query the GitHub API to get asset download URLs
+          # The api.github.com asset endpoint supports CORS (unlike github.com/releases/download/)
+          RELEASE_JSON=$(gh api "repos/${REPO}/releases/tags/${TAG}")
+          
+          # Build variant entries with CORS-friendly API URLs
+          # Format: https://api.github.com/repos/{owner}/{repo}/releases/assets/{id}
+          # The flasher will fetch with Accept: application/octet-stream header
+          VARIANTS="["
+          FIRST=true
+          for VARIANT_ID in ESP32_S3_8 ESP32_S3_16 ESP32_P4_16 ESP32_P4_32; do
+            FILE="${VARIANT_ID}-merged.bin"
+            CHIP="esp32s3"
+            FLASH="8MB"
+            if [[ "$VARIANT_ID" == *"P4"* ]]; then CHIP="esp32p4"; fi
+            if [[ "$VARIANT_ID" == *"_16" ]]; then FLASH="16MB"; fi
+            if [[ "$VARIANT_ID" == *"_32" ]]; then FLASH="32MB"; fi
+
+            # Get asset ID from release JSON
+            ASSET_ID=$(echo "$RELEASE_JSON" | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          for asset in data.get('assets', []):
+              if asset['name'] == '$FILE':
+                  print(asset['id'])
+                  break
+          " 2>/dev/null || echo "")
+
+            if [ -n "$ASSET_ID" ]; then
+              API_URL="https://api.github.com/repos/${REPO}/releases/assets/${ASSET_ID}"
+              BROWSER_URL="https://github.com/${REPO}/releases/download/${TAG}/${FILE}"
+              if [ "$FIRST" = true ]; then FIRST=false; else VARIANTS="$VARIANTS,"; fi
+              VARIANTS="$VARIANTS
+              { \"id\": \"${VARIANT_ID}\", \"chip\": \"${CHIP}\", \"flash\": \"${FLASH}\", \"file\": \"${FILE}\", \"url\": \"${API_URL}\", \"browser_url\": \"${BROWSER_URL}\" }"
+            else
+              echo "⚠️  Asset not found for $FILE — skipping"
+            fi
+          done
+          VARIANTS="$VARIANTS
+            ]"
 
           cat > boards/firmware/latest.json << EOF
           {
@@ -172,14 +216,13 @@ jobs:
             "pyDirect_commit": "$COMMIT",
             "scriptostudio_commit": "${{ github.sha }}",
             "release_tag": "$TAG",
-            "variants": [
-              { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "${DL}/ESP32_S3_8-merged.bin" },
-              { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "${DL}/ESP32_S3_16-merged.bin" },
-              { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "${DL}/ESP32_P4_16-merged.bin" },
-              { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "${DL}/ESP32_P4_32-merged.bin" }
-            ]
+            "release_url": "https://github.com/${REPO}/releases/tag/${TAG}",
+            "variants": $VARIANTS
           }
           EOF
+
+          echo "📋 Generated latest.json:"
+          cat boards/firmware/latest.json
 
       - name: Commit latest.json
         run: |
