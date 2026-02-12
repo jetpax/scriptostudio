@@ -6,9 +6,9 @@
   "release_tag": "firmware-v1.27.0-20260212032356",
   "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-v1.27.0-20260212032356",
   "variants": [
-    { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584851", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_S3_8-merged.bin" },
-    { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584847", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_S3_16-merged.bin" },
-    { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584850", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_P4_16-merged.bin" },
-    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584849", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_P4_32-merged.bin" }
+    { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "/boards/firmware/ESP32_S3_8-merged.bin" },
+    { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "/boards/firmware/ESP32_S3_16-merged.bin" },
+    { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "/boards/firmware/ESP32_P4_16-merged.bin" },
+    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "/boards/firmware/ESP32_P4_32-merged.bin" }
   ]
 }

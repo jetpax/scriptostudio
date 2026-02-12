@@ -6,9 +6,6 @@ __pycache__/
 .Python
 *.egg-info/
 
-# Firmware binaries (delivered via GitHub Releases, not committed)
-boards/firmware/*.bin
-
 # Test files
 test-index.json
 test-catalogue/
