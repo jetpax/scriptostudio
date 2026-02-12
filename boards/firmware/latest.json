@@ -1,14 +1,14 @@
 {
   "version": "v1.27.0",
-  "updated": "2026-02-12T02:47:13Z",
+  "updated": "2026-02-12T03:24:04Z",
   "pyDirect_commit": "60d8b29d3b64ce32448a2824c79b1878fb344e4b",
-  "scriptostudio_commit": "dc9069a20b66aed5da4215914899e10077004c7f",
-  "release_tag": "firmware-vv1.27.0-20260212024711",
-  "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-vv1.27.0-20260212024711",
+  "scriptostudio_commit": "ca0e7775e5591ab9b52924a047149493568b4865",
+  "release_tag": "firmware-v1.27.0-20260212032356",
+  "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-v1.27.0-20260212032356",
   "variants": [
-    { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354566826", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-vv1.27.0-20260212024711/ESP32_S3_8-merged.bin" },
-    { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354566827", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-vv1.27.0-20260212024711/ESP32_S3_16-merged.bin" },
-    { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354566828", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-vv1.27.0-20260212024711/ESP32_P4_16-merged.bin" },
-    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354566829", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-vv1.27.0-20260212024711/ESP32_P4_32-merged.bin" }
+    { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584851", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_S3_8-merged.bin" },
+    { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584847", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_S3_16-merged.bin" },
+    { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584850", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_P4_16-merged.bin" },
+    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "https://api.github.com/repos/jetpax/scriptostudio/releases/assets/354584849", "browser_url": "https://github.com/jetpax/scriptostudio/releases/download/firmware-v1.27.0-20260212032356/ESP32_P4_32-merged.bin" }
   ]
 }
