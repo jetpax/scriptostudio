@@ -297,7 +297,7 @@ def a2b_base64(ascii):
     last_char_was_a_pad = False
 
     for c in ascii:
-        c = chr(c)
+        c = c if isinstance(c, str) else chr(c)
         if c == PAD:
             if quad_pos > 2 or (quad_pos == 2 and last_char_was_a_pad):
                 break  # stop on 'xxx=' or on 'xx=='

@@ -56,11 +56,11 @@ def get_hostname():
         mac = ubinascii.hexlify(sta.config('mac'), ':').decode()
         mac_suffix = mac.replace(':', '')[-4:]
         
-        prefix = settings.get("wifi.hostname_prefix", "pydirect")
+        prefix = settings.get("wifi.hostname_prefix", "pybot")
         return f"{prefix}-{mac_suffix}"
     except Exception as e:
         _log("warning", f"Failed to get hostname: {e}")
-        return "pydirect"
+        return "pybot"
 
 
 def init():

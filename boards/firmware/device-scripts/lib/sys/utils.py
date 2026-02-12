@@ -49,7 +49,7 @@ NEOFETCH_FW_NAME = "RetroVMS-MINI"
 NEOFETCH_TERMINAL = "xterm.js"
 NEOFETCH_COMMAND_PARSER = "webREPL"
 NEOFETCH_AUTHOR = "jetpax"
-NEOFETCH_OS = "MicroPython with \033[3mpyDirect\033[23m"  # \033[3m = italic on, \033[23m = italic off
+NEOFETCH_OS = "MicroPython with \033[3mpyBot\033[23m"  # \033[3m = italic on, \033[23m = italic off
 
 # Neofetch logo with ANSI color codes
 NEOFETCH_LOGO = (
@@ -938,9 +938,8 @@ def sync_ntp(server=None, tz_offset=None, auto_detect=None, force=False):
     """
     from lib.sys import settings
     
-    # Check if enabled (default: True)
-    if not settings.get('ntp.enabled', True):
-        return {'success': False, 'error': 'NTP sync disabled'}
+    # NTP is always-on — no enable/disable toggle.
+    # If unreachable (isolated LAN), sync fails gracefully and RTC keeps its time.
     
     # Get settings with defaults
     server = server or settings.get('ntp.server', 'pool.ntp.org')

@@ -23,7 +23,7 @@ SETUP_HTML = '''<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>pyDirect Setup</title>
+<title>pyBot Setup</title>
 <style>
 :root{--bg:#0f172a;--panel:#111827;--border:#1f2937;--text:#e5e7eb;--muted:#9ca3af;--accent:#38bdf8;--error:#f87171;--success:#10b981}
 *{box-sizing:border-box}
@@ -45,7 +45,7 @@ button:disabled{opacity:.5;cursor:default}
 </head>
 <body>
 <div class="panel">
-<h1>⚡ pyDirect Setup</h1>
+<h1>⚡ pyBot Setup</h1>
 <div class="subtitle">Set your WebREPL password to complete setup</div>
 <div class="info">
 <strong>Device:</strong> HOSTNAME.local<br>
@@ -87,7 +87,7 @@ def run_setup_server():
     # Get saved WiFi credentials
     ssid = settings.get("wifi.ssid")
     password = settings.get("wifi.password")
-    hostname = settings.get("device.hostname", "pydirect")
+    hostname = settings.get("device.hostname", "pybot")
     
     if not ssid:
         print("[SETUP] ERROR: No WiFi credentials saved, cannot start setup mode")

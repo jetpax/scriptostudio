@@ -86,7 +86,7 @@
     "status_led": {
       "type": "neopixel",
       "pin": 38,
-      "pixel_order": "RGB",
+      "pixel_order": "GRB",
       "description": "Onboard RGB NeoPixel LED on GPIO38"
     },
 

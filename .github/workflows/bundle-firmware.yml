@@ -49,6 +49,13 @@ jobs:
           echo "📦 Found variants:"
           ls -1 "$COMPONENTS"
 
+      - name: List VFS contents
+        run: |
+          echo "📂 Device scripts to be bundled into VFS:"
+          find boards/firmware/device-scripts -type f | sort
+          echo ""
+          echo "📊 Total files: $(find boards/firmware/device-scripts -type f | wc -l)"
+
       - name: Build merged firmware for each variant
         run: |
           COMPONENTS="boards/firmware/components"
