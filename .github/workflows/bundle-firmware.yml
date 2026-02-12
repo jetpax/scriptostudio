@@ -114,8 +114,8 @@ jobs:
               BOOT_OFFSET="0x2000"
             fi
 
-            # Merge all parts into deployable firmware
-            MERGED="$FIRMWARE_DIR/pyDirect-${VARIANT}-merged.bin"
+            # Merge all parts into deployable firmware (output to /tmp, not repo)
+            MERGED="/tmp/${VARIANT}-merged.bin"
             esptool.py --chip "$CHIP" merge_bin \
               --fill-flash-size "$FLASH_SIZE" \
               --flash_mode dio \
@@ -130,9 +130,9 @@ jobs:
             echo "  ✅ Created: $MERGED ($(du -h "$MERGED" | cut -f1))"
           done
 
-      - name: Update firmware metadata
+      - name: Determine version
+        id: version
         run: |
-          # Read version from components build-info
           BUILD_INFO="boards/firmware/components/build-info.json"
           if [ -f "$BUILD_INFO" ]; then
             VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
@@ -141,6 +141,29 @@ jobs:
             VERSION="unknown"
             COMMIT="${{ github.sha }}"
           fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+          TAG="firmware-v${VERSION}-$(date -u +%Y%m%d%H%M%S)"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Create firmware release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "Firmware ${{ steps.version.outputs.version }}"
+          body: |
+            Firmware build from pyDirect commit `${{ steps.version.outputs.commit }}`
+            Built: ${{ github.event.head_commit.timestamp || github.event.repository.updated_at }}
+          files: /tmp/*-merged.bin
+          make_latest: true
+
+      - name: Update latest.json
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          COMMIT="${{ steps.version.outputs.commit }}"
+          TAG="${{ steps.version.outputs.tag }}"
+          REPO="${{ github.repository }}"
+          DL="https://github.com/${REPO}/releases/download/${TAG}"
 
           cat > boards/firmware/latest.json << EOF
           {
@@ -148,19 +171,20 @@ jobs:
             "updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "pyDirect_commit": "$COMMIT",
             "scriptostudio_commit": "${{ github.sha }}",
+            "release_tag": "$TAG",
             "variants": [
-              { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "pyDirect-ESP32_S3_8-merged.bin" },
-              { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "pyDirect-ESP32_S3_16-merged.bin" },
-              { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "pyDirect-ESP32_P4_16-merged.bin" },
-              { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "pyDirect-ESP32_P4_32-merged.bin" }
+              { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "${DL}/ESP32_S3_8-merged.bin" },
+              { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "${DL}/ESP32_S3_16-merged.bin" },
+              { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "${DL}/ESP32_P4_16-merged.bin" },
+              { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "${DL}/ESP32_P4_32-merged.bin" }
             ]
           }
           EOF
 
-      - name: Commit merged firmware
+      - name: Commit latest.json
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add boards/firmware/*.bin boards/firmware/latest.json
-          git commit -m "🤖 Merged firmware $(date -u +%Y-%m-%d)" || echo "No changes"
+          git add boards/firmware/latest.json
+          git commit -m "🤖 Firmware ${{ steps.version.outputs.version }} — release ${{ steps.version.outputs.tag }}" || echo "No changes"
           git push
