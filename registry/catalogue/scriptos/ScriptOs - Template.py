@@ -7,25 +7,17 @@ print("You could write MicroPython code before the configuration.")
 
 dict(
 
-    timeout = 2,    # Delay in seconds before showing the interrupt button to the user.
-                    # A value of 0 will never display the button.
-                    # It is not mandatory, the default value is 5 seconds.    
-
     info    = dict(
         # ----------------------------------------------------------------------
         name        = 'Script Object template ',                # Name is mandatory
-        version     = [1, 0, 0],                                # Version is mandatory (list of 3 int)
+        version     = [1, 0, 0],                                # Version is mandatory
         category    = 'Templates',                              # Optional: category for organization
-        description =                                           # Description is mandatory
-                      ''' This template is a guide to developing Script Objects in MicroPython.\
-                          You just need a "dict" in your code, with the 2 commented lines above and below.\
-                          You can create user inputs of various types (str, int, float, bool, list, dict) which are retrieved at runtime via the "args" class.
-                          Use a "list" type to propose a choice between all the GPIO pins of the ESP32.
-                          Also, use the "dict" type to propose a multiple choice via the "items" sub-tree.
-                      ''',
+        description = 'Template for building ScriptOs — MicroPython scripts with '
+                      'configurable parameters. Demonstrates all argument types: '
+                      'str, int, float, bool, list (GPIO picker), and dict (multiple choice).',
         author      = 'jetpax',                             # Author is mandatory
-        mail        = 'jep@alphabetiq.com',              # Mail is not mandatory
-        www         = 'https://docs.micropython.org'            # Web link is not mandatory
+        mail        = 'jep@alphabetiq.com',                 # Mail is not mandatory
+        www         = 'https://scriptostudio.com'           # Web link is not mandatory
         # ----------------------------------------------------------------------
     ),
     
@@ -66,21 +58,47 @@ dict(
 # === END_CONFIG_PARAMETERS ===
 
 # ==============================================================================
-# IMPORTANT: How ScriptOs Work
+# How ScriptOs Work
 # ==============================================================================
-# 
-# 1. CODE RUNS AT MODULE LEVEL (not in functions!)
-#    ✓ Correct:   print(args.my_arg)
-#    ✗ Wrong:     def init(): print(args.my_arg)  # Don't do this!
 #
-# 2. ACCESS CONFIG VALUES via the 'args' class
-#    The config block above is replaced with: class args:
-#                                                  my_first_arg_id = "Test..."
-#                                                  my_second_arg_id = 42
-#                                                  # etc.
+# ScriptOs execute at module level — there is no main() or entry point.
+# Everything below the config block runs immediately when the script loads.
 #
-# 3. ALL YOUR CODE executes immediately when the script runs
-#    No need to call init() or main() - just write your code below!
+# User-configured values are available via the `args` class. At runtime,
+# the config block above is replaced with:
+#
+#     class args:
+#         my_first_arg_id = "Test..."
+#         my_second_arg_id = 42
+#
+# Access them directly:  print(args.my_first_arg_id)
+#
+# ==============================================================================
+# ASYNC CODE IN SCRIPTOS
+# ==============================================================================
+#
+# ⚠️ NEVER use asyncio.run() or loop.run_until_complete() in a ScriptOs!
+#    These block the MicroPython main task and prevent queue_pump from
+#    processing M2M responses, background tasks, and WebREPL I/O.
+#
+# ✅ Use bg_tasks.start() instead:
+#
+#    async def _my_async_work():
+#        result = await some_async_function()
+#        print(result)
+#        # Optionally re-display prompt (output appears after REPL prompt)
+#        print('>>> ', end='')
+#
+#    from lib.sys import bg_tasks
+#    bg_tasks.start('my_task', _my_async_work, restart=True)
+#    print('Task started...')
+#
+# KEY POINTS:
+# - bg_tasks.start() returns immediately — module-level code continues
+# - The async function runs cooperatively in the existing event loop
+# - Any output from the async function appears AFTER the REPL prompt
+# - Use print('>>> ', end='') at the end of async output to restore prompt
+# - For mixed sync/async: run sync tests at module level, async via bg_tasks
 #
 # ==============================================================================
 
