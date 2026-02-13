@@ -466,6 +466,14 @@ class St77xx_lvgl(object):
         # create event loop if not yet present
         if not lv_utils.event_loop.is_running(): self.event_loop=lv_utils.event_loop()
 
+        # If display already exists, reuse it (makes reinit safe for AI agents)
+        existing = lv.display_get_default()
+        if existing is not None:
+            self.disp_drv = existing
+            # Re-register flush callback to this instance's blit method
+            self.disp_drv.set_flush_cb(self.disp_drv_flush_cb)
+            return
+
         # create display buffer(s)
         draw_buf1 = lv.draw_buf_create(self.width, self.height // factor, color_format, 0)
         draw_buf2 = lv.draw_buf_create(self.width, self.height // factor, color_format, 0) if doublebuffer else None
