@@ -286,6 +286,16 @@ async def main_async():
     except Exception as e:
         _log("warning", f"NTP sync failed: {e}")
     
+    # Initialize display if board has one (singleton, safe to call once)
+    try:
+        from lib.sys import board
+        if board.has("display"):
+            from lib.sys.display.display_manager import init_display
+            init_display()
+            _log("info", "Display initialized")
+    except Exception as e:
+        _log("warning", f"Display init skipped: {e}")
+    
     # Configure syslog (after network connection)
     try:
         from lib.syslog_helper import syslog, FACILITY_LOCAL0
