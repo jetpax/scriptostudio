@@ -416,10 +416,35 @@ async def task():
                 if rssi < roam_threshold and since_last >= _ROAM_COOLDOWN_S:
                     _log("info", f"Signal weak ({rssi} dBm < {roam_threshold}), scanning for better AP...")
                     _last_roam_tick = now
-                    ip = scan_and_connect()
-                    if ip:
-                        _log("info", f"Roamed to stronger AP: {ip}")
-                        _set_network_ready("WiFi", ip, hostname)
+                    
+                    # Scan and check hysteresis before roaming
+                    _ROAM_HYSTERESIS = 5  # dBm - candidate must be this much stronger
+                    try:
+                        from lib.sys import settings as _s
+                        _ssid = _s.get("wifi.ssid", "")
+                    except:
+                        _ssid = ""
+                    
+                    if _ssid:
+                        _reset_connection()
+                        networks = _sta.scan()
+                        matching = [ap for ap in networks if ap[0].decode('utf-8') == _ssid]
+                        if matching:
+                            matching.sort(key=lambda x: x[3], reverse=True)
+                            best_rssi = matching[0][3]
+                            if best_rssi > rssi + _ROAM_HYSTERESIS:
+                                _log("info", f"Better AP found ({best_rssi} dBm vs {rssi} dBm), roaming...")
+                                try:
+                                    from lib.sys import settings as _s2
+                                    _pw = _s2.get("wifi.password", "")
+                                except:
+                                    _pw = ""
+                                ip = connect(_ssid, _pw, bssid=matching[0][1])
+                                if ip:
+                                    _log("info", f"Roamed to stronger AP: {ip}")
+                                    _set_network_ready("WiFi", ip, hostname)
+                            else:
+                                _log("debug", f"Best candidate {best_rssi} dBm, not enough gain (need +{_ROAM_HYSTERESIS}), staying")
             except:
                 pass
             await asyncio.sleep(10)
