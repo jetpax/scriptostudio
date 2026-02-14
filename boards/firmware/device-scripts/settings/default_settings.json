@@ -3,7 +3,8 @@
   "wifi": {
     "ssid": "Paxnet",
     "password": "rtyu4567",
-    "hostname_prefix": "pybot"
+    "hostname_prefix": "pybot",
+    "roam_rssi_threshold": -80
   },
   "ethernet": {
     "dhcp": true,

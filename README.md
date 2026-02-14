@@ -20,27 +20,6 @@ Delivered as a PWA that runs in any modern browser, ScriptO Studio communicates 
 
 ---
 
-## ⚡ But Isn't Python Too Slow?
-
-That's where **[pyDirect](https://github.com/jetpax/pyDirect)** comes in.
-
-pyDirect provides native C "fast path" accelerators for performance-critical operations. Python handles the application logic, while time-sensitive protocols run at native speed:
-
-| |Fast Path | What It Accelerates |
-|---|-----------|---------------------|
-| ✅| **HTTP/HTTPS** | TLS encryption and SecureWebSocket protocols |
-| ✅| **WebREPL** | Secure Binary WebREPL over WebRTC/wss |
-| ✅| **Husarnet VPN** | Zero-config global peer-to-peer device connectivity |
-| ✅| **USBmodem** | USB modem connectivity for 4G/5G networks|
-| ✅| **PLC** | DIN 70121 and SLAC protocol responder for CCS/NACS vehicle communication |
-| ✅| **CAN** | Multi user CAN bus manager |
-| ✅| **WebRTC** | Real-time P2P communication with NAT traversal |
-| ✅| **GVRET** | Direct CAN <> Wifi bridge |
-
-Python makes it easy. Native code makes it fast. You get the best of both worlds.
-
----
-
 ## ✨ Key Features
 
 ### 🛡️ Fast, Secure Development

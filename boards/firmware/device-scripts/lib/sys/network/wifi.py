@@ -238,7 +238,9 @@ def connect(ssid=None, password=None, bssid=None, timeout_ms=15000):
         except:
             pass
     
-    # Connect
+    # Ensure driver is idle before connecting (clears IDF internal reconnect state)
+    _reset_connection()
+    
     _log("info", f"Connecting to {ssid}...")
     try:
         if bssid:
@@ -301,6 +303,9 @@ def scan_and_connect(ssid=None, password=None, timeout_ms=15000):
         _sta.active(True)
         time.sleep_ms(100)
     
+    # Ensure driver is idle so scan is allowed (clears IDF internal reconnect state)
+    _reset_connection()
+    
     # Scan for networks
     target_bssid = None
     try:
@@ -333,6 +338,30 @@ def disconnect():
             pass
 
 
+def _reset_connection():
+    """Force WiFi driver back to idle state.
+    
+    After beacon timeout (reason 200), the IDF WiFi driver enters an internal
+    reconnecting state that blocks scan() and connect() calls. Cycling the
+    interface is the only reliable way to return it to idle.
+    """
+    global _sta
+    if _sta is None:
+        return
+    try:
+        _sta.disconnect()
+    except:
+        pass
+    try:
+        _sta.active(False)
+        time.sleep_ms(100)
+        _sta.active(True)
+        time.sleep_ms(100)
+    except:
+        pass
+    _log("debug", "WiFi driver reset to idle state")
+
+
 async def task():
     """Async WiFi manager - connects, monitors, and handles reconnection"""
     # Check if WiFi hardware is available
@@ -347,6 +376,19 @@ async def task():
     
     hostname = get_hostname()
     
+    # Load roaming threshold from settings
+    roam_threshold = -80  # default
+    try:
+        from lib.sys import settings
+        roam_threshold = settings.get("wifi.roam_rssi_threshold", -80)
+    except:
+        pass
+    _log("info", f"RSSI roam threshold: {roam_threshold} dBm")
+    
+    # Cooldown: minimum seconds between roam attempts
+    _ROAM_COOLDOWN_S = 30
+    _last_roam_tick = 0
+    
     # Check if already connected (soft reset)
     if is_connected():
         ip = get_ip()
@@ -357,6 +399,8 @@ async def task():
     # Main connection/monitoring loop
     while True:
         if not is_connected():
+            # Clear network_ready so downstream services know we're offline
+            network_ready.clear()
             # Try to connect (scan and connect to strongest AP)
             ip = scan_and_connect()
             if ip:
@@ -364,7 +408,20 @@ async def task():
             else:
                 await asyncio.sleep(5)  # Retry after delay
         else:
-            # Already connected - monitor status
+            # Connected - check if signal is weak enough to roam
+            try:
+                rssi = _sta.status('rssi')
+                now = time.ticks_ms()
+                since_last = time.ticks_diff(now, _last_roam_tick) // 1000
+                if rssi < roam_threshold and since_last >= _ROAM_COOLDOWN_S:
+                    _log("info", f"Signal weak ({rssi} dBm < {roam_threshold}), scanning for better AP...")
+                    _last_roam_tick = now
+                    ip = scan_and_connect()
+                    if ip:
+                        _log("info", f"Roamed to stronger AP: {ip}")
+                        _set_network_ready("WiFi", ip, hostname)
+            except:
+                pass
             await asyncio.sleep(10)
 
 
