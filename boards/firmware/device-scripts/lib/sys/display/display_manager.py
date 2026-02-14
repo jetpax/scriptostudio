@@ -69,6 +69,47 @@ def init_display(brightness=80):
         factor=16,
     )
 
+    # ── Boot splash: prevent white flash ──
+    # Constructor sets backlight to 10% — kill it immediately
+    _lcd.set_backlight(0)
+
+    # Set LVGL screen bg to black BEFORE any render cycle
+    try:
+        import lvgl as lv
+        scr = lv.screen_active()
+        if scr:
+            scr.set_style_bg_color(lv.color_hex(0x000000), 0)
+        # Force LVGL to render the black bg now
+        lv.refr_now(None)
+    except Exception:
+        pass
+
+    # Clear display to black at SPI level (belt and suspenders)
+    _lcd.clear(0x0000)
+
+    # Blit splash icon centered on display (row-by-row to avoid SPI buffer limits)
+    try:
+        import struct as _st
+        icon_w, icon_h = 128, 128
+        x = (_lcd.width - icon_w) // 2
+        y = (_lcd.height - icon_h) // 2
+        row_bytes = icon_w * 2  # 256 bytes per row
+
+        _lcd.set_window(x, y, icon_w, icon_h)
+        # Send RAMWR command, then stream pixel data row by row
+        _st.pack_into('B', _lcd.buf1, 0, 0x2C)  # ST77XX_RAMWR
+        _lcd.cs.value(0)
+        _lcd.dc.value(0)
+        _lcd.spi.write(_lcd.buf1)
+        _lcd.dc.value(1)
+        with open('/lib/sys/display/splash.bin', 'rb') as f:
+            for _ in range(icon_h):
+                _lcd.spi.write(f.read(row_bytes))
+        _lcd.cs.value(1)
+    except Exception as e:
+        print(f"[DISPLAY] splash skipped: {e}")
+
+    # NOW turn on backlight — user sees black + icon, never white
     _lcd.set_backlight(brightness)
     return _lcd
 
