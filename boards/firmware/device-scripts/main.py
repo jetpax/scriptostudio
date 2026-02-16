@@ -301,6 +301,15 @@ async def main_async():
     except Exception as e:
         _log("warning", f"Syslog configuration failed: {e}")
     
+    # Auto-start registered extensions (after network + syslog ready)
+    try:
+        from lib.sys.autostart import run_autostart
+        run_autostart()
+    except ImportError:
+        pass  # autostart module not available
+    except Exception as e:
+        _log("warning", f"Extension autostart failed: {e}")
+    
     # Start servers
     if not start_servers(ip):
         _log("error", "Cannot continue without servers")
