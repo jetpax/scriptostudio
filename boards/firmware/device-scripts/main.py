@@ -40,7 +40,6 @@ import time
 import httpserver
 import webrepl_binary as webrepl
 import json
-import logging
 import asyncio
 
 from lib.sys import bg_tasks
@@ -58,19 +57,7 @@ from lib.sys.utils import (
 # WebREPL clients can call extension functions directly - Python will import
 # them automatically when they're first called via exec().
 
-# Setup logger for WebREPL logging
-logger = logging.getLogger("system")
-logger.handlers.clear()  # Remove any existing handlers to prevent duplicates
-handler = webrepl.logHandler(logging.INFO)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
-
-def _log(level, msg):
-    """Safe logging helper - uses logger if WebREPL available, otherwise prints to console"""
-    if webrepl.running() and logger:
-        getattr(logger, level)(msg)
-    else:
-        print(f"[{level.upper()}] {msg}")
+from lib.sys.log import log
 
 # Server Configuration (from settings API)
 def _load_server_config():
@@ -85,7 +72,7 @@ def _load_server_config():
             'https_key_file': settings.get('server.https_key_file', '/certs/prvtkey.pem')
         }
     except Exception as e:
-        _log("warning", f"Failed to load server settings: {e}")
+        log("warning", f"Failed to load server settings: {e}", source="main")
     
     return {
         'webrepl_password': 'password',
@@ -103,7 +90,7 @@ from lib.sys import network
 
 def start_servers(ip):
     """Start HTTP server (and optionally HTTPS) and WebREPL"""
-    _log("info", "Starting servers...")
+    log("info", "Starting servers...", source="main")
     
     http_port = _server_config.get('http_port', 80)
     https_enabled = _server_config.get('https_enabled', False)
@@ -115,22 +102,22 @@ def start_servers(ip):
             cert_file = _server_config.get('https_cert_file')
             key_file = _server_config.get('https_key_file')
             httpserver.start(http_port, cert_file=cert_file, key_file=key_file)
-            _log("info", f"HTTP/HTTPS server started on ports {http_port}/443")
+            log("info", f"HTTP/HTTPS server started on ports {http_port}/443", source="main")
         else:
             httpserver.start(http_port)
-            _log("info", f"HTTP server started on port {http_port}")
+            log("info", f"HTTP server started on port {http_port}", source="main")
     except Exception as e:
-        _log("error", f"Failed to start HTTP server: {e}")
+        log("error", f"Failed to start HTTP server: {e}", source="main")
         return False
     
     # Start WebREPL
     try:
         if webrepl.running():
-            _log("info", "WebREPL already running (Soft Reset detected)")
+            log("info", "WebREPL already running (Soft Reset detected)", source="main")
             # Recover previous session (re-attach dupterm)
             if hasattr(webrepl, 'recover'):
                 if webrepl.recover():
-                    _log("info", "Session recovered (dupterm re-attached)")
+                    log("info", "Session recovered (dupterm re-attached)", source="main")
                     if status_led:
                         status_led.set_state(StatusLED.STATE_CLIENT_CONNECTED)
                     # Send welcome notification after soft reset recovery
@@ -141,9 +128,9 @@ def start_servers(ip):
                     webrepl.notify(json.dumps({"welcome": {"banner": "", "tagline": tagline}}))
         else:
             webrepl.start(webrepl_password, "/webrepl")
-            _log("info", "WebREPL started")
+            log("info", "WebREPL started", source="main")
     except Exception as e:
-        _log("error", f"Failed to start WebREPL: {e}")
+        log("error", f"Failed to start WebREPL: {e}", source="main")
         return False
     
     # Register WebSocket connect and disconnect callbacks
@@ -151,31 +138,31 @@ def start_servers(ip):
         import wsserver
         wsserver.on(wsserver.CONNECT, wsserver_connect_callback)
         wsserver.on(wsserver.DISCONNECT, wsserver_disconnect_callback)
-        _log("info", "WebSocket callbacks registered")
+        log("info", "WebSocket callbacks registered", source="main")
     except Exception as e:
-        _log("error", f"Failed to register callbacks: {e}")
+        log("error", f"Failed to register callbacks: {e}", source="main")
     
     # Start WebRTC signaling server (optional)
     try:
         from lib.sys import webrtc_signaling
         if webrtc_signaling.start():
-            _log('info', '✓ WebRTC signaling server started')
+            log('info', '✓ WebRTC signaling server started', source='main')
         else:
-            _log('warning', 'WebRTC signaling server failed to start')
+            log('warning', 'WebRTC signaling server failed to start', source='main')
     except ImportError:
-        _log('debug', 'WebRTC signaling not available (module not found)')
+        log('debug', 'WebRTC signaling not available (module not found)', source='main')
     except Exception as e:
-        _log('error', f'Failed to start WebRTC signaling: {e}')
+        log('error', f'Failed to start WebRTC signaling: {e}', source='main')
     
     # Register WebREPL authentication callback (fires after successful auth)
     try:
         if hasattr(webrepl, 'on_auth'):
             webrepl.on_auth(webrepl_auth_callback)
-            _log("info", "WebREPL auth callback registered")
+            log("info", "WebREPL auth callback registered", source="main")
         else:
-            _log("error", "webrepl.on_auth() not available - firmware may need update")
+            log("error", "webrepl.on_auth() not available - firmware may need update", source="main")
     except Exception as e:
-        _log("error", f"Failed to register WebREPL auth callback: {e}")
+        log("error", f"Failed to register WebREPL auth callback: {e}", source="main")
     
     return True
 
@@ -190,19 +177,19 @@ async def queue_pump():
             webrepl.process_queue()  # Handles both WebSocket and WebRTC transports
             httpserver.process_queue()
         except Exception as e:
-            _log("warning", f"queue_pump error: {e}")
+            log("warning", f"queue_pump error: {e}", source="main")
         
         await asyncio.sleep_ms(10)
 
 async def system_root():
     """Main async entry point - starts all background tasks"""
-    _log("info", "Starting background tasks...")
+    log("info", "Starting background tasks...", source="main")
     
     # Start system tasks (protected from Stop button)
     bg_tasks.start("queue_pump", queue_pump, is_system=True)
-    _log("debug", "queue_pump started (system)")
+    log("debug", "queue_pump started (system)", source="main")
     
-    _log("info", f"Active tasks: {list(bg_tasks.list_tasks().keys())}")
+    log("info", f"Active tasks: {list(bg_tasks.list_tasks().keys())}", source="main")
     
     # Keep running forever
     while True:
@@ -210,7 +197,7 @@ async def system_root():
             await asyncio.sleep(3600)
         except KeyboardInterrupt:
             # Catch any stray KeyboardInterrupt at top level
-            _log("debug", "KeyboardInterrupt in system_root - stopping user tasks")
+            log("debug", "KeyboardInterrupt in system_root - stopping user tasks", source="main")
             bg_tasks.stop_user_tasks()
 
 
@@ -221,7 +208,7 @@ def wsserver_connect_callback(client_id, event_name):
     """
     global _webrepl_client_connected
     # Note: Client is not authenticated yet, so we don't set LED or send welcome here
-    _log("info", f"   WebSocket client {client_id} connected (waiting for authentication)")
+    log("info", f"   WebSocket client {client_id} connected (waiting for authentication)", source="main")
 
 # WebREPL client ID constants
 WEBREPL_CLIENT_WEBSOCKET = 0  # Client ID 0-3 for WebSocket connections
@@ -244,7 +231,7 @@ def webrepl_auth_callback(client_id=WEBREPL_CLIENT_WEBRTC):
             
     except Exception as e:
         # Don't let callback exceptions break the connection
-        _log("error", f"   Error in auth callback: {e}")
+        log("error", f"   Error in auth callback: {e}", source="main")
         import sys
         sys.print_exception(e)
 
@@ -256,7 +243,7 @@ def wsserver_disconnect_callback(client_id, event_name):
     Sets LED back to network connected state (yellow solid - waiting for client).
     """
     global _webrepl_client_connected
-    _log("info", f"🔴 Disconnect callback: client_id={client_id}, event={event_name}, connected={_webrepl_client_connected}")
+    log("info", f"🔴 Disconnect callback: client_id={client_id}, event={event_name}, connected={_webrepl_client_connected}", source="main")
     
     # Set LED back to network connected state (network still connected, waiting for client)
     if status_led:
@@ -284,22 +271,16 @@ async def main_async():
         from lib.sys.utils import sync_ntp
         sync_ntp()  # Syncs if enabled and not already synced
     except Exception as e:
-        _log("warning", f"NTP sync failed: {e}")
+        log("warning", f"NTP sync failed: {e}", source="main")
     
     
     # Display init moved to boot.py for earliest splash screen
 
     
-    # Configure syslog (after network connection)
-    try:
-        from lib.syslog_helper import syslog, FACILITY_LOCAL0
-        # Replace with your syslog server IP address
-        syslog.configure(host='192.168.1.2', port=514, facility=FACILITY_LOCAL0)
-        syslog.info("System initialized", source="main")
-    except ImportError:
-        pass  # syslog_helper not available
-    except Exception as e:
-        _log("warning", f"Syslog configuration failed: {e}")
+    # Syslog is now auto-configured from settings by lib.sys.log
+    log("info", "*******************************************************", source="main")
+    log("info", "System initialized", source="main")
+    log("info", "*******************************************************", source="main")
     
     # Auto-start registered extensions (after network + syslog ready)
     try:
@@ -308,11 +289,11 @@ async def main_async():
     except ImportError:
         pass  # autostart module not available
     except Exception as e:
-        _log("warning", f"Extension autostart failed: {e}")
+        log("warning", f"Extension autostart failed: {e}", source="main")
     
     # Start servers
     if not start_servers(ip):
-        _log("error", "Cannot continue without servers")
+        log("error", "Cannot continue without servers", source="main")
         return False
     
     # Enter system_root for other background tasks
@@ -358,7 +339,7 @@ def main():
         except SystemExit:
             # Soft reset from WebREPL - restart MicroPython VM
             # Network stays connected (C layer), just reinitialize Python state
-            _log("info", "Soft reset - restarting MicroPython...")
+            log("info", "Soft reset - restarting MicroPython...", source="main")
             try:
                 bg_tasks.stop_all()
             except:
