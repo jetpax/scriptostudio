@@ -92,6 +92,21 @@ def _init_qspi_display(board, disp, brightness):
 
     lcd.set_backlight(0)
     lcd.clear(0x0000)
+
+    # Blit splash icon centered on display
+    try:
+        icon_w, icon_h = 128, 128
+        x = (disp.width - icon_w) // 2
+        y = (disp.height - icon_h) // 2
+        band = 4  # rows per read (128*4*2 = 1024 bytes per band)
+        with open('/lib/sys/display/splash.bin', 'rb') as f:
+            for row in range(0, icon_h, band):
+                h = min(band, icon_h - row)
+                data = f.read(icon_w * h * 2)
+                lcd.blit(x, y + row, icon_w, h, data)
+    except Exception as e:
+        print(f"[DISPLAY] splash skipped: {e}")
+
     lcd.display_on()
     lcd.set_backlight(brightness)
     return lcd
