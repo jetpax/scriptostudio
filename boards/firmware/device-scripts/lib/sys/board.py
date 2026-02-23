@@ -76,6 +76,11 @@ class SPI(_View):
     pass
 
 
+class QSPI(_View):
+    """View for QSPI bus configuration."""
+    pass
+
+
 class Device(_View):
     """View for device configuration."""
     @property
@@ -176,6 +181,10 @@ class Board:
     def spi(self, name):
         """Get SPI bus configuration."""
         return SPI(self._bus("spi", name))
+
+    def qspi(self, name):
+        """Get QSPI bus configuration."""
+        return QSPI(self._bus("qspi", name))
 
     def _bus(self, kind, name):
         """Internal: get bus configuration."""

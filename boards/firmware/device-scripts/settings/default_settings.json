@@ -42,5 +42,9 @@
     "auto_detect_tz": true,
     "tz_offset": 0.0,
     "timezone": "UTC"
+  },
+  "syslog": {
+    "host": "",
+    "port": 514
   }
 }

@@ -14,26 +14,94 @@ Usage:
 _lcd = None
 
 
-def init_display(brightness=80):
-    """
-    Initialize display from board manifest. Safe to call multiple times
-    (returns existing instance if already initialized).
+def _reset_via_expander(board):
+    """Toggle LCD RST via I2C GPIO expander (e.g. TCA9554PWR)."""
+    try:
+        exp = board._res.get("expander", {})
+        lcd_rst_pin = exp.get("pins", {}).get("lcd_rst")
+        if lcd_rst_pin is None:
+            return
 
-    Returns the St7789 instance, or None if no display capability.
-    """
-    global _lcd
-    if _lcd is not None:
-        return _lcd
+        i2c_bus_name = exp.get("i2c_bus", "sensors")
+        i2c_cfg = board.i2c(i2c_bus_name)
+        exp_dev = board.device("gpio_expander")
+        addr = int(exp_dev.i2c_address, 16) if isinstance(exp_dev.i2c_address, str) else exp_dev.i2c_address
 
-    from lib.sys import board
-    if not board.has("display"):
-        return None
+        import machine
+        i2c = machine.SoftI2C(scl=machine.Pin(i2c_cfg.scl),
+                               sda=machine.Pin(i2c_cfg.sda), freq=400_000)
 
+        # TCA9554: reg 0x01=output, reg 0x03=config (0=output, 1=input)
+        # Set the LCD RST pin as output
+        config = i2c.readfrom_mem(addr, 0x03, 1)[0]
+        config &= ~(1 << lcd_rst_pin)  # clear bit = output
+        i2c.writeto_mem(addr, 0x03, bytes([config]))
+
+        # Toggle reset: low → high
+        import time
+        out = i2c.readfrom_mem(addr, 0x01, 1)[0]
+        out &= ~(1 << lcd_rst_pin)
+        i2c.writeto_mem(addr, 0x01, bytes([out]))
+        time.sleep_ms(20)
+        out |= (1 << lcd_rst_pin)
+        i2c.writeto_mem(addr, 0x01, bytes([out]))
+        time.sleep_ms(120)
+        print("[DISPLAY] LCD reset via expander OK")
+    except Exception as e:
+        print(f"[DISPLAY] expander reset skipped: {e}")
+
+
+def _init_qspi_display(board, disp, brightness):
+    """Initialize a QSPI display (e.g. SPD2010)."""
+    import gc
+
+    qspi_cfg = board.qspi("lcd")
+
+    # Reset LCD via expander if wired that way
+    _reset_via_expander(board)
+
+    # Backlight pin
+    bl_pin = board._res.get("gpio", {}).get("bl_pwm")
+
+    gc.collect()
+
+    import qspi_lcd
+    bus = qspi_lcd.Bus(
+        host=1,
+        sck=qspi_cfg.sck,
+        data0=qspi_cfg.data0,
+        data1=qspi_cfg.data1,
+        data2=qspi_cfg.data2,
+        data3=qspi_cfg.data3,
+        cs=qspi_cfg.cs,
+        freq=40_000_000,
+        cmd_bits=32,
+        param_bits=8,
+        spi_mode=getattr(disp, 'spi_mode', 0),
+    )
+
+    from lib.sys.display.spd2010 import Spd2010
+    lcd = Spd2010(
+        bus=bus,
+        res=(disp.width, disp.height),
+        bl=bl_pin,
+        color_bits=getattr(disp, 'color_bits', 16),
+        doublebuffer=False,
+        factor=8,
+    )
+
+    lcd.set_backlight(0)
+    lcd.clear(0x0000)
+    lcd.set_backlight(brightness)
+    return lcd
+
+
+def _init_spi_display(board, disp, brightness):
+    """Initialize a standard SPI display (e.g. ST7789)."""
     import machine
     import gc
 
     spi_cfg = board.spi("lcd")
-    disp = board.device("display")
 
     # SPI bus
     spi = machine.SPI(
@@ -54,10 +122,8 @@ def init_display(brightness=80):
 
     gc.collect()
 
-    # ST7789 internal resolution is always 240x320;
-    # the driver handles offset mapping via MADCTL rotation tables
     from lib.sys.display.st77xx import St7789
-    _lcd = St7789(
+    lcd = St7789(
         rot=0,
         res=(240, 320),
         spi=spi,
@@ -70,47 +136,73 @@ def init_display(brightness=80):
     )
 
     # ── Boot splash: prevent white flash ──
-    # Constructor sets backlight to 10% — kill it immediately
-    _lcd.set_backlight(0)
+    lcd.set_backlight(0)
 
-    # Set LVGL screen bg to black BEFORE any render cycle
     try:
         import lvgl as lv
         scr = lv.screen_active()
         if scr:
             scr.set_style_bg_color(lv.color_hex(0x000000), 0)
-        # Force LVGL to render the black bg now
         lv.refr_now(None)
     except Exception:
         pass
 
-    # Clear display to black at SPI level (belt and suspenders)
-    _lcd.clear(0x0000)
+    lcd.clear(0x0000)
 
-    # Blit splash icon centered on display (row-by-row to avoid SPI buffer limits)
+    # Blit splash icon centered on display
     try:
         import struct as _st
         icon_w, icon_h = 128, 128
-        x = (_lcd.width - icon_w) // 2
-        y = (_lcd.height - icon_h) // 2
-        row_bytes = icon_w * 2  # 256 bytes per row
+        x = (lcd.width - icon_w) // 2
+        y = (lcd.height - icon_h) // 2
+        row_bytes = icon_w * 2
 
-        _lcd.set_window(x, y, icon_w, icon_h)
-        # Send RAMWR command, then stream pixel data row by row
-        _st.pack_into('B', _lcd.buf1, 0, 0x2C)  # ST77XX_RAMWR
-        _lcd.cs.value(0)
-        _lcd.dc.value(0)
-        _lcd.spi.write(_lcd.buf1)
-        _lcd.dc.value(1)
+        lcd.set_window(x, y, icon_w, icon_h)
+        _st.pack_into('B', lcd.buf1, 0, 0x2C)
+        lcd.cs.value(0)
+        lcd.dc.value(0)
+        lcd.spi.write(lcd.buf1)
+        lcd.dc.value(1)
         with open('/lib/sys/display/splash.bin', 'rb') as f:
             for _ in range(icon_h):
-                _lcd.spi.write(f.read(row_bytes))
-        _lcd.cs.value(1)
+                lcd.spi.write(f.read(row_bytes))
+        lcd.cs.value(1)
     except Exception as e:
         print(f"[DISPLAY] splash skipped: {e}")
 
-    # NOW turn on backlight — user sees black + icon, never white
-    _lcd.set_backlight(brightness)
+    lcd.set_backlight(brightness)
+    return lcd
+
+
+def init_display(brightness=80):
+    """
+    Initialize display from board manifest. Safe to call multiple times
+    (returns existing instance if already initialized).
+
+    Dispatches based on the manifest's devices.display.interface field:
+      - "qspi" → SPD2010 QSPI driver
+      - "spi"  → ST7789 SPI driver (default)
+
+    Returns the display instance, or None if no display capability.
+    """
+    global _lcd
+    if _lcd is not None:
+        return _lcd
+
+    from lib.sys import board
+    if not board.has("display"):
+        return None
+
+    disp = board.device("display")
+
+    # Determine interface type from manifest
+    interface = getattr(disp, 'interface', 'spi')
+
+    if interface == 'qspi':
+        _lcd = _init_qspi_display(board, disp, brightness)
+    else:
+        _lcd = _init_spi_display(board, disp, brightness)
+
     return _lcd
 
 
