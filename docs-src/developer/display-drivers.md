@@ -15,10 +15,10 @@ ScriptO Studio supports two display interfaces, configured in the board manifest
 ┌────────────────────────────────────────────┐
 │           display_manager.py               │
 │   init_display() → reads board manifest    │
-│   Dispatches: QSPI → spd2010, SPI → st77xx│
+│   Dispatches: QSPI → spd2010, SPI → st77xx │
 ├────────────────┬───────────────────────────┤
 │  spd2010.py    │       st77xx.py           │
-│  (QSPI AMOLED) │       (SPI LCD)          │
+│  (QSPI AMOLED) │       (SPI LCD)           │
 │  Spd2010_hw    │                           │
 │  Spd2010_lvgl  │                           │
 ├────────────────┼───────────────────────────┤
