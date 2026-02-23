@@ -41,13 +41,27 @@ _DISPON = const(0x29)
 
 
 def _qspi_cmd(cmd):
-    """Encode a command for QSPI: cmd byte in bits[15:8], 0x02 in bits[31:24]."""
-    return (_WRITE_CMD << 24) | (cmd << 8)
+    """Encode a command for QSPI write.
+
+    ESP-IDF's spi_lcd_prepare_cmd_buffer byte-reverses the 32-bit command
+    (because SPI peripheral sends LSB-first but LCD expects MSB-first).
+
+    On wire we need: Byte0=0x02, Byte1=0x00, Byte2=cmd, Byte3=0x00
+    In memory (LE):  [0x00, cmd, 0x00, 0x02]  →  int = 0x02_00_XX_00
+    After reversal:  [0x02, 0x00, cmd, 0x00]  →  on wire ✓
+
+    Encoding:  (cmd << 8) | (_WRITE_CMD << 24)
+    """
+    return (cmd << 8) | (_WRITE_CMD << 24)
 
 
 def _qspi_color_cmd(cmd):
-    """Encode a color-write command for QSPI: 0x32 prefix."""
-    return (_WRITE_COLOR << 24) | (cmd << 8)
+    """Encode a color-write command for QSPI: 0x32 prefix.
+
+    Same byte-reversal compensation as _qspi_cmd.
+    Encoding:  (cmd << 8) | (_WRITE_COLOR << 24)
+    """
+    return (cmd << 8) | (_WRITE_COLOR << 24)
 
 
 class Spd2010_hw:
@@ -141,17 +155,16 @@ class Spd2010_hw:
 
     def clear(self, color=0x0000):
         """Fill entire display with a single color (RGB565)."""
-        bs = 128
-        buf2 = bytearray(2)
-        struct.pack_into('>h', buf2, 0, color)
-        buf = bs * bytes(buf2)
-        npx = self.width * self.height
-        self.set_memory_location(0, 0, self.width - 1, self.height - 1)
-        for _ in range(npx // bs):
-            self.bus.tx_color(self._ramwr, buf)
-        remainder = npx % bs
-        if remainder:
-            self.bus.tx_color(self._ramwr, buf2 * remainder)
+        rows_per_band = 4
+        row_pixels = self.width * rows_per_band
+        buf = bytearray(row_pixels * 2)
+        hi = (color >> 8) & 0xFF
+        lo = color & 0xFF
+        for i in range(0, len(buf), 2):
+            buf[i] = hi
+            buf[i + 1] = lo
+        for y in range(0, self.height, rows_per_band):
+            self.blit(0, y, self.width, rows_per_band, buf)
 
     def _init_sequence(self):
         """Full SPD2010 initialization sequence.
@@ -456,7 +469,11 @@ class Spd2010_hw:
         sp(0x11, 0x00)
         time.sleep_ms(120)
 
-        # Display on
+        # NOTE: DISPON deferred — call display_on() after first clear()
+        # to avoid white flash from uninitialized AMOLED RAM.
+
+    def display_on(self):
+        """Send DISPON command. Call after first clear() to avoid white flash."""
         self.set_params(_DISPON)
 
 
@@ -479,7 +496,7 @@ class Spd2010_lvgl:
         self.blit(x1, y1, w, h, data_view)
         self.disp_drv.flush_ready()
 
-    def __init__(self, doublebuffer=True, factor=8):
+    def __init__(self, doublebuffer=True, factor=32):
         import lvgl as lv
         try:
             import lv_utils
@@ -516,6 +533,12 @@ class Spd2010_lvgl:
         self.disp_drv.set_render_mode(lv.DISPLAY_RENDER_MODE.PARTIAL)
         self.disp_drv.set_flush_cb(self.disp_drv_flush_cb)
 
+        # Prevent white flash: set initial screen to black and force immediate render
+        scr = lv.screen_active()
+        if scr:
+            scr.set_style_bg_color(lv.color_hex(0x000000), 0)
+            lv.refr_now(None)
+
 
 class Spd2010(Spd2010_hw, Spd2010_lvgl):
     """Combined SPD2010 hardware + LVGL driver.
@@ -524,7 +547,7 @@ class Spd2010(Spd2010_hw, Spd2010_lvgl):
         lcd = Spd2010(bus=bus, res=(412, 412), bl=5, doublebuffer=True, factor=8)
     """
     def __init__(self, *, bus, res, bl=None, rst=None, rot=0,
-                 color_bits=16, doublebuffer=True, factor=8):
+                 color_bits=16, doublebuffer=True, factor=32):
         Spd2010_hw.__init__(self, bus=bus, res=res, bl=bl, rst=rst,
                              rot=rot, color_bits=color_bits)
         Spd2010_lvgl.__init__(self, doublebuffer=doublebuffer, factor=factor)

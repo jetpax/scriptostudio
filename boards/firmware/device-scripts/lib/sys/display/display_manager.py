@@ -87,11 +87,12 @@ def _init_qspi_display(board, disp, brightness):
         bl=bl_pin,
         color_bits=getattr(disp, 'color_bits', 16),
         doublebuffer=False,
-        factor=8,
+        factor=32,
     )
 
     lcd.set_backlight(0)
     lcd.clear(0x0000)
+    lcd.display_on()
     lcd.set_backlight(brightness)
     return lcd
 
