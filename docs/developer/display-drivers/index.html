@@ -12,13 +12,9 @@
         <meta name="author" content="jetpax">
       
       
-        <link rel="canonical" href="https://scriptostudio.com/docs/device-setup/flashing-firmware/">
+        <link rel="canonical" href="https://scriptostudio.com/docs/developer/display-drivers/">
       
       
-        <link rel="prev" href="../../getting-started/ide-overview/">
-      
-      
-        <link rel="next" href="../board-configurations/">
       
       
         
@@ -29,7 +25,7 @@
     
     
       
-        <title>Flashing Firmware - ScriptO Studio Docs</title>
+        <title>Display Drivers - ScriptO Studio Docs</title>
       
     
     
@@ -80,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#flashing-firmware" class="md-skip">
+        <a href="#display-drivers" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Flashing Firmware
+              Display Drivers
             
           </span>
         </div>
@@ -435,8 +431,6 @@
       
   
   
-    
-  
   
   
     
@@ -449,11 +443,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -474,7 +470,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -489,37 +485,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flashing Firmware
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
         
   
   
@@ -535,220 +504,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#supported-hardware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported Hardware
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#method-1-web-installer-easiest" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Method 1: Web Installer (Easiest)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#method-2-esptoolpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Method 2: esptool.py
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Method 2: esptool.py">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#download-firmware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Download Firmware
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#flash-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flash Commands
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#boot-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Boot Mode
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#method-3-build-from-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Method 3: Build from Source
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Method 3: Build from Source">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#prerequisites_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#build-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Build Steps
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#after-flashing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        After Flashing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshooting
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#failed-to-connect-to-esp32-s3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Failed to connect to ESP32-S3"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#a-fatal-error-occurred-md5-of-file-does-not-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "A fatal error occurred: MD5 of file does not match"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-doesnt-boot-after-flash" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device doesn't boot after flash
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -761,7 +516,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../board-configurations/" class="md-nav__link">
+      <a href="../../device-setup/board-configurations/" class="md-nav__link">
         
   
   
@@ -789,7 +544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../network-setup/" class="md-nav__link">
+      <a href="../../device-setup/network-setup/" class="md-nav__link">
         
   
   
@@ -817,7 +572,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provisioning/" class="md-nav__link">
+      <a href="../../device-setup/provisioning/" class="md-nav__link">
         
   
   
@@ -1944,7 +1699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -1972,7 +1727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/building-from-source/" class="md-nav__link">
+      <a href="../building-from-source/" class="md-nav__link">
         
   
   
@@ -2000,7 +1755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/contributing/" class="md-nav__link">
+      <a href="../contributing/" class="md-nav__link">
         
   
   
@@ -2028,7 +1783,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/esm-modules/" class="md-nav__link">
+      <a href="../esm-modules/" class="md-nav__link">
         
   
   
@@ -2056,7 +1811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/shortcuts/" class="md-nav__link">
+      <a href="../shortcuts/" class="md-nav__link">
         
   
   
@@ -2084,7 +1839,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/micropython-reference/" class="md-nav__link">
+      <a href="../micropython-reference/" class="md-nav__link">
         
   
   
@@ -2112,7 +1867,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/registry/" class="md-nav__link">
+      <a href="../registry/" class="md-nav__link">
         
   
   
@@ -2485,10 +2240,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#supported-hardware" class="md-nav__link">
+  <a href="#supported-displays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supported Hardware
+        Supported Displays
       
     </span>
   </a>
@@ -2496,10 +2251,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#method-1-web-installer-easiest" class="md-nav__link">
+  <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Method 1: Web Installer (Easiest)
+        Architecture
       
     </span>
   </a>
@@ -2507,110 +2262,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#method-2-esptoolpy" class="md-nav__link">
+  <a href="#boot-sequence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Method 2: esptool.py
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Method 2: esptool.py">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#download-firmware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Download Firmware
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#flash-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flash Commands
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#boot-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Boot Mode
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#method-3-build-from-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Method 3: Build from Source
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Method 3: Build from Source">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#prerequisites_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#build-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Build Steps
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#after-flashing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        After Flashing
+        Boot Sequence
       
     </span>
   </a>
@@ -2618,60 +2273,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#qspi-command-encoding" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshooting
+        QSPI Command Encoding
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#failed-to-connect-to-esp32-s3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Failed to connect to ESP32-S3"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#a-fatal-error-occurred-md5-of-file-does-not-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "A fatal error occurred: MD5 of file does not match"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-doesnt-boot-after-flash" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device doesn't boot after flash
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#dma-and-buffer-sizing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        DMA and Buffer Sizing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-fonts-tinyttf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Fonts (TinyTTF)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-from-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using from Scripts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Layout
       
     </span>
   </a>
@@ -2698,156 +2347,149 @@
   
 
 
-<h1 id="flashing-firmware">Flashing Firmware<a class="headerlink" href="#flashing-firmware" title="Permanent link">&para;</a></h1>
-<p>Install pyDirect firmware on your ESP32-S3 device.</p>
-<h2 id="supported-hardware">Supported Hardware<a class="headerlink" href="#supported-hardware" title="Permanent link">&para;</a></h2>
+<h1 id="display-drivers">Display Drivers<a class="headerlink" href="#display-drivers" title="Permanent link">&para;</a></h1>
+<p>ScriptO Studio supports two display interfaces, configured in the board manifest.</p>
+<h2 id="supported-displays">Supported Displays<a class="headerlink" href="#supported-displays" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Board</th>
-<th>Chip</th>
-<th>Flash</th>
-<th>PSRAM</th>
-<th>Status</th>
+<th>Interface</th>
+<th>Driver</th>
+<th>Display</th>
+<th>Resolution</th>
+<th>IC</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>ESP32-S3-DevKitC-1</td>
-<td>ESP32-S3</td>
-<td>16MB</td>
-<td>8MB</td>
-<td>✅ Recommended</td>
+<td>QSPI</td>
+<td><code>spd2010.py</code></td>
+<td>Round AMOLED</td>
+<td>412×412</td>
+<td>SPD2010</td>
 </tr>
 <tr>
-<td>ESP32-S3-WROOM-1</td>
-<td>ESP32-S3</td>
-<td>8MB+</td>
-<td>2MB+</td>
-<td>✅ Supported</td>
-</tr>
-<tr>
-<td>LilyGO T-Display-S3</td>
-<td>ESP32-S3</td>
-<td>16MB</td>
-<td>8MB</td>
-<td>✅ Supported</td>
-</tr>
-<tr>
-<td>Generic ESP32-S3</td>
-<td>ESP32-S3</td>
-<td>4MB+</td>
-<td>Optional</td>
-<td>⚠️ Limited</td>
+<td>SPI</td>
+<td><code>st77xx.py</code></td>
+<td>Rectangular LCD</td>
+<td>240×320</td>
+<td>ST7789</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>[!IMPORTANT]
-ESP32-S3 with SPIRAM (PSRAM) is strongly recommended for reliable operation.</p>
-</blockquote>
-<h2 id="method-1-web-installer-easiest">Method 1: Web Installer (Easiest)<a class="headerlink" href="#method-1-web-installer-easiest" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Visit <a href="https://pydirect.com/flash">pydirect.com/flash</a></li>
-<li>Connect your device via USB</li>
-<li>Click <strong>Connect</strong> and select the serial port</li>
-<li>Choose your board type</li>
-<li>Click <strong>Flash</strong></li>
-</ol>
-<blockquote>
-<p>[!NOTE]
-Requires Chrome or Edge browser with WebSerial support.</p>
-</blockquote>
-<h2 id="method-2-esptoolpy">Method 2: esptool.py<a class="headerlink" href="#method-2-esptoolpy" title="Permanent link">&para;</a></h2>
-<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>esptool
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│           display_manager.py               │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   init_display() → reads board manifest    │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   Dispatches: QSPI → spd2010, SPI → st77xx│
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├────────────────┬───────────────────────────┤
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  spd2010.py    │       st77xx.py           │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  (QSPI AMOLED) │       (SPI LCD)          │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  Spd2010_hw    │                           │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  Spd2010_lvgl  │                           │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>├────────────────┼───────────────────────────┤
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│  qspi_lcd.Bus  │     machine.SPI           │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│  (C module)    │     (MicroPython)         │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>├────────────────┴───────────────────────────┤
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│            ESP-IDF SPI Driver              │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│         (DMA, bounce buffering)            │
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>└────────────────────────────────────────────┘
 </code></pre></div>
-<h3 id="download-firmware">Download Firmware<a class="headerlink" href="#download-firmware" title="Permanent link">&para;</a></h3>
-<p>Get the latest firmware from <a href="https://github.com/jetpax/pyDirect/releases">Releases</a>:</p>
-<ul>
-<li><code>pydirect-esp32s3-vX.X.X.bin</code> - Combined binary</li>
-</ul>
-<h3 id="flash-commands">Flash Commands<a class="headerlink" href="#flash-commands" title="Permanent link">&para;</a></h3>
-<p><strong>Erase and flash (recommended for first install):</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Erase flash</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>esptool.py<span class="w"> </span>--chip<span class="w"> </span>esp32s3<span class="w"> </span>--port<span class="w"> </span>/dev/ttyUSB0<span class="w"> </span>erase_flash
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Flash firmware</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>esptool.py<span class="w"> </span>--chip<span class="w"> </span>esp32s3<span class="w"> </span>--port<span class="w"> </span>/dev/ttyUSB0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>--baud<span class="w"> </span><span class="m">921600</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>write_flash<span class="w"> </span>-z<span class="w"> </span>0x0<span class="w"> </span>pydirect-esp32s3-vX.X.X.bin
-</code></pre></div>
-<p><strong>macOS port:</strong> <code>/dev/cu.usbserial-*</code> or <code>/dev/cu.SLAB_USBtoUART</code></p>
-<p><strong>Windows port:</strong> <code>COM3</code> (check Device Manager)</p>
-<h3 id="boot-mode">Boot Mode<a class="headerlink" href="#boot-mode" title="Permanent link">&para;</a></h3>
-<p>If device doesn't flash:</p>
+<h2 id="boot-sequence">Boot Sequence<a class="headerlink" href="#boot-sequence" title="Permanent link">&para;</a></h2>
+<p><code>display_manager.init_display()</code> is called at boot from <code>boot.py</code>:</p>
 <ol>
-<li>Hold <strong>BOOT</strong> button</li>
-<li>Press and release <strong>RESET</strong> button</li>
-<li>Release <strong>BOOT</strong> button</li>
-<li>Device is now in flash mode</li>
+<li><strong>Read manifest</strong> — <code>board.device("display")</code> determines interface type</li>
+<li><strong>Hardware reset</strong> — Toggle LCD RST via I2C GPIO expander (if wired)</li>
+<li><strong>Create bus</strong> — Initialize QSPI or SPI bus with correct pinout</li>
+<li><strong>Init driver</strong> — Run the full register init sequence (~600 writes)</li>
+<li><strong>Clear to black</strong> — Fill framebuffer before DISPON to prevent flash</li>
+<li><strong>Blit splash</strong> — Center 128×128 boot logo from <code>splash.bin</code></li>
+<li><strong>DISPON</strong> — Turn on the AMOLED/LCD panel</li>
+<li><strong>Backlight on</strong> — Ramp up brightness</li>
 </ol>
-<h2 id="method-3-build-from-source">Method 3: Build from Source<a class="headerlink" href="#method-3-build-from-source" title="Permanent link">&para;</a></h2>
-<p>For developers who want to customize the firmware.</p>
-<h3 id="prerequisites_1">Prerequisites<a class="headerlink" href="#prerequisites_1" title="Permanent link">&para;</a></h3>
-<ul>
-<li>ESP-IDF v5.5.1</li>
-<li>Python 3.10+</li>
-<li>Git</li>
-</ul>
-<h3 id="build-steps">Build Steps<a class="headerlink" href="#build-steps" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Clone repository</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/jetpax/pyDirect.git
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">cd</span><span class="w"> </span>pyDirect
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Set up ESP-IDF</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">source</span><span class="w"> </span>~/esp/esp-idf-v5.5.1/export.sh
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Configure for your board</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>cp<span class="w"> </span>boards/ESP32_S3_16MB/sdkconfig.board<span class="w"> </span>sdkconfig
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Build</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>make<span class="w"> </span>submodules
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>make<span class="w"> </span>mpy-cross
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>make
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="c1"># Flash</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>make<span class="w"> </span>deploy<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span>/dev/ttyUSB0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># boot.py</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys.display.display_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_display</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">lcd</span> <span class="o">=</span> <span class="n">init_display</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </code></pre></div>
-<p>See <a href="https://github.com/jetpax/pyDirect/blob/main/docs/BUILD_GUIDE.md">BUILD_GUIDE.md</a> for detailed instructions.</p>
-<h2 id="after-flashing">After Flashing<a class="headerlink" href="#after-flashing" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Device will reboot and create AP: <code>pyDirect-XXXX</code></li>
-<li>Connect to the AP network</li>
-<li>Open ScriptO Studio at <code>http://192.168.4.1</code></li>
-<li>Configure WiFi in Settings</li>
-<li>Device will reboot and connect to your network</li>
-</ol>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<h3 id="failed-to-connect-to-esp32-s3">"Failed to connect to ESP32-S3"<a class="headerlink" href="#failed-to-connect-to-esp32-s3" title="Permanent link">&para;</a></h3>
+<h2 id="qspi-command-encoding">QSPI Command Encoding<a class="headerlink" href="#qspi-command-encoding" title="Permanent link">&para;</a></h2>
+<p>The SPD2010 uses a 32-bit QSPI command format. Due to ESP-IDF's byte reversal
+in the SPI peripheral, commands must be pre-encoded:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># On wire: PREFIX, 0x00, CMD, 0x00</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># Encoding: (cmd &lt;&lt; 8) | (prefix &lt;&lt; 24)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">_qspi_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">cmd</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mh">0x02</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span><span class="p">)</span>    <span class="c1"># 0x02 = write command</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">_qspi_color_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">cmd</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mh">0x32</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span><span class="p">)</span>    <span class="c1"># 0x32 = write color data</span>
+</code></pre></div>
+<h2 id="dma-and-buffer-sizing">DMA and Buffer Sizing<a class="headerlink" href="#dma-and-buffer-sizing" title="Permanent link">&para;</a></h2>
+<p>For QSPI displays with PSRAM-backed LVGL draw buffers:</p>
 <ul>
-<li>Check USB cable supports data (not charge-only)</li>
-<li>Try a different USB port</li>
-<li>Install USB drivers (CP210x or CH340 depending on board)</li>
-<li>Put device in boot mode manually</li>
+<li><strong>Bounce buffer</strong>: 12KB pre-allocated in internal SRAM (<code>modqspi_lcd.c</code>)</li>
+<li><strong>Draw buffer factor</strong>: <code>factor=32</code> → chunks of ~11KB (fits in 12KB bounce)</li>
+<li><strong>Double buffering</strong>: Disabled by default to conserve PSRAM</li>
 </ul>
-<h3 id="a-fatal-error-occurred-md5-of-file-does-not-match">"A fatal error occurred: MD5 of file does not match"<a class="headerlink" href="#a-fatal-error-occurred-md5-of-file-does-not-match" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Download firmware again (file may be corrupted)</li>
-<li>Use a slower baud rate: <code>--baud 115200</code></li>
-</ul>
-<h3 id="device-doesnt-boot-after-flash">Device doesn't boot after flash<a class="headerlink" href="#device-doesnt-boot-after-flash" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Verify correct firmware for your board</li>
-<li>Try erasing flash first</li>
-<li>Check PSRAM configuration matches your hardware</li>
-</ul>
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../board-configurations/">Board Configurations</a></li>
-<li><a href="../network-setup/">Network Setup</a></li>
-<li><a href="../provisioning/">Provisioning</a></li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BOUNCE_BUF_SIZE</code></td>
+<td>12KB</td>
+<td>Max single DMA transfer</td>
+</tr>
+<tr>
+<td><code>factor</code></td>
+<td>32</td>
+<td><code>412 × (412/32) × 2 ≈ 11KB</code> per flush chunk</td>
+</tr>
+</tbody>
+</table>
+<h2 id="custom-fonts-tinyttf">Custom Fonts (TinyTTF)<a class="headerlink" href="#custom-fonts-tinyttf" title="Permanent link">&para;</a></h2>
+<p>The build enables <a href="https://docs.lvgl.io/master/details/libs/tiny_ttf.html">TinyTTF</a>
+for runtime <code>.ttf</code> font loading:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lvgl</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lv</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">fs_driver</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Register MicroPython FS bridge (once)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">fs_drv</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">fs_drv_t</span><span class="p">()</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">fs_driver</span><span class="o">.</span><span class="n">fs_register</span><span class="p">(</span><span class="n">fs_drv</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Load any TTF at any size</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">font</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">tiny_ttf_create_file</span><span class="p">(</span><span class="s1">&#39;S:/lib/fonts/MyFont.ttf&#39;</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">label</span><span class="o">.</span><span class="n">set_style_text_font</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+<p>Built-in Montserrat sizes: 14, 16, 20, 24, 28, 32, 36, 48.</p>
+<h2 id="using-from-scripts">Using from Scripts<a class="headerlink" href="#using-from-scripts" title="Permanent link">&para;</a></h2>
+<p>LVGL scripts should <strong>not</strong> reinitialize the display. Use the boot-initialized
+driver and just create widgets:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lvgl</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lv</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">scr</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">obj</span><span class="p">()</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">scr</span><span class="o">.</span><span class="n">set_style_bg_color</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">color_hex</span><span class="p">(</span><span class="mh">0x000000</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">label</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">scr</span><span class="p">)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">label</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">label</span><span class="o">.</span><span class="n">set_style_text_color</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">color_hex</span><span class="p">(</span><span class="mh">0xFFFFFF</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">label</span><span class="o">.</span><span class="n">set_style_text_font</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">font_montserrat_36</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">label</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">ALIGN</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="n">lv</span><span class="o">.</span><span class="n">screen_load</span><span class="p">(</span><span class="n">scr</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="file-layout">File Layout<a class="headerlink" href="#file-layout" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>lib/sys/display/
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── display_manager.py   # Boot init + splash + singleton
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├── spd2010.py           # SPD2010 QSPI AMOLED driver
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── st77xx.py            # ST7789 SPI LCD driver
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├── lv_utils.py          # LVGL event loop helper
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>├── splash.bin           # 128×128 RGB565 boot logo
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>└── fs_driver.py         # LVGL ↔ MicroPython filesystem bridge
+</code></pre></div>
 
 
 
