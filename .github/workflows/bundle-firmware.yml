@@ -104,8 +104,9 @@ jobs:
             CHIP="esp32s3"
             if [[ "$VARIANT" == *"P4"* ]]; then CHIP="esp32p4"; fi
 
-            # Detect flash size from variant suffix (ESP32_S3_8=8MB, ESP32_S3_16=16MB, etc.)
-            FLASH_MB=$(echo "$VARIANT" | grep -oE '[0-9]+$')
+            # Detect flash size from variant name (handle suffixes like _OPI)
+            # ESP32_S3_8=8MB, ESP32_S3_8_OPI=8MB, ESP32_S3_16=16MB, ESP32_P4_32=32MB
+            FLASH_MB=$(echo "$VARIANT" | sed 's/_OPI$//' | grep -oE '[0-9]+$')
             FLASH_SIZE="${FLASH_MB}MB"
 
             # Detect bootloader offset (P4 uses 0x2000, others use 0x0)
@@ -181,6 +182,7 @@ jobs:
             "release_url": "https://github.com/${REPO}/releases/tag/${TAG}",
             "variants": [
               { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "/boards/firmware/ESP32_S3_8-merged.bin" },
+              { "id": "ESP32_S3_8_OPI", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8_OPI-merged.bin", "url": "/boards/firmware/ESP32_S3_8_OPI-merged.bin" },
               { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "/boards/firmware/ESP32_S3_16-merged.bin" },
               { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "/boards/firmware/ESP32_P4_16-merged.bin" },
               { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "/boards/firmware/ESP32_P4_32-merged.bin" }
