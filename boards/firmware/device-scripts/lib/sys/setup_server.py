@@ -100,6 +100,13 @@ def run_setup_server():
     print(f"[SETUP] Connecting to WiFi: {ssid}")
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
+    time.sleep_ms(100)  # Wait for radio to initialize (required on some boards)
+    
+    # Clear any stale connection state from IDF driver
+    try:
+        wlan.disconnect()
+    except:
+        pass
     
     # Set hostname before connecting (for mDNS)
     try:
@@ -109,15 +116,29 @@ def run_setup_server():
     except:
         pass
     
-    wlan.connect(ssid, password)
-    
-    # Wait for connection (up to 30 seconds)
-    for i in range(60):
-        if wlan.isconnected():
+    # Connect with retry (first attempt may fail on cold boot)
+    connected = False
+    for attempt in range(2):
+        wlan.connect(ssid, password)
+        
+        # Wait for connection (up to 15 seconds per attempt)
+        for i in range(30):
+            if wlan.isconnected():
+                connected = True
+                break
+            time.sleep(0.5)
+        
+        if connected:
             break
-        time.sleep(0.5)
+        
+        print(f"[SETUP] WiFi attempt {attempt + 1} failed, retrying...")
+        try:
+            wlan.disconnect()
+        except:
+            pass
+        time.sleep(1)
     
-    if not wlan.isconnected():
+    if not connected:
         print("[SETUP] ERROR: WiFi connection failed")
         return
     
