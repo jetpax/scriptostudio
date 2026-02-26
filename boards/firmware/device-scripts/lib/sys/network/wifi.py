@@ -87,6 +87,10 @@ def init():
     try:
         hostname = get_hostname()
         _sta.config(hostname=hostname)
+        # Also set global hostname for mDNS responder (.local resolution)
+        # _sta.config() only sets DHCP hostname, network.hostname() triggers
+        # the ESP-IDF mDNS service that responds to .local queries
+        network.hostname(hostname)
         _log("debug", f"WiFi hostname: {hostname}")
     except Exception as e:
         _log("warning", f"Failed to set hostname: {e}")

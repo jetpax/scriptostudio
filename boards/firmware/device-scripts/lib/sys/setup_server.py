@@ -104,6 +104,8 @@ def run_setup_server():
     # Set hostname before connecting (for mDNS)
     try:
         wlan.config(hostname=hostname)
+        # Also set global hostname for mDNS responder (.local resolution)
+        network.hostname(hostname)
     except:
         pass
     
