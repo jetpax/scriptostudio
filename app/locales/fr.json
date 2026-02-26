@@ -97,6 +97,10 @@
   },
   "sysinfo": {
     "title": "Informations système",
+    "studioTitle": "ScriptO Studio",
+    "studioVersion": "Version :",
+    "studioCommit": "Build :",
+    "studioBuildDate": "Date de build :",
     "loading": "Chargement des informations système...",
     "boardInfo": "Informations sur la carte",
     "loadingBoard": "Chargement des informations sur la carte...",

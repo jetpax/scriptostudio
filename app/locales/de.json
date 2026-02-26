@@ -97,6 +97,10 @@
   },
   "sysinfo": {
     "title": "Systeminformationen",
+    "studioTitle": "ScriptO Studio",
+    "studioVersion": "Version:",
+    "studioCommit": "Build:",
+    "studioBuildDate": "Build-Datum:",
     "loading": "Systeminformationen werden geladen...",
     "boardInfo": "Board-Informationen",
     "loadingBoard": "Board-Informationen werden geladen...",
