@@ -197,4 +197,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add boards/firmware/latest.json boards/firmware/*-merged.bin
           git commit -m "🤖 Firmware ${{ steps.version.outputs.version }} — release ${{ steps.version.outputs.tag }}" || echo "No changes"
+          git pull --rebase
           git push
