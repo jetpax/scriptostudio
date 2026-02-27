@@ -16,6 +16,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Only one bundle job at a time — later pushes cancel in-progress runs
+concurrency:
+  group: bundle-firmware
+  cancel-in-progress: true
+
 jobs:
   bundle:
     name: Build merged firmware
