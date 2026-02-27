@@ -190,7 +190,7 @@ def run_setup_server():
         if setup_complete[0]:
             print("[SETUP] Resetting device for normal boot...")
             time.sleep_ms(500)  # Allow response to complete
-            machine.soft_reset()
+            machine.reset()  # Hard reset — soft_reset preserves WiFi driver state, preventing mDNS re-init
         
         time.sleep_ms(10)
 
