@@ -104,9 +104,9 @@ jobs:
             CHIP="esp32s3"
             if [[ "$VARIANT" == *"P4"* ]]; then CHIP="esp32p4"; fi
 
-            # Detect flash size from variant name (handle suffixes like _OCT)
+            # Detect flash size from variant name (strip non-numeric suffixes like _OCT, _OPI etc.)
             # ESP32_S3_8=8MB, ESP32_S3_8_OCT=8MB, ESP32_S3_16=16MB, ESP32_P4_32=32MB
-            FLASH_MB=$(echo "$VARIANT" | sed 's/_OCT$//' | grep -oE '[0-9]+$')
+            FLASH_MB=$(echo "$VARIANT" | sed 's/_[A-Z]*$//' | grep -oE '[0-9]+$')
             FLASH_SIZE="${FLASH_MB}MB"
 
             # Detect bootloader offset (P4 uses 0x2000, others use 0x0)
