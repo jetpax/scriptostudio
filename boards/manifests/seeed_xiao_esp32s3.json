@@ -9,7 +9,7 @@
   },
 
   "firmware": {
-    "variant": "ESP32_S3_8_OPI"
+    "variant": "ESP32_S3_8_OCT"
   },
 
   "network": {
