@@ -68,10 +68,11 @@ function check(){
 pw1.oninput=pw2.oninput=check;
 async function save(){
   btn.disabled=true;btn.textContent='Saving...';
+  const ext=new URLSearchParams(location.search).get('ext')||'';
   try{
-    const r=await fetch('/set-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw1.value})});
+    const r=await fetch('/set-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw1.value,ext:ext})});
     const d=await r.json();
-    if(d.success){status.className='status ok';status.textContent='✓ Setup complete! Redirecting...';setTimeout(()=>location.href=d.redirect,2000)}
+    if(d.success){status.className='status ok';status.textContent='\u2713 Setup complete! Redirecting...';setTimeout(()=>location.href=d.redirect,2000)}
     else throw new Error(d.error);
   }catch(e){status.className='status error';status.textContent=e.message;btn.disabled=false;btn.textContent='Complete Setup'}
 }
@@ -153,6 +154,11 @@ def run_setup_server():
             # TODO: Make studio URL configurable
             redirect = f"https://scriptostudio.com/app/?device={hostname}.local"
             
+            # Forward extension parameter if present
+            ext = data.get("ext", "")
+            if ext:
+                redirect += f"&extension={ext}"
+            
             # Signal main loop to perform reset
             setup_complete[0] = True
             
@@ -164,7 +170,11 @@ def run_setup_server():
     
     def redirect_to_setup(uri, post_data=None, remote_addr=None):
         # 302 redirect not supported by C module, use HTML refresh
-        httpserver.send('<html><head><meta http-equiv="refresh" content="0;url=/setup"></head><body><a href="/setup">Redirecting...</a></body></html>')
+        # Forward query string (e.g. ?ext=pfc) to /setup
+        qs = ''
+        if '?' in uri:
+            qs = '?' + uri.split('?', 1)[1]
+        httpserver.send(f'<html><head><meta http-equiv="refresh" content="0;url=/setup{qs}"></head><body><a href="/setup{qs}">Redirecting...</a></body></html>')
     
     # Start HTTPS server FIRST (required before registering routes)
     cert_file = settings.get("server.https_cert_file", "/certs/servercert.pem")
