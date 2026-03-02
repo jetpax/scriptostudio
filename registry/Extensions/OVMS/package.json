@@ -1,7 +1,0 @@
-{
-  "name": "OVMS",
-  "version": "0.9.0",
-  "description": "Pushes vehicle metrics to an OVMS v2 server for remote monitoring",
-  "author": "JetPax",
-  "license": "MIT"
-}

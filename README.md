@@ -24,7 +24,7 @@ Delivered as a PWA that runs in any modern browser, ScriptO Studio communicates 
 
 ### 🛡️ Fast, Secure Development
 
-All device acces is through hw accelerated TLS and WebRTC, so it's fast and secure. See [Connection](/docs/getting-started/connection/) for details.
+All device access is through hw accelerated TLS and WebRTC, so it's fast and secure. See [Connection](/docs/getting-started/connection/) for details.
 ![ScriptO Studio Connect](.github/images/connect.png)
 
 ### ✏️ Smart Python Editor
@@ -34,12 +34,12 @@ Agentic code editor for MicroPython with syntax highlighting, file management, a
 
 ### 🧩 ScriptO Automations
 
-Script Objects are the ultimate device customization tool. Choose from a [library of ScriptOs](https://scriptostudio.com/registry/catalogue/) to get started, or create your own with the Smart Editor. See [Writing ScriptOs](/docs/user-guide/writing-scriptos/).
+Script Objects are the ultimate device customization tool. Create your own with the Smart Editor, or browse community-contributed scripts. See [Writing ScriptOs](/docs/user-guide/writing-scriptos/).
 ![ScriptO Studio ScriptO](.github/images/scripto.png)
 
 ### 📦 System Extensions
 
-Add major new features at the touch of a button. Load [Extensions](https://scriptostudio.com/registry/extensions-catalogue/) like **OVMS**, **OpenInverter**, **GVRET**, or **Dala's Battery Emulator**. See [Extensions Overview](/docs/user-guide/extensions/).
+Add major new features at the touch of a button. Browse and install extensions from **[ScriptoHub](https://scriptohub.com)** — including **PFC**, **OVMS**, **OpenInverter**, **GVRET**, and more. See [Extensions Overview](/docs/user-guide/extensions/).
 ![ScriptO Studio OI](.github/images/OI.png)
 
 ### ⚙️ Device Management
@@ -49,29 +49,6 @@ Connect and manage devices, configure board settings, manage files, and network 
 
 ### 🐞 Visual Debugger
 Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics. See [Debugger Overview](/docs/debugging/).
-
----
-
-## 📦 Registry
-
-The registry provides a curated collection of reusable code:
-
-### 🐍 ScriptOs (Python Scripts)
-Python scripts that run directly on your ESP32 device — hardware drivers, protocol implementations, and utility libraries.
-
-**Browse:** [scriptostudio.com/registry/catalogue/](https://scriptostudio.com/registry/catalogue/)
-
-### 🔌 Extensions (JavaScript + Python)
-Full-featured applications with rich UIs that extend ScriptO Studio's capabilities.
-
-| Extension | Based On | Status |
-|-----------|----------|--------|
-| **GVRET** | [collin80/GVRET](https://github.com/collin80/GVRET) | ✅ Working |
-| **OVMS** | [Open Vehicle Monitoring System](https://docs.openvehicles.com/) | 🚧 In development |
-| **OpenInverter** | [openinverter.org](https://openinverter.org/) | 🚧 In development |
-| **Battery Emulator** | [Dala's Battery Emulator](https://github.com/dalathegreat/Battery-Emulator) | 🚧 In development |
-
-**Browse:** [scriptostudio.com/registry/extensions-catalogue/](https://scriptostudio.com/registry/extensions-catalogue/)
 
 ---
 
@@ -95,9 +72,9 @@ Works directly in your browser. No software to install. See the [Flashing Firmwa
 
 Visit **[scriptostudio.com/app/](https://scriptostudio.com/app/)** — works on desktop, tablet, or phone.
 
-### 3. Load an Extension
+### 3. Install an Extension
 
-Click **Extensions** → Browse → **Install**. Your device is now running that application. See [Extensions Overview](/docs/user-guide/extensions/).
+Click **Extensions** → Browse → **Install**. Extensions are hosted on **[ScriptoHub](https://scriptohub.com)**. Your device starts running the extension immediately. See [Extensions Overview](/docs/user-guide/extensions/).
 
 ### 4. Disconnect and Go
 
@@ -110,7 +87,8 @@ Your device keeps running the Extension autonomously. Access its web UI directly
 | Component | Description |
 |-----------|-------------|
 | **[ScriptO Studio](https://scriptostudio.com/app/)** | Web IDE + Extension loader |
-| **[Registry](https://scriptostudio.com/registry/)** | Catalogue of Extensions and ScriptOs |
+| **[ScriptoHub](https://scriptohub.com)** | Extension & ScriptO marketplace |
+| **[PycoClaw](https://pycoclaw.com)** | Open-source AI agent platform |
 | **[pyDirect](https://github.com/jetpax/pyDirect)** | MicroPython fast-path C modules |
 | **[WebREPL Binary Protocol](https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md)** | IANA-registered sub-protocol |
 | **[MicroPython](https://micropython.org)** | Python for microcontrollers |
@@ -131,52 +109,23 @@ Your device keeps running the Extension autonomously. Access its web UI directly
 ---
 ## 🏗️ Repository Structure
 
-This repository hosts:
+This repository hosts the deployment artefacts for ScriptO Studio:
 
 | Path | Description | URL |
 |------|-------------|-----|
 | `/app/` | ScriptO Studio IDE | [scriptostudio.com/app/](https://scriptostudio.com/app/) |
-| `/registry/` | ScriptOs & Extensions catalogue | [scriptostudio.com/registry/](https://scriptostudio.com/registry/) |
+| `/boards/` | Board manifests & firmware scripts | — |
 | `/docs/` | Documentation | [scriptostudio.com/docs/](https://scriptostudio.com/docs/) |
+
+Extensions and ScriptOs are now managed via **[ScriptoHub](https://scriptohub.com)**.
 
 ---
 
 ## 🛠️ Development
 
-### Contributing ScriptOs
-
-ScriptOs are Python scripts with embedded metadata. To add one:
-
-1. Create a `.py` file with a config block:
-```python
-# === START_CONFIG_PARAMETERS ===
-dict(
-    info = dict(
-        name = 'My ScriptO',
-        version = [1, 0, 0],
-        author = 'Your Name',
-        description = 'What it does',
-        category = 'Sensors'
-    )
-)
-# === END_CONFIG_PARAMETERS ===
-```
-
-2. Add to `registry/ScriptOs/`
-3. Run `python3 tools/build_index.py` to regenerate the index
-
 ### Contributing Extensions
 
-Extensions are JavaScript apps with optional device-side Python libraries:
-
-```
-registry/Extensions/MyExtension/
-├── MyExtension.js      # UI code with config block
-└── lib/                # Optional Python libraries for device
-    └── my_module.py
-```
-
-See the [Contributing Guide](/docs/developer/contributing/) for full details.
+Extensions are published via [ScriptoHub](https://scriptohub.com). See the [Contributing Guide](/docs/developer/contributing/) for full details.
 
 ---
 
