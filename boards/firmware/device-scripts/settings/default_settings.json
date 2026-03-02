@@ -1,8 +1,8 @@
 {
   "setup_mode": true,
   "wifi": {
-    "ssid": "Paxnet",
-    "password": "rtyu4567",
+    "ssid": "",
+    "password": "",
     "hostname_prefix": "pybot",
     "roam_rssi_threshold": -80
   },
