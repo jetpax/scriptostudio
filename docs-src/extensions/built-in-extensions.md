@@ -88,4 +88,4 @@ ExtensionName/
     └── lib/
 ```
 
-View source on GitHub: [scriptostudio/registry/Extensions](https://github.com/jetpax/scriptostudio)
+Browse extensions at [ScriptoHub](https://scriptohub.com)

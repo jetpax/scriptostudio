@@ -2,7 +2,7 @@
 
 ## When to Bump Extension Versions
 
-**Always bump the version number in extension JavaScript files when making changes** so that the registry properly updates and users get the new version.
+**Always bump the version number in extension JavaScript files when making changes** so that ScriptoHub properly updates and users get the new version.
 
 ## Version Format
 
@@ -26,7 +26,7 @@ Example:
 
 ## Why This Matters
 
-The registry uses version numbers to:
+ScriptoHub uses version numbers to:
 - Track which version users have installed
 - Determine if updates are available
 - Cache-bust browser-side code

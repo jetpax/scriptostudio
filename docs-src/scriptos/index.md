@@ -1,6 +1,6 @@
 # ScriptOs
 
-This section documents the built-in ScriptOs available in the ScriptO Studio registry.
+This section documents the built-in ScriptOs available in [ScriptoHub](https://scriptohub.com).
 
 ![ScriptOs Panel](../assets/scripto.png)
 

@@ -113,7 +113,7 @@ Yes! See [Writing Extensions](../extensions/writing-extensions.md) for a complet
 
 ### Where are extensions stored?
 
-- **UI code**: Loaded from the registry at runtime
+- **UI code**: Loaded from ScriptoHub at runtime
 - **Device libraries**: Installed to `/lib/` on the device
 
 ## Hardware

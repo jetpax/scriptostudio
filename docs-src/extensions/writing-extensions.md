@@ -206,12 +206,12 @@ The bundler:
 3. Base64-encodes device files from `device/`
 4. Produces a single `{id}.bundle.js` file
 
-### Registry Structure
+### ScriptoHub Structure
 
 For distribution, place bundles in the extension directory:
 
 ```
-registry/Extensions/DBE/
+ScriptoHub (see scriptohub.com)
 ├── dbe.bundle.js    # Bundled extension
 ├── package.json     # Minimal metadata
 └── README.md        # Documentation

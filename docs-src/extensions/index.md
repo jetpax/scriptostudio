@@ -47,7 +47,7 @@ Both Extensions and [ScriptOs](../scriptos/index.md) expand ScriptO Studio funct
 | **UI Location** | Sidebar tabs | Run from ScriptOs panel |
 | **Persistence** | Always loaded | Run on-demand |
 | **Use Case** | Complex tools with dedicated UI | Quick utilities, demos, automation |
-| **Install** | Via registry, deploys device libs | Just run from registry |
+| **Install** | Via ScriptoHub, deploys device libs | Just run from ScriptoHub |
 
 **Choose Extensions** when you need:
 - Permanent sidebar presence
