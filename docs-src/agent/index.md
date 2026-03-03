@@ -12,6 +12,7 @@ The Agent is an AI assistant integrated into ScriptO Studio that can:
 - **Debug issues** by analyzing errors and logs
 - **Suggest optimizations** for performance and memory
 - **Answer questions** about MicroPython and ESP32
+- **Stream responses** in real-time via C-native SSE (Server-Sent Events)
 
 ## How It Works
 
@@ -29,6 +30,7 @@ The Agent uses large language models (LLMs) to understand your requests and gene
 | **Error Analysis** | Paste an error, get an explanation and fix |
 | **Device Awareness** | Knows your board's pins and capabilities |
 | **Context Retention** | Remembers conversation history |
+| **SSE Streaming** | C-native Server-Sent Events for real-time token delivery |
 
 ## Getting Started
 
