@@ -2170,6 +2170,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -2186,6 +2204,64 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v600-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v6.0.0 — Streaming
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v6.0.0 — Streaming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Highlights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technical Details
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2247,6 +2323,53 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v600-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v6.0.0 — Streaming
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v6.0.0 — Streaming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Highlights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technical Details
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2266,11 +2389,24 @@
 
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h2 id="v600-streaming">v6.0.0 — Streaming<a class="headerlink" href="#v600-streaming" title="Permanent link">&para;</a></h2>
+<h3 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>🔴 C-Native SSE Streaming</strong> — Server-Sent Events streaming implemented at the C module level (<code>httpclient</code>) for real-time LLM token delivery. SSE frames are parsed in the ESP-IDF HTTP event handler and delivered to MicroPython via a ring buffer, enabling progressive response delivery with minimal latency.</li>
+<li><strong>Event-Driven Agent Loop</strong> — Agent <code>run_loop()</code> now supports an <code>on_reply</code> callback for immediate delivery of assistant responses as they arrive, replacing the previous request-response pattern.</li>
+<li><strong>Streaming-First Provider</strong> — <code>call_chat_stream()</code> supports both Gemini (<code>?alt=sse</code>) and OpenAI-compatible (<code>stream:true</code>) endpoints with automatic fallback to standard HTTP.</li>
+</ul>
+<h3 id="technical-details">Technical Details<a class="headerlink" href="#technical-details" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>modhttpclient.c</code>: Ring buffer for SSE frames, <code>_poll_chunk()</code> API, slot lifecycle management for concurrent streaming + polling requests</li>
+<li><code>httpclient.py</code>: Callback-based <code>stream()</code> wrapper with drain-after-poll and explicit slot cleanup</li>
+<li><code>providers/__init__.py</code>: Delta normalization for Gemini and OpenAI SSE formats</li>
+</ul>
+<hr />
 <div class="admonition note">
-<p class="admonition-title">Coming Soon</p>
-<p>This page is under construction.</p>
+<p class="admonition-title">Earlier Versions</p>
+<p>Changelog entries for earlier versions are under construction.</p>
 </div>
-<p>Please check back later or <a href="../../developer/contributing/">contribute to the docs</a>.</p>
 
 
 
