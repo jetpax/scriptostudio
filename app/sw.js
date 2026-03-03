@@ -1,6 +1,6 @@
 // Service Worker for ScriptO Studio PWA
-const CACHE_NAME = 'scripto-studio-v11';
-const RUNTIME_CACHE = 'scripto-studio-runtime-v11';
+const CACHE_NAME = 'scripto-studio-v12';
+const RUNTIME_CACHE = 'scripto-studio-runtime-v12';
 
 // Install event - skip pre-caching, activate immediately
 // We'll cache assets dynamically as they're requested to avoid stale content
@@ -110,6 +110,11 @@ self.addEventListener('fetch', (event) => {
   
   // Skip non-GET requests
   if (request.method !== 'GET') {
+    return;
+  }
+  
+  // Never cache firmware binaries or firmware metadata — always fetch fresh
+  if (url.pathname.endsWith('.bin') || url.pathname.endsWith('latest.json')) {
     return;
   }
   
