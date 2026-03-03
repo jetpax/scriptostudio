@@ -138,7 +138,12 @@ async def stream(url, *, method='POST', data=None, headers=None, timeout=60000, 
                         break
                     if on_chunk:
                         on_chunk(tail)
-                return r  # Stream done, slot freed by _poll
+                # Free the streaming slot (C _poll doesn't free streaming slots)
+                try:
+                    _c._cancel(h)
+                except:
+                    pass
+                return r
 
             # Check deadline
             if time.ticks_diff(time.ticks_ms(), t0) > deadline:
