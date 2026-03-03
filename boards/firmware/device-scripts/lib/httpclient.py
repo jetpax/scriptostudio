@@ -131,6 +131,13 @@ async def stream(url, *, method='POST', data=None, headers=None, timeout=60000, 
             # No chunk available — check if stream is complete
             r = _c._poll(h)
             if r is not None:
+                # Drain any remaining chunks deposited between last poll_chunk and poll
+                while True:
+                    tail = _c._poll_chunk(h)
+                    if tail is None:
+                        break
+                    if on_chunk:
+                        on_chunk(tail)
                 return r  # Stream done, slot freed by _poll
 
             # Check deadline
