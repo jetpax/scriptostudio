@@ -1,0 +1,6336 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-D-NMKdpX.js","assets/vendor-XVACtT3C.js","assets/vendor-YJ71nRLj.js","assets/vendor-CkB03O3T.css","assets/index-D8uXHUWg.js","assets/index-BvC6oQL-.js","assets/index-CEIVfw6W.js","assets/index-Ckq7-Rzu.js","assets/index-BR6z4vJu.js","assets/index-Bvni1Ih1.js","assets/index-CzizjDTO.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
+import{PANEL_TOO_SMALL as PANEL_TOO_SMALL$1,PANEL_CLOSED as PANEL_CLOSED$1,PANEL_DEFAULT as PANEL_DEFAULT$1}from"./vendor-XVACtT3C.js";import{c as cborExports,C as CBOR,h as html$1,a as Component$1,g,b as Choo}from"./vendor-YJ71nRLj.js";(function(){const i=document.createElement("link").relList;if(i&&i.supports&&i.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))s(r);new MutationObserver(r=>{for(const a of r)if(a.type==="childList")for(const c of a.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&s(c)}).observe(document,{childList:!0,subtree:!0});function o(r){const a={};return r.integrity&&(a.integrity=r.integrity),r.referrerPolicy&&(a.referrerPolicy=r.referrerPolicy),r.crossOrigin==="use-credentials"?a.credentials="include":r.crossOrigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function s(r){if(r.ep)return;r.ep=!0;const a=o(r);fetch(r.href,a)}})();function parseScriptOsConfig(n){const i="# === START_CONFIG_PARAMETERS ===",o="# === END_CONFIG_PARAMETERS ===",s=n.indexOf(i),r=n.indexOf(o);if(s===-1||r===-1)return console.warn("[ScriptOs Parser] Config markers not found"),null;const a=n.substring(s+i.length,r).trim();try{return parsePythonDict(a)}catch(c){return console.error("[ScriptOs Parser] Failed to parse config:",c),null}}function parsePythonDict(n){let i=n.trim();i.startsWith("dict(")&&i.endsWith(")")&&(i=i.substring(5,i.length-1).trim()),i=i.split(`
+`).map(r=>{let a=!1,c=null,l=!1;for(let d=0;d<r.length;d++){const p=r[d];if(l){l=!1;continue}if(p==="\\"){l=!0;continue}if((p==='"'||p==="'"||p==="`")&&!a){a=!0,c=p;continue}if(p===c&&a){a=!1,c=null;continue}if(p==="#"&&!a)return r.substring(0,d)}return r}).join(`
+`),i=i.replace(/\\\s*[\r\n]+\s*/g," ");let o="{";const s=smartSplit(i,",");for(let r=0;r<s.length;r++){const a=s[r].trim();if(!a)continue;const c=a.indexOf("=");if(c===-1)continue;const l=a.substring(0,c).trim();let d=a.substring(c+1).trim();d=convertPythonValue(d),r>0&&(o+=","),o+=`"${l}":${d}`}return o+="}",JSON.parse(o)}function smartSplit(n,i){const o=[];let s="",r=0,a=!1,c=null,l=!1;for(let d=0;d<n.length;d++){const p=n[d],u=d>0?n[d-1]:"";if(l){s+=p,l=!1;continue}if(p==="\\"){l=!0,s+=p;continue}if((p==='"'||p==="'"||p==="`")&&!a){a=!0,c=p,s+=p;continue}if(p===c&&a&&u!=="\\"){a=!1,c=null,s+=p;continue}if(a){s+=p;continue}if(p==="("||p==="["||p==="{"?r++:(p===")"||p==="]"||p==="}")&&r--,p===i&&r===0){o.push(s),s="";continue}s+=p}return s.trim()&&o.push(s),o}function convertPythonValue(n){if(n=n.trim(),n==="None")return"null";if(n==="True")return"true";if(n==="False")return"false";if(/^-?\d+(\.\d+)?$/.test(n))return n;if(n.startsWith("[")&&n.endsWith("]")){const i=n.substring(1,n.length-1);return"["+smartSplit(i,",").map(r=>convertPythonValue(r)).join(",")+"]"}if(n.startsWith("(")&&n.endsWith(")")){const i=n.substring(1,n.length-1);return"["+smartSplit(i,",").map(r=>convertPythonValue(r)).join(",")+"]"}if(n.startsWith("dict(")&&n.endsWith(")")){const i=n.substring(5,n.length-1);return convertDictContent(i)}if(n.startsWith("{")&&n.endsWith("}")){const i=n.substring(1,n.length-1);return convertDictLiteral(i)}if(n.includes("+")){const i=n.split("+").map(o=>{const s=o.trim();return s.startsWith("'")||s.startsWith('"')?s.substring(1,s.length-1):s});return JSON.stringify(i.join(""))}if(n.startsWith("'''")||n.startsWith('"""')){n.substring(0,3);let i=n.substring(3,n.length-3);return i=i.replace(/\s+/g," ").trim(),JSON.stringify(i)}return n.startsWith("'")&&n.endsWith("'")||n.startsWith('"')&&n.endsWith('"')?JSON.stringify(n.substring(1,n.length-1)):n==="str"?'"str"':n==="int"?'"int"':n==="float"?'"float"':n==="bool"?'"bool"':n==="list"?'"list"':n==="dict"?'"dict"':JSON.stringify(n)}function convertDictContent(n){let i="{";const o=smartSplit(n,",");let s=!0;for(let r=0;r<o.length;r++){const a=o[r].trim();if(!a)continue;const c=a.indexOf("=");if(c===-1)continue;const l=a.substring(0,c).trim();let d=a.substring(c+1).trim();d=convertPythonValue(d),s||(i+=","),i+=`"${l}":${d}`,s=!1}return i+="}",i}function convertDictLiteral(n){let i="{";const o=smartSplit(n,",");let s=!0;for(let r=0;r<o.length;r++){const a=o[r].trim();if(!a)continue;const c=a.indexOf(":");if(c===-1)continue;let l=a.substring(0,c).trim(),d=a.substring(c+1).trim();(l.startsWith("'")&&l.endsWith("'")||l.startsWith('"')&&l.endsWith('"'))&&(l=l.substring(1,l.length-1)),d=convertPythonValue(d),s||(i+=","),i+=`"${l}":${d}`,s=!1}return i+="}",i}function generateScriptOsCode(n,i,o){const s="# === START_CONFIG_PARAMETERS ===",r="# === END_CONFIG_PARAMETERS ===",a=n.indexOf(s),c=n.indexOf(r);if(a===-1||c===-1)return n;const l=n.substring(0,a).trim(),d=n.substring(c+r.length).trim();if(!i.args||Object.keys(i.args).length===0){const f=i.info||{};let h=`# ${f.name||"ScriptO"}
+`;return f.description&&(h+=`# ${f.description}
+`),f.author&&(h+=`# Author: ${f.author}
+`),h+=`
+`,h+(l?l+`
+
+`:"")+d}const p=i.info||{};let u=`# ${p.name||"ScriptO"}
+`;p.description&&(u+=`# ${p.description}
+`),p.author&&(u+=`# Author: ${p.author}
+`),u+=`
+`,l&&(u+=l+`
+
+`),u+=`# Configuration
+`,u+=`class args:
+`;for(const f in i.args){const h=i.args[f];let m=o[f];m==null&&(m=h.value);let v;m==null?v="None":typeof m=="string"?v=`'${escapePythonString(m)}'`:typeof m=="boolean"?v=m?"True":"False":typeof m=="number"?v=m.toString():Array.isArray(m)?v="["+m.map(y=>typeof y=="string"?`'${escapePythonString(y)}'`:y).join(", ")+"]":v="None",u+=`    ${f} = ${v}
+`}return u+=`
+`,d&&(u+=d),u}function escapePythonString(n){return String(n).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\t/g,"\\t")}class IndexedDBFileBridge{constructor(){this.DB_NAME="scripto-studio-files",this.DB_VERSION=1,this.STORE_FILES="files",this.rootPath="/"}async _initDB(){return new Promise((i,o)=>{const s=indexedDB.open(this.DB_NAME,this.DB_VERSION);s.onerror=()=>o(s.error),s.onsuccess=()=>i(s.result),s.onupgradeneeded=r=>{const a=r.target.result;a.objectStoreNames.contains(this.STORE_FILES)||a.createObjectStore(this.STORE_FILES)}})}_normalizePath(i){return i?(i=i.replace(this.rootPath,""),i.startsWith("/")||(i="/"+i),i!=="/"&&i.endsWith("/")&&(i=i.slice(0,-1)),i):"/"}async _getFilesInDirectory(i){const o=this._normalizePath(i),s=o==="/"?"/":o+"/",r=await this._initDB();return new Promise((a,c)=>{const p=r.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).openCursor(),u=[],f=new Set;p.onsuccess=h=>{const m=h.target.result;if(m){const v=m.key,y=m.value;if(v.startsWith(s)){const w=v.substring(s.length);if(v.endsWith("/")&&y.type==="folder"){const b=w.slice(0,-1);b&&!b.includes("/")&&!f.has(b)&&(f.add(b),u.push({path:b,type:"folder"}))}else if(w&&!w.includes("/"))u.push({path:w,type:y.type||"file",content:y.content,timestamp:y.timestamp,size:y.size});else if(w.includes("/")){const b=w.split("/")[0];f.has(b)||(f.add(b),u.push({path:b,type:"folder"}))}}m.continue()}else u.sort((v,y)=>v.type===y.type?v.path.localeCompare(y.path):v.type==="folder"?-1:1),a(u)},p.onerror=()=>c(p.error)})}async initialize(){try{return await this._initDB(),!0}catch(i){return console.error("[IDB FS] Error initializing:",i),!1}}isSupported(){return"indexedDB"in window}async openFolder(){const i=await this.ilistFiles("/");return{folder:this.rootPath,files:i}}async ilistFiles(i){try{return(await this._getFilesInDirectory(i)).map(s=>{let r=s.size;return r===void 0&&s.type==="file"&&(s.content?typeof s.content=="string"?r=new TextEncoder().encode(s.content).length:s.content instanceof ArrayBuffer?r=s.content.byteLength:s.content instanceof Uint8Array?r=s.content.length:s.content instanceof Blob&&(r=s.content.size):r=0),{path:s.path,type:s.type,size:r}})}catch(o){return console.error("[IDB FS] Error listing files:",o),[]}}async ilistAllFiles(i){try{const o=this._normalizePath(i),s=o==="/"?"/":o+"/",r=await this._initDB();return new Promise((a,c)=>{const p=r.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).openCursor(),u=[],f=new Set;p.onsuccess=h=>{const m=h.target.result;if(m){const v=m.key,y=m.value;if(v.startsWith(s)){const w=v.substring(s.length);if(w){const b=w.split("/");let x=s.slice(0,-1);for(let C=0;C<b.length;C++)x+="/"+b[C],f.has(x)||(f.add(x),C===b.length-1&&y.type==="file"?u.push({path:x,type:"file"}):C<b.length-1&&u.push({path:x,type:"folder"}))}}m.continue()}else a(u)},p.onerror=()=>c(p.error)})}catch(o){return console.error("[IDB FS] Error listing all files:",o),[]}}async loadFile(i){try{const o=this._normalizePath(i),s=await this._initDB();return new Promise((r,a)=>{const d=s.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).get(o);d.onsuccess=()=>{const p=d.result;if(!p||p.type!=="file"){a(new Error(`File not found: ${i}`));return}const u=p.content||"",h=new TextEncoder().encode(u).buffer;console.log("[IDB FS] Loaded file:",i,"(",h.byteLength,"bytes)"),r(h)},d.onerror=()=>a(d.error)})}catch(o){throw console.error("[IDB FS] Error loading file:",o),new Error(`Failed to load file: ${o.message}`)}}async saveFileContent(i,o){try{const s=this._normalizePath(i);let r=o;o instanceof Uint8Array?r=new TextDecoder().decode(o):o instanceof ArrayBuffer?r=new TextDecoder().decode(new Uint8Array(o)):o instanceof Blob?r=await o.text():typeof o!="string"&&(r=String(o));const a=await this._initDB();return new Promise((c,l)=>{const u=a.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).put({type:"file",content:r,timestamp:Date.now(),size:new TextEncoder().encode(r).length},s);u.onsuccess=()=>{console.log("[IDB FS] Saved file:",i),c(!0)},u.onerror=()=>l(u.error)})}catch(s){throw console.error("[IDB FS] Error saving file:",s),new Error(`Failed to save file: ${s.message}`)}}async importFiles(i="/"){return new Promise((o,s)=>{const r=document.createElement("input");r.type="file",r.multiple=!0,r.accept="*/*",r.onchange=async a=>{try{const c=Array.from(a.target.files);if(c.length===0){o([]);return}const l=[];for(const d of c){const p=await d.text(),u=this.getFullPath(i,"",d.name);await this.saveFileContent(u,p),l.push({name:d.name,path:u,size:d.size}),console.log("[IDB FS] Imported file:",d.name,"→",u)}o(l)}catch(c){console.error("[IDB FS] Error importing files:",c),s(c)}},r.oncancel=()=>{o([])},r.click()})}async fileExists(i){try{const o=this._normalizePath(i),s=await this._initDB();return new Promise((r,a)=>{const d=s.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES).get(o);d.onsuccess=()=>{const p=d.result;r(p&&p.type==="file")},d.onerror=()=>a(d.error)})}catch{return!1}}async folderExists(i){try{const o=this._normalizePath(i),s=o.endsWith("/")?o:o+"/",r=o==="/"?"/":o+"/",a=await this._initDB();return new Promise((c,l)=>{const p=a.transaction([this.STORE_FILES],"readonly").objectStore(this.STORE_FILES),u=p.get(s);u.onsuccess=()=>{if(u.result&&u.result.type==="folder"){c(!0);return}const f=p.openCursor();f.onsuccess=h=>{const m=h.target.result;if(m){const v=m.key;if(v.startsWith(r)&&v!==s){c(!0);return}m.continue()}else c(!1)},f.onerror=()=>l(f.error)},u.onerror=()=>l(u.error)})}catch{return!1}}async removeFile(i){try{const o=this._normalizePath(i),s=await this._initDB();return new Promise((r,a)=>{const d=s.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).delete(o);d.onsuccess=()=>{console.log("[IDB FS] Removed file:",i),r(!0)},d.onerror=()=>a(d.error)})}catch(o){throw console.error("[IDB FS] Error removing file:",o),new Error(`Failed to remove file: ${o.message}`)}}async renameFile(i,o){try{const s=this._normalizePath(i),r=this._normalizePath(o),a=await this.loadFile(i);return await this.saveFileContent(o,a),await this.removeFile(i),console.log("[IDB FS] Renamed file:",i,"->",o),!0}catch(s){throw console.error("[IDB FS] Error renaming file:",s),new Error(`Failed to rename file: ${s.message}`)}}async createFolder(i){try{const o=this._normalizePath(i),s=o.endsWith("/")?o:o+"/",r=await this._initDB();return new Promise((a,c)=>{const d=r.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES),p=d.get(s);p.onsuccess=()=>{if(p.result){console.log("[IDB FS] Folder already exists:",i),a(!0);return}const u=d.put({type:"folder",timestamp:Date.now()},s);u.onsuccess=()=>{console.log("[IDB FS] Created folder:",i),a(!0)},u.onerror=()=>c(u.error)},p.onerror=()=>c(p.error)})}catch(o){throw console.error("[IDB FS] Error creating folder:",o),new Error(`Failed to create folder: ${o.message}`)}}async removeFolder(i){try{const o=this._normalizePath(i),s=o==="/"?"/":o+"/",r=o.endsWith("/")?o:o+"/",a=await this._initDB();return new Promise((c,l)=>{const u=a.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).openCursor(),f=[];u.onsuccess=h=>{const m=h.target.result;if(m){const v=m.key;(v.startsWith(s)||v===o||v===r)&&f.push(m.delete()),m.continue()}else Promise.all(f).then(()=>{console.log("[IDB FS] Removed folder:",i),c(!0)}).catch(l)},u.onerror=()=>l(u.error)})}catch(o){throw console.error("[IDB FS] Error removing folder:",o),new Error(`Failed to remove folder: ${o.message}`)}}async listFiles(i){return this.ilistFiles(i)}getFullPath(i,o,s){let r=i||"/";return o&&o!=="/"&&(r+=(r.endsWith("/")?"":"/")+o.replace(/^\//,"")),s&&(r+=(r.endsWith("/")?"":"/")+s),r.startsWith("/")||(r="/"+r),r}getNavigationPath(i,o){if(o===".."){const s=i.split("/").filter(r=>r);return s.pop(),"/"+s.join("/")}return i==="/"?"/"+o:i+"/"+o}async getAppPath(){return this.rootPath}async clearWorkspace(){try{const i=await this._initDB();return new Promise((o,s)=>{const c=i.transaction([this.STORE_FILES],"readwrite").objectStore(this.STORE_FILES).clear();c.onsuccess=()=>{console.log("[IDB FS] Workspace cleared"),o()},c.onerror=()=>s(c.error)})}catch(i){console.error("[IDB FS] Error clearing workspace:",i)}}async listScriptOsFiles(){try{const i="/ScriptOs",o=await this.ilistFiles(i),s=[];console.log(`[IDB FS] Found ${o.length} items in ScriptOs directory`);for(const r of o)if(r.type==="file"&&r.path.endsWith(".py"))try{const a=i+"/"+r.path,c=await this.loadFile(a),l=new TextDecoder().decode(new Uint8Array(c)),d=parseScriptOsConfig(l);d?(s.push({filename:r.path,fullPath:a,content:l,config:d}),console.log(`[IDB FS] Loaded ScriptO: ${d.info?.name||r.path}`)):console.warn(`[IDB FS] No valid config found in: ${r.path}`)}catch(a){console.error(`[IDB FS] Error loading ScriptO ${r.path}:`,a)}return console.log(`[IDB FS] Successfully loaded ${s.length} ScriptOs`),s}catch(i){return console.error("[IDB FS] Error listing ScriptOs files:",i),[]}}async hasOnboardedDevices(){try{return(await this.ilistFiles("/onboarded")).some(o=>o.type==="file"&&o.path.endsWith(".json"))}catch{return!1}}async getOnboardedDevices(){try{const i=await this.ilistFiles("/onboarded"),o=[];for(const s of i)if(s.type==="file"&&s.path.endsWith(".json"))try{const r=await this.loadFile("/onboarded/"+s.path),a=new TextDecoder().decode(new Uint8Array(r));o.push(JSON.parse(a))}catch(r){console.warn("[IDB FS] Error parsing device file:",s.path,r)}return o}catch(i){return console.error("[IDB FS] Error listing onboarded devices:",i),[]}}async addOnboardedDevice(i,o){try{await this.createFolder("/onboarded");const r="/onboarded/"+(i.replace(/:/g,"")+".json");await this.saveFileContent(r,JSON.stringify(o,null,2)),console.log("[IDB FS] Added onboarded device:",o.hostname||i)}catch(s){throw console.error("[IDB FS] Error adding onboarded device:",s),s}}}const BridgeDisk=new IndexedDBFileBridge,AIAgentSystemPrompt=`You are an expert MicroPython developer specializing in ESP32 microcontrollers.
+
+CRITICAL: MicroPython is NOT standard Python - it has a LIMITED subset of modules.
+- Many CPython modules do NOT exist (display, matplotlib, numpy, pandas, PIL, tkinter, pygame, etc.)
+- Only use modules that exist in MicroPython ESP32 (machine, network, esp32, neopixel, time, math, etc.)
+- For visual output, use webrepl.display_ui() with HTML/CSS/JavaScript, NOT display libraries
+- NEVER import modules that don't exist in MicroPython
+
+Your task is to generate complete, working ScriptO code based on user requests.
+
+CRITICAL RULES - READ THIS CAREFULLY:
+
+1. CODE GENERATION VS EXPLANATION:
+   - If the user asks you to generate/create/write code → Generate complete ScriptO code in a code block
+   - If the user asks you to modify/fix/change existing code → Generate the complete updated ScriptO code in a code block
+   - If the user just asks a question or for clarification → Respond with text only, NO code block
+   - Examples:
+     * "print fibonacci numbers" → Generate ScriptO code
+     * "fix the bug" → Generate corrected ScriptO code
+     * "why didn't you send code?" → Respond with text explanation only
+   
+   IMPORTANT: Use your judgment about script naming:
+   - If modifying/improving the previous script → Keep the SAME info.name
+   - If creating something completely different → Use a NEW appropriate name
+   - Context will tell you what the previous script was called
+
+2. NEVER EXECUTE CODE:
+   You MUST ALWAYS generate ScriptO code format, NEVER execute code or return computation results.
+   Even if the user asks "print the first 30 fibonacci numbers", you should generate a ScriptO script that WILL print them when run.
+   The user wants a reusable ScriptO script they can save and run multiple times, NOT the output of executing code once.
+   
+   WRONG: Returning "0, 1, 1, 2, 3, 5, 8, 13..." (this is execution output)
+   RIGHT: Returning a Python script with the ScriptO config format that prints fibonacci numbers
+
+IMPORTANT: ScriptO Format Requirements:
+
+1. ALWAYS include configurable parameters in the args section when possible
+   - Numbers that might need adjustment (count, delay, threshold, etc.)
+   - Pin numbers for GPIO
+   - Text strings (names, messages, etc.)
+   - Boolean options (enable/disable features)
+   - Make scripts flexible and reusable!
+
+2. CRITICAL: Use args.paramName in your code, NOT hardcoded values!
+   - If you define args.count, use args.count in the code
+   - If you define args.pin, use args.pin in the code
+   - The configuration system will replace args.* with user values
+   - DO NOT use hardcoded values that you defined in the config!
+
+3. Include a configuration dictionary between these exact markers (START AT COLUMN 0 - NO LEADING SPACES):
+
+# === START_CONFIG_PARAMETERS ===
+dict(
+  info = dict(
+    name = 'Script Name',
+    version = [1, 0, 0],
+    category = 'Hardware',
+    description = 'Brief description',
+    author = 'Your Name'
+  ),
+  args = dict(
+    argName = dict(
+      label = 'User-friendly label:',
+      type = int,  # str, int, float, bool, list (for GPIO pins), or dict (for dropdowns)
+      value = 10,  # default value
+      optional = False
+    )
+  )
+)
+# === END_CONFIG_PARAMETERS ===
+
+2. After the config, write the actual code that uses: args.argName
+
+3. Type options:
+
+   - int: Integer input
+
+   - float: Decimal number input
+
+   - str: Text input
+
+   - bool: Checkbox
+
+   - list: GPIO pin selector (shows pins: 0-48)
+
+   - dict: Dropdown menu (use items = {'key': 'Label', ...})
+
+4. For dict type with dropdown, include 'items':
+
+   items = { '0': 'Option 1', '1': 'Option 2' }
+
+5. MicroPython Module Availability (CRITICAL):
+
+   AVAILABLE modules in MicroPython ESP32:
+   - machine (GPIO, ADC, PWM, I2C, SPI, Timer, etc.)
+   - network (WiFi, WLAN)
+   - esp32 (httpserver, webrepl, NVS, etc.)
+   - neopixel (NeoPixel LED strips)
+   - time, utime
+   - ujson, uos, uio
+   - socket, select
+   - gc (garbage collector)
+   - sys
+   - math
+   - lib.client_helpers, lib.device_helpers (ScriptO-specific helpers)
+   
+   NOT AVAILABLE - DO NOT USE:
+   - ❌ display (does not exist - use web UI or terminal output instead)
+   - ❌ matplotlib (does not exist - use web UI with canvas/Chart.js for plotting)
+   - ❌ numpy (does not exist - use basic math module)
+   - ❌ pandas (does not exist)
+   - ❌ PIL/Pillow (does not exist - use web UI for images)
+   - ❌ tkinter (does not exist - use web UI instead)
+   - ❌ pygame (does not exist)
+   - ❌ Most CPython standard library modules
+   
+   For output/display (choose the simplest appropriate method):
+   - PREFERRED for simple results: Use print() for terminal output (numbers, text, simple data)
+   - Use webrepl.display_ui() ONLY for complex interactive UIs (forms, charts, real-time updates, multiple controls)
+   - Use web UI with HTML5 Canvas or Chart.js ONLY when user explicitly asks for visual plots/charts
+   - If unclear whether to use print() or web UI, prefer print() for simplicity
+   - NEVER try to import display, matplotlib, or GUI libraries
+
+6. Common ESP32 hardware patterns:
+
+   - GPIO: Use machine.Pin(args.pin, machine.Pin.OUT)
+
+   - ADC: Use machine.ADC(machine.Pin(args.pin))
+
+   - PWM: Use machine.PWM(machine.Pin(args.pin), freq=args.frequency)
+
+   - NeoPixel: from neopixel import NeoPixel; np = NeoPixel(Pin(args.pin), args.count)
+
+   - I2C: machine.I2C(0, scl=Pin(args.scl), sda=Pin(args.sda))
+
+   - SPI: machine.SPI(1, baudrate=args.baudrate, sck=Pin(args.sck), mosi=Pin(args.mosi), miso=Pin(args.miso))
+
+7. Always include proper error handling and interrupt support (try/except KeyboardInterrupt)
+
+8. Add helpful comments explaining what the code does
+
+9. Output Method Selection (IMPORTANT - choose the simplest approach):
+
+   PREFERRED: Use print() for simple output:
+   - Numbers, text, simple data structures
+   - Lists, dictionaries, sensor readings
+   - Status messages, logs
+   - Simple calculations and results
+   - Example: "print fibonacci numbers" → use print() statements
+   
+   Use webrepl.display_ui() when user requests:
+   - "web UI", "web interface", "HTML interface", "browser interface"
+   - "interactive UI", "buttons", "forms", "controls", "sliders"
+   - "chart", "plot", "visualization", "graph" (any visual output)
+   - "display", "show in UI", "web page"
+   - Complex multi-component interfaces with real-time updates
+   
+   CRITICAL: When generating ANY web UI (HTML, charts, plots, visualizations):
+   - MUST use esp32.httpserver.on() to register the route
+   - MUST use webrepl.display_ui() to open it in ScriptO Studio
+   - MUST use getDeviceURL() to get the correct URL
+   - NEVER use raw socket servers or manual HTTP handling
+   - NEVER just print URLs and expect users to open browsers manually
+   
+   Decision rules (apply in order):
+   1. User asks for "plot", "chart", "graph", "visualization", "display", "show" → Use webrepl.display_ui() with web UI
+   2. User explicitly says "web UI", "HTML", "web interface", "browser" → Use webrepl.display_ui()
+   3. User asks for interactive controls/forms/buttons → Use webrepl.display_ui()
+   4. Simple text/numbers only → Use print() for simplicity
+   
+10. ScriptO Studio UI Display Feature (REQUIRED for any web UI/chart/plot):
+
+   CRITICAL: When generating ANY web-based UI, chart, plot, or visualization:
+   - You MUST use this pattern - NEVER use raw sockets or manual HTTP servers
+   - The device serves HTML via esp32.httpserver.on('/route', handler, 'GET')
+   - CRITICAL: Always include the HTTP method ('GET') as the third parameter to httpserver.on()
+   - MUST use webrepl.display_ui(url, title) to automatically open UI in ScriptO Studio
+   - MUST use lib.client_helpers.getDeviceURL() to auto-detect HTTP/HTTPS
+   - Set silent = True in config for UI-based ScriptOs (hide internal prints)
+   
+   REQUIRED pattern (ALWAYS use this for web UIs):
+     \`\`\`python
+     from esp32 import httpserver, webrepl
+     from lib.client_helpers import getDeviceURL
+     
+     # HTTP handler returns HTML
+     def my_ui_handler(uri, post_data=None):
+         html = '<html><body><h1>Hello!</h1></body></html>'
+         return html
+     
+     # Unregister route first (if it exists) to avoid conflicts
+     try:
+         httpserver.off('/my_ui', 'GET')
+     except:
+         pass
+     
+     # Register HTTP route - MUST include 'GET' as third parameter
+     httpserver.on('/my_ui', my_ui_handler, 'GET')
+     
+     # Display UI in Studio (auto-detects HTTP/HTTPS) - REQUIRED!
+     url = getDeviceURL('/my_ui')
+     webrepl.display_ui(url, 'My UI Title')
+     \`\`\`
+   
+   FORBIDDEN patterns (NEVER use these):
+   - ❌ Raw socket servers (socket.socket(), socket.bind(), etc.)
+   - ❌ Manual HTTP request parsing
+   - ❌ Printing URLs and asking users to open browsers manually
+   - ❌ Using socket.listen() or socket.accept() for HTTP
+   
+   HTML can include inline CSS/JavaScript for interactive UIs
+   ALWAYS unregister routes with httpserver.off() before registering to avoid conflicts`;class AIBridge{constructor(){this.registryExamples=null,this.registryUrl="https://scriptostudio.com/registry/index.json",this.systemPrompt=AIAgentSystemPrompt,this.systemPrompt||console.warn("[AIBridge] System prompt not loaded")}async testConnection(i){const{provider:o,apiKey:s,model:r,endpoint:a}=i;if(!s)throw new Error("API key is required");try{const c=await this.makeRequest("Hi! Just testing the connection.",[],i,!0);return{success:!0}}catch(c){throw new Error(c.message||"Connection test failed")}}async fetchRegistryExamples(){if(this.registryExamples)return this.registryExamples;try{console.log("[AIBridge] Fetching registry examples...");const i=await fetch(this.registryUrl);if(!i.ok)throw new Error("Failed to fetch registry");const o=await i.json(),s=[],r=["UI Plugins","GPIO","Hardware","Utilities"];for(const a of r){const c=o.scriptos.find(l=>l.tags&&l.tags.includes(a));if(c){const l=await fetch(c.url);if(l.ok){const d=await l.text();s.push({name:c.name,category:a,code:d})}}}return this.registryExamples=s,console.log(`[AIBridge] Loaded ${s.length} registry examples`),s}catch(i){return console.warn("[AIBridge] Failed to fetch registry examples:",i),[]}}async generateCode(i,o,s){await this.fetchRegistryExamples();const r=this.buildMessages(i,o,s);try{const a=await this.makeRequest(i,r,s,!1);console.log("[AIBridge] Raw AI response:",a.substring(0,200)+"...");const c=this.extractCode(a);return console.log("[AIBridge] Extracted code:",c?"YES ("+c.length+" chars)":"NO CODE FOUND"),c&&(console.log("[AIBridge] Extracted code (first 300 chars):",c.substring(0,300)),console.log("[AIBridge] Code has START marker:",c.includes("# === START_CONFIG_PARAMETERS ===")),console.log("[AIBridge] Code has END marker:",c.includes("# === END_CONFIG_PARAMETERS ==="))),{content:a,code:c}}catch(a){throw console.error("[AIBridge] Error generating code:",a),a}}buildMessages(i,o,s){const r=[];let a=s.systemPrompt&&typeof s.systemPrompt=="string"&&s.systemPrompt.trim().length>0?s.systemPrompt.trim():this.systemPrompt;if(this.registryExamples&&this.registryExamples.length>0){a+=`
+
+REAL-WORLD EXAMPLES FROM REGISTRY:
+
+`,a+=`Study these actual ScriptOs from the registry to learn the patterns:
+
+`;for(const d of this.registryExamples){a+=`Example: ${d.name} (${d.category})
+`,a+="```python\n";const p=d.code.length>500?d.code.substring(0,500)+`
+# ... (rest of code omitted)
+`:d.code;a+=p,a+="```\n\n"}a+=`Use these examples as reference for proper ScriptO format, patterns, and best practices.
+`}console.log("[AIBridge] Using system prompt:",a===this.systemPrompt?"DEFAULT (ScriptO format)":"CUSTOM","| Length:",a.length,"chars",this.registryExamples?`| ${this.registryExamples.length} registry examples`:""),(s.provider==="openai"||s.provider==="grok"||s.provider==="openrouter"||s.provider==="custom")&&r.push({role:"system",content:a}),o.slice(-10).filter(d=>d.role==="user"||d.role==="assistant").forEach(d=>{(d.role==="user"||d.role==="assistant")&&r.push({role:d.role,content:d.content})});const l=o[o.length-1];return(!l||l.content!==i)&&r.push({role:"user",content:i}),r}async makeRequest(i,o,s,r=!1){const{provider:a,apiKey:c,model:l,endpoint:d,anthropicProxyUrl:p}=s;switch(a){case"openai":return await this.callOpenAI(o,c,l,r);case"anthropic":const u=s.systemPrompt&&typeof s.systemPrompt=="string"&&s.systemPrompt.trim().length>0?s.systemPrompt.trim():this.systemPrompt;return await this.callAnthropic(o,c,l,u,r,p);case"grok":return await this.callGrok(o,c,l,r);case"openrouter":return await this.callOpenRouter(o,c,l,r);case"custom":return await this.callCustomEndpoint(o,c,l,d,r);default:throw new Error(`Unknown provider: ${a}`)}}async callOpenAI(i,o,s,r){const a="https://api.openai.com/v1/chat/completions",c={model:s,messages:r?[{role:"system",content:"You are a helpful assistant."},{role:"user",content:'Say "OK" if you can read this.'}]:i,temperature:.7,max_tokens:r?10:2e3},l=await fetch(a,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${o}`},body:JSON.stringify(c)});if(!l.ok){let p=`OpenAI API error: ${l.status}`;try{const u=await l.json(),f=u.error?.message||"";f.includes("insufficient_quota")||f.includes("billing")?p="Insufficient credits or billing issue. Please check your OpenAI account balance.":l.status===401?p="Invalid API key. Please check your API key in System > AI Agent settings.":l.status===403?p="Access forbidden. Check your API key permissions and account status.":p=u.error?.message||p}catch{p=`OpenAI API error: ${l.status} ${l.statusText}`}throw new Error(p)}return(await l.json()).choices[0].message.content}async callAnthropic(i,o,s,r,a,c){const l=c||"http://localhost:3001/api/anthropic",d=i.filter(u=>u.role!=="system"),p={model:s,max_tokens:a?10:2e3,system:a?"You are a helpful assistant.":r,messages:a?[{role:"user",content:'Say "OK" if you can read this.'}]:d,apiKey:o||void 0};try{const u=await fetch(l,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});if(!u.ok){let h=`Anthropic API error: ${u.status}`;try{const m=await u.json();h=m.error?.message||m.message||h}catch{}throw new Error(h)}return(await u.json()).content[0].text}catch(u){throw u.message.includes("Failed to fetch")||u.message.includes("NetworkError")||u.name==="TypeError"?new Error(`Could not connect to Anthropic proxy server at ${l}. Make sure the proxy server is running. See proxy-server/README.md for setup instructions.`):u}}async callGrok(i,o,s,r){const a="https://api.x.ai/v1/chat/completions",c={model:s,messages:r?[{role:"system",content:"You are a helpful assistant."},{role:"user",content:'Say "OK" if you can read this.'}]:i,stream:!1,temperature:r?0:.7,max_tokens:r?10:2e3},l=await fetch(a,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${o}`},body:JSON.stringify(c)});if(!l.ok){let p=`Grok API error: ${l.status} ${l.statusText}`;try{const u=await l.json();if(u.code||u.error){const f=u.code||"",h=u.error||"";f.includes("permission")||h.includes("credits")?p="No credits available. Please purchase credits at https://console.x.ai or check your account balance.":f.includes("authentication")||l.status===401?p="Invalid API key. Please check your API key in System > AI Agent settings.":l.status===403?p=u.error||u.message||"Access forbidden. Check your API key permissions and account status.":p=u.error||u.message||u.code||p}else p=u.message||p}catch{const f=await l.text();f&&(p+=` - ${f}`)}throw new Error(p)}return(await l.json()).choices[0].message.content}async callOpenRouter(i,o,s,r){const a="https://openrouter.ai/api/v1/chat/completions",c={model:s,messages:r?[{role:"system",content:"You are a helpful assistant."},{role:"user",content:'Say "OK" if you can read this.'}]:i},l=await fetch(a,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${o}`,"HTTP-Referer":window.location.origin,"X-Title":"ScriptO Studio"},body:JSON.stringify(c)});if(!l.ok){let p=`OpenRouter API error: ${l.status} ${l.statusText}`;try{const u=await l.json(),f=u.error?.message||u.message||"";f.includes("credits")||f.includes("balance")?p="Insufficient credits. Please add credits to your OpenRouter account.":l.status===401?p="Invalid API key. Please check your API key in System > AI Agent settings.":l.status===403?p=u.error?.message||u.message||"Access forbidden. Check your API key permissions and account status.":p=u.error?.message||u.message||p}catch{const f=await l.text();f&&(p+=` - ${f}`)}throw new Error(p)}return(await l.json()).choices[0].message.content}async callCustomEndpoint(i,o,s,r,a){if(!r)throw new Error("Custom endpoint URL is required");const c={model:s,messages:a?[{role:"system",content:"You are a helpful assistant."},{role:"user",content:'Say "OK" if you can read this.'}]:i,temperature:.7,max_tokens:a?10:2e3},l=await fetch(r,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${o}`},body:JSON.stringify(c)});if(!l.ok)throw new Error(`Custom endpoint error: ${l.status}`);const d=await l.json();if(d.choices&&d.choices[0]?.message?.content)return d.choices[0].message.content;if(d.content&&Array.isArray(d.content))return d.content[0].text;if(d.response)return d.response;if(d.text)return d.text;throw new Error("Unable to parse response from custom endpoint")}extractCode(i){let o=null;const s=i.match(/```python\n([\s\S]*?)```/);if(s&&(o=s[1].trim()),!o){const r=i.match(/```\n([\s\S]*?)```/);r&&(o=r[1].trim())}if(!o&&i.includes("# === START_CONFIG_PARAMETERS ===")&&(o=i.trim()),o){const r=o.includes("# === START_CONFIG_PARAMETERS ==="),a=o.includes("def ")||o.includes("import ")||o.includes("print(")||o.includes("class ")||/^[a-zA-Z_][\w]*\s*=/.test(o);return!r&&!a?(console.log("[AIBridge] Extracted content does not look like code, ignoring"),null):o.length<50?(console.log("[AIBridge] Extracted code too short, probably not valid:",o.length,"chars"),null):o}return null}}const AIBridgeInstance=new AIBridge;class ExtensionRegistry{constructor(){this.DB_NAME="scripto-studio-extension-registry",this.DB_VERSION=1,this.STORE_INDEX="index",this.STORE_EXTENSIONS="extensions",this.STORE_INSTALLED="installed"}async _initDB(){return new Promise((n,i)=>{const o=indexedDB.open(this.DB_NAME,this.DB_VERSION);o.onerror=()=>i(o.error),o.onsuccess=()=>n(o.result),o.onupgradeneeded=s=>{const r=s.target.result;r.objectStoreNames.contains(this.STORE_INDEX)||r.createObjectStore(this.STORE_INDEX,{keyPath:"id"}),r.objectStoreNames.contains(this.STORE_EXTENSIONS)||r.createObjectStore(this.STORE_EXTENSIONS,{keyPath:"id"}),r.objectStoreNames.contains(this.STORE_INSTALLED)||r.createObjectStore(this.STORE_INSTALLED,{keyPath:"id"})}})}async loadIndex(n){try{const i=await this._initDB();try{const o=await fetch(n);if(!o.ok)throw new Error(`Failed to fetch registry: ${o.status}`);const r=(await o.json()).extensions||[],c=i.transaction([this.STORE_INDEX],"readwrite").objectStore(this.STORE_INDEX);return await new Promise((l,d)=>{const p=c.put({id:"registry",timestamp:Date.now(),extensions:r});p.onsuccess=()=>l(),p.onerror=()=>d(p.error)}),console.log("[Extension Registry] Loaded and cached index:",r.length,"extensions"),r}catch(o){console.warn("[Extension Registry] Failed to fetch index, trying cache:",o);const r=i.transaction([this.STORE_INDEX],"readonly").objectStore(this.STORE_INDEX);return new Promise((a,c)=>{const l=r.get("registry");l.onsuccess=()=>{const d=l.result;d&&d.extensions?(console.log("[Extension Registry] Using cached index:",d.extensions.length,"extensions"),a(d.extensions)):c(new Error("No cached registry available"))},l.onerror=()=>c(l.error)})}}catch(i){return console.error("[Extension Registry] Error loading index:",i),[]}}parseExtensionConfig(content){const metaMatch=content.match(/export\s+const\s+__EXTENSION_META__\s*=\s*(\{[\s\S]*?\});/);if(!metaMatch)return console.error("[Extension Registry] No __EXTENSION_META__ found in V2 bundle"),null;try{return JSON.parse(metaMatch[1])}catch(error){try{return eval("("+metaMatch[1]+")")}catch(n){return console.error("[Extension Registry] Failed to parse V2 config:",error),null}}}async installExtension(n){try{console.log("[Extension Registry] Installing extension:",n.name);const i=await fetch(n.url);if(!i.ok)throw new Error(`Failed to fetch extension: ${i.status}`);const o=await i.text(),s=this.parseExtensionConfig(o);if(!s)throw new Error("Failed to parse extension config");const r=await this._initDB(),a={id:n.id,content:o,config:s,styles:s.styles||"",mipPackage:s.mipPackage||n.mipPackage||null,url:n.url,installedAt:Date.now()},l=r.transaction([this.STORE_EXTENSIONS],"readwrite").objectStore(this.STORE_EXTENSIONS);await new Promise((u,f)=>{const h=l.put(a);h.onsuccess=()=>u(),h.onerror=()=>f(h.error)});const p=r.transaction([this.STORE_INSTALLED],"readwrite").objectStore(this.STORE_INSTALLED);return await new Promise((u,f)=>{const h=p.put({id:n.id,name:s.name,icon:s.icon,menu:s.menu,version:s.version,mipPackage:s.mipPackage||null,installedAt:Date.now()});h.onsuccess=()=>u(),h.onerror=()=>f(h.error)}),console.log("[Extension Registry] Extension installed:",s.name),a}catch(i){throw console.error("[Extension Registry] Installation failed:",i),i}}async getInstalledExtensions(){try{const o=(await this._initDB()).transaction([this.STORE_INSTALLED],"readonly").objectStore(this.STORE_INSTALLED);return new Promise((s,r)=>{const a=o.getAll();a.onsuccess=()=>{console.log("[Extension Registry] Found installed extensions:",a.result.length),s(a.result)},a.onerror=()=>r(a.error)})}catch(n){return console.error("[Extension Registry] Error getting installed extensions:",n),[]}}async getExtension(n){try{const s=(await this._initDB()).transaction([this.STORE_EXTENSIONS],"readonly").objectStore(this.STORE_EXTENSIONS);return new Promise((r,a)=>{const c=s.get(n);c.onsuccess=()=>{c.result?(console.log("[Extension Registry] Loaded extension from cache:",n),r(c.result)):(console.warn("[Extension Registry] Extension not found in cache:",n),r(null))},c.onerror=()=>a(c.error)})}catch(i){return console.error("[Extension Registry] Error getting extension:",i),null}}async uninstallExtension(n){try{const i=await this._initDB(),s=i.transaction([this.STORE_EXTENSIONS],"readwrite").objectStore(this.STORE_EXTENSIONS);await new Promise((c,l)=>{const d=s.delete(n);d.onsuccess=()=>c(),d.onerror=()=>l(d.error)});const a=i.transaction([this.STORE_INSTALLED],"readwrite").objectStore(this.STORE_INSTALLED);return await new Promise((c,l)=>{const d=a.delete(n);d.onsuccess=()=>c(),d.onerror=()=>l(d.error)}),console.log("[Extension Registry] Extension uninstalled:",n),!0}catch(i){return console.error("[Extension Registry] Uninstall failed:",i),!1}}async installExtensionFromContent(n){try{const i=this.parseExtensionConfig(n);if(!i)throw new Error("Failed to parse extension config. Ensure the file is a valid bundle with __EXTENSION_META__.");if(!i.id)throw new Error('Extension config must have an "id" field');console.log("[Extension Registry] Installing extension from content:",i.name||i.id);const o=await this._initDB(),s={id:i.id,content:n,config:i,styles:i.styles||"",mipPackage:i.mipPackage||null,url:"local://dev",installedAt:Date.now()},a=o.transaction([this.STORE_EXTENSIONS],"readwrite").objectStore(this.STORE_EXTENSIONS);await new Promise((d,p)=>{const u=a.put(s);u.onsuccess=()=>d(),u.onerror=()=>p(u.error)});const l=o.transaction([this.STORE_INSTALLED],"readwrite").objectStore(this.STORE_INSTALLED);return await new Promise((d,p)=>{const u=l.put({id:i.id,name:i.name,icon:i.icon,menu:i.menu,version:i.version,mipPackage:i.mipPackage||null,installedAt:Date.now()});u.onsuccess=()=>d(),u.onerror=()=>p(u.error)}),console.log("[Extension Registry] Extension installed:",i.name),s}catch(i){throw console.error("[Extension Registry] Installation from content failed:",i),i}}async getDependencies(n){try{const s=(await this._initDB()).transaction([this.STORE_EXTENSIONS],"readonly").objectStore(this.STORE_EXTENSIONS);return new Promise((r,a)=>{const c=s.get(n);c.onsuccess=()=>{const l=c.result;l&&l.config&&l.config.mipPackage?r({mipPackage:l.config.mipPackage}):r(null)},c.onerror=()=>a(c.error)})}catch(i){return console.error("[Extension Registry] Error getting dependencies:",i),null}}async updateExtensionDev(n,i){try{console.log("[Extension Registry] DEV: Updating extension:",n);const o=this.parseExtensionConfig(i);if(!o)throw new Error("Failed to parse extension config from content");const s=await this._initDB(),r=await this.getExtension(n);if(!r)throw new Error(`Extension ${n} not found. Install it first from the registry.`);const a={id:n,content:i,config:o,styles:o.styles||"",mipPackage:o.mipPackage||null,url:r.url,installedAt:r.installedAt||Date.now()},l=s.transaction([this.STORE_EXTENSIONS],"readwrite").objectStore(this.STORE_EXTENSIONS);await new Promise((u,f)=>{const h=l.put(a);h.onsuccess=()=>u(),h.onerror=()=>f(h.error)});const p=s.transaction([this.STORE_INSTALLED],"readwrite").objectStore(this.STORE_INSTALLED);return await new Promise((u,f)=>{const h=p.put({id:n,name:o.name,icon:o.icon,menu:o.menu,version:o.version,mipPackage:o.mipPackage||null,installedAt:r.installedAt||Date.now()});h.onsuccess=()=>u(),h.onerror=()=>f(h.error)}),console.log("[Extension Registry] DEV: Extension updated successfully:",o.name),console.log("[Extension Registry] DEV: Reload the extension panel to see changes"),a}catch(o){throw console.error("[Extension Registry] DEV: Update failed:",o),o}}async updateExtensionDevFromFile(n,i){try{console.log("[Extension Registry] DEV: Fetching extension from:",i);const o=await fetch(i);if(!o.ok)throw new Error(`Failed to fetch file: ${o.status} ${o.statusText}`);const s=await o.text();return await this.updateExtensionDev(n,s)}catch(o){throw console.error("[Extension Registry] DEV: Failed to load file:",o),o}}}const extensionLoader=Object.freeze(Object.defineProperty({__proto__:null,ExtensionRegistry},Symbol.toStringTag,{value:"Module"}));let DeviceAPI$1=class{constructor(i){this.device=i}async execute(i,o={}){if(!this.device)throw new Error("Device not connected");try{return await this.device.exec(i)||""}catch(s){throw o.suppressErrors||console.error("[DeviceAPI] Execution error:",s),s}}async saveFile(i,o,s={}){if(!this.device)throw new Error("Device not connected");return this.device.saveFile(i,o,s)}subscribe(i,o){this.device&&this.device.subscribe(i,o)}unsubscribe(i){this.device&&this.device.unsubscribe(i)}async mkdir(i){if(!this.device)throw new Error("Device not connected");await this.device.exec(`
+import os, json
+def mkdirs(p):
+  parts = p.strip('/').split('/')
+  cur = ''
+  for part in parts:
+    cur += '/' + part
+    try: os.mkdir(cur)
+    except: pass
+mkdirs('${i}')
+print(json.dumps({"ok":True}))
+`)}parseJSON(i){if(i&&typeof i=="object")return i;if(!i)throw new Error("Empty output from device");typeof i!="string"&&(i=String(i));try{return JSON.parse(i)}catch{const s=i.indexOf("{");if(s!==-1){let r=0,a=-1;for(let c=s;c<i.length;c++)if(i[c]==="{"&&r++,i[c]==="}"&&r--,r===0){a=c+1;break}if(a!==-1){const c=i.substring(s,a);try{return JSON.parse(c)}catch{throw new Error("Failed to parse extracted JSON: "+c.substring(0,100))}}}throw new Error("Failed to parse response: "+i.substring(0,100))}}};const deviceApi=Object.freeze(Object.defineProperty({__proto__:null,DeviceAPI:DeviceAPI$1},Symbol.toStringTag,{value:"Module"}));let translations={en:{},de:{},es:{},fr:{}},currentLocale="en";function initTranslations(n,i,o,s){translations.en=n||{},translations.de=i||{},translations.es=o||{},translations.fr=s||{}}function getLocale(){return currentLocale}function setLocale(n){getAvailableLocales().includes(n)&&(currentLocale=n)}function getAvailableLocales(){return["en","de","es","fr"]}function getLocaleName(n){return{en:"English",de:"Deutsch",es:"Español",fr:"Français"}[n]||n}function t(n,i={}){const s=translations[currentLocale||"en"]||translations.en,r=n.split(".");let a=s;for(const c of r)if(a&&typeof a=="object"&&c in a)a=a[c];else{let d=translations.en||{};for(const p of r)if(d&&typeof d=="object"&&p in d)d=d[p];else return n;a=d;break}return typeof a!="string"?n:Object.keys(i).length>0?a.replace(/\{(\w+)\}/g,(c,l)=>i[l]!==void 0?i[l]:c):a}const i18n={initTranslations,getLocale,setLocale,getAvailableLocales,getLocaleName,t};window.i18n=i18n;class WebREPLWCB{constructor(){this.websocket=null,this.state="DISCONNECTED",this.password="",this.dataCallbacks=[],this.connectionClosedCallbacks=[],this.eventHandlers=new Map,this.completionCallbacks=[],this.onEthStatus=null,this.onWwanStatus=null,this.pendingRequests=new Map,this.pendingRun=null,this.pendingFileOps=new Map,this.currentTransfer=null,this.isReady=!1,this.authenticated=!1,this.CH_FILE=23,this.CH_TRM=1,this.CH_M2M=2,this.CH_DBG=3,this.CH_LOG=4,this.CH_EVENT=0,this.OP_EXE=0,this.OP_INT=1,this.OP_RST=2,this.OP_RES=0,this.OP_CON=1,this.OP_PRO=2,this.OP_COM=3,this.FILE_RRQ=1,this.FILE_WRQ=2,this.FILE_DATA=3,this.FILE_ACK=4,this.FILE_ERROR=5,this.ERR_NOT_FOUND=1,this.ERR_ACCESS=2,this.ERR_DISK_FULL=3,this.EVT_AUTH=0,this.EVT_AUTH_OK=1,this.EVT_AUTH_FAIL=2,this.EVT_INFO=3,this.EVT_LOG=4,this.FMT_PY=0,this.FMT_MPY=1,this.DEFAULT_BLKSIZE=4096}_generateId(){return Math.random().toString(36).substring(2,9)}_sendChannel(i,o,s="",r={}){if(!this.websocket||this.state!=="CONNECTED"){console.warn("[WCB] Cannot send: not connected");return}const a=[i,o,s];r.id!==void 0?(a.push(r.format!==void 0?r.format:null),a.push(r.id)):r.format!==void 0&&a.push(r.format);const c=cborExports.encode(a),l=s?s.length:0;console.debug(`[WCB] Sending CH=${i} OP=${o} DataLen=${l} EncodedLen=${c.byteLength}`),this.websocket.send(c)}_sendEvent(i,...o){if(!this.websocket||this.state!=="CONNECTED"){console.warn("[WCB] Cannot send: not connected");return}const s=[this.CH_EVENT,i,...o],r=cborExports.encode(s);this.websocket.send(r)}_sendFileMsg(i,...o){if(this.state!=="CONNECTED")return;const s=[this.CH_FILE,i,...o],r=cborExports.encode(s);this.websocket.send(r)}_handleMessage(i){const o=i.data;if(!(o instanceof ArrayBuffer)){console.warn("[WCB] Unexpected TEXT frame");return}try{const s=cborExports.decode(o);if(!Array.isArray(s)||s.length<2){console.warn("[WCB] Invalid message format");return}const r=s[0];r===this.CH_FILE?this._handleFile(s):r===this.CH_EVENT?this._handleEvent(s):r>=this.CH_TRM&&r<=22?this._handleChannel(s):console.warn("[WCB] Unknown channel:",r)}catch(s){console.error("[WCB] Failed to decode CBOR:",s);const r=new Uint8Array(o),a=Array.from(r.slice(0,32)).map(c=>c.toString(16).padStart(2,"0")).join(" ");console.error("[WCB] Raw data (first 32 bytes):",a),console.error("[WCB] As ASCII:",String.fromCharCode(...r.slice(0,32)))}}_handleChannel(i){if(i.length<3)return;const[o,s,...r]=i;switch(s){case this.OP_RES:this._handleRES(o,r[0],r[1]);break;case this.OP_CON:this._handleCON(o);break;case this.OP_PRO:this._handlePRO(o,r[0],r[1],r[2]);break;case this.OP_COM:this._handleCOM(o,r[0]);break;default:console.warn("[WCB] Unknown channel opcode:",s)}}_handleRES(i,o,s){const r=this.parseDebugState(o);if(r){console.debug("[WCB] Parsed debug state:",r);const a=this.eventHandlers.get("debug-state");if(a)try{a(r)}catch(c){console.error("[WCB] debug-state event handler error:",c)}}if(s&&this.pendingRequests.has(s)){const a=this.pendingRequests.get(s);a.buffer=(a.buffer||"")+o,console.debug("[WCB] M2M RES with ID:",s,"data length:",o.length,"total buffer:",a.buffer.length);return}i===this.CH_M2M&&!s&&(console.warn("[WCB] M2M RES message missing ID (device bug). Expected one of:",Array.from(this.pendingRequests.keys())),console.warn("[WCB] RES data:",o.substring(0,200))),i===this.CH_TRM?this._notifyData(o,!1):i===this.CH_DBG?this._notifyData(o,!1):i===this.CH_LOG&&console.log("[WCB LOG]",o)}_handleCON(i){console.debug("[WCB] Continuation prompt (...)")}_handleCOM(i,o){console.debug("[WCB] Tab completions on channel",i,":",o),this.completionCallbacks.forEach(s=>{try{s(i,o)}catch(r){console.error("[WCB] Completion callback error:",r)}})}_handlePRO(i,o,s=null,r=null){if(r&&this.pendingRequests.has(r)){const a=this.pendingRequests.get(r),{resolve:c,reject:l,timeoutId:d,buffer:p}=a;if(clearTimeout(d),this.pendingRequests.delete(r),o!==0)l(new Error(s||"Request failed"));else if(i===this.CH_M2M){console.debug("[WCB] M2M PRO success with ID:",r,"buffer length:",p?p.length:0,"buffer:",p?p.substring(0,200):"null");try{let u=null;if(p)try{u=JSON.parse(p)}catch(f){const h=p.indexOf("{");if(h!==-1){let m=0,v=-1;for(let y=h;y<p.length;y++)if(p[y]==="{"&&m++,p[y]==="}"&&m--,m===0){v=y+1;break}if(v!==-1){const y=p.substring(h,v);u=JSON.parse(y)}else throw f}else throw f}c(u)}catch(u){console.warn("[WCB] Failed to parse JSON buffer:",u,"buffer:",p?p.substring(0,200):"null"),c(p||null)}}else c(p||null);return}if(i===this.CH_M2M&&!r&&console.warn("[WCB] M2M PRO message missing ID (device bug):",{status:o,error:s}),o!==0){const a=s||"Unknown error";if(console.error("[WCB] Error:",a),this.isReady=!0,this.pendingRun){const{reject:c}=this.pendingRun;this.pendingRun=null,c(new Error(a))}}else if(this.isReady=!0,this.pendingRun){const{resolve:a}=this.pendingRun;this.pendingRun=null,a()}}_handleFile(i){if(i.length<2)return;const o=i[1],s=i.slice(2);if(!this.currentTransfer){console.warn("[WCB] Received file message with no active transfer");return}switch(o){case this.FILE_ACK:this._handleFileAck(s);break;case this.FILE_DATA:this._handleFileData(s);break;case this.FILE_ERROR:this._handleFileError(s);break;default:console.warn("[WCB] Unknown file opcode:",o)}}_handleFileAck(i){if(!this.currentTransfer)return;const o=i[0];this.currentTransfer.type==="UPLOAD"?o===this.currentTransfer.blockNum&&this.currentTransfer.resolveBlock():this.currentTransfer.type==="DOWNLOAD"&&o===0&&this.currentTransfer.blockNum===-1&&(i.length>1&&(this.currentTransfer.totalSize=i[1]),this._sendFileMsg(this.FILE_ACK,0),this.currentTransfer.blockNum=0)}_handleFileData(i){if(!this.currentTransfer||this.currentTransfer.type!=="DOWNLOAD")return;const o=i[0],s=i[1],r=(this.currentTransfer.blockNum+1)%65536;if(o===r){if((s instanceof Uint8Array||s instanceof ArrayBuffer)&&(this.currentTransfer.chunks.push(s),this.currentTransfer.receivedSize+=s.byteLength),this.currentTransfer.blockNum=o,this._sendFileMsg(this.FILE_ACK,o),this.currentTransfer.progressCallback&&this.currentTransfer.totalSize>0){const a=Math.floor(this.currentTransfer.receivedSize/this.currentTransfer.totalSize*100);this.currentTransfer.progressCallback(Math.min(a,99))}if(s.byteLength<this.currentTransfer.blksize){this.currentTransfer.progressCallback&&this.currentTransfer.progressCallback(100);const a=(Date.now()-this.currentTransfer.startTime)/1e3,c=(this.currentTransfer.receivedSize/a/1024).toFixed(2),l=(this.currentTransfer.receivedSize*8/a/1e6).toFixed(2);console.log(`[WCB] Download complete: ${this.currentTransfer.path} (${this.currentTransfer.receivedSize} bytes in ${a.toFixed(2)}s = ${c} KB/s / ${l} Mbps)`);const d=new Blob(this.currentTransfer.chunks),p=new FileReader;p.onload=()=>{this.currentTransfer.resolve(new Uint8Array(p.result)),this.currentTransfer=null},p.readAsArrayBuffer(d)}}else o===this.currentTransfer.blockNum&&this._sendFileMsg(this.FILE_ACK,o)}_handleFileError(i){if(this.currentTransfer){const o=i[0],s=i[1];this.currentTransfer.reject(new Error(`TFTP Error ${o}: ${s}`)),this.currentTransfer=null}}_handleEvent(i){if(i.length<2)return;const[o,s,...r]=i;switch(s){case this.EVT_AUTH_OK:this._authResolve&&(this.authenticated=!0,this._authResolve(),this._authResolve=null,this._authReject=null);break;case this.EVT_AUTH_FAIL:if(this._authReject){const a=r[0]||"Authentication failed";this._authReject(new Error(a)),this._authResolve=null,this._authReject=null}break;case this.EVT_INFO:{let a={};try{const l=r[0];if(typeof l!="string"){console.error("[WCB] INFO payload must be a JSON string, got:",typeof l);break}a=JSON.parse(l)}catch(l){console.error("[WCB] Failed to parse INFO payload JSON:",l,r[0]);break}if(a.welcome){this.isReady=!0;const l=this.eventHandlers.get("welcome");l&&l(a.welcome)}if(a.heap!==void 0){const l={heap:a.heap,uptime:a.uptime,rssi:a.rssi,extra:a.extra},d=this.eventHandlers.get("auto_info");d&&d(l)}if(a.eth_status!==void 0){if(console.log("[WCB] Ethernet status event:",a.eth_status),this.onEthStatus)try{this.onEthStatus(a.eth_status)}catch(d){console.error("[WCB] onEthStatus callback error:",d)}const l=this.eventHandlers.get("eth_status");if(l)try{l(a.eth_status)}catch(d){console.error("[WCB] eth_status event handler error:",d)}}if(a.wwan_status!==void 0){if(console.log("[WCB] WWAN status event:",a.wwan_status),this.onWwanStatus)try{this.onWwanStatus(a.wwan_status)}catch(d){console.error("[WCB] onWwanStatus callback error:",d)}const l=this.eventHandlers.get("wwan_status");if(l)try{l(a.wwan_status)}catch(d){console.error("[WCB] wwan_status event handler error:",d)}}if(a.display_ui!==void 0){if(console.log("[WCB] Display UI event:",a.display_ui),this.onDisplayUi)try{this.onDisplayUi(a.display_ui)}catch(d){console.error("[WCB] onDisplayUi callback error:",d)}const l=this.eventHandlers.get("display_ui");if(l)try{l(a.display_ui)}catch(d){console.error("[WCB] display_ui event handler error:",d)}}if(a.pfc_chat!==void 0){const l=this.eventHandlers.get("pfc_chat");if(l)try{l(a.pfc_chat)}catch(d){console.error("[WCB] pfc_chat handler error:",d)}}const c=this.eventHandlers.get("info");c&&c(a)}break;case this.EVT_LOG:{const[a,c,l,d]=r,p={level:a,message:c,timestamp:l,source:d};console.debug("[WCB] LOG event received:",p);const u=this.eventHandlers.get("log");if(console.debug("[WCB] LOG handler check:",{hasHandler:!!u,handlerCount:this.eventHandlers.size,allHandlers:Array.from(this.eventHandlers.keys())}),u)console.debug("[WCB] Calling LOG handler with:",p),u(p);else{const f=["DBG","INF","WRN","ERR"][a]||"LOG";console.log(`[WCB ${f}] ${c} (no handler registered)`)}}break;default:console.debug("[WCB] Unhandled event:",s)}}async connect(i,o="password"){if(this.state!=="DISCONNECTED")throw new Error("Already connected or connecting");return this.password=o,new Promise((s,r)=>{try{const a=Date.now();console.log("[WCB] Connecting to:",i),this.websocket=new WebSocket(i,["webrepl.binary.v1"]),this.websocket.binaryType="arraybuffer",this.state="CONNECTING";const c=setTimeout(()=>{r(new Error("Connection timeout")),this.disconnect()},1e4);this.websocket.addEventListener("open",async()=>{console.log("[WCB] WebSocket opened after",Date.now()-a,"ms"),this.state="CONNECTED";try{await this._authenticate(),clearTimeout(c),this.isReady=!0,console.log("[WCB] Authenticated successfully"),s()}catch(l){clearTimeout(c),r(new Error("Authentication failed: "+l.message)),this.disconnect()}}),this.websocket.addEventListener("message",l=>{this._handleMessage(l)}),this.websocket.addEventListener("close",l=>{console.log("[WCB] Connection closed",{code:l.code,reason:l.reason||"No reason provided"}),this.state="DISCONNECTED",this.isReady=!1,this.authenticated=!1,this.currentTransfer&&(console.warn("[WCB] Transfer interrupted by disconnect:",this.currentTransfer.path),this.currentTransfer.reject&&this.currentTransfer.reject(new Error("Transfer interrupted: Connection closed")),this.currentTransfer=null),this._notifyConnectionClosed()}),this.websocket.addEventListener("error",l=>{console.error("[WCB] WebSocket error:",l),r(l)})}catch(a){this.state="DISCONNECTED",r(a)}})}async _authenticate(){return new Promise((i,o)=>{const s=setTimeout(()=>{this._authResolve=null,this._authReject=null,o(new Error("Auth timeout"))},1e4);this._authResolve=()=>{clearTimeout(s),i()},this._authReject=r=>{clearTimeout(s),o(r)},this._sendEvent(this.EVT_AUTH,this.password)})}async disconnect(){this.websocket&&(this.websocket.close(),this.websocket=null),this.state="DISCONNECTED",this.isReady=!1,this.authenticated=!1,this.pendingRequests.clear(),this.pendingRun=null,this.currentTransfer&&(console.warn("[WCB] Clearing transfer state on disconnect:",this.currentTransfer.path),this.currentTransfer.reject&&this.currentTransfer.reject(new Error("Transfer cancelled: Disconnected")),this.currentTransfer=null),this.pendingFileOps&&this.pendingFileOps.clear()}async exec(i){if(this.state!=="CONNECTED")throw new Error("Not connected");return new Promise((o,s)=>{const r=this._generateId(),a=setTimeout(()=>{this.pendingRequests.has(r)&&(this.pendingRequests.delete(r),s(new Error("M2M timeout")))},3e4);this.pendingRequests.set(r,{resolve:o,reject:s,timeoutId:a,buffer:""}),console.debug("[WCB] Sending M2M EXE with ID:",r,"code:",i.substring(0,50)),this._sendChannel(this.CH_M2M,this.OP_EXE,i+`
+`,{format:this.FMT_PY,id:r})})}async execBytecode(i){if(this.state!=="CONNECTED")throw new Error("Not connected");return new Promise((o,s)=>{const r=this._generateId(),a=setTimeout(()=>{this.pendingRequests.has(r)&&(this.pendingRequests.delete(r),s(new Error("M2M timeout")))},3e4);this.pendingRequests.set(r,{resolve:o,reject:s,timeoutId:a,buffer:""}),this._sendChannel(this.CH_M2M,this.OP_EXE,i,{format:this.FMT_MPY,id:r})})}async sendInput(i){if(this.state!=="CONNECTED")throw new Error("Not connected");this._pendingInputEcho=i+`\r
+`,this._sendChannel(this.CH_TRM,this.OP_EXE,i+"\r")}async run(i){if(this.state!=="CONNECTED")throw new Error("Not connected");return this.isReady||await this.interrupt(),console.debug("[WCB] Executing:",i.substring(0,50)+(i.length>50?"...":"")),this.isReady=!1,new Promise((o,s)=>{this.pendingRun={resolve:o,reject:s},this._sendChannel(this.CH_TRM,this.OP_EXE,i+`
+`)})}async requestCompletion(i){if(this.state!=="CONNECTED")throw new Error("Not connected");return new Promise((o,s)=>{const r=setTimeout(()=>{this.offCompletion(a),s(new Error("Completion timeout"))},5e3),a=(c,l)=>{c===this.CH_TRM&&(clearTimeout(r),this.offCompletion(a),o(l||[]))};this.onCompletion(a),console.debug("[WCB] Requesting completion for:",i),this._sendChannel(this.CH_TRM,this.OP_EXE,i+"	")})}async interrupt(){if(this.pendingRun!==null)console.log("[WCB] Interrupting active script execution"),this._sendChannel(this.CH_TRM,this.OP_INT);else{console.log("[WCB] No script running - stopping background tasks via M2M");try{const o=await this.exec("from lib import bg_tasks; bg_tasks.stop_user_tasks()");console.log("[WCB] Stopped tasks:",o),this.isReady=!0}catch(o){console.warn("[WCB] Failed to send stop request:",o)}}return new Promise(o=>{const s=setInterval(()=>{this.isReady&&(clearInterval(s),o())},50);setTimeout(()=>{clearInterval(s),this.isReady=!0,o()},2e3)})}async reset(i=!1){if(this.state!=="CONNECTED")throw new Error("Not connected");console.log("[WCB] Sending",i?"hard":"soft","reset"),this._sendChannel(this.CH_TRM,this.OP_RST,i?1:0),this.isReady=!1}async saveFile(i,o,s={}){if(this.currentTransfer)throw new Error("Transfer already in progress");const r=typeof o=="string"?new TextEncoder().encode(o):o,a=r.length;return new Promise(async(c,l)=>{this.currentTransfer={type:"UPLOAD",path:i,data:r,totalSize:a,blockNum:0,blksize:8192,startTime:Date.now(),resolveBlock:null,resolve:c,reject:l,chunks:null},this._sendFileMsg(this.FILE_WRQ,i,a,this.DEFAULT_BLKSIZE,5e3,0);try{await new Promise(v=>{this.currentTransfer.resolveBlock=v});let d=0,p=1;const u=s.progressCallback;for(u&&u(0);d<a;){const v=r.slice(d,d+this.DEFAULT_BLKSIZE);if(this.currentTransfer.blockNum=p,this._sendFileMsg(this.FILE_DATA,p,v),await new Promise(y=>{this.currentTransfer.resolveBlock=y}),d+=v.length,p++,u&&a>0){const y=Math.floor(d/a*100);u(Math.min(y,99))}}u&&u(100),a===0&&(this._sendFileMsg(this.FILE_DATA,1,new Uint8Array(0)),this.currentTransfer.blockNum=1,await new Promise(v=>{this.currentTransfer.resolveBlock=v}));const f=(Date.now()-this.currentTransfer.startTime)/1e3,h=(a/f/1024).toFixed(2),m=(a*8/f/1e6).toFixed(2);console.log(`[WCB] Upload complete: ${i} (${a} bytes in ${f.toFixed(2)}s = ${h} KB/s / ${m} Mbps)`),this.currentTransfer=null,c()}catch(d){this.currentTransfer=null,l(d)}})}async loadFile(i,o={}){if(this.currentTransfer&&this.state==="DISCONNECTED"&&(console.warn("[WCB] Clearing stale transfer state before loadFile"),this.currentTransfer=null),this.currentTransfer)throw new Error("Transfer already in progress");return new Promise((s,r)=>{this.currentTransfer={type:"DOWNLOAD",path:i,totalSize:0,receivedSize:0,blockNum:-1,chunks:[],blksize:16384,startTime:Date.now(),progressCallback:o.progressCallback,resolve:s,reject:r},this._sendFileMsg(this.FILE_RRQ,i,16384,5e3)})}subscribe(i,o){this.eventHandlers.set(i,o)}unsubscribe(i){this.eventHandlers.delete(i)}onData(i){this.dataCallbacks=[i]}onConnectionClosed(i){this.connectionClosedCallbacks.push(i)}onCompletion(i){this.completionCallbacks.push(i)}offCompletion(i){const o=this.completionCallbacks.indexOf(i);o>=0&&this.completionCallbacks.splice(o,1)}_notifyData(i,o=!1){if(this._pendingInputEcho&&i.includes(this._pendingInputEcho)){if(i=i.replace(this._pendingInputEcho,""),this._pendingInputEcho=null,i==="")return}else if(this._pendingInputEcho&&this._pendingInputEcho.startsWith(i)){this._pendingInputEcho=this._pendingInputEcho.slice(i.length);return}this.dataCallbacks.forEach(s=>s(i,o))}_notifyConnectionClosed(){this.connectionClosedCallbacks.forEach(i=>i())}isCommandRunning(){return this.pendingRun!==null||!this.isReady}isFileOperationActive(){return this.currentTransfer!==null||this.pendingFileOps.size>0}parseDebugState(i){const o="\x1B[?1049hD",s="D\x1B[?1049l";if(i.includes(o)&&i.includes(s)){const r=i.indexOf(o)+o.length,a=i.indexOf(s),c=i.substring(r,a);try{return JSON.parse(c)}catch(l){return console.error("[WCB] Failed to parse debug state:",l),null}}return null}async sendDebugCommand(i){const o=`_debug_cmd = '${i}'; import __main__; setattr(__main__, '_debug_cmd', '${i}'); import builtins; setattr(builtins, '_debug_cmd', '${i}')`;return console.log("[WCB] Sending debug command via M2M:",i),this.exec(o)}}const CBOR_RTC=CBOR;class WebREPLRTC{constructor(){this.pc=null,this.dataChannel=null,this.state="DISCONNECTED",this.signalingUrl="",this.dataCallbacks=[],this.connectionClosedCallbacks=[],this.eventHandlers=new Map,this.completionCallbacks=[],this.pendingRequests=new Map,this.pendingRun=null,this.pendingFileOps=new Map,this.currentTransfer=null,this.keepaliveTimer=null,this.isReady=!1,this.authenticated=!1,this.CH_FILE=23,this.CH_TRM=1,this.CH_M2M=2,this.CH_DBG=3,this.CH_LOG=4,this.CH_EVENT=0,this.OP_EXE=0,this.OP_INT=1,this.OP_RST=2,this.OP_RES=0,this.OP_CON=1,this.OP_PRO=2,this.OP_COM=3,this.FILE_RRQ=1,this.FILE_WRQ=2,this.FILE_DATA=3,this.FILE_ACK=4,this.FILE_ERROR=5,this.ERR_NOT_FOUND=1,this.ERR_ACCESS=2,this.ERR_DISK_FULL=3,this.EVT_AUTH=0,this.EVT_AUTH_OK=1,this.EVT_AUTH_FAIL=2,this.EVT_INFO=3,this.EVT_LOG=4,this.CH_AUTH=0,this.FMT_PY=0,this.FMT_MPY=1,this.DEFAULT_BLKSIZE=4096}_generateId(){return Math.random().toString(36).substring(2,9)}_sendChannel(i,o,s="",r={}){if(!this.dataChannel||this.dataChannel.readyState!=="open"){console.warn("[RTC] Cannot send: DataChannel not open",{hasDataChannel:!!this.dataChannel,readyState:this.dataChannel?.readyState,state:this.state});return}const a=[i,o,s];r.id!==void 0?(a.push(r.format!==void 0?r.format:null),a.push(r.id)):r.format!==void 0&&a.push(r.format);const c=CBOR_RTC.encode(a);try{this.dataChannel.send(c)}catch(l){throw console.error("[RTC] DataChannel send failed:",l,{readyState:this.dataChannel.readyState,bufferedAmount:this.dataChannel.bufferedAmount}),l}}_sendEvent(i,...o){if(!this.dataChannel||this.dataChannel.readyState!=="open"){console.warn("[RTC] Cannot send event: DataChannel not open");return}const s=[this.CH_AUTH,i,...o],r=CBOR_RTC.encode(s);this.dataChannel.send(r)}_sendFileMsg(i,...o){if(!this.dataChannel||this.dataChannel.readyState!=="open")return;const s=[this.CH_FILE,i,...o],r=CBOR_RTC.encode(s);this.dataChannel.send(r)}_handleMessage(i){const o=Date.now(),s=i.data;if(console.debug("[RTC] Received message:",{type:typeof s,size:s?.byteLength||0,timestamp:o}),!(s instanceof ArrayBuffer)){console.warn("[RTC] Unexpected non-binary data");return}try{const r=CBOR_RTC.decode(s);if(console.debug("[RTC] Decoded message:",r),!Array.isArray(r)||r.length<2){console.warn("[RTC] Invalid message format");return}const a=r[0];a===this.CH_FILE?this._handleFile(r):a===this.CH_EVENT?this._handleEvent(r):a>=this.CH_TRM&&a<=22?this._handleChannel(r):console.warn("[RTC] Unknown channel:",a)}catch(r){console.error("[RTC] Failed to decode CBOR:",r);const a=new Uint8Array(s),c=Array.from(a.slice(0,32)).map(l=>l.toString(16).padStart(2,"0")).join(" ");console.error("[RTC] Raw data (first 32 bytes):",c),console.error("[RTC] As ASCII:",String.fromCharCode(...a.slice(0,32)))}}_handleChannel(i){if(i.length<3)return;const[o,s,...r]=i;switch(console.debug("[RTC] Handling channel message:",{channel:o,opcode:s,restLength:r.length}),s){case this.OP_RES:this._handleRES(o,r[0],r[1]);break;case this.OP_CON:this._handleCON(o);break;case this.OP_PRO:this._handlePRO(o,r[0],r[1],r[2]);break;case this.OP_COM:this._handleCOM(o,r[0]);break;default:console.warn("[RTC] Unknown channel opcode:",s)}}_handleRES(i,o,s){if(console.debug("[RTC] Handling RES:",{channel:i,dataType:typeof o,dataLength:o?.length||0,id:s}),s&&this.pendingRequests.has(s)){const r=this.pendingRequests.get(s);r.buffer=(r.buffer||"")+o,console.debug("[RTC] Buffered data for ID:",s,"Total:",r.buffer.length);return}i===this.CH_M2M&&!s&&(console.warn("[RTC] M2M RES message missing ID (device bug). Expected one of:",Array.from(this.pendingRequests.keys())),console.warn("[RTC] RES data:",o?.substring?o.substring(0,200):o)),i===this.CH_TRM?(console.debug("[RTC] Notifying terminal data:",o),this._notifyData(o,!1)):i===this.CH_DBG?(console.debug("[RTC] Notifying debug data:",o),this._notifyData(o,!1)):i===this.CH_LOG&&console.log("[RTC LOG]",o)}_handleCON(i){}_handleCOM(i,o){this.completionCallbacks.forEach(s=>{try{s(i,o)}catch(r){console.error(r)}})}_handlePRO(i,o,s=null,r=null){if(console.log("[RTC] PRO received:",{channel:i,status:o,error:s,id:r,pendingRun:!!this.pendingRun}),r&&this.pendingRequests.has(r)){const a=this.pendingRequests.get(r),{resolve:c,reject:l,timeoutId:d,buffer:p}=a;if(console.debug("[RTC] Completing request:",r,"Buffer:",p),clearTimeout(d),this.pendingRequests.delete(r),o!==0)l(new Error(s||"Request failed"));else if(i===this.CH_M2M){console.debug("[RTC] M2M PRO success with ID:",r,"buffer length:",p?p.length:0);try{let u=null;if(p)try{u=JSON.parse(p)}catch(f){const h=p.indexOf("{");if(h!==-1){let m=0,v=-1;for(let y=h;y<p.length;y++)if(p[y]==="{"&&m++,p[y]==="}"&&m--,m===0){v=y+1;break}if(v!==-1){const y=p.substring(h,v);u=JSON.parse(y)}else throw f}else throw f}console.debug("[RTC] M2M result parsed:",u),c(u)}catch(u){console.warn("[RTC] Failed to parse JSON buffer:",u,"buffer:",p?p.substring(0,200):"null"),c(p||null)}}else c(p||null);return}if(console.log("[RTC] PRO for TRM, pendingRun:",!!this.pendingRun,"id:",r),o!==0){const a=s||"Unknown error";if(console.error("[RTC] Error:",a),this.pendingRun){const{reject:c}=this.pendingRun;this.pendingRun=null,c(new Error(a))}}else if(this.isReady=!0,this.pendingRun){console.log("[RTC] Resolving pendingRun, setting isReady=true");const{resolve:a}=this.pendingRun;this.pendingRun=null,a()}}_handleFile(i){if(i.length<2)return;const o=i[1],s=i.slice(2);if(!this.currentTransfer){console.warn("[RTC] File message with no active transfer");return}switch(o){case this.FILE_ACK:this._handleFileAck(s);break;case this.FILE_DATA:this._handleFileData(s);break;case this.FILE_ERROR:this._handleFileError(s);break}}_handleFileAck(i){if(!this.currentTransfer)return;const o=i[0];this.currentTransfer.type==="UPLOAD"?o===this.currentTransfer.blockNum&&this.currentTransfer.resolveBlock():this.currentTransfer.type==="DOWNLOAD"&&o===0&&this.currentTransfer.blockNum===-1&&(i.length>1&&(this.currentTransfer.totalSize=i[1]),this._sendFileMsg(this.FILE_ACK,0),this.currentTransfer.blockNum=0)}_handleFileData(i){if(!this.currentTransfer||this.currentTransfer.type!=="DOWNLOAD")return;const o=i[0],s=i[1],r=(this.currentTransfer.blockNum+1)%65536;if(o===r){if(this.currentTransfer.chunks.push(s),this.currentTransfer.receivedSize+=s.byteLength,this.currentTransfer.totalSize&&this.currentTransfer.progressCallback){const a=Math.floor(this.currentTransfer.receivedSize*100/this.currentTransfer.totalSize);this.currentTransfer.progressCallback(Math.min(a,99))}if(this._sendFileMsg(this.FILE_ACK,o),this.currentTransfer.blockNum=o,s.byteLength<this.currentTransfer.blksize){this.currentTransfer.progressCallback&&this.currentTransfer.progressCallback(100);const a=new Blob(this.currentTransfer.chunks),c=new FileReader;c.onload=()=>{this.currentTransfer.resolve(new Uint8Array(c.result)),this.currentTransfer=null},c.readAsArrayBuffer(a)}}else o===this.currentTransfer.blockNum&&this._sendFileMsg(this.FILE_ACK,o)}_handleFileError(i){if(this.currentTransfer){const o=i[0],s=i[1];this.currentTransfer.reject(new Error(`TFTP Error ${o}: ${s}`)),this.currentTransfer=null}}_handleEvent(i){if(i.length<2)return;const[o,s,...r]=i;switch(s){case this.EVT_INFO:{let a={};try{const l=r[0];if(typeof l!="string"){console.error("[RTC] INFO payload must be a JSON string, got:",typeof l);break}a=JSON.parse(l)}catch(l){console.error("[RTC] Failed to parse INFO payload JSON:",l,r[0]);break}if(a.welcome){this.isReady=!0;const l=this.eventHandlers.get("welcome");l&&l(a.welcome)}if(a.display_ui!==void 0){if(console.log("[RTC] Display UI event:",a.display_ui),this.onDisplayUi)try{this.onDisplayUi(a.display_ui)}catch(d){console.error("[RTC] onDisplayUi callback error:",d)}const l=this.eventHandlers.get("display_ui");if(l)try{l(a.display_ui)}catch(d){console.error("[RTC] display_ui event handler error:",d)}}if(a.pfc_chat!==void 0){const l=this.eventHandlers.get("pfc_chat");if(l)try{l(a.pfc_chat)}catch(d){console.error("[RTC] pfc_chat handler error:",d)}}const c=this.eventHandlers.get("info");c&&c(a)}break;case this.EVT_AUTH_OK:this._authResolve&&(this.authenticated=!0,this._authResolve(),this._authResolve=null,this._authReject=null);break;case this.EVT_AUTH_FAIL:{const a=r[0]||"Authentication failed";console.error("[RTC] Authentication failed:",a),this._authReject&&(this._authReject(new Error(a)),this._authResolve=null,this._authReject=null)}break;case this.EVT_LOG:{const[a,c,l,d]=r,p={level:a,message:c,timestamp:l,source:d},u=this.eventHandlers.get("log");u&&u(p)}break}}async connect(i,o=""){if(this.state!=="DISCONNECTED")throw new Error("Already connected or connecting");this._cleanup(),this.authenticated=!1;let s,r;i=i.trim(),i.startsWith("https://")?(s="https:",i=i.slice(8)):i.startsWith("http://")?(s="http:",i=i.slice(7)):s=window.location.protocol==="https:"?"https:":"http:";const a=i.indexOf("/");a!==-1&&(i=i.slice(0,a)),r=i,this.signalingUrl=`${s}//${r}/webrtc/offer`,this.state="CONNECTING";try{this.pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"}]}),this.dataChannel=this.pc.createDataChannel("wbp",{ordered:!0,protocol:"webrepl.binary.v1"}),this.dataChannel.binaryType="arraybuffer",this._setupDataChannel();const c=[],l=new Promise(h=>{this.pc.onicecandidate=m=>{m.candidate?c.push(m.candidate.candidate):h()},setTimeout(h,3e3)}),d=await this.pc.createOffer();await this.pc.setLocalDescription(d),await l;let p=this.pc.localDescription.sdp;const u=await fetch(this.signalingUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sdp:p,password:o})});if(!u.ok)throw new Error(`Signaling failed: ${u.status}`);const f=await u.json();if(f.error)throw new Error(f.error);if(await this.pc.setRemoteDescription({type:"answer",sdp:f.sdp}),f.ice_candidates)for(const h of f.ice_candidates)try{await this.pc.addIceCandidate({candidate:h,sdpMid:"0",sdpMLineIndex:0})}catch{}await new Promise((h,m)=>{const v=setTimeout(()=>m(new Error("DataChannel open timeout")),1e4);this.dataChannel.readyState==="open"?(clearTimeout(v),h()):(this.dataChannel.onopen=()=>{clearTimeout(v),h()},this.dataChannel.onerror=y=>{clearTimeout(v),m(new Error("DataChannel error"))})}),await this.authenticate(o),this.state="CONNECTED",this.isReady=!0,console.log("[RTC] Connection established:",{state:this.state,isReady:this.isReady,dataChannelState:this.dataChannel.readyState,peerConnectionState:this.pc.connectionState}),this._startKeepalive()}catch(c){throw console.error("[RTC] Connection failed:",c),this.state="DISCONNECTED",this._cleanup(),c}}async authenticate(i){if(!this.dataChannel||this.dataChannel.readyState!=="open")throw new Error("DataChannel not open");if(!this.authenticated)return new Promise((o,s)=>{const r=setTimeout(()=>{this._authResolve=null,this._authReject=null,s(new Error("Authentication timeout"))},1e4);this._authResolve=()=>{clearTimeout(r),o()},this._authReject=a=>{clearTimeout(r),s(a)},this._sendEvent(this.EVT_AUTH,i)})}_setupDataChannel(){this.dataChannel.onmessage=i=>this._handleMessage(i),this.dataChannel.onclose=()=>{this.state="DISCONNECTED",this.isReady=!1,this._stopKeepalive(),this._notifyConnectionClosed()},this.dataChannel.onerror=i=>{console.error("[RTC] DataChannel error:",i)}}_startKeepalive(){this._stopKeepalive(),this.keepaliveTimer=setInterval(()=>{if(this.dataChannel&&this.dataChannel.readyState==="open")try{const i=CBOR_RTC.encode([0,99]);this.dataChannel.send(i)}catch(i){console.warn("[RTC] Keepalive send failed:",i)}},2e3)}_stopKeepalive(){this.keepaliveTimer&&(clearInterval(this.keepaliveTimer),this.keepaliveTimer=null)}_cleanup(){this._stopKeepalive(),this.dataChannel&&(this.dataChannel.close(),this.dataChannel=null),this.pc&&(this.pc.close(),this.pc=null),this.currentTransfer=null,this.pendingRequests.clear(),this.pendingRun=null}async disconnect(){this._cleanup(),this.state="DISCONNECTED",this.isReady=!1,this.authenticated=!1}async exec(i){if(this.state!=="CONNECTED")throw new Error("Not connected");return new Promise((o,s)=>{const r=this._generateId(),a=setTimeout(()=>{this.pendingRequests.has(r)&&(this.pendingRequests.delete(r),s(new Error("M2M timeout")))},3e4);this.pendingRequests.set(r,{resolve:o,reject:s,timeoutId:a,buffer:""}),this._sendChannel(this.CH_M2M,this.OP_EXE,i+`
+`,{format:this.FMT_PY,id:r})})}async run(i){if(this.state!=="CONNECTED")throw new Error("Not connected");const o=performance.now();return this.isReady||(console.log("[RTC] run(): isReady=false, calling interrupt()..."),await this.interrupt(),console.log("[RTC] run(): interrupt() took",(performance.now()-o).toFixed(0),"ms")),this.isReady=!1,console.log("[RTC] run(): sending command, total setup time:",(performance.now()-o).toFixed(0),"ms"),new Promise((s,r)=>{const a=setTimeout(()=>{this.pendingRun&&(console.warn("[RTC] run(): Command timed out after 30 seconds"),this.pendingRun=null,this.isReady=!0,r(new Error("Command timeout")))},3e4);this.pendingRun={resolve:c=>{clearTimeout(a),s(c)},reject:c=>{clearTimeout(a),r(c)}},this._sendChannel(this.CH_TRM,this.OP_EXE,i+`
+`)})}async interrupt(){return this._sendChannel(this.CH_TRM,this.OP_INT),new Promise(i=>{const o=setInterval(()=>{this.isReady&&(clearInterval(o),i())},50);setTimeout(()=>{clearInterval(o),this.isReady=!0,i()},2e3)})}async requestCompletion(i){if(this.state!=="CONNECTED")throw new Error("Not connected");return new Promise((o,s)=>{const r=setTimeout(()=>{this.offCompletion(a),s(new Error("Completion timeout"))},5e3),a=(c,l)=>{c===this.CH_TRM&&(clearTimeout(r),this.offCompletion(a),o(l||[]))};this.onCompletion(a),console.debug("[RTC] Requesting completion for:",i),this._sendChannel(this.CH_TRM,this.OP_EXE,i+"	")})}async reset(i=!1){if(this.state!=="CONNECTED")throw new Error("Not connected");this._sendChannel(this.CH_TRM,this.OP_RST,i?1:0),this.isReady=!1}async saveFile(i,o,s={}){if(this.currentTransfer)throw new Error("Transfer already in progress");const r=typeof o=="string"?new TextEncoder().encode(o):o,a=r.length;return new Promise(async(c,l)=>{this.currentTransfer={type:"UPLOAD",path:i,data:r,totalSize:a,blockNum:0,blksize:this.DEFAULT_BLKSIZE,startTime:Date.now(),resolveBlock:null,resolve:c,reject:l},this._sendFileMsg(this.FILE_WRQ,i,a,this.DEFAULT_BLKSIZE,5e3,0);try{await new Promise(f=>{this.currentTransfer.resolveBlock=f});let d=0,p=1;const u=s.progressCallback;for(u&&u(0);d<a;){const f=r.slice(d,d+this.DEFAULT_BLKSIZE);this.currentTransfer.blockNum=p,this._sendFileMsg(this.FILE_DATA,p,f),await new Promise(h=>{this.currentTransfer.resolveBlock=h}),d+=f.length,p++,u&&a>0&&u(Math.min(Math.floor(d/a*100),99))}u&&u(100),a===0&&(this._sendFileMsg(this.FILE_DATA,1,new Uint8Array(0)),this.currentTransfer.blockNum=1,await new Promise(f=>{this.currentTransfer.resolveBlock=f})),this.currentTransfer=null,c()}catch(d){this.currentTransfer=null,l(d)}})}async loadFile(i,o={}){if(this.currentTransfer)throw new Error("Transfer already in progress");return new Promise((s,r)=>{this.currentTransfer={type:"DOWNLOAD",path:i,totalSize:0,receivedSize:0,blockNum:-1,chunks:[],blksize:16384,startTime:Date.now(),progressCallback:o.progressCallback,resolve:s,reject:r},this._sendFileMsg(this.FILE_RRQ,i,16384,5e3)})}subscribe(i,o){this.eventHandlers.set(i,o)}unsubscribe(i){this.eventHandlers.delete(i)}onData(i){this.dataCallbacks=[i]}onConnectionClosed(i){this.connectionClosedCallbacks.push(i)}onCompletion(i){this.completionCallbacks.push(i)}offCompletion(i){const o=this.completionCallbacks.indexOf(i);o>=0&&this.completionCallbacks.splice(o,1)}_notifyData(i,o=!1){console.debug("[RTC] _notifyData called:",{data:i,isError:o,callbackCount:this.dataCallbacks.length}),this.dataCallbacks.forEach(s=>s(i,o))}_notifyConnectionClosed(){this.connectionClosedCallbacks.forEach(i=>i())}isCommandRunning(){return this.pendingRun!==null||!this.isReady}isFileOperationActive(){return this.currentTransfer!==null||this.pendingFileOps.size>0}}class WebREPLBridge{constructor(){this.client=null,this.transportType=null,this.pendingCallbacks={onData:null,onConnectionClosed:[],onCompletion:[],subscriptions:{}}}async connect(i,o="password"){let s;if(i.startsWith("ws://")||i.startsWith("wss://"))s="websocket";else if(i.startsWith("http://")||i.startsWith("https://"))s="webrtc";else throw new Error(`Unknown transport protocol in URL: ${i}
+Supported: ws://, wss://, http://, https://`);if(this.client&&this.transportType===s&&(this.client.state||"DISCONNECTED")==="DISCONNECTED")return console.log("[Bridge] Reusing existing client for reconnect"),this.client.connect(i,o);if(s==="websocket")console.log("[Bridge] Using WebSocket transport"),this.client=new WebREPLWCB,this.transportType="websocket";else{if(console.log("[Bridge] Using WebRTC transport"),typeof WebREPLRTC>"u")throw new Error("WebRTC transport not available");this.client=new WebREPLRTC,this.transportType="webrtc"}this.pendingCallbacks.onData&&this.client.onData(this.pendingCallbacks.onData);for(const r of this.pendingCallbacks.onConnectionClosed)this.client.onConnectionClosed(r);for(const r of this.pendingCallbacks.onCompletion)this.client.onCompletion(r);for(const[r,a]of Object.entries(this.pendingCallbacks.subscriptions))this.client.subscribe(r,a);return this.client.connect(i,o)}async disconnect(){if(this.client){const i=await this.client.disconnect();return this.client=null,this.transportType=null,i}}async exec(i){if(!this.client)throw new Error("Not connected");return this.client.exec(i)}async execBytecode(i){if(!this.client)throw new Error("Not connected");return this.client.execBytecode(i)}async run(i){if(!this.client)throw new Error("Not connected");return this.client.run(i)}async sendInput(i){if(!this.client)throw new Error("Not connected");return this.client.sendInput?this.client.sendInput(i):this.client.run(i)}async requestCompletion(i){if(!this.client)throw new Error("Not connected");return this.client.requestCompletion(i)}async interrupt(){if(!this.client)throw new Error("Not connected");return this.client.interrupt()}async reset(i=!1){if(!this.client)throw new Error("Not connected");return this.client.reset(i)}async sendDebugCommand(i){if(!this.client)throw new Error("Not connected");return this.client.sendDebugCommand(i)}async saveFile(i,o,s={}){if(!this.client)throw new Error("Not connected");return this.client.saveFile(i,o,s)}async loadFile(i,o={}){if(!this.client)throw new Error("Not connected");return this.client.loadFile(i,o)}onData(i){if(!this.client){this.pendingCallbacks.onData=i;return}this.client.onData(i)}onConnectionClosed(i){if(!this.client){this.pendingCallbacks.onConnectionClosed.push(i);return}this.client.onConnectionClosed(i)}subscribe(i,o){if(!this.client){this.pendingCallbacks.subscriptions[i]=o;return}this.client.subscribe(i,o)}unsubscribe(i){this.client&&this.client.unsubscribe(i)}onCompletion(i){if(!this.client){this.pendingCallbacks.onCompletion.push(i);return}this.client.onCompletion(i)}offCompletion(i){this.client&&this.client.offCompletion(i)}isCommandRunning(){return this.client?this.client.isCommandRunning():!1}isFileOperationActive(){return this.client?this.client.isFileOperationActive():!1}get state(){return this.client?.state||"DISCONNECTED"}get isReady(){return this.client?.isReady||!1}get authenticated(){return this.client?.authenticated||!1}set onEthStatus(i){this.client&&(this.client.onEthStatus=i)}get onEthStatus(){return this.client?.onEthStatus}set onWwanStatus(i){this.client&&(this.client.onWwanStatus=i)}get onWwanStatus(){return this.client?.onWwanStatus}set onDisplayUi(i){this.client&&(this.client.onDisplayUi=i)}get onDisplayUi(){return this.client?.onDisplayUi}set onPlotData(i){this.client&&(this.client.onPlotData=i)}get onPlotData(){return this.client?.onPlotData}set onMqttConfig(i){this.client&&(this.client.onMqttConfig=i)}get onMqttConfig(){return this.client?.onMqttConfig}set onMqttConfigSave(i){this.client&&(this.client.onMqttConfigSave=i)}get onMqttConfigSave(){return this.client?.onMqttConfigSave}set onWwanConfig(i){this.client&&(this.client.onWwanConfig=i)}get onWwanConfig(){return this.client?.onWwanConfig}set onWwanConfigSave(i){this.client&&(this.client.onWwanConfigSave=i)}get onWwanConfigSave(){return this.client?.onWwanConfigSave}set onModemStatus(i){this.client&&(this.client.onModemStatus=i)}get onModemStatus(){return this.client?.onModemStatus}set onNtpSync(i){this.client&&(this.client.onNtpSync=i)}get onNtpSync(){return this.client?.onNtpSync}set onNtpConfig(i){this.client&&(this.client.onNtpConfig=i)}get onNtpConfig(){return this.client?.onNtpConfig}set onNtpConfigSave(i){this.client&&(this.client.onNtpConfigSave=i)}get onNtpConfigSave(){return this.client?.onNtpConfigSave}set onCanConfig(i){this.client&&(this.client.onCanConfig=i)}get onCanConfig(){return this.client?.onCanConfig}set onCanConfigSave(i){this.client&&(this.client.onCanConfigSave=i)}get onCanConfigSave(){return this.client?.onCanConfigSave}set onVpnConfig(i){this.client&&(this.client.onVpnConfig=i)}get onVpnConfig(){return this.client?.onVpnConfig}set onVpnConfigSave(i){this.client&&(this.client.onVpnConfigSave=i)}get onVpnConfigSave(){return this.client?.onVpnConfigSave}set onVpnConnect(i){this.client&&(this.client.onVpnConnect=i)}get onVpnConnect(){return this.client?.onVpnConnect}set onVpnDisconnect(i){this.client&&(this.client.onVpnDisconnect=i)}get onVpnDisconnect(){return this.client?.onVpnDisconnect}set onVpnInfo(i){this.client&&(this.client.onVpnInfo=i)}get onVpnInfo(){return this.client?.onVpnInfo}set onSdcardConfig(i){this.client&&(this.client.onSdcardConfig=i)}get onSdcardConfig(){return this.client?.onSdcardConfig}set onSdcardConfigSave(i){this.client&&(this.client.onSdcardConfigSave=i)}get onSdcardConfigSave(){return this.client?.onSdcardConfigSave}set onSdcardInfo(i){this.client&&(this.client.onSdcardInfo=i)}get onSdcardInfo(){return this.client?.onSdcardInfo}set onSdcardMount(i){this.client&&(this.client.onSdcardMount=i)}get onSdcardMount(){return this.client?.onSdcardMount}set onSdcardUnmount(i){this.client&&(this.client.onSdcardUnmount=i)}get onSdcardUnmount(){return this.client?.onSdcardUnmount}set onGpioConfig(i){this.client&&(this.client.onGpioConfig=i)}get onGpioConfig(){return this.client?.onGpioConfig}set onGpioConfigSave(i){this.client&&(this.client.onGpioConfigSave=i)}get onGpioConfigSave(){return this.client?.onGpioConfigSave}set onEthConfig(i){this.client&&(this.client.onEthConfig=i)}get onEthConfig(){return this.client?.onEthConfig}set onEthConfigSave(i){this.client&&(this.client.onEthConfigSave=i)}get onEthConfigSave(){return this.client?.onEthConfigSave}set onEthInit(i){this.client&&(this.client.onEthInit=i)}get onEthInit(){return this.client?.onEthInit}}const BridgeDevice=new WebREPLBridge,scriptRel="modulepreload",assetsURL=function(n){return"/app/"+n},seen={},__vitePreload=function n(i,o,s){let r=Promise.resolve();if(o&&o.length>0){document.getElementsByTagName("link");const c=document.querySelector("meta[property=csp-nonce]"),l=c?.nonce||c?.getAttribute("nonce");r=Promise.allSettled(o.map(d=>{if(d=assetsURL(d),d in seen)return;seen[d]=!0;const p=d.endsWith(".css"),u=p?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${d}"]${u}`))return;const f=document.createElement("link");if(f.rel=p?"stylesheet":scriptRel,p||(f.as="script"),f.crossOrigin="",f.href=d,l&&f.setAttribute("nonce",l),document.head.appendChild(f),p)return new Promise((h,m)=>{f.addEventListener("load",h),f.addEventListener("error",()=>m(new Error(`Unable to preload CSS for ${d}`)))})}))}function a(c){const l=new Event("vite:preloadError",{cancelable:!0});if(l.payload=c,window.dispatchEvent(l),!l.defaultPrevented)throw c}return r.then(c=>{for(const l of c||[])l.status==="rejected"&&a(l.reason);return i().catch(a)})};let Parser=null,Language=null,wasmUrl=null,pythonWasmImportUrl=null;const DEBUG_STATE_MODULE=`
+# Debug State Module (injected at runtime)
+try:
+    from time import monotonic as _time_now
+    _time_unit = 1000
+except ImportError:
+    from time import ticks_ms as _time_now
+    _time_unit = 1
+import gc, json
+from time import sleep
+
+class DebugStates:
+    _instance = None
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
+        self.s = "CO"  # CO: Continue, S: Step Into, SO: Step Over, ST: Step Out
+        self.depth = 0
+        self.target_depth = 0
+        self.t = _time_now() * _time_unit
+        self.d = {"t": 0, "m": gc.mem_free(), "f": "", "l": 1, "w": {}, "h": False, "d": 0, "v": {}}
+        self.hc = {} # hit counts
+    
+    def us(self, f, l, c=True, h=None):
+        if not c: return
+        k = "%s:%d" % (f, l)
+        self.hc[k] = self.hc.get(k, 0) + 1
+        cnt = self.hc[k]
+        b = False
+        if h:
+            try:
+                if h.startswith(">="): b = cnt >= int(h[2:])
+                elif h.startswith("<="): b = cnt <= int(h[2:])
+                elif h.startswith(">"): b = cnt > int(h[1:])
+                elif h.startswith("<"): b = cnt < int(h[1:])
+                elif h.startswith("="): b = cnt == int(h[1:])
+                elif h.startswith("%"): b = cnt % int(h[1:]) == 0
+                else: b = cnt >= int(h)
+            except: b = True
+        else: b = True
+        if b: self.s = "S"
+
+    def sv(self, l):
+        v = {}
+        for k, val in l.items():
+            if k.startswith("_") or k == "_ds": continue
+            try:
+                s = str(val)
+                if len(s) > 100: s = s[:97] + "..."
+                v[k] = s
+            except: v[k] = "?"
+        self.d["v"] = v
+    
+    def wrap(self, f):
+        def w(*a, **k):
+            self.depth += 1
+            try: return f(*a, **k)
+            finally: self.depth -= 1
+        return w
+
+    def awrap(self, f):
+        async def w(*a, **k):
+            self.depth += 1
+            try: return await f(*a, **k)
+            finally: self.depth -= 1
+        return w
+    
+    def sh(self, fileName, lineNum):
+        duration = (_time_now() * _time_unit) - self.t
+        self.d = {"t": duration, "m": gc.mem_free(), "f": fileName, "l": lineNum, "w": {}, "h": False, "d": self.depth, "v": {}}
+    
+    def st(self):
+        global _debug_cmd
+        
+        halt = False
+        if self.s == "S": halt = True
+        elif self.s == "SO":
+            if self.depth <= self.target_depth: halt = True
+        elif self.s == "ST":
+            if self.depth < self.target_depth: halt = True
+        
+        if halt:
+            self.d["h"] = True
+            # Send state via alternate screen buffer (hidden from REPL)
+            print("\\x1b[?1049hD" + json.dumps(self.d) + "D\\x1b[?1049l", end="")
+            
+            timeout = 30000
+            start = _time_now() * _time_unit
+            
+            _pq_wr = None
+            _pq_hs = None
+            try:
+                import webrepl_binary as _wr
+                _pq_wr = _wr.process_queue
+            except:
+                try: from esp32 import webrepl as _wr; _pq_wr = _wr.process_queue
+                except: pass
+            try:
+                import httpserver as _hs
+                _pq_hs = _hs.process_queue
+            except:
+                try: from esp32 import httpserver as _hs; _pq_hs = _hs.process_queue
+                except: pass
+            
+            while (_time_now() * _time_unit - start) < timeout:
+                if _pq_hs: _pq_hs()
+                if _pq_wr: _pq_wr()
+                
+                cmd = None
+                if '_debug_cmd' in globals():
+                    cmd = globals()['_debug_cmd']
+                    if cmd: globals()['_debug_cmd'] = None
+                
+                if not cmd:
+                    try:
+                        import __main__
+                        if hasattr(__main__, '_debug_cmd') and __main__._debug_cmd:
+                            cmd = __main__._debug_cmd
+                            __main__._debug_cmd = None
+                    except: pass
+                
+                if not cmd:
+                    try:
+                        import builtins
+                        if hasattr(builtins, '_debug_cmd') and builtins._debug_cmd:
+                            cmd = builtins._debug_cmd
+                            builtins._debug_cmd = None
+                    except: pass
+
+                if cmd:
+                    if cmd in ("S", "SO", "ST", "CO", "CW"):
+                        self.s = cmd
+                        self.target_depth = self.depth
+                    else:
+                        self.s = "CO"
+                    break
+                
+                sleep(0.01)
+            
+            # Send final state before continuing
+            print("\\x1b[?1049hD" + json.dumps(self.d) + "D\\x1b[?1049l", end="")
+        
+        self.t = _time_now() * _time_unit
+    
+    def exec(self, code):
+        g = {"__name__": "__main__", "_ds": self}
+        exec(code, g)
+
+# Initialize and reset state
+_ds = DebugStates()
+_debug_cmd = None
+try:
+    import __main__
+    __main__._debug_cmd = None
+except: pass
+
+# Drain process queues
+try:
+    _wr = None
+    _hs = None
+    try: import webrepl_binary as _wr
+    except:
+        try: from esp32 import webrepl as _wr
+        except: pass
+    try: import httpserver as _hs
+    except:
+        try: from esp32 import httpserver as _hs
+        except: pass
+
+    if _hs and hasattr(_hs, 'process_queue'):
+        while _hs.process_queue() > 0: pass
+    if _wr and hasattr(_wr, 'process_queue'):
+        while _wr.process_queue() > 0: pass
+except: pass
+`;let parserInstance=null,pythonLanguage=null;async function getParser(){if(parserInstance&&pythonLanguage)return parserInstance;try{if(!Parser){console.log("[Debugger] Lazy loading Tree-sitter...");const[n,i,o]=await Promise.all([__vitePreload(()=>import("./tree-sitter-D-NMKdpX.js"),__vite__mapDeps([0,1,2,3])),__vitePreload(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),__vitePreload(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);Parser=n.Parser,Language=n.Language,wasmUrl=i.default,pythonWasmImportUrl=o.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await Parser.init({locateFile:()=>wasmUrl}),parserInstance=new Parser,console.log("[Debugger] Loading Python grammar..."),!pythonWasmImportUrl)throw new Error("tree-sitter-python.wasm URL not found in imports");return pythonLanguage=await Language.load(pythonWasmImportUrl),parserInstance.setLanguage(pythonLanguage),console.log("[Debugger] Tree-sitter parser initialized successfully"),parserInstance}catch(n){throw console.error("[Debugger] Failed to initialize parser:",n),new Error(`Tree-sitter initialization failed: ${n.message}`)}}async function identifyCodeRows(n){const i=await getParser();if(!i)return new Map;const o=i.parse(n),s=new Map,r=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],a=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],c=l=>{if(!l)return;let d=!1;const p=l.type;a.includes(p)?d=!1:r.includes(p)?(d=!0,(p==="function_definition"||p==="async_function_definition"||p==="class_definition")&&l.parent&&l.parent.type==="decorated_definition"&&(d=!1),p==="expression_statement"&&l.childCount===1&&l.firstChild.type==="string"&&(d=!1)):p==="decorated_definition"&&(d=!0),d&&s.set(l.startPosition.row,p);for(let u=0;u<l.childCount;u++)c(l.child(u))};return c(o.rootNode),s}function generateDebugBlock(n,i,o,s,r,a,c=null){let l="";if(c){const d=c.condition?`(${c.condition})`:"True",p=c.hitCount?`"${c.hitCount}"`:"None",u=c.enabled!==!1?"True":"False";l+=`${n}try:
+`,l+=`${n}    _ds.us("${o}", ${s}, ${u} and ${d}, ${p})
+`,l+=`${n}except:
+`,l+=`${n}    pass
+`}else i?l+=`${n}_ds.us("${o}", ${s}, True, None)
+`:(a.forEach(d=>{l+=`${n}try:
+`,l+=`${n}    if (${d}): _ds.s = "S"
+`,l+=`${n}except:
+`,l+=`${n}    pass
+`}),l+=`${n}if _ds.s == "S":
+`,n+="    ");return l+=`${n}_ds.sh("${o}", ${s})
+`,l+=`${n}if _ds.s != "CO": _ds.sv(locals())
+`,r.forEach(d=>{const p=d.replace(/"/g,'\\"');l+=`${n}try:
+`,l+=`${n}    _ds.d["w"]["${p}"] = str(${d})
+`,l+=`${n}except Exception as _debug_e:
+`,l+=`${n}    _ds.d["w"]["${p}"] = str(_debug_e)
+`}),l+=`${n}_ds.st()
+`,l}async function instrumentCodeForExec(n,i={}){const{watches:o={},conditionalBP:s={},fileName:r="main.py"}=i,a=performance.now(),c=await identifyCodeRows(n);console.log(`[Debugger] Identified ${c.size} code rows in ${performance.now()-a}ms`);let l=n.split(/\r?\n/);const d=new Map,p=o[""]||[],u=o[r]||[],f=[...new Set([...p,...u])],h=s[""]||[],m=s[r]||[],v=[...new Set([...h,...m])],y=Array.from(c.keys()).sort((k,S)=>k-S);for(const k of y){const S=l[k],_=c.get(k);if(S===void 0)continue;const E=/# ●/.test(S),I=i.breakpoints&&i.breakpoints[r]?i.breakpoints[r][k+1]:null;(E||I)&&console.log(`[Debugger] Breakpoint detected at line ${k+1}: ${S}`);const P=S.match(/^(\s*)/)[1];let $=generateDebugBlock(P,E,r,k+1,f,v,I);_==="function_definition"?$+=`${P}@_ds.wrap
+`:_==="async_function_definition"&&($+=`${P}@_ds.awrap
+`),E&&console.log(`[Debugger] Generated instrumentation for row ${k+1} (${_})`),d.set(k,$)}let w=[];for(let k=0;k<l.length;k++)d.has(k)&&w.push(d.get(k)),w.push(l[k]);const b=w.join(`
+`),x=`${DEBUG_STATE_MODULE}
+
+# Execute isolated code
+_ds.exec("""${b.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/'/g,"\\'")}""")
+`,C=performance.now()-a;return console.log(`[Debugger] Instrumentation complete in ${C.toFixed(0)}ms`),x}console.log("[Libs] ES modules loaded");function renderIcon(n,i={}){const{className:o="",size:s=24,color:r="currentColor"}=i;return html$1`
+    <svg class="icon icon-tabler ${o}" 
+         width="${s}" 
+         height="${s}" 
+         viewBox="0 0 24 24" 
+         fill="none" 
+         stroke="${r}" 
+         stroke-width="2" 
+         stroke-linecap="round" 
+         stroke-linejoin="round">
+      <use href="#tabler-${n}" />
+    </svg>
+  `}const IconSprite={renderIcon};await __vitePreload(()=>import("./vendor-XVACtT3C.js"),__vite__mapDeps([1,2,3]));console.log("[Views] Vendor loaded, Component available:",!!window.Component);function Button(n){const{first:i=!1,size:o="",square:s=!1,icon:r="link",onClick:a=k=>{},disabled:c=!1,active:l=!1,tooltip:d,label:p,background:u}=n;let f=html``;d&&(f=html`<div class="tooltip">${d}</div>`),f=html``;let h=l?"active":"",m=l?"selected":"",v=u?"inverted":"",y=i?"first":"",w=s?"square":"",b=c?"inactive":"active",x=o==="small"?"":html`<div class="label ${b} ${m}">${p}</div>`;const C=IconSprite.renderIcon(r,{className:""});return html`
+     <div class="button ${y}">
+       <button disabled=${c} class="${w}${o} ${h} ${v}" onclick=${a}>
+         ${C}
+       </button>
+       ${x}
+       ${f}
+     </div>
+   `}let cm6Loaded=!1,EditorView,EditorState,Compartment,python,json,keymap,highlightActiveLine,lineNumbers,gutter,GutterMarker,search,searchKeymap,highlightSelectionMatches,foldGutter,foldKeymap,indentOnInput,syntaxHighlighting,defaultHighlightStyle,bracketMatching,closeBrackets,closeBracketsKeymap,indentWithTab,defaultKeymap,history,historyKeymap,baseTheme=null,themes=null,BreakpointMarkerClass=null;async function loadCM6(){if(!cm6Loaded)try{const[n,i,o,s,r,a,c,l,d,p]=await Promise.all([__vitePreload(()=>import("./vendor-YJ71nRLj.js").then(w=>w.aj),[]),__vitePreload(()=>import("./vendor-YJ71nRLj.js").then(w=>w.ai),[]),__vitePreload(()=>import("./index-D8uXHUWg.js"),__vite__mapDeps([4,5,2,6])),__vitePreload(()=>import("./index-Ckq7-Rzu.js"),__vite__mapDeps([7,5,2])),__vitePreload(()=>import("./index-BR6z4vJu.js"),__vite__mapDeps([8,2])),__vitePreload(()=>import("./vendor-YJ71nRLj.js").then(w=>w.ak),[]),__vitePreload(()=>import("./index-CEIVfw6W.js"),__vite__mapDeps([6,2])),__vitePreload(()=>import("./index-Bvni1Ih1.js"),__vite__mapDeps([9,2])),__vitePreload(()=>import("./vendor-YJ71nRLj.js").then(w=>w.al),[]),__vitePreload(()=>import("./index-CzizjDTO.js"),__vite__mapDeps([10,2]))]);EditorView=n.EditorView,keymap=n.keymap,highlightActiveLine=n.highlightActiveLine,lineNumbers=n.lineNumbers,gutter=n.gutter,GutterMarker=n.GutterMarker,EditorState=i.EditorState,Compartment=i.Compartment,python=o.python,json=s.json,search=r.search,searchKeymap=r.searchKeymap,highlightSelectionMatches=r.highlightSelectionMatches,foldGutter=a.foldGutter,foldKeymap=a.foldKeymap,indentOnInput=a.indentOnInput,syntaxHighlighting=a.syntaxHighlighting,defaultHighlightStyle=a.defaultHighlightStyle,bracketMatching=a.bracketMatching,closeBrackets=c.closeBrackets,closeBracketsKeymap=c.closeBracketsKeymap,indentWithTab=l.indentWithTab,defaultKeymap=l.defaultKeymap,history=l.history,historyKeymap=l.historyKeymap,BreakpointMarkerClass=class extends GutterMarker{constructor(w=!0){super(),this.enabled=w}toDOM(){const w=document.createElement("span");return w.className="cm-breakpoint"+(this.enabled?"":" cm-breakpoint-disabled"),w.textContent="●",w}},baseTheme=EditorView.theme({"&":{height:"100%",fontSize:"14px"},".cm-scroller":{fontFamily:"var(--font-mono)",overflow:"auto"},".cm-content":{caretColor:"currentColor"},".cm-cursor":{borderLeftColor:"currentColor"},".cm-gutters":{backgroundColor:"transparent !important",borderRight:"none"},".cm-gutter.cm-lineNumbers":{backgroundColor:"transparent !important"},"&.cm-focused .cm-selectionBackground, ::selection":{backgroundColor:"rgba(100, 100, 100, 0.3)"},".cm-foldGutter .cm-gutterElement":{cursor:"pointer",padding:"0 3px"},".cm-breakpoint-gutter":{width:"20px !important",minWidth:"20px !important"},".cm-breakpoint-gutter .cm-gutterElement":{display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:"0"},".cm-breakpoint":{color:"#e63946",fontSize:"14px",lineHeight:"1",paddingRight:"9px"},".cm-breakpoint-disabled":{opacity:"0.3"},".cm-panels":{fontSize:"14px"},".cm-panels input, .cm-panels button":{fontSize:"14px"}});const{cobalt:u,solarizedLight:f,coolGlow:h,clouds:m}=d,{xcodeDark:v,xcodeLight:y}=p;themes={cobalt:u,"solarized-light":f,"xcode-dark":v,"xcode-light":y,coolglow:h,clouds:m},cm6Loaded=!0,console.debug("[Editor] Lazy loaded CM6 modules")}catch(n){throw console.error("[Editor] Failed to load CM6:",n),n}}class CodeMirrorEditor extends Component{constructor(){super(),this.view=null,this.content="# empty file",this.fileName=null,this.scrollTop=0,this.currentTheme=null,this.themeCompartment=null,this.readOnlyCompartment=null,this.languageCompartment=null}createElement(i){return i&&(this.content=i),html`<div id="code-editor"></div>`}load(i){loadCM6().then(()=>this.createEditor(i)).catch(o=>{console.error("[Editor] Failed to initialize:",o),i.innerHTML='<div style="color:red;padding:10px;">Editor failed to load. Check console for errors.</div>'})}createEditor(i){this.themeCompartment=new Compartment,this.readOnlyCompartment=new Compartment,this.languageCompartment=new Compartment;const o=this.getEditorTheme();if(this.currentTheme=o,this.fileName&&typeof this.fileName=="string"&&this.fileName.toLowerCase().endsWith(".json")){const d=this._tryFormatJson(this.content);d!==null&&(this.content=d)}const s=window.appState?.debugger?.active||window.appState?.debugger?.configOpen||!1,r=this.getLanguageMode(),a=this,c=gutter({class:"cm-breakpoint-gutter",lineMarker:(d,p)=>{const u=d.state.doc.lineAt(p.from).number,f=d.state.doc.line(u).text;if(/# ●/.test(f)){const m=(window.appState?.debugger?.breakpoints?.[a.fileName]||{})[u],v=m?m.enabled!==!1:!0;return new BreakpointMarkerClass(v)}return null},domEventHandlers:{click:(d,p)=>{const u=d.state.doc.lineAt(p.from).number,f=d.state.doc.line(u).text;return/# ●/.test(f)?window.appInstance.emitter.emit("debugger:edit-breakpoint",{file:a.fileName,line:u}):a.toggleBreakpoint(u-1),!0}}}),l=EditorState.create({doc:this.content||"",extensions:[lineNumbers(),history(),foldGutter({openText:"▼",closedText:"▶"}),indentOnInput(),bracketMatching(),closeBrackets(),highlightActiveLine(),highlightSelectionMatches(),syntaxHighlighting(defaultHighlightStyle,{fallback:!0}),search({top:!0}),keymap.of([...defaultKeymap,...historyKeymap,...closeBracketsKeymap,...foldKeymap,...searchKeymap,indentWithTab]),this.languageCompartment.of(r),baseTheme,this.themeCompartment.of(themes[o]||themes.cobalt),this.readOnlyCompartment.of(EditorState.readOnly.of(s)),c,EditorView.updateListener.of(d=>{d.docChanged&&(this.content=d.state.doc.toString(),this.onChange()),d.geometryChanged&&(this.scrollTop=this.view?.scrollDOM.scrollTop||0)})]});this.view=new EditorView({state:l,parent:i}),setTimeout(()=>{this.view&&this.scrollTop>0&&(this.view.scrollDOM.scrollTop=this.scrollTop)},10),this.themeObserver=new MutationObserver(()=>{this.updateTheme()}),this.themeObserver.observe(document.documentElement,{attributes:!0,attributeFilter:["data-theme"]}),this.editorThemeHandler=()=>this.updateTheme(),window.addEventListener("editor-theme-changed",this.editorThemeHandler),this.breakpointsUpdatedHandler=d=>{d.file===this.fileName&&this.syncBreakpointsFromStore()},window.appInstance.emitter.on("debugger:breakpoints-updated",this.breakpointsUpdatedHandler)}getLanguageMode(){return this.fileName&&typeof this.fileName=="string"&&this.fileName.toLowerCase().endsWith(".json")?json():python()}getEditorTheme(){const i=document.documentElement.getAttribute("data-theme")==="dark";switch(localStorage.getItem("editorTheme")||"auto"){case"cobalt":return i?"cobalt":"solarized-light";case"xcode":return i?"xcode-dark":"xcode-light";case"coolglow":return i?"coolglow":"clouds";case"auto":default:return i?"cobalt":"solarized-light"}}updateTheme(){if(!this.view||!themes)return;const i=this.getEditorTheme();i!==this.currentTheme&&(this.currentTheme=i,this.view.dispatch({effects:this.themeCompartment.reconfigure(themes[i]||themes.cobalt)}))}update(i){if(this.view&&window.appState?.debugger){const o=window.appState.debugger.active||window.appState.debugger.configOpen;this.view.state.facet(EditorState.readOnly)!==o&&(this.view.dispatch({effects:this.readOnlyCompartment.reconfigure(EditorState.readOnly.of(o))}),this.view.dom.style.opacity=o?"0.7":"1.0")}return!1}unload(){this.themeObserver&&(this.themeObserver.disconnect(),this.themeObserver=null),this.editorThemeHandler&&(window.removeEventListener("editor-theme-changed",this.editorThemeHandler),this.editorThemeHandler=null),this.breakpointsUpdatedHandler&&(window.appInstance.emitter.removeListener("debugger:breakpoints-updated",this.breakpointsUpdatedHandler),this.breakpointsUpdatedHandler=null),this.view&&(this.scrollTop=this.view.scrollDOM.scrollTop,this.view.destroy(),this.view=null)}updateScrollPosition(i){this.scrollTop=i.target.scrollTop}onChange(){return!1}_tryFormatJson(i){if(typeof i!="string")return null;const o=i.trim();if(!o)return null;const s=o[0];if(s!=="{"&&s!=="[")return null;try{const r=JSON.parse(o);return JSON.stringify(r,null,2)+`
+`}catch{return null}}toggleBreakpoint(i){if(!this.view)return;const o=this.view.state.doc.line(i+1),s=o.text,r=/# ●/.test(s);let a;r?a=s.replace(/\s*# ●.*/,""):a=s.trimEnd()+" # ●",this.view.dispatch({changes:{from:o.from,to:o.to,insert:a}})}syncBreakpointsFromStore(){if(!this.view||!this.fileName)return;const i=window.appState?.debugger?.breakpoints?.[this.fileName]||{},o=this.view.state.doc,s=[];for(let r=1;r<=o.lines;r++){const a=o.line(r),c=a.text,l=i[r],d=/# ●/.test(c);if(l&&!d)s.push({from:a.to,to:a.to,insert:" # ●"});else if(!l&&d){const p=c.match(/\s*# ●.*/);if(p){const u=a.from+c.indexOf(p[0]);s.push({from:u,to:a.to,insert:""})}}}s.length>0&&this.view.dispatch({changes:s})}}const editor=Object.freeze(Object.defineProperty({__proto__:null,CodeMirrorEditor},Symbol.toStringTag,{value:"Module"}));function Tab(n){const{text:i="undefined",icon:o="device-desktop",onSelectTab:s=()=>!1,onCloseTab:r=()=>!1,onStartRenaming:a=()=>!1,onFinishRenaming:c=()=>!1,active:l=!1,renaming:d=!1,hasChanges:p=!1}=n;if(l)if(d){let h=function(v){c(v.target.value)},m=function(v){v.key.toLowerCase()==="enter"&&v.target.blur(),v.key.toLowerCase()==="escape"&&(v.target.value=null,v.target.blur())};return html`
+        <div class="tab active" tabindex="0">
+          ${IconSprite.renderIcon(o,{className:"icon"})}
+          <div class="text">
+            <input type="text"
+              value=${i}
+              onblur=${h}
+              onkeydown=${m}
+              />
+          </div>
+        </div>
+      `}else{let h=function(m){m.stopPropagation(),r(m)};return html`
+        <div class="tab active" tabindex="0">
+          ${IconSprite.renderIcon(o,{className:"icon"})}
+          <div class="text" onclick=${a}>
+            ${p?" *":""} ${i}
+          </div>
+          <div class="options" >
+            <button onclick=${h}>
+              ${IconSprite.renderIcon("x",{className:"icon"})}
+            </button>
+          </div>
+        </div>
+      `}function u(h){h.target.classList.contains("close-tab")||s(h)}function f(h){h.stopPropagation(),r(h)}return html`
+    <div
+      class="tab"
+      tabindex="1"
+      onclick=${u}
+      >
+      ${IconSprite.renderIcon(o,{className:"icon"})}
+      <div class="text">
+        ${p?"*":""} ${i}
+      </div>
+      <div class="options close-tab">
+        <button class="close-tab" onclick=${f}>
+          ${IconSprite.renderIcon("x",{className:"close-tab icon"})}
+        </button>
+      </div>
+    </div>
+  `}const TERMINAL_PROMPT="\x1B[38;2;221;221;221m>>> \x1B[0m";function bindTerminalOutput(n){const i=n.cache(XTerm,"terminal");if(!i||!i.term){console.debug("[TerminalHelpers] Terminal not ready yet, will bind on view switch");return}const o=i.term;BridgeDevice.onData((r,a=!1)=>{if(r){const c=r.replace(/\n/g,`\r
+`);a?o.write("\x1B[91m"+c+"\x1B[0m\x1B[38;2;51;255;51m"):o.write(c),o.scrollToBottom()}})}function redrawLine(n,i,o,s){const r=s.isCommandRunning&&s.isCommandRunning(),a=r?"":TERMINAL_PROMPT,c=r?0:4;n.write("\r\x1B[K"+a+i);const l=c+o,d=c+i.length;l<d&&n.write("\x1B["+(d-l)+"D")}function setupTerminalInputHandler(n,i,o){n.onData(async s=>{if(s==="\x1B[A"){i.commandHistory.length>0&&(i.historyIndex===-1?(i.savedLine=i.currentLine,i.historyIndex=i.commandHistory.length-1):i.historyIndex>0&&i.historyIndex--,i.currentLine=i.commandHistory[i.historyIndex],i.cursorPos=i.currentLine.length,redrawLine(n,i.currentLine,i.cursorPos,o)),n.scrollToBottom();return}if(s==="\x1B[B"){i.historyIndex!==-1&&(i.historyIndex++,i.historyIndex>=i.commandHistory.length?(i.currentLine=i.savedLine||"",i.historyIndex=-1):i.currentLine=i.commandHistory[i.historyIndex],i.cursorPos=i.currentLine.length,redrawLine(n,i.currentLine,i.cursorPos,o)),n.scrollToBottom();return}if(s==="\x1B[D"){i.cursorPos>0&&(i.cursorPos--,n.write("\x1B[D"));return}if(s==="\x1B[C"){i.cursorPos<i.currentLine.length&&(i.cursorPos++,n.write("\x1B[C"));return}if(s==="\r"||s===`
+`){if(n.write(`\r
+`),i.currentLine.trim().length>0){(i.commandHistory.length===0||i.commandHistory[i.commandHistory.length-1]!==i.currentLine)&&(i.commandHistory.push(i.currentLine),i.commandHistory.length>100&&i.commandHistory.shift()),i.historyIndex=-1,i.savedLine="";try{if(o.isCommandRunning&&o.isCommandRunning()){console.log("[Terminal] Sending input to running command:",i.currentLine),await o.sendInput(i.currentLine),i.currentLine="",i.cursorPos=0;return}else{const r=i.currentLine;i.currentLine="",i.cursorPos=0;const a=performance.now();console.log("[Terminal] Calling device.run at",a.toFixed(0)),await o.run(r),console.log("[Terminal] device.run returned after",(performance.now()-a).toFixed(0),"ms")}}catch(r){n.write("Error: "+r.message+`\r
+`)}}n.write(TERMINAL_PROMPT)}else if(s==="	"){if(i.isConnected&&o&&typeof o.requestCompletion=="function")try{const r=await o.requestCompletion(i.currentLine);if(!r||r.length===0){n.write("\x07");return}const a=p=>p&&p.length>=2&&/^[A-Z][A-Z0-9_]*$/.test(p),c=r.filter(p=>!a(p));if(c.length===0){n.write("\x07");return}let l="",d=[];if(c.length===1)l=c[0];else{const p=i.currentLine;let u=c[0];for(let f=1;f<c.length;f++){let h=0;for(;h<u.length&&h<c[f].length&&u[h]===c[f][h];)h++;u=u.slice(0,h)}u.length>p.length&&(l=u.slice(p.length)),d=c}if(l&&(i.currentLine=i.currentLine.slice(0,i.cursorPos)+l+i.currentLine.slice(i.cursorPos),i.cursorPos+=l.length,redrawLine(n,i.currentLine,i.cursorPos,o)),d.length>0){n.write(`\r
+`);const p=80;let u="";for(const f of d){const h=u.length+f.length+(u?4:0);u&&h>p?(n.write(u+`\r
+`),u=f):u=u?u+"    "+f:f}u&&n.write(u+`\r
+`),n.write(TERMINAL_PROMPT),redrawLine(n,i.currentLine,i.cursorPos,o)}}catch(r){console.error("[Terminal] Completion error:",r),n.write("\x07")}else n.write("\x07");n.scrollToBottom()}else if(s==="")n.write(`^C\r
+`),i.currentLine="",i.cursorPos=0,i.historyIndex=-1,n.write(TERMINAL_PROMPT);else if(s===""||s==="\b")i.cursorPos>0&&(o.isCommandRunning&&o.isCommandRunning()?(i.currentLine=i.currentLine.slice(0,-1),i.cursorPos--,n.write("\b \b")):(i.currentLine=i.currentLine.slice(0,i.cursorPos-1)+i.currentLine.slice(i.cursorPos),i.cursorPos--,redrawLine(n,i.currentLine,i.cursorPos,o)));else if(s.length>=1){const r=s.split("").filter(a=>{const c=a.charCodeAt(0);return c>=32&&c<127}).join("");r.length>0&&(o.isCommandRunning&&o.isCommandRunning()?(i.currentLine+=r,i.cursorPos+=r.length,n.write(r)):(i.currentLine=i.currentLine.slice(0,i.cursorPos)+r+i.currentLine.slice(i.cursorPos),i.cursorPos+=r.length,redrawLine(n,i.currentLine,i.cursorPos,o)))}n.scrollToBottom()})}let TerminalClass=null,FitAddonClass=null,xtermLoaded=!1;async function loadXterm(){if(xtermLoaded)return{Terminal:TerminalClass,FitAddon:FitAddonClass};try{const[n,i]=await Promise.all([__vitePreload(()=>import("./xterm-CASmyfyk.js"),[]),__vitePreload(()=>import("./addon-fit-DOCEibfw.js"),[]),__vitePreload(()=>Promise.resolve({}),__vite__mapDeps([11]))]);return TerminalClass=n.Terminal,FitAddonClass=i.FitAddon,xtermLoaded=!0,console.debug("[XTerm] Lazy loaded xterm modules"),{Terminal:TerminalClass,FitAddon:FitAddonClass}}catch(n){throw console.error("[XTerm] Failed to load xterm:",n),n}}loadXterm();class XTerm extends Component$1{constructor(i,o,s){super(i),this.term=null,this.fitAddon=null,this.resizeObserver=null,this.inputBound=!1,this._emit=s}load(i){if(this.term){console.debug("[XTerm] Reusing existing terminal instance (no re-open needed)");const o=this.term.element?.parentElement;o&&i.appendChild(o),this.resizeObserver&&this.resizeObserver.disconnect(),this.resizeObserver=new ResizeObserver(()=>{setTimeout(()=>this.fitTerminal(),50)}),this.resizeObserver.observe(i),setTimeout(()=>this.fitTerminal(),50),setTimeout(()=>this.fitTerminal(),150);return}loadXterm().then(()=>this.ensureFontsLoaded()).then(()=>this.createAndOpenTerminal(i)).catch(o=>{console.error("[XTerm] Failed to initialize terminal:",o),i.innerHTML='<div style="color:red;padding:10px;">Terminal failed to load. Check console for errors.</div>'})}async ensureFontsLoaded(){if(document.fonts&&document.fonts.ready)try{return await document.fonts.ready,document.fonts.check&&await new Promise(i=>setTimeout(i,50)),Promise.resolve()}catch{return new Promise(o=>setTimeout(o,200))}else return new Promise(i=>setTimeout(i,200))}createAndOpenTerminal(i){this.term=new TerminalClass({fontFamily:"monospace",fontSize:12,letterSpacing:0,cursorBlink:!0,cursorStyle:"block",scrollback:1e3,theme:{foreground:"#33ff33",background:"#000000",cursor:"#FFFFFF",cursorAccent:"#000000"}}),this.term.open(i),this.fitAddon=new FitAddonClass,this.term.loadAddon(this.fitAddon),setTimeout(()=>this.fitTerminal(),50),setTimeout(()=>this.fitTerminal(),150),setTimeout(()=>this.fitTerminal(),300),setTimeout(()=>this.fitTerminal(),600);let o=null;const s=()=>{o&&clearTimeout(o),o=setTimeout(()=>this.fitTerminal(),100)};this.resizeObserver=new ResizeObserver(s),this.resizeObserver.observe(i);const r=i.closest(".repl-panel-main");r&&this.resizeObserver.observe(r)}createElement(){return html$1`<div class="terminal-wrapper"></div>`}update(){return this.fitAddon&&setTimeout(()=>this.fitTerminal(),50),!1}unload(){this.resizeObserver&&(this.resizeObserver.disconnect(),this.resizeObserver=null)}fitTerminal(){if(!(!this.term||!this.fitAddon))try{this.fitAddon.fit(),this.term.refresh&&this.term.refresh(0,this.term.rows-1)}catch(i){console.warn("[XTerm] Fit failed:",i)}}resizeTerm(){this.fitTerminal()}bindInput(i,o){return this.inputBound||!this.term?!1:(console.debug("[XTerm] Binding input handler"),this.inputBound=!0,this.term.textarea&&this.term.textarea.addEventListener("focus",()=>{this._emit&&this._emit("terminal-focus")}),setupTerminalInputHandler(this.term,i,o),!0)}isInputBound(){return this.inputBound}}function CodeEditor(n,i){if(n.editingFile){const o=n.openFiles.find(s=>s.id==n.editingFile);return o?o.editor.render():(console.error("[CodeEditor] File not found for id:",n.editingFile),html$1`<div id="code-editor">File not found</div>`)}else return html$1`
+      <div id="code-editor"></div>
+    `}function ConnectionDialog(n,i){const o=n.isConnectionDialogOpen?"open":"closed",s=localStorage.getItem("webrepl-url")||"",r=localStorage.getItem("webrepl-password")||"";let a=!1;function c(f){a=f.target.closest(".dialog-content")!==null}function l(f){f.target.id=="dialog-connection"&&!a&&i("close-connection-dialog"),a=!1}function d(f){if(f.preventDefault(),f.stopPropagation(),n.isConnecting)return;const h=document.getElementById("webrepl-url").value,m=document.getElementById("webrepl-password").value;i("connect-webrepl",{wsUrl:h,password:m})}function p(f){f.stopPropagation(),f.key==="Enter"&&!n.isConnecting&&d(f)}n.isConnectionDialogOpen&&!window._connectionDialogEnterHandler?(window._connectionDialogEmit=i,window._connectionDialogEnterHandler=f=>{const h=document.getElementById("dialog-connection");if(!h||!h.classList.contains("open"))return;const m=h.querySelector(".connect-button");if(!(m&&m.disabled)&&f.key==="Enter"){const v=f.target;if(v.tagName!=="INPUT"&&v.tagName!=="TEXTAREA"){f.preventDefault(),f.stopPropagation();const y=document.getElementById("webrepl-url")?.value,w=document.getElementById("webrepl-password")?.value;y&&w&&window._connectionDialogEmit&&window._connectionDialogEmit("connect-webrepl",{wsUrl:y,password:w})}}},document.addEventListener("keydown",window._connectionDialogEnterHandler)):!n.isConnectionDialogOpen&&window._connectionDialogEnterHandler&&(document.removeEventListener("keydown",window._connectionDialogEnterHandler),window._connectionDialogEnterHandler=null,window._connectionDialogEmit=null);const u=html`
+  <div id="dialog-connection" class="dialog ${o}" tabindex="-1" onmousedown=${c} onclick=${l} onkeydown=${f=>{f.key==="Enter"&&!n.isConnecting&&(f.preventDefault(),f.stopPropagation(),d(f))}} oncreate=${()=>{const f=document.getElementById("webrepl-url"),h=document.getElementById("webrepl-password");f&&s&&(f.value=s),h&&r&&(h.value=r)}}>
+    
+    <div class="dialog-content webrepl-dialog">
+      <div class="dialog-header">
+        <div class="dialog-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div class="dialog-title">Connect to Device</div>
+        <div class="dialog-subtitle">Enter your device connection details</div>
+      </div>
+      
+      <div class="dialog-body">
+        <div class="form-group">
+          <label class="form-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20"/>
+            </svg>
+            Device URL
+          </label>
+          <input 
+            type="text" 
+            id="webrepl-url" 
+            class="form-input"
+            placeholder="https://scripto-XXXX.local/webrepl (WebRTC) or wss://192.168.1.32/webrepl (WebSocket)"
+            value=${s}
+            onclick=${f=>f.stopPropagation()}
+            onkeydown=${p}
+          />
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Password
+          </label>
+          <input 
+            type="password" 
+            id="webrepl-password" 
+            class="form-input"
+            placeholder="Enter password"
+            value=${r}
+            onclick=${f=>f.stopPropagation()}
+            onkeydown=${p}
+          />
+        </div>
+        
+        <div class="dialog-footer">
+          <button class="connect-button" onclick=${d} disabled=${n.isConnecting}>
+            ${n.isConnecting?"Connecting...":"Connect"}
+          </button>
+          <div class="dialog-feedback ${n.isConnecting?"connecting":""}">
+            ${n.isConnecting?html`<svg class="spinner" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              </svg> Connecting...`:"Press Enter or click Connect to begin"}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  `;if(n.isConnectionDialogOpen)return u}function getListDirScript(n="/"){return`
+import os, json
+S_IFDIR = 0x4000
+S_IFREG = 0x8000
+def S_ISDIR(m): return (m & 0xF000) == S_IFDIR
+def S_ISREG(m): return (m & 0xF000) == S_IFREG
+def _join(p1, p2):
+    if p1 == "/" and not p2.startswith("/"): return "/" + p2
+    elif p1 == "/": return p2
+    return p1 + "/" + p2
+
+dir_path = ${JSON.stringify(n)}
+result_list = []
+entries_dict = {}
+
+try:
+    # 1. Check if dir_path exists and is a directory
+    dir_stats = os.stat(dir_path)
+    if S_ISDIR(dir_stats[0]):
+        # Use ilistdir() which provides file type AND size directly
+        try:
+            for entry in os.ilistdir(dir_path):
+                item_name = entry[0]
+                item_mode = entry[1] if len(entry) > 1 else None
+                item_size = entry[3] if len(entry) > 3 else -1
+                item_type = 'unknown'
+                
+                if item_mode is not None:
+                    if S_ISDIR(item_mode):
+                        item_type = 'dir'
+                        item_size = 0
+                    elif S_ISREG(item_mode):
+                        item_type = 'file'
+                        # Size is already in entry[3]
+                        if item_size == -1:
+                            try:
+                                fullpath = _join(dir_path, item_name)
+                                item_stats = os.stat(fullpath)
+                                item_size = item_stats[6]
+                            except: item_size = -1
+                else:
+                    # Fallback if no mode in entry
+                    try:
+                        fullpath = _join(dir_path, item_name)
+                        item_stats = os.stat(fullpath)
+                        item_mode = item_stats[0]
+                        if S_ISDIR(item_mode):
+                            item_type = 'dir'
+                            item_size = 0
+                        elif S_ISREG(item_mode):
+                            item_type = 'file'
+                            item_size = item_stats[6]
+                    except: pass
+                
+                result_list.append({'name': item_name, 'type': item_type, 'size': item_size})
+        except AttributeError:
+            # Fallback for old MicroPython without ilistdir
+            for item_name in os.listdir(dir_path):
+                item_type = 'unknown'
+                item_size = -1
+                try:
+                    fullpath = _join(dir_path, item_name)
+                    item_stats = os.stat(fullpath)
+                    item_mode = item_stats[0]
+                    if S_ISDIR(item_mode):
+                        item_type = 'dir'
+                        item_size = 0
+                    elif S_ISREG(item_mode):
+                        item_type = 'file'
+                        item_size = item_stats[6]
+                except: pass
+                result_list.append({'name': item_name, 'type': item_type, 'size': item_size})
+except: pass
+
+# 2. Sort the list
+result_list.sort(key=lambda item: (0 if item.get('type') == 'dir' else 1, item.get('name', '')))
+
+# 3. Format dictionary
+for item_map in result_list:
+    f_name = item_map.get('name')
+    f_type = item_map.get('type')
+    f_size = item_map.get('size')
+    if f_name is not None:
+        entries_dict[f_name] = f_size if f_type == 'file' else None
+
+print(json.dumps({'path': dir_path, 'entries': entries_dict}))`.trim()}function getDeleteFolderScript(n){return`
+import os
+S_IFDIR = 0x4000
+def S_ISDIR(m): return (m & 0xF000) == S_IFDIR
+def _join(p1, p2):
+    if p1 == "/" and not p2.startswith("/"): return "/" + p2
+    elif p1 == "/": return p2
+    return p1 + "/" + p2
+
+def _recursive_delete(path):
+    try:
+        stat_info = os.stat(path)
+        if S_ISDIR(stat_info[0]):
+            items = os.listdir(path)
+            for item in items:
+                full_path = _join(path, item)
+                _recursive_delete(full_path)
+            os.rmdir(path)
+        else:
+            os.remove(path)
+    except OSError as e:
+        raise Exception("Error deleting " + path + ": " + str(e))
+
+_recursive_delete(${JSON.stringify(n)})
+`.trim()}async function getSystemInfo(n){const i=await n.exec("getSysInfo()");return typeof i=="string"?JSON.parse(i):i}async function getNetworksInfo(n){const i=await n.exec("getNetworksInfo()");return typeof i=="string"?JSON.parse(i):i}async function ilistFiles(n,i="/"){const s=(await n.exec(getListDirScript(i))).entries||{};return Object.entries(s).map(([r,a])=>({fileName:r,size:a,type:a===null?"folder":"file"}))}async function statFile(n,i){const o=`import os, json; print(json.dumps(os.stat('${i}')))`,s=await n.exec(o);return typeof s=="string"?JSON.parse(s):s}async function deleteFile(n,i){const o=`import os; os.remove('${i}')`;await n.exec(o)}async function renameFile(n,i,o){const s=`import os; os.rename('${i}', '${o}')`;await n.exec(s)}async function createFolder(n,i){const o=`import os; os.mkdir('${i}')`;await n.exec(o)}async function fileExists(n,i){try{return await statFile(n,i),!0}catch{return!1}}async function deleteFolder(n,i){await n.exec(getDeleteFolderScript(i))}function getFullPath$1(n,i,o){let s=n||"";return i&&i!=="/"&&(s+=i),o&&(s+="/"+o),s.replace(/\/+/g,"/")}function getNavigationPath(n,i){if(i===".."){const o=n.split("/").filter(s=>s);return o.pop(),"/"+o.join("/")}return n==="/"?"/"+i:n+"/"+i}const getDisk=()=>BridgeDisk,getDevice=()=>BridgeDevice,getFullPath=getFullPath$1;async function getDiskFiles(n){let o=await getDisk().ilistFiles(n);return o=o.map(s=>({fileName:s.path,type:s.type,size:s.size})),o=o.sort(sortFilesAlphabetically),o}async function getBoardFiles(n){let i=await ilistFiles(BridgeDevice,n);return i=i.sort(sortFilesAlphabetically),i}function sortFilesAlphabetically(n,i){return n.fileName.localeCompare(i.fileName)}async function checkDiskFile({root:n,parentFolder:i,fileName:o}){if(n==null||i==null||o==null)return!1;const s=getDisk(),r=s.getFullPath(n,i,o),a=await s.fileExists(r),c=await s.folderExists(r);return a||c}async function checkBoardFile({root:n,parentFolder:i,fileName:o}){return n==null||i==null||o==null?!1:fileExists(BridgeDevice,getFullPath(n,i,o))}async function checkOverwrite({fileNames:n=[],parentPath:i,source:o}){let s=[];return o==="board"?s=await getBoardFiles(i):s=await getDiskFiles(i),s.filter(r=>n.indexOf(r.fileName)!==-1)}function generateFileName(n){{const i=`New${window.appState.fileCounter}.py`;return window.appState.fileCounter++,i}}function generateHash(){return`${Date.now()}_${parseInt(Math.random()*1024)}`}async function uploadFolder(n,i,o){o=o||function(){};const s=getDevice(),r=getDisk();await s.createFolder(i);let a=await r.ilistAllFiles(n);for(let c in a){const l=a[c],d=l.path.substring(n.length);if(l.type==="folder")await s.createFolder(getFullPath(i,d,""));else{const p=r.getFullPath(n,d,""),u=getFullPath(i,d,""),f=await BridgeDisk.loadFile(p),h=new Uint8Array(f);await s.saveFile(u,h,{progressCallback:m=>{o(m,d)}})}o(100,d)}}async function downloadFolder(n,i,o){o=o||function(){},await getDisk().createFolder(i);try{const r=[];async function a(c){const l=await ilistFiles(BridgeDevice,c);for(const d of l){const p=c==="/"?`/${d.fileName}`:`${c}/${d.fileName}`;d.type==="folder"?(r.push({path:p,type:"folder"}),await a(p)):r.push({path:p,type:"file"})}}await a(n);for(let c in r){const l=r[c],d=l.path.substring(n.length),p=getDisk(),u=getDevice();if(l.type=="folder")await p.createFolder(p.getFullPath(i,d,""));else{const f=getFullPath(n,d,""),h=getFullPath(i,d,""),m=await u.loadFile(f,{progressCallback:v=>{o(v,d)}});await BridgeDisk.saveFileContent(h,m.buffer)}o(100,d)}}catch(r){throw console.error(`[Store] Error downloading folder ${n}:`,r),new Error(`Failed to download folder: ${r.message}`)}}async function removeBoardFolder(n){try{await deleteFolder(BridgeDevice,n)}catch(i){throw console.error(`[Store] Error removing folder ${n}:`,i),new Error(`Failed to remove folder: ${i.message}`)}}function canSave({isConnected:n,openFiles:i,editingFile:o}){const s=i.find(r=>r.id===o);return!s||!s.hasChanges?!1:s.source==="disk"?!0:n}function canExecute({isConnected:n}){return n}function canDownload({isConnected:n,selectedFiles:i}){const o=i.filter(s=>s.source==="disk");return n&&i.length>0&&o.length===0}function canUpload({isConnected:n,selectedFiles:i}){const o=i.filter(s=>s.source==="board");return n&&i.length>0&&o.length===0}function canEdit({selectedFiles:n}){return n.filter(o=>o.type=="file").length!=0}function NewFileDialog(n,i){const o=n.isNewFileDialogOpen?"open":"closed";function s(h){h.target.id=="dialog-new-file"&&i("close-new-file-dialog")}function r(h){return()=>{const m=document.querySelector("#file-name"),v=m.value.trim()||m.placeholder;i("create-new-tab",h,v)}}let a="";n.isConnected&&(a=html`
+      <button class="button item" onclick=${r("board")}>Board</button>
+    `),new MutationObserver((h,m)=>{const v=document.querySelector("#dialog-new-file input");v&&(v.focus(),m.disconnect())}).observe(document.body,{childList:!0,subtree:!0});let l="",d="";d=generateFileName();const p={type:"text",id:"file-name",value:l,placeholder:d},u=generateFileName();n.newFileName===null&&`${u}`;const f=html`
+  <div id="dialog-new-file" class="dialog ${o}" onclick=${s}>
+    <div class="dialog-content">
+      <h2 class="dialog-title">Create new file</h2>
+      <input class="dialog-input" ${p} />
+      <div class="buttons-horizontal">
+        ${a}
+        <button class="button item" onclick=${r("disk")}>Computer</button>
+      </div>
+    </div>
+  </div>
+`;if(n.isNewFileDialogOpen){const h=f.querySelector("#dialog-new-file .dialog-content > input");return h&&h.focus(),f}}function ScriptOsModal(n,i){return n.isScriptOsModalOpen?html`
+    <div class="scriptos-modal-overlay" onclick=${o=>{o.target.classList.contains("scriptos-modal-overlay")&&i("close-scriptos-modal")}}>
+      <div class="scriptos-modal">
+        <button 
+          class="scriptos-modal-close" 
+          onclick=${()=>i("close-scriptos-modal")}
+          title="Close">
+          ×
+        </button>
+        ${n.scriptOsModalView==="library"?ScriptOsLibraryView(n,i):ScriptOsConfigView(n,i)}
+      </div>
+    </div>
+  `:html`<div></div>`}function ScriptOsLibraryView(n,i){if(n.scriptOsCategoryCollapse||(n.scriptOsCategoryCollapse={}),n.isLoadingRegistry)return html`
+      <div class="scriptos-library">
+        <div class="scriptos-empty">
+          <div class="scriptos-loading-spinner"></div>
+          <h3>Loading ScriptO Registry...</h3>
+          <p>Fetching ScriptOs from the cloud registry</p>
+        </div>
+      </div>
+    `;const o=w=>{if(w.slug){const b=[];return w.category&&b.push(w.category),w.skillType&&b.push(w.skillType==="skill"?"📦 Package":"🔧 Tool"),{name:w.displayName||w.slug,description:w.summary||"",tags:b,author:"",version:w.latestVersion?.version||"1.0.0"}}else return w.config&&w.config.info?{name:w.config.info.name||w.filename,description:w.config.info.description||"",tags:w.config.info.category?[w.config.info.category]:[],author:w.config.info.author||"",version:w.config.info.version||[1,0,0]}:{name:w.filename||"Unknown",description:"",tags:[],author:"",version:[1,0,0]}},s=new Set;n.scriptOsList.forEach(w=>{o(w).tags.forEach(x=>s.add(x))});const r=Array.from(s).sort(),a=(n.scriptOsSearchQuery||"").toLowerCase(),c=n.scriptOsFilterTags||[],l=n.scriptOsList.filter(w=>{const b=o(w),x=b.name.toLowerCase(),C=b.description.toLowerCase(),k=b.tags.join(" ").toLowerCase(),S=!a||x.includes(a)||C.includes(a)||k.includes(a),_=c.length===0||c.every(E=>b.tags.includes(E));return S&&_}),d={},p=[];l.forEach(w=>{const b=o(w),x=b.tags.length>0?b.tags[0]:null;x?(d[x]||(d[x]=[]),d[x].push(w)):p.push(w)});const u=Object.keys(d).sort(),f=w=>{n.scriptOsCategoryCollapse[w]=!n.scriptOsCategoryCollapse[w],i("render")},h=()=>{n.scriptOsFiltersCollapsed=!n.scriptOsFiltersCollapsed,i("render")},m=()=>{n.scriptOsViewMode=n.scriptOsViewMode==="cards"?"list":"cards",i("render")},v=n.scriptOsFiltersCollapsed,y=n.scriptOsViewMode||"cards";return html`
+    <div class="scriptos-library">
+      <div class="scriptos-header-sticky">
+        <div class="scriptos-header">
+          <h2>ScriptO Registry</h2>
+          <p class="scriptos-subtitle">
+            ${n.scriptOsList.length} ScriptO${n.scriptOsList.length!==1?"s":""} available from cloud registry
+          </p>
+        </div>
+        
+        ${n.scriptOsList.length>0?html`
+          <div class="scriptos-toolbar">
+            <div class="scriptos-search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="scriptos-search-icon">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input 
+                type="text" 
+                class="scriptos-search-input"
+                placeholder="Search ScriptOs by name, description, or tags..."
+                value="${n.scriptOsSearchQuery||""}"
+                oninput=${w=>i("scriptos-search",w.target.value)}
+              />
+              ${a?html`
+                <button 
+                  class="scriptos-search-clear"
+                  onclick=${()=>i("scriptos-search","")}
+                  title="Clear search">
+                  ×
+                </button>
+              `:""}
+            </div>
+            <div class="scriptos-toolbar-actions">
+              ${r.length>1?html`
+                <button 
+                  class="scriptos-toolbar-btn ${v?"":"active"} ${c.length>0?"has-filters":""}"
+                  onclick=${h}
+                  title="${v?"Show filters":"Hide filters"}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                  </svg>
+                  ${c.length>0?html`<span class="scriptos-toolbar-badge">${c.length}</span>`:""}
+                </button>
+              `:""}
+              <button 
+                class="scriptos-toolbar-btn"
+                onclick=${m}
+                title="${y==="cards"?"Switch to list view":"Switch to card view"}">
+                ${y==="cards"?html`
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                    <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                  </svg>
+                `:html`
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+                  </svg>
+                `}
+              </button>
+            </div>
+          </div>
+          
+          ${r.length>1&&!v?html`
+            <div class="scriptos-tag-filters">
+              <div class="scriptos-tag-filters-list">
+                ${r.map(w=>{const b=c.includes(w);return html`
+                    <button 
+                      class="scriptos-tag-filter ${b?"active":""}" 
+                      onclick=${()=>i("scriptos-toggle-tag",w)}
+                      title="${b?"Remove filter":"Filter by "+w}">
+                      ${w}
+                      ${b?html`<span class="scriptos-tag-check">✓</span>`:""}
+                    </button>
+                  `})}
+              </div>
+              ${c.length>0?html`
+                <button 
+                  class="scriptos-clear-filters"
+                  onclick=${()=>i("scriptos-clear-tags")}
+                  title="Clear all filters">
+                  Clear filters (${c.length})
+                </button>
+              `:""}
+            </div>
+          `:""}
+        `:""}
+      </div>
+      
+      <div class="scriptos-content">
+        ${n.scriptOsList.length===0?html`
+          <div class="scriptos-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+            <h3>No ScriptOs Found</h3>
+            <p>Unable to load ScriptOs from the registry</p>
+            <p class="scriptos-hint">
+              Check your internet connection and try again
+            </p>
+          </div>
+        `:l.length===0?html`
+          <div class="scriptos-empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <h3>No ScriptOs Found</h3>
+            <p>No ScriptOs match "${a}"</p>
+            <button 
+              class="scriptos-btn scriptos-btn-primary"
+              onclick=${()=>i("scriptos-search","")}>
+              Clear Search
+            </button>
+          </div>
+        `:u.length<=1&&p.length===0?html`
+          <!-- Single category or flat list: no collapsible headers -->
+          ${y==="list"?html`
+            <div class="scriptos-list">
+              ${l.map(w=>ScriptOsListRow(w,i))}
+            </div>
+          `:html`
+            <div class="scriptos-grid">
+              ${l.map(w=>ScriptOsCard(w,i,r.length<=1))}
+            </div>
+          `}
+        `:html`
+          <div class="scriptos-categories">
+            ${u.map(w=>{const b=n.scriptOsCategoryCollapse[w]===!0;return html`
+                <div class="scriptos-category ${b?"collapsed":""}">
+                  <h3 class="scriptos-category-title" onclick=${()=>f(w)}>
+                    <svg class="scriptos-category-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                    <span>${w}</span>
+                    <span class="scriptos-category-count">${d[w].length}</span>
+                  </h3>
+                  ${b?"":y==="list"?html`
+                    <div class="scriptos-list">
+                      ${d[w].map(x=>ScriptOsListRow(x,i))}
+                    </div>
+                  `:html`
+                    <div class="scriptos-grid">
+                      ${d[w].map(x=>ScriptOsCard(x,i,!1))}
+                    </div>
+                  `}
+                </div>
+              `})}
+            ${p.length>0?html`
+              <div class="scriptos-category ${n.scriptOsCategoryCollapse.Other?"collapsed":""}">
+                <h3 class="scriptos-category-title" onclick=${()=>f("Other")}>
+                  <svg class="scriptos-category-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                  <span>Other</span>
+                  <span class="scriptos-category-count">${p.length}</span>
+                </h3>
+                ${n.scriptOsCategoryCollapse.Other?"":y==="list"?html`
+                  <div class="scriptos-list">
+                    ${p.map(w=>ScriptOsListRow(w,i))}
+                  </div>
+                `:html`
+                  <div class="scriptos-grid">
+                    ${p.map(w=>ScriptOsCard(w,i,!1))}
+                  </div>
+                `}
+              </div>
+            `:""}
+          </div>
+        `}
+      </div>
+    </div>
+  `}function ScriptOsCard(n,i,o=!1){let s,r,a,c,l;if(n.slug)s=n.displayName||n.slug,r=n.summary||"",c=n.tags?Object.keys(n.tags):[],a=n.latestVersion?.version?`v${n.latestVersion.version}`:"v1.0.0",l="";else if(n.config&&n.config.info){const d=n.config.info;s=d.name||n.filename,r=d.description||"",c=d.category?[d.category]:[],l=d.author||"",d.version?a=Array.isArray(d.version)?`v${d.version.join(".")}`:`v${d.version}`:a="v1.0.0"}else s=n.filename||"Unknown",r="",c=[],a="v1.0.0",l="";return html`
+    <div 
+      class="scriptos-card"
+      onclick=${()=>i("select-scriptos",n)}>
+      <div class="scriptos-card-header">
+        <div class="scriptos-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <h3>${s}</h3>
+        <span class="scriptos-card-version">${a}</span>
+      </div>
+      
+      <p class="scriptos-card-description">
+        ${r||"No description available"}
+      </p>
+      
+      ${c.length>0&&!o?html`
+        <div class="scriptos-card-tags">
+          ${c.slice(0,3).map(d=>html`<span class="scriptos-tag-badge">${d}</span>`)}
+          ${c.length>3?html`<span class="scriptos-tag-badge">+${c.length-3}</span>`:""}
+        </div>
+      `:""}
+      
+      <div class="scriptos-card-footer">
+        ${l?html`
+          <span class="scriptos-card-author">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            ${l}
+          </span>
+        `:""}
+      </div>
+    </div>
+  `}function ScriptOsListRow(n,i){let o,s,r;if(n.slug)o=n.displayName||n.slug,s=n.summary||"",r=n.latestVersion?.version?`v${n.latestVersion.version}`:"v1.0.0";else if(n.config&&n.config.info){const a=n.config.info;o=a.name||n.filename,s=a.description||"",a.version?r=Array.isArray(a.version)?`v${a.version.join(".")}`:`v${a.version}`:r="v1.0.0"}else o=n.filename||"Unknown",s="",r="v1.0.0";return html`
+    <div class="scriptos-list-row" onclick=${()=>i("select-scriptos",n)}>
+      <span class="scriptos-list-name">${o}</span>
+      <span class="scriptos-list-version">${r}</span>
+      <span class="scriptos-list-desc">${s}</span>
+    </div>
+  `}function ScriptOsConfigView(n,i){const o=n.selectedScriptOs;if(!o)return html`<div>Loading...</div>`;const s=o.config.info||{},r=o.config.args,a=r&&typeof r=="object"&&Object.keys(r).length>0;let c="v1.0.0";return s.version&&(Array.isArray(s.version)?c=`v${s.version.join(".")}`:c=`v${s.version}`),html`
+    <div class="scriptos-config">
+      <div class="scriptos-config-header">
+        <div class="scriptos-config-title">
+          <h2>${s.name||o.filename}</h2>
+          <span class="scriptos-config-version">
+            ${c}
+          </span>
+        </div>
+        <p class="scriptos-config-description">${s.description||"No description"}</p>
+        ${s.author?html`
+          <div class="scriptos-config-meta">
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              ${s.author}
+            </span>
+            ${s.www?html`
+              <a href="${s.www}" target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                Website
+              </a>
+            `:""}
+          </div>
+        `:""}
+      </div>
+      
+      <div class="scriptos-config-form">
+        ${a?html`
+          <h3>Configuration</h3>
+          ${renderConfigFields(r,n,i)}
+        `:html`
+          <div class="scriptos-config-no-args">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <p>This ScriptO requires no configuration</p>
+          </div>
+        `}
+      </div>
+      
+      <div class="scriptos-config-actions">
+        <button 
+          class="scriptos-btn scriptos-btn-secondary" 
+          onclick=${()=>i("scriptos-back")}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back
+        </button>
+        <button 
+          class="scriptos-btn scriptos-btn-primary" 
+          onclick=${()=>i("scriptos-execute")}>
+          Generate Code
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="5 12 5 5 12 5"/>
+            <polyline points="19 12 19 19 12 19"/>
+            <line x1="5" y1="5" x2="19" y2="19"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  `}function renderConfigFields(n,i,o){const s=Object.keys(n);return html`
+    <div class="scriptos-config-fields">
+      ${s.map(r=>{const a=n[r],c=a.label||r;a.type;const l=a.optional||!1;return html`
+          <div class="scriptos-config-field">
+            <label for="arg-${r}">
+              ${c}
+              ${l?html`<span class="scriptos-field-optional">(optional)</span>`:""}
+            </label>
+            ${renderInputField(r,a,i,o)}
+          </div>
+        `})}
+    </div>
+  `}function renderInputField(n,i,o,s){const r=i.type,a=o.scriptOsArgs[n],c=i.value!==void 0?i.value:null;switch(r){case"str":return html`
+        <input 
+          type="text" 
+          id="arg-${n}"
+          class="scriptos-input"
+          value="${a!==void 0?a:c||""}"
+          oninput=${u=>s("scriptos-update-arg",{argId:n,value:u.target.value})}
+          placeholder="Enter text..."
+        />
+      `;case"int":return html`
+        <input 
+          type="number" 
+          id="arg-${n}"
+          class="scriptos-input"
+          step="1"
+          value="${a!==void 0?a:c||0}"
+          oninput=${u=>s("scriptos-update-arg",{argId:n,value:parseInt(u.target.value)||0})}
+          placeholder="Enter integer..."
+        />
+      `;case"float":return html`
+        <input 
+          type="number" 
+          id="arg-${n}"
+          class="scriptos-input"
+          step="0.1"
+          value="${a!==void 0?a:c||0}"
+          oninput=${u=>s("scriptos-update-arg",{argId:n,value:parseFloat(u.target.value)||0})}
+          placeholder="Enter number..."
+        />
+      `;case"bool":return html`
+        <label class="scriptos-checkbox">
+          <input 
+            type="checkbox" 
+            id="arg-${n}"
+            checked=${a!==void 0?a:c||!1}
+            onchange=${u=>s("scriptos-update-arg",{argId:n,value:u.target.checked})}
+          />
+          <span class="scriptos-checkbox-label">Enabled</span>
+        </label>
+      `;case"list":const l=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,21,26,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48];return html`
+        <select 
+          id="arg-${n}"
+          class="scriptos-select"
+          onchange=${u=>s("scriptos-update-arg",{argId:n,value:u.target.value==="none"?null:parseInt(u.target.value)})}>
+          ${i.optional?html`<option value="none">No pin</option>`:""}
+          ${l.map(u=>html`
+            <option 
+              value="${u}" 
+              selected=${a==u||a===void 0&&c==u}>
+              GPIO ${u}
+            </option>
+          `)}
+        </select>
+      `;case"dict":const d=i.items||{},p=Object.keys(d);return html`
+        <select 
+          id="arg-${n}"
+          class="scriptos-select"
+          onchange=${u=>s("scriptos-update-arg",{argId:n,value:u.target.value})}>
+          ${p.map(u=>html`
+            <option 
+              value="${u}" 
+              selected=${a===u||a===void 0&&c===u}>
+              ${d[u]}
+            </option>
+          `)}
+        </select>
+      `;default:return html`
+        <input 
+          type="text" 
+          id="arg-${n}"
+          class="scriptos-input"
+          value="${a!==void 0?a:c||""}"
+          oninput=${u=>s("scriptos-update-arg",{argId:n,value:u.target.value})}
+          placeholder="Enter value..."
+        />
+      `}}function ScriptOsUiModal(n,i){if(!n.scriptOsUiModal||!n.scriptOsUiModal.isOpen)return html`<div></div>`;const{url:o,title:s}=n.scriptOsUiModal;return html`
+    <div 
+      class="scriptos-ui-modal-overlay" 
+      onclick=${r=>{r.target.classList.contains("scriptos-ui-modal-overlay")&&i("close-scriptos-ui-modal")}}>
+      <div class="scriptos-ui-modal-container">
+        <div class="scriptos-ui-modal-header">
+          <h2 class="scriptos-ui-modal-title">${s||"ScriptO UI"}</h2>
+          <button 
+            class="scriptos-ui-modal-close" 
+            onclick=${()=>i("close-scriptos-ui-modal")}
+            title="Close (Esc)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="scriptos-ui-modal-content">
+          ${n.scriptOsUiModal.isLoading?html`
+            <div class="scriptos-ui-modal-loading">
+              <div class="scriptos-ui-modal-spinner"></div>
+              <p>Loading UI from device...</p>
+            </div>
+          `:""}
+          
+          <iframe
+            src="${o}"
+            class="scriptos-ui-modal-iframe"
+            style="${n.scriptOsUiModal.isLoading?"display: none;":""}"
+            sandbox="allow-scripts allow-same-origin allow-forms"
+            onload=${()=>{n.scriptOsUiModal&&n.scriptOsUiModal.isLoading&&(n.scriptOsUiModal.loadTimeout&&(clearTimeout(n.scriptOsUiModal.loadTimeout),n.scriptOsUiModal.loadTimeout=null),n.scriptOsUiModal.isLoading=!1,n.scriptOsUiModal.error=null,i("render"))}}
+            onerror=${r=>{console.error("[ScriptO UI] Failed to load iframe:",r),n.scriptOsUiModal&&(n.scriptOsUiModal.loadTimeout&&(clearTimeout(n.scriptOsUiModal.loadTimeout),n.scriptOsUiModal.loadTimeout=null),n.scriptOsUiModal.isLoading=!1,n.scriptOsUiModal.error="Failed to load UI from device. Check the browser console for details.",i("render"))}}
+          ></iframe>
+          
+          ${n.scriptOsUiModal.error?html`
+            <div class="scriptos-ui-modal-error">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <p>${n.scriptOsUiModal.error}</p>
+              <button 
+                class="scriptos-ui-modal-retry"
+                onclick=${()=>{n.scriptOsUiModal.error=null,n.scriptOsUiModal.isLoading=!0,i("render")}}>
+                Retry
+              </button>
+            </div>
+          `:""}
+        </div>
+        
+        <div class="scriptos-ui-modal-footer">
+          <div class="scriptos-ui-modal-url">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            ${o}
+          </div>
+        </div>
+      </div>
+    </div>
+  `}function ExtensionsModal(n,i){return!n.isExtensionsModalOpen&&!n.installingDependencies&&!n.dependencyPrompt?html`<div></div>`:n.dependencyPrompt?DependencyPromptModal(n,i):n.installingDependencies?DependencyInstallModal(n):html`
+    <div class="scriptos-modal-overlay" onclick=${o=>{o.target.classList.contains("scriptos-modal-overlay")&&i("close-extensions-modal")}}>
+      <div class="scriptos-modal">
+        <button 
+          class="scriptos-modal-close" 
+          onclick=${()=>i("close-extensions-modal")}
+          title="Close">
+          ×
+        </button>
+        ${n.isLoadingExtensions?html`
+          <div class="scriptos-loading">
+            <div class="scriptos-loading-spinner"></div>
+            <p>Loading extensions registry...</p>
+          </div>
+        `:ExtensionsLibraryView(n,i)}
+      </div>
+    </div>
+  `}function DependencyPromptModal(n,i){const{extensionId:o,extensionName:s,dependencies:r}=n.dependencyPrompt,a=r?.mipPackage||"";return html`
+    <div class="scriptos-modal-overlay" onclick=${c=>{c.target.classList.contains("scriptos-modal-overlay")&&i("close-dependency-prompt")}}>
+      <div class="scriptos-modal" style="max-width: 500px;">
+        <div class="scriptos-library">
+          <div class="scriptos-header">
+            <h2>Install Dependencies?</h2>
+            <p class="scriptos-subtitle">${s} requires Python libraries</p>
+          </div>
+          
+          <div style="padding: 20px;">
+            <p style="color: var(--text-primary); margin-bottom: 16px;">
+              This extension requires Python libraries to be installed on your device.
+            </p>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; margin-bottom: 20px;">
+              <div style="font-family: 'Menlo', 'Monaco', monospace; color: var(--scheme-primary); font-size: 13px; word-break: break-all;">
+                ${a}
+              </div>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 20px;">
+              Make sure your device is connected before installing.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+              <button 
+                class="scriptos-uninstall-btn"
+                onclick=${()=>i("close-dependency-prompt")}
+                style="padding: 10px 20px;">
+                Skip
+              </button>
+              <button 
+                class="scriptos-update-btn"
+                onclick=${()=>i("upload-extension-dependencies",o)}
+                style="padding: 10px 20px;">
+                Install
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `}function DependencyInstallModal(n,i){const{extensionName:o,mipPackage:s}=n.installingDependencies;return html`
+    <div class="scriptos-modal-overlay">
+      <div class="scriptos-modal" style="max-width: 500px;">
+        <div class="scriptos-library">
+          <div class="scriptos-header">
+            <h2>Installing Dependencies</h2>
+            <p class="scriptos-subtitle">Installing Python libraries for ${o}...</p>
+          </div>
+          
+          <div style="padding: 40px 20px; text-align: center;">
+            <div class="scriptos-loading-spinner" style="margin: 0 auto 20px;"></div>
+            <div style="font-family: 'Menlo', 'Monaco', monospace; color: var(--scheme-primary); font-size: 14px; margin-bottom: 12px;">
+              ${s}
+            </div>
+            <p style="color: var(--text-secondary);">
+              This may take a few moments. Please wait...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `}function ExtensionsLibraryView(n,i){const o=n.availableExtensions||[],s=n.installedExtensions||[],r=new Set(s.map(l=>l.id)),a=o.filter(l=>!r.has(l.id)),c=(l,d)=>{for(let p=0;p<3;p++){const u=l[p]||0,f=d[p]||0;if(u>f)return!0;if(u<f)return!1}return!1};return o.length===0?html`
+      <div class="scriptos-library">
+        <div class="scriptos-header-sticky">
+           <div class="scriptos-header">
+            <h2>Extensions</h2>
+            <p class="scriptos-subtitle">System extensions registry</p>
+          </div>
+        </div>
+        <div class="scriptos-content">
+          <div class="scriptos-empty">
+            <h3>No Extensions Available</h3>
+            <p>No extensions found in the registry</p>
+          </div>
+        </div>
+      </div>
+    `:html`
+    <div class="scriptos-library">
+      <div class="scriptos-header-sticky">
+        <div class="scriptos-header">
+          <h2>Extensions</h2>
+          <p class="scriptos-subtitle">
+            ${s.length} installed, ${a.length} available
+          </p>
+        </div>
+      </div>
+      
+      <div class="scriptos-content">
+        ${s.length>0?html`
+          <div class="scriptos-section" style="margin-bottom: 32px">
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; color: var(--text-primary);">Installed</h3>
+            
+            <div class="scriptos-grid">
+              ${s.map(l=>{const d=o.find(u=>u.id===l.id),p=d&&c(d.version,l.version);return html`
+                  <div class="scriptos-card installed ${p?"has-update":""}">
+                    ${p?html`
+                      <div class="scriptos-update-badge">Update available</div>
+                    `:""}
+                    
+                    <div class="scriptos-card-header">
+                      <div class="scriptos-card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          ${getExtensionIcon(l.icon)}
+                        </svg>
+                      </div>
+                      <h3>${l.name}</h3>
+                      <span class="scriptos-card-version">
+                        v${l.version.join(".")}
+                        ${p?html`<span class="scriptos-version-arrow">→ v${d.version.join(".")}</span>`:""}
+                      </span>
+                    </div>
+
+                    <p class="scriptos-card-description">${l.description}</p>
+                    
+                    <div class="scriptos-card-actions" style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; gap: 8px;">
+                      ${p?html`
+                        <button 
+                          class="scriptos-update-btn"
+                          onclick=${u=>{u.stopPropagation(),i("update-extension",{extension:l,newVersion:d})}}
+                          title="Update to v${d.version.join(".")}">
+                          Update
+                        </button>
+                      `:""}
+                      <button 
+                        class="scriptos-uninstall-btn"
+                        onclick=${u=>{u.stopPropagation(),i("uninstall-extension",l.id)}}
+                        title="Uninstall ${l.name}">
+                        Uninstall
+                      </button>
+                    </div>
+                    
+                    <div class="scriptos-card-footer" style="border: none; padding-top: 8px;">
+                       <span class="scriptos-card-author">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        ${l.author}
+                      </span>
+                    </div>
+                  </div>
+                `})}
+            </div>
+          </div>
+        `:""}
+        
+        ${a.length>0?html`
+          <div class="scriptos-section">
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; color: var(--text-primary);">Available for Install</h3>
+            
+            <div class="scriptos-grid">
+              ${a.map(l=>html`
+                <div class="scriptos-card" onclick=${()=>i("install-extension",l)}>
+                  <div class="scriptos-card-header">
+                    <div class="scriptos-card-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        ${getExtensionIcon(l.icon)}
+                      </svg>
+                    </div>
+                    <h3>${l.name}</h3>
+                    <span class="scriptos-card-version">v${l.version.join(".")}</span>
+                  </div>
+                  
+                  <p class="scriptos-card-description">${l.description}</p>
+                  
+                  <div class="scriptos-card-badge" style="margin-top: auto;">
+                    <span class="scriptos-badge-install">Click to Install</span>
+                  </div>
+
+                   <div class="scriptos-card-footer">
+                       <span class="scriptos-card-author">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        ${l.author}
+                      </span>
+                    </div>
+                </div>
+              `)}
+            </div>
+          </div>
+        `:""}
+      </div>
+    </div>
+  `}function getExtensionIcon(n){const i={sliders:html`
+      <line x1="4" y1="21" x2="4" y2="14"/>
+      <line x1="4" y1="10" x2="4" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12" y2="3"/>
+      <line x1="20" y1="21" x2="20" y2="16"/>
+      <line x1="20" y1="12" x2="20" y2="3"/>
+      <line x1="1" y1="14" x2="7" y2="14"/>
+      <line x1="9" y1="8" x2="15" y2="8"/>
+      <line x1="17" y1="16" x2="23" y2="16"/>
+    `,activity:html`
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    `,radio:html`
+      <circle cx="12" cy="12" r="2"/>
+      <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/>
+    `,"trending-up":html`
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+      <polyline points="17 6 23 6 23 12"/>
+    `,cpu:html`
+      <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+      <rect x="9" y="9" width="6" height="6"/>
+      <line x1="9" y1="1" x2="9" y2="4"/>
+      <line x1="15" y1="1" x2="15" y2="4"/>
+      <line x1="9" y1="20" x2="9" y2="23"/>
+      <line x1="15" y1="20" x2="15" y2="23"/>
+      <line x1="20" y1="9" x2="23" y2="9"/>
+      <line x1="20" y1="14" x2="23" y2="14"/>
+      <line x1="1" y1="9" x2="4" y2="9"/>
+      <line x1="1" y1="14" x2="4" y2="14"/>
+    `};return i[n]||i.cpu}function ResetDialog(n,i){const o=n.isResetDialogOpen?"open":"closed";function s(l){l.target.id==="dialog-reset"&&i("close-reset-dialog")}function r(){i("trigger-reset",0)}async function a(){confirm(`HARD RESET WARNING:
+
+This is equivalent to pressing the physical reset button.
+The connection will be lost immediately.
+
+Are you sure you want to proceed?`)&&i("trigger-reset",1)}n.isResetDialogOpen&&window.addEventListener("keydown",function l(d){d.key==="Escape"&&(i("close-reset-dialog"),window.removeEventListener("keydown",l))},{once:!0});const c=html`
+  <div id="dialog-reset" class="dialog ${o}" tabindex="-1" onclick=${s}>
+    <div class="dialog-content webrepl-dialog" style="max-width: 450px;">
+      <div class="dialog-header">
+        <div class="dialog-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </div>
+        <div class="dialog-title">Reset Device</div>
+        <div class="dialog-subtitle">Choose how you want to reset the device</div>
+      </div>
+      
+      <div class="dialog-body">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <div class="reset-option" style="padding: 16px; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;" onclick=${r}>
+             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="font-weight: 600; color: var(--text-primary);">Soft Reset</div>
+                <div style="font-size: 11px; background: var(--scheme-primary); color: white; padding: 2px 6px; border-radius: 4px;">RECOMMENDED</div>
+             </div>
+             <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+               Restarts the MicroPython interpreter (VM). Global variables are cleared, but the WebREPL connection remains active.
+             </div>
+          </div>
+
+          <div class="reset-option" style="padding: 16px; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;" onclick=${a}>
+             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="font-weight: 600; color: #ef4444;">Hard Reset</div>
+                <div style="font-size: 11px; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px;">DISCONNECTS</div>
+             </div>
+             <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+               Equivalent to pressing the physical reset button. The device will reboot and the connection will be lost.
+             </div>
+          </div>
+
+        </div>
+        
+        <div class="dialog-footer" style="justify-content: center; margin-top: 24px;">
+           <button class="scriptos-btn scriptos-btn-secondary" style="min-width: 100px;" onclick=${()=>i("close-reset-dialog")}>
+             Cancel
+           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;if(n.isResetDialogOpen)return c}function DebugSidebar(n,i){if(!n.debugger||!n.debugger.configOpen)return html``;const o=n.openFiles.filter(c=>c.fileName&&c.fileName.endsWith(".py")),r=(n.debugger.watchExpressions[""]||[]).join(`
+`),a=n.debugger.active;return html`
+    <div class="debug-sidebar">
+      <div class="debug-sidebar-header">
+        <h2>${a?"Debug Session":"Setup Debugger"}</h2>
+        <button class="close-btn" onclick=${()=>{i(a?"debugger:stop":"debugger:close-config")}}>×</button>
+      </div>
+
+      <div class="debug-sidebar-body">
+        ${o.length===0?html`
+          <div class="empty-state">
+            <p>No Python files open. Please open a .py file to debug.</p>
+          </div>
+        `:html`
+          <section class="debug-section">
+            <h3>Watch Expressions</h3>
+            <p class="help-text">Expressions to evaluate on each step</p>
+            <textarea 
+              class="debug-textarea"
+              placeholder="e.g., x * 2"
+              rows="6"
+              oninput=${c=>i("debugger:set-watches",c.target.value)}
+            >${r}</textarea>
+          </section>
+
+          ${a?html`
+            <section class="debug-section">
+              <h3>Live Variables</h3>
+              <div class="debug-variables">
+                ${Object.entries(n.debugger.variables||{}).map(([c,l])=>html`
+                  <div class="debug-var">
+                    <span class="var-name">${c}:</span>
+                    <span class="var-value">${l}</span>
+                  </div>
+                `)}
+                ${Object.entries(n.debugger.locals||{}).map(([c,l])=>html`
+                  <div class="debug-var">
+                    <span class="var-name">${c}:</span>
+                    <span class="var-value">${l}</span>
+                  </div>
+                `)}
+                ${Object.keys(n.debugger.variables||{}).length===0&&Object.keys(n.debugger.locals||{}).length===0?html`
+                  <p class="empty-hint">No variables captured.</p>
+                `:""}
+              </div>
+            </section>
+          `:html`
+            <section class="debug-section">
+              <h3>Target File</h3>
+              <p class="file-path">${n.openFiles.find(c=>c.id===n.editingFile)?.fileName||"No file selected"}</p>
+              
+              <div class="debug-actions">
+                <button 
+                  class="debug-btn-primary" 
+                  onclick=${()=>i("debugger:start")}
+                  disabled=${o.length===0}
+                >
+                  Start Debugging
+                </button>
+              </div>
+            </section>
+          `}
+        `}
+      </div>
+    </div>
+
+    <style>
+      .debug-sidebar {
+        position: fixed;
+        top: 100px; /* Below navigation bar */
+        right: 0;
+        bottom: 40px; /* Above status bar */
+        width: 320px;
+        z-index: 900;
+        background: var(--bg-primary);
+        border-left: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+      }
+
+      .debug-sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .debug-sidebar-header h2 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-primary);
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        line-height: 1;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-btn:hover {
+        color: var(--text-primary);
+      }
+
+      .debug-sidebar-body {
+        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .debug-section {
+        margin-bottom: 24px;
+      }
+
+      .debug-section h3 {
+        margin: 0 0 8px 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .help-text {
+        margin: 0 0 10px 0;
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      .debug-textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-family: 'CodeFont', monospace;
+        font-size: 12px;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        resize: vertical;
+        box-sizing: border-box;
+      }
+
+      .file-path {
+        font-family: monospace;
+        font-size: 11px;
+        background: var(--bg-secondary);
+        padding: 8px;
+        border-radius: 4px;
+        color: var(--text-secondary);
+        word-break: break-all;
+      }
+
+      .debug-variables {
+        background: var(--bg-tertiary);
+        border-radius: 4px;
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .debug-var {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-family: monospace;
+        font-size: 11px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+      }
+
+      .debug-var:last-child {
+        border-bottom: none;
+      }
+
+      .var-name {
+        color: var(--scheme-primary);
+        font-weight: 600;
+      }
+
+      .var-value {
+        color: var(--text-secondary);
+        word-break: break-all;
+        text-align: right;
+        padding-left: 10px;
+      }
+
+      .empty-hint {
+        font-style: italic;
+        color: var(--text-secondary);
+        font-size: 11px;
+        margin: 0;
+      }
+
+      .debug-actions {
+        margin-top: 16px;
+      }
+
+      .debug-btn-primary {
+        width: 100%;
+        padding: 10px;
+        background: var(--scheme-primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .debug-btn-primary:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+
+      .debug-btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 10px;
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+    </style>
+  `}function BreakpointModal(n,i){if(!n.debugger||!n.debugger.breakpointModalOpen)return html`<div></div>`;const{file:o,line:s}=n.debugger.editingBreakpoint,r=n.debugger.breakpoints[o][s]||{condition:"",hitCount:"",enabled:!0},a=()=>{i("debugger:save-breakpoint",{file:o,line:s,config:r})},c=()=>{i("debugger:delete-breakpoint",{file:o,line:s})},l=()=>{i("debugger:close-breakpoint-modal")};return html`
+    <div class="scriptos-modal-overlay" onclick=${d=>{d.target.classList.contains("scriptos-modal-overlay")&&l()}}>
+      <div class="scriptos-modal breakpoint-modal">
+        <div class="breakpoint-modal-header">
+          <div class="breakpoint-modal-title">
+            <span onclick=${l} style="cursor: pointer; font-size: 20px; line-height: 1;">×</span>
+            <span>Breakpoint</span>
+          </div>
+          <div class="switch-container">
+            <label class="switch">
+              <input type="checkbox" checked=${r.enabled} onchange=${d=>{r.enabled=d.target.checked,i("render")}}>
+              <span class="slider"></span>
+            </label>
+            <span style="font-size: 13px; color: var(--text-primary);">
+              ${r.enabled?"Enabled":"Disabled"}
+            </span>
+            <button class="btn-delete" onclick=${c} title="Delete Breakpoint">
+              ${IconSprite.renderIcon("trash",{size:20})}
+            </button>
+          </div>
+        </div>
+
+        <div class="breakpoint-modal-file">
+          ${o} (${s})
+        </div>
+
+        <div class="breakpoint-field">
+          <div class="breakpoint-field-icon" title="Condition">?</div>
+          <input 
+            type="text" 
+            class="breakpoint-input" 
+            placeholder="CONDITION EXPRESSION e.g. x == 0"
+            value=${r.condition}
+            oninput=${d=>{r.condition=d.target.value}}
+          >
+        </div>
+
+        <div class="breakpoint-field">
+          <div class="breakpoint-field-icon" title="Hit Count">
+            ${IconSprite.renderIcon("hash",{size:18})}
+          </div>
+          <input 
+            type="text" 
+            class="breakpoint-input" 
+            placeholder="HIT COUNT e.g. <1 or <=2 or =3 or >4 or >=5 or %6"
+            value=${r.hitCount}
+            oninput=${d=>{r.hitCount=d.target.value}}
+          >
+        </div>
+
+        <div class="breakpoint-actions">
+          <button class="scriptos-btn scriptos-btn-secondary" onclick=${l}>Cancel</button>
+          <button class="scriptos-btn scriptos-btn-primary" onclick=${a}>Save</button>
+        </div>
+      </div>
+    </div>
+  `}const REGISTRY_PATH="/lib/ext/registry.json";async function readDeviceExtensionRegistry(n){try{const i=await n.execute(`
+import json
+try:
+    with open('${REGISTRY_PATH}') as f:
+        print(json.dumps({"registry": json.load(f)}))
+except:
+    print(json.dumps({"registry": {}}))
+`);if(typeof i=="object"&&i.registry!==void 0)return i.registry;if(typeof i=="string"){const o=JSON.parse(i.trim());return o.registry||o||{}}return{}}catch(i){return console.warn("[device-registry] Error reading registry:",i),{}}}async function updateDeviceExtensionRegistry(n,i,o){try{const s=await readDeviceExtensionRegistry(n);s[i]={version:o,installedAt:Date.now()};const a=JSON.stringify(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'");await n.execute(`
+import json
+import os
+# Ensure /lib/ext exists as a Python package
+def mkdirs(p):
+  parts = p.strip('/').split('/')
+  cur = ''
+  for part in parts:
+    cur += '/' + part
+    try: os.mkdir(cur)
+    except: pass
+mkdirs('/lib/ext')
+# Create __init__.py to make lib.ext a valid Python package
+try:
+  with open('/lib/ext/__init__.py', 'r'): pass
+except:
+  with open('/lib/ext/__init__.py', 'w') as f:
+    f.write('# Extension package marker\\n')
+# Write registry
+with open('${REGISTRY_PATH}', 'w') as f:
+    f.write('${a}')
+print(json.dumps({"ok": True}))
+`),console.log(`[device-registry] Updated ${i} to v${o}`)}catch(s){throw console.error("[device-registry] Error updating registry:",s),s}}function needsInstall(n,i){if(!i)return!0;const o=Array.isArray(n)?n.join("."):String(n),s=i.version||"";return o!==s}function hasOnInstallMethod(n){return n?/async\s+onInstall\s*\(/.test(n):!1}const deviceRegistry=Object.freeze(Object.defineProperty({__proto__:null,hasOnInstallMethod,needsInstall,readDeviceExtensionRegistry,updateDeviceExtensionRegistry},Symbol.toStringTag,{value:"Module"}));let lastExtensionDOM=null,lastExtensionKey=null;function shouldPreserveInput(n){const i=document.activeElement;if(i&&(i.tagName==="INPUT"||i.tagName==="TEXTAREA")){if(i.classList.contains("msg-input"))return!1;if(i.closest('.system-panel, .msg-chat, [class*="extension"]'))return!0}return!1}async function checkAndRunOnInstall(n,i,o,s,r,a){const c=o.data.config,l=Array.isArray(c.version)?c.version.join("."):String(c.version||"0.0.0");try{const p=(await readDeviceExtensionRegistry(s))[n];if(!needsInstall(l,p))return;r.loadedExtensions[n].installing=!0,a("render");try{await i.onInstall(),await updateDeviceExtensionRegistry(s,n,l)}catch(u){console.error("[ExtensionContainer] onInstall failed:",u),r.loadedExtensions[n].installError=u.message}finally{r.loadedExtensions[n].installing=!1,a("render")}}catch(d){console.warn("[ExtensionContainer] Could not check device registry:",d)}}async function instantiateExtension$1(extensionId,loadedExtension,state,emit,html){if(loadedExtension.data.styles&&!loadedExtension.stylesInjected){const n=`extension-styles-${extensionId}`;let i=document.getElementById(n);i||(i=document.createElement("style"),i.id=n,i.textContent=loadedExtension.data.styles,document.head.appendChild(i)),loadedExtension.stylesInjected=!0}const extensionCode=loadedExtension.data.content,filesMatch=extensionCode.match(/export\s+const\s+__DEVICE_FILES__\s*=\s*(\{[\s\S]*?\});/);let deviceFiles={};if(filesMatch)try{const rawFiles=eval("("+filesMatch[1]+")");for(const[n,i]of Object.entries(rawFiles))try{const o=atob(i),s=new Uint8Array(o.length);for(let r=0;r<o.length;r++)s[r]=o.charCodeAt(r);deviceFiles[n]=new TextDecoder("utf-8").decode(s)}catch{deviceFiles[n]=i}}catch(n){console.warn("[ExtensionContainer] Device files parse failed:",n)}const blob=new Blob([extensionCode],{type:"text/javascript"}),blobUrl=URL.createObjectURL(blob);let ExtensionClass;try{ExtensionClass=(await import(blobUrl)).default}finally{URL.revokeObjectURL(blobUrl)}if(!ExtensionClass)throw new Error("No default export found in extension bundle");const deviceAPI=new DeviceAPI$1(BridgeDevice),extensionInstance=new ExtensionClass(deviceAPI,emit,state,html);extensionInstance.deviceFiles=deviceFiles,loadedExtension.instance=extensionInstance,loadedExtension.instantiating=!1,emit("render"),state.isConnected&&typeof extensionInstance.onInstall=="function"&&checkAndRunOnInstall(extensionId,extensionInstance,loadedExtension,deviceAPI,state,emit)}function ExtensionContainer(n,i,o){const s=n.activeExtension,r=n.activeExtensionPanel,a=`${s}:${r}`;if(shouldPreserveInput()&&lastExtensionDOM&&lastExtensionKey===a)return console.debug("[ExtensionContainer] Preserving DOM during input focus"),lastExtensionDOM;if(!s||!r)return lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message">
+          <p>No extension panel selected</p>
+        </div>
+      </div>
+    `;if(!n.loadedExtensions[s])return lastExtensionDOM=null,lastExtensionKey=null,n.isConnected?o`
+      <div class="system-panel">
+        <div class="panel-message">
+          <p>Loading extension...</p>
+        </div>
+      </div>
+    `:o`
+        <div class="system-panel">
+          <div class="panel-message" style="cursor: pointer;" onclick=${()=>i("connect")}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" style="opacity: 0.4; margin-bottom: 8px;">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            <p style="color: var(--text-secondary);">Connect to device</p>
+          </div>
+        </div>
+      `;const c=n.loadedExtensions[s];if(!c.instance&&!c.instantiating)return c.instantiating=!0,instantiateExtension$1(s,c,n,i,o).catch(p=>{console.error("[ExtensionContainer] Failed to instantiate extension:",p),c.instantiateError=p.message,c.instantiating=!1,i("render")}),lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message">
+          <p>Loading extension...</p>
+        </div>
+      </div>
+    `;if(c.instantiating)return lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message">
+          <p>Loading extension...</p>
+        </div>
+      </div>
+    `;if(c.instantiateError)return lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message error">
+          <p>Failed to load extension: ${c.instantiateError}</p>
+        </div>
+      </div>
+    `;if(c.installing){lastExtensionDOM=null,lastExtensionKey=null;const p=c.data?.config?.name||s;return o`
+      <div class="system-panel">
+        <div class="panel-message" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 48px 24px;">
+          <div class="install-progress-spinner"></div>
+          <div style="text-align: center;">
+            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 6px;">Installing ${p}</div>
+            <div style="color: var(--text-secondary); font-size: 0.9rem;">Writing files to device…</div>
+          </div>
+        </div>
+      </div>
+    `}if(c.installError)return lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message error">
+          <p>Failed to install extension files: ${c.installError}</p>
+          <button onclick=${()=>{delete c.installError,delete c.instance,i("render")}}>Retry</button>
+        </div>
+      </div>
+    `;const l=c.instance,d=`render${r.charAt(0).toUpperCase()+r.slice(1)}`;if(typeof l[d]!="function")return lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message error">
+          <p>Extension panel not found: ${r}</p>
+          <p>Looking for method: ${d}</p>
+        </div>
+      </div>
+    `;try{const p=l[d]();return lastExtensionDOM=p,lastExtensionKey=a,p}catch(p){return console.error("[ExtensionContainer] Render error:",p),lastExtensionDOM=null,lastExtensionKey=null,o`
+      <div class="system-panel">
+        <div class="panel-message error">
+          <p>Extension render error: ${p.message}</p>
+        </div>
+      </div>
+    `}}function AgentSidebar(n,i){return n.aiAgent.isOpen?html`
+    <div class="agent-sidebar">
+      <!-- Header -->
+      <div class="agent-sidebar-header">
+        <div class="agent-sidebar-title">
+          <svg width="20" height="20" viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.2px">
+            <rect x="8" y="13" width="35" height="32" rx="3.5" ry="3.5"/>
+            <line x1="25" y1="6" x2="25" y2="13"/>
+            <circle cx="25" cy="4" r="2.5"/>
+            <circle cx="16" cy="25" r="3.5"/>
+            <circle cx="34" cy="25" r="3.5"/>
+            <line x1="15" y1="36" x2="35" y2="36"/>
+            <line x1="17" y1="40" x2="33" y2="40"/>
+            <line x1="8" y1="25" x2="4" y2="25"/>
+            <line x1="43" y1="25" x2="46" y2="25"/>
+          </svg>
+          <h3>AI Agent</h3>
+        </div>
+        <div class="agent-sidebar-actions">
+          ${n.aiAgent.messages.length>0?html`
+            <button 
+              class="agent-sidebar-clear"
+              onclick=${()=>i("ai-clear-chat")}
+              title="Clear chat">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+            </button>
+          `:""}
+          <button 
+            class="agent-sidebar-close"
+            onclick=${()=>i("toggle-agent-sidebar")}
+            title="Close sidebar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="agent-sidebar-messages" id="agent-messages">
+        ${n.aiAgent.messages.length===0?html`
+          <div class="agent-welcome">
+            <svg width="64" height="64" viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.2px">
+              <rect x="8" y="13" width="35" height="32" rx="3.5" ry="3.5"/>
+              <line x1="25" y1="6" x2="25" y2="13"/>
+              <circle cx="25" cy="4" r="2.5"/>
+              <circle cx="16" cy="25" r="3.5"/>
+              <circle cx="34" cy="25" r="3.5"/>
+              <line x1="15" y1="36" x2="35" y2="36"/>
+              <line x1="17" y1="40" x2="33" y2="40"/>
+              <line x1="8" y1="25" x2="4" y2="25"/>
+              <line x1="43" y1="25" x2="46" y2="25"/>
+            </svg>
+            <h4>Welcome to AI Agent</h4>
+            <p>Generate MicroPython code for your ESP32 using natural language.</p>
+            <div class="agent-examples">
+              <strong>Try asking:</strong>
+              <ul>
+                <li>"Flash a NeoPixel at 1Hz"</li>
+                <li>"Read an analog sensor on GPIO 34"</li>
+                <li>"Control a servo motor"</li>
+                <li>"Set up I2C communication"</li>
+              </ul>
+            </div>
+            ${n.aiAgent.settings.apiKey?"":html`
+              <div class="agent-setup-warning">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <p>Please configure your API key in <strong>System > AI Agent</strong> to get started.</p>
+              </div>
+            `}
+          </div>
+        `:n.aiAgent.messages.map(o=>renderMessage(o,i))}
+        
+        ${n.aiAgent.isGenerating?html`
+          <div class="agent-message agent-message-assistant">
+            <div class="agent-message-avatar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                <rect x="9" y="9" width="6" height="6"/>
+              </svg>
+            </div>
+            <div class="agent-message-content">
+              <div class="agent-typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        `:""}
+      </div>
+
+      <!-- Input -->
+      <div class="agent-sidebar-input">
+        <textarea
+          id="agent-input"
+          class="agent-input-field"
+          placeholder="Describe what you want to build..."
+          rows="3"
+          data-preserve-value="true"
+          oninput=${o=>{n.aiAgent.inputValue=o.target.value,i("ai-update-input",o.target.value)}}
+          onkeydown=${o=>handleInputKeydown(o,n,i)}
+          disabled=${n.aiAgent.isGenerating}
+        >${n.aiAgent.inputValue||""}</textarea>
+        <button 
+          class="agent-send-btn"
+          onclick=${()=>handleSendMessage(n,i)}
+          disabled=${n.aiAgent.isGenerating}
+          title="Send message (Ctrl+Enter)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  `:html`<div></div>`}function renderMessage(n,i){const o=new Date(n.timestamp).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});return n.role==="user"?html`
+      <div class="agent-message agent-message-user">
+        <div class="agent-message-content">
+          <div class="agent-message-text">${n.content}</div>
+          <div class="agent-message-time">${o}</div>
+        </div>
+        <div class="agent-message-avatar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    `:n.role==="assistant"?html`
+      <div class="agent-message agent-message-assistant">
+        <div class="agent-message-avatar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+            <rect x="9" y="9" width="6" height="6"/>
+          </svg>
+        </div>
+        <div class="agent-message-content">
+          <div class="agent-message-text">${formatMessageContent(n.content)}</div>
+          ${n.code?html`
+            <div class="agent-code-actions">
+              <button 
+                class="agent-code-btn"
+                onclick=${()=>i("ai-code-generated",n.code)}
+                title="Configure">
+                Configure
+              </button>
+              <button 
+                class="agent-copy-btn"
+                onclick=${()=>i("ai-open-in-new-tab",n.code)}
+                title="Open in new tab">
+                Open in new tab
+              </button>
+            </div>
+          `:""}
+          <div class="agent-message-time">${o}</div>
+        </div>
+      </div>
+    `:n.role==="error"?html`
+      <div class="agent-message agent-message-error">
+        <div class="agent-message-avatar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <div class="agent-message-content">
+          <div class="agent-message-text">${n.content}</div>
+          <div class="agent-message-time">${o}</div>
+        </div>
+      </div>
+    `:html`<div></div>`}function formatMessageContent(n){let i=n;i=i.replace(/```python\n[\s\S]*?```/g,'[Code generated - click "Configure" below]'),i=i.replace(/```\n[\s\S]*?```/g,'[Code generated - click "Configure" below]');const o=i.split(`
+`);if(o.length===0)return"";if(o.length===1)return o[0]||"";const s=[];for(let r=0;r<o.length;r++)s.push(o[r]),r<o.length-1&&s.push(html`<br>`);return html`${s}`}function handleInputKeydown(n,i,o){(n.ctrlKey||n.metaKey)&&n.key==="Enter"&&(n.preventDefault(),handleSendMessage(i,o))}function handleSendMessage(n,i){const o=(n.aiAgent.inputValue||"").trim();!o||n.aiAgent.isGenerating||(i("ai-send-message",o),setTimeout(()=>{const s=document.getElementById("agent-messages");s&&(s.scrollTop=s.scrollHeight)},100))}class LogTerminalComponent extends Component{constructor(i,o,s){super(i),this.state=o,this.emit=s,this.term=null,this.fitAddon=null,this.resizeObserver=null,this.writeHandler=null,this.clearHandler=null}createElement(i){return html`<div class="log-sidebar-terminal"></div>`}update(i){return this.state=i,!1}load(i){console.debug("[LogTerminal] Component loaded, initializing terminal"),this.initTerminal(i),this.attachEventListeners()}unload(){console.debug("[LogTerminal] Component unloading, cleaning up"),this.cleanup()}async initTerminal(i){const s=document.documentElement.getAttribute("data-theme")==="dark";let r,a,c,l;s?(r="#2c3e50",a="#e8eaed",c="#008184",l="#34495e"):(r="#ffffff",a="#1f1f1f",c="#008184",l="#e8e8e8"),await this.ensureFontsLoaded();const[d,p]=await Promise.all([__vitePreload(()=>import("./xterm-CASmyfyk.js"),[]),__vitePreload(()=>import("./addon-fit-DOCEibfw.js"),[]),__vitePreload(()=>Promise.resolve({}),__vite__mapDeps([11]))]),u=d.Terminal,f=p.FitAddon;this.term=new u({cursorBlink:!1,cursorStyle:"bar",fontSize:12,fontFamily:"monospace",letterSpacing:0,theme:{background:r,foreground:a,cursor:c,selection:l},disableStdin:!0,scrollback:this.state.logs?.maxMessages||1e3}),this.fitAddon=new f,this.term.loadAddon(this.fitAddon),console.debug("[LogTerminal] Opening terminal into container, dimensions:",i.getBoundingClientRect()),this.term.open(i),this.fitAfterOpen(i)}async ensureFontsLoaded(){if(document.fonts&&document.fonts.ready)try{return await document.fonts.ready,document.fonts.check&&await new Promise(i=>setTimeout(i,50)),Promise.resolve()}catch{return new Promise(o=>setTimeout(o,200))}else return new Promise(i=>setTimeout(i,200))}fitAfterOpen(i){setTimeout(()=>this.fitTerminal(),100),setTimeout(()=>this.fitTerminal(),300),setTimeout(()=>this.fitTerminal(),1e3),this.resizeObserver=new ResizeObserver(()=>{setTimeout(()=>this.fitTerminal(),50)}),this.resizeObserver.observe(i);const o=i.closest(".log-sidebar");o&&this.resizeObserver.observe(o),this.term.write(`\x1B[1;32m=== Log Terminal Initialized ===\x1B[0m\r
+`),this.term.write(`\x1B[37mTerminal is ready to receive logs\x1B[0m\r
+\r
+`),this.state.logs?.messages?.length>0&&(console.debug("[LogTerminal] Writing",this.state.logs.messages.length,"buffered messages"),this.state.logs.messages.forEach(s=>{this.writeLogEntry(s)}))}fitTerminal(){if(!this.term||!this.fitAddon)return;const o=this.element?.closest(".log-sidebar")?.getBoundingClientRect(),s=this.element?.getBoundingClientRect();console.debug("[LogTerminal] Sidebar rect:",o,"Container rect:",s);try{this.fitAddon.fit(),this.term.refresh&&this.term.refresh(0,this.term.rows-1),console.debug("[LogTerminal] Fitted:",this.term.cols,"x",this.term.rows)}catch(r){console.warn("[LogTerminal] Fit failed:",r)}}attachEventListeners(){this.writeHandler=i=>{const o=i.detail;o&&this.term&&this.writeLogEntry(o)},this.clearHandler=()=>{this.term&&this.term.clear()},window.addEventListener("log-terminal-write",this.writeHandler),window.addEventListener("log-terminal-clear",this.clearHandler),console.debug("[LogTerminal] Event listeners attached")}writeLogEntry(i){if(!this.term)return;const{level:o,message:s,timestamp:r,source:a}=i,c=["\x1B[37m","\x1B[34m","\x1B[33m","\x1B[31m"],l=["DBG","INF","WRN","ERR"],d=c[o]||"",p=l[o]||"LOG",u="\x1B[0m";let f="";if(r){const y=r<9466848e5?r*1e3:r;f=`[${new Date(y).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}] `}const h=a?`[${a}] `:"",m=`${f}${d}[${p}]${u} ${h}${s}\r
+`;this.term.write(m),this.state.logs?.autoScroll!==!1&&this.term.scrollToBottom()}cleanup(){this.writeHandler&&(window.removeEventListener("log-terminal-write",this.writeHandler),this.writeHandler=null),this.clearHandler&&(window.removeEventListener("log-terminal-clear",this.clearHandler),this.clearHandler=null),this.resizeObserver&&(this.resizeObserver.disconnect(),this.resizeObserver=null),this.term&&(this.term.dispose(),this.term=null),this.fitAddon=null}}let logTerminalComponent=null;function LogSidebar(n,i){if(!n.logs.isOpen)return logTerminalComponent=null,null;logTerminalComponent||(logTerminalComponent=new LogTerminalComponent("log-terminal",n,i));const o=logTerminalComponent.render(n),s=n.logSidebarWidth||350;return html`
+    <div class="log-sidebar" style="width: ${s}px; flex: 0 0 ${s}px;">
+      <div class="log-sidebar-resizer" 
+           onmousedown=${()=>i("start-resizing-log-sidebar")}></div>
+      <div class="log-sidebar-header">
+        ${IconSprite.renderIcon("file-text",{className:"",size:16})}
+        <span>Logs</span>
+      </div>
+      ${o}
+    </div>
+  `}function FileActions(n,i){const{isConnected:o,selectedFiles:s}=n,r=s.some(a=>a.type==="file");return html`
+  <div id="file-actions">
+    ${Button({icon:"edit",size:"small",disabled:!canEdit({selectedFiles:n.selectedFiles}),onClick:()=>i("open-selected-files")})}
+    ${Button({icon:"arrow-left",size:"small",background:"inverted",active:!0,disabled:!canUpload({isConnected:o,selectedFiles:s}),onClick:()=>i("upload-files")})}
+    ${Button({icon:"arrow-right",size:"small",background:"inverted",active:!0,disabled:!canDownload({isConnected:o,selectedFiles:s}),onClick:()=>i("download-files")})}
+    ${Button({icon:"arrow-down",size:"small",background:"inverted",active:!0,disabled:!r,onClick:()=>i("export-files")})}
+    ${Button({icon:"trash",size:"small",disabled:n.selectedFiles.length===0,onClick:()=>i("remove-files")})}
+  </div>
+
+  `}const DiskFileList=generateFileList("disk"),BoardFileList=generateFileList("board");function generateFileList(n){return function(o,s){function r(h){h.key.toLowerCase()==="enter"&&h.target.blur(),h.key.toLowerCase()==="escape"&&(h.target.value=null,h.target.blur())}const a=html`
+      <div class="item">
+        ${IconSprite.renderIcon("file",{className:"icon"})}
+        <div class="text">
+          <input type="text" onkeydown=${r} onblur=${h=>s("finish-creating-file",h.target.value)}/>
+        </div>
+      </div>
+    `,c=html`
+      <div class="item">
+        ${IconSprite.renderIcon("folder",{className:"icon"})}
+        <div class="text">
+          <input type="text" onkeydown=${r} onblur=${h=>s("finish-creating-folder",h.target.value)}/>
+        </div>
+      </div>
+    `;function l(h,m){const v=html`
+        <input type="text"
+          value=${h.fileName}
+          onkeydown=${r}
+          onblur=${E=>s("finish-renaming-file",E.target.value)}
+          onclick=${E=>!1}
+          ondblclick=${E=>!1}
+          />
+      `,y=o.selectedFiles.find(E=>E.fileName===h.fileName&&E.source===n);function w(E){return E.preventDefault(),s("rename-file",n,h),!1}function b(){o.renamingFile||s(`navigate-${n}-folder`,h.fileName)}function x(){o.renamingFile||s("open-file",n,h)}let C=h.fileName;const k=o.selectedFiles.find(E=>E.fileName===C);o.renamingFile==n&&k&&(C=v);function S(E){if(E==null)return"";if(E===0)return"0 B";const I=1024,P=["B","KB","MB","GB"],$=Math.floor(Math.log(E)/Math.log(I));return parseFloat((E/Math.pow(I,$)).toFixed(1))+" "+P[$]}const _=h.type==="file"?S(h.size):"";return h.type==="folder"?html`
+          <div
+            class="item ${y?"selected":""}"
+            onclick=${E=>s("toggle-file-selection",h,n,E)}
+            ondblclick=${b}
+            >
+            ${IconSprite.renderIcon("folder",{className:"icon"})}
+            <div class="text">${C}</div>
+            <div class="options" onclick=${w}>
+              ${IconSprite.renderIcon("cursor-text",{className:""})}
+            </div>
+          </div>
+        `:html`
+          <div
+            class="item ${y?"selected":""}"
+            onclick=${E=>s("toggle-file-selection",h,n,E)}
+            ondblclick=${x}
+            >
+            ${IconSprite.renderIcon("file",{className:"icon"})}
+            <div class="text" style="display: flex; justify-content: space-between; padding-right: 10px;">
+              <span>${C}</span>
+              <span class="file-size">${_}</span>
+            </div>
+            <div class="options" onclick=${w}>
+              ${IconSprite.renderIcon("cursor-text",{className:""})}
+            </div>
+          </div>
+        `}const d=o[`${n}Files`].sort((h,m)=>{const v=h.fileName.toUpperCase(),y=m.fileName.toUpperCase();if(h.type==="folder"&&m.type==="file")return-1;if(h.type===m.type){if(v<y)return-1;if(v>y)return 1}return 0}),p=html`<div class="item"
+  onclick=${()=>s(`navigate-${n}-parent`)}
+  style="cursor: pointer"
+  >
+  ..
+</div>`,u=html`
+      <div class="file-list">
+        <div class="list">
+          ${n==="disk"&&o.diskNavigationPath!="/"?p:""}
+          ${n==="board"&&o.boardNavigationPath!="/"?p:""}
+          ${o.creatingFile==n?a:null}
+          ${o.creatingFolder==n?c:null}
+          ${d.map(l)}
+        </div>
+      </div>
+    `;return new MutationObserver(h=>{const m=u.querySelector("input");m&&m.focus()}).observe(u,{childList:!0,subtree:!0}),u}}function ReplPanel(n,i){const o=()=>{n.panelHeight>PANEL_CLOSED$1?i("close-panel"):i("open-panel")};n.isPanelOpen;const s=n.panelHeight>PANEL_TOO_SMALL$1?"visible":"hidden";let r="terminal-enabled";return(!n.isConnected||n.isNewFileDialogOpen)&&(r="terminal-disabled"),html$1`
+    <div id="panel" style="height: ${n.panelHeight}px">
+      <div class="panel-bar">
+        ${n.isConnected&&n.connectedPort?html$1`
+          <div class="panel-connection-label" title=${`Connected to ${n.connectedPort}`}>
+            Connected to ${n.connectedPort}
+          </div>
+        `:""}
+        <div class="spacer"></div>
+        <div id="drag-handle"
+          onmousedown=${a=>i("start-resizing-panel",a)}
+          ></div>
+        <div class="term-operations ${s}">
+          ${ReplOperations(n,i)}
+        </div>
+        ${Button({icon:n.panelHeight>PANEL_CLOSED$1?"chevron-down":"chevron-up",size:"small",onClick:o})}
+        
+      </div>
+      <div class="repl-panel-content">
+        <div class="repl-panel-main ${r}">
+          ${n.cache(XTerm,"terminal").render()}
+        </div>
+        ${n.logs&&n.logs.isOpen?LogSidebar(n,i):""}
+      </div>
+    </div>
+  `}function ReplOperations(n,i){return[Button({icon:"copy",size:"small",tooltip:"Copy",onClick:()=>document.execCommand("copy")}),Button({icon:"clipboard",size:"small",tooltip:"Paste",onClick:()=>document.execCommand("paste")}),Button({icon:"trash",size:"small",tooltip:`Clean (${n.platform==="darwin"?"Cmd":"Ctrl"}+L)`,onClick:()=>i("clear-terminal")}),Button({icon:"file-text",size:"small",tooltip:"Toggle Logs",onClick:()=>i("toggle-log-sidebar")})]}function Tabs(n,i){const o=html`
+    <div id="tabs">
+      ${n.openFiles.map(r=>Tab({text:r.fileName,icon:r.source==="board"?"cpu":"device-desktop",active:r.id===n.editingFile,renaming:r.id===n.renamingTab,hasChanges:r.hasChanges,onSelectTab:()=>i("select-tab",r.id),onCloseTab:()=>i("close-tab",r.id),onStartRenaming:()=>i("rename-tab",r.id),onFinishRenaming:a=>i("finish-renaming-tab",a)}))}
+    </div>
+  `;return new MutationObserver(r=>{const a=o.querySelector("input");a&&a.focus()}).observe(o,{childList:!0,subtree:!0}),o}function Toolbar(n,i){const o=canSave({isConnected:n.isConnected,openFiles:n.openFiles,editingFile:n.editingFile}),s=canExecute({isConnected:n.isConnected}),r=n.platform==="darwin"?"Cmd":"Ctrl",a=n.debugger.active||n.debugger.configOpen;return html`
+    <div id="navigation-bar">
+      <div id="toolbar">
+        ${Button({icon:"file-plus",label:"New",tooltip:`New (${r}+N)`,disabled:n.systemSection!="editor"||a,onClick:()=>i("create-new-file"),first:!0})}
+
+        ${Button({icon:"device-floppy",label:"Save",tooltip:`Save (${r}+S)`,disabled:!o||a,onClick:()=>i("save")})}
+
+        <div class="separator"></div>
+
+        ${Button({icon:"alert-triangle",label:"Reset",tooltip:"Reset Device",disabled:!n.isConnected,onClick:()=>i("open-reset-dialog")})}
+
+        ${a?html`
+          ${Button({icon:"player-stop",label:"Stop",tooltip:"Stop Debug",onClick:()=>i("debugger:stop")})}
+
+          ${Button({icon:"player-play",label:n.debugger.active?"Continue":"Run",tooltip:n.debugger.active?"Continue (F5)":"Start Debugging (F5)",disabled:n.debugger.active&&!n.debugger.halted,onClick:()=>{n.debugger.active?i("debugger:continue",!0):i("debugger:start")}})}
+
+          ${Button({icon:"player-skip-forward",label:"Step",tooltip:"Step Over (F10)",disabled:!n.debugger.active||!n.debugger.halted,onClick:()=>i("debugger:step-over")})}
+          ${Button({icon:"step-into",label:"Step In",tooltip:"Step Into (F11)",disabled:!n.debugger.active||!n.debugger.halted,onClick:()=>i("debugger:step-into")})}
+          ${Button({icon:"step-out",label:"Step Out",tooltip:"Step Out (F12)",disabled:!n.debugger.active||!n.debugger.halted,onClick:()=>i("debugger:step-out")})}
+        `:html`
+          ${Button({icon:"player-stop",label:"Stop",tooltip:`Stop (${r}+H)`,disabled:!s,onClick:()=>i("stop")})}
+
+          ${Button({icon:"player-play",label:"Run",tooltip:`Run (${r}+R)`,disabled:!s,onClick:c=>{c.altKey?i("run-from-button",!0):i("run-from-button")}})}
+
+          <div class="separator"></div>
+
+          ${n.systemSection==="editor"?Button({icon:"bug",label:"Debug",tooltip:"Start Debugging",disabled:!s||!n.editingFile,onClick:()=>i("debugger:open-config")}):""}
+
+          <div class="separator"></div>
+
+          ${n.systemSection==="editor"?Button({icon:"script",label:"ScriptO",tooltip:"Open ScriptO Library",onClick:()=>i("open-scriptos-modal")}):""}
+
+          ${n.systemSection==="system"?Button({icon:"apps",label:"Extensions",tooltip:"Manage Extensions",onClick:()=>i("open-extensions-modal")}):""}
+
+          ${n.systemSection==="editor"?Button({icon:"robot-face",label:"AI Agent",tooltip:"Open AI Code Assistant",active:n.aiAgent.isOpen,onClick:()=>i("toggle-agent-sidebar")}):""}
+        `}
+      </div>
+    </div>
+  `}function Overlay(n,i){let o=html`<div id="overlay" class="closed"></div>`;if(n.diskFiles==null&&(i("load-disk-files"),o=html`<div id="overlay" class="open"><p>Loading files...</p></div>`),n.isRemoving&&(o=html`<div id="overlay" class="open"><p>Removing...</p></div>`),n.isConnecting&&(o=html`<div id="overlay" class="open"><p>Connecting...</p></div>`),n.isLoadingFiles&&(o=html`<div id="overlay" class="open"><p>Loading files...</p></div>`),n.isSaving&&(o=html`<div id="overlay" class="open"><p>Saving file... ${n.savingProgress}</p></div>`),n.isTransferring){const s=String(n.transferringProgress||""),r=s.match(/(\d+)%?$/),a=r?parseInt(r[1]):0,c=s.match(/^(.+?):/),l=c?c[1]:"file";o=html`
+      <div id="overlay" class="open">
+        <div class="transfer-overlay-content">
+          <div class="transfer-title">Transferring File</div>
+          <div class="transfer-filename">${l}</div>
+          <div class="transfer-progress-container">
+            <div class="transfer-progress-bar">
+              <div class="transfer-progress-fill" style="width: ${a}%"></div>
+            </div>
+            <div class="transfer-progress-text">${a}%</div>
+          </div>
+        </div>
+      </div>
+    `}return o}const DISCONNECTED_STATUS_TEXT="ScriptO Studio © JetPax 2026";function formatUptimeMinutes(n){const i=(n||0)*60,o=Math.floor(i/86400),s=Math.floor(i%86400/3600),r=Math.floor(i%3600/60),a=Math.floor(i%60),c=[];return o>0&&c.push(`${o}d`),s>0&&c.push(`${s}h`),r>0&&c.push(`${r}m`),(a>0||c.length===0)&&c.push(`${a}s`),c.join(" ")}function buildStatusBarModel(n,i){if(!n)return{connected:!1,disconnectedText:DISCONNECTED_STATUS_TEXT,ram:null,temp:null,uptime:null,rssi:null};const o=n.mem||{},s=n.temp,r=n.uptime||0,a=n.wifi_rssi,c=o.alloc||0,l=o.free||0,d=c+l,p=(c/1024).toFixed(2),u=(d/(1024*1024)).toFixed(2);let f=null;s!=null&&((i||"degC")==="degF"?f=`${(s*9/5+32).toFixed(1)}°F`:f=`${s.toFixed(1)}°C`);const h=formatUptimeMinutes(r);let m=null;return a!=null&&(m=`${a} dBm`),{connected:!0,disconnectedText:DISCONNECTED_STATUS_TEXT,ram:`${p} KB / ${u} MB`,temp:f,uptime:h,rssi:m}}function StatusBar(n,i){const o=buildStatusBarModel(n.isConnected?n.statusInfo:null,n.temperatureUnit||"degC");if(!o||!o.connected){const s=o&&o.disconnectedText||DISCONNECTED_STATUS_TEXT;return html`
+      <div id="status-bar" class="disconnected">
+        <div class="status-bar-center">
+          <a href="https://scriptostudio.com" target="_blank" rel="noopener noreferrer">${s}</a>
+        </div>
+      </div>
+    `}return html`
+    <div id="status-bar">
+      <div class="status-bar-center">
+        <div class="status-item ram">
+          <span class="status-label">RAM</span>
+          <span class="status-value">${o.ram}</span>
+        </div>
+        ${o.temp?html`
+          <div class="status-item temp">
+            <span class="status-label">TEMP</span>
+            <span class="status-value">${o.temp}</span>
+          </div>
+        `:""}
+        <div class="status-item uptime">
+          <span class="status-label">UPTIME</span>
+          <span class="status-value">${o.uptime}</span>
+        </div>
+        ${o.rssi?html`
+          <div class="status-item wifi-rssi">
+            <span class="status-label">RSSI</span>
+            <span class="status-value">${o.rssi}</span>
+          </div>
+        `:""}
+      </div>
+    </div>
+  `}function LanguageSelector(n,i){const o=window.html||(()=>{}),s=n.locale||"en",r=window.i18n?window.i18n.getAvailableLocales():["en","de","es","fr"],a={en:"English",de:"Deutsch",es:"Español",fr:"Français"},c=window.i18n?window.i18n.t("language"):"Language";return o`
+    <div class="language-selector">
+      <label class="language-selector-label" for="language-select">
+        ${c}
+      </label>
+      <select
+        id="language-select"
+        class="language-select"
+        onchange=${d=>{const p=d.target.value;i("change-locale",p)}}
+      >
+        ${r.map(d=>o`
+          <option value=${d} selected=${d===s}>
+            ${a[d]||d}
+          </option>
+        `)}
+      </select>
+    </div>
+  `}typeof window<"u"&&(window.LanguageSelector=LanguageSelector);function AppearancePanel(n,i){const o=window.i18n?window.i18n.t:c=>c;n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config");const s=n.networksInfo?.eth!==null,r=n.networksInfo?.wwan!==null,a=n.networkInterfacesConfig||{wifi:!0,ethernet:!0,wwan:!0};return html`
+    <div class="panel-container">
+      <div class="appearance-content">
+        
+        <!-- Theme Mode Section -->
+        <div class="appearance-section">
+          <h3>${o("appearance.theme")}</h3>
+          <p class="appearance-hint">${o("appearance.themeHint")}</p>
+          
+          <div class="theme-mode-selector">
+            ${renderThemeOption("light",o("appearance.themeLight"),n,i)}
+            ${renderThemeOption("dark",o("appearance.themeDark"),n,i)}
+            ${renderThemeOption("device",o("appearance.themeDevice"),n,i)}
+          </div>
+          
+          ${n.theme==="device"?html`
+            <p class="appearance-hint">
+              ${o("appearance.themeCurrentlyUsing")} <strong>${n.effectiveTheme==="dark"?o("appearance.themeDark"):o("appearance.themeLight")}</strong> 
+              ${o("appearance.themeFromSystem")}
+            </p>
+          `:""}
+        </div>
+        
+        <!-- Color Scheme Section -->
+        <div class="appearance-section">
+          <h3>${o("appearance.colorScheme")}</h3>
+          <p class="appearance-hint">${o("appearance.colorSchemeHint")}</p>
+          
+          <div class="color-scheme-grid">
+            ${renderColorSchemeOption("teal",o("appearance.colorTeal"),n,i)}
+            ${renderColorSchemeOption("blue",o("appearance.colorBlue"),n,i)}
+            ${renderColorSchemeOption("purple",o("appearance.colorPurple"),n,i)}
+            ${renderColorSchemeOption("green",o("appearance.colorGreen"),n,i)}
+            ${renderColorSchemeOption("red",o("appearance.colorRed"),n,i)}
+            ${renderColorSchemeOption("orange",o("appearance.colorOrange"),n,i)}
+          </div>
+        </div>
+        
+        <!-- Editor Theme Section -->
+        <div class="appearance-section">
+          <h3>${o("appearance.editorTheme")}</h3>
+          <p class="appearance-hint">${o("appearance.editorThemeHint")}</p>
+          
+          <div class="editor-theme-grid">
+            ${renderEditorThemeOption("auto",o("appearance.editorAuto"),o("appearance.editorAutoDesc"),n,i)}
+            ${renderEditorThemeOption("cobalt",o("appearance.editorCobalt"),o("appearance.editorCobaltDesc"),n,i)}
+            ${renderEditorThemeOption("xcode",o("appearance.editorXcode"),o("appearance.editorXcodeDesc"),n,i)}
+            ${renderEditorThemeOption("coolglow",o("appearance.editorCoolGlow"),o("appearance.editorCoolGlowDesc"),n,i)}
+          </div>
+        </div>
+        
+        <!-- Temperature Unit Section -->
+        <div class="appearance-section">
+          <h3>${o("appearance.temperatureUnit")}</h3>
+          <p class="appearance-hint">${o("appearance.temperatureUnitHint")}</p>
+          
+          <div class="theme-mode-selector">
+            ${renderTemperatureUnitOption("degC",o("appearance.temperatureCelsius"),n,i)}
+            ${renderTemperatureUnitOption("degF",o("appearance.temperatureFahrenheit"),n,i)}
+          </div>
+        </div>
+        
+        <!-- Network Interfaces Section (only show when connected) -->
+        ${n.isConnected?html`
+          <div class="appearance-section">
+            <h3>Network Interfaces</h3>
+            <p class="appearance-hint">Enable or disable network interfaces. Disabled interfaces will not start on boot. At least one interface must remain enabled.</p>
+            
+            ${n.isLoadingNetworkInterfacesConfig?html`
+              <p style="color: var(--text-secondary);">Loading configuration...</p>
+            `:html`
+              <div class="network-interfaces-grid">
+                ${renderNetworkInterfaceOption("wifi","WiFi",a.wifi,n,i)}
+                ${s?renderNetworkInterfaceOption("ethernet","Ethernet",a.ethernet,n,i):""}
+                ${r?renderNetworkInterfaceOption("wwan","WWAN (4G)",a.wwan,n,i):""}
+              </div>
+              
+              <button 
+                class="save-button" 
+                style="margin-top: 16px;"
+                onclick=${()=>{const c={wifi:n.networkInterfacesConfig?.wifi??!0,ethernet:n.networkInterfacesConfig?.ethernet??!0,wwan:n.networkInterfacesConfig?.wwan??!0};i("save-network-interfaces-config",c)}}
+                disabled=${!n.isConnected||n.isSavingNetworkInterfacesConfig===!0}
+              >
+                ${n.isSavingNetworkInterfacesConfig?"Saving...":"Save Network Settings"}
+              </button>
+            `}
+          </div>
+        `:""}
+        
+      </div>
+    </div>
+  `}function renderThemeOption(n,i,o,s){const r=o.theme===n;return html`
+    <button 
+      class="theme-mode-option ${r?"selected":""}"
+      onclick=${()=>s("set-theme",n)}
+    >
+      ${getThemeIcon(n)}
+      <span>${i}</span>
+    </button>
+  `}function getThemeIcon(n){const i={light:html`
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    `,dark:html`
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    `,device:html`
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    `};return i[n]||i.device}function renderColorSchemeOption(n,i,o,s){const r=o.colorScheme===n;return html`
+    <div 
+      class="color-scheme-option ${r?"selected":""}"
+      data-scheme="${n}"
+      onclick=${()=>s("set-color-scheme",n)}
+    >
+      <div class="color-scheme-circle"></div>
+      <div class="color-scheme-label">${i}</div>
+    </div>
+  `}function renderTemperatureUnitOption(n,i,o,s){const r=(o.temperatureUnit||"degC")===n;return html`
+    <button 
+      class="theme-mode-option ${r?"selected":""}"
+      onclick=${()=>s("set-temperature-unit",n)}
+    >
+      <span>${i}</span>
+    </button>
+  `}function renderEditorThemeOption(n,i,o,s,r){const a=(s.editorTheme||"auto")===n;return html`
+    <div 
+      class="editor-theme-option ${a?"selected":""}"
+      onclick=${()=>r("set-editor-theme",n)}
+    >
+      <div class="editor-theme-preview" data-theme="${n}"></div>
+      <div class="editor-theme-info">
+        <div class="editor-theme-name">${i}</div>
+        <div class="editor-theme-desc">${o}</div>
+      </div>
+    </div>
+  `}function renderNetworkInterfaceOption(n,i,o,s,r){return html`
+    <div class="network-interface-option">
+      <div class="network-interface-info">
+        <span class="network-interface-label">${i}</span>
+        <span class="network-interface-status ${o?"enabled":"disabled"}">
+          ${o?"Enabled":"Disabled"}
+        </span>
+      </div>
+      <label class="toggle-switch">
+        <input 
+          type="checkbox" 
+          checked=${o}
+          onchange=${a=>{s.networkInterfacesConfig||(s.networkInterfacesConfig={wifi:!0,ethernet:!0,wwan:!0}),s.networkInterfacesConfig[n]=a.target.checked,r("render")}}
+        />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  `}function StudioInfoSection(n){return html`
+    <div class="panel-section">
+      <h3 class="panel-section-title">${n("sysinfo.studioTitle")}</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">${n("sysinfo.studioVersion")}</span>
+          <span class="info-value">${"1.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${n("sysinfo.studioCommit")}</span>
+          <span class="info-value info-mono">${"b9a2b51"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${n("sysinfo.studioBuildDate")}</span>
+          <span class="info-value">${"2026-03-03"}</span>
+        </div>
+      </div>
+    </div>
+  `}function SysInfoPanel(n,i){const o=window.i18n?window.i18n.t:r=>r;if(!n.systemInfo&&n.isConnected&&!n.isLoadingSystemInfo&&!n.systemInfoAttempted&&(n.systemInfoAttempted=!0,i("refresh-system-info")),!n.systemInfo)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>${o("sysinfo.title")}</h2>
+        </div>
+        ${StudioInfoSection(o)}
+        <div class="panel-message">
+          <p>${n.isConnected?o("sysinfo.loading"):"Connect to a device to view system information."}</p>
+        </div>
+      </div>
+    `;const s=n.systemInfo;return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>${o("sysinfo.title")}</h2>
+      </div>
+      
+      ${StudioInfoSection(o)}
+      ${BoardInfoSection(n.boardConfig,o)}
+      ${MCUSection(s,o)}
+      ${PartitionsSection(s,o)}
+    </div>
+  `}function BoardInfoSection(n,i){return html`
+    <div class="panel-section">
+      <h3 class="panel-section-title">${i("sysinfo.boardInfo")}</h3>
+      ${n?html`
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">${i("sysinfo.boardName")}</span>
+            <span class="info-value">${n.board_name||i("sysinfo.notAvailable")}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">${i("sysinfo.boardId")}</span>
+            <span class="info-value info-mono">${n.board_id||i("sysinfo.notAvailable")}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">${i("sysinfo.chip")}</span>
+            <span class="info-value">${n.chip||i("sysinfo.notAvailable")}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">${i("sysinfo.version")}</span>
+            <span class="info-value">${n.version||i("sysinfo.notAvailable")}</span>
+          </div>
+          ${n.description?html`
+            <div class="info-item" style="grid-column: 1 / -1;">
+              <span class="info-label">${i("sysinfo.description")}</span>
+              <span class="info-value">${n.description}</span>
+            </div>
+          `:""}
+        </div>
+      `:html`
+        <div class="panel-loading" style="padding: 20px; text-align: center; color: var(--text-secondary);">
+          ${i("sysinfo.loadingBoard")}
+        </div>
+      `}
+    </div>
+  `}function MCUSection(n,i){const o=n.os||{};return html`
+    <div class="panel-section">
+      <h3 class="panel-section-title">${i("sysinfo.mcuTitle")}</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.uniqueId")}</span>
+          <span class="info-value info-mono">${n.uid||i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.frequency")}</span>
+          <span class="info-value">${n.freq?n.freq+" "+i("sysinfo.mhz"):i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.flashSize")}</span>
+          <span class="info-value">${formatBytes$1(n.flashSize)}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.platform")}</span>
+          <span class="info-value">${o.platform||i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.system")}</span>
+          <span class="info-value">${o.system||i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.release")}</span>
+          <span class="info-value">${o.release||i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.version")}</span>
+          <span class="info-value info-mono">${o.version||i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.implementation")}</span>
+          <span class="info-value">${o.implem||i("sysinfo.notAvailable")}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.spiram")}</span>
+          <span class="info-value ${o.spiram?"status-yes":"status-no"}">
+            ${o.spiram?i("sysinfo.yes"):i("sysinfo.no")}
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">${i("sysinfo.mpyVersion")}</span>
+          <span class="info-value">${o.mpyver||i("sysinfo.notAvailable")}</span>
+        </div>
+      </div>
+    </div>
+  `}function PartitionsSection(n,i){return!n.partitions||n.partitions.length===0?"":html`
+    <div class="panel-section">
+      <h3 class="panel-section-title">${i("sysinfo.partitions")}</h3>
+      <div class="partitions-table">
+        <div class="partition-header">
+          <span class="partition-name">${i("sysinfo.partitionName")}</span>
+          <span class="partition-type">${i("sysinfo.partitionType")}</span>
+          <span class="partition-offset">${i("sysinfo.partitionOffset")}</span>
+          <span class="partition-size">${i("sysinfo.partitionSize")}</span>
+        </div>
+        ${n.partitions.map(o=>{let s;return Array.isArray(o)?s={type:o[0],subtype:o[1],offset:o[2],size:o[3],name:o[4]||"unknown",encrypted:o[5]}:s=o,html`
+            <div class="partition-row">
+              <span class="partition-name">
+                ${getPartitionIcon(s.name)}
+                ${s.name}
+              </span>
+              <span class="partition-type">${getPartitionType(s.type,s.subtype)}</span>
+              <span class="partition-offset">0x${s.offset.toString(16)}</span>
+              <span class="partition-size">${formatBytes$1(s.size)}</span>
+            </div>
+          `})}
+      </div>
+    </div>
+  `}function getPartitionType(n,i){return{0:"APP",1:"DATA"}[n]||`Type ${n}`}function getPartitionIcon(n){if(!n)return"📦";const i=n.toLowerCase();return i.includes("ota")?"🔄":i.includes("nvs")?"💾":i.includes("www")?"🌐":i.includes("vfs")?"📁":i.includes("data")?"💿":i.includes("factory")?"🏭":"📦"}function formatBytes$1(n){return n?n<1024?n+" B":n<1024*1024?(n/1024).toFixed(1)+" KB":(n/(1024*1024)).toFixed(2)+" MB":"N/A"}function WiFiPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config"),!n.networksInfo)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>WiFi Configuration</h2>
+        </div>
+        <div class="panel-loading">
+          ${n.isConnected?"Loading WiFi information...":"Connect to device to view WiFi configuration"}
+        </div>
+      </div>
+    `;const o=n.networksInfo,s=n.networkInterfacesConfig?.wifi===!1;return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>WiFi Configuration</h2>
+      </div>
+      
+      ${WiFiSTASection(o.wifiSTA,s)}
+      ${WiFiAPSection(o.wifiAP)}
+    </div>
+  `}function WiFiSTASection(n,i=!1){if(!n)return"";const o=i?"status-disabled":n.active?"status-active":"status-inactive",s=i?"Disabled":n.active?"Active":"Inactive";return html`
+    <div class="panel-section">
+      <div class="section-header">
+        <h3 class="panel-section-title">Wi-Fi Client Interface</h3>
+        <div class="status-badge ${o}">
+          ${s}
+        </div>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">MAC Address:</span>
+          <span class="info-value info-mono">${n.mac||"N/A"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">SSID:</span>
+          <span class="info-value">${n.ssid||"Not connected"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">IP Address:</span>
+          <span class="info-value info-mono">${n.ip||"0.0.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Subnet Mask:</span>
+          <span class="info-value info-mono">${n.mask||"0.0.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Gateway:</span>
+          <span class="info-value info-mono">${n.gateway||"0.0.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">DNS Server:</span>
+          <span class="info-value info-mono">${n.dns||"0.0.0.0"}</span>
+        </div>
+        ${n.rssi?html`
+          <div class="info-item">
+            <span class="info-label">Signal Strength:</span>
+            <span class="info-value">${n.rssi} dBm</span>
+          </div>
+        `:""}
+      </div>
+      
+      ${n.active&&n.ssid?html`
+        <div class="config-actions">
+          <button class="secondary-button" onclick=${()=>alert("WiFi configuration coming soon")}>
+            Configure
+          </button>
+        </div>
+      `:html`
+        <div class="config-actions">
+          <button class="primary-button" onclick=${()=>alert("WiFi setup coming soon")}>
+            Connect to Network
+          </button>
+        </div>
+      `}
+    </div>
+  `}function WiFiAPSection(n){return n?html`
+    <div class="panel-section">
+      <div class="section-header">
+        <h3 class="panel-section-title">Wi-Fi Access Point Interface</h3>
+        <div class="status-badge ${n.active?"status-active":"status-inactive"}">
+          ${n.active?"Active":"Inactive"}
+        </div>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">MAC Address:</span>
+          <span class="info-value info-mono">${n.mac||"N/A"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">SSID:</span>
+          <span class="info-value">${n.ssid||"N/A"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">IP Address:</span>
+          <span class="info-value info-mono">${n.ip||"0.0.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Subnet Mask:</span>
+          <span class="info-value info-mono">${n.mask||"0.0.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Gateway:</span>
+          <span class="info-value info-mono">${n.gateway||"0.0.0.0"}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">DNS Server:</span>
+          <span class="info-value info-mono">${n.dns||"0.0.0.0"}</span>
+        </div>
+        ${n.clients!==void 0?html`
+          <div class="info-item">
+            <span class="info-label">Connected Clients:</span>
+            <span class="info-value">${n.clients}</span>
+          </div>
+        `:""}
+      </div>
+      
+      <div class="config-actions">
+        <button class="secondary-button" onclick=${()=>alert("AP configuration coming soon")}>
+          ${n.active?"Configure":"Enable AP"}
+        </button>
+      </div>
+    </div>
+  `:""}function EthernetPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),n.isConnected&&!n.ethConfigLoaded&&!n.isLoadingEthConfig&&i("load-eth-config"),n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config"),!n.networksInfo)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>Ethernet Configuration</h2>
+        </div>
+        <div class="panel-loading">
+          ${n.isConnected?"Loading Ethernet information...":"Connect to device to view Ethernet configuration"}
+        </div>
+      </div>
+    `;const o=n.networksInfo.eth,s=n.ethStatus,r=s&&s.initialized?s:o&&o.mac?o:s||o,a=n.ethConfig||{},c=o!==null,l=n.networkInterfacesConfig?.ethernet===!1,d=r&&(r.mac||r.enabled||r.enable||r.initialized),p=r&&r.ip&&r.ip!=="0.0.0.0",u=r&&r.linkup===!0,f=p;if(!c)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>Ethernet Configuration</h2>
+        </div>
+        <div class="panel-message">
+          <p>Ethernet is not available on this device.</p>
+          <p style="color: var(--text-secondary); font-size: 0.9em; margin-top: 8px;">
+            This chip may not have an internal EMAC, or the firmware was built without Ethernet support.
+          </p>
+        </div>
+      </div>
+    `;const h=l?"status-disabled":f?"status-active":u?"status-warning":"status-inactive",m=l?"Disabled":f?"Connected":u?"Link Up (No IP)":d?"No Link":"Not Initialized";return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>Ethernet Configuration</h2>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Ethernet PHY Interface</h3>
+          <div class="status-badge ${h}">
+            ${m}
+          </div>
+        </div>
+        
+        ${d?html`
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">MAC Address:</span>
+              <span class="info-value info-mono">${r.mac||"N/A"}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Status:</span>
+              <span class="info-value ${r.enabled||r.enable?"status-yes":"status-no"}">
+                ${r.enabled||r.enable?"Active":"Inactive"}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Link:</span>
+              <span class="info-value ${u?"status-yes":"status-no"}">
+                ${u?"Cable Connected":"No Cable"}
+              </span>
+            </div>
+            ${p?html`
+              <div class="info-item">
+                <span class="info-label">IP Address:</span>
+                <span class="info-value info-mono">${r.ip||"0.0.0.0"}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Subnet Mask:</span>
+                <span class="info-value info-mono">${r.mask||"0.0.0.0"}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Gateway:</span>
+                <span class="info-value info-mono">${r.gateway||"0.0.0.0"}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">DNS Server:</span>
+                <span class="info-value info-mono">${r.dns||"0.0.0.0"}</span>
+              </div>
+            `:""}
+          </div>
+        `:html`
+          <div class="panel-message" style="margin: 16px 0;">
+            <p>Ethernet interface is available but not initialized.</p>
+          </div>
+        `}
+        
+        <div class="config-actions" style="margin-top: 16px;">
+          ${d?"":html`
+            <button 
+              class="primary-button" 
+              onclick=${()=>i("init-ethernet")}
+              disabled=${n.isInitializingEth}
+            >
+              ${n.isInitializingEth?"Initializing...":"Initialize Ethernet"}
+            </button>
+          `}
+        </div>
+      </div>
+      
+      ${a?html`
+        <div class="panel-section">
+          <div class="section-header">
+            <h3 class="panel-section-title">Configuration</h3>
+          </div>
+          
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Auto-Enable:</span>
+              <span class="info-value ${a.enabled!==!1?"status-yes":"status-no"}">
+                ${a.enabled!==!1?"Yes":"No"}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">DHCP:</span>
+              <span class="info-value ${a.dhcp!==!1?"status-yes":"status-no"}">
+                ${a.dhcp!==!1?"Enabled":"Static IP"}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">PHY Type:</span>
+              <span class="info-value">${a.phy_type||"Auto"}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">PHY Address:</span>
+              <span class="info-value">${a.phy_addr!==void 0?a.phy_addr:"Auto"}</span>
+            </div>
+            ${a.pins?html`
+              <div class="info-item">
+                <span class="info-label">MDC Pin:</span>
+                <span class="info-value">GPIO ${a.pins.mdc}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">MDIO Pin:</span>
+                <span class="info-value">GPIO ${a.pins.mdio}</span>
+              </div>
+            `:""}
+          </div>
+        </div>
+      `:""}
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Network Priority</h3>
+        </div>
+        <div class="info-description">
+          <p style="margin: 0 0 8px 0;">
+            <strong>Ethernet-Preferred Mode:</strong> When Ethernet is connected with a valid IP, 
+            it becomes the preferred network interface. WiFi remains active as an automatic fallback.
+          </p>
+        </div>
+      </div>
+    </div>
+  `}function VPNPanel(n,i){n.isConnected&&!n.vpnConfigLoaded&&!n.isLoadingVpnConfig&&i("load-vpn-config");const o=n.vpnConfig||{hostname:"",join_code:"",auto_connect:!1},s=n.networksInfo?.vpn,r=n.isConnected,a=n.networksInfo&&s!==void 0;!a||s.available;const c=a&&s.active;return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>VPN Configuration</h2>
+      </div>
+      
+      <!-- Module not available warning (only show when connected and confirmed unavailable) -->
+      ${r&&a&&!s.available?html`
+        <div class="panel-section">
+          <div class="panel-message" style="background: var(--warning-bg, rgba(255, 193, 7, 0.1)); border-left: 3px solid var(--warning-color, #ffc107);">
+            <p><strong>Husarnet VPN module not available</strong></p>
+            <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">
+              The Husarnet VPN module is not compiled into this firmware build.
+              To enable VPN support, rebuild the firmware with 
+              <code style="background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px;">MODULE_PYDIRECT_HUSARNET=ON</code>
+            </p>
+          </div>
+        </div>
+      `:""}
+      
+      <!-- VPN Status Section -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">VPN Status</h3>
+          <div class="status-badge ${c?"status-active":"status-inactive"}">
+            ${c?"Connected":"Disconnected"}
+          </div>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Status:</span>
+            <span class="info-value ${c?"status-yes":"status-no"}">
+              ${c?"Connected":"Not connected"}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">VPN IPv6 Address:</span>
+            <span class="info-value info-mono">${c&&s?.ip?s.ip:"--"}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Hostname:</span>
+            <span class="info-value">${s?.hostname||o.hostname||"--"}</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- VPN Configuration Section -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Configuration</h3>
+        </div>
+        
+        <form class="config-form" onsubmit=${l=>{l.preventDefault();const d=new FormData(l.target),p=d.get("hostname")||"",u=d.get("join_code")||"",f=d.get("auto_connect")==="on";if(!p.trim()){alert("Please enter a hostname for this device");return}if(!u.trim()){alert("Please enter a Husarnet join code");return}i("vpn-connect",{hostname:p.trim(),join_code:u.trim(),auto_connect:f})}}>
+          <div class="form-group">
+            <label for="vpn-hostname">
+              Device Hostname
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">A unique name for this device on the VPN network</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="vpn-hostname" 
+              name="hostname" 
+              value=${o.hostname||""}
+              placeholder="e.g., my-esp32-device"
+              ${c?"disabled":""}
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="vpn-join-code">
+              Join Code
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">
+                  Get your join code from the Husarnet Dashboard at app.husarnet.com.
+                  Create a network and copy the join code.
+                </span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="vpn-join-code" 
+              name="join_code" 
+              value=${o.join_code||""}
+              placeholder="fc94:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx"
+              ${c?"disabled":""}
+              style="font-family: var(--font-mono); font-size: 12px;"
+            />
+            <p class="form-help-text" style="margin-top: 6px; font-size: 12px; color: var(--text-secondary);">
+              Get your join code from 
+              <a href="https://app.husarnet.com" target="_blank" rel="noopener" style="color: var(--accent-color);">
+                app.husarnet.com
+              </a>
+            </p>
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                name="auto_connect"
+                ${o.auto_connect?"checked":""}
+              />
+              <span>
+                Auto-connect on boot
+                <span class="label-tooltip">
+                  <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span class="tooltip">Automatically connect to VPN when the device boots (requires network)</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          
+          <div class="config-actions">
+            ${c?html`
+              <button 
+                type="button" 
+                class="secondary-button danger" 
+                onclick=${()=>i("vpn-disconnect")}
+              >
+                Disconnect VPN
+              </button>
+            `:html`
+              <button type="submit" class="primary-button" disabled=${!r}>
+                Connect to VPN
+              </button>
+              <button 
+                type="button" 
+                class="secondary-button" 
+                disabled=${!r}
+                onclick=${l=>{l.preventDefault();const d=l.target.closest("form"),p=new FormData(d);i("vpn-save-config",{hostname:p.get("hostname")||"",join_code:p.get("join_code")||"",auto_connect:p.get("auto_connect")==="on",enabled:!1})}}
+              >
+                Save Only
+              </button>
+            `}
+          </div>
+        </form>
+      </div>
+      
+      <!-- Connected Peers Section -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Connected Peers</h3>
+        </div>
+        
+        ${c&&s?.peers&&s.peers.length>0?html`
+          <div class="peers-list">
+            ${s.peers.map(l=>html`
+              <div class="peer-item">
+                <div class="peer-hostname">${l.hostname}</div>
+                <div class="peer-ip info-mono">${l.ip}</div>
+              </div>
+            `)}
+          </div>
+        `:html`
+          <p class="info-description">
+            ${c?"No other peers discovered yet. Add more devices to your Husarnet network to see them here.":"Connect to VPN to discover peers on your network."}
+          </p>
+        `}
+      </div>
+      
+      <!-- About Husarnet -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">About Husarnet VPN</h3>
+        </div>
+        <p class="info-description">
+          Husarnet is a peer-to-peer VPN that creates secure, encrypted connections between your devices.
+          Each device gets a unique IPv6 address (fc94::/16) that remains constant across network changes.
+        </p>
+        <ul class="feature-list" style="margin-top: 12px; padding-left: 20px; font-size: 13px; color: var(--text-secondary);">
+          <li>Low latency P2P connections (no server in the middle)</li>
+          <li>Works across NAT and firewalls</li>
+          <li>End-to-end encryption (X25519 + ChaCha20-Poly1305)</li>
+          <li>Stable addresses for services like registries, OTA, and OVMS</li>
+        </ul>
+      </div>
+    </div>
+  `}function BTLEPanel(n,i){if(!n.networksInfo&&n.isConnected&&!n.isLoadingNetworks&&i("refresh-networks"),!n.networksInfo)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>Bluetooth LE Configuration</h2>
+        </div>
+        <div class="panel-loading">
+          ${n.isConnected?"Loading Bluetooth LE information...":"Connect to device to view Bluetooth LE configuration"}
+        </div>
+      </div>
+    `;const o=n.networksInfo.ble;return o?html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>Bluetooth LE Configuration</h2>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Bluetooth LE Interface</h3>
+          <div class="status-badge ${o.active?"status-active":"status-inactive"}">
+            ${o.active?"Active":"Inactive"}
+          </div>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">MAC Address:</span>
+            <span class="info-value info-mono">${o.mac||"N/A"}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status:</span>
+            <span class="info-value">${o.active?"Enabled":"Disabled"}</span>
+          </div>
+        </div>
+        
+        <div class="config-actions">
+          <button class="secondary-button" onclick=${()=>alert("Bluetooth configuration coming soon")}>
+            ${o.active?"Configure":"Enable Bluetooth"}
+          </button>
+        </div>
+      </div>
+    </div>
+  `:html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>Bluetooth LE Configuration</h2>
+        </div>
+        <div class="panel-message">
+          <p>Bluetooth LE information not available.</p>
+        </div>
+      </div>
+    `}function WWANPanel(n,i){if(n.isConnected&&!n.wwanConfigLoaded&&!n.isLoadingWwanConfig&&i("load-wwan-config"),n.isConnected&&!n.modemStatusLoaded&&!n.isLoadingModemStatus&&i("load-modem-status"),n.isConnected&&!n.networkInterfacesConfig&&!n.isLoadingNetworkInterfacesConfig&&i("load-network-interfaces-config"),n.networkInterfacesConfig?.wwan===!1)return html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>WWAN/Mobile Data</h2>
+        </div>
+        <div class="panel-section">
+          <div class="section-header">
+            <h3 class="panel-section-title">Interface Status</h3>
+            <div class="status-badge status-disabled">Disabled</div>
+          </div>
+          <div class="panel-message" style="margin: 16px 0;">
+            <p>WWAN interface is disabled in system settings.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9em; margin-top: 8px;">
+              To enable, go to System → Settings → Network Interfaces.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;const s=n.wwanConfig||{},r=n.modemStatus||{},a=r.ppp||{};let c="Disabled",l="status-disabled";return s.mobile_data_enabled&&(a.connected?(c="Connected",l="status-connected"):a.connecting?(c="Connecting...",l="status-connecting"):r.connected?(c="Standby (WiFi OK)",l="status-standby"):(c="Waiting for modem...",l="status-waiting")),html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>WWAN/Mobile Data</h2>
+      </div>
+      
+      <!-- Mobile Data Toggle Section -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Mobile Data</h3>
+        </div>
+        
+        <div class="mobile-data-control">
+          <div class="toggle-row">
+            <label class="toggle-switch ${a.connected?"ppp-active":a.connecting?"ppp-connecting":""}">
+              <input 
+                type="checkbox" 
+                ${s.mobile_data_enabled?"checked":""}
+                onchange=${d=>{d.target.checked?i("enable-mobile-data"):i("disable-mobile-data")}}
+                disabled=${!n.isConnected}
+              />
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Enable Mobile Data</span>
+          </div>
+          
+          <div class="status-row">
+            <span class="status-label">Status:</span>
+            <span class="status-value ${l}">${c}</span>
+          </div>
+          
+          ${a.connected&&a.ip?html`
+            <div class="ip-row">
+              <span class="ip-label">IP Address:</span>
+              <span class="ip-value">${a.ip}</span>
+            </div>
+          `:""}
+          
+          <p class="mobile-data-note">
+            WiFi is preferred. Mobile data is used as backup when WiFi has no internet connectivity.
+          </p>
+        </div>
+      </div>
+      
+      <!-- GPRS Settings Section -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">GPRS Settings</h3>
+        </div>
+        
+        <form class="config-form" onsubmit=${d=>{d.preventDefault();const p=new FormData(d.target),u={apn:p.get("apn")||"",username:p.get("username")||"",password:p.get("password")||"",auto_init_modem:p.get("auto_init_modem")==="on",mobile_data_enabled:s.mobile_data_enabled||!1};i("save-wwan-config",u)}}>
+          <div class="form-group">
+            <label for="wwan-apn">
+              GPRS APN
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">The access point name for the mobile network (optional, required for GPRS connection)</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="wwan-apn" 
+              name="apn" 
+              value=${s.apn||""}
+              placeholder="e.g., internet"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="wwan-username">
+              GPRS Username
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">Username for GPRS connection (if required by provider)</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="wwan-username" 
+              name="username" 
+              value=${s.username||""}
+              placeholder="Optional"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="wwan-password">
+              GPRS Password
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">Password for GPRS connection (if required by provider)</span>
+              </span>
+            </label>
+            <input 
+              type="password" 
+              id="wwan-password" 
+              name="password" 
+              value=${s.password||""}
+              placeholder="Optional"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                name="auto_init_modem" 
+                ${s.auto_init_modem!==!1?"checked":""}
+              />
+              <span>
+                Auto-initialize USB Modem on Boot
+                <span class="label-tooltip">
+                  <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span class="tooltip">Automatically initialize and connect to USB modem if detected on boot</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          
+          <div class="config-actions">
+            <button type="submit" class="primary-button" disabled=${!n.isConnected}>
+              Save Configuration
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      ${n.isConnected?"":html`
+        <div class="panel-message">
+          <p>Connect to device to configure WWAN settings.</p>
+        </div>
+      `}
+    </div>
+    
+    <style>
+      .mobile-data-control {
+        padding: 12px 0;
+      }
+      
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 26px;
+      }
+      
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border-color);
+        transition: 0.3s;
+        border-radius: 26px;
+      }
+      
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+      }
+      
+      .toggle-switch input:checked + .toggle-slider {
+        background-color: var(--scheme-primary);
+      }
+      
+      .toggle-switch.ppp-active input:checked + .toggle-slider {
+        background-color: #22c55e;
+      }
+      
+      .toggle-switch.ppp-connecting input:checked + .toggle-slider {
+        background-color: var(--scheme-primary-light);
+        animation: toggle-pulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes toggle-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+      
+      .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(22px);
+      }
+      
+      .toggle-switch input:disabled + .toggle-slider {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      
+      .toggle-label {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      
+      .status-row, .ip-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+      }
+      
+      .status-label, .ip-label {
+        color: var(--text-secondary);
+      }
+      
+      .status-value {
+        font-weight: 500;
+      }
+      
+      .status-disabled {
+        color: var(--text-secondary);
+      }
+      
+      .status-standby {
+        color: #f59e0b;
+      }
+      
+      .status-waiting {
+        color: #f59e0b;
+      }
+      
+      .status-connected {
+        color: #22c55e;
+      }
+      
+      .status-connecting {
+        color: var(--scheme-primary-light);
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      .ip-value {
+        font-family: 'CodeFont', monospace;
+        color: var(--scheme-primary);
+      }
+      
+      .mobile-data-note {
+        font-size: 12px;
+        color: var(--text-secondary);
+        opacity: 0.8;
+        margin-top: 12px;
+        padding: 8px;
+        background: var(--bg-secondary);
+        border-radius: 4px;
+        line-height: 1.4;
+      }
+    </style>
+  `}function MQTTPanel(n,i){n.isConnected&&!n.mqttConfigLoaded&&!n.isLoadingMqttConfig&&i("load-mqtt-config");const o=n.mqttConfig||{};return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>MQTT Configuration</h2>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">MQTT Broker Settings</h3>
+        </div>
+        
+        <form class="config-form" onsubmit=${s=>{s.preventDefault();const r=new FormData(s.target),a={server:r.get("server")||"",port:parseInt(r.get("port")||"1883"),username:r.get("username")||"",password:r.get("password")||"",tls:r.get("tls")==="on",ca_cert_path:r.get("ca_cert_path")||"",topic_prefix:r.get("topic_prefix")||""};if(!a.server){alert("Server address is required");return}i("save-mqtt-config",a)}}>
+          <div class="form-group">
+            <label for="mqtt-server">
+              Server Address <span class="required">*</span>
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">The IP address or hostname of your MQTT broker</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="mqtt-server" 
+              name="server" 
+              value=${o.server||""}
+              placeholder="e.g., mqtt.example.com or 192.168.1.100"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="mqtt-port">
+              Port
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">Use 1883 for unencrypted connections or 8883 for TLS/SSL</span>
+              </span>
+            </label>
+            <input 
+              type="number" 
+              id="mqtt-port" 
+              name="port" 
+              value=${o.port||1883}
+              min="1"
+              max="65535"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="mqtt-username">
+              Username
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">The username for connecting to your MQTT broker</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="mqtt-username" 
+              name="username" 
+              value=${o.username||""}
+              placeholder="Optional"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="mqtt-password">
+              Password
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">The password for connecting to your MQTT broker</span>
+              </span>
+            </label>
+            <input 
+              type="password" 
+              id="mqtt-password" 
+              name="password" 
+              value=${o.password||""}
+              placeholder="Optional"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                name="tls" 
+                ${o.tls?"checked":""}
+              />
+              <span>
+                Encryption (TLS/SSL)
+                <span class="label-tooltip">
+                  <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span class="tooltip">Enable this for secure communication</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          
+          <div class="form-group">
+            <label for="mqtt-ca-cert">
+              CA Certificate Path
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">Path to CA certificate file (required if using TLS)</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="mqtt-ca-cert" 
+              name="ca_cert_path" 
+              value=${o.ca_cert_path||""}
+              placeholder="e.g., /store/trustedca/mqtt.pem"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="mqtt-topic-prefix">
+              Topic Prefix
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">Common prefix for organizing data (standard: ovms/&lt;username&gt;/&lt;vehicleid&gt;)</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="mqtt-topic-prefix" 
+              name="topic_prefix" 
+              value=${o.topic_prefix||"ovms/"}
+              placeholder="e.g., ovms/username/vehicleid"
+            />
+          </div>
+          
+          <div class="config-actions">
+            <button type="submit" class="primary-button" disabled=${!n.isConnected}>
+              Save Configuration
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      ${n.isConnected?"":html`
+        <div class="panel-message">
+          <p>Connect to device to configure MQTT settings.</p>
+        </div>
+      `}
+    </div>
+  `}function NTPPanel(n,i){n.isConnected&&!n.ntpConfigLoaded&&!n.isLoadingNtpConfig&&i("load-ntp-config");const o=n.ntpConfig||{server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1},s=n.ntpSyncResult||null,r=p=>{if(!p)return"--:--:--";const{year:u,month:f,day:h,hour:m,minute:v,second:y}=p;return`${String(m).padStart(2,"0")}:${String(v).padStart(2,"0")}:${String(y).padStart(2,"0")}`},a=p=>{if(!p)return"";const{year:u,month:f,day:h}=p;return`${u}-${String(f).padStart(2,"0")}-${String(h).padStart(2,"0")}`},c=[{value:"UTC",offset:0,label:"UTC (Coordinated Universal Time)"},{value:"EST",offset:-5,label:"EST (Eastern Standard Time)"},{value:"CST",offset:-6,label:"CST (Central Standard Time)"},{value:"MST",offset:-7,label:"MST (Mountain Standard Time)"},{value:"PST",offset:-8,label:"PST (Pacific Standard Time)"},{value:"GMT",offset:0,label:"GMT (Greenwich Mean Time)"},{value:"CET",offset:1,label:"CET (Central European Time)"},{value:"EET",offset:2,label:"EET (Eastern European Time)"},{value:"JST",offset:9,label:"JST (Japan Standard Time)"},{value:"AEST",offset:10,label:"AEST (Australian Eastern Standard Time)"}],l=o.timezone,d=[...c];return l&&!c.find(p=>p.value===l)&&d.unshift({value:l,offset:o.tzOffset||0,label:`${l} (Detected)`}),html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>NTP Time Synchronization</h2>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Current Time</h3>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Local Time:</span>
+            <span class="info-value">
+              ${s&&s.local?`${a(s.local)} ${r(s.local)}`:"--:--:--"}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">UTC Time:</span>
+            <span class="info-value">
+              ${s&&s.utc?`${a(s.utc)} ${r(s.utc)}`:"--:--:--"}
+            </span>
+          </div>
+        </div>
+        ${s?html`
+          <p class="info-description" style="margin-top: 12px; font-size: 12px; color: var(--text-secondary);">
+            Last synchronized: ${new Date(s.timestamp).toLocaleTimeString()}
+          </p>
+        `:""}
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">NTP Configuration</h3>
+        </div>
+        
+        <form class="config-form" onsubmit=${async p=>{p.preventDefault();const u=new FormData(p.target),f=u.get("server")||"pool.ntp.org",h=u.get("timezone")||"UTC",m=u.get("auto_detect")==="on",v=d.find(b=>b.value===h),y=v?v.offset:0,w={server:f,tz_offset:y,timezone:h,auto_detect:m};try{await new Promise((b,x)=>{const C=setTimeout(()=>x(new Error("Save timeout")),1e4),k=()=>{clearTimeout(C),window.appInstance.emitter.removeListener("ntp-config-saved",S),window.appInstance.emitter.removeListener("ntp-config-save-error",_)},S=()=>{k(),b()},_=E=>{k(),x(E)};window.appInstance.emitter.once("ntp-config-saved",S),window.appInstance.emitter.once("ntp-config-save-error",_),i("save-ntp-config",w)}),i("sync-ntp-time",f,y,m)}catch(b){console.error("[NTP] Failed to save config before sync:",b),alert(`Failed to save NTP configuration: ${b.message}`)}}}>
+          <div class="form-group">
+            <label for="ntp-server">
+              NTP Server
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">NTP server hostname or IP address</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="ntp-server" 
+              name="server" 
+              value=${o.server||"pool.ntp.org"}
+              placeholder="e.g., pool.ntp.org"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="ntp-timezone">
+              Timezone
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">Select your timezone</span>
+              </span>
+            </label>
+            <select id="ntp-timezone" name="timezone">
+              ${d.map(p=>html`
+                <option value=${p.value} ${o.timezone===p.value?"selected":""}>
+                  ${p.label}
+                </option>
+              `)}
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                name="auto_detect"
+                ${o.autoDetect?"checked":""}
+              />
+              <span>
+                Auto-detect timezone from IP
+                <span class="label-tooltip">
+                  <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span class="tooltip">Attempt to automatically detect timezone using IP geolocation</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          
+          <div class="config-actions">
+            <button type="submit" class="primary-button" disabled=${!n.isConnected}>
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      ${n.isConnected?"":html`
+        <div class="panel-message">
+          <p>Connect to device to synchronize time.</p>
+        </div>
+      `}
+    </div>
+  `}function CANPanel(n,i){n.isConnected&&!n.canConfigLoaded&&!n.isLoadingCanConfig&&i("load-can-config");const o=n.canConfig||{bitrate:5e5,enabled:!0};return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>CAN/TWAI Configuration</h2>
+      </div>
+      
+      <div class="panel-section">
+        <div class="panel-section">
+          <div class="section-header">
+            <h3 class="panel-section-title">Protocol Settings</h3>
+            <div class="status-badge ${o.enabled?"status-active":"status-inactive"}">
+              ${o.enabled?"Enabled":"Disabled"}
+            </div>
+          </div>
+          
+          <form class="config-form" onsubmit=${async s=>{s.preventDefault();const r=new FormData(s.target),a={bitrate:parseInt(r.get("bitrate")||"500000"),enabled:r.get("enabled")==="on"};i("save-can-config",a)}}>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                name="enabled" 
+                ${o.enabled?"checked":""}
+              />
+              <span>
+                Enable CAN Bus
+                <span class="label-tooltip">
+                  <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span class="tooltip">Enable or disable CAN/TWAI bus</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          
+          <div class="form-group">
+            <label for="can-bitrate">
+              Bitrate <span class="required">*</span>
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="tooltip">CAN bus bitrate in bits per second (bps)</span>
+              </span>
+            </label>
+            <select id="can-bitrate" name="bitrate" required>
+              <option value="125000" ${o.bitrate===125e3?"selected":""}>125 kbps</option>
+              <option value="250000" ${o.bitrate===25e4?"selected":""}>250 kbps</option>
+              <option value="500000" ${o.bitrate===5e5?"selected":""}>500 kbps</option>
+              <option value="1000000" ${o.bitrate===1e6?"selected":""}>1 Mbps</option>
+            </select>
+          </div>
+          
+          <div class="config-actions">
+            <button type="submit" class="primary-button" disabled=${!n.isConnected}>
+              Save Settings
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Usage</h3>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Used by:</span>
+            <span class="info-value">GVRET, OpenInverter, OVMS, DTC extensions</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Note:</span>
+            <span class="info-value">Changes require device restart to take effect</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Hardware (from board.json)</h3>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">TX Pin:</span>
+            <span class="info-value">${o.txPin!=null?"GPIO"+o.txPin:"Not configured"}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">RX Pin:</span>
+            <span class="info-value">${o.rxPin!=null?"GPIO"+o.rxPin:"Not configured"}</span>
+          </div>
+        </div>
+      </div>
+      
+      ${n.isConnected?"":html`
+        <div class="panel-message">
+          <p>Connect to device to configure CAN settings.</p>
+        </div>
+      `}
+    </div>
+  `}function GPSPanel(n,i){n.isConnected&&!n.gpsDataLoaded&&!n.isLoadingGpsData&&i("load-gps-data");const o=n.gpsData||{},s=o.latitude!==void 0&&o.longitude!==void 0,r=37.3349,a=-122.009,c=s?o.latitude:r,l=s?o.longitude:a;return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>GPS Location</h2>
+      </div>
+      
+      ${n.isLoadingGpsData?html`
+        <div class="panel-loading">
+          Loading GPS data...
+        </div>
+      `:html`
+        <div class="panel-section">
+          <div class="section-header">
+            <h3 class="panel-section-title">${s?"Current Location":"Map Display"}</h3>
+            <div class="status-badge ${s?"status-active":"status-inactive"}">
+              ${s?"GPS Fix Acquired":"No GPS Fix"}
+            </div>
+          </div>
+          
+          <!-- Map Container (always shown) -->
+          <div class="gps-map-container">
+            ${s?"":html`
+              <div style="margin-bottom: 0.5rem; color: #999; font-size: 0.9em;">
+                Showing default location (Apple Park) - Waiting for GPS fix...
+              </div>
+            `}
+            <iframe
+              class="gps-map"
+              width="100%"
+              height="400"
+              frameborder="0"
+              scrolling="no"
+              marginheight="0"
+              marginwidth="0"
+              src=${`https://www.openstreetmap.org/export/embed.html?bbox=${l-.01},${c-.01},${l+.01},${c+.01}&layer=mapnik&marker=${c},${l}`}
+            >
+            </iframe>
+            <br/>
+            <small>
+              <a 
+                href=${`https://www.openstreetmap.org/?mlat=${c}&mlon=${l}&zoom=15`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Larger Map
+              </a>
+            </small>
+          </div>
+            
+            <!-- GPS Information Grid -->
+            <div class="info-grid" style="margin-top: 1rem;">
+              ${s?html`
+                <div class="info-item">
+                  <span class="info-label">Latitude:</span>
+                  <span class="info-value info-mono">${o.latitude.toFixed(6)}°</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Longitude:</span>
+                  <span class="info-value info-mono">${o.longitude.toFixed(6)}°</span>
+                </div>
+              `:html`
+                <div class="info-item">
+                  <span class="info-label">Latitude:</span>
+                  <span class="info-value info-mono" style="color: #999;">${c.toFixed(6)}° (default)</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Longitude:</span>
+                  <span class="info-value info-mono" style="color: #999;">${l.toFixed(6)}° (default)</span>
+                </div>
+              `}
+              ${o.altitude!==void 0?html`
+                <div class="info-item">
+                  <span class="info-label">Altitude:</span>
+                  <span class="info-value">${o.altitude.toFixed(1)} m</span>
+                </div>
+              `:""}
+              ${o.satellites!==void 0?html`
+                <div class="info-item">
+                  <span class="info-label">Satellites:</span>
+                  <span class="info-value">${o.satellites}</span>
+                </div>
+              `:""}
+              ${o.speed!==void 0?html`
+                <div class="info-item">
+                  <span class="info-label">Speed:</span>
+                  <span class="info-value">${o.speed.toFixed(1)} km/h</span>
+                </div>
+              `:""}
+              ${o.heading!==void 0?html`
+                <div class="info-item">
+                  <span class="info-label">Heading:</span>
+                  <span class="info-value">${o.heading.toFixed(1)}°</span>
+                </div>
+              `:""}
+              ${o.date?html`
+                <div class="info-item">
+                  <span class="info-label">Date:</span>
+                  <span class="info-value info-mono">${formatDate(o.date)}</span>
+                </div>
+              `:""}
+              ${o.time?html`
+                <div class="info-item">
+                  <span class="info-label">Time:</span>
+                  <span class="info-value info-mono">${formatTime(o.time)}</span>
+                </div>
+              `:""}
+            </div>
+            
+            <!-- Google Maps Link -->
+            <div class="config-actions" style="margin-top: 1rem;">
+              <a 
+                href=${`https://www.google.com/maps?q=${c},${l}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="primary-button"
+                style="text-decoration: none; display: inline-block;"
+              >
+                Open in Google Maps
+              </a>
+            </div>
+          </div>
+          
+          ${s?"":html`
+            <div class="panel-section" style="margin-top: 1rem;">
+              <div class="section-header">
+                <h3 class="panel-section-title">GPS Status</h3>
+              </div>
+              <p class="info-description">
+                GPS is enabled but no fix has been acquired yet. This can take 30-60 seconds for a cold start.
+                Make sure the GPS antenna has a clear view of the sky.
+              </p>
+              ${o.satellites!==void 0?html`
+                <div class="info-grid" style="margin-top: 1rem;">
+                  <div class="info-item">
+                    <span class="info-label">Satellites in View:</span>
+                    <span class="info-value">${o.satellites}</span>
+                  </div>
+                </div>
+              `:""}
+            </div>
+          `}
+      `}
+      
+      ${n.isConnected?"":html`
+        <div class="panel-message">
+          <p>Connect to device to view GPS location data.</p>
+        </div>
+      `}
+    </div>
+  `}function formatDate(n){if(!n||n.length!==6)return n;const i=n.substring(0,2),o=n.substring(2,4),s="20"+n.substring(4,6);return`${i}/${o}/${s}`}function formatTime(n){if(!n)return n;const i=n.indexOf("."),o=i!==-1?n.substring(0,i):n;if(o.length!==6)return n;const s=o.substring(0,2),r=o.substring(2,4),a=o.substring(4,6);return`${s}:${r}:${a}`}function ModemPanel(n,i){n.isConnected&&!n.modemStatusLoaded&&!n.isLoadingModemStatus&&i("load-modem-status");const o=n.modemStatus||{},s=o.info||{},r=o.signal||{},a=o.ppp||{},c=r.dbm,l=rssiToBars(c),d=rssiToQuality(c),p=getSignalColor(c);let u="Not detected",f="status-disconnected";return o.connected&&(a.connected?(u="PPP Active",f="status-ppp"):a.connecting?(u="PPP Connecting...",f="status-connecting"):(u="Connected (AT)",f="status-connected")),html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>Modem</h2>
+      </div>
+      
+      <!-- Connection Status -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Status</h3>
+        </div>
+        <div class="status-display">
+          <span class="status-indicator ${f}"></span>
+          <span class="status-text">${u}</span>
+        </div>
+        ${a.connected&&a.ip?html`
+          <div class="ip-display">
+            <span class="ip-label">IP Address:</span>
+            <span class="ip-value">${a.ip}</span>
+          </div>
+        `:""}
+      </div>
+      
+      <!-- Signal Strength -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Signal Strength</h3>
+        </div>
+        ${o.connected?html`
+          <div class="signal-display">
+            <div class="signal-bars">
+              ${[1,2,3,4,5].map(h=>html`
+                <div class="signal-bar ${h<=l?"active":""}" style="--bar-color: ${p}"></div>
+              `)}
+            </div>
+            <div class="signal-info">
+              ${c!=null&&c!==-999?html`
+                <span class="signal-dbm" style="color: ${p}">${c} dBm</span>
+                <span class="signal-quality">${d}</span>
+              `:html`
+                <span class="signal-unknown">Unknown</span>
+              `}
+            </div>
+          </div>
+          ${r.rssi!=null?html`
+            <div class="signal-raw">
+              <span>RSSI: ${r.rssi}</span>
+              ${r.ber!=null?html`<span>BER: ${r.ber}</span>`:""}
+            </div>
+          `:""}
+        `:html`
+          <p class="no-data">Modem not connected</p>
+        `}
+      </div>
+      
+      <!-- Modem Info -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Modem Information</h3>
+        </div>
+        ${o.connected&&Object.keys(s).length>0?html`
+          <div class="info-grid">
+            ${s.manufacturer?html`
+              <div class="info-row">
+                <span class="info-label">Manufacturer</span>
+                <span class="info-value">${s.manufacturer}</span>
+              </div>
+            `:""}
+            ${s.model?html`
+              <div class="info-row">
+                <span class="info-label">Model</span>
+                <span class="info-value">${s.model}</span>
+              </div>
+            `:""}
+            ${s.revision?html`
+              <div class="info-row">
+                <span class="info-label">Revision</span>
+                <span class="info-value">${s.revision}</span>
+              </div>
+            `:""}
+            ${s.imei?html`
+              <div class="info-row">
+                <span class="info-label">IMEI</span>
+                <span class="info-value mono">${s.imei}</span>
+              </div>
+            `:""}
+            ${o.firmware?html`
+              <div class="info-row">
+                <span class="info-label">Firmware</span>
+                <span class="info-value">${o.firmware}</span>
+              </div>
+            `:""}
+          </div>
+        `:html`
+          <p class="no-data">${o.connected?"Loading...":"Modem not connected"}</p>
+        `}
+      </div>
+      
+      ${n.isConnected?"":html`
+        <div class="panel-message">
+          <p>Connect to device to view modem status.</p>
+        </div>
+      `}
+    </div>
+    
+    <style>
+      /* refresh-button uses global styles from main.css */
+      
+      .status-display {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 0;
+      }
+      
+      .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--text-secondary);
+        opacity: 0.5;
+      }
+      
+      .status-indicator.status-disconnected {
+        background: var(--text-secondary);
+        opacity: 0.5;
+      }
+      
+      .status-indicator.status-connected {
+        background: #f59e0b;
+      }
+      
+      .status-indicator.status-ppp {
+        background: #22c55e;
+      }
+      
+      .status-indicator.status-connecting {
+        background: var(--scheme-primary-light);
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      .status-text {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      
+      .ip-display {
+        display: flex;
+        gap: 8px;
+        font-size: 13px;
+        padding-bottom: 12px;
+      }
+      
+      .ip-label {
+        color: var(--text-secondary);
+      }
+      
+      .ip-value {
+        font-family: 'CodeFont', monospace;
+        color: var(--scheme-primary);
+      }
+      
+      .signal-display {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 16px 0;
+      }
+      
+      .signal-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 32px;
+      }
+      
+      .signal-bar {
+        width: 8px;
+        background: var(--bg-tertiary);
+        border-radius: 2px;
+        transition: all 0.3s;
+      }
+      
+      .signal-bar:nth-child(1) { height: 20%; }
+      .signal-bar:nth-child(2) { height: 40%; }
+      .signal-bar:nth-child(3) { height: 60%; }
+      .signal-bar:nth-child(4) { height: 80%; }
+      .signal-bar:nth-child(5) { height: 100%; }
+      
+      .signal-bar.active {
+        background: var(--bar-color, var(--scheme-primary));
+      }
+      
+      .signal-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      
+      .signal-dbm {
+        font-size: 18px;
+        font-weight: 600;
+        font-family: 'CodeFont', monospace;
+      }
+      
+      .signal-quality {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+      
+      .signal-unknown {
+        color: var(--text-secondary);
+        opacity: 0.6;
+        font-style: italic;
+      }
+      
+      .signal-raw {
+        display: flex;
+        gap: 16px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        opacity: 0.6;
+        padding-bottom: 12px;
+      }
+      
+      .info-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 0;
+      }
+      
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      
+      .info-label {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+      
+      .info-value {
+        font-size: 13px;
+        color: var(--text-primary);
+      }
+      
+      .info-value.mono {
+        font-family: 'CodeFont', monospace;
+      }
+      
+      .no-data {
+        color: var(--text-secondary);
+        opacity: 0.6;
+        font-style: italic;
+        padding: 16px 0;
+      }
+    </style>
+  `}function rssiToBars(n){return n==null||n===-999?0:n>=-70?5:n>=-80?4:n>=-90?3:n>=-100?2:n>=-110?1:0}function rssiToQuality(n){return n==null||n===-999?"Unknown":n>=-70?"Excellent":n>=-80?"Good":n>=-90?"Fair":n>=-100?"Poor":"Very Poor"}function getSignalColor(n){return n==null||n===-999?"var(--text-secondary)":n>=-70||n>=-80?"#22c55e":n>=-90||n>=-100?"#f59e0b":"#ef4444"}function SDCardPanel(n,i){const s=n.boardConfig?.hardware?.sdcard;n.isConnected&&!n.sdcardConfigLoaded&&!n.isLoadingSdcardConfig&&i("load-sdcard-config"),s&&n.isConnected&&!n.sdcardInfo&&!n.isLoadingSdcardInfo&&i("sdcard-get-info");const r=n.sdcardConfig||{mountPoint:"/sd",autoMount:!1};return n.isConnected?s?html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>SD Card Configuration</h2>
+        ${n.sdcardInfo&&!n.sdcardInfo.error?html`
+          <button 
+            class="refresh-button" 
+            onclick=${()=>i("sdcard-unmount")}
+            disabled=${!n.isConnected||n.isUnmountingSDCard}
+            title="Unmount SD Card"
+          >
+            ${n.isUnmountingSDCard?"Unmounting...":"Unmount"}
+          </button>
+        `:html`
+          <button 
+            class="refresh-button" 
+            onclick=${()=>i("sdcard-mount")}
+            disabled=${!n.isConnected}
+            title="Mount SD Card"
+          >
+            Mount
+          </button>
+        `}
+      </div>
+      
+      ${BoardSDCardHardwareSection(s)}
+      
+      <div class="sdcard-layout">
+        ${n.sdcardInfo?html`
+          <div class="panel-section">
+            <h3 class="panel-section-title">
+              ${n.sdcardInfo.error?"SD Card Status":"Storage Information"}
+            </h3>
+            ${n.sdcardInfo.error?html`
+              <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1; border-left: 3px solid #dc3545;">
+                  <span class="info-label">Not Mounted</span>
+                  <span class="info-value">${n.sdcardInfo.error}</span>
+                </div>
+              </div>
+            `:html`
+              <div class="info-grid">
+                ${n.sdcardInfo.cardCapacity?html`
+                  <div class="info-item">
+                    <span class="info-label">Card Capacity</span>
+                    <span class="info-value">${formatBytes(n.sdcardInfo.cardCapacity)}</span>
+                  </div>
+                `:""}
+                <div class="info-item">
+                  <span class="info-label">Partition</span>
+                  <span class="info-value">${formatBytes(n.sdcardInfo.totalSize)}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Free</span>
+                  <span class="info-value">${formatBytes(n.sdcardInfo.freeSize)}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Used</span>
+                  <span class="info-value">${formatBytes(n.sdcardInfo.usedSize)}</span>
+                </div>
+              </div>
+            `}
+          </div>
+        `:n.isLoadingSdcardInfo?html`
+          <div class="panel-section">
+            <div class="panel-loading">Loading storage information...</div>
+          </div>
+        `:""}
+        
+        <div class="panel-section">
+          <h3 class="panel-section-title">SD Card Settings</h3>
+          <form class="config-form" onsubmit=${async a=>{a.preventDefault();const c=new FormData(a.target);i("save-sdcard-config",{mountPoint:c.get("mount_point")||"/sd",autoMount:c.get("auto_mount")==="on"})}}>
+            <div class="form-group">
+              <label for="sdcard-mount-point">
+                Mount Point <span class="required">*</span>
+                <span class="label-tooltip">
+                  ${IconSprite.renderIcon("info-circle",{className:"label-tooltip-icon",size:16})}
+                  <span class="tooltip">Filesystem mount point path (e.g., /sd)</span>
+                </span>
+              </label>
+              <input type="text" id="sdcard-mount-point" name="mount_point" 
+                value=${r.mountPoint||"/sd"} required placeholder="/sd" />
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="auto_mount" ${r.autoMount?"checked":""} />
+                <span>Auto-mount on boot
+                  <span class="label-tooltip">
+                    ${IconSprite.renderIcon("info-circle",{className:"label-tooltip-icon",size:16})}
+                    <span class="tooltip">Automatically mount SD card when device boots</span>
+                  </span>
+                </span>
+              </label>
+            </div>
+            <div class="config-actions">
+              <button type="submit" class="scriptos-update-btn">Save Settings</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  `:html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>SD Card Configuration</h2>
+        </div>
+        
+        <div class="panel-section">
+          <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+            <div style="font-size: 48px; margin-bottom: 16px;">📇</div>
+            <h3 style="margin-bottom: 8px; color: var(--text-primary);">No SD Card Hardware Detected</h3>
+            <p>This board does not have SD card hardware configured.</p>
+          </div>
+        </div>
+      </div>
+    `:html`
+      <div class="panel-container">
+        <div class="panel-header">
+          <h2>SD Card Configuration</h2>
+        </div>
+        
+        <div class="panel-section">
+          <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+            <div style="font-size: 48px; margin-bottom: 16px;">📇</div>
+            <h3 style="margin-bottom: 8px; color: var(--text-primary);">No SD Card Hardware Detected</h3>
+            <p>This board does not have SD card hardware configured.</p>
+            <p style="margin-top: 12px; font-size: 14px;">Connect to a device to check board configuration.</p>
+          </div>
+        </div>
+      </div>
+    `}function BoardSDCardHardwareSection(n){if(!n)return"";const i=n.pins||{},o=n.power_control||{},s=n.mode||"SD";let r=n.bus_width||1;n.bus_width||(i.d3!==void 0?r=4:i.d0!==void 0?r=1:s==="SD"&&(r=4));const a=s==="SD"?"SDMMC":s;return html`
+    <div class="panel-section">
+      <div class="section-header">
+        <h3 class="panel-section-title">Board Hardware Configuration</h3>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Mode:</span>
+          <span class="info-value">${a}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Width:</span>
+          <span class="info-value">${r}-bit</span>
+        </div>
+      </div>
+      
+      <div style="margin-top: 12px;">
+        <details>
+          <summary style="cursor: pointer; color: var(--text-secondary); font-size: 14px;">
+            Pin Configuration
+          </summary>
+          <div class="info-grid" style="margin-top: 8px;">
+            ${i.cmd!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">CMD:</span>
+                <span class="info-value info-mono">GPIO ${i.cmd}</span>
+              </div>
+            `:""}
+            ${i.clk!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">CLK:</span>
+                <span class="info-value info-mono">GPIO ${i.clk}</span>
+              </div>
+            `:""}
+            ${i.d0!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">D0:</span>
+                <span class="info-value info-mono">GPIO ${i.d0}</span>
+              </div>
+            `:""}
+            ${i.d1!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">D1:</span>
+                <span class="info-value info-mono">GPIO ${i.d1}</span>
+              </div>
+            `:""}
+            ${i.d2!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">D2:</span>
+                <span class="info-value info-mono">GPIO ${i.d2}</span>
+              </div>
+            `:""}
+            ${i.d3!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">D3:</span>
+                <span class="info-value info-mono">GPIO ${i.d3}</span>
+              </div>
+            `:""}
+            ${o.pin!==void 0?html`
+              <div class="info-item">
+                <span class="info-label">Power:</span>
+                <span class="info-value info-mono">GPIO ${o.pin} ${o.active_low?"(Active Low)":"(Active High)"}</span>
+              </div>
+            `:""}
+          </div>
+        </details>
+      </div>
+    </div>
+  `}function formatBytes(n){if(!n||n===0)return"0 B";const i=1024,o=["B","KB","MB","GB"],s=Math.floor(Math.log(n)/Math.log(i));return Math.round(n/Math.pow(i,s)*100)/100+" "+o[s]}const REGISTRY_BASE="/boards",CHIP_VARIANT_MAP={"ESP32-S3":{base:"ESP32_S3_8",variants:["ESP32_S3_8","ESP32_S3_8_OCT","ESP32_S3_16"]},"ESP32-P4":{base:"ESP32_P4_16",variants:["ESP32_P4_16","ESP32_P4_32"]}};async function fetchFirmwareInfo(){try{const n=await fetch(`${REGISTRY_BASE}/firmware/latest.json`);if(!n.ok)throw new Error(`Registry error: ${n.status}`);return await n.json()}catch(n){throw console.error("[firmware-flasher] Failed to fetch firmware info:",n),n}}async function selectFirmwareVariant(n,i=0,o=null){const s=CHIP_VARIANT_MAP[n];if(!s)return console.warn(`[firmware-flasher] No firmware mapping for chip: ${n}`),null;const r=typeof i=="string"?parseInt(i):i;let a=s.base;n==="ESP32-S3"?r>=16?a="ESP32_S3_16":o==="octal"&&(a="ESP32_S3_8_OCT"):n==="ESP32-P4"&&r>=32&&(a="ESP32_P4_32");try{const l=await fetchFirmwareInfo(),d=(l.variants||[]).find(p=>p.id===a);if(d&&d.url)return{id:d.id,file:d.file,url:d.url,displayName:d.id.replace(/_/g," "),version:l.version}}catch(l){console.warn("[firmware-flasher] Could not fetch latest.json, using fallback URL:",l)}const c=`${a}-merged.bin`;return{id:a,file:c,url:`${REGISTRY_BASE}/firmware/${c}`,displayName:a.replace(/_/g," ")}}async function fetchBoardManifests(n=null){try{const i=await fetch(`${REGISTRY_BASE}/manifests/index.json`);if(!i.ok)throw new Error(`Registry error: ${i.status}`);let s=(await i.json()).boards||[];return n&&(s=s.filter(r=>r.chip===n)),s}catch(i){throw console.error("[firmware-flasher] Failed to fetch board manifests:",i),i}}async function fetchBoardManifest(n){try{const i=await fetch(`${REGISTRY_BASE}/manifests/${n}.json`);if(!i.ok)throw new Error(`Manifest not found: ${n}`);return await i.json()}catch(i){throw console.error(`[firmware-flasher] Failed to fetch manifest for ${n}:`,i),i}}async function downloadFirmware(n,i=()=>{},o=0){try{const s=await fetch(n);if(!s.ok){const f=n.match(/([A-Z0-9_]+)-merged\.bin/),h=f?f[1]:"requested";throw s.status===404||s.status===503?new Error(`Firmware "${h}" is not available yet. The build may still be in progress — please try again in a few minutes.`):new Error(`Failed to download firmware: HTTP ${s.status}`)}const r=s.headers.get("content-length"),a=r?parseInt(r,10):0;if(!s.body){const f=await s.arrayBuffer();return i(100),f}const c=s.body.getReader(),l=[];let d=0;for(;;){const{done:f,value:h}=await c.read();if(f)break;l.push(h),d+=h.length;const m=o||a;m>0?i(Math.round(d/m*100)):i(Math.round(10+d/1e6%80))}const p=new Uint8Array(d);let u=0;for(const f of l)p.set(f,u),u+=f.length;return console.log(`[firmware-flasher] Downloaded ${(d/1024/1024).toFixed(1)} MB`),i(100),p.buffer}catch(s){throw console.error("[firmware-flasher] Download error:",s),s}}function showStyledModal({variant:n="",icon:i,title:o,subtitle:s,body:r,buttons:a}){const c=l=>l?l.includes("<")||/[\u{1F300}-\u{1F9FF}]/u.test(l)?l:`<svg class="icon icon-tabler" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-${l}"></use></svg>`:"";return new Promise(l=>{const d=document.createElement("div");d.className="fw-modal-overlay active",d.innerHTML=`
+      <div class="fw-styled-modal">
+        <div class="fw-styled-modal-header ${n?`fw-styled-modal-header--${n}`:""}">
+          <div class="fw-styled-modal-icon">${c(i)}</div>
+          <h2>${o}</h2>
+          <p>${s}</p>
+        </div>
+        <div class="fw-styled-modal-content">
+          <div class="fw-styled-modal-card">${r}</div>
+          ${a.map(p=>`<button class="${p.class}" data-id="${p.id}">${p.icon||""}${p.label}</button>`).join("")}
+        </div>
+      </div>`,document.body.appendChild(d),a.forEach(p=>{d.querySelector(`[data-id="${p.id}"]`).addEventListener("click",()=>{d.remove(),l(p.id)})})})}function updateModalBody(n){const i=document.querySelector(".fw-styled-modal-card");i&&(i.innerHTML=n)}function closeStyledModal(){const n=document.querySelector(".fw-modal-overlay.active");n&&n.remove()}let currentPort=null,currentLoader=null,detectedChipName="",detectedMacAddress="",isBlankDevice=!0,ESPLoader=null,appState=null,panelState={view:"connect",deviceInfo:null,releases:[],selectedFirmware:null,flashProgress:0,wifiNetworks:[],selectedNetwork:null,credentials:null,logs:[{message:"> Ready",type:"info",timestamp:new Date().toLocaleTimeString()}],isFlashing:!1,isScanning:!1,terminalCollapsed:!1,reblessComplete:!1,reblessHostname:null,flashStep:"select",currentRelease:null,firmwareOptions:[],flashComplete:!1,boardOptions:[],selectedBoard:null,isNewDeviceFlow:!1};function addLog(n,i="info"){panelState.logs.push({message:`> ${n}`,type:i,timestamp:new Date().toLocaleTimeString()}),panelState.logs.length>100&&(panelState.logs=panelState.logs.slice(-100)),triggerRerender()}function clearLog(){panelState.logs=[]}function triggerRerender(){document.dispatchEvent(new CustomEvent("firmware-panel-update"))}async function pulseReset(n){await n.setSignals({dataTerminalReady:!1,requestToSend:!1}),await new Promise(i=>setTimeout(i,50)),await n.setSignals({dataTerminalReady:!1,requestToSend:!0}),await new Promise(i=>setTimeout(i,100)),await n.setSignals({dataTerminalReady:!1,requestToSend:!1}),await new Promise(i=>setTimeout(i,100))}async function transitionToREPL(){currentLoader&&(await currentLoader.disconnect(),currentLoader=null,await new Promise(l=>setTimeout(l,100))),await currentPort.close(),await new Promise(l=>setTimeout(l,100)),await currentPort.open({baudRate:115200}),addLog("Resetting device..."),await pulseReset(currentPort),addLog("Waiting for System booting...");const n=currentPort.readable.getReader(),i=new TextDecoder;let o="";const s=Date.now();let r=!1,a=null;const c=[{pattern:/invalid header: 0x[0-9a-fA-F]+/i,message:"Invalid firmware header - incompatible image for this device"},{pattern:/flash read err/i,message:"Flash read error - firmware may be corrupted"},{pattern:/ets_main\.c/i,message:"Boot failure - firmware not recognized"},{pattern:/rst:0x10.*boot:0x[0-9a-f]+.*invalid/i,message:"Boot loop detected - firmware incompatible"}];for(;Date.now()-s<8e3;){const{value:l,done:d}=await n.read();if(d)break;if(l){o+=i.decode(l);for(const{pattern:p,message:u}of c)if(p.test(o)){a=u,console.log("[transitionToREPL] Boot error detected:",o);break}if(a)break;if(o.includes("System booting...")){r=!0,addLog("System booting detected","success"),n.releaseLock();const p=currentPort.writable.getWriter();await p.write(new Uint8Array([3,3,3])),await new Promise(u=>setTimeout(u,30)),await p.write(new Uint8Array([3,3])),p.releaseLock(),addLog("Interrupting to enter REPL...");break}}}if(!r)try{n.releaseLock()}catch{}if(a)return addLog(a,"error"),{success:!1,error:a,bootOutput:o};if(!r){addLog("No boot signature detected","error");const l=currentPort.writable.getWriter();return await l.write(new Uint8Array([3,3])),l.releaseLock(),{success:!1,error:"No boot signature from device - firmware may be incompatible",bootOutput:o}}await new Promise(l=>setTimeout(l,200)),addLog("Entering REPL mode...");try{const l=currentPort.readable.getReader(),d=setTimeout(()=>l.cancel(),500);try{for(;;){const{value:p,done:u}=await l.read();if(u)break}}catch{}clearTimeout(d),l.releaseLock()}catch(l){console.log("[DRAIN] Error:",l)}return addLog("REPL ready"),{success:!0}}async function handleBootFailure(n){await showStyledModal({variant:"danger",icon:'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',title:"Boot Failure Detected",subtitle:"Incompatible firmware image",body:`<p><strong>${n}</strong></p><p>The device could not boot. This typically happens when the wrong firmware variant is flashed.</p>`,buttons:[{id:"reflash",class:"fw-styled-modal-btn-primary",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="margin-right:0.5rem"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',label:"Return to Bootloader"},{id:"close",class:"fw-styled-modal-btn-cancel",label:"Close"}]})==="reflash"&&(addLog("Returning to bootloader mode..."),addLog('Ready for re-flash. Select "Onboard New Device" to flash correct firmware.',"success")),panelState.view="scenarios",triggerRerender()}async function sendREPLCommand(n,i,o=15e3,s=!0){const r=n.writable.getWriter();try{const a=i.split(`
+`).filter(v=>v.trim().length>0),c=Math.min(...a.map(v=>{const y=v.match(/^(\s*)/);return y?y[1].length:0})),l=a.map(v=>v.slice(c)).join(`
+`);s&&(await r.write(new Uint8Array([1])),await new Promise(v=>setTimeout(v,100)));const d=new TextEncoder().encode(l),p=64;for(let v=0;v<d.length;v+=p){const y=d.slice(v,Math.min(v+p,d.length));await r.write(y),await new Promise(w=>setTimeout(w,10))}await new Promise(v=>setTimeout(v,50)),await r.write(new Uint8Array([4])),r.releaseLock();const u=n.readable.getReader();let f="";const h=new TextDecoder,m=Date.now();for(;Date.now()-m<o;){const{value:v,done:y}=await u.read();if(y||v&&(f+=h.decode(v),f.includes("OK")&&f.endsWith(">")))break}return u.releaseLock(),f}catch(a){try{r.releaseLock()}catch{}throw a}}const USB_BRIDGE_DB={6790:{vendorName:"QinHeng Electronics",products:{29986:{name:"CH340",maxBaudrate:460800},29987:{name:"CH340",maxBaudrate:460800},21971:{name:"CH343",maxBaudrate:6e6},21972:{name:"CH9102",maxBaudrate:6e6}}},4292:{vendorName:"Silicon Labs",products:{6e4:{name:"CP2102(n)",maxBaudrate:3e6},60016:{name:"CP2105",maxBaudrate:2e6}}},1027:{vendorName:"FTDI",products:{24577:{name:"FT232R",maxBaudrate:3e6},24592:{name:"FT2232",maxBaudrate:3e6},24597:{name:"FT230X",maxBaudrate:3e6}}},12346:{vendorName:"Espressif Systems",products:{2:{name:"ESP32-S2 Native USB",maxBaudrate:2e6},4097:{name:"ESP32 Native USB",maxBaudrate:2e6},16386:{name:"ESP32 Native USB (CDC)",maxBaudrate:2e6}}}},JEDEC_MANUFACTURERS={1:"Spansion/Infineon",11:"Samsung",28:"Eon/Puya",32:"Micron",104:"Atmel/Adesto",133:"Fudan",157:"ISSI",191:"Microchip/SST",194:"Macronix",200:"GigaDevice",239:"Winbond"},JEDEC_FLASH_PARTS={239:{16406:"W25Q32 (32 Mbit)",16407:"W25Q64 (64 Mbit)",16408:"W25Q128 (128 Mbit)",16409:"W25Q256 (256 Mbit)"},200:{16406:"GD25Q32 (32 Mbit)",16407:"GD25Q64 (64 Mbit)",16408:"GD25Q128 (128 Mbit)",16409:"GD25Q256 (256 Mbit)"},194:{16406:"MX25L3206 (32 Mbit)",16407:"MX25L6406 (64 Mbit)",16408:"MX25L12835 (128 Mbit)"}};function getUsbBridgeInfo(n){try{const i=n.getInfo?.();if(!i||typeof i.usbVendorId!="number")return null;const o=i.usbVendorId,s=i.usbProductId,r=USB_BRIDGE_DB[o];if(!r)return`Unknown (0x${o.toString(16).padStart(4,"0")})`;const a=r.products[s];return a?`${r.vendorName} - ${a.name} (0x${s.toString(16).toUpperCase()})`:`${r.vendorName} (0x${s?.toString(16).padStart(4,"0")||"????"})`}catch(i){return console.log("[getUsbBridgeInfo] Error:",i),null}}function getFlashDeviceInfo(n){if(!n||typeof n!="number")return null;const i=n&255,o=n>>8&255,s=n>>16&255,r=o<<8|s,a=JEDEC_MANUFACTURERS[i],c=JEDEC_FLASH_PARTS[i]?.[r];return a&&c?`${a} ${c}`:a?`${a} (0x${r.toString(16).toUpperCase()})`:`0x${n.toString(16).padStart(6,"0").toUpperCase()}`}async function detectHardware(n){ESPLoader||(ESPLoader=(await __vitePreload(()=>import("./tasmota-esptool.bundle-CejzY9o0.js"),[])).ESPLoader,console.log("[firmware-panel] ESPLoader module loaded"));const i={log:f=>console.log(f),debug:f=>console.debug(f),error:f=>console.error(f)},o=new ESPLoader(n,i),s=getUsbBridgeInfo(n);await o.initialize();const r=o.chipName||"Unknown";console.log("Connected to chip:",r);const a=o.macAddr(),c=Array.isArray(a)&&a.length>=6?a.slice(0,6).map(f=>f.toString(16).padStart(2,"0")).join(":"):"Unknown";let l=null;if(r?.includes("ESP32-S3"))try{const h=await o.readRegister(1610641492),m=h>>3&3,v=h>>7&3,y={0:null,1:"8MB",2:"2MB",3:"8MB+"},w={1:"AP Memory 3.3V",2:"AP Memory 1.8V"};if(m>0){const b=v===1;l={capacity:y[m]||"Unknown",vendor:w[v]||"",mode:b?"octal":"quad",display:`Embedded PSRAM ${y[m]||""}${w[v]?` (${w[v]})`:""}`},console.log("PSRAM detected:",l)}}catch(f){console.log("PSRAM eFuse detection not available:",f)}let d="Unknown",p=null,u=115200;try{console.log("Running stub...");const f=await o.runStub();await f.detectFlashSize(),d=f.flashSize||"Unknown",console.log("Flash size detected:",d);try{const h=await f.flashId?.();h&&(p=getFlashDeviceInfo(h),console.log("Flash device:",p))}catch(h){console.log("Flash ID detection not available:",h)}u=f.transport?.baudrate||921600,currentLoader=f}catch(f){console.warn("Stub/Feature detection failed:",f),d="Detection Failed",currentLoader=o}return{chipName:r,flashSizeMB:d,macAddress:c,usbBridge:s,flashDevice:p,connectionBaud:u,psramInfo:l}}async function handleConnect(){try{currentLoader&&(await currentLoader.disconnect(),currentLoader=null),currentPort&&(await currentPort.close(),currentPort=null)}catch(n){console.log("Cleanup previous connection:",n)}try{clearLog(),addLog("Requesting serial port..."),currentPort=await navigator.serial.requestPort({}),await currentPort.open({baudRate:115200}),addLog("Port opened"),addLog("Detecting hardware...");const n=await detectHardware(currentPort);detectedChipName=n.chipName,detectedMacAddress=n.macAddress,addLog(`Detected: ${detectedChipName}`),addLog(`MAC: ${detectedMacAddress}`),panelState.deviceInfo={chipName:detectedChipName,mac:detectedMacAddress,flashSize:n.flashSizeMB,usbBridge:n.usbBridge,flashDevice:n.flashDevice,connectionBaud:n.connectionBaud,psramInfo:n.psramInfo},isBlankDevice=!0;const i=sessionStorage.getItem("extension-install-active");i?(addLog(`Extension install: ${i} — skipping to flash`),selectScenario("new-device")):(panelState.view="scenarios",addLog("Device connected - select an action")),appState&&(appState.connectionMode="usb"),triggerRerender()}catch(n){console.error("[firmware-panel]",n),addLog(`Error: ${n.message}`,"error");try{currentPort&&await currentPort.close()}catch{}currentPort=null,currentLoader=null,triggerRerender()}}async function handleDisconnect(){try{if(currentLoader&&(await currentLoader.disconnect(),currentLoader=null),currentPort){try{await pulseReset(currentPort)}catch(n){console.log("[handleDisconnect] Reset error:",n)}await currentPort.close(),currentPort=null}}catch{}panelState.view="connect",panelState.deviceInfo=null,detectedChipName="",detectedMacAddress="",isBlankDevice=!0,appState&&(appState.connectionMode=null),clearLog(),addLog("Disconnected"),triggerRerender()}async function resetAndClosePort(){try{if(currentLoader&&(await currentLoader.disconnect(),currentLoader=null),currentPort){try{await pulseReset(currentPort)}catch(n){console.log("[resetAndClosePort] Reset error:",n)}await currentPort.close(),currentPort=null}}catch(n){console.log("[resetAndClosePort] Error:",n)}}function selectScenario(n){addLog(`Selected: ${n}`),panelState.view=n,n==="new-device"?loadFirmwareOptions():n==="forgot-credentials"?readCredentials():n==="change-wifi"?performWifiSetup():n==="re-provision"&&startRebless(),triggerRerender()}function goBack(){panelState.flashStep="select",panelState.flashComplete=!1,panelState.flashProgress=0,panelState.view="scenarios",triggerRerender()}async function loadFirmwareOptions(){try{addLog("Selecting firmware variant..."),panelState.flashStep="select",panelState.firmwareOptions=[],triggerRerender();const n=panelState.deviceInfo?.chipName?.includes("ESP32-S3")?"ESP32-S3":panelState.deviceInfo?.chipName?.includes("ESP32-P4")?"ESP32-P4":null;if(!n){addLog("Unknown chip family - cannot select firmware","error");return}const i=panelState.deviceInfo?.flashSize,o=panelState.deviceInfo?.psramInfo?.mode||null,s=await selectFirmwareVariant(n,i,o);if(!s){addLog(`No firmware available for ${n}`,"error");return}panelState.selectedFirmware=s,panelState.firmwareOptions=[s],addLog(`Selected: ${s.displayName}`);try{const r=await fetchBoardManifests(n);panelState.boardOptions=r;const a=n==="ESP32-S3"?"generic_esp32s3":"generic_esp32p4";panelState.selectedBoard=r.find(c=>c.id===a)||r[0]||null,panelState.selectedBoard&&addLog(`Board: ${panelState.selectedBoard.name}`)}catch(r){console.warn("[firmware-panel] Could not load board manifests:",r),panelState.boardOptions=[],panelState.selectedBoard=null}triggerRerender()}catch(n){addLog(`Error: ${n.message}`,"error"),triggerRerender()}}async function startFlash(){if(!currentLoader){addLog("Error: No device connected","error");return}if(!panelState.selectedFirmware){addLog("Error: No firmware selected","error");return}if(!confirm(`⚠️ FLASH FIRMWARE ⚠️
+
+This will ERASE all data on the device and install:
+${panelState.selectedFirmware.displayName}
+
+Any existing scripts, settings, and certificates will be PERMANENTLY DELETED.
+
+Are you sure you want to continue?`)){addLog("Flash cancelled by user");return}try{panelState.flashStep="downloading",panelState.flashProgress=0,triggerRerender(),addLog(`Downloading ${panelState.selectedFirmware.displayName}...`);const i=panelState.deviceInfo?.flashSize||"",o=parseFloat(i)*1024*1024||0,s=await downloadFirmware(panelState.selectedFirmware.url,r=>{panelState.flashProgress=r,r%20===0&&addLog(`Download: ${r}%`),triggerRerender()},o);addLog(`Downloaded ${(s.byteLength/1024/1024).toFixed(1)} MB`),panelState.flashStep="flashing",panelState.flashProgress=0,triggerRerender(),addLog("Syncing with device...");try{await currentLoader.sync()}catch{await currentLoader.initialize()}addLog("Flashing firmware...");try{await currentLoader.flashData(s,(r,a)=>{const c=Math.floor(r/a*100);panelState.flashProgress=c,c%10===0&&addLog(`Progress: ${c}%`),triggerRerender()},0,!0)}catch(r){if((r?.message||String(r)).includes("Timed out")&&panelState.flashProgress>=95)addLog("Flash complete (device rebooted)");else throw r}addLog("✓ Flash complete!","success");try{await currentLoader.disconnect()}catch{}currentLoader=null,panelState.flashStep="complete",panelState.flashComplete=!0,panelState.terminalCollapsed=!0,triggerRerender()}catch(i){console.error("[firmware-panel] Flash error:",i),addLog(`Flash failed: ${i.message}`,"error");const o=panelState.flashStep==="flashing";if(panelState.flashStep="select",o){try{currentPort&&await currentPort.close()}catch{}currentPort=null,currentLoader=null}triggerRerender()}}async function proceedToWifiSetup(){addLog("Proceeding to WiFi setup..."),panelState.flashStep="select",panelState.flashComplete=!1,panelState.flashProgress=0,panelState.isNewDeviceFlow=!0,panelState.view="change-wifi";try{if(!currentPort){addLog("Please reconnect device"),panelState.view="connect",triggerRerender();return}performWifiSetup()}catch(n){addLog(`Error: ${n.message}`,"error")}triggerRerender()}async function readCredentials(){try{addLog("Reading credentials from device...");const n=await transitionToREPL();if(!n.success){await handleBootFailure(n.error);return}const o=(await sendREPLCommand(currentPort,`
+import json
+from lib.sys import settings
+hostname = settings.get("device.hostname", "unknown")
+password = settings.get("server.webrepl_password", "not set")
+ssid = settings.get("wifi.ssid", "not set")
+print("CREDS:" + json.dumps({"h": hostname, "p": password, "s": ssid}))
+`)).match(/CREDS:(\{.*\})/);if(o){const s=JSON.parse(o[1]);panelState.credentials={hostname:s.h+".local",password:s.p,ssid:s.s},addLog(`Found: ${s.h}.local`,"success")}else throw new Error("Could not read settings - device may need firmware");triggerRerender()}catch(n){addLog(`Error: ${n.message}`,"error"),triggerRerender()}}async function performWifiSetup(){clearLog();try{let l=function(d){return new Promise((p,u)=>{const f=document.createElement("div");f.className="fw-modal-overlay active",f.innerHTML=`
+          <div class="fw-modal">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 0.5rem;">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <circle cx="12" cy="20" r="1"/>
+              </svg>
+              Select WiFi Network
+            </h3>
+            <div class="fw-network-modal-list">
+              ${d.map((y,w)=>`
+                <button class="fw-modal-network-item" data-index="${w}">
+                  <span class="fw-network-name">${y.ssid}</span>
+                  <span class="fw-network-info">
+                    ${y.sec?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>':""}
+                    <span class="fw-network-rssi">${y.rssi} dBm</span>
+                  </span>
+                </button>
+              `).join("")}
+            </div>
+            <button class="fw-modal-cancel">Cancel</button>
+          </div>
+        `,document.body.appendChild(f);const h=y=>{const w=y.target.closest(".fw-modal-network-item");if(w){const b=parseInt(w.dataset.index);v(),p(b)}},m=()=>{v(),u(new Error("Setup cancelled"))},v=()=>{f.remove()};f.querySelector(".fw-network-modal-list").addEventListener("click",h),f.querySelector(".fw-modal-cancel").addEventListener("click",m)})};addLog("Connecting to REPL...");const n=await transitionToREPL();if(!n.success){await handleBootFailure(n.error);return}addLog("Scanning for WiFi networks...");const o=(await sendREPLCommand(currentPort,`
+import network
+import json
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+raw = wlan.scan()
+# Deduplicate by SSID, keeping strongest signal
+nets = {}
+for ssid, bssid, channel, rssi, authmode, hidden in raw:
+    s = ssid.decode()
+    if s and (s not in nets or rssi > nets[s][0]):
+        nets[s] = (rssi, authmode)
+# Convert to sorted list (by rssi descending)
+result = [{"ssid": k, "rssi": v[0], "sec": v[1] != 0} for k, v in nets.items()]
+result.sort(key=lambda x: x["rssi"], reverse=True)
+print("JSON:" + json.dumps(result))
+`)).match(/JSON:(\[.*\])/);if(!o)throw new Error("Failed to parse network scan - no JSON found");let s;try{s=JSON.parse(o[1])}catch(d){throw new Error("Failed to parse network JSON: "+d.message)}if(s.length===0)throw new Error("No WiFi networks found");addLog(`Found ${s.length} networks`);let r=!1,a=null,c=null;for(;!r;){const d=await l(s),p=s[d],u=prompt(`Enter password for "${p.ssid}":`);if(u===null)continue;addLog(`Connecting to "${p.ssid}"...`);const h=(await sendREPLCommand(currentPort,`
+import time
+try:
+    wlan.disconnect()
+except:
+    pass
+time.sleep(0.3)
+wlan.connect('${p.ssid}', '${u}')
+for i in range(20):
+    if wlan.isconnected():
+        ip = wlan.ifconfig()[0]
+        print(f"CONNECTED:{ip}")
+        break
+    time.sleep(0.5)
+else:
+    print("FAILED:timeout")
+`,15e3,!1)).match(/CONNECTED:(\d+\.\d+\.\d+\.\d+)/);if(h){a=h[1],r=!0,addLog(`Connected! IP: ${a}`),addLog("Saving settings...");const v=`pybot-${panelState.deviceInfo?.mac?panelState.deviceInfo.mac.replace(/:/g,"").slice(-4).toLowerCase():"xxxx"}`;if(await sendREPLCommand(currentPort,`
+from lib.sys import settings
+settings.set("wifi.ssid", "${p.ssid}")
+settings.set("wifi.password", "${u}")
+settings.set("server.https_enabled", True)
+settings.set("device.hostname", "${v}")
+settings.save()
+print("SETTINGS_OK")
+`,5e3,!1),addLog(`Settings saved (hostname: ${v})`,"success"),panelState.isNewDeviceFlow){panelState.isNewDeviceFlow=!1,panelState.savedHostname=v,addLog("Continuing to certificate generation..."),await continueToProvision(v);return}panelState.view="scenarios",triggerRerender();return}else if(addLog("Connection failed"),!confirm(`WiFi connection failed. Wrong password?
+
+Click OK to try again, or Cancel to abort.`))throw new Error("Connection cancelled")}}catch(n){addLog(`Error: ${n.message}`,"error"),triggerRerender()}}async function continueToProvision(n){try{const i=n+".local";addLog("Generating HTTPS certificate..."),window.forge||await new Promise((l,d)=>{const p=document.createElement("script");p.src="https://cdn.jsdelivr.net/npm/node-forge@1.3.1/dist/forge.min.js",p.onload=l,p.onerror=()=>d(new Error("Failed to load forge")),document.head.appendChild(p)}),addLog(`Hostname: ${i}`);const{certPem:o,keyPem:s}=generateSelfSignedCert(i);if(addLog(`Certificate generated (${o.length} bytes)`),addLog("Installing certificate..."),await uploadCertsToDevice(currentPort,o,s),panelState.selectedBoard)try{addLog(`Installing board config: ${panelState.selectedBoard.name}...`);const l=await fetchBoardManifest(panelState.selectedBoard.id),d=JSON.stringify(l).replace(/\\/g,"\\\\").replace(/'/g,"\\'");await sendREPLCommand(currentPort,`
+import json
+try:
+    import os
+    os.mkdir('/settings')
+except:
+    pass
+with open('/settings/board.json', 'w') as f:
+    f.write('${d}')
+print("BOARD_OK")
+`,5e3,!1),addLog("Board config installed","success")}catch(l){addLog(`Warning: Could not install board config: ${l.message}`,"error")}const r=localStorage.getItem("pending-extension-id");if(r){localStorage.removeItem("pending-extension-id");try{addLog(`Pre-installing extension: ${r}...`);const l=new ExtensionRegistry,p=(await l.loadIndex("https://cheerful-stoat-894.convex.site/api/v1/extensions")).find(u=>u.id===r);p?(await l.installExtension(p),addLog(`Extension cached: ${p.name}`,"success")):addLog(`Extension "${r}" not found in registry`,"error")}catch(l){addLog(`Warning: could not pre-install extension: ${l.message}`,"error")}}const a=panelState.selectedFirmware?.version||"unknown";addLog(`Firmware version: ${a}`),addLog("Enabling setup mode..."),await sendREPLCommand(currentPort,`
+from lib.sys import settings
+settings.set("setup_mode", True)
+settings.set("firmware.version", "${a}")
+settings.save()
+print("SETUP_MODE_SET")
+`,5e3,!1),addLog("Resetting device...");try{const l=currentPort.writable.getWriter(),p=new TextEncoder().encode("import machine; machine.reset()"),u=new Uint8Array(p.length+1);u.set(p),u[p.length]=4,await l.write(u),l.releaseLock()}catch{}await new Promise(l=>setTimeout(l,500));try{await currentPort.close()}catch{}currentPort=null,addLog("Device is restarting and connecting to WiFi...","success");let c=`https://${i}/setup`;r&&(c+=`?ext=${encodeURIComponent(r)}`),showSecurityWarningModal(i,c)}catch(i){addLog(`Error: ${i.message}`,"error"),triggerRerender()}}async function startRebless(){try{addLog("Starting re-provisioning...");const n=await transitionToREPL();if(!n.success){await handleBootFailure(n.error);return}addLog("Reading device settings...");const o=(await sendREPLCommand(currentPort,`
+from lib.sys import settings
+print("HOST:" + settings.get("device.hostname", "pybot-xxxx"))
+`)).match(/HOST:(.+)/),s=o?o[1].trim():"pybot-new";addLog(`Generating new certificate for ${s}.local...`),window.forge||await new Promise((d,p)=>{const u=document.createElement("script");u.src="https://cdn.jsdelivr.net/npm/node-forge@1.3.1/dist/forge.min.js",u.onload=d,u.onerror=p,document.head.appendChild(u)});const r=s+".local",{certPem:a,keyPem:c}=generateSelfSignedCert(r);addLog("Installing new certificate..."),await uploadCertsToDevice(currentPort,a,c),addLog("Enabling setup mode..."),await sendREPLCommand(currentPort,`
+from lib.sys import settings
+settings.set("setup_mode", True)
+settings.save()
+print("SETUP_MODE_SET")
+`,5e3,!1),addLog("Resetting device...");try{const d=currentPort.writable.getWriter(),u=new TextEncoder().encode("import machine; machine.reset()"),f=new Uint8Array(u.length+1);f.set(u),f[u.length]=4,await d.write(f),d.releaseLock()}catch{}await new Promise(d=>setTimeout(d,500));try{await currentPort.close()}catch{}currentPort=null,addLog("Device is restarting and connecting to WiFi...","success");const l=`https://${r}/setup`;showSecurityWarningModal(r,l)}catch(n){addLog(`Error: ${n.message}`,"error"),triggerRerender()}}async function showSecurityWarningModal(n,i){const o=await showStyledModal({icon:'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',title:"Accept Security Warning",subtitle:"Your device has new certificates",body:'<p>Your device is <strong>restarting</strong> and connecting to WiFi.</p><p>A new tab will open — click <strong>"Advanced"</strong> → <strong>"Proceed"</strong> to trust your device, then <strong>return here</strong>.</p>',buttons:[{id:"connect",class:"fw-styled-modal-btn-primary",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="margin-right:0.5rem"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',label:`Open ${n}`},{id:"cancel",class:"fw-styled-modal-btn-cancel",label:"Skip for now"}]});panelState.view="scenarios",panelState.reblessComplete=!1,triggerRerender(),o==="connect"&&window.open(i,"_blank")}function generateSelfSignedCert(n,i=10){const o=forge.pki.rsa.generateKeyPair(2048),s=forge.pki.createCertificate();s.publicKey=o.publicKey,s.serialNumber="01",s.validity.notBefore=new Date,s.validity.notAfter=new Date,s.validity.notAfter.setFullYear(s.validity.notBefore.getFullYear()+i);const r=[{name:"commonName",value:n}];return s.setSubject(r),s.setIssuer(r),s.setExtensions([{name:"subjectAltName",altNames:[{type:2,value:n}]}]),s.sign(o.privateKey,forge.md.sha256.create()),{certPem:forge.pki.certificateToPem(s),keyPem:forge.pki.privateKeyToPem(o.privateKey)}}async function uploadCertsToDevice(n,i,o){addLog("Creating /certs directory..."),await sendREPLCommand(n,`
+import os
+try:
+    os.mkdir('/certs')
+except OSError:
+    pass
+print('DIR_OK')
+`,3e3,!1),addLog("Writing certificate...");const s=btoa(i);await sendREPLCommand(n,`
+import binascii
+with open('/certs/servercert.pem', 'wb') as f:
+    f.write(binascii.a2b_base64(b'${s}'))
+print('CERT_OK')
+`,5e3,!1),addLog("Writing private key...");const r=btoa(o);await sendREPLCommand(n,`
+with open('/certs/prvtkey.pem', 'wb') as f:
+    f.write(binascii.a2b_base64(b'${r}'))
+print('KEY_OK')
+`,5e3,!1),addLog("Certificates installed!")}function FirmwarePanel(n,i){appState=n;const o=panelState.view;return html$1`
+    <div class="firmware-panel">
+      ${o==="connect"?renderConnectView():""}
+      ${o==="scenarios"?renderScenariosView():""}
+      ${o==="new-device"?renderNewDeviceView():""}
+      ${o==="forgot-credentials"?renderForgotCredentialsView():""}
+      ${o==="change-wifi"?renderChangeWifiView():""}
+      ${o==="re-provision"?renderReProvisionView():""}
+      
+      ${renderTerminal()}
+    </div>
+  `}function renderDeviceInfoCompact(n="Connected",i="fw-status-success"){const o=panelState.deviceInfo;if(!o)return"";const s=getChipFeatures(o.chipName),r=o.connectionBaud?`${o.connectionBaud.toLocaleString()} bps`:"115,200 bps";return html$1`
+    <div class="fw-device-info-header">
+      <!-- Dark Header Section -->
+      <div class="fw-device-chip-header">
+        <div class="fw-device-chip-name">${o.chipName}</div>
+        <div class="fw-device-chip-subline">
+          <span class="fw-device-subline-item">
+            ${IconSprite.renderIcon("refresh",{className:"fw-subline-icon",size:16})}
+            v1.0
+          </span>
+          <span class="fw-device-subline-item">
+            ${IconSprite.renderIcon("wifi",{className:"fw-subline-icon",size:16})}
+            ${o.mac} (MAC)
+          </span>
+        </div>
+      </div>
+      
+      <!-- Blue Summary Card -->
+      <div class="fw-device-summary-card">
+        <div class="fw-summary-section">
+          <div class="fw-summary-label">
+            ${IconSprite.renderIcon("cpu",{className:"fw-summary-icon",size:24})}
+            MEMORY
+          </div>
+          <div class="fw-summary-value">${o.flashSize||"Unknown"} Flash${o.psramInfo?` · ${o.psramInfo.capacity} PSRAM`:""}</div>
+          <div class="fw-summary-meta">Crystal 40 MHz${o.psramInfo?` · ${o.psramInfo.mode.toUpperCase()} PSRAM`:""}</div>
+          <div class="fw-summary-facts">
+            ${o.flashDevice?html$1`
+              <div class="fw-summary-fact">
+                ${IconSprite.renderIcon("cpu",{className:"fw-fact-icon",size:14})}
+                <span>Flash Device : ${o.flashDevice}</span>
+              </div>
+            `:""}
+            ${o.usbBridge?html$1`
+              <div class="fw-summary-fact">
+                ${IconSprite.renderIcon("usb",{className:"fw-fact-icon",size:14})}
+                <span>USB Bridge : ${o.usbBridge}</span>
+              </div>
+            `:""}
+            <div class="fw-summary-fact">
+              ${IconSprite.renderIcon("bolt",{className:"fw-fact-icon",size:14})}
+              <span>Connection Baud : ${r}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="fw-summary-divider"></div>
+        
+        <div class="fw-summary-section">
+          <div class="fw-summary-label">
+            ${IconSprite.renderIcon("bolt",{className:"fw-summary-icon",size:24})}
+            FEATURE SET
+          </div>
+          <div class="fw-summary-value">${s.length} capabilities</div>
+          <div class="fw-summary-chips">
+            ${s.map(a=>html$1`
+              <div class="fw-feature-chip">
+                <span class="fw-feature-label">${a}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="M20 6L9 17L4 12"></path>
+                </svg>
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+    </div>
+  `}function getChipFeatures(n){const i={"ESP32-P4":["High-Performance MCU","RISC-V Dual Core"],"ESP32-S3":["WiFi","BLE 5.0","USB OTG"],"ESP32-S2":["WiFi","USB OTG"],"ESP32-C3":["WiFi","BLE 5.0","RISC-V"],"ESP32-C6":["WiFi 6","BLE 5.0","Thread"],ESP32:["WiFi","Bluetooth Classic","BLE"]};for(const[o,s]of Object.entries(i))if(n?.includes(o))return s;return["Microcontroller"]}let extensionDisplayNames={},extensionNamesFetched=!1;async function fetchExtensionDisplayName(n){if(!extensionNamesFetched){extensionNamesFetched=!0;try{const i=await fetch("https://cheerful-stoat-894.convex.site/api/v1/extensions");if(!i.ok)return;const o=await i.json();for(const s of o.extensions||[])extensionDisplayNames[s.id]=s.name;triggerRerender()}catch(i){console.warn("[firmware-panel] Could not fetch extension names:",i)}}}function renderConnectView(n,i){const o=sessionStorage.getItem("extension-install-active");if(o){extensionNamesFetched||fetchExtensionDisplayName();const s=extensionDisplayNames[o]||o.toUpperCase();return html$1`
+      <div class="fw-view active" style="align-items: center; justify-content: center;">
+        <div class="fw-ext-card">
+          <div class="fw-ext-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />
+              <path d="M12 2v2" />
+              <path d="M9 12v9" />
+              <path d="M15 12v9" />
+              <path d="M5 16l4 -2" />
+              <path d="M15 14l4 2" />
+              <path d="M9 18h6" />
+              <path d="M10 8v.01" />
+              <path d="M14 8v.01" />
+            </svg>
+          </div>
+          
+          <h2 class="fw-ext-title">Installing ${s}</h2>
+          <p class="fw-ext-subtitle">Plug in your device via USB</p>
+          
+          <div class="fw-ext-spinner" aria-hidden="true">
+            <div class="fw-ext-spinner-ring"></div>
+          </div>
+          
+          <p class="fw-ext-note">
+            We'll detect your hardware, flash firmware, and install the <strong>${s}</strong> extension on your ESP32 device.
+          </p>
+          
+          <button class="fw-ext-connect-btn" onclick=${handleConnect}>
+            Connect Device
+          </button>
+        </div>
+      </div>
+    `}return html$1`
+    <div class="fw-view active">
+      <div class="fw-welcome">
+        <h2>${t("firmware.deviceSetup")}</h2>
+        <p>${t("firmware.deviceSetupHint")}</p>
+      </div>
+      
+      <button class="fw-btn fw-btn-primary" onclick=${handleConnect}>
+        ${IconSprite.renderIcon("usb",{className:"fw-btn-icon",size:20})}
+        ${t("firmware.connectDevice")}
+      </button>
+      
+      <div class="fw-hint-box">
+        ${IconSprite.renderIcon("bulb",{className:"fw-hint-icon"})}
+        <span>${t("firmware.connectHint")}</span>
+      </div>
+    </div>
+  `}function renderScenariosView(n,i){const o=t(isBlankDevice?"firmware.readyToFlash":"firmware.pyDirectDetected");return html$1`
+    <div class="fw-view active">
+      ${renderDeviceInfoCompact(o,isBlankDevice?"fw-status-warning":"fw-status-success")}
+      
+      <div class="fw-scenario-grid">
+        <div class="fw-scenario-card ${isBlankDevice?"fw-scenario-highlighted":""}" 
+             onclick=${()=>selectScenario("new-device")}>
+          <div class="fw-scenario-icon">
+            ${IconSprite.renderIcon("cpu",{className:"",size:28})}
+          </div>
+          <h3>${t("firmware.newDevice")}</h3>
+          <p>${t("firmware.newDeviceDesc")}</p>
+        </div>
+        
+        <div class="fw-scenario-card ${isBlankDevice?"":"fw-scenario-highlighted"}"
+             onclick=${()=>selectScenario("forgot-credentials")}>
+          <div class="fw-scenario-icon">
+            ${IconSprite.renderIcon("key",{className:"",size:28})}
+          </div>
+          <h3>${t("firmware.forgotCredentials")}</h3>
+          <p>${t("firmware.forgotCredentialsDesc")}</p>
+        </div>
+        
+        <div class="fw-scenario-card"
+             onclick=${()=>selectScenario("change-wifi")}>
+          <div class="fw-scenario-icon">
+            ${IconSprite.renderIcon("wifi",{className:"",size:28})}
+          </div>
+          <h3>${t("firmware.changeWifi")}</h3>
+          <p>${t("firmware.changeWifiDesc")}</p>
+        </div>
+        
+        <div class="fw-scenario-card"
+             onclick=${()=>selectScenario("re-provision")}>
+          <div class="fw-scenario-icon">
+            ${IconSprite.renderIcon("refresh",{className:"",size:28})}
+          </div>
+          <h3>${t("firmware.reProvision")}</h3>
+          <p>${t("firmware.reProvisionDesc")}</p>
+        </div>
+      </div>
+    </div>
+  `}function renderNewDeviceView(n,i){const o=panelState.flashStep,s=panelState.flashProgress,r=panelState.selectedFirmware;if(o==="complete")return html$1`
+      <div class="fw-view active">
+        ${renderDeviceInfoCompact(t("firmware.flashComplete"),"fw-status-success")}
+        
+        <div class="fw-device-card">
+          <div class="fw-device-card-header">
+            <h3>
+              ${IconSprite.renderIcon("cpu",{className:"fw-header-icon"})}
+              ${t("firmware.flashComplete")}
+            </h3>
+          </div>
+          
+          <div style="text-align: center; padding: 2rem 0;">
+            <div class="fw-success-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem;">${t("firmware.flashSuccess")}</h2>
+            ${r?.version?html$1`<p style="color: var(--brand); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">pyDirect ${r.version}</p>`:""}
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+              ${t("firmware.flashSuccessHint")}
+            </p>
+          </div>
+          
+          <button class="fw-btn fw-btn-primary" onclick=${proceedToWifiSetup}>
+            ${IconSprite.renderIcon("wifi",{className:"fw-btn-icon",size:20})}
+            ${t("firmware.configureWifi")}
+          </button>
+          <button class="fw-btn fw-btn-secondary" onclick=${()=>{panelState.view="scenarios",panelState.flashStep="select",panelState.flashComplete=!1,triggerRerender()}}>
+            ${t("firmware.skipForNow")}
+          </button>
+        </div>
+      </div>
+    `;if(o==="downloading"||o==="flashing"){const a=t(o==="downloading"?"firmware.downloading":"firmware.flashing"),c=o==="flashing"&&s>90?html$1`<p style="text-align: center; color: var(--text-muted); margin-top: 0.5rem; font-size: 0.8rem;">
+          ${t("firmware.writingToFlash")}
+        </p>`:null;return html$1`
+      <div class="fw-view active">
+        ${renderDeviceInfoCompact(a,"fw-status-warning")}
+        
+        <div class="fw-device-card">
+          <div class="fw-device-card-header">
+            <h3>
+              ${IconSprite.renderIcon("cpu",{className:"fw-header-icon"})}
+              ${a}
+            </h3>
+          </div>
+          
+          <div style="padding: 1.5rem 0;">
+            <div class="fw-progress-bar">
+              <div class="fw-progress-fill" style="width: ${s}%"></div>
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 0.75rem; font-size: 0.9rem;">
+              ${s}%
+            </p>
+            ${c}
+          </div>
+        </div>
+      </div>
+    `}return html$1`
+    <div class="fw-view active">
+      <button class="fw-btn-back" onclick=${goBack}>
+        ${t("firmware.back")}
+      </button>
+      
+      ${renderDeviceInfoCompact(t("firmware.readyToFlash"),"fw-status-warning")}
+      
+      
+      
+      
+      <div class="fw-device-card" style="margin-top: 1rem;">
+        <div class="fw-device-card-header">
+          <h3>
+            ${IconSprite.renderIcon("bolt",{className:"fw-header-icon"})}
+            ${t("firmware.selectFirmware")}
+          </h3>
+        </div>
+        
+        ${r?html$1`
+          ${panelState.firmwareOptions.length>1?html$1`
+            <div class="fw-form-group">
+              <select class="fw-select" onchange=${a=>{const c=panelState.firmwareOptions.find(l=>l.id===a.target.value);c&&(panelState.selectedFirmware=c,triggerRerender())}}>
+                ${panelState.firmwareOptions.map(a=>html$1`
+                  <option value="${a.id}" selected=${a.id===r.id}>
+                    ${a.displayName}
+                  </option>
+                `)}
+              </select>
+            </div>
+          `:html$1`
+            <div class="fw-firmware-info">
+              <p style="font-weight: 500;">${r.displayName} <span style="font-size: 0.8rem; color: var(--text-secondary);">
+                ${r.version?` ( Based on MicroPython ${r.version} )`:""}
+                ${r.version&&r.size?" · ":""}
+                ${r.size?`${(r.size/1024/1024).toFixed(1)} MB`:r.version?"":"Ready to flash"}
+              </span></p>
+            </div>
+          `}
+          
+          ${panelState.boardOptions.length>0?html$1`
+            <div class="fw-form-group" style="margin-top: 1rem;">
+              <label style="font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem; display: block; color: var(--text-secondary);">
+                Board Configuration
+              </label>
+              <select class="fw-select" onchange=${a=>{const c=panelState.boardOptions.find(l=>l.id===a.target.value);c&&(panelState.selectedBoard=c,triggerRerender())}}>
+                ${panelState.boardOptions.map(a=>html$1`
+                  <option value="${a.id}" selected=${panelState.selectedBoard?.id===a.id}>
+                    ${a.name}
+                  </option>
+                `)}
+              </select>
+              ${panelState.selectedBoard?.description?html$1`
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">
+                  ${panelState.selectedBoard.description}
+                </p>
+              `:""}
+            </div>
+          `:""}
+          
+          <button class="fw-btn fw-btn-primary" onclick=${startFlash} style="margin-top: 1rem;">
+            ${IconSprite.renderIcon("bolt",{className:"fw-btn-icon",size:20})}
+            ${t("firmware.flashButton")}
+          </button>
+        `:html$1`
+          <div class="fw-loading">
+            <span>${t("firmware.loadingFirmware")}</span>
+          </div>
+        `}
+      </div>
+    </div>
+  `}function renderForgotCredentialsView(n,i){const o=panelState.credentials;return html$1`
+    <div class="fw-view active">
+      <button class="fw-btn-back" onclick=${goBack}>
+        ${t("firmware.back")}
+      </button>
+      
+      ${renderDeviceInfoCompact()}
+      
+      <div class="fw-device-card">
+        <div class="fw-device-card-header">
+          <h3>
+            ${IconSprite.renderIcon("key",{className:"fw-header-icon"})}
+            ${t("firmware.deviceCredentials")}
+          </h3>
+        </div>
+        
+        ${o?html$1`
+          <div class="fw-credentials-grid">
+            <div class="fw-cred-item">
+              <label>${t("firmware.hostname")}</label>
+              <span class="fw-cred-value">${o.hostname}</span>
+            </div>
+            <div class="fw-cred-item">
+              <label>${t("firmware.password")}</label>
+              <span class="fw-cred-value">${o.password}</span>
+            </div>
+            <div class="fw-cred-item">
+              <label>${t("firmware.wifiNetwork")}</label>
+              <span class="fw-cred-value">${o.ssid}</span>
+            </div>
+          </div>
+        `:html$1`
+          <div class="fw-loading">
+            <span>${t("firmware.readingCredentials")}</span>
+          </div>
+        `}
+      </div>
+    </div>
+  `}function renderChangeWifiView(n,i){return panelState.setupComplete?html$1`
+      <div class="fw-view active">
+        <div class="fw-device-card">
+          <div class="fw-device-card-header">
+            <h3>
+              ${IconSprite.renderIcon("zap",{className:"fw-header-icon"})}
+              Setup Complete!
+            </h3>
+          </div>
+          
+          <div style="text-align: center; padding: 2rem 0;">
+            <div class="fw-success-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                <path d="M20 6L9 17L4 12"></path>
+              </svg>
+            </div>
+            <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Device Ready!</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+              Your device is configured at: <strong>${panelState.setupHostname}</strong>
+            </p>
+          </div>
+          
+          <!-- Browser Security Warning -->
+          <div class="fw-hint-box fw-hint-warning">
+            <h4>
+              ${IconSprite.renderIcon("alert-triangle",{className:"fw-hint-icon"})}
+              ${t("firmware.browserSecurityTitle")}
+            </h4>
+            <p>${t("firmware.browserSecurityHint")}</p>
+          </div>
+          
+          <button class="fw-btn fw-btn-primary" onclick=${()=>window.open(panelState.setupUrl,"_blank")}>
+            ${IconSprite.renderIcon("external-link",{className:"fw-btn-icon",size:20})}
+            ${t("firmware.openDeviceSetup")}
+          </button>
+          
+          <button class="fw-btn fw-btn-secondary" style="margin-top: 0.5rem;" onclick=${()=>{panelState.setupComplete=!1,panelState.view="scenarios",triggerRerender()}}>
+            ${t("firmware.done")}
+          </button>
+        </div>
+      </div>
+    `:html$1`
+    <div class="fw-view active">
+      <button class="fw-btn-back" onclick=${goBack}>
+        ${t("firmware.back")}
+      </button>
+      
+      ${renderDeviceInfoCompact()}
+      
+      <div class="fw-device-card">
+        <div class="fw-device-card-header">
+          <h3>
+            ${IconSprite.renderIcon("wifi",{className:"fw-header-icon"})}
+            ${t("firmware.changeWifi")}
+          </h3>
+        </div>
+        
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">
+          Connecting to device and scanning for networks...
+        </p>
+      </div>
+    </div>
+  `}function renderReProvisionView(n,i){const o=()=>{const r=`https://${panelState.reblessHostname}`;window.open(r,"_blank")},s=async()=>{await resetAndClosePort(),panelState.reblessComplete=!1,panelState.reblessHostname=null,panelState.view="connect",triggerRerender()};return panelState.reblessComplete?html$1`
+      <div class="fw-view active">
+        <div class="fw-device-card">
+          <div class="fw-device-card-header">
+            <h3>
+              ${IconSprite.renderIcon("refresh",{className:"fw-header-icon"})}
+              ${t("firmware.reProvisionTitle")}
+            </h3>
+          </div>
+          
+          <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+            ${t("firmware.reProvisionHint")}
+          </p>
+          
+          <!-- Success State -->
+          <div style="text-align: center; padding: 2rem 0;">
+            <div class="fw-success-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem;">${t("firmware.reProvisionComplete")}</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+              ${t("firmware.reProvisionSuccess")} <strong>${panelState.reblessHostname}</strong>
+            </p>
+          </div>
+          
+          <!-- Browser Security Warning -->
+          <div class="fw-hint-box fw-hint-warning">
+            ${IconSprite.renderIcon("alert-triangle",{className:"fw-hint-icon-warning"})}
+            <div style="flex: 1;">
+              <strong style="display: block; margin-bottom: 0.25rem;">${t("firmware.browserSecurityTitle")}</strong>
+              <span style="font-size: 0.8rem;">
+                ${t("firmware.browserSecurityHint")}
+              </span>
+            </div>
+          </div>
+          
+          <button class="fw-btn fw-btn-primary" onclick=${o} style="margin-top: 1rem;">
+            ${IconSprite.renderIcon("external-link",{className:"fw-btn-icon",size:20})}
+            ${t("firmware.openDeviceSetup")}
+          </button>
+          <button class="fw-btn fw-btn-secondary" onclick=${s} style="margin-top: 0.5rem;">
+            ${t("firmware.done")}
+          </button>
+        </div>
+      </div>
+    `:html$1`
+    <div class="fw-view active">
+      <button class="fw-btn-back" onclick=${goBack}>
+        ${t("firmware.back")}
+      </button>
+      
+      ${renderDeviceInfoCompact()}
+      
+      <div class="fw-device-card">
+        <div class="fw-device-card-header">
+          <h3>
+            ${IconSprite.renderIcon("refresh",{className:"fw-header-icon"})}
+            ${t("firmware.reProvisionTitle")}
+          </h3>
+        </div>
+        
+        <div class="fw-provision-info">
+          <p>${t("firmware.generatingCerts")}</p>
+          <p>${t("firmware.checkTerminal")}</p>
+        </div>
+      </div>
+    </div>
+  `}function renderTerminal(){const n=panelState.logs;return html$1`
+    <div class="fw-terminal ${panelState.terminalCollapsed?"collapsed":""}">
+      <div class="fw-terminal-header" onclick=${()=>{panelState.terminalCollapsed=!panelState.terminalCollapsed,triggerRerender()}}>
+        <span>${IconSprite.renderIcon("terminal",{className:"fw-terminal-icon",size:14})} ${t("firmware.statusLog")}</span>
+        ${IconSprite.renderIcon(panelState.terminalCollapsed?"chevron-up":"chevron-down",{className:"fw-terminal-toggle"})}
+      </div>
+      <div class="fw-terminal-content">
+        ${n.map(i=>html$1`
+          <div class="fw-log-line ${i.type}">${i.message}</div>
+        `)}
+      </div>
+    </div>
+  `}function AIAgentPanel(n,i){const o=n.aiAgent.settings;return html`
+    <div class="panel-container">
+      <div class="ai-agent-content">
+        
+        <!-- API Provider Section -->
+        <div class="ai-agent-section">
+          <h3>API Provider</h3>
+          <p class="ai-agent-hint">Select your AI service provider</p>
+          
+          <select 
+            class="ai-agent-select"
+            value="${o.provider}"
+            onchange=${s=>i("ai-set-provider",s.target.value)}
+          >
+            <option value="openai" selected=${o.provider==="openai"}>OpenAI (GPT-4, GPT-3.5)</option>
+            <option value="anthropic" selected=${o.provider==="anthropic"}>Anthropic (Claude)</option>
+            <option value="grok" selected=${o.provider==="grok"}>Grok (x.ai)</option>
+            <option value="openrouter" selected=${o.provider==="openrouter"}>OpenRouter (Multi-model)</option>
+            <option value="custom" selected=${o.provider==="custom"}>Custom Endpoint</option>
+          </select>
+        </div>
+        
+        <!-- API Key Section -->
+        <div class="ai-agent-section">
+          <h3>API Key</h3>
+          <p class="ai-agent-hint">
+            ${o.provider==="openai"?"Get your API key from platform.openai.com":""}
+            ${o.provider==="anthropic"?html`
+              Get your API key from console.anthropic.com
+              <br><strong style="color: var(--scheme-primary);">Note:</strong> Anthropic requires a proxy server (see below). You can enter your API key here (it will be sent to the proxy), or configure it in the proxy server's .env file.
+            `:""}
+            ${o.provider==="grok"?"Get your API key from x.ai":""}
+            ${o.provider==="openrouter"?"Get your API key from openrouter.ai":""}
+            ${o.provider==="custom"?"Enter your custom API key and endpoint URL":""}
+          </p>
+          
+          <div class="ai-agent-input-group">
+            <input 
+              type="password"
+              class="ai-agent-input"
+              placeholder="sk-..."
+              value="${o.apiKey||""}"
+              oninput=${s=>i("ai-set-apikey",s.target.value)}
+            />
+            <button 
+              class="ai-agent-test-btn"
+              onclick=${()=>i("ai-test-connection")}
+              disabled=${!o.apiKey}
+            >
+              Test
+            </button>
+          </div>
+          
+          ${n.aiAgent.connectionStatus?html`
+            <div class="ai-agent-status ${n.aiAgent.connectionStatus.success?"success":"error"}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                ${n.aiAgent.connectionStatus.success?html`
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                `:html`
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" y1="9" x2="9" y2="15"/>
+                  <line x1="9" y1="9" x2="15" y2="15"/>
+                `}
+              </svg>
+              ${n.aiAgent.connectionStatus.message}
+            </div>
+          `:""}
+        </div>
+        
+        <!-- Model Selection -->
+        <div class="ai-agent-section">
+          <h3>Model</h3>
+          <p class="ai-agent-hint">Choose the AI model to use for code generation</p>
+          
+          <select 
+            class="ai-agent-select"
+            value="${o.model}"
+            onchange=${s=>i("ai-set-model",s.target.value)}
+            disabled=${n.aiAgent.isLoadingOpenRouterModels&&o.provider==="openrouter"}
+          >
+            ${getModelOptions(o.provider,o.model,n.aiAgent.openRouterModels,n.aiAgent.isLoadingOpenRouterModels)}
+          </select>
+          ${n.aiAgent.isLoadingOpenRouterModels&&o.provider==="openrouter"?html`
+            <p class="ai-agent-hint" style="margin-top: 8px; font-size: 12px; color: var(--text-secondary);">
+              Loading available models...
+            </p>
+          `:""}
+        </div>
+        
+        <!-- Custom Endpoint (if custom provider) -->
+        ${o.provider==="custom"?html`
+          <div class="ai-agent-section">
+            <h3>Custom Endpoint</h3>
+            <p class="ai-agent-hint">Enter your custom API endpoint URL</p>
+            
+            <input 
+              type="text"
+              class="ai-agent-input"
+              placeholder="https://api.example.com/v1/chat/completions"
+              value="${o.endpoint||""}"
+              oninput=${s=>i("ai-set-endpoint",s.target.value)}
+            />
+          </div>
+        `:""}
+        
+        <!-- Anthropic Proxy URL (if anthropic provider) -->
+        ${o.provider==="anthropic"?html`
+          <div class="ai-agent-section">
+            <h3>Proxy Server URL</h3>
+            <p class="ai-agent-hint">
+              URL of the Anthropic proxy server. 
+              <br><strong>Localhost:</strong> http://localhost:3001/api/anthropic
+              <br><strong>LAN access:</strong> http://YOUR_IP:3001/api/anthropic
+              <br>See <code>proxy-server/README.md</code> for setup instructions.
+            </p>
+            
+            <input 
+              type="text"
+              class="ai-agent-input"
+              placeholder="http://localhost:3001/api/anthropic"
+              value="${o.anthropicProxyUrl||""}"
+              oninput=${s=>i("ai-set-anthropic-proxy-url",s.target.value)}
+            />
+          </div>
+        `:""}
+        
+        <!-- System Prompt Section -->
+        <div class="ai-agent-section">
+          <h3>System Prompt</h3>
+          <p class="ai-agent-hint">Customize the AI's behavior (optional)</p>
+          
+          <textarea 
+            class="ai-agent-textarea"
+            rows="6"
+            placeholder="Leave empty to use default MicroPython expert prompt..."
+            value="${o.systemPrompt||""}"
+            oninput=${s=>i("ai-set-system-prompt",s.target.value)}
+          ></textarea>
+        </div>
+        
+        <!-- Info Section -->
+        <div class="ai-agent-section ai-agent-info">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <div>
+            <strong>Privacy Note:</strong> Your API key is stored locally in your browser and never sent to our servers.
+            All AI requests go directly from your browser to your chosen provider.
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  `}function getModelOptions(n,i,o=[],s=!1){const r={openai:[{value:"gpt-4o",label:"GPT-4o (Recommended)"},{value:"gpt-4-turbo",label:"GPT-4 Turbo"},{value:"gpt-4",label:"GPT-4"},{value:"gpt-3.5-turbo",label:"GPT-3.5 Turbo"}],anthropic:[{value:"claude-3-5-sonnet-20241022",label:"Claude 3.5 Sonnet (Recommended)"},{value:"claude-3-opus-20240229",label:"Claude 3 Opus"},{value:"claude-3-sonnet-20240229",label:"Claude 3 Sonnet"},{value:"claude-3-haiku-20240307",label:"Claude 3 Haiku"}],grok:[{value:"grok-4-latest",label:"Grok-4 Latest (Recommended)"},{value:"grok-2-1212",label:"Grok-2"},{value:"grok-beta",label:"Grok Beta"},{value:"grok-vision-beta",label:"Grok Vision Beta"}],openrouter:o.length>0?o:[{value:"anthropic/claude-3.5-sonnet",label:"Claude 3.5 Sonnet"},{value:"openai/gpt-4-turbo",label:"GPT-4 Turbo"},{value:"google/gemini-pro-1.5",label:"Gemini Pro 1.5"},{value:"meta-llama/llama-3.1-70b-instruct",label:"Llama 3.1 70B"}],custom:[{value:"custom-model",label:"Custom Model"}]},a=r[n]||r.openai;return s&&n==="openrouter"?html`<option>Loading models...</option>`:a.map(c=>html`
+    <option value="${c.value}" selected=${c.value===i}>${c.label}</option>
+  `)}function parseSkillMd(n){const i={meta:{},body:n},o=n.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);if(o){const s=o[1];for(const r of s.split(`
+`)){const a=r.match(/^(\w+)\s*:\s*(.+)$/);a&&(i.meta[a[1].trim()]=a[2].trim())}i.body=n.slice(o[0].length)}return i.body=i.body.replace(/^ScriptO for\s+\[.*?\]\(.*?\)\.?\s*Run on device\s*\(MicroPython\)\.?\s*\n?/im,""),i.body=i.body.trim(),i}function SkillSidebar(n,i){if(!n.isSkillSidebarOpen||!n.skillSidebarContent)return html`<div></div>`;const{name:o,skillMd:s}=n.skillSidebarContent,{meta:r,body:a}=parseSkillMd(s);let c="";try{a&&(c=g.parse(a,{breaks:!0}))}catch(f){console.error("[SkillSidebar] Failed to parse markdown:",f),c=`<pre>${a}</pre>`}const l=[];r.description&&l.push(`<p class="skill-meta-description">${r.description}</p>`);const d=[];r.category&&d.push(`<span class="skill-meta-tag">${r.category}</span>`),r.author&&d.push(`<span class="skill-meta-tag">by ${r.author}</span>`),d.length&&l.push(`<div class="skill-meta-tags">${d.join("")}</div>`);const p=l.length?`<div class="skill-meta-block">${l.join("")}</div>`:"",u=document.createElement("div");return u.className="skill-sidebar-content skill-md-content",u.innerHTML=p+c,html`
+    <div class="skill-sidebar">
+      <!-- Titlebar -->
+      <div class="skill-sidebar-titlebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        <span>SKILL</span>
+        <button 
+          class="skill-sidebar-close"
+          onclick=${()=>i("close-skill-sidebar")}
+          title="Close sidebar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Skill Name Header -->
+      <div class="skill-sidebar-header">
+        <h3>${o||r.name||"Skill Documentation"}</h3>
+      </div>
+
+      <!-- Metadata + Markdown Content -->
+      ${u}
+
+      <!-- Deploy Button Footer -->
+      <div class="skill-sidebar-footer">
+        <button
+          class="skill-deploy-btn"
+          onclick=${()=>i("deploy-skill")}
+          title="Deploy this skill to the connected device">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Deploy Skill
+        </button>
+      </div>
+    </div>
+  `}function ReconnectDialog(n,i){if(!n.isReconnecting)return;const o=n.reconnectAttempt||0;function s(){i("reconnect-cancel")}return html$1`
+  <div id="dialog-reconnect" class="dialog open" tabindex="-1">
+    <div class="dialog-content webrepl-dialog" style="max-width: 400px;">
+      <div class="dialog-header">
+        <div class="dialog-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 11A8.1 8.1 0 0 0 4.5 9M4 5v4h4"/>
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4"/>
+          </svg>
+        </div>
+        <div class="dialog-title">Reconnecting…</div>
+        <div class="dialog-subtitle">Attempting to reconnect… (${o+1})</div>
+      </div>
+
+      <div class="dialog-body">
+        <div style="display: flex; justify-content: center; padding: 16px 0;">
+          <div class="reconnect-spinner" style="
+            width: 36px; height: 36px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--scheme-primary);
+            border-radius: 50%;
+            animation: reconnect-spin 0.8s linear infinite;
+          "></div>
+        </div>
+
+        <div class="dialog-footer" style="justify-content: center; margin-top: 16px;">
+           <button class="scriptos-btn scriptos-btn-secondary" style="min-width: 100px;" onclick=${s}>
+             Cancel
+           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes reconnect-spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+  `}function EditorContent(n,i){return html$1`
+    <div class="editor-layout">
+      <div class="working-area">
+        ${Toolbar(n,i)}
+        ${Tabs(n,i)}
+        ${CodeEditor(n)}
+        ${ReplPanel(n,i)}
+      </div>
+      ${AgentSidebar(n,i)}
+      ${SkillSidebar(n,i)}
+    </div>
+  `}function FileManagerContent(n,i){let o="Connect to board",s=`${n.diskNavigationRoot}${n.diskNavigationPath}`;return n.isConnected&&(o=`${n.connectedPort}${n.boardNavigationPath}`),html`
+    <div id="file-manager">
+      <div id="board-files">
+        <div class="device-header">
+          ${IconSprite.renderIcon(n.isConnected?"cpu":"unlink",{className:"icon"})}
+          <div onclick=${()=>i("connect")} class="text">
+            <span>${o}</span>
+          </div>
+          <button disabled=${!n.isConnected} onclick=${()=>i("create-folder","board")}>
+            ${IconSprite.renderIcon("folder-plus",{className:"icon"})}
+          </button>
+          <button disabled=${!n.isConnected} onclick=${()=>i("create-file","board")}>
+            ${IconSprite.renderIcon("file-plus",{className:"icon"})}
+          </button>
+          <button disabled=${!n.isConnected} onclick=${()=>i("upload-to-device")} title="Upload files from computer directly to device">
+            ${IconSprite.renderIcon("file-upload",{className:"icon"})}
+          </button>
+        </div>
+        ${BoardFileList(n,i)}
+      </div>
+      ${FileActions(n,i)}
+      <div id="disk-files">
+        <div class="device-header">
+          ${IconSprite.renderIcon("device-desktop",{className:"icon"})}
+          <div class="text">
+            <span>${s}</span>
+          </div>
+          <button onclick=${()=>i("create-folder","disk")}>
+            ${IconSprite.renderIcon("folder-plus",{className:"icon"})}
+          </button>
+          <button onclick=${()=>i("create-file","disk")}>
+            ${IconSprite.renderIcon("file-plus",{className:"icon"})}
+          </button>
+          <button onclick=${()=>i("import-files")} title="Import files from computer">
+            ${IconSprite.renderIcon("file-upload",{className:"icon"})}
+          </button>
+        </div>
+        ${DiskFileList(n,i)}
+      </div>
+    </div>
+  `}function LandingView(n,i){return html$1`
+    <div class="landing-view">
+      <div class="landing-container">
+        <!-- Demo Header with Scripto Studio branding -->
+        <div class="demo-header">
+          <h2>${t("landing.title")}</h2>
+          <p>${t("landing.tagline")}</p>
+        </div>
+        
+        <div class="landing-scenario-grid">
+          <div class="landing-scenario-card" onclick=${()=>openIframeModal("https://scriptohub.ai/extensions","Browse Extensions")}>
+            <div class="landing-scenario-icon">
+              ${IconSprite.renderIcon("packages",{className:"landing-icon-large"})}
+            </div>
+            <h3>${t("landing.browseExtensions")}</h3>
+            <p>${t("landing.browseExtensionsDesc")}</p>
+          </div>
+          
+          <div class="landing-scenario-card" onclick=${()=>openIframeModal("https://scriptohub.ai/skills","Browse ScriptOs")}>
+            <div class="landing-scenario-icon">
+              ${IconSprite.renderIcon("script",{className:"landing-icon-large"})}
+            </div>
+            <h3>${t("landing.browseScriptOs")}</h3>
+            <p>${t("landing.browseScriptOsDesc")}</p>
+          </div>
+          
+          <div class="landing-scenario-card" onclick=${()=>openExternal("https://scriptostudio.com/docs/")}>
+            <div class="landing-scenario-icon">
+              ${IconSprite.renderIcon("book",{className:"landing-icon-large"})}
+            </div>
+            <h3>${t("landing.browseDocs")}</h3>
+            <p>${t("landing.browseDocsDesc")}</p>
+          </div>
+          
+          <div class="landing-scenario-card ${n.needsOnboarding?"highlight-pulse":""}" onclick=${()=>i("navigate","system:firmware")}>
+            <div class="landing-scenario-icon">
+              ${IconSprite.renderIcon("cpu",{className:"landing-icon-large"})}
+            </div>
+            <h3>${t("landing.onboardDevice")}</h3>
+            <p>${t("landing.onboardDeviceDesc")}</p>
+          </div>
+        </div>
+        
+        <!-- Animated Connect Button with Pulse Circle (mobile only, when sidebar is hidden) -->
+        <div class="demo-cta mobile-only">
+          <div style="display: inline-block; position: relative;">
+            <div class="pulse-circle"></div>
+            <div class="pulse-circle pulse-delay"></div>
+            <button class="interactive-btn" onclick=${()=>i("connect")}>
+              ${t("landing.connectDevice")}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `}function openExternal(n){window.open(n,"_blank","noopener,noreferrer")}function openIframeModal(n,i){const o=document.createElement("div");o.className="fw-modal-overlay active",o.style.cssText="z-index: 10000;",o.innerHTML=`
+    <div style="
+      width: 92vw; height: 90vh; max-width: 1200px;
+      background: var(--bg-primary, #1a1d23);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    ">
+      <div style="
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color, #2a2d35);
+        background: var(--bg-secondary, #22252b);
+      ">
+        <span style="font-weight: 600; font-size: 1rem; color: var(--text-primary, #e0e0e0);">${i}</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button onclick="window.open('${n}', '_blank')" style="
+            background: none; border: 1px solid var(--border-color, #2a2d35);
+            color: var(--text-secondary, #999); cursor: pointer;
+            padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;
+          ">↗ Open in tab</button>
+          <button class="iframe-modal-close" style="
+            background: none; border: none;
+            color: var(--text-secondary, #999); cursor: pointer;
+            font-size: 1.4rem; line-height: 1; padding: 4px 8px;
+          ">✕</button>
+        </div>
+      </div>
+      <iframe src="${n}" style="
+        flex: 1; border: none; width: 100%;
+        background: var(--bg-primary, #1a1d23);
+      "></iframe>
+    </div>
+  `,o.querySelector(".iframe-modal-close").addEventListener("click",()=>o.remove()),o.addEventListener("click",s=>{s.target===o&&o.remove()}),document.addEventListener("keydown",function s(r){r.key==="Escape"&&(o.remove(),document.removeEventListener("keydown",s))}),document.body.appendChild(o)}function SystemView(n,i){n.sidebarIconRotated===void 0&&(n.sidebarIconRotated=!1);const o=n.connectionMode==="webrepl"?"#00FF7F":n.connectionMode==="usb"?"#FF9500":"var(--text-secondary)",s=html$1`
+    <div class="sidebar-header">
+      <div
+        class="sidebar-header-logo connection-${n.connectionMode||"none"}"
+        onclick=${()=>{n.connectionMode==="usb"?handleDisconnect():n.isConnected?i("disconnect"):i("connect")}}
+        title=${n.connectionMode==="usb"?"Disconnect USB Device":n.isConnected?"Disconnect from Device":"Connect to Device"}
+        style="color: ${o}"
+      >
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+      </div>
+    </div>
+  `;return html$1`
+    <div class="working-area">
+      <div class="system-container">
+        ${s}
+        <aside class="system-sidebar">
+          ${SystemSidebar(n,i)}
+        </aside>
+        <main class="system-content">
+          ${renderActivePanel(n,i)}
+        </main>
+      </div>
+    </div>
+    ${StatusBar(n)}
+    ${ConnectionDialog(n,i)}
+    ${DebugSidebar(n,i)}
+    ${NewFileDialog(n,i)}
+    ${ScriptOsModal(n,i)}
+    ${ScriptOsUiModal(n,i)}
+    ${ResetDialog(n,i)}
+    ${ReconnectDialog(n,i)}
+    ${ExtensionsModal(n,i)}
+    ${BreakpointModal(n,i)}
+  `}function SystemSidebar(n,i){const o=window.i18n?window.i18n.t:S=>S,s=[{id:"home",label:o("sidebar.home"),icon:"home"}],r=[{id:"editor",label:o("sidebar.editor"),icon:"code"},{id:"file-manager",label:o("sidebar.files"),icon:"folder"}],a=[{id:"about",label:o("sidebar.about"),icon:"info-circle"},{id:"settings",label:o("sidebar.settings"),icon:"adjustments-alt"},{id:"ai-agent",label:o("sidebar.aiAgent"),icon:"robot-face"},{id:"firmware",label:o("sidebar.firmware"),icon:"file-download"}],c=[{id:"wifi",label:o("sidebar.wifi"),icon:"wifi"},{id:"ethernet",label:o("sidebar.ethernet"),icon:"cloud-network"},{id:"vpn",label:o("sidebar.vpn"),icon:"shield-chevron"},{id:"btle",label:o("sidebar.btle"),icon:"bluetooth"},{id:"wwan",label:o("sidebar.wwan"),icon:"cell"},{id:"mqtt",label:o("sidebar.mqtt"),icon:"message-2"},{id:"ntp",label:o("sidebar.ntp"),icon:"clock-cog"},{id:"can",label:o("sidebar.can"),icon:"car-crash"}],l=[{id:"gps",label:o("sidebar.gps"),icon:"gps"},{id:"4g-modem",label:o("sidebar.modem"),icon:"signal-4g"},{id:"sdcard",label:o("sidebar.sdcard"),icon:"device-sd-card"}],d=s.map(S=>renderSidebarItem(S,n,i)),p=r.map(S=>renderSidebarItem(S,n,i)),u=n.expandedSystem!==!1,f=html$1`
+    <div class="system-sidebar-extension">
+      <div 
+        class="system-sidebar-item system-sidebar-toggle"
+        onclick=${()=>i("toggle-system-menu")}
+      >
+        ${IconSprite.renderIcon("settings",{className:"",size:20})}
+        <span>${o("sidebar.system")}</span>
+        ${IconSprite.renderIcon("chevron-down",{className:`expand-icon ${u?"expanded":""}`,size:16})}
+      </div>
+      
+      ${u?html$1`
+        <div class="system-sidebar-submenu">
+          ${a.map(S=>{const _=n.activeSystemPanel===S.id;return html$1`
+              <div 
+                class="system-sidebar-subitem ${_?"active":""}"
+                onclick=${()=>i("change-system-panel",S.id)}
+              >
+                ${IconSprite.renderIcon(S.icon,{className:"",size:16})}
+                <span>${S.label}</span>
+              </div>
+            `})}
+        </div>
+      `:""}
+    </div>
+  `,h=n.expandedNetworks!==!1,m=html$1`
+    <div class="system-sidebar-extension">
+      <div 
+        class="system-sidebar-item system-sidebar-toggle"
+        onclick=${()=>i("toggle-networks-menu")}
+      >
+        ${IconSprite.renderIcon("network",{className:"",size:20})}
+        <span>${o("sidebar.networks")}</span>
+        ${IconSprite.renderIcon("chevron-down",{className:`expand-icon ${h?"expanded":""}`,size:16})}
+      </div>
+      
+      ${h?html$1`
+        <div class="system-sidebar-submenu">
+          ${c.map(S=>{const _=n.activeNetworkPanel===S.id;return html$1`
+              <div 
+                class="system-sidebar-subitem ${_?"active":""}"
+                onclick=${()=>i("change-network-panel",S.id)}
+              >
+                ${IconSprite.renderIcon(S.icon,{className:"",size:16})}
+                <span>${S.label}</span>
+              </div>
+            `})}
+        </div>
+      `:""}
+    </div>
+  `,v=n.expandedPeripherals!==!1,y=html$1`
+    <div class="system-sidebar-extension">
+      <div
+        class="system-sidebar-item system-sidebar-toggle"
+        onclick=${()=>i("toggle-peripherals-menu")}
+      >
+        ${IconSprite.renderIcon("cpu",{className:"",size:20})}
+        <span>${o("sidebar.peripherals")}</span>
+        ${IconSprite.renderIcon("chevron-down",{className:`expand-icon ${v?"expanded":""}`,size:16})}
+      </div>
+      
+      ${v?html$1`
+        <div class="system-sidebar-submenu">
+          ${l.map(S=>{const _=n.activePeripheralsPanel===S.id;return html$1`
+              <div 
+                class="system-sidebar-subitem ${_?"active":""}"
+                onclick=${()=>i("change-peripherals-panel",S.id)}
+              >
+                ${IconSprite.renderIcon(S.icon,{className:"",size:16})}
+                <span>${S.label}</span>
+              </div>
+            `})}
+        </div>
+      `:""}
+    </div>
+  `,w=S=>{const _=S.icon||"settings";return IconSprite.renderIcon(_,{className:"",size:20})},b=(n.installedExtensions||[]).map(S=>{const _=n.expandedExtensions[S.id],E=n.activeExtension===S.id,I=S.devices===!0;let P=null;if(I&&_)if(!n.loadedExtensions[S.id])console.warn("[System] Extension not loaded:",S.id);else{const $=n.loadedExtensions[S.id];if(!$.instance)try{const T=$.data.content,O=new Function("DeviceAPI","html","emit","state",`
+              ${T}
+              const classMatch = ${JSON.stringify(T)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
+              if (!classMatch) {
+                throw new Error('No extension class found');
+              }
+              return eval(classMatch[1]);
+            `)(DeviceAPI,html$1,i,n),D=new DeviceAPI(BridgeDevice),F=new O(D,i,n,html$1);n.loadedExtensions[S.id].instance=F}catch(T){console.error(`[System] Error instantiating extension ${S.id}:`,T)}if($.instance&&typeof $.instance.getMenuItems=="function")try{const T=$.instance.getMenuItems();T&&Array.isArray(T)&&(S.menu=T)}catch(T){console.error(`[System] Error getting menu items for ${S.id}:`,T)}if($.instance&&typeof $.instance.renderSidebarDevices=="function")try{P=$.instance.renderSidebarDevices()}catch(T){console.error(`[System] Error rendering sidebar devices for ${S.id}:`,T)}else console.warn(`[System] renderSidebarDevices not available for ${S.id}`)}if(_&&n.loadedExtensions[S.id]?.instance){const $=n.loadedExtensions[S.id];if($.instance&&typeof $.instance.getMenuItems=="function")try{const T=$.instance.getMenuItems();T&&Array.isArray(T)&&(S.menu=T)}catch(T){console.error(`[System] Error getting menu items for ${S.id}:`,T)}}return html$1`
+      <div class="system-sidebar-extension">
+        <div 
+          class="system-sidebar-item system-sidebar-toggle ${E?"active-extension":""}"
+          onclick=${()=>i("toggle-extension-menu",S.id)}
+        >
+          ${w(S)}
+          <span>${S.name}</span>
+          ${IconSprite.renderIcon("chevron-down",{className:`expand-icon ${_?"expanded":""}`,size:16})}
+        </div>
+        
+        ${_?html$1`
+          <div class="system-sidebar-submenu">
+            ${S.menu.map($=>{const T=n.activeExtension===S.id&&n.activeExtensionPanel===$.id,N=$.disabled===!0;return html$1`
+                <div 
+                  class="system-sidebar-subitem ${T?"active":""} ${N?"disabled":""}"
+                  onclick=${N?null:()=>i("change-extension-panel",{extensionId:S.id,panelId:$.id})}
+                  style=${N?"opacity: 0.6; cursor: default; font-weight: 600;":""}
+                >
+                  <span>${$.label}</span>
+                </div>
+              `})}
+            
+            ${I?html$1`
+              <div class="system-sidebar-devices-section">
+                <div class="system-sidebar-devices-header">
+                  DEVICES
+                </div>
+                ${P||html$1`
+                  <div style="padding: 12px; text-align: center; color: var(--text-secondary); font-size: 11px;">
+                    Loading...
+                  </div>
+                `}
+              </div>
+            `:""}
+          </div>
+        `:""}
+      </div>
+    `}),x=html$1`
+    <div class="system-sidebar-extensions-header">
+      <span>${o("extensions")}</span>
+      <button 
+        class="extensions-add-button" 
+        onclick=${()=>i("open-extensions-modal")}
+        title=${o("add_extension")}
+      >
+        +
+      </button>
+    </div>
+  `,C=html$1`
+    <div class="system-sidebar-divider"></div>
+  `,k=html$1`
+    <div class="sidebar-footer">
+      ${window.LanguageSelector?window.LanguageSelector(n,i):""}
+    </div>
+  `;return html$1`
+    <div class="system-sidebar-content">
+      ${d}
+      ${p}
+      ${m}
+      ${y}
+      ${f}
+      ${C}
+      ${x}
+      ${b}
+      ${k}
+    </div>
+  `}function renderSidebarItem(n,i,o){const s=i.systemSection===n.id,a=["editor","file-manager"].includes(n.id)?"change-view":"change-system-section";return html$1`
+    <div
+      class="system-sidebar-item ${s?"active":""}"
+      onclick=${()=>o(a,n.id)}
+    >
+      ${IconSprite.renderIcon(n.icon,{className:"",size:20})}
+      <span>${n.label}</span>
+    </div>
+  `}function renderActivePanel(n,i){const o=n.systemSection;if(o==="editor")return EditorContent(n,i);if(o==="file-manager")return FileManagerContent(n,i);if(o==="landing")return LandingView(n,i);if(o?.startsWith("extension:"))return ExtensionContainer(n,i,html$1);if(o?.startsWith("network:"))switch(o.split(":")[1]){case"wifi":return WiFiPanel(n,i);case"ethernet":return EthernetPanel(n,i);case"vpn":return VPNPanel(n,i);case"btle":return BTLEPanel(n,i);case"wwan":return WWANPanel(n,i);case"mqtt":return MQTTPanel(n,i);case"ntp":return NTPPanel(n,i);case"can":return CANPanel(n,i);default:return WiFiPanel(n,i)}if(o?.startsWith("peripherals:"))switch(o.split(":")[1]){case"gps":return GPSPanel(n,i);case"4g-modem":return ModemPanel(n,i);case"sdcard":return SDCardPanel(n,i);default:return GPSPanel(n,i)}if(o?.startsWith("system:"))switch(o.split(":")[1]){case"about":return SysInfoPanel(n,i);case"settings":return AppearancePanel(n,i);case"ai-agent":return AIAgentPanel(n,i);case"firmware":return FirmwarePanel(n);default:return AppearancePanel(n,i)}return LandingView(n,i)}const cacheBuster=Date.now();window.i18nReady=Promise.all([fetch(`locales/en.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/de.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/es.json?v=${cacheBuster}`).then(n=>n.json()),fetch(`locales/fr.json?v=${cacheBuster}`).then(n=>n.json())]).then(([n,i,o,s])=>{if(window.i18n){window.i18n.initTranslations(n,i,o,s);const r=localStorage.getItem("locale")||"en";window.i18n.setLocale(r),console.log("[i18n] Translations loaded, locale set to:",r),window.appInstance&&window.appInstance.emitter.emit("render")}else console.warn("[i18n] window.i18n not available yet");return!0}).catch(n=>(console.error("[i18n] Failed to load translations:",n),!1));const newFileContent=`# This program was created in ScriptO Studio for MicroPython
+
+print('Hello, ')
+print('ScriptO!') # ●
+`;async function sleep(n){return new Promise(i=>setTimeout(i,n))}async function confirmDialog(n,i,o){return confirm(n)?0:1}function updateStatusBarDirectly(n,i){const o=document.getElementById("status-bar");if(!o)return;const s=i||localStorage.getItem("temperatureUnit")||"degC",r=buildStatusBarModel?buildStatusBarModel(n,s):null;if(!r||!r.connected){o.className="disconnected";const f=o.querySelector(".status-bar-center");f?f.textContent=r&&r.disconnectedText||DISCONNECTED_STATUS_TEXT:o.textContent=r&&r.disconnectedText||DISCONNECTED_STATUS_TEXT;return}o.className="";const a=o.querySelector(".status-bar-center")||o;function c(f){let h=a.querySelector(`.status-item.${f}`);if(!h){h=document.createElement("div"),h.className=`status-item ${f}`;const m=document.createElement("span");m.className="status-label";const v=document.createElement("span");v.className="status-value",h.appendChild(m),h.appendChild(v),a.appendChild(h)}return h}const l=c("ram");l.querySelector(".status-label").textContent="RAM",l.querySelector(".status-value").textContent=r.ram;const d=a.querySelector(".status-item.temp");if(r.temp){const f=c("temp");f.querySelector(".status-label").textContent="TEMP",f.querySelector(".status-value").textContent=r.temp}else d&&d.remove();const p=c("uptime");p.querySelector(".status-label").textContent="UPTIME",p.querySelector(".status-value").textContent=r.uptime;const u=a.querySelector(".status-item.wifi-rssi");if(r.rssi){const f=c("wifi-rssi");f.querySelector(".status-label").textContent="RSSI",f.querySelector(".status-value").textContent=r.rssi}else u&&u.remove()}function updateOverlayDirectly(n){const i=document.getElementById("overlay");if(!i)return;let o=!1,s="";if(n.diskFiles==null)o=!0,s="<p>Loading files...</p>";else if(n.isRemoving)o=!0,s="<p>Removing...</p>";else if(n.isConnecting)o=!0,s="<p>Connecting...</p>";else if(n.isLoadingFiles)o=!0,s="<p>Loading files...</p>";else if(n.isSaving)o=!0,s=`<p>Saving file... ${n.savingProgress||0}</p>`;else if(n.isTransferring){o=!0;const r=String(n.transferringProgress||""),a=r.match(/(\d+)%?$/),c=a?parseInt(a[1]):0,l=r.match(/^(.+?):/);s=`
+      <div class="transfer-overlay-content">
+        <div class="transfer-title">Transferring File</div>
+        <div class="transfer-filename">${l?l[1]:"file"}</div>
+        <div class="transfer-progress-container">
+          <div class="transfer-progress-bar">
+            <div class="transfer-progress-fill" style="width: ${c}%"></div>
+          </div>
+          <div class="transfer-progress-text">${c}%</div>
+        </div>
+      </div>
+    `}o?(i.classList.remove("closed"),i.classList.add("open"),i.innerHTML=s):(i.classList.remove("open"),i.classList.add("closed"))}class RegistryCache{constructor(){this.DB_NAME="scripto-studio-registry-cache",this.DB_VERSION=1,this.STORE_SCRIPTOS="scriptos",this.STORE_INDEX="index",this.INDEX_CACHE_KEY="index",this.INDEX_CACHE_EXPIRY=24*60*60*1e3}async _initDB(){return new Promise((i,o)=>{const s=indexedDB.open(this.DB_NAME,this.DB_VERSION);s.onerror=()=>o(s.error),s.onsuccess=()=>i(s.result),s.onupgradeneeded=r=>{const a=r.target.result;a.objectStoreNames.contains(this.STORE_SCRIPTOS)||a.createObjectStore(this.STORE_SCRIPTOS),a.objectStoreNames.contains(this.STORE_INDEX)||a.createObjectStore(this.STORE_INDEX)}})}async getIndex(){try{const i=await this._initDB();return new Promise((o,s)=>{const c=i.transaction([this.STORE_INDEX],"readonly").objectStore(this.STORE_INDEX).get(this.INDEX_CACHE_KEY);c.onsuccess=()=>{const l=c.result;if(l&&l.data){const d=Date.now()-l.timestamp;d<this.INDEX_CACHE_EXPIRY?(console.log("[Registry Cache] Using cached index (age:",Math.round(d/1e3/60),"minutes)"),o(l.data)):(console.log("[Registry Cache] Index cache expired"),o(null))}else o(null)},c.onerror=()=>s(c.error)})}catch(i){return console.error("[Registry Cache] Error getting index:",i),null}}async saveIndex(i){try{const o=await this._initDB();return new Promise((s,r)=>{const l=o.transaction([this.STORE_INDEX],"readwrite").objectStore(this.STORE_INDEX).put({data:i,timestamp:Date.now()},this.INDEX_CACHE_KEY);l.onsuccess=()=>{console.log("[Registry Cache] Saved index"),s()},l.onerror=()=>r(l.error)})}catch(o){console.error("[Registry Cache] Error saving index:",o)}}async getScriptO(i){try{const o=await this._initDB();return new Promise((s,r)=>{const l=o.transaction([this.STORE_SCRIPTOS],"readonly").objectStore(this.STORE_SCRIPTOS).get(i);l.onsuccess=()=>{const d=l.result;d&&d.content?(console.log("[Registry Cache] Using cached ScriptO:",i),s(d)):s(null)},l.onerror=()=>r(l.error)})}catch(o){return console.error("[Registry Cache] Error getting ScriptO:",o),null}}async saveScriptO(i,o,s){try{const r=await this._initDB();return new Promise((a,c)=>{const p=r.transaction([this.STORE_SCRIPTOS],"readwrite").objectStore(this.STORE_SCRIPTOS).put({url:i,content:o,config:s,timestamp:Date.now()},i);p.onsuccess=()=>{console.log("[Registry Cache] Saved ScriptO:",i),a()},p.onerror=()=>c(p.error)})}catch(r){console.error("[Registry Cache] Error saving ScriptO:",r)}}}async function initializeState(state,emitter,createNewTab){const disk=BridgeDisk;state.platform=navigator.platform.indexOf("Mac")>-1?"darwin":"linux",state.systemSection=null,state.diskNavigationPath="/",state.isInitializing=!0,state.commandHistory=[],state.historyIndex=-1,state.cursorPos=0,await disk.initialize(),state.diskNavigationRoot="/",console.log("[Store] Using IndexedDB virtual filesystem, root:",state.diskNavigationRoot),state.isInitializing=!1,emitter.emit("render"),state.diskFiles=[],state.boardNavigationPath="/",state.boardNavigationRoot="/",state.boardFiles=[],state.openFiles=[],state.selectedFiles=[],state.filesLoadedOnce=!1,state.newTabFileName=null,state.editingFile=null,state.creatingFile=null,state.renamingFile=null,state.currentLine="",state.bannerDisplayed=!1,state.creatingFolder=null,state.renamingTab=null,state.fileCounter=1,state.isConnectionDialogOpen=!1,state.isConnecting=!1,state.systemInfo=null,state.networksInfo=null,state.isLoadingSystemInfo=!1,state.isLoadingNetworks=!1,state.expandedNetworks=!1,state.activeNetworkPanel=null,state.expandedPeripherals=!1,state.activePeripheralsPanel=null,state.expandedSystem=!1,state.activeSystemPanel=null,state.sdcardConfig=null,state.isLoadingSdcardConfig=!1,state.sdcardConfigLoaded=!1,state.sdcardInfo=null,state.isLoadingSdcardInfo=!1,state.isMountingSDCard=!1,state.isUnmountingSDCard=!1,state.gpioConfig=null,state.isLoadingGpioConfig=!1,state.gpioConfigLoaded=!1,state.gpioSortBy="usage",state.gpioSortOrder="asc",state.gpioEditingRow=null,state.gpioEditingRowData=null,state.gpioValidationErrors=[],state.mqttConfig=null,state.isLoadingMqttConfig=!1,state.canConfig=null,state.canConfigLoaded=!1,state.isLoadingCanConfig=!1,state.mqttConfigLoaded=!1,state.ntpConfig={server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1},state.isLoadingNtpConfig=!1,state.ntpConfigLoaded=!1,state.ntpSyncResult=null,state.wwanConfig=null,state.isLoadingWwanConfig=!1,state.wwanConfigLoaded=!1,state.modemStatus=null,state.isLoadingModemStatus=!1,state.modemStatusLoaded=!1,state.gpsData=null,state.isLoadingGpsData=!1,state.gpsDataLoaded=!1,state.theme=null,state.colorScheme=null,state.effectiveTheme=null,state.locale=localStorage.getItem("locale")||"en",state.isConnected=!1,state.connectedPort=null,state.connectionMode="none",state.needsOnboarding=!1;try{const n=await disk.hasOnboardedDevices();state.needsOnboarding=!n,console.log("[State Init] Onboarding needed:",state.needsOnboarding)}catch(n){console.warn("[State Init] Could not check onboarded devices:",n),state.needsOnboarding=!0}state.statusInfo=null,state.scriptOsList=[],state.selectedScriptOs=null,state.scriptOsModalView="library",state.scriptOsArgs={},state.scriptOsSearchQuery="",state.scriptOsFilterTags=[],state.scriptOsFiltersCollapsed=!0,state.scriptOsViewMode="cards",state.isScriptOsModalOpen=!1,state.scriptohubApiUrl="https://cheerful-stoat-894.convex.site",state.isLoadingRegistry=!1,state.isSkillSidebarOpen=!1,state.skillSidebarContent=null,state.scriptOsUiModal={isOpen:!1,url:null,title:null,isLoading:!1,error:null},state.aiAgent={isOpen:!1,messages:[],isGenerating:!1,connectionStatus:null,openRouterModels:[],isLoadingOpenRouterModels:!1,inputValue:"",lastConfiguredArgs:null,lastScriptName:null,settings:{provider:localStorage.getItem("ai-provider")||"openai",apiKey:localStorage.getItem("ai-apikey")||null,model:localStorage.getItem("ai-model")||"gpt-4o",endpoint:localStorage.getItem("ai-endpoint")||null,systemPrompt:localStorage.getItem("ai-system-prompt")||"",anthropicProxyUrl:localStorage.getItem("ai-anthropic-proxy-url")||"http://localhost:3001/api/anthropic"}},state.debugger={active:!1,halted:!1,configOpen:!1,debugFiles:[],breakpoints:{},watchExpressions:{},conditionalBreakpoints:{},breakpointModalOpen:!1,editingBreakpoint:null,currentFile:"",currentLine:0,variables:{},locals:{},memory:0,timing:0},state.extensionRegistry=new ExtensionRegistry,state.installedExtensions=[],state.allCachedExtensions=[],state.availableExtensions=[],state.loadedExtensions={},state.activeExtension=null,state.activeExtensionPanel=null,state.expandedExtensions={},state.isExtensionsModalOpen=!1,state.isLoadingExtensions=!1,state.dependencyPrompt=null,state.installingDependencies=null,state.isNewFileDialogOpen=!1,state.isSaving=!1,state.savingProgress=0,state.isTransferring=!1,state.transferringProgress="",state.isRemoving=!1,state.isLoadingFiles=!1,state.dialogs=[],state.shortcutsDisabled=!1,await createNewTab("disk"),state.savedPanelHeight=PANEL_DEFAULT$1,state.panelHeight=PANEL_CLOSED$1,state.dragStartY=0,state.dragStartHeight=0,state.logSidebarWidth=350,state.savedLogSidebarWidth=350;try{const n=await state.extensionRegistry.getInstalledExtensions();state.allCachedExtensions=n,state.installedExtensions=[...n],console.log(`[Extension Registry] Cached extensions in IDB: ${n.length}`)}catch(n){console.error("[Extensions] Failed to load installed extensions:",n),state.allCachedExtensions=[],state.installedExtensions=[]}state.cache(XTerm,"terminal"),console.log("[State Init] Terminal component cached"),typeof window<"u"&&(window.dev={state,registry:state.extensionRegistry,updateExtension:async n=>new Promise((i,o)=>{const s=document.createElement("input");s.type="file",s.accept=".js",s.onchange=async r=>{try{const a=await r.target.files[0].text(),c=await state.extensionRegistry.updateExtensionDev(n,a);console.log("✅ Extension updated! Click another panel, then back to reload."),i(c)}catch(a){o(a)}},s.click()}),installExtensionFromFile:async()=>new Promise((resolve,reject)=>{const input=document.createElement("input");input.type="file",input.accept=".js",input.onchange=async e=>{try{const content=await e.target.files[0].text(),result=await state.extensionRegistry.installExtensionFromContent(content);if(console.log(`✅ Extension "${result.config.name}" installed!`),state.installedExtensions=await state.extensionRegistry.getInstalledExtensions(),state.allCachedExtensions=[...state.installedExtensions],emitter.emit("render"),hasOnInstallMethod(content)&&state.isConnected){showStyledModal({variant:"",icon:"📦",title:"Installing Extension Files",subtitle:result.config.name,body:"<p>Writing files to device...</p>",buttons:[]});try{const html=(n,...i)=>n.reduce((o,s,r)=>o+s+(i[r]||""),""),deviceAPI=new DeviceAPI$1(BridgeDevice),filesMatch=content.match(/export\s+const\s+__DEVICE_FILES__\s*=\s*(\{[\s\S]*?\});/);let deviceFiles={};if(filesMatch)try{const rawFiles=eval("("+filesMatch[1]+")");for(const[n,i]of Object.entries(rawFiles))try{const o=atob(i),s=new Uint8Array(o.length);for(let r=0;r<o.length;r++)s[r]=o.charCodeAt(r);deviceFiles[n]=new TextDecoder("utf-8").decode(s)}catch(o){console.warn(`[Dev Install] Failed to decode ${n}:`,o),deviceFiles[n]=i}}catch(n){console.warn("[Dev Install] Device files parse failed:",n)}const exportMatch=content.match(/export\s*\{\s*(\w+)\s+as\s+default\s*\}/),defaultExportVar=exportMatch?exportMatch[1]:null,evalContent=content.replace(/export\s+(const|default|class|function)/g,"$1").replace(/export\s*\{[^}]*\}\s*;?/g,""),returnLogic=defaultExportVar?`return ${defaultExportVar};`:`if (typeof P !== 'undefined') return P;
+                       const classMatch = ${JSON.stringify(evalContent)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
+                       if (classMatch) return eval(classMatch[1]);
+                       throw new Error('No extension class found in bundle');`,extensionFunction=new Function("DeviceAPI","html","emit","state",`
+                    ${evalContent}
+                    ${returnLogic}
+                  `),ExtensionClass=extensionFunction(DeviceAPI$1,html,emitter.emit.bind(emitter),state),instance=new ExtensionClass(deviceAPI,emitter.emit.bind(emitter),state,html);instance.deviceFiles=deviceFiles,console.log(`[Dev Install] Loaded with ${Object.keys(deviceFiles).length} device files`);const installResult=await instance.onInstall();if(installResult===!1)throw new Error("onInstall returned false (check console for details)");const version=Array.isArray(result.config.version)?result.config.version.join("."):"0.0.0";await updateDeviceExtensionRegistry(deviceAPI,result.id,version),closeStyledModal(),await showStyledModal({variant:"success",icon:"✅",title:"Extension Ready",subtitle:result.config.name,body:"<p>Extension files have been installed on your device.</p>",buttons:[{id:"done",class:"fw-styled-modal-btn-primary",label:"Done"}]})}catch(n){console.error("[Dev Install] onInstall failed:",n),closeStyledModal(),await showStyledModal({variant:"danger",icon:"❌",title:"Installation Failed",subtitle:result.config.name,body:`<p>Failed to install files: ${n.message}</p>`,buttons:[{id:"close",class:"fw-styled-modal-btn-cancel",label:"Close"}]})}}else hasOnInstallMethod(content)&&await showStyledModal({variant:"warning",icon:"📦",title:"Extension Saved",subtitle:result.config.name,body:"<p>Connect to your device and open the extension to install files.</p>",buttons:[{id:"ok",class:"fw-styled-modal-btn-primary",label:"OK"}]});resolve(result),console.log("[Dev Install] 🔄 Reloading to apply changes..."),setTimeout(()=>location.reload(),500)}catch(n){reject(n)}},input.click()})},console.log('[State Init] Dev utilities exposed: dev.updateExtension("id"), dev.installExtensionFromFile()')),state.resizePanel=function(n){const i=parseFloat(getComputedStyle(document.body).zoom)||1,o=(n.clientY-state.dragStartY)/i;state.panelHeight=state.dragStartHeight-o,state.panelHeight<=PANEL_CLOSED$1?state.savedPanelHeight=PANEL_DEFAULT$1:state.savedPanelHeight=state.panelHeight,emitter.emit("render")},state.resizeLogSidebar=function(n){const s=document.querySelector(".repl-panel-content");if(!s)return;const r=s.getBoundingClientRect(),a=r.width,c=r.right-n.clientX,l=a-600;c>=200&&c<=l&&(state.logSidebarWidth=c,state.savedLogSidebarWidth=c,emitter.emit("render"))}}function detectSystemTheme(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches}catch(n){return console.warn("Failed to detect system theme:",n),!1}}function applyTheme(n){if(n.theme==="device"){const i=detectSystemTheme();n.effectiveTheme=i?"dark":"light"}else n.effectiveTheme=n.theme;n.effectiveTheme==="dark"?document.documentElement.setAttribute("data-theme","dark"):document.documentElement.removeAttribute("data-theme")}function applyColorScheme(n){document.documentElement.setAttribute("data-color-scheme",n.colorScheme)}let darkModeMediaQuery=null;function setupThemeListener(n,i){if(darkModeMediaQuery)try{darkModeMediaQuery.removeListener?darkModeMediaQuery.removeListener(handleSystemThemeChange):darkModeMediaQuery.removeEventListener&&darkModeMediaQuery.removeEventListener("change",handleSystemThemeChange)}catch{}darkModeMediaQuery=window.matchMedia("(prefers-color-scheme: dark)"),darkModeMediaQuery.addListener?darkModeMediaQuery.addListener(()=>handleSystemThemeChange(n,i)):darkModeMediaQuery.addEventListener&&darkModeMediaQuery.addEventListener("change",()=>handleSystemThemeChange(n,i))}function handleSystemThemeChange(n,i){n.theme==="device"&&(applyTheme(n),window.dispatchEvent(new CustomEvent("theme-changed")),i.emit("render"))}function initializeTheme(n,i){const o=localStorage.getItem("theme")||"dark",s=localStorage.getItem("colorScheme")||"green",r=localStorage.getItem("editorTheme")||"auto";n.theme=o,n.colorScheme=s,n.editorTheme=r,applyTheme(n),applyColorScheme(n),setupThemeListener(n,i)}function registerThemeHandlers(n,i){i.on("set-theme",o=>{console.log("set-theme",o),n.theme=o,localStorage.setItem("theme",n.theme),applyTheme(n),window.dispatchEvent(new CustomEvent("theme-changed")),i.emit("render")}),i.on("set-color-scheme",o=>{console.log("set-color-scheme",o),n.colorScheme=o,localStorage.setItem("colorScheme",n.colorScheme),applyColorScheme(n),i.emit("render")}),i.on("set-temperature-unit",o=>{console.log("set-temperature-unit",o),n.temperatureUnit=o,localStorage.setItem("temperatureUnit",n.temperatureUnit),n.isConnected&&n.statusInfo&&updateStatusBarDirectly(n.statusInfo,o||"degC"),i.emit("render")}),i.on("set-editor-theme",o=>{console.log("set-editor-theme",o),n.editorTheme=o,localStorage.setItem("editorTheme",n.editorTheme),window.dispatchEvent(new CustomEvent("editor-theme-changed",{detail:{theme:o}})),i.emit("render")})}function dismissOpenDialogs(n,i,o=null){o&&o.key!="Escape"||(window._dismissDialogsKeyHandler&&(document.removeEventListener("keydown",window._dismissDialogsKeyHandler),window._dismissDialogsKeyHandler=null),n.isConnectionDialogOpen=!1,n.isNewFileDialogOpen=!1,n.scriptOsUiModal&&n.scriptOsUiModal.isOpen&&i.emit("close-scriptos-ui-modal"),i.emit("render"))}function updateDialogDOM(n,i){const o=document.getElementById(n);return o?(i?(o.classList.remove("closed"),o.classList.add("open")):(o.classList.remove("open"),o.classList.add("closed")),!0):!1}function registerDialogHandlers(n,i,o){i.on("open-connection-dialog",async()=>{dismissOpenDialogs(n,i),await o.disconnect(),n.isConnectionDialogOpen=!0,updateDialogDOM("dialog-connection",!0)||i.emit("render");const s=r=>dismissOpenDialogs(n,i,r);document.addEventListener("keydown",s),window._dismissDialogsKeyHandler=s}),i.on("close-connection-dialog",()=>{n.isConnectionDialogOpen=!1,dismissOpenDialogs(n,i),updateDialogDOM("dialog-connection",!1)}),i.on("create-new-file",()=>{console.log("create-new-file"),dismissOpenDialogs(n,i),n.isNewFileDialogOpen=!0,updateDialogDOM("dialog-new-file",!0)||i.emit("render");const s=r=>dismissOpenDialogs(n,i,r);document.addEventListener("keydown",s),window._dismissDialogsKeyHandler=s}),i.on("close-new-file-dialog",()=>{n.isNewFileDialogOpen=!1,dismissOpenDialogs(n,i),updateDialogDOM("dialog-new-file",!1)})}function registerTerminalHandlers(n,i,o,s){let r=!1;function a(){r=!0,setTimeout(()=>{r=!1},500)}function c(u=!1){r||(i.emit("run",u),a())}function l(){canExecute({isConnected:n.isConnected})&&c()}function d(){canExecute({isConnected:n.isConnected})&&c(!0)}function p(){canExecute({isConnected:n.isConnected})&&i.emit("stop")}return i.on("run-from-button",(u=!1)=>{u?d():l()}),i.on("run",async(u=!1)=>{const f=n.openFiles.find(y=>y.id==n.editingFile);if(!f||!f.editor){console.warn("[run] No active file to execute");return}let h=f.editor.content||"";if(u&&f.editor.view){const y=f.editor.view.state,w=y.selection;if(w.ranges.some(x=>x.from!==x.to)){const x=w.ranges.filter(C=>C.from!==C.to).map(C=>y.sliceDoc(C.from,C.to)).join(`
+`);x.trim().length>0&&(h=x)}}let m=!1;if(!u&&h.startsWith("# SCRIPTOS_SILENT: True")&&(m=!0,console.log("[ScriptO] Detected silent mode marker")),!u&&h.includes("# === START_CONFIG_PARAMETERS ==="))try{console.log("[ScriptO] Detected ScriptO file, parsing...");const y=parseScriptOsConfig(h);if(y){m=y.silent===!0,console.log("[ScriptO] Config parsed:",y,"silent:",m);const w={};if(y.args)for(const x in y.args){const C=y.args[x];C.value!==void 0&&(w[x]=C.value)}console.log("[ScriptO] Using default values:",w);const b=generateScriptOsCode(h,y,w);console.log("[ScriptO] Generated code length:",b.length,"original:",h.length),h=b,console.log("[ScriptO] Parsed and generated clean code successfully")}else console.log("[ScriptO] Config parsing returned null")}catch(y){console.error("[ScriptO] Error parsing config:",y)}i.emit("open-panel");let v=document.querySelector(".xterm-helper-textarea");v&&v.focus(),i.emit("render");try{bindTerminalOutput(n);let y=n.cache(s,"terminal").term;y.write(`\r
+`);const w=await o.run(h,m);w&&w.trim()&&m&&y.write(w+`\r
+`),y.write(TERMINAL_PROMPT),y.scrollToBottom()}catch(y){console.log("error",y),bindTerminalOutput(n);let w=n.cache(s,"terminal").term;w.write(`\r
+\x1B[91mError: `+y.message+`\x1B[0m\r
+`),w.write(TERMINAL_PROMPT),w.scrollToBottom()}v=document.querySelector(".cm-content"),v&&v.focus(),i.emit("render")}),i.on("stop",async()=>{if(n.panelHeight<=PANEL_CLOSED$1&&(n.panelHeight=n.savedPanelHeight),i.emit("open-panel"),i.emit("render"),n.isConnected)try{await o.interrupt()}catch(u){console.log("Stop failed:",u)}}),i.on("clear-terminal",()=>{n.cache(s,"terminal").term.clear(),i.emit("log:clear")}),i.on("terminal:write",u=>{n.cache(s,"terminal").term.write(u)}),i.on("terminal:write-prompt",()=>{n.cache(s,"terminal").term.write(TERMINAL_PROMPT)}),i.on("open-panel",()=>{i.emit("stop-resizing-panel"),n.panelHeight=n.savedPanelHeight,i.emit("render"),setTimeout(()=>{n.cache(s,"terminal").resizeTerm()},200)}),i.on("close-panel",()=>{i.emit("stop-resizing-panel"),n.savedPanelHeight=n.panelHeight,n.panelHeight=0,i.emit("render")}),i.on("start-resizing-panel",u=>{n.dragStartY=u.clientY,n.dragStartHeight=n.panelHeight;const f=document.querySelector("#panel");f&&f.classList.add("resizing"),document.body.style.userSelect="none",document.body.style.cursor="grabbing",window.addEventListener("mousemove",n.resizePanel);const h=()=>{i.emit("stop-resizing-panel")};window.addEventListener("mouseup",h,{once:!0}),document.body.addEventListener("mouseleave",h,{once:!0}),document.querySelector("#tabs").addEventListener("mouseenter",h,{once:!0})}),i.on("stop-resizing-panel",()=>{const u=document.querySelector("#panel");u&&u.classList.remove("resizing"),document.body.style.userSelect="",document.body.style.cursor="",window.removeEventListener("mousemove",n.resizePanel),setTimeout(()=>n.cache(s,"terminal").resizeTerm(),50)}),{runCode:l,runCodeSelection:d,stopCode:p}}function registerLogHandlers(n,i){n.logs={isOpen:!1,messages:[],maxMessages:1e3,autoScroll:!0},i.on("toggle-log-sidebar",()=>{n.logs.isOpen=!n.logs.isOpen,i.emit("render"),n.logs.isOpen&&n.logs.autoScroll&&setTimeout(()=>{const o=document.querySelector("#log-terminal .xterm-viewport");o&&(o.scrollTop=o.scrollHeight)},100)}),i.on("log:add",o=>{console.debug("[Log Store] log:add event received:",o),n.logs.messages.push(o),n.logs.messages.length>n.logs.maxMessages&&n.logs.messages.shift();const s=new CustomEvent("log-terminal-write",{detail:o});console.debug("[Log Store] Dispatching log-terminal-write event:",o),window.dispatchEvent(s)}),i.on("log:clear",()=>{n.logs.messages=[];const o=new CustomEvent("log-terminal-clear");window.dispatchEvent(o),i.emit("render")}),i.on("log:toggle-autoscroll",()=>{n.logs.autoScroll=!n.logs.autoScroll,i.emit("render")}),i.on("start-resizing-log-sidebar",()=>{console.log("start-resizing-log-sidebar"),window.addEventListener("mousemove",n.resizeLogSidebar);const o=()=>{i.emit("stop-resizing-log-sidebar")};window.addEventListener("mouseup",o,{once:!0}),document.body.addEventListener("mouseleave",o,{once:!0})}),i.on("stop-resizing-log-sidebar",()=>{window.removeEventListener("mousemove",n.resizeLogSidebar)})}function registerSystemConfigHandlers(n,i,o){i.on("toggle-system-menu",()=>{n.expandedSystem=!n.expandedSystem,i.emit("render")}),i.on("change-system-panel",s=>{n.activeSystemPanel=s,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`system:${s}`,i.emit("render")}),i.on("load-network-interfaces-config",async()=>{if(console.log("[Network Interfaces] Loading config..."),!n.isConnected){console.warn("[Network Interfaces] Not connected to device");return}if(n.isLoadingNetworkInterfacesConfig){console.log("[Network Interfaces] Already loading, skipping");return}try{n.isLoadingNetworkInterfacesConfig=!0;const r=await o.exec(`
+from lib.sys import settings
+import json
+
+config = {
+    'wifi': settings.get("network.wifi.enabled", True),
+    'ethernet': settings.get("network.ethernet.enabled", True),
+    'wwan': settings.get("network.wwan.enabled", True)
+}
+
+print(json.dumps({'success': True, 'config': config}))
+`);r&&r.success&&(n.networkInterfacesConfig=r.config,console.log("[Network Interfaces] Config loaded:",n.networkInterfacesConfig))}catch(s){console.error("[Network Interfaces] Failed to load config:",s)}finally{n.isLoadingNetworkInterfacesConfig=!1,i.emit("render")}}),i.on("save-network-interfaces-config",async s=>{if(console.log("[Network Interfaces] Saving config:",s),!n.isConnected){console.warn("[Network Interfaces] Not connected to device");return}if(!s.wifi&&!s.ethernet&&!s.wwan){alert("At least one network interface must be enabled.");return}try{n.isSavingNetworkInterfacesConfig=!0,i.emit("render");const a=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(s).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+settings.set("network.wifi.enabled", config.get('wifi', True))
+settings.set("network.ethernet.enabled", config.get('ethernet', True))
+settings.set("network.wwan.enabled", config.get('wwan', True))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'Network interfaces configuration saved. Reboot to apply changes.'}))
+`,c=await o.exec(a);if(c&&c.success)n.networkInterfacesConfig=s,alert("Network interfaces configuration saved. Please reboot the device to apply changes.");else throw new Error(c?.error||"Save failed")}catch(r){console.error("[Network Interfaces] Failed to save config:",r),alert(`Failed to save configuration: ${r.message}`)}finally{n.isSavingNetworkInterfacesConfig=!1,i.emit("render")}})}function registerNetworkConfigHandlers(n,i,o){const s=console.log;i.on("toggle-networks-menu",()=>{s("toggle-networks-menu"),n.expandedNetworks=!n.expandedNetworks,i.emit("render")}),i.on("change-network-panel",r=>{s("change-network-panel:",r),n.activeNetworkPanel=r,n.activeSystemPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`network:${r}`,r==="gps"&&!n.gpsDataLoaded&&n.isConnected&&i.emit("load-gps-data"),i.emit("render")}),i.on("load-ntp-config",async()=>{if(s("load-ntp-config"),!n.isConnected){console.warn("[NTP] Not connected to device");return}if(n.isLoadingNtpConfig){console.log("[NTP] Already loading config, skipping");return}try{n.isLoadingNtpConfig=!0;const a=await o.exec(`
+from lib.sys import settings
+from time import gmtime, localtime, mktime
+import json
+
+# Load config from settings API
+tz_offset = settings.get("ntp.tz_offset", 0.0)
+config = {
+    'server': settings.get("ntp.server", "pool.ntp.org"),
+    'tz_offset': tz_offset,
+    'timezone': settings.get("ntp.timezone", "UTC"),
+    'auto_detect': settings.get("ntp.auto_detect_tz", False)
+}
+
+# Get current RTC time if synced (year >= 2023)
+utc = gmtime()
+current_time = None
+if utc[0] >= 2023:
+    utc_timestamp = mktime(utc)
+    local_timestamp = utc_timestamp + int(tz_offset * 3600)
+    local = localtime(local_timestamp)
+    current_time = {
+        'utc': {'year': utc[0], 'month': utc[1], 'day': utc[2], 'hour': utc[3], 'minute': utc[4], 'second': utc[5]},
+        'local': {'year': local[0], 'month': local[1], 'day': local[2], 'hour': local[3], 'minute': local[4], 'second': local[5]}
+    }
+
+print(json.dumps({'success': True, 'config': config, 'current_time': current_time}))
+`);o.onNtpConfig&&o.onNtpConfig(a)}catch(r){console.error("[NTP] Failed to load config:",r),n.isLoadingNtpConfig=!1}}),i.on("save-ntp-config",async r=>{if(s("save-ntp-config",r),!n.isConnected){console.warn("[NTP] Not connected to device"),i.emit("ntp-config-save-error",new Error("Not connected"));return}try{const c=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save config using settings API
+settings.set("ntp.server", config.get('server', config.get('server', 'pool.ntp.org')))
+settings.set("ntp.tz_offset", config.get('tz_offset', config.get('tzOffset', 0.0)))
+settings.set("ntp.timezone", config.get('timezone', 'UTC'))
+settings.set("ntp.auto_detect", config.get('auto_detect', config.get('autoDetect', False)))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'NTP configuration saved successfully'}))
+`,l=await o.exec(c);if(l&&l.success)n.ntpConfig={server:r.server||"pool.ntp.org",tzOffset:r.tz_offset??r.tzOffset??0,timezone:r.timezone||"UTC",autoDetect:r.auto_detect??r.autoDetect??!1},i.emit("render"),i.emit("ntp-config-saved");else{const d=new Error(l?.error||"Save failed");throw i.emit("ntp-config-save-error",d),d}}catch(a){throw console.error("[NTP] Failed to save config:",a),alert(`Failed to save NTP configuration: ${a.message}`),i.emit("ntp-config-save-error",a),a}}),i.on("sync-ntp-time",async(r,a,c)=>{if(s("sync-ntp-time",r,a,c),!n.isConnected){console.warn("[NTP] Not connected to device");return}try{const d=`
+from lib.sys.utils import sync_ntp
+sync_ntp('${r}', ${a}, ${c?"True":"False"}, force=True)
+`,p=await o.exec(d);if(o.onNtpSync){const u={autoDetect:c,server:r,tzOffset:a};o.onNtpSync(p,u)}}catch(l){console.error("[NTP] Failed to sync time:",l),alert(`Failed to sync NTP time: ${l.message}`)}}),i.on("load-mqtt-config",async()=>{if(s("load-mqtt-config"),!n.isConnected){console.warn("[MQTT] Not connected to device");return}if(n.isLoadingMqttConfig){console.log("[MQTT] Already loading config, skipping");return}try{n.isLoadingMqttConfig=!0;const a=await o.exec(`
+from lib.sys import settings
+import json
+
+# Load config from settings API
+config = {
+    'server': settings.get("mqtt.server", ""),
+    'port': settings.get("mqtt.port", 1883),
+    'username': settings.get("mqtt.username", ""),
+    'password': settings.get("mqtt.password", ""),
+    'tls': settings.get("mqtt.tls", False),
+    'ca_cert_path': settings.get("mqtt.ca_cert_path", ""),
+    'topic_prefix': settings.get("mqtt.topic_prefix", "")
+}
+
+print(json.dumps({'success': True, 'config': config}))
+`);o.onMqttConfig&&o.onMqttConfig(a)}catch(r){console.error("[MQTT] Failed to load config:",r),n.isLoadingMqttConfig=!1}}),i.on("save-mqtt-config",async r=>{if(s("save-mqtt-config",r),!n.isConnected){console.warn("[MQTT] Not connected to device");return}try{const c=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save config using settings API
+settings.set("mqtt.server", config.get('server', ''))
+settings.set("mqtt.port", config.get('port', 1883))
+settings.set("mqtt.username", config.get('username', ''))
+settings.set("mqtt.password", config.get('password', ''))
+settings.set("mqtt.tls", config.get('tls', False))
+settings.set("mqtt.ca_cert_path", config.get('ca_cert_path', ''))
+settings.set("mqtt.topic_prefix", config.get('topic_prefix', ''))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'MQTT configuration saved successfully'}))
+`,l=await o.exec(c);o.onMqttConfigSave&&o.onMqttConfigSave(l),n.mqttConfig=r,i.emit("render")}catch(a){console.error("[MQTT] Failed to save config:",a),alert(`Failed to save MQTT configuration: ${a.message}`)}}),i.on("load-wwan-config",async()=>{if(s("load-wwan-config"),!n.isConnected){console.warn("[WWAN] Not connected to device");return}if(n.isLoadingWwanConfig){console.log("[WWAN] Already loading config, skipping");return}try{n.isLoadingWwanConfig=!0;const a=await o.exec(`
+from lib.sys import settings
+from lib.sys.network import wwan
+import json
+
+# Load config from settings API
+config = wwan.load_config()
+
+# Map auto_init to auto_init_modem for client compatibility
+config['auto_init_modem'] = config.get('auto_init', True)
+
+# Get status from network.wwan module
+status = wwan.get_status()
+
+print(json.dumps({'success': True, 'config': config, 'status': status}))
+`);o.onWwanConfig&&o.onWwanConfig(a)}catch(r){console.error("[WWAN] Failed to load config:",r),n.isLoadingWwanConfig=!1}}),i.on("save-wwan-config",async r=>{if(s("save-wwan-config",r),!n.isConnected){console.warn("[WWAN] Not connected to device");return}try{const c=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save config using settings API
+settings.set("wwan.apn", config.get('apn', ''))
+settings.set("wwan.username", config.get('username', ''))
+settings.set("wwan.password", config.get('password', ''))
+# Map auto_init_modem to auto_init for settings
+settings.set("wwan.auto_init", config.get('auto_init_modem', config.get('auto_init', True)))
+settings.set("wwan.mobile_data_enabled", config.get('mobile_data_enabled', False))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'WWAN configuration saved successfully'}))
+`,l=await o.exec(c);o.onWwanConfigSave&&o.onWwanConfigSave(l),n.wwanConfig=r,i.emit("render")}catch(a){console.error("[WWAN] Failed to save config:",a),alert(`Failed to save WWAN configuration: ${a.message}`)}}),i.on("load-modem-status",async()=>{if(s("load-modem-status"),!n.isConnected){console.warn("[Modem] Not connected to device");return}if(n.isLoadingModemStatus){console.log("[Modem] Already loading status, skipping");return}try{n.isLoadingModemStatus=!0;const a=await o.exec(`
+from lib.sys.network import wwan
+import json
+
+status = wwan.get_status()
+print(json.dumps(status))
+`);o.onModemStatus&&o.onModemStatus(a)}catch(r){console.error("[Modem] Failed to load status:",r),n.isLoadingModemStatus=!1}}),i.on("load-can-config",async()=>{if(s("load-can-config"),!n.isConnected){console.warn("[CAN] Not connected to device");return}if(n.isLoadingCanConfig){console.log("[CAN] Already loading config, skipping");return}try{n.isLoadingCanConfig=!0;const a=await o.exec(`
+from lib.sys import settings
+from lib.sys import board
+import json
+
+# Hardware pins from board.json (immutable)
+try:
+    can_bus = board.can("can0")
+    tx_pin = can_bus.tx
+    rx_pin = can_bus.rx
+except:
+    tx_pin = None
+    rx_pin = None
+
+# User preferences from settings
+config = {
+    'txPin': tx_pin,
+    'rxPin': rx_pin,
+    'bitrate': settings.get("can.bitrate", 500000),
+    'enabled': settings.get("can.enabled", False),
+    'mode': settings.get("can.mode", "NORMAL")
+}
+
+print(json.dumps({'success': True, 'config': config}))
+`);o.onCanConfig&&o.onCanConfig(a)}catch(r){console.error("[CAN] Failed to load config:",r),n.isLoadingCanConfig=!1}}),i.on("save-can-config",async r=>{if(s("save-can-config",r),!n.isConnected){console.warn("[CAN] Not connected to device");return}try{const c=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save user preferences only (pins come from board.json, not settings)
+settings.set("can.bitrate", config.get('bitrate', 500000))
+settings.set("can.enabled", config.get('enabled', False))
+settings.set("can.mode", config.get('mode', "NORMAL"))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'CAN configuration saved successfully'}))
+`,l=await o.exec(c);o.onCanConfigSave&&o.onCanConfigSave(l),n.canConfig=r,i.emit("render")}catch(a){console.error("[CAN] Failed to save config:",a),alert(`Failed to save CAN configuration: ${a.message}`)}}),i.on("load-vpn-config",async()=>{if(s("load-vpn-config"),!n.isConnected){console.warn("[VPN] Not connected to device");return}if(n.isLoadingVpnConfig){console.log("[VPN] Already loading config, skipping");return}try{n.isLoadingVpnConfig=!0;const a=await o.exec(`
+from lib.sys import settings
+import json
+
+# Load VPN config from settings API
+config = {
+    'hostname': settings.get("vpn.hostname", ""),
+    'join_code': settings.get("vpn.join_code", ""),
+    'auto_connect': settings.get("vpn.auto_connect", False),
+    'enabled': settings.get("vpn.enabled", False)
+}
+
+print(json.dumps({'success': True, 'config': config}))
+`);o.onVpnConfig&&o.onVpnConfig(a)}catch(r){console.error("[VPN] Failed to load config:",r),n.isLoadingVpnConfig=!1}}),i.on("vpn-save-config",async r=>{if(s("vpn-save-config",r),!n.isConnected){console.warn("[VPN] Not connected to device");return}try{const c=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save VPN config using settings API
+settings.set("vpn.hostname", config.get('hostname', ''))
+settings.set("vpn.join_code", config.get('join_code', ''))
+settings.set("vpn.auto_connect", config.get('auto_connect', False))
+settings.set("vpn.enabled", config.get('enabled', False))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'VPN configuration saved successfully'}))
+`,l=await o.exec(c);o.onVpnConfigSave&&o.onVpnConfigSave(l),n.vpnConfig=r,n.vpnConfigLoaded=!0,i.emit("render")}catch(a){console.error("[VPN] Failed to save config:",a),alert(`Failed to save VPN configuration: ${a.message}`)}}),i.on("vpn-connect",async r=>{if(s("vpn-connect",r),!n.isConnected){console.warn("[VPN] Not connected to device");return}try{const a=`
+import husarnet
+import json
+
+try:
+    # Initialize Husarnet client first
+    husarnet.init()
+    
+    # Join with hostname and join_code as separate arguments
+    husarnet.join('${r.hostname}', '${r.join_code}')
+    
+    ipv6 = husarnet.get_ip()
+    print(json.dumps({'success': True, 'ipv6': ipv6, 'message': 'Connected to Husarnet'}))
+except Exception as e:
+    import sys
+    sys.print_exception(e)
+    print(json.dumps({'success': False, 'error': str(e)}))
+`,c=await o.exec(a);o.onVpnConnect&&o.onVpnConnect(c),n.vpnConfig=r,n.vpnConfigLoaded=!0,setTimeout(()=>{i.emit("refresh-networks")},2e3),i.emit("render")}catch(a){console.error("[VPN] Failed to connect:",a),alert(`Failed to connect to VPN: ${a.message}`)}}),i.on("vpn-disconnect",async()=>{if(s("vpn-disconnect"),!n.isConnected){console.warn("[VPN] Not connected to device");return}try{const a=await o.exec(`
+import husarnet
+import json
+
+try:
+    husarnet.leave()
+    print(json.dumps({'success': True, 'message': 'Disconnected from Husarnet'}))
+except Exception as e:
+    import sys
+    sys.print_exception(e)
+    print(json.dumps({'success': False, 'error': str(e)}))
+`);o.onVpnDisconnect&&o.onVpnDisconnect(a),n.vpnConfig&&(n.vpnConfig.enabled=!1),setTimeout(()=>{i.emit("refresh-networks")},1e3),i.emit("render")}catch(r){console.error("[VPN] Failed to disconnect:",r),alert(`Failed to disconnect VPN: ${r.message}`)}}),i.on("load-gps-data",async()=>{if(s("load-gps-data"),!n.isConnected){console.warn("[GPS] Not connected to device");return}if(n.isLoadingGpsData){console.log("[GPS] Already loading GPS data, skipping");return}try{n.isLoadingGpsData=!0,i.emit("render");const a=await o.exec(`
+import usbmodem
+import json
+try:
+    info = usbmodem.gps_info()
+    # Convert to dict and serialize as JSON
+    result = {}
+    if 'latitude' in info:
+        result['latitude'] = float(info['latitude'])
+    if 'longitude' in info:
+        result['longitude'] = float(info['longitude'])
+    if 'altitude' in info:
+        result['altitude'] = float(info['altitude'])
+    if 'satellites' in info:
+        result['satellites'] = int(info['satellites'])
+    if 'date' in info:
+        result['date'] = str(info['date'])
+    if 'time' in info:
+        result['time'] = str(info['time'])
+    if 'speed' in info:
+        result['speed'] = float(info['speed'])
+    if 'heading' in info:
+        result['heading'] = float(info['heading'])
+    print(json.dumps({'success': True, 'data': result}))
+except Exception as e:
+    import sys
+    sys.print_exception(e)
+    print(json.dumps({'success': False, 'error': str(e)}))
+`);a&&a.success&&a.data?(n.gpsData=a.data,n.gpsDataLoaded=!0,console.log("[GPS] GPS data loaded:",n.gpsData)):(n.gpsData={},n.gpsDataLoaded=!0)}catch(r){console.error("[GPS] Failed to load GPS data:",r),n.gpsData={},n.gpsDataLoaded=!0}finally{n.isLoadingGpsData=!1,i.emit("render")}}),i.on("refresh-gps-data",async()=>{s("refresh-gps-data"),n.gpsDataLoaded=!1,i.emit("load-gps-data")}),i.on("refresh-system-info",async()=>{if(!n.isConnected){console.warn("[System Info] Not connected, cannot refresh system info");return}if(n.isLoadingSystemInfo){console.log("[System Info] Already loading, skipping");return}n.isLoadingSystemInfo=!0,i.emit("render");try{const r=await getSystemInfo(o);n.systemInfo=r,console.log("[System Info] Loaded:",r)}catch(r){console.error("[System Info] Failed to load:",r),n.systemInfo=null}finally{n.isLoadingSystemInfo=!1,i.emit("render")}}),i.on("refresh-networks",async()=>{if(s("refresh-networks"),!n.isConnected){console.warn("[Networks] Not connected, cannot refresh networks");return}if(n.isLoadingNetworks){console.log("[Networks] Already loading, skipping");return}n.isLoadingNetworks=!0,i.emit("render");try{const r=await getNetworksInfo(o);n.networksInfo=r,console.log("[Networks] Loaded:",r)}catch(r){console.error("[Networks] Failed to load:",r),n.networksInfo=null}finally{n.isLoadingNetworks=!1,i.emit("render")}}),i.on("load-eth-config",async()=>{if(s("load-eth-config"),!n.isConnected){console.warn("[Ethernet] Not connected to device");return}if(n.isLoadingEthConfig){console.log("[Ethernet] Already loading config, skipping");return}try{n.isLoadingEthConfig=!0,i.emit("render");const a=await o.exec(`
+from lib.sys import settings
+from lib.sys.network import eth
+import json
+
+# Load config from settings API
+config = {
+    'dhcp': settings.get("ethernet.dhcp", True),
+    'static_ip': settings.get("ethernet.static_ip", None)
+}
+
+# Get status from network.eth module
+status = eth.get_status()
+
+print(json.dumps({'success': True, 'config': config, 'status': status}))
+`);o.onEthConfig&&o.onEthConfig(a)}catch(r){console.error("[Ethernet] Failed to load config:",r),n.isLoadingEthConfig=!1,i.emit("render")}}),i.on("save-eth-config",async r=>{if(s("save-eth-config",r),!n.isConnected){console.warn("[Ethernet] Not connected to device");return}try{const c=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save config using settings API
+settings.set("ethernet.dhcp", config.get('dhcp', True))
+if config.get('static_ip'):
+    settings.set("ethernet.static_ip", config.get('static_ip'))
+else:
+    settings.set("ethernet.static_ip", None)
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'Ethernet configuration saved'}))
+`,l=await o.exec(c);o.onEthConfigSave&&o.onEthConfigSave(l),n.ethConfig=r,i.emit("render")}catch(a){console.error("[Ethernet] Failed to save config:",a),alert(`Failed to save Ethernet configuration: ${a.message}`)}}),i.on("init-ethernet",async()=>{if(s("init-ethernet"),!n.isConnected){console.warn("[Ethernet] Not connected to device");return}try{n.isInitializingEth=!0,i.emit("render");const a=await o.exec(`
+from lib.sys.network import eth
+import json
+import time
+
+# Initialize Ethernet (uses settings internally)
+lan = eth.init()
+
+if lan is None:
+    print(json.dumps({'success': False, 'error': 'Ethernet not available or initialization failed'}))
+else:
+    # Wait briefly for link/DHCP
+    for _ in range(20):
+        status = eth.get_status()
+        if status.get('connected') or status.get('ip'):
+            break
+        time.sleep_ms(250)
+    
+    status = eth.get_status()
+    print(json.dumps({'success': True, 'status': status}))
+`);o.onEthInit&&o.onEthInit(a),n.isInitializingEth=!1,i.emit("refresh-networks")}catch(r){console.error("[Ethernet] Failed to initialize:",r),n.isInitializingEth=!1,alert(`Failed to initialize Ethernet: ${r.message}`),i.emit("render")}}),i.on("refresh-eth-status",async()=>{if(s("refresh-eth-status"),!!n.isConnected)try{const a=await o.exec(`
+from lib.sys.network import eth
+import json
+print(json.dumps(eth.get_status()))
+`);o.onEthStatus&&o.onEthStatus(a)}catch(r){console.error("[Ethernet] Failed to get status:",r)}})}function registerHardwareConfigHandlers(n,i,o){const s=console.log;i.on("toggle-peripherals-menu",()=>{s("toggle-peripherals-menu"),n.expandedPeripherals=!n.expandedPeripherals,i.emit("render")}),i.on("change-peripherals-panel",r=>{s("change-peripherals-panel:",r),n.activePeripheralsPanel=r,n.activeNetworkPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection=`peripherals:${r}`,r==="gps"&&n.isConnected&&!n.gpsDataLoaded&&!n.isLoadingGpsData&&i.emit("load-gps-data"),r==="sdcard"&&n.isConnected&&(!n.sdcardConfigLoaded&&!n.isLoadingSdcardConfig&&i.emit("load-sdcard-config"),n.sdcardInfo=null,i.emit("sdcard-get-info")),i.emit("render")}),i.on("load-sdcard-config",async()=>{if(s("load-sdcard-config"),!n.isConnected){console.warn("[SD Card] Not connected to device");return}if(n.isLoadingSdcardConfig){console.log("[SD Card] Already loading config, skipping");return}try{n.isLoadingSdcardConfig=!0;const a=await o.exec(`
+import json
+try:
+    with open('/settings/sdcard.json', 'r') as f:
+        config = json.load(f)
+    print(json.dumps({'success': True, 'config': config}))
+except OSError:
+    print(json.dumps({'success': True, 'config': {'mountPoint': '/sd', 'autoMount': False}}))
+except Exception as e:
+    print(json.dumps({'success': False, 'error': str(e)}))
+`);o.onSdcardConfig&&o.onSdcardConfig(a)}catch(r){console.error("[SD Card] Failed to load config:",r),n.isLoadingSdcardConfig=!1}}),i.on("save-sdcard-config",async r=>{if(s("save-sdcard-config",r),!n.isConnected){console.warn("[SD Card] Not connected to device");return}try{const c=`
+import json
+import os
+config_json = '${JSON.stringify(r).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Ensure settings directory exists
+settings_dir = '/settings'
+try:
+    os.mkdir(settings_dir)
+except OSError:
+    pass  # Directory already exists
+
+# Write config
+with open(settings_dir + '/sdcard.json', 'w') as f:
+    json.dump(config, f)
+
+print(json.dumps({'success': True, 'message': 'SD Card configuration saved successfully'}))
+`,l=await o.exec(c);o.onSdcardConfigSave&&o.onSdcardConfigSave(l),n.sdcardConfig=r,i.emit("render")}catch(a){console.error("[SD Card] Failed to save config:",a),alert(`Failed to save SD Card configuration: ${a.message}`)}}),i.on("sdcard-unmount",async()=>{if(s("sdcard-unmount"),!n.isConnected){console.warn("[SD Card] Not connected to device");return}if(n.isUnmountingSDCard){console.log("[SD Card] Already unmounting, skipping");return}try{n.isUnmountingSDCard=!0,i.emit("render");const c=`
+import os
+import json
+
+mount_point = '${(n.sdcardConfig||{mountPoint:"/sd"}).mountPoint||"/sd"}'
+
+try:
+    os.umount(mount_point)
+except OSError:
+    pass
+
+# Deinit and remove the global sd object
+try:
+    import builtins
+    if hasattr(builtins, 'sd'):
+        builtins.sd.deinit()
+        del builtins.sd
+except:
+    pass
+
+import gc
+gc.collect()
+print(json.dumps({'success': True, 'message': 'SD card unmounted successfully'}))
+`,l=await o.exec(c);o.onSdcardUnmount&&o.onSdcardUnmount(l)}catch(r){console.error("[SD Card] Failed to unmount:",r),n.isUnmountingSDCard=!1,alert(`Failed to unmount SD card: ${r.message}`),i.emit("render")}}),i.on("sdcard-mount",async()=>{if(s("sdcard-mount"),!n.isConnected){console.warn("[SD Card] Not connected to device");return}if(n.isMountingSDCard){console.log("[SD Card] Already mounting, skipping");return}try{n.isMountingSDCard=!0,i.emit("render");const c=`
+import json
+import time
+from machine import Pin, SDCard
+from lib.sys import board
+import os
+
+result = {'success': False, 'log': []}
+
+def log_msg(msg):
+    result['log'].append(msg)
+    print(msg)
+
+try:
+    # Load board configuration
+    log_msg("Loading board configuration...")
+    log_msg(f"Board: {board.id.name}")
+    
+    # Get SD card hardware config from board
+    if not board.has("sdcard"):
+        log_msg("✗ No SD card configuration found for this board")
+        result['error'] = 'No SD card configuration found for this board'
+        print(json.dumps(result))
+    else:
+        sd_device = board.device('sdcard')
+        sd_bus = board.sdmmc('sdcard')
+        
+        # Determine bus width (4-bit or 1-bit)
+        width = 4 if hasattr(sd_bus, 'd3') else 1
+        
+        # Extract power control settings
+        power_ctrl = getattr(sd_device, 'power_control', {})
+        power_pin = power_ctrl.get('pin', 45)
+        power_active_low = power_ctrl.get('active_low', True)
+        
+        # Normalize to simpler structure
+        sd_hw_norm = {
+            'pins': {
+                'power': power_pin,
+                'clk': sd_bus.clk,
+                'cmd': sd_bus.cmd,
+                'd0': sd_bus.d0,
+                'd1': getattr(sd_bus, 'd1', None),
+                'd2': getattr(sd_bus, 'd2', None),
+                'd3': getattr(sd_bus, 'd3', None)
+            },
+            'slot': 0,  # Assuming slot 0 for sdcard
+            'width': width,
+            'power_active_low': power_active_low
+        }
+        log_msg(f"Slot: {sd_hw_norm['slot']}, Width: {sd_hw_norm['width']}-bit")
+        
+        # Power cycle the card
+        log_msg("Power cycling SD card...")
+        sd_power = Pin(power_pin, Pin.OUT)
+        sd_power.value(1 if power_active_low else 0)  # Disable power
+        time.sleep_ms(200)
+        sd_power.value(0 if power_active_low else 1)  # Enable power
+        time.sleep_ms(500)
+        log_msg("✓ Power cycle complete")
+        
+        # Initialize SD card
+        log_msg("Initializing SD card...")
+        import gc
+        gc.collect()
+        time.sleep_ms(200)
+        
+        pins = sd_hw_norm['pins']
+        data_pins = (pins['d0'], pins['d1'], pins['d2'], pins['d3']) if sd_hw_norm['width'] == 4 else (pins['d0'],)
+        
+        sd = SDCard(
+            slot=sd_hw_norm['slot'],
+            width=sd_hw_norm['width'],
+            sck=pins['clk'],
+            cmd=pins['cmd'],
+            data=data_pins,
+            freq=4000000
+        )
+        import builtins
+        builtins.sd = sd
+        
+        info = sd.info()
+        capacity_gb = (info[0] * info[1]) / (1024**3)
+        log_msg(f"✓ {capacity_gb:.1f} GB card detected")
+        
+        # Mount filesystem
+        mount_point = '${(n.sdcardConfig||{mountPoint:"/sd"}).mountPoint||"/sd"}'
+        log_msg(f"Mounting to {mount_point}...")
+        try:
+            os.mkdir(mount_point)
+        except OSError:
+            pass
+        os.mount(sd, mount_point)
+        log_msg("✓ Mounted")
+        
+        # Get filesystem info
+        stat = os.statvfs(mount_point)
+        total_mb = (stat[0] * stat[2]) / (1024**2)
+        free_mb = (stat[0] * stat[3]) / (1024**2)
+        used_mb = total_mb - free_mb
+        
+        log_msg(f"Total: {total_mb:.0f} MB")
+        log_msg(f"Free:  {free_mb:.0f} MB")
+        log_msg(f"Used:  {used_mb:.0f} MB ({used_mb/total_mb*100:.1f}%)")
+        
+        result['success'] = True
+        result['info'] = {
+            'mountPoint': mount_point,
+            'cardCapacity': info[0],
+            'sectorSize': info[1],
+            'totalSize': int(total_mb * 1024 * 1024),
+            'freeSize': int(free_mb * 1024 * 1024),
+            'usedSize': int(used_mb * 1024 * 1024)
+        }
+        
+        print(json.dumps(result))
+
+except Exception as e:
+    import sys
+    log_msg(f"✗ Failed: {e}")
+    result['error'] = str(e)
+    print(json.dumps(result))
+`,l=await o.exec(c);o.onSdcardMount&&o.onSdcardMount(l)}catch(r){console.error("[SD Card] Failed to mount:",r),n.isMountingSDCard=!1,alert(`Failed to mount SD card: ${r.message}`),i.emit("render")}}),i.on("sdcard-get-info",async()=>{if(s("sdcard-get-info"),!n.isConnected){console.warn("[SD Card] Not connected to device");return}if(n.isLoadingSdcardInfo){console.log("[SD Card] Already loading info, skipping");return}try{n.isLoadingSdcardInfo=!0,i.emit("render");const c=`
+import os
+import json
+
+mount_point = '${(n.sdcardConfig||{mountPoint:"/sd"}).mountPoint||"/sd"}'
+
+try:
+    # Check if mount point exists using os.stat() (NOT listdir - crashes P4+C6)
+    os.stat(mount_point)
+    
+    # Get physical card capacity from sd.info()
+    card_capacity = 0
+    sector_size = 0
+    try:
+        _ci = sd.info()
+        card_capacity = _ci[0]
+        sector_size = _ci[1]
+    except:
+        pass
+    
+    # Get filesystem stats
+    stat = os.statvfs(mount_point)
+    block_size = stat[0]
+    total_blocks = stat[2]
+    free_blocks = stat[3]
+    
+    total_size = block_size * total_blocks
+    free_size = block_size * free_blocks
+    used_size = total_size - free_size
+    
+    info = {
+        'mountPoint': mount_point,
+        'cardCapacity': card_capacity,
+        'sectorSize': sector_size,
+        'totalSize': total_size,
+        'freeSize': free_size,
+        'usedSize': used_size,
+        'blockSize': block_size
+    }
+    print(json.dumps({'success': True, 'info': info}))
+    
+except OSError as e:
+    # Mount point doesn't exist or not mounted
+    print(json.dumps({'success': False, 'error': f'SD Card not mounted at {mount_point}'}))
+except Exception as e:
+    print(json.dumps({'success': False, 'error': str(e)}))
+`,l=await o.exec(c);o.onSdcardInfo&&o.onSdcardInfo(l)}catch(r){console.error("[SD Card] Failed to get info:",r),n.isLoadingSdcardInfo=!1,n.sdcardInfo={error:`Failed to get storage info: ${r.message}`},i.emit("render")}})}const STATUS_INFO_POLL_INTERVAL=1e4;let statusInfoPollInterval=null,statusInfoPollingEnabled=!1;function startStatusInfoPolling$1(n,i,o){stopStatusInfoPolling$1(),statusInfoPollingEnabled=!0;let s=null;statusInfoPollInterval=setInterval(async()=>{if(!statusInfoPollingEnabled)return;if(!i.isConnected||!n){stopStatusInfoPolling$1();return}const r=i.isTransferring,a=i.installingDependencies,c=n.isFileOperationActive&&n.isFileOperationActive(),l=n.isCommandRunning&&n.isCommandRunning();if(r||a||c||l){const d=r?"transferring":c?"fileOp":l?"command":"deps";d!==s&&(console.log(`[Store] Status info polling paused: ${d}`),s=d);return}s&&(console.log("[Store] Status info polling resuming"),s=null);try{const d=await n.exec("getStatusInfo()");d&&(i.statusInfo=d,updateStatusBarDirectly(d,i.temperatureUnit||"degC"))}catch(d){console.debug("[Store] Status info poll failed:",d.message)}},STATUS_INFO_POLL_INTERVAL)}function stopStatusInfoPolling$1(){statusInfoPollingEnabled=!1,statusInfoPollInterval&&(clearInterval(statusInfoPollInterval),statusInfoPollInterval=null,console.log("[Store] Stopped status info polling"))}function registerConnectionHandlers(state,emitter,device,updateMenu,bindTerminalOutput){emitter.on("disconnected",()=>{stopStatusInfoPolling$1(),state.isConnected=!1,state.connectionMode="none",state.panelHeight=PANEL_CLOSED$1,state.boardFiles=[],state.boardNavigationPath="/",state.filesLoadedOnce=!1,state.isTransferring=!1,state.transferringProgress="",state.isSaving=!1,state.savingProgress=0,state.isRemoving=!1,state.bannerDisplayed=!1,state.systemInfoAttempted=!1;for(const n in state.loadedExtensions)state.loadedExtensions[n].instance=null;emitter.emit("refresh-files"),emitter.emit("render"),state.isResettingHard&&(state.isResettingHard=!1,setTimeout(()=>{emitter.emit("open-connection-dialog")},100))}),emitter.on("disconnect",async()=>{state._userDisconnected=!0,state._reconnectTimer&&(clearTimeout(state._reconnectTimer),state._reconnectTimer=null),state.isReconnecting=!1,await device.disconnect(),emitter.emit("disconnected")}),emitter.on("reconnecting",()=>{if(state._userDisconnected){emitter.emit("disconnected");return}console.log("[Store] Connection lost - starting auto-reconnect"),stopStatusInfoPolling$1(),state.isReconnecting=!0,state.reconnectAttempt=0,state.isConnected=!1,state.connectionMode="none",emitter.emit("render");const n=localStorage.getItem("webrepl-url"),i=localStorage.getItem("webrepl-password")||"";if(!n){console.warn("[Store] No saved connection URL, falling back to disconnect"),state.isReconnecting=!1,emitter.emit("disconnected");return}const o=20,s=3e3,r=async()=>{if(state.isReconnecting){state.reconnectAttempt++,console.log(`[Store] Reconnect attempt ${state.reconnectAttempt}/${o}`),emitter.emit("render");try{await device.connect(n,i),console.log("[Store] Reconnected successfully"),state.isReconnecting=!1,state.reconnectAttempt=0,state.isConnected=!0,state.connectionMode="webrepl",state._reconnectTimer=null,updateMenu(),emitter.emit("render"),startStatusInfoPolling$1(device,state,emitter);try{const a=await device.exec("getStatusInfo()");a&&(state.statusInfo=a,updateStatusBarDirectly(a,state.temperatureUnit||"degC"))}catch{}}catch(a){if(console.log(`[Store] Reconnect attempt ${state.reconnectAttempt} failed:`,a.message),state.reconnectAttempt>=o){console.warn("[Store] Max reconnect attempts reached, giving up"),state.isReconnecting=!1,state._reconnectTimer=null,emitter.emit("disconnected");return}state.isReconnecting&&(state._reconnectTimer=setTimeout(r,s))}}};state._reconnectTimer=setTimeout(r,s)}),emitter.on("reconnect-cancel",()=>{console.log("[Store] Reconnect cancelled by user"),state._reconnectTimer&&(clearTimeout(state._reconnectTimer),state._reconnectTimer=null),state.isReconnecting=!1,emitter.emit("disconnected")}),emitter.on("connection-timeout",async()=>{state.isConnected=!1,state.isConnecting=!1,state.isConnectionDialogOpen=!0,emitter.emit("render")}),emitter.on("connect",async()=>{emitter.emit("open-connection-dialog")}),emitter.on("connect-webrepl",async({wsUrl,password})=>{wsUrl&&localStorage.setItem("webrepl-url",wsUrl),password&&localStorage.setItem("webrepl-password",password),state.isConnecting=!0,emitter.emit("render"),updateOverlayDirectly(state);const terminalComponent=state.cache(XTerm,"terminal");terminalComponent&&terminalComponent.term&&terminalComponent.bindInput(state,device),bindTerminalOutput(state);try{await device.connect(wsUrl,password),state.isConnecting=!1,state.isConnected=!0,state.connectionMode="webrepl",updateOverlayDirectly(state),state.boardNavigationPath="/",state.connectedPort=wsUrl,updateMenu(),emitter.emit("render"),state.systemSection==="file-manager"&&emitter.emit("refresh-files"),state._userDisconnected=!1,device.onConnectionClosed(()=>{state._userDisconnected||emitter.emit("reconnecting")}),device.subscribe("status_info",n=>{const i=!state.statusInfo&&n;state.statusInfo=n,i?emitter.emit("render"):updateStatusBarDirectly(n,state.temperatureUnit||"degC")}),device.subscribe("log",n=>{console.debug("[Connection] LOG event handler called with:",n),emitter.emit("log:add",n)}),device.onPlotData=n=>{},device.onDisplayUi=n=>{console.log("[ScriptO UI] Display UI command received:",n),emitter.emit("open-scriptos-ui-modal",n)},device.onWwanStatus=n=>{console.log("[WWAN] Status event received:",n),state.wwanStatus=n,emitter.emit("render")},device.onMqttConfig=n=>{console.log("[MQTT] Config received:",n),state.isLoadingMqttConfig=!1,state.mqttConfigLoaded=!0,n.success&&n.config?state.mqttConfig=n.config:state.mqttConfig={},emitter.emit("render")},device.onMqttConfigSave=n=>{console.log("[MQTT] Config save response:",n),n.success?emitter.emit("render"):alert(`Failed to save MQTT configuration: ${n.error||"Unknown error"}`)},device.onWwanConfig=n=>{console.log("[WWAN] Config received:",n),state.isLoadingWwanConfig=!1,state.wwanConfigLoaded=!0,n.success&&n.config?(state.wwanConfig=n.config,state.wwanConfig.auto_init_modem===void 0&&(state.wwanConfig.auto_init_modem=!0)):state.wwanConfig={auto_init_modem:!0},emitter.emit("render")},device.onWwanConfigSave=n=>{console.log("[WWAN] Config save response:",n),n.success?emitter.emit("render"):alert(`Failed to save WWAN configuration: ${n.error||"Unknown error"}`)},device.onModemStatus=n=>{console.log("[Modem] Status received:",n),state.isLoadingModemStatus=!1,state.modemStatusLoaded=!0,state.modemStatus=n,emitter.emit("render")},device.onNtpSync=(n,i)=>{if(console.log("[NTP] Sync response:",n),n.success){state.ntpConfig||(state.ntpConfig={server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1,autoSync:!1});const o=i?.autoDetect??state.ntpConfig.autoDetect??!1,s=i?.autoSync??state.ntpConfig.autoSync??!1,r=state.ntpConfig.timezone??"UTC";n.ntp_server?state.ntpConfig.server=n.ntp_server:i?.server&&(state.ntpConfig.server=i.server),n.tz_offset!==void 0?state.ntpConfig.tzOffset=n.tz_offset:i?.tzOffset!==void 0&&(state.ntpConfig.tzOffset=i.tzOffset),state.ntpConfig.autoDetect=o,state.ntpConfig.autoSync=s,state.ntpConfig.timezone=r,state.ntpSyncResult={utc:n.utc,local:n.local,timestamp:Date.now()},emitter.emit("render")}else alert(`NTP sync failed: ${n.error||"Unknown error"}`)},device.onNtpConfig=n=>{console.log("[NTP] Config received:",n),state.isLoadingNtpConfig=!1,state.ntpConfigLoaded=!0,n.success&&n.config&&(state.ntpConfig={server:n.config.server||"pool.ntp.org",tzOffset:n.config.tz_offset||0,timezone:n.config.timezone||"UTC",autoDetect:n.config.auto_detect||!1,autoSync:n.config.auto_sync||!1},n.current_time&&(state.ntpSyncResult={utc:n.current_time.utc,local:n.current_time.local,timestamp:Date.now()})),emitter.emit("render")},device.onNtpConfigSave=n=>{if(console.log("[NTP] Config save response:",n),n.success)emitter.emit("render");else{const i=new Error(n.error||"Unknown error");emitter.emit("ntp-config-save-error",i),alert(`Failed to save NTP configuration: ${i.message}`)}},device.onCanConfig=n=>{console.log("[CAN] Config received:",n),state.isLoadingCanConfig=!1,state.canConfigLoaded=!0,n.success&&n.config&&(state.canConfig={txPin:n.config.txPin||5,rxPin:n.config.rxPin||4,bitrate:n.config.bitrate||5e5,enabled:n.config.enabled!==void 0?n.config.enabled:!0,loopback:n.config.loopback||!1},emitter.emit("render"))},device.onCanConfigSave=n=>{console.log("[CAN] Config save response:",n),n.success?(emitter.emit("render"),alert("CAN configuration saved successfully. Device restart required for changes to take effect.")):alert(`Failed to save CAN configuration: ${n.error||"Unknown error"}`)},device.onVpnConfig=n=>{console.log("[VPN] Config received:",n),state.isLoadingVpnConfig=!1,state.vpnConfigLoaded=!0,n.success&&n.config?state.vpnConfig={hostname:n.config.hostname||"",join_code:n.config.join_code||"",auto_connect:n.config.auto_connect||!1,enabled:n.config.enabled||!1}:state.vpnConfig={hostname:"",join_code:"",auto_connect:!1,enabled:!1},emitter.emit("render")},device.onVpnConfigSave=n=>{console.log("[VPN] Config save response:",n),n.success?emitter.emit("render"):alert(`Failed to save VPN configuration: ${n.error||"Unknown error"}`)},device.onVpnConnect=n=>{console.log("[VPN] Connect response:",n),n.success?(alert(n.message||"Connected to VPN successfully!"),emitter.emit("refresh-networks")):alert(`Failed to connect to VPN: ${n.error||"Unknown error"}`),emitter.emit("render")},device.onVpnDisconnect=n=>{console.log("[VPN] Disconnect response:",n),n.success?(alert(n.message||"VPN disconnected."),emitter.emit("refresh-networks")):alert(`Failed to disconnect VPN: ${n.error||"Unknown error"}`),emitter.emit("render")},device.onVpnInfo=n=>{console.log("[VPN] Info received:",n),state.networksInfo&&(state.networksInfo.vpn=n),emitter.emit("render")},device.onSdcardConfig=n=>{console.log("[SD Card] Config received:",n),state.isLoadingSdcardConfig=!1,state.sdcardConfigLoaded=!0,n.success&&n.config?state.sdcardConfig={mountPoint:n.config.mountPoint||"/sd",autoMount:n.config.autoMount||!1}:state.sdcardConfig={mountPoint:"/sd",autoMount:!1},emitter.emit("render")},device.onSdcardConfigSave=n=>{console.log("[SD Card] Config save response:",n),n.success?emitter.emit("render"):alert(`Failed to save SD Card configuration: ${n.error||"Unknown error"}`)},device.onSdcardInfo=n=>{console.log("[SD Card] Info received:",n),state.isLoadingSdcardInfo=!1,n.success&&n.info?(!n.info.cardCapacity&&state.sdcardInfo&&state.sdcardInfo.cardCapacity&&(n.info.cardCapacity=state.sdcardInfo.cardCapacity,n.info.sectorSize=state.sdcardInfo.sectorSize),state.sdcardInfo=n.info):state.sdcardInfo={error:n.error||"Failed to get storage information"},emitter.emit("render")},device.onSdcardMount=n=>{if(console.log("[SD Card] Mount response:",n),state.isMountingSDCard=!1,n.success){const i=n.log?n.log.join(`
+`):"SD card mounted successfully";console.log(`[SD Card] Mount log:
+`+i),n.info&&(state.sdcardInfo=n.info)}else{const i=n.error||"Unknown error",o=n.log?`
+
+Log:
+`+n.log.join(`
+`):"";alert("Failed to mount SD card: "+i+o),state.sdcardInfo={error:i}}emitter.emit("render")},device.onSdcardUnmount=n=>{if(console.log("[SD Card] Unmount response:",n),state.isUnmountingSDCard=!1,n.success)console.log("[SD Card] Unmounted successfully"),state.sdcardInfo=null;else{const i=n.error||"Unknown error";alert("Failed to unmount SD card: "+i)}emitter.emit("render")},device.onGpioConfig=n=>{console.log("[GPIO] Config received:",n),state.isLoadingGpioConfig=!1,state.gpioConfigLoaded=!0,n.success&&n.config?state.gpioConfig=n.config:(n.chipInfo?state.gpioConfig={version:"1.0",assignments:{OUT:{digital:{PP:[],HS:[],LS:[]}},IN:{digital:{PU:[],PD:[],FLOAT:[]}},SPI0:{MISO:null,MOSI:null,SCLK:null,CS:null},SPI1:{MISO:null,MOSI:null,SCLK:null,CS:null},I2C0:{SDA:null,SCL:null},I2C1:{SDA:null,SCL:null},UART0:{TXD:null,RXD:null},UART1:{TXD:null,RXD:null},UART2:{TXD:null,RXD:null},CAN:{TX:null,RX:null},PWM:{channels:{}},NEO:{DIN:null,count:0},BUZZ:{PWM:null},BOOT:{pin:0,mode:"INPUT_PULLUP"},SDCARD:{CMD:null,CLK:null,D0:null,D1:null,D2:null,D3:null,mode:"SPI"},BRIDGE:{0:{HS:null,LS:null},1:{HS:null,LS:null}},USB:{DP:null,DM:null,enabled:!1}},metadata:{...n.chipInfo,board:n.chipInfo.board||"Unknown",modified:null}}:state.gpioConfig=null,console.warn("[GPIO] Config not found, using defaults with chip info")),emitter.emit("render")},device.onGpioConfigSave=n=>{console.log("[GPIO] Config save response:",n),n.success?(alert("GPIO configuration saved successfully"),emitter.emit("render")):alert(`Failed to save GPIO configuration: ${n.error||"Unknown error"}`)},device.onEthConfig=n=>{console.log("[Ethernet] Config received:",n),state.isLoadingEthConfig=!1,state.ethConfigLoaded=!0,n.success?(state.ethConfig=n.config||{},state.ethStatus=n.status||{}):(state.ethConfig={enabled:!0,dhcp:!0},console.warn("[Ethernet] Config not found, using defaults")),emitter.emit("render")},device.onEthConfigSave=n=>{console.log("[Ethernet] Config save response:",n),n.success?alert("Ethernet configuration saved successfully"):alert(`Failed to save Ethernet configuration: ${n.error||"Unknown error"}`),emitter.emit("render")},device.onEthInit=n=>{console.log("[Ethernet] Init response:",n),state.isInitializingEth=!1,n.success&&n.status?(state.ethStatus=n.status,n.status.gotip?alert(`Ethernet connected: ${n.status.ip}`):n.status.linkup?alert("Ethernet link up, waiting for DHCP..."):alert("Ethernet initialized (no cable detected)")):alert(`Ethernet initialization failed: ${n.error||"Unknown error"}`),emitter.emit("render")},device.onEthStatus=n=>{console.log("[Ethernet] Status received:",n),state.ethStatus=n,emitter.emit("render")},window.handleIframeMessage=async n=>{if(!n.data||n.data.type!=="execute")return;const{id:i,code:o}=n.data;console.log("[Iframe Bridge] Executing code from iframe:",o.substring(0,50)+"...");try{const s=await device.run(o,!0);console.log("[Iframe Bridge] Raw output from device:",s.substring(0,200));const r=s.indexOf("{");let a=s;if(r!==-1){let c=0,l=-1;for(let d=r;d<s.length;d++)if(s[d]==="{"&&c++,s[d]==="}"&&c--,c===0){l=d+1;break}l!==-1&&(a=s.substring(r,l),console.log("[Iframe Bridge] Extracted JSON:",a.substring(0,100)+"..."))}n.source.postMessage({type:"result",id:i,data:a},"*"),console.log("[Iframe Bridge] Result sent to iframe")}catch(s){console.log("[Iframe Bridge] Error executing code:",s),n.source.postMessage({type:"error",id:i,error:s.message||"Execution failed"},"*")}},window.addEventListener("message",window.handleIframeMessage);const termComp=state.cache(XTerm,"terminal");termComp&&termComp.term&&termComp.term.clear(),state.panelHeight=PANEL_DEFAULT$1,emitter.emit("open-panel"),emitter.emit("close-connection-dialog");try{const n=await device.exec("getStatusInfo()");n&&(state.statusInfo=n,emitter.emit("render"))}catch(n){}startStatusInfoPolling$1(device,state,emitter),emitter.emit("refresh-system-info"),setTimeout(()=>{emitter.emit("terminal-focus")},200),(async()=>{try{const n=await device.exec(`
+import os
+from lib.sys import board
+import json
+
+# Get basic config from board module
+board_id = board.id.id
+board_name = board.id.name
+chip = board.id.chip
+
+# Get version and UI fields from board.json (only load what we need)
+version = '0.0'
+description = None
+hardware = None
+try:
+    with open('/settings/board.json', 'r') as f:
+        config = json.load(f)
+        # Version is in identity.revision
+        v = config.get('identity', {}).get('revision')
+        if v is not None:
+            version = str(v) if not isinstance(v, str) else v
+        description = config.get('description') or config.get('identity', {}).get('description')
+        hardware = config.get('devices')
+except Exception as e:
+    # Log error for debugging (version will default to '0.0')
+    import sys
+    sys.print_exception(e)
+
+print(json.dumps({
+  'board_id': board_id,
+  'board_name': board_name,
+  'chip': chip,
+  'version': version,
+  'machine': os.uname().machine,
+  'description': description,
+  'hardware': hardware
+}))
+`),i=typeof n=="object"?n:JSON.parse(n.trim());state.boardConfig={board_id:i.board_id,board_name:i.board_name,chip:i.chip,version:i.version,description:i.description,hardware:i.hardware};try{const s=new URL(wsUrl).hostname,r=i.board_id||s.replace(/\\./g,"-");await BridgeDisk.addOnboardedDevice(r,{hostname:s,url:wsUrl,board_id:i.board_id,board_name:i.board_name,chip:i.chip,version:i.version,connectedAt:new Date().toISOString()}),console.log("[Connection] Device saved to /onboarded/"),state.needsOnboarding=!1}catch(o){console.warn("[Connection] Could not save device to /onboarded/:",o)}emitter.emit("render")}catch(n){console.error("[BoardConfig] Failed to load board config:",n)}try{const DeviceAPI=(await __vitePreload(async()=>{const{DeviceAPI:n}=await Promise.resolve().then(()=>deviceApi);return{DeviceAPI:n}},void 0)).DeviceAPI,{updateDeviceExtensionRegistry,needsInstall:needsInstallCheck}=await __vitePreload(async()=>{const{updateDeviceExtensionRegistry:n,needsInstall:i}=await Promise.resolve().then(()=>deviceRegistry);return{updateDeviceExtensionRegistry:n,needsInstall:i}},void 0),deviceAPI=new DeviceAPI(BridgeDevice),deviceRegistry$1=await readDeviceExtensionRegistry(deviceAPI),deviceExtensionIds=new Set(Object.keys(deviceRegistry$1)),pendingExtId=localStorage.getItem("pending-extension-id");for(const n in state.loadedExtensions)state.loadedExtensions[n].instance=null;console.log(`[Extensions] Device registry has ${Object.keys(deviceRegistry$1).length} extensions, sidebar showing: ${state.installedExtensions.map(n=>n.id).join(", ")||"(none)"}`),emitter.emit("render"),pendingExtId&&!deviceRegistry$1[pendingExtId]&&(console.log(`[Extensions] Pending extension ${pendingExtId} not in device registry — running onInstall`),(async()=>{try{const{ExtensionRegistry}=await __vitePreload(async()=>{const{ExtensionRegistry:n}=await Promise.resolve().then(()=>extensionLoader);return{ExtensionRegistry:n}},void 0),registry=new ExtensionRegistry,extData=await registry.getExtension(pendingExtId);if(!extData||!extData.content){console.warn(`[Extensions] No cached data for ${pendingExtId}, skipping onInstall`);return}const filesMatch=extData.content.match(/export\s+const\s+__DEVICE_FILES__\s*=\s*(\{[\s\S]*?\});/);let deviceFiles={};if(filesMatch)try{const rawFiles=eval("("+filesMatch[1]+")");for(const[n,i]of Object.entries(rawFiles))try{const o=atob(i),s=new Uint8Array(o.length);for(let r=0;r<o.length;r++)s[r]=o.charCodeAt(r);deviceFiles[n]=new TextDecoder("utf-8").decode(s)}catch{deviceFiles[n]=i}}catch(n){console.warn("[Extensions] Device files parse failed:",n)}if(Object.keys(deviceFiles).length===0){console.log(`[Extensions] ${pendingExtId} has no device files, skipping onInstall`);const n=extData.config?.version,i=Array.isArray(n)?n.join("."):String(n||"0.0.0");await updateDeviceExtensionRegistry(deviceAPI,pendingExtId,i);return}const blob=new Blob([extData.content],{type:"text/javascript"}),blobUrl=URL.createObjectURL(blob);let ExtClass;try{ExtClass=(await import(blobUrl)).default}finally{URL.revokeObjectURL(blobUrl)}if(!ExtClass){console.warn(`[Extensions] No default export in ${pendingExtId} bundle`);return}const{html}=await __vitePreload(async()=>{const{html:n}=await import("./vendor-XVACtT3C.js");return{html:n}},__vite__mapDeps([1,2,3])),instance=new ExtClass(deviceAPI,emitter.emit.bind(emitter),state,html);if(instance.deviceFiles=deviceFiles,typeof instance.onInstall=="function"){if(console.log(`[Extensions] Running onInstall for ${pendingExtId}...`),await instance.onInstall()===!1){console.error(`[Extensions] onInstall returned false for ${pendingExtId}`);return}const i=extData.config?.version,o=Array.isArray(i)?i.join("."):String(i||"0.0.0");await updateDeviceExtensionRegistry(deviceAPI,pendingExtId,o),console.log(`[Extensions] onInstall complete for ${pendingExtId}`)}localStorage.removeItem("pending-extension-id")}catch(n){console.error(`[Extensions] Deferred onInstall failed for ${pendingExtId}:`,n)}})())}catch(n){console.warn("[Extensions] Could not read device extension registry:",n)}})(),emitter.emit("render")}catch(n){let i="Connection failed";n instanceof Error||n&&n.message?i=n.message:n&&n.type==="error"&&(i=`WebSocket connection failed. Check if device is available at ${wsUrl}`),console.log("✗ Connection failed:",i),state.isConnecting=!1,state.isConnected=!1,updateOverlayDirectly(state),emitter.emit("render")}}),emitter.on("open-reset-dialog",()=>{state.isResetDialogOpen=!0,emitter.emit("render")}),emitter.on("close-reset-dialog",()=>{state.isResetDialogOpen=!1,emitter.emit("render")}),emitter.on("trigger-reset",async n=>{state.isResetDialogOpen=!1,emitter.emit("render");try{n===1?(console.log("[Connection] Triggering Hard Reset"),state.isResettingHard=!0,await device.reset(1),console.log("[Connection] Hard reset sent, waiting for disconnect...")):(console.log("[Connection] Triggering Soft Reset"),await device.reset(0))}catch(i){console.error("[Connection] Reset failed:",i),state.isResettingHard=!1,alert("Reset failed: "+i.message)}}),emitter.on("bind-terminal-input",()=>{const n=state.cache(XTerm,"terminal");!n||!n.term||n.bindInput(state,device)&&console.log("[Connection] Bound terminal input after view change")}),emitter.on("terminal-focus",async()=>{if(!state.isConnected||state.bannerDisplayed)return;const n=state.cache(XTerm,"terminal");if(!n||!n.term)return;const i=n.term;try{const o=await device.exec(`
+import os, json
+u = os.uname()
+print(json.dumps({"version": u.version, "machine": u.machine}))
+`);if(o){const s=`MicroPython ${o.version} on ${o.machine}`;i.write(`\r
+\x1B[1;32m`+s+`\x1B[0m\r
+`),i.write(`\x1B[0mType "help()" for more information.\r
+`)}}catch(o){console.debug("[Connection] Failed to fetch version info:",o.message)}i.write(TERMINAL_PROMPT),i.scrollToBottom(),state.bannerDisplayed=!0,console.log("[Connection] Welcome banner displayed")})}function registerFileOperationHandlers(n,i,o,s,r,a,c){i.on("save",async()=>{if(console.log("save"),canSave({isConnected:n.isConnected,openFiles:n.openFiles,editingFile:n.editingFile})==!1){console.log("can't save");return}n.isSaving=!0,updateOverlayDirectly(n);let d=n.openFiles.find(v=>v.id===n.editingFile),p=!1;const u=d.parentFolder,f=u===null;f&&(d.source=="board"?d.parentFolder=n.boardNavigationPath:d.source=="disk"&&(d.parentFolder=n.diskNavigationPath));let h=!1;if(d.source=="board"?h=await fileExists(BridgeDevice,getFullPath(n.boardNavigationRoot,d.parentFolder,d.fileName)):d.source=="disk"&&(h=await s.fileExists(s.getFullPath(n.diskNavigationRoot,d.parentFolder,d.fileName))),(f||!h)&&(d.source=="board"?(d.parentFolder=n.boardNavigationPath,p=await fileExists(BridgeDevice,getFullPath(n.boardNavigationRoot,d.parentFolder,d.fileName))):d.source=="disk"&&(d.parentFolder=n.diskNavigationPath,p=await s.fileExists(s.getFullPath(n.diskNavigationRoot,d.parentFolder,d.fileName)))),p&&await confirmDialog(`You are about to overwrite the file ${d.fileName} on your ${d.source}.
+
+ Are you sure you want to proceed?`)!==0){n.isSaving=!1,d.parentFolder=u,updateOverlayDirectly(n),i.emit("render");return}let m=d.editor.content||"";if(d.fileName&&d.fileName.toLowerCase().endsWith(".json"))try{const v=m.trim();if(v&&(v[0]==="{"||v[0]==="[")){const y=JSON.parse(v),w=JSON.stringify(y,null,2)+`
+`;w!==m&&(m=w)}}catch{}try{if(d.source=="board"){if(["main.py","boot.py"].includes(d.fileName)&&await confirmDialog(`⚠️ Warning: Saving '${d.fileName}' to device may cause disconnection.
+
+This file is running on the device. Overwriting it may crash the connection.
+
+Recommended: Save locally instead (to disk), then reconnect.
+
+Continue saving to device?`,"Cancel","OK")!==0){n.isSaving=!1,updateOverlayDirectly(n),i.emit("render");return}await o.saveFile(getFullPath(n.boardNavigationRoot,d.parentFolder,d.fileName),m,{progressCallback:y=>{n.savingProgress=y,i.emit("render")}})}else d.source=="disk"&&await s.saveFileContent(s.getFullPath(n.diskNavigationRoot,d.parentFolder,d.fileName),m)}catch(v){console.log("error",v)}d.hasChanges=!1,n.isSaving=!1,n.savingProgress=0,updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}),i.on("select-tab",l=>{if(console.log("select-tab",l),!n.openFiles.find(p=>p.id===l)){console.warn("[select-tab] Tab not found:",l);return}n.editingFile=l,i.emit("render")}),i.on("close-tab",async l=>{console.log("close-tab",l);const d=n.openFiles.find(p=>p.id===l);if(!d){console.warn("[close-tab] Tab not found:",l);return}if(d.hasChanges&&await confirmDialog("Your file has unsaved changes. Are you sure you want to proceed?")!==0)return!1;n.openFiles=n.openFiles.filter(p=>p.id!==l),n.openFiles.length>0?n.editingFile=n.openFiles[0].id:await a("disk"),i.emit("render")}),i.on("refresh-board-files",async()=>{if(console.log("refresh-board-files"),n.isConnected)try{n.boardFiles=await getBoardFiles(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,""))}catch{n.boardFiles=[]}else n.boardFiles=[];i.emit("refresh-selected-files"),i.emit("render")}),i.on("refresh-disk-files",async()=>{console.log("refresh-disk-files");try{n.diskFiles=await getDiskFiles(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,""))}catch(l){console.error("[FS] Error refreshing disk files:",l),n.diskNavigationRoot=null,n.diskNavigationPath="/"}i.emit("refresh-selected-files"),i.emit("render")}),i.on("refresh-files",async()=>{if(console.log("refresh-files"),n.isLoadingFiles)return;n.isLoadingFiles=!0;const l=document.getElementById("overlay");l?(l.classList.remove("closed"),l.classList.add("open"),l.innerHTML="<p>Loading files...</p>"):i.emit("render");try{await Promise.all([(async()=>{if(n.isConnected)try{n.boardFiles=await getBoardFiles(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,""))}catch{n.boardFiles=[]}else n.boardFiles=[]})(),(async()=>{try{n.diskFiles=await getDiskFiles(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,""))}catch(d){console.error("[FS] Error refreshing files:",d),n.diskNavigationRoot=null,n.diskNavigationPath="/"}})()])}finally{n.isLoadingFiles=!1,i.emit("refresh-selected-files");const d=document.getElementById("overlay");d&&(d.classList.remove("open"),d.classList.add("closed")),n.systemSection==="file-manager"&&i.emit("render")}}),i.on("refresh-selected-files",()=>{n.selectedFiles=n.selectedFiles.filter(l=>l.source==="board"?n.isConnected?n.boardFiles.find(d=>l.fileName===d.fileName):!1:n.diskFiles.find(d=>l.fileName===d.fileName)),i.emit("render")}),i.on("create-new-tab",async(l,d=null)=>{const p=l=="board"?n.boardNavigationPath:n.diskNavigationPath;console.log("create-new-tab",l,d,p),await a(l,d,p)&&(i.emit("close-new-file-dialog"),i.emit("render"))}),i.on("create-file",(l,d=null)=>{console.log("create-file",l),n.creatingFile===null&&(n.creatingFile=l,n.creatingFolder=null,d!=null&&i.emit("finish-creating-file",d),i.emit("render"))}),i.on("finish-creating-file",async l=>{if(console.log("finish-creating",l),!n.creatingFile)return;if(!l){n.creatingFile=null,i.emit("render");return}if(n.creatingFile=="board"&&n.isConnected){if(await checkBoardFile({root:n.boardNavigationRoot,parentFolder:n.boardNavigationPath,fileName:l})&&await confirmDialog(`You are about to overwrite the file ${l} on your board.
+
+Are you sure you want to proceed?`)!==0){n.creatingFile=null,i.emit("render");return}if(["main.py","boot.py"].includes(l)&&await confirmDialog(`⚠️ Warning: Saving '${l}' to device may cause disconnection.
+
+This file is running on the device. Overwriting it may crash the connection.
+
+Recommended: Save locally instead (to disk), then reconnect.
+
+Continue saving to device?`)!==0){n.creatingFile=null,i.emit("render");return}await o.saveFile(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l),newFileContent)}else if(n.creatingFile=="disk"){if(await checkDiskFile({root:n.diskNavigationRoot,parentFolder:n.diskNavigationPath,fileName:l})&&await confirmDialog(`You are about to overwrite the file ${l} on your disk.
+
+Are you sure you want to proceed?`)!==0){n.creatingFile=null,i.emit("render");return}await s.saveFileContent(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l),newFileContent)}const d=n.creatingFile;setTimeout(()=>{n.creatingFile=null,dismissOpenDialogs(n,i),d==="disk"?i.emit("refresh-disk-files"):i.emit("refresh-board-files"),i.emit("render")},200)}),i.on("import-files",async()=>{console.log("import-files");try{const l=s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,""),d=await s.importFiles(l);d.length>0&&(console.log(`[Store] Imported ${d.length} file(s):`,d.map(p=>p.name).join(", ")),i.emit("refresh-disk-files"),i.emit("render"))}catch(l){console.error("[Store] Error importing files:",l),alert(`Failed to import files: ${l.message}`)}}),i.on("upload-to-device",async()=>{if(console.log("upload-to-device"),!n.isConnected){alert("Please connect to device first");return}try{const l=document.createElement("input");l.type="file",l.multiple=!0;const d=await new Promise((f,h)=>{l.onchange=m=>{f(Array.from(m.target.files||[]))},l.oncancel=()=>f([]),l.click()});if(d.length===0)return;n.isTransferring=!0,updateOverlayDirectly(n);const p=d.map(f=>f.name),u=await checkOverwrite({source:"board",fileNames:p,parentPath:getFullPath(n.boardNavigationRoot,n.boardNavigationPath,"")});if(u.length>0){let f=`You are about to overwrite the following files/folders on your board:
+
+`;if(u.forEach(m=>f+=`${m.fileName}
+`),f+=`
+Are you sure you want to proceed?`,await confirmDialog(f,"Cancel","Yes")!==0){n.isTransferring=!1,updateOverlayDirectly(n),i.emit("render");return}}for(const f of d){const h=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,f.name),m=await f.arrayBuffer(),v=new Uint8Array(m);await o.saveFile(h,v,{progressCallback:y=>{n.transferringProgress=`${f.name}: ${y}%`,i.emit("render")}}),n.transferringProgress=""}i.emit("refresh-files"),i.emit("render")}catch(l){console.error("[Store] Error uploading to device:",l),alert(`Failed to upload files: ${l.message}`)}finally{n.isTransferring=!1,n.transferringProgress="",updateOverlayDirectly(n),i.emit("render")}}),i.on("create-folder",l=>{console.log("create-folder",l),n.creatingFolder===null&&(n.creatingFolder=l,n.creatingFile=null,i.emit("render"))}),i.on("finish-creating-folder",async l=>{if(console.log("finish-creating-folder",l),!!n.creatingFolder){if(!l){n.creatingFolder=null,i.emit("render");return}if(n.creatingFolder=="board"&&n.isConnected){if(await checkBoardFile({root:n.boardNavigationRoot,parentFolder:n.boardNavigationPath,fileName:l})){if(await confirmDialog(`You are about to overwrite ${l} on your board.
+
+Are you sure you want to proceed?`)!==0){n.creatingFolder=null,i.emit("render");return}await removeBoardFolder(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l))}await createFolder(o,getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l))}else if(n.creatingFolder=="disk"){if(await checkDiskFile({root:n.diskNavigationRoot,parentFolder:n.diskNavigationPath,fileName:l})){if(await confirmDialog(`You are about to overwrite ${l} on your disk.
+
+Are you sure you want to proceed?`)!==0){n.creatingFolder=null,i.emit("render");return}await s.removeFolder(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l))}await s.createFolder(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l))}setTimeout(()=>{n.creatingFolder=null,i.emit("refresh-files"),i.emit("render")},200)}}),i.on("remove-files",async()=>{console.log("remove-files");let l=n.selectedFiles.filter(m=>m.source==="board").map(m=>m.fileName),d=n.selectedFiles.filter(m=>m.source==="disk").map(m=>m.fileName),p=`You are about to delete the following files:
+
+`;if(l.length&&(p+=`From your board:
+`,l.forEach(m=>p+=`${m}
+`),p+=`
+`),d.length&&(p+=`From your disk:
+`,d.forEach(m=>p+=`${m}
+`),p+=`
+`),p+="Are you sure you want to proceed?",await confirmDialog(p)!==0){i.emit("render");return}let f=!1,h=!1;for(let m in n.selectedFiles){const v=n.selectedFiles[m];v.type=="folder"?v.source==="board"?(await removeBoardFolder(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,v.fileName)),f=!0):(await s.removeFolder(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,v.fileName)),h=!0):v.source==="board"?(await deleteFile(o,getFullPath(n.boardNavigationRoot,n.boardNavigationPath,v.fileName)),f=!0):(await s.removeFile(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,v.fileName)),h=!0)}f&&h?i.emit("refresh-files"):f?i.emit("refresh-board-files"):h&&i.emit("refresh-disk-files"),n.selectedFiles=[],i.emit("render")}),i.on("rename-file",(l,d)=>{console.log("rename-file",l,d),n.renamingFile=l,i.emit("render")}),i.on("finish-renaming-file",async l=>{console.log("finish-renaming-file",l);const d=n.selectedFiles[0];if(!l||d.fileName==l){n.renamingFile=null,i.emit("render");return}if(n.isSaving=!0,updateOverlayDirectly(n),n.renamingFile=="board"&&n.isConnected){if((await checkOverwrite({fileNames:[l],parentPath:s.getFullPath(n.boardNavigationRoot,n.boardNavigationPath,""),source:"board"})).length>0){let u=`You are about to overwrite the following file/folder on your board:
+
+`;if(u+=`${l}
+
+`,u+="Are you sure you want to proceed?",await confirmDialog(u)!==0){n.isSaving=!1,n.renamingFile=null,updateOverlayDirectly(n),i.emit("render");return}d.type=="folder"?await removeBoardFolder(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l)):d.type=="file"&&await deleteFile(o,getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l))}}else if(n.renamingFile=="disk"&&(await checkOverwrite({fileNames:[l],parentPath:s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,""),source:"disk"})).length>0){let u=`You are about to overwrite the following file/folder on your disk:
+
+`;if(u+=`${l}
+
+`,u+="Are you sure you want to proceed?",await confirmDialog(u)!==0){n.isSaving=!1,n.renamingFile=null,updateOverlayDirectly(n),i.emit("render");return}d.type=="folder"?await s.removeFolder(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l)):d.type=="file"&&await s.removeFile(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l))}try{n.renamingFile=="board"?await renameFile(o,getFullPath(n.boardNavigationRoot,n.boardNavigationPath,d.fileName),getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l)):await s.renameFile(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,d.fileName),s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l));const p=n.openFiles.findIndex(u=>u.fileName===d.fileName&&u.source===d.source&&u.parentFolder===d.parentFolder);p>-1&&(n.openFiles[p].fileName=l,i.emit("render"))}catch{alert(`The file ${d.fileName} could not be renamed to ${l}`)}n.isSaving=!1,n.renamingFile=null,updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}),i.on("rename-tab",l=>{console.log("rename-tab",l),n.renamingTab=l,i.emit("render")}),i.on("finish-renaming-tab",async l=>{console.log("finish-renaming-tab",l);const d=n.openFiles.find(v=>v.id===n.renamingTab);if(!l||d.fileName==l){n.renamingTab=null,n.isSaving=!1,updateOverlayDirectly(n),i.emit("render");return}n.isSaving=!0,updateOverlayDirectly(n);const p=d.parentFolder,u=d.fileName;d.fileName=l;const f=p===null;let h=!1;f||(d.source=="board"?h=await fileExists(BridgeDevice,getFullPath(n.boardNavigationRoot,d.parentFolder,u)):d.source=="disk"&&(h=await s.fileExists(s.getFullPath(n.diskNavigationRoot,d.parentFolder,u)))),(f||!h)&&(d.source=="board"?d.parentFolder=n.boardNavigationPath:d.source=="disk"&&(d.parentFolder=n.diskNavigationPath));let m=!1;if(d.source=="board"?m=await fileExists(BridgeDevice,getFullPath(n.boardNavigationRoot,d.parentFolder,d.fileName)):d.source=="disk"&&(m=await s.fileExists(s.getFullPath(n.diskNavigationRoot,d.parentFolder,d.fileName))),m&&await confirmDialog(`You are about to overwrite the file ${d.fileName} on your ${d.source}.
+
+ Are you sure you want to proceed?`)!==0){n.renamingTab=null,n.isSaving=!1,d.fileName=u,i.emit("render");return}if(h){if(d.hasChanges){const v=d.editor.content||"";try{if(d.source=="board"){if(["main.py","boot.py"].includes(u)&&await confirmDialog(`⚠️ Warning: Saving '${u}' to device may cause disconnection.
+
+This file is running on the device. Overwriting it may crash the connection.
+
+Recommended: Save locally instead (to disk), then reconnect.
+
+Continue saving to device?`,"Cancel","OK")!==0){n.renamingTab=null,n.isSaving=!1,d.fileName=u,updateOverlayDirectly(n),i.emit("render");return}await o.saveFile(getFullPath(n.boardNavigationRoot,d.parentFolder,u),v,{progressCallback:w=>{n.savingProgress=w,i.emit("render")}})}else d.source=="disk"&&await s.saveFileContent(s.getFullPath(n.diskNavigationRoot,d.parentFolder,u),v)}catch(y){console.log("error",y)}}try{d.source=="board"?await renameFile(o,getFullPath(n.boardNavigationRoot,d.parentFolder,u),getFullPath(n.boardNavigationRoot,d.parentFolder,d.fileName)):d.source=="disk"&&await s.renameFile(s.getFullPath(n.diskNavigationRoot,d.parentFolder,u),s.getFullPath(n.diskNavigationRoot,d.parentFolder,d.fileName))}catch(v){console.log("error",v)}}else if(!h){const v=d.editor.content||"";try{if(d.source=="board"){if(["main.py","boot.py"].includes(d.fileName)&&await confirmDialog(`⚠️ Warning: Saving '${d.fileName}' to device may cause disconnection.
+
+This file is running on the device. Overwriting it may crash the connection.
+
+Recommended: Save locally instead (to disk), then reconnect.
+
+Continue saving to device?`,"Cancel","OK")!==0){n.renamingTab=null,n.isSaving=!1,d.fileName=u,updateOverlayDirectly(n),i.emit("render");return}await o.saveFile(getFullPath(n.boardNavigationRoot,d.parentFolder,d.fileName),v,{progressCallback:w=>{n.savingProgress=w,i.emit("render")}})}else d.source=="disk"&&await s.saveFileContent(s.getFullPath(n.diskNavigationRoot,d.parentFolder,d.fileName),v)}catch(y){console.log("error",y)}}d.hasChanges=!1,n.renamingTab=null,n.isSaving=!1,n.savingProgress=0,updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}),i.on("toggle-file-selection",(l,d,p)=>{console.log("toggle-file-selection",l,d,p);let u=d=="board"?n.boardNavigationPath:n.diskNavigationPath;if(p&&!p.ctrlKey&&!p.metaKey){n.selectedFiles=[{fileName:l.fileName,type:l.type,source:d,parentFolder:u}],i.emit("render");return}n.selectedFiles.find(h=>h.fileName===l.fileName&&h.source===d)?n.selectedFiles=n.selectedFiles.filter(h=>!(h.fileName===l.fileName&&h.source===d)):n.selectedFiles.push({fileName:l.fileName,type:l.type,source:d,parentFolder:u}),i.emit("render")}),i.on("open-selected-files",async()=>{console.log("open-selected-files");let l=[],d=[];if(!n.isLoadingFiles){n.isLoadingFiles=!0,i.emit("render");for(let p in n.selectedFiles){let u=n.selectedFiles[p];if(u.type=="folder")continue;const f=n.openFiles.find(h=>h.fileName==u.fileName&&h.source==u.source&&h.parentFolder==u.parentFolder);if(f)d.push(f);else{let h=null;if(u.source=="board"){const m=await o.loadFile(getFullPath(n.boardNavigationRoot,n.boardNavigationPath,u.fileName)),v=new Uint8Array(m),y=new TextDecoder("utf-8").decode(v);h=await r({parentFolder:n.boardNavigationPath,fileName:u.fileName,source:u.source,content:y}),h.editor.onChange=function(){h.hasChanges=!0,i.emit("render")}}else if(u.source=="disk"){const m=await s.loadFile(s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,u.fileName)),v=new Uint8Array(m),y=new TextDecoder("utf-8").decode(v);h=await r({parentFolder:n.diskNavigationPath,fileName:u.fileName,source:u.source,content:y}),h.editor.onChange=function(){h.hasChanges=!0,i.emit("render")}}l.push(h)}}d.length>0&&(n.editingFile=d[0].id),l.length>0&&(n.editingFile=l[0].id),n.openFiles=n.openFiles.concat(l),n.selectedFiles=[],n.isLoadingFiles=!1,i.emit("change-view","editor"),i.emit("render")}}),i.on("open-file",(l,d)=>{console.log("open-file",l,d),n.selectedFiles=[{fileName:d.fileName,type:d.type,source:l,parentFolder:n[`${l}NavigationPath`]}],i.emit("open-selected-files")}),i.on("upload-files",async()=>{console.log("upload-files"),n.isTransferring=!0,i.emit("render");const l=await checkOverwrite({source:"board",fileNames:n.selectedFiles.map(d=>d.fileName),parentPath:getFullPath(n.boardNavigationRoot,n.boardNavigationPath,"")});if(l.length>0){let d=`You are about to overwrite the following files/folders on your board:
+
+`;if(l.forEach(u=>d+=`${u.fileName}
+`),d+=`
+`,d+="Are you sure you want to proceed?",await confirmDialog(d)!==0){n.isTransferring=!1,i.emit("render");return}}try{for(let d in n.selectedFiles){const p=n.selectedFiles[d],u=s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,p.fileName),f=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,p.fileName);if(p.type=="folder")await uploadFolder(u,f,(h,m)=>{n.transferringProgress=`${m}: ${h}`,i.emit("render")}),n.transferringProgress="";else{const h=await BridgeDisk.loadFile(u),m=new Uint8Array(h);await o.saveFile(f,m,{progressCallback:v=>{n.transferringProgress=`${p.fileName}: ${v}%`,i.emit("render")}}),n.transferringProgress=""}}n.selectedFiles=[],n.isTransferring=!1,n.transferringProgress="",updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}catch(d){console.error("[Upload] Transfer failed:",d),n.isTransferring=!1,n.transferringProgress="",updateOverlayDirectly(n),i.emit("render");let p=d.message;p&&p.includes("Transfer already in progress")&&(p="Transfer already in progress. The device may have stale TFTP state from a previous disconnected transfer. Please wait a moment and try again, or disconnect and reconnect."),alert(`Upload failed: ${p}`)}}),i.on("download-files",async()=>{console.log("download-files"),n.isTransferring=!0,updateOverlayDirectly(n),i.emit("render");const l=await checkOverwrite({source:"disk",fileNames:n.selectedFiles.map(d=>d.fileName),parentPath:s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,"")});if(l.length>0){let d=`You are about to overwrite the following files/folders on your disk:
+
+`;if(l.forEach(u=>d+=`${u.fileName}
+`),d+=`
+`,d+="Are you sure you want to proceed?",await confirmDialog(d)!==0){n.isTransferring=!1,i.emit("render");return}}try{for(let d in n.selectedFiles){const p=n.selectedFiles[d],u=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,p.fileName),f=s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,p.fileName);if(p.type=="folder")await downloadFolder(u,f,h=>{n.transferringProgress=h,i.emit("render")});else{const h=await o.loadFile(u,{progressCallback:m=>{n.transferringProgress=`${p.fileName}: ${m}%`,i.emit("render")}});await BridgeDisk.saveFileContent(f,h.buffer)}}n.isTransferring=!1,n.selectedFiles=[],updateOverlayDirectly(n),i.emit("refresh-files"),i.emit("render")}catch(d){console.error("[Download] Transfer failed:",d),n.isTransferring=!1,n.transferringProgress="",updateOverlayDirectly(n),i.emit("render");let p=d.message;p&&p.includes("Transfer already in progress")&&(p="Transfer already in progress. The device may have stale TFTP state from a previous disconnected transfer. Please wait a moment and try again, or disconnect and reconnect."),alert(`Download failed: ${p}`)}}),i.on("export-files",async()=>{console.log("export-files");for(const l of n.selectedFiles)if(l.type!=="folder")try{let d;if(l.source==="board"){const v=getFullPath(n.boardNavigationRoot,n.boardNavigationPath,l.fileName),y=await o.loadFile(v);d=new Uint8Array(y)}else{const v=s.getFullPath(n.diskNavigationRoot,n.diskNavigationPath,l.fileName),y=await s.loadFile(v);d=new Uint8Array(y)}const p=l.fileName.split(".").pop().toLowerCase(),u={png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",gif:"image/gif",py:"text/plain",txt:"text/plain",json:"application/json",md:"text/markdown"},f=new Blob([d],{type:u[p]||"application/octet-stream"}),h=URL.createObjectURL(f),m=document.createElement("a");m.href=h,m.download=l.fileName,document.body.appendChild(m),m.click(),document.body.removeChild(m),URL.revokeObjectURL(h)}catch(d){console.error(`[Export] Failed to export ${l.fileName}:`,d),alert(`Failed to export ${l.fileName}: ${d.message}`)}}),i.on("navigate-board-folder",l=>{console.log("navigate-board-folder",l),n.boardNavigationPath=getNavigationPath(n.boardNavigationPath,l),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-board-parent",()=>{console.log("navigate-board-parent"),n.boardNavigationPath=getNavigationPath(n.boardNavigationPath,".."),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-disk-folder",l=>{console.log("navigate-disk-folder",l),n.diskNavigationPath=s.getNavigationPath(n.diskNavigationPath,l),i.emit("refresh-files"),i.emit("render")}),i.on("navigate-disk-parent",()=>{console.log("navigate-disk-parent"),n.diskNavigationPath=s.getNavigationPath(n.diskNavigationPath,".."),i.emit("refresh-files"),i.emit("render")})}function debuggerStore(n,i){let o=null;console.log("[Debugger Store] Registering event handlers"),i.on("debugger:open-config",()=>{console.log("[Debugger] Opening config modal"),n.debugger.configOpen=!0,i.emit("render")}),i.on("debugger:close-config",()=>{n.debugger.configOpen=!1,i.emit("render")}),i.on("debugger:toggle-file",s=>{const r=n.debugger.debugFiles.indexOf(s);r>=0?n.debugger.debugFiles.splice(r,1):n.debugger.debugFiles.push(s),i.emit("render")}),i.on("debugger:set-watches",s=>{const r=s.split(`
+`).map(a=>a.trim()).filter(a=>a.length>0);n.debugger.watchExpressions[""]=r,i.emit("render")}),i.on("debugger:start",async()=>{try{const s=n.openFiles.find(a=>a.id===n.editingFile);if(!s){console.error("[Debugger] No file open");return}const r=s.editor?s.editor.content:"";if(!r){console.error("[Debugger] No content to debug");return}n.debugger.active=!0,i.emit("render"),o=new DebugSession(n,i),await o.start(r,n.debugger.watchExpressions,n.debugger.conditionalBreakpoints,s.fileName)}catch(s){console.error("[Debugger] Failed to start:",s),n.debugger.active=!1,i.emit("render")}}),i.on("debugger:step-over",async()=>{o&&await o.stepOver()}),i.on("debugger:step-into",async()=>{o&&await o.stepInto()}),i.on("debugger:step-out",async()=>{o&&await o.stepOut()}),i.on("debugger:continue",async(s=!0)=>{o&&await o.continue(s)}),i.on("debugger:stop",async()=>{o&&(await o.stop(),o=null),n.debugger.active=!1,n.debugger.halted=!1,n.debugger.configOpen=!1,i.emit("render")}),i.on("debugger:state-update",s=>{n.debugger.currentFile=s.f,n.debugger.currentLine=s.l,n.debugger.variables=s.w,n.debugger.locals=s.v,n.debugger.memory=s.m,n.debugger.timing=s.t,n.debugger.halted=s.h,i.emit("render")}),i.on("debugger:edit-breakpoint",s=>{const{file:r,line:a}=s;n.debugger.breakpoints[r]||(n.debugger.breakpoints[r]={}),n.debugger.breakpoints[r][a]||(n.debugger.breakpoints[r][a]={condition:"",hitCount:"",enabled:!0}),n.debugger.editingBreakpoint={file:r,line:a},n.debugger.breakpointModalOpen=!0,i.emit("render")}),i.on("debugger:save-breakpoint",s=>{const{file:r,line:a,config:c}=s;n.debugger.breakpoints[r]||(n.debugger.breakpoints[r]={}),n.debugger.breakpoints[r][a]=c,n.debugger.breakpointModalOpen=!1,n.debugger.editingBreakpoint=null,i.emit("debugger:breakpoints-updated",{file:r}),i.emit("render")}),i.on("debugger:delete-breakpoint",s=>{const{file:r,line:a}=s;n.debugger.breakpoints[r]&&delete n.debugger.breakpoints[r][a],n.debugger.breakpointModalOpen=!1,n.debugger.editingBreakpoint=null,i.emit("debugger:breakpoints-updated",{file:r}),i.emit("render")}),i.on("debugger:close-breakpoint-modal",()=>{n.debugger.breakpointModalOpen=!1,n.debugger.editingBreakpoint=null,i.emit("render")})}class DebugSession{constructor(i,o){this.state=i,this.emitter=o,this.device=BridgeDevice}async start(i,o,s,r){if(console.log("[Debugger] Starting debug session for:",r),!instrumentCodeForExec){console.error("[Debugger] instrumentCodeForExec not available - debugger-utils.js may not be loaded"),this.emitter.emit("show-dialog",{title:"Debugger Error",message:"Debugger utilities not loaded. Please refresh the page.",buttons:["OK"]});return}const a=performance.now(),c=await instrumentCodeForExec(i,{watches:this.state.debugger.watchExpressions,conditionalBP:this.state.debugger.conditionalBreakpoints,breakpoints:this.state.debugger.breakpoints,fileName:r});console.log(`[Debugger] Instrumentation took ${(performance.now()-a).toFixed(0)}ms`),await this.device.interrupt(),await sleep(100),this.device.subscribe("debug-state",this.onDebugState.bind(this)),console.log("[Debugger] Executing instrumented code...");try{await this.device.run(c),console.log("[Debugger] Execution completed successfully")}catch(l){console.warn("[Debugger] Code execution ended:",l.message)}finally{this.emitter.emit("terminal:write-prompt"),this.device.unsubscribe("debug-state"),this.state.debugger.active=!1,this.state.debugger.halted=!1,this.emitter.emit("render")}}async stepInto(){console.log("[Debugger] Step Into"),await this.device.sendDebugCommand("S")}async stepOver(){console.log("[Debugger] Step Over"),await this.device.sendDebugCommand("SO")}async stepOut(){console.log("[Debugger] Step Out"),await this.device.sendDebugCommand("ST")}async continue(i=!0){console.log("[Debugger] Continue",i?"(with log)":"(no log)"),await this.device.sendDebugCommand(i?"CW":"CO")}async stop(){console.log("[Debugger] Stop"),await this.device.interrupt(),this.device.unsubscribe("debug-state")}onDebugState(i){console.log("[Debugger] State update:",i),this.emitter.emit("debugger:state-update",i),this.displayDebugState(i)}displayDebugState(i){let o=`
+[DEBUG] Paused at ${i.f}:${i.l}
+`;const s=Object.entries(i.w);s.length>0&&(o+=`
+[WATCHES]
+`,s.forEach(([a,c])=>{o+=`  ${a} = ${c}
+`}));const r=Object.entries(i.v||{});r.length>0&&(o+=`
+[LOCALS]
+`,r.forEach(([a,c])=>{o+=`  ${a} = ${c}
+`})),o+=`[DEBUG] Memory: ${this.formatBytes(i.m)} | Time: ${i.t} ms
+`,this.emitter.emit("terminal:append",o)}formatBytes(i){if(!i)return"0 B";const o=1024,s=["B","KB","MB"],r=Math.floor(Math.log(i)/Math.log(o));return`${(i/Math.pow(o,r)).toFixed(1)} ${s[r]}`}}const stopStatusInfoPolling=()=>window.stopStatusInfoPolling?window.stopStatusInfoPolling():null,startStatusInfoPolling=(n,i,o)=>window.startStatusInfoPolling?window.startStatusInfoPolling(n,i,o):null;function instantiateExtension(extensionCode,state,emit,html){const deviceAPI=new DeviceAPI$1(BridgeDevice),metaMatch=extensionCode.match(/export\s+const\s+__EXTENSION_META__\s*=\s*(\{[\s\S]*?\});/);let meta={};if(metaMatch)try{meta=eval("("+metaMatch[1]+")")}catch(n){console.warn("[Extensions] Meta parse failed:",n)}const filesMatch=extensionCode.match(/export\s+const\s+__DEVICE_FILES__\s*=\s*(\{[\s\S]*?\});/);let deviceFiles={};if(filesMatch)try{const rawFiles=eval("("+filesMatch[1]+")");for(const[n,i]of Object.entries(rawFiles))try{const o=atob(i),s=new Uint8Array(o.length);for(let r=0;r<o.length;r++)s[r]=o.charCodeAt(r);deviceFiles[n]=new TextDecoder("utf-8").decode(s)}catch(o){console.warn(`[Extensions] Failed to decode ${n}:`,o),deviceFiles[n]=i}}catch(n){console.warn("[Extensions] Device files parse failed:",n)}const exportMatch=extensionCode.match(/export\s*\{\s*(\w+)\s+as\s+default\s*\}/),defaultExportVar=exportMatch?exportMatch[1]:null,evalCode=extensionCode.replace(/export\s+(const|default|class|function)/g,"$1").replace(/export\s*\{[^}]*\}\s*;?/g,""),returnLogic=defaultExportVar?`return ${defaultExportVar};`:`if (typeof P !== 'undefined') return P;
+       const classMatch = ${JSON.stringify(evalCode)}.match(/class\\s+(\\w+(?:App|Extension))\\s*{/);
+       if (classMatch) return eval(classMatch[1]);
+       throw new Error('No extension class found in bundle');`,extensionFunction=new Function("DeviceAPI","html","emit","state",`
+    ${evalCode}
+    ${returnLogic}
+  `),ExtensionClass=extensionFunction(DeviceAPI$1,html,emit,state),instance=new ExtensionClass(deviceAPI,emit,state,html);return instance.deviceFiles=deviceFiles,instance.meta=meta,console.log(`[Extensions] Loaded ${meta.name||"extension"} with ${Object.keys(deviceFiles).length} device files`),instance}function registerExtensionHandlers(n,i,o,s){const r=console.log;i.on("open-extensions-modal",async()=>{r("open-extensions-modal"),n.isExtensionsModalOpen=!0,n.isLoadingExtensions=!0,i.emit("render");try{const c=n.registryUrl||"https://cheerful-stoat-894.convex.site/api/v1/extensions";n.availableExtensions=await n.extensionRegistry.loadIndex(c),n.isLoadingExtensions=!1,i.emit("render")}catch(c){console.error("[Extensions] Error loading registry:",c),n.isLoadingExtensions=!1,n.availableExtensions=[],i.emit("render"),alert(`Failed to load extensions registry:
+${c.message}`)}}),i.on("close-extensions-modal",()=>{r("close-extensions-modal"),n.isExtensionsModalOpen=!1,i.emit("render")}),i.on("install-extension",async c=>{r("install-extension:",c.name);try{const l=await n.extensionRegistry.installExtension(c);n.installedExtensions=await n.extensionRegistry.getInstalledExtensions(),n.allCachedExtensions=[...n.installedExtensions],n.isExtensionsModalOpen=!1,r(`[Extensions] Installed ${c.name}`),i.emit("render");const d=await n.extensionRegistry.getExtension(c.id);hasOnInstallMethod(d?.content)?n.isConnected&&o?await a(c,d,n,i,o):(r("[Extensions] Device not connected - extension will install files when first opened"),await showStyledModal({variant:"warning",icon:"packages",title:"Extension Saved",subtitle:c.name,body:`<p>This extension needs to install files on your device.</p>
+                   <p style="color: var(--text-secondary);">Connect to your device and open the extension to complete setup.</p>`,buttons:[{id:"ok",class:"fw-styled-modal-btn-primary",label:"OK"}]})):c.mipPackage&&i.emit("prompt-upload-dependencies",{extensionId:c.id,extensionName:c.name})}catch(l){console.error("[Extensions] Installation failed:",l),alert(`Failed to install extension:
+${l.message}`)}});async function a(c,l,d,p,u){const f=c.id,h=Array.isArray(c.version)?c.version.join("."):String(c.version);r(`[Extensions] Running onInstall for ${c.name}...`),showStyledModal({variant:"",icon:"packages",title:"Installing Extension",subtitle:c.name,body:`<p>Installing extension files to device...</p>
+             <div style="margin-top: 16px; color: var(--text-secondary);">
+               <span class="install-spinner">◐</span> Preparing...
+             </div>`,buttons:[]});try{stopStatusInfoPolling();const m=(y,...w)=>y.reduce((b,x,C)=>b+x+(w[C]||""),""),v=instantiateExtension(l.content,d,p.emit.bind(p),m);if(typeof v.onInstall=="function"){updateModalBody(`<p>Writing files to device...</p>
+          <div style="margin-top: 16px; color: var(--text-secondary);">
+            <span class="install-spinner">◐</span> Installing...
+          </div>`),await v.onInstall(),updateModalBody(`<p>Updating device registry...</p>
+          <div style="margin-top: 16px; color: var(--text-secondary);">
+            <span class="install-spinner">◐</span> Finalizing...
+          </div>`);const y=new DeviceAPI$1(BridgeDevice);await updateDeviceExtensionRegistry(y,f,h),r(`[Extensions] onInstall complete for ${c.name}`)}closeStyledModal(),await showStyledModal({variant:"success",icon:"check",title:"Extension Ready",subtitle:c.name,body:"<p>Extension files have been installed on your device.</p>",buttons:[{id:"done",class:"fw-styled-modal-btn-primary",label:"Done"}]})}catch(m){console.error("[Extensions] onInstall failed:",m),closeStyledModal(),await showStyledModal({variant:"danger",icon:"alert-triangle",title:"Installation Failed",subtitle:c.name,body:`<p>Failed to install extension files:</p>
+               <p style="color: var(--error-color)">${m.message}</p>
+               <p style="margin-top: 12px; color: var(--text-secondary);">
+                 You can try again by opening the extension panel.
+               </p>`,buttons:[{id:"close",class:"fw-styled-modal-btn-cancel",label:"Close"}]})}finally{d.isConnected&&u&&startStatusInfoPolling(u,d,p)}}i.on("update-extension",async({extension:c,newVersion:l})=>{r("update-extension:",c.id,`v${c.version.join(".")} → v${l.version.join(".")}`);try{delete n.loadedExtensions[c.id];const d=`extension-styles-${c.id}`,p=document.getElementById(d);p&&(p.remove(),console.log(`[Extensions] Removed old styles for ${c.id}`)),await n.extensionRegistry.uninstallExtension(c.id),await n.extensionRegistry.installExtension(l),n.installedExtensions=await n.extensionRegistry.getInstalledExtensions(),n.allCachedExtensions=[...n.installedExtensions],n.activeExtension===c.id&&i.emit("change-extension-panel",{extensionId:c.id,panelId:n.activeExtensionPanel||l.menu[0].id}),r(`[Extensions] Updated ${c.name} to v${l.version.join(".")}`),l.mipPackage&&i.emit("prompt-upload-dependencies",{extensionId:c.id,extensionName:c.name}),i.emit("render")}catch(d){console.error("[Extensions] Update failed:",d),alert(`Failed to update extension:
+${d.message}`)}}),i.on("uninstall-extension",async c=>{r("uninstall-extension:",c);try{await n.extensionRegistry.uninstallExtension(c),delete n.loadedExtensions[c];const l=`extension-styles-${c}`,d=document.getElementById(l);d&&(d.remove(),console.log(`[Extensions] Removed styles for ${c}`)),n.installedExtensions=await n.extensionRegistry.getInstalledExtensions(),n.allCachedExtensions=[...n.installedExtensions],n.activeExtension===c&&(n.activeExtension=null,n.activeExtensionPanel=null,n.systemSection="settings"),r(`[Extensions] Uninstalled ${c}`),i.emit("render")}catch(l){console.error("[Extensions] Uninstall failed:",l),alert(`Failed to uninstall extension:
+${l.message}`)}}),i.on("prompt-upload-dependencies",async({extensionId:c,extensionName:l})=>{r("prompt-upload-dependencies:",c);try{const d=await n.extensionRegistry.getDependencies(c);if(!d||!d.mipPackage)return;n.dependencyPrompt={extensionId:c,extensionName:l,dependencies:d},i.emit("render")}catch(d){console.error("[Extensions] Error getting dependencies:",d)}}),i.on("close-dependency-prompt",()=>{r("close-dependency-prompt"),n.dependencyPrompt=null,i.emit("render")}),i.on("upload-extension-dependencies",async c=>{r("upload-extension-dependencies:",c),n.dependencyPrompt=null;try{const l=n.installedExtensions.find(u=>u.id===c);if(!l||!l.mipPackage){i.emit("render");return}if(!n.isConnected){alert("Please connect to device first"),i.emit("render");return}stopStatusInfoPolling(),n.installingDependencies={extensionName:l.name,mipPackage:l.mipPackage},i.emit("render");const d=`
+import mip
+try:
+    result = mip.install("${l.mipPackage}", target="/lib")
+    print("mip.install completed")
+    print(f"mip.install result: {result}")
+except Exception as e:
+    print(f"mip.install error: {e}")
+    import sys
+    sys.print_exception(e)
+    raise  # Re-raise to ensure error is visible
+`,p=await o.run(d,!1);if(p&&(p.includes("error")||p.includes("Error")||p.includes("Exception")))throw new Error(`mip install failed: ${p}`);n.installingDependencies=null,n.isConnected&&o&&startStatusInfoPolling(o,n,i),i.emit("render"),alert("Dependencies installed successfully via mip!")}catch(l){console.error("[Extensions] Dependency installation failed:",l),n.installingDependencies=null,n.isConnected&&o&&startStatusInfoPolling(o,n,i),i.emit("render"),alert(`Failed to install dependencies:
+${l.message}`)}}),i.on("toggle-extension-menu",c=>{n.expandedExtensions[c]=!n.expandedExtensions[c],i.emit("render")}),i.on("change-extension-panel",async({extensionId:c,panelId:l})=>{if(r("change-extension-panel:",c,l),!n.loadedExtensions[c])try{const d=await n.extensionRegistry.getExtension(c);if(!d)throw new Error(`Extension not found: ${c}`);n.loadedExtensions[c]={data:d,instance:null},r(`[Extensions] Loaded extension ${c} from cache`)}catch(d){console.error("[Extensions] Failed to load extension:",d),alert(`Failed to load extension:
+${d.message}`);return}n.activeExtension=c,n.activeExtensionPanel=l,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.systemSection=`extension:${c}:${l}`,i.emit("render")})}function registerAIAgentHandlers(n,i,o){const s=console.log;i.on("toggle-agent-sidebar",()=>{s("toggle-agent-sidebar"),n.aiAgent.isOpen=!n.aiAgent.isOpen,i.emit("render")}),i.on("ai-set-provider",async r=>{s("ai-set-provider",r);const a=n.aiAgent.settings.provider;if(n.aiAgent.settings.provider=r,localStorage.setItem("ai-provider",r),a!==r){const c={openai:"gpt-4o",anthropic:"claude-3-5-sonnet-20241022",grok:"grok-4-latest",openrouter:"anthropic/claude-3.5-sonnet",custom:"custom-model"};n.aiAgent.settings.model=c[r]||"gpt-4o",localStorage.setItem("ai-model",n.aiAgent.settings.model)}r==="openrouter"&&n.aiAgent.settings.apiKey&&i.emit("ai-fetch-openrouter-models"),i.emit("render")}),i.on("ai-fetch-openrouter-models",async()=>{if(s("ai-fetch-openrouter-models"),!!n.aiAgent.settings.apiKey){n.aiAgent.isLoadingOpenRouterModels=!0,i.emit("render");try{const r=await fetch("https://openrouter.ai/api/v1/models",{headers:{Authorization:`Bearer ${n.aiAgent.settings.apiKey}`}});if(r.ok){const c=(await r.json()).data.filter(l=>l.id&&!l.id.includes("moderation")).sort((l,d)=>l.pricing?.prompt&&!d.pricing?.prompt?-1:!l.pricing?.prompt&&d.pricing?.prompt?1:l.name.localeCompare(d.name)).map(l=>({value:l.id,label:l.name||l.id}));n.aiAgent.openRouterModels=c,!c.find(l=>l.value===n.aiAgent.settings.model)&&c.length>0&&(n.aiAgent.settings.model=c[0].value,localStorage.setItem("ai-model",n.aiAgent.settings.model))}else console.warn("[AI] Failed to fetch OpenRouter models:",r.status)}catch(r){console.error("[AI] Error fetching OpenRouter models:",r)}finally{n.aiAgent.isLoadingOpenRouterModels=!1,i.emit("render")}}}),i.on("ai-set-apikey",r=>{n.aiAgent.settings.apiKey=r,localStorage.setItem("ai-apikey",r),n.aiAgent.connectionStatus=null,n.aiAgent.settings.provider==="openrouter"&&r&&i.emit("ai-fetch-openrouter-models")}),i.on("ai-set-model",r=>{s("ai-set-model",r),n.aiAgent.settings.model=r,localStorage.setItem("ai-model",r),i.emit("render")}),i.on("ai-set-endpoint",r=>{n.aiAgent.settings.endpoint=r,localStorage.setItem("ai-endpoint",r)}),i.on("ai-set-anthropic-proxy-url",r=>{n.aiAgent.settings.anthropicProxyUrl=r,localStorage.setItem("ai-anthropic-proxy-url",r)}),i.on("ai-set-system-prompt",r=>{n.aiAgent.settings.systemPrompt=r,localStorage.setItem("ai-system-prompt",r)}),i.on("ai-test-connection",async()=>{if(s("ai-test-connection"),!n.aiAgent.settings.apiKey){n.aiAgent.connectionStatus={success:!1,message:"Please enter an API key"},i.emit("render");return}try{n.aiAgent.connectionStatus={success:!1,message:"Testing connection..."},i.emit("render");const a=await AIBridgeInstance.testConnection(n.aiAgent.settings);n.aiAgent.connectionStatus={success:!0,message:"Connection successful! Ready to generate code."}}catch(r){n.aiAgent.connectionStatus={success:!1,message:r.message||"Connection failed"}}i.emit("render")}),i.on("ai-update-input",r=>{n.aiAgent.inputValue=r}),i.on("ai-send-message",async r=>{if(s("ai-send-message",r),!(!r||!r.trim())){if(!n.aiAgent.settings.apiKey){n.aiAgent.messages.push({role:"error",content:"Please configure your API key in System > AI Agent settings",timestamp:new Date}),i.emit("render");return}n.aiAgent.inputValue="",n.aiAgent.messages.push({role:"user",content:r,timestamp:new Date}),n.aiAgent.isGenerating=!0,i.emit("render");try{const a=AIBridgeInstance;let c=r;n.aiAgent.lastScriptName&&(c=`[CONTEXT: The last script you generated was "${n.aiAgent.lastScriptName}". If the user is asking you to modify/improve that script, keep the same name. If they're asking for something completely different, use a new appropriate name.]
+
+${r}`,console.log("[AI] Adding script context:",n.aiAgent.lastScriptName));const l=await a.generateCode(c,n.aiAgent.messages,n.aiAgent.settings);n.aiAgent.messages.push({role:"assistant",content:l.content,code:l.code,timestamp:new Date}),l.code&&i.emit("ai-code-generated",l.code)}catch(a){n.aiAgent.messages.push({role:"error",content:`Error: ${a.message}`,timestamp:new Date})}n.aiAgent.isGenerating=!1,i.emit("render")}}),i.on("ai-clear-chat",()=>{s("ai-clear-chat"),n.aiAgent.messages=[],n.aiAgent.inputValue="",n.aiAgent.lastConfiguredArgs=null,n.aiAgent.lastScriptName=null,console.log("[AI] Cleared chat and configuration values"),i.emit("render")}),i.on("ai-code-generated",async r=>{s("ai-code-generated");try{console.log("[AI] Code received (first 500 chars):",r.substring(0,500)),console.log("[AI] Code has START marker:",r.includes("# === START_CONFIG_PARAMETERS ===")),console.log("[AI] Code has END marker:",r.includes("# === END_CONFIG_PARAMETERS ==="));const a=parseScriptOsConfig(r);if(console.log("[AI] Parsed config:",a),console.log("[AI] Config args:",a?.args),console.log("[AI] Has args:",a&&a.args&&Object.keys(a.args).length>0),a&&a.args&&Object.keys(a.args).length>0){let l=(a.info||{}).name||"AI Generated Script";const d=n.aiAgent.lastScriptName===a.info.name,p=d&&n.aiAgent.lastConfiguredArgs!==null;if(console.log("[AI] Script name:",a.info.name),console.log("[AI] Last script name:",n.aiAgent.lastScriptName),console.log("[AI] Is same script:",d),console.log("[AI] Has existing config:",p),console.log("[AI] Last configured args:",n.aiAgent.lastConfiguredArgs),console.log("[AI] New config args:",Object.keys(a.args)),p){console.log("[AI] Using previous configuration values:",n.aiAgent.lastConfiguredArgs);let u=generateScriptOsCode(r,a,n.aiAgent.lastConfiguredArgs);a.silent===!0&&(u=`# SCRIPTOS_SILENT: True
+${u}`);const f=l.replace(/[^a-zA-Z0-9]/g,"_")+".py",h=n.openFiles.find(m=>m.isAIGenerated&&m.source==="disk"&&m.fileName===f);if(h)h.editor.editor.setValue(u),h.hasChanges=!0,n.editingFile=h.id,console.log("[AI] Auto-updated existing tab with previous config:",h.fileName);else if(await o("disk",f,null,u)){const v=n.openFiles[n.openFiles.length-1];v.isAIGenerated=!0,console.log("[AI] Created new tab with previous config:",f)}}else n.selectedScriptOs={filename:l,content:r,config:a,isAIGenerated:!0},n.scriptOsModalView="config",n.scriptOsArgs={},n.isScriptOsModalOpen=!0}else{const c=n.openFiles.find(l=>l.isAIGenerated&&l.source==="disk");if(c)c.editor.editor.setValue(r),c.hasChanges=!0,n.editingFile=c.id,console.log("[AI] Updated existing AI-generated tab:",c.fileName);else{const l="AI_Generated.py";if(await o("disk",l,null,r)){const p=n.openFiles[n.openFiles.length-1];p.isAIGenerated=!0,console.log("[AI] Created new AI-generated tab:",l)}}}i.emit("render")}catch(a){console.error("[AI] Error processing generated code:",a);const c=n.openFiles.find(l=>l.isAIGenerated&&l.source==="disk");if(c)c.editor.editor.setValue(r),c.hasChanges=!0,n.editingFile=c.id;else{await o("disk","AI_Generated.py",null,r);const d=n.openFiles[n.openFiles.length-1];d&&(d.isAIGenerated=!0)}i.emit("render")}})}const SCRIPTOHUB_API_URL="https://cheerful-stoat-894.convex.site";async function listSkills(n,i={}){const o=n||SCRIPTOHUB_API_URL,s=new URLSearchParams;i.limit&&s.set("limit",String(i.limit)),i.cursor&&s.set("cursor",i.cursor),i.sort&&s.set("sort",i.sort);const r=`${o}/api/v1/skills${s.toString()?"?"+s:""}`,a=await fetch(r);if(!a.ok)throw new Error(`ScriptoHub listSkills failed: ${a.status} ${a.statusText}`);return a.json()}async function getSkill(n,i){const s=await fetch(`${i||SCRIPTOHUB_API_URL}/api/v1/skills/${encodeURIComponent(n)}`);if(!s.ok)throw new Error(`ScriptoHub getSkill(${n}) failed: ${s.status}`);return s.json()}async function getSkillFile(n,i,o){const s=o||SCRIPTOHUB_API_URL,r=new URLSearchParams({path:i}),a=await fetch(`${s}/api/v1/skills/${encodeURIComponent(n)}/file?${r}`);if(!a.ok)throw new Error(`ScriptoHub getSkillFile(${n}, ${i}) failed: ${a.status}`);return a.text()}function registerScriptOsHandlers(n,i,o,s){const r=console.log;i.on("open-scriptos-modal",async()=>{r("open-scriptos-modal"),n.isLoadingRegistry=!0,n.scriptOsModalView="library",n.scriptOsSearchQuery="",n.scriptOsFilterTags=[],n.isScriptOsModalOpen=!0,i.emit("render");try{console.log("[Registry] Fetching skills from ScriptoHub...");const a=await listSkills(n.scriptohubApiUrl,{limit:200});n.scriptOsList=(a.items||[]).map(c=>({slug:c.slug,displayName:c.displayName,summary:c.summary,category:c.category||null,skillType:c.skillType||null,tags:c.tags||{},stats:c.stats||{},latestVersion:c.latestVersion,createdAt:c.createdAt,updatedAt:c.updatedAt})),console.log(`[Registry] Loaded ${n.scriptOsList.length} skills from ScriptoHub`),n.isLoadingRegistry=!1,i.emit("render")}catch(a){console.error("[ScriptOs] Error loading registry:",a),n.isLoadingRegistry=!1,n.scriptOsList=[],i.emit("render"),alert(`Failed to load ScriptOs from ScriptoHub:
+${a.message}
+
+Please check your internet connection and try again.`)}}),i.on("select-scriptos",async a=>{if(r("select-scriptos:",a.displayName||a.slug),a.slug&&!a.content){const c=a.slug;console.log("[Registry] Fetching skill from ScriptoHub:",c);try{const l=await getSkill(c,n.scriptohubApiUrl);if(!l||!l.latestVersion)throw new Error(`Skill "${c}" has no published version`);const p=(await getSkillVersionFiles(c,l,n.scriptohubApiUrl)).files.find(m=>m.path.endsWith(".py"));if(!p)throw new Error(`Skill "${c}" has no .py file`);const[u,f]=await Promise.all([getSkillFile(c,p.path,n.scriptohubApiUrl),getSkillFile(c,"SKILL.md",n.scriptohubApiUrl).catch(()=>null)]),h=parseScriptOsConfig(u);if(!h)throw new Error("Failed to parse ScriptO configuration");console.log("[Registry] Fetched skill:",c,"py:",p.path,"skill.md:",!!f),a={slug:c,filename:p.path,displayName:a.displayName||l.skill?.displayName,content:u,config:h,skillMd:f}}catch(l){console.error("[Registry] Error fetching skill:",l),alert(`Failed to load skill:
+${l.message}`);return}}if(n.selectedScriptOs=a,n.scriptOsArgs={},a.config&&a.config.args)for(const c in a.config.args){const l=a.config.args[c];l.value!==void 0?n.scriptOsArgs[c]=l.value:l.type==="str"?n.scriptOsArgs[c]="":l.type==="int"||l.type==="float"?n.scriptOsArgs[c]=0:l.type==="bool"?n.scriptOsArgs[c]=!1:l.type==="list"?n.scriptOsArgs[c]=l.optional?null:0:l.type==="dict"&&l.items&&(n.scriptOsArgs[c]=Object.keys(l.items)[0])}a.skillMd&&(n.isSkillSidebarOpen=!0,n.skillSidebarContent={name:a.displayName||a.config?.info?.name||a.slug,skillMd:a.skillMd}),n.scriptOsModalView="config",i.emit("render")}),i.on("scriptos-update-arg",({argId:a,value:c})=>{n.scriptOsArgs[a]=c}),i.on("scriptos-search",a=>{n.scriptOsSearchQuery=a,i.emit("render")}),i.on("scriptos-toggle-tag",a=>{r("scriptos-toggle-tag:",a);const c=n.scriptOsFilterTags.indexOf(a);c>=0?n.scriptOsFilterTags.splice(c,1):n.scriptOsFilterTags.push(a),i.emit("render")}),i.on("scriptos-clear-tags",()=>{r("scriptos-clear-tags"),n.scriptOsFilterTags=[],i.emit("render")}),i.on("scriptos-back",()=>{r("scriptos-back"),n.scriptOsModalView="library",n.selectedScriptOs=null,n.isSkillSidebarOpen=!1,n.skillSidebarContent=null,i.emit("render")}),i.on("scriptos-execute",async()=>{r("scriptos-execute");const a=n.selectedScriptOs;if(a)try{let c=generateScriptOsCode(a.content,a.config,n.scriptOsArgs);a.config.silent===!0&&(c=`# SCRIPTOS_SILENT: True
+${c}`),n.isScriptOsModalOpen=!1;const l=a.config.info||{};let d=(l.name||a.filename.replace(".py","")).replace(/[^a-zA-Z0-9]/g,"_")+".py";if(a.isAIGenerated){n.aiAgent.lastConfiguredArgs={...n.scriptOsArgs},n.aiAgent.lastScriptName=l.name,console.log("[AI] Saved configuration values for future updates:",n.aiAgent.lastConfiguredArgs),console.log("[AI] Saved script name:",n.aiAgent.lastScriptName);const p=n.openFiles.find(u=>u.isAIGenerated&&u.source==="disk"&&u.fileName===d);if(p)p.editor.editor.setValue(c),p.hasChanges=!0,n.editingFile=p.id,console.log("[AI] Updated existing AI-generated tab with configured code:",p.fileName);else{const u=d||"AI_Generated.py";if(await s("disk",u,null,c)){const h=n.openFiles[n.openFiles.length-1];h.isAIGenerated=!0,console.log("[AI] Created new AI-generated tab with configured code:",u)}}}else await s("disk",d,null,c),r("[ScriptOs] Generated code in new tab:",d);i.emit("render")}catch(c){console.error("[ScriptOs] Error generating code:",c)}}),i.on("close-scriptos-modal",()=>{r("close-scriptos-modal"),n.isScriptOsModalOpen=!1,n.selectedScriptOs=null,n.scriptOsModalView="library",n.isSkillSidebarOpen=!1,n.skillSidebarContent=null,i.emit("render")}),i.on("deploy-skill",async()=>{if(r("deploy-skill"),!n.isConnected){alert("Please connect to a device to deploy this skill.");return}const a=n.selectedScriptOs;if(!a||!a.content){alert("No skill selected to deploy.");return}const c=a.slug||a.filename.replace(/\.py$/i,"").replace(/[^a-zA-Z0-9]/g,"-").toLowerCase(),l=`/pfc/skills/${c}`,d=a.filename||`${c}.py`;try{console.log(`[Deploy] Deploying skill "${c}" to device at ${l}/`),await createFolder(BridgeDevice,"/pfc/skills").catch(()=>{}),await createFolder(BridgeDevice,l).catch(()=>{}),await BridgeDevice.saveFile(`${l}/${d}`,a.content),console.log(`[Deploy] Saved ${l}/${d}`),a.skillMd&&(await BridgeDevice.saveFile(`${l}/SKILL.md`,a.skillMd),console.log(`[Deploy] Saved ${l}/SKILL.md`)),alert(`Skill "${a.filename}" deployed to ${l}/`),console.log("[Deploy] Skill deployed successfully")}catch(p){console.error("[Deploy] Error deploying skill:",p),alert(`Failed to deploy skill:
+${p.message}`)}}),i.on("toggle-skill-sidebar",()=>{n.isSkillSidebarOpen=!n.isSkillSidebarOpen,i.emit("render")}),i.on("close-skill-sidebar",()=>{n.isSkillSidebarOpen=!1,i.emit("render")}),i.on("open-scriptos-ui-modal",a=>{r("open-scriptos-ui-modal",a),n.scriptOsUiModal&&n.scriptOsUiModal.loadTimeout&&clearTimeout(n.scriptOsUiModal.loadTimeout),n.scriptOsUiModal={isOpen:!0,url:a.url,title:a.title||"ScriptO UI",isLoading:!0,error:null,loadTimeout:null},n.scriptOsUiModal.loadTimeout=setTimeout(()=>{n.scriptOsUiModal&&n.scriptOsUiModal.isLoading&&(console.warn("[ScriptO UI] Load timeout - iframe did not load within 10 seconds"),n.scriptOsUiModal.isLoading=!1,n.scriptOsUiModal.error="Failed to load UI: timeout after 10 seconds. Check if the URL is accessible.",i.emit("render"))},1e4),i.emit("render")}),i.on("close-scriptos-ui-modal",()=>{r("close-scriptos-ui-modal"),n.scriptOsUiModal&&n.scriptOsUiModal.loadTimeout&&clearTimeout(n.scriptOsUiModal.loadTimeout),n.scriptOsUiModal={isOpen:!1,url:null,title:null,isLoading:!1,error:null,loadTimeout:null},i.emit("render")}),i.on("configure-scripto",async a=>{r("configure-scripto",a);try{let c,l,d,p=null;if(a.slug){const h=a.slug;console.log("[ScriptO] Fetching skill from ScriptoHub:",h);const m=await getSkill(h,n.scriptohubApiUrl);if(!m||!m.latestVersion)throw new Error(`Skill "${h}" has no published version`);const y=(await getSkillVersionFiles(h,m,n.scriptohubApiUrl)).files.find(w=>w.path.endsWith(".py"));if(!y)throw new Error(`Skill "${h}" has no .py file`);[c,p]=await Promise.all([getSkillFile(h,y.path,n.scriptohubApiUrl),getSkillFile(h,"SKILL.md",n.scriptohubApiUrl).catch(()=>null)]),d=y.path}else if(a.url){const h=await fetch(a.url);if(!h.ok)throw new Error(`Failed to fetch: ${h.status}`);c=await h.text();const m=a.url.split("/");d=decodeURIComponent(m[m.length-1])}else if(a.content)c=a.content,d=a.filename||"script.py";else throw new Error("No slug, url, or content provided");if(l=parseScriptOsConfig(c),!l)throw new Error("Failed to parse ScriptO configuration");let u=d;l.info&&l.info.name&&(u=l.info.name),console.log("[ScriptO] Opening in config modal:",u);const f={slug:a.slug||null,filename:u,content:c,config:l,skillMd:p,isAIGenerated:a.isAIGenerated||!1};if(n.selectedScriptOs=f,n.scriptOsArgs={},l.args)for(const h in l.args){const m=l.args[h];m.value!==void 0?n.scriptOsArgs[h]=m.value:m.type==="str"?n.scriptOsArgs[h]="":m.type==="int"||m.type==="float"?n.scriptOsArgs[h]=0:m.type==="bool"?n.scriptOsArgs[h]=!1:m.type==="list"?n.scriptOsArgs[h]=m.optional?null:0:m.type==="dict"&&m.items&&(n.scriptOsArgs[h]=Object.keys(m.items)[0])}p&&(n.isSkillSidebarOpen=!0,n.skillSidebarContent={name:u,skillMd:p}),n.scriptOsModalView="config",n.isScriptOsModalOpen=!0,console.log("[ScriptO] Successfully opened ScriptO in config modal"),i.emit("render")}catch(c){console.error("[ScriptO] Error loading ScriptO:",c),alert(`Failed to load ScriptO:
+${c.message}`)}})}async function getSkillVersionFiles(n,i,o){const s=i.latestVersion?.version;if(!s)throw new Error(`Skill "${n}" has no version`);const r=await fetch(`${o}/api/v1/skills/${encodeURIComponent(n)}/versions/${encodeURIComponent(s)}`);if(!r.ok)throw new Error(`Failed to fetch version files: ${r.status}`);const a=await r.json();return a.version||a}console.log("[Stores] ES modules loaded");let CodeMirrorEditorClass=null;async function getCodeMirrorEditor(){return CodeMirrorEditorClass||(CodeMirrorEditorClass=(await __vitePreload(()=>Promise.resolve().then(()=>editor),void 0)).CodeMirrorEditor),CodeMirrorEditorClass}const log=console.log,device=BridgeDevice,disk=BridgeDisk,registryCache=new RegistryCache;async function store(n,i){async function o(a){const{source:c,parentFolder:l,fileName:d,content:p=newFileContent,hasChanges:u=!1}=a,f=generateHash(),h=await getCodeMirrorEditor(),m=n.cache(h,`editor_${f}`);return m.content=p,m.fileName=d,{id:f,source:c,parentFolder:l,fileName:d,editor:m,hasChanges:u}}async function s(a,c=null,l=null,d=null){a=="board"?n.boardNavigationPath:n.diskNavigationPath;const p=await o({fileName:c===null?generateFileName():c,parentFolder:l,source:a,hasChanges:!0,content:d||newFileContent});let u=!1;return l!=null&&(a=="board"?u=await fileExists(BridgeDevice,getFullPath$1(n.boardNavigationRoot,p.parentFolder,p.fileName)):a=="disk"&&(u=await disk.fileExists(disk.getFullPath(n.diskNavigationRoot,p.parentFolder,p.fileName)))),n.openFiles.find(h=>h.parentFolder===p.parentFolder&&h.fileName===p.fileName&&h.source===p.source)||u?(await confirmDialog(`File ${p.fileName} already exists on ${a}. Please choose another name.`),!1):(p.editor.onChange=function(){p.hasChanges=!0,i.emit("render")},n.openFiles.push(p),n.editingFile=p.id,!0)}await initializeState(n,i,s),initializeTheme(n,i),registerThemeHandlers(n,i);const r=()=>{};registerDialogHandlers(n,i,device),registerConnectionHandlers(n,i,device,r,bindTerminalOutput),registerFileOperationHandlers(n,i,device,disk,o,s),registerTerminalHandlers(n,i,device,XTerm),registerAIAgentHandlers(n,i,s),registerLogHandlers(n,i),document.addEventListener("connection-mode-change",a=>{const c=a.detail?.mode||"none";n.connectionMode=c,i.emit("render")}),document.addEventListener("firmware-panel-update",()=>{i.emit("render")}),i.on("navigate",a=>{i.emit("change-system-section",a)}),i.on("change-view",async a=>{a==="file-manager"&&(n.isConnected&&BridgeDevice&&BridgeDevice.isCommandRunning()&&(i.emit("stop"),await sleep(250)),n.filesLoadedOnce||(log("[File Manager] Loading files for first time..."),n.filesLoadedOnce=!0),n.isConnected?i.emit("refresh-files"):i.emit("refresh-disk-files")),n.systemSection!==a&&(n.selectedFiles=[],n.systemSection=a,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null,a==="editor"&&n.isConnected&&setTimeout(()=>{bindTerminalOutput(n);const c=n.cache(XTerm,"terminal");c&&c.term&&(i.emit("bind-terminal-input"),i.emit("terminal-focus"))},100),i.emit("render"))}),i.on("launch-app",async(a,c)=>{window.launchApp(a,c)}),i.on("change-system-section",a=>{if(log("change-system-section",a),n.systemSection=a,a.startsWith("network:")){const c=a.split(":")[1];n.activeNetworkPanel=c,n.activeSystemPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else if(a.startsWith("peripherals:")){const c=a.split(":")[1];n.activePeripheralsPanel=c,n.activeNetworkPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else if(a.startsWith("system:")){const c=a.split(":")[1];n.activeSystemPanel=c,n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeExtension=null,n.activeExtensionPanel=null}else n.activeNetworkPanel=null,n.activePeripheralsPanel=null,n.activeSystemPanel=null,n.activeExtension=null,n.activeExtensionPanel=null;(a==="ai-agent"||a==="system:ai-agent")&&n.aiAgent.settings.provider==="openrouter"&&n.aiAgent.settings.apiKey&&n.aiAgent.openRouterModels.length===0&&i.emit("ai-fetch-openrouter-models"),i.emit("render")}),registerNetworkConfigHandlers(n,i,device),registerHardwareConfigHandlers(n,i,device),registerSystemConfigHandlers(n,i,device),registerExtensionHandlers(n,i,device),registerScriptOsHandlers(n,i,registryCache,s),typeof debuggerStore=="function"?debuggerStore(n,i):console.warn("[Store] Debugger store not loaded"),i.on("change-locale",a=>{n.locale=a,localStorage.setItem("locale",a),window.i18n&&window.i18n.setLocale(a),i.emit("render")}),window.i18n?(window.i18n.setLocale(n.locale),console.log("[i18n] Locale initialized to:",n.locale)):console.warn("[i18n] i18n module not available")}const PANEL_CLOSED=45,PANEL_TOO_SMALL=65,PANEL_DEFAULT=320;typeof window<"u"&&(window.PANEL_CLOSED=PANEL_CLOSED,window.PANEL_TOO_SMALL=PANEL_TOO_SMALL,window.PANEL_DEFAULT=PANEL_DEFAULT);function App(n,i){return n.isInitializing?html$1`
+      <div id="app" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <p>Loading...</p>
+      </div>
+    `:html$1`
+    <div id="app">
+      ${SystemView(n,i)}
+      ${Overlay(n,i)}
+    </div>
+  `}async function initApp(){window.i18nReady&&(await window.i18nReady,console.log("[App] Translations loaded, starting app...")),console.log("%c ScriptO Studio v1.0.0 ","background: #9b59b6; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 3px;","build b9a2b51 (2026-03-03)");let n=Choo();n.use(store),n.route("*",App),n.mount("#app"),window.appState=n.state,window.appInstance=n,n.emitter.on("DOMContentLoaded",()=>{n.state.diskNavigationRoot&&n.emitter.emit("refresh-files");const i=new URLSearchParams(window.location.search),o=i.get("device");if(o){const c=`wss://${o}/webrepl`;localStorage.setItem("webrepl-url",c),console.log(`[App] Device URL from query param: ${c}`),setTimeout(()=>{n.emitter.emit("open-connection-dialog");const l=window.location.pathname;window.history.replaceState({},"",l)},500)}const s=i.get("configure");s&&setTimeout(()=>{n.emitter.emit("configure-scripto",s);const c=window.location.pathname;window.history.replaceState({},"",c)},500);const r=i.get("extension");if(r){localStorage.setItem("pending-extension-id",r),sessionStorage.setItem("extension-install-active",r),console.log(`[App] Extension from query param: ${r}`),i.delete("extension");const c=i.toString(),l=window.location.pathname+(c?"?"+c:"");window.history.replaceState({},"",l),o||setTimeout(()=>{console.log("[App] Fresh extension install — navigating to Device Setup"),n.emitter.emit("change-system-panel","firmware")},500)}const a=localStorage.getItem("pending-extension-id");if(a&&o&&setTimeout(async()=>{try{const d=(await new ExtensionRegistry().getInstalledExtensions()).find(p=>p.id===a);d&&d.menu&&d.menu.length>0&&(console.log(`[App] Auto-navigating to extension: ${a}`),localStorage.removeItem("pending-extension-id"),n.emitter.emit("change-extension-panel",{extensionId:a,panelId:d.menu[0].id}))}catch(c){console.warn("[App] Could not auto-navigate to extension:",c)}},1e3),!n.state.isConnected){let c=document.getElementById("hand-click-hint");if(!c){c=document.createElement("div"),c.id="hand-click-hint";const p=document.createElementNS("http://www.w3.org/2000/svg","svg");p.setAttribute("width","36"),p.setAttribute("height","36"),p.setAttribute("viewBox","0 0 24 24"),p.setAttribute("fill","none"),p.setAttribute("stroke","currentColor"),p.setAttribute("stroke-width","2"),p.setAttribute("stroke-linecap","round"),p.setAttribute("stroke-linejoin","round"),p.innerHTML=`
+          <path d="M8 13v-8.5a1.5 1.5 0 0 1 3 0v7.5" />
+          <path d="M11 11.5v-2a1.5 1.5 0 0 1 3 0v2.5" />
+          <path d="M14 10.5a1.5 1.5 0 0 1 3 0v1.5" />
+          <path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" />
+          <path d="M5 3l-1 -1" />
+          <path d="M4 7h-1" />
+          <path d="M14 3l1 -1" />
+          <path d="M15 6h1" />
+        `,c.appendChild(p),document.body.appendChild(c)}const l=()=>{c.classList.add("animate"),setTimeout(()=>{c.classList.remove("animate")},7500)};setTimeout(l,1e3);const d=setInterval(l,1e4);n.emitter.on("connect",()=>{clearInterval(d);const p=document.getElementById("hand-click-hint");p&&p.remove()})}})}document.readyState==="complete"?initApp():window.addEventListener("load",initApp);export{__vitePreload as _};
