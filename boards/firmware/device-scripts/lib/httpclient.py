@@ -94,28 +94,23 @@ async def delete(url, *, headers=None, timeout=10000):
     """Async HTTP DELETE."""
     return await request(url, method='DELETE', headers=headers, timeout=timeout)
 
-
-async def stream(url, *, method='POST', data=None, headers=None, timeout=60000):
+async def stream(url, *, method='POST', data=None, headers=None, timeout=60000, on_chunk=None):
     """
-    Async generator: yields SSE data frames as bytes.
+    SSE streaming HTTP request — callback-based (MicroPython compatible).
 
-    For LLM streaming APIs (Gemini ?alt=sse, OpenAI stream:true).
-    Each yielded value is the raw JSON payload from one SSE data line.
-
-    Usage:
-        async for chunk in stream(url, data=payload, headers=headers):
-            delta = json.loads(chunk)
-            # Process incremental response...
+    Calls on_chunk(bytes) for each SSE data frame as it arrives.
+    Returns the final poll result when stream completes.
 
     Args:
         url: SSE endpoint URL
         method: HTTP method (usually POST for LLM APIs)
         data: Request body (str or bytes)
         headers: Dict or 'Key:Value\\n' string
-        timeout: Total stream timeout in ms (default 60s for long generations)
+        timeout: Total stream timeout in ms (default 60s)
+        on_chunk: Callback(bytes) called for each SSE data frame
 
-    Yields:
-        bytes: Raw JSON payload from each SSE data line
+    Returns:
+        dict: Final poll result (status, headers)
     """
     hdrs = _format_headers(headers)
     h = _c._start(url, method=method, data=data, headers=hdrs,
@@ -129,13 +124,14 @@ async def stream(url, *, method='POST', data=None, headers=None, timeout=60000):
             # Try to get a chunk
             chunk = _c._poll_chunk(h)
             if chunk is not None:
-                yield chunk
+                if on_chunk:
+                    on_chunk(chunk)
                 continue
 
             # No chunk available — check if stream is complete
             r = _c._poll(h)
             if r is not None:
-                return  # Stream done, slot freed by _poll
+                return r  # Stream done, slot freed by _poll
 
             # Check deadline
             if time.ticks_diff(time.ticks_ms(), t0) > deadline:
@@ -144,12 +140,6 @@ async def stream(url, *, method='POST', data=None, headers=None, timeout=60000):
 
             # Yield to event loop
             await asyncio.sleep_ms(10)
-    except GeneratorExit:
-        # Generator closed by caller — clean up
-        try:
-            _c._cancel(h)
-        except:
-            pass
     except Exception:
         try:
             _c._cancel(h)
