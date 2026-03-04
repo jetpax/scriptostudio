@@ -46,5 +46,14 @@
   "syslog": {
     "host": "",
     "port": 514
+  },
+  "mqtt": {
+    "server": "",
+    "ca_cert_path": "",
+    "username": "",
+    "port": 1883,
+    "password": "",
+    "tls": false,
+    "topic_prefix": ""
   }
 }
