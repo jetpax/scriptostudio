@@ -175,9 +175,15 @@ async def queue_pump():
     while True:
         try:
             webrepl.process_queue()  # Handles both WebSocket and WebRTC transports
+        except Exception as e:
+            # "stream operation not supported" is a benign race during WS connect/auth cycle
+            if "stream" not in str(e):
+                log("warning", f"queue_pump(webrepl): {e}", source="main")
+        try:
             httpserver.process_queue()
         except Exception as e:
-            log("warning", f"queue_pump error: {e}", source="main")
+            if "stream" not in str(e):
+                log("warning", f"queue_pump(http): {e}", source="main")
         
         await asyncio.sleep_ms(10)
 
@@ -243,7 +249,9 @@ def wsserver_disconnect_callback(client_id, event_name):
     Sets LED back to network connected state (yellow solid - waiting for client).
     """
     global _webrepl_client_connected
-    log("info", f"🔴 Disconnect callback: client_id={client_id}, event={event_name}, connected={_webrepl_client_connected}", source="main")
+    if not _webrepl_client_connected:
+        return  # Already disconnected, skip redundant callbacks
+    log("info", f"🔴 Disconnect callback: client_id={client_id}", source="main")
     
     # Set LED back to network connected state (network still connected, waiting for client)
     if status_led:
