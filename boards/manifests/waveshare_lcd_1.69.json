@@ -46,7 +46,7 @@
     },
 
     "i2c": {
-      "sensors": {
+      "i2c0": {
         "scl": 10,
         "sda": 11
       }
@@ -95,7 +95,7 @@
     "touch": {
       "type": "CST816T",
       "driver": "cst816",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "i2c_address": "0x15",
       "int_pin": 14,
       "rst_pin": 13,
@@ -105,7 +105,7 @@
     "imu": {
       "type": "QMI8658C",
       "driver": "qmi8658",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "i2c_address": "0x6B",
       "description": "6-axis accelerometer/gyroscope"
     },
@@ -113,7 +113,7 @@
     "rtc": {
       "type": "PCF85063ATL",
       "driver": "pcf85063",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "i2c_address": "0x51",
       "int_pin": 39,
       "description": "Real-time clock with alarm"

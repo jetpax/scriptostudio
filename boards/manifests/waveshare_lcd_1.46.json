@@ -57,7 +57,7 @@
     },
 
     "i2c": {
-      "sensors": {
+      "i2c0": {
         "scl": 10,
         "sda": 11
       }
@@ -102,7 +102,7 @@
 
     "expander": {
       "chip": "TCA9554PWR",
-      "i2c_bus": "sensors",
+      "i2c_bus": "i2c0",
       "pins": {
         "tp_rst": 1,
         "lcd_rst": 2,
@@ -129,7 +129,7 @@
     "touch": {
       "type": "SPD2010",
       "driver": "spd2010",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "i2c_address": "0x53",
       "int_pin": 4,
       "rst_expander_pin": 1,
@@ -139,7 +139,7 @@
     "imu": {
       "type": "QMI8658C",
       "driver": "qmi8658",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "int1_expander_pin": 5,
       "int2_expander_pin": 4,
       "description": "6-axis accelerometer/gyroscope"
@@ -148,7 +148,7 @@
     "rtc": {
       "type": "PCF85063ATL",
       "driver": "pcf85063",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "int_pin": 9,
       "description": "Real-time clock with alarm"
     },
@@ -156,7 +156,7 @@
     "audio_codec": {
       "type": "ES8311",
       "driver": "es8311",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "i2s_bus": "i2s.audio",
       "description": "Audio codec for speaker output"
     },
@@ -184,7 +184,7 @@
 
     "gpio_expander": {
       "type": "TCA9554PWR",
-      "bus": "i2c.sensors",
+      "bus": "i2c.i2c0",
       "i2c_address": "0x20",
       "pins_used": 5,
       "description": "8-bit I2C GPIO expander for peripheral control"

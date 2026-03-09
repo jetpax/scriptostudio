@@ -234,7 +234,7 @@ def webrepl_auth_callback(client_id=WEBREPL_CLIENT_WEBRTC):
         if status_led:
             status_led.set_state(StatusLED.STATE_CLIENT_CONNECTED)
         _webrepl_client_connected = True
-        log("info", f" ✅ WebREPL client authenticated", source="main")
+        log("info", f"✅ WebREPL client authenticated", source="main")
     
     except Exception as e:
         # Don't let callback exceptions break the connection
