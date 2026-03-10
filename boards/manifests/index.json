@@ -52,6 +52,13 @@
       "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, PoE Ethernet, MIPI-DSI/CSI, Audio codec"
     },
     {
+      "id": "waveshare_rlcd_4.2",
+      "name": "Waveshare ESP32-S3-RLCD-4.2",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N16R8 with 4.2\" reflective LCD, dual-mic array, IMU, audio, SD, RTC, temp/humidity sensor"
+    },
+    {
       "id": "waveshare_s3_lcd_1.47",
       "name": "Waveshare ESP32-S3 LCD 1.47",
       "chip": "ESP32-S3",
