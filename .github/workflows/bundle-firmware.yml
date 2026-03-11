@@ -61,6 +61,19 @@ jobs:
           echo ""
           echo "📊 Total files: $(find boards/firmware/device-scripts -type f | wc -l)"
 
+      - name: Bake platform version into VFS
+        run: |
+          # Read current platform version and write to VFS so device can report it
+          PLATFORM_FILE="boards/firmware/platform-version.json"
+          VERSION=$(python3 -c "import json; print(json.load(open('$PLATFORM_FILE'))['version'])")
+          BUILD_INFO="boards/firmware/components/build-info.json"
+          MPY_VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO')).get('version','unknown'))" 2>/dev/null || echo "unknown")
+
+          cat > boards/firmware/device-scripts/firmware-version.json << EOF
+          {"platform": "$VERSION", "micropython": "$MPY_VERSION", "built": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          EOF
+          echo "📌 Baked firmware-version.json: $(cat boards/firmware/device-scripts/firmware-version.json)"
+
       - name: Build merged firmware for each variant
         run: |
           COMPONENTS="boards/firmware/components"
