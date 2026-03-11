@@ -139,16 +139,60 @@ jobs:
       - name: Determine version
         id: version
         run: |
+          # Read MicroPython base version from pyDirect build-info
           BUILD_INFO="boards/firmware/components/build-info.json"
           if [ -f "$BUILD_INFO" ]; then
-            VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
-            COMMIT=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['commit'])")
+            MPY_VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
+            PYDIRECT_COMMIT=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['commit'])")
           else
-            VERSION="unknown"
-            COMMIT="${{ github.sha }}"
+            MPY_VERSION="unknown"
+            PYDIRECT_COMMIT="${{ github.sha }}"
           fi
+
+          # Read current platform version
+          PLATFORM_FILE="boards/firmware/platform-version.json"
+          CURRENT=$(python3 -c "import json; print(json.load(open('$PLATFORM_FILE'))['version'])")
+          echo "Current platform version: $CURRENT"
+
+          # Auto-bump based on conventional commits since last firmware tag
+          LAST_TAG=$(git tag -l 'firmware-*' --sort=-creatordate | head -1 || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            COMMITS=$(git log "$LAST_TAG"..HEAD --oneline 2>/dev/null || echo "")
+          else
+            COMMITS=$(git log --oneline -20 2>/dev/null || echo "")
+          fi
+
+          # Parse semver components
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+          # Check for feat: (minor bump) or fix: (patch bump)
+          if echo "$COMMITS" | grep -qiE '^[a-f0-9]+ feat(\(|:)'; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            echo "🔼 Minor bump (feat: detected)"
+          elif echo "$COMMITS" | grep -qiE '^[a-f0-9]+ fix(\(|:)'; then
+            PATCH=$((PATCH + 1))
+            echo "🔧 Patch bump (fix: detected)"
+          else
+            PATCH=$((PATCH + 1))
+            echo "🔧 Patch bump (default)"
+          fi
+
+          VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "New platform version: $VERSION"
+
+          # Write back the bumped version
+          python3 -c "
+          import json
+          with open('$PLATFORM_FILE', 'r+') as f:
+              d = json.load(f)
+              d['version'] = '$VERSION'
+              f.seek(0); json.dump(d, f, indent=2); f.write('\n'); f.truncate()
+          "
+
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "mpy_version=$MPY_VERSION" >> "$GITHUB_OUTPUT"
+          echo "commit=$PYDIRECT_COMMIT" >> "$GITHUB_OUTPUT"
           TAG="firmware-${VERSION}-$(date -u +%Y%m%d%H%M%S)"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
@@ -158,7 +202,9 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: "Firmware ${{ steps.version.outputs.version }}"
           body: |
-            Firmware build from pyDirect commit `${{ steps.version.outputs.commit }}`
+            Platform version: `${{ steps.version.outputs.version }}`
+            MicroPython base: `${{ steps.version.outputs.mpy_version }}`
+            pyDirect commit: `${{ steps.version.outputs.commit }}`
             Built: ${{ github.event.head_commit.timestamp || github.event.repository.updated_at }}
           files: /tmp/*-merged.bin
           make_latest: true
@@ -166,6 +212,7 @@ jobs:
       - name: Update firmware for same-origin serving
         run: |
           VERSION="${{ steps.version.outputs.version }}"
+          MPY_VERSION="${{ steps.version.outputs.mpy_version }}"
           COMMIT="${{ steps.version.outputs.commit }}"
           TAG="${{ steps.version.outputs.tag }}"
           REPO="${{ github.repository }}"
@@ -180,6 +227,7 @@ jobs:
           cat > boards/firmware/latest.json << EOF
           {
             "version": "$VERSION",
+            "micropython_version": "$MPY_VERSION",
             "updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "pyDirect_commit": "$COMMIT",
             "scriptostudio_commit": "${{ github.sha }}",
@@ -202,7 +250,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add boards/firmware/latest.json boards/firmware/*-merged.bin
+          git add boards/firmware/latest.json boards/firmware/platform-version.json boards/firmware/*-merged.bin
           git commit -m "🤖 Firmware ${{ steps.version.outputs.version }} — release ${{ steps.version.outputs.tag }}" || echo "No changes"
           git pull --rebase
           git push
