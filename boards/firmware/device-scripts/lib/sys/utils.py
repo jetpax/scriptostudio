@@ -943,12 +943,12 @@ def sync_ntp(server=None, tz_offset=None, auto_detect=None, force=False):
     
     # Get settings with defaults
     server = server or settings.get('ntp.server', 'pool.ntp.org')
-    auto_detect = auto_detect if auto_detect is not None else settings.get('ntp.auto_detect_tz', True)
+    auto_detect = auto_detect if auto_detect is not None else settings.get('ntp.auto_detect_tz', settings.get('ntp.auto_detect', True))
     tz_offset = tz_offset if tz_offset is not None else settings.get('ntp.tz_offset', 0.0)
     timezone_name = settings.get('ntp.timezone', 'UTC')
     
-    # Auto-detect timezone if enabled and not already detected
-    if auto_detect and tz_offset == 0.0:
+    # Auto-detect timezone if enabled (re-detect each sync to handle DST changes)
+    if auto_detect:
         detected_offset, detected_tz = _detect_timezone()
         if detected_offset is not None:
             tz_offset = detected_offset
