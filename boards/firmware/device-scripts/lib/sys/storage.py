@@ -9,6 +9,9 @@ Usage:
 """
 import os
 
+# Module-level SD card object (replaces builtins.sd to avoid creating builtins module)
+_sd_card = None
+
 # Defaults (flash fallback — /pfc on root VFS partition)
 DATA_DIR = '/pfc'
 SESSIONS_DIR = '/pfc/sessions'
@@ -17,11 +20,12 @@ IMAGES_DIR = '/pfc/images'
 
 def has_sdcard():
   """Is a real SD card mounted (not just a flash directory)?"""
-  try:
-    import builtins
-    return hasattr(builtins, 'sd')
-  except:
-    return False
+  return _sd_card is not None
+
+
+def get_sd_card():
+  """Get the mounted SDCard object, or None if not mounted."""
+  return _sd_card
 
 
 def init():
@@ -100,8 +104,8 @@ def mount_sdcard():
       pass
     os.mount(sd, '/sd')
 
-    import builtins
-    builtins.sd = sd
+    global _sd_card
+    _sd_card = sd
 
     info = sd.info()
     cap_gb = (info[0] * info[1]) / (1024**3)

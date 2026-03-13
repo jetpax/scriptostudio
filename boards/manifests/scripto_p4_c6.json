@@ -47,7 +47,7 @@
 
     "sdmmc": {
       "sdcard": {
-        "slot": 1,
+        "slot": 0,
         "cmd": 44,
         "clk": 43,
         "d0": 39,
@@ -55,8 +55,8 @@
         "d2": 41,
         "d3": 42
       },
-      "slot1": {
-        "slot": 0,
+      "c6_sdio": {
+        "slot": 1,
         "cmd": 19,
         "clk": 18,
         "d0": 14,
@@ -88,6 +88,8 @@
 
     "sdcard": {
       "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "bus_width": 4,
       "power_control": {
         "pin": 45,
         "active_low": true
