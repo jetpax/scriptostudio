@@ -141,7 +141,8 @@ def run_setup_server():
             pw = data.get("password", "")
             
             if len(pw) < 4:
-                return json.dumps({"success": False, "error": "Password too short (min 4 chars)"})
+                httpserver.send(json.dumps({"success": False, "error": "Password too short (min 4 chars)"}))
+                return
             
             # Save password and clear setup mode
             settings.set("server.webrepl_password", pw)
@@ -162,11 +163,11 @@ def run_setup_server():
             # Signal main loop to perform reset
             setup_complete[0] = True
             
-            return json.dumps({"success": True, "redirect": redirect})
+            httpserver.send(json.dumps({"success": True, "redirect": redirect}))
             
         except Exception as e:
             print(f"[SETUP] Error: {e}")
-            return json.dumps({"success": False, "error": str(e)})
+            httpserver.send(json.dumps({"success": False, "error": str(e)}))
     
     def redirect_to_setup(uri, post_data=None, remote_addr=None):
         # 302 redirect not supported by C module, use HTML refresh
