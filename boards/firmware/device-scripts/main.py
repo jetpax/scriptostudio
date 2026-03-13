@@ -286,8 +286,7 @@ async def main_async():
     # Display init moved to boot.py for earliest splash screen
 
     # Mount SD card (mandatory if board supports it, silent fail if no card)
-    # NOTE: On boards with SDIO coprocessor (e.g. P4+C6), mount_sdcard()
-    # will skip automatically to avoid corrupting the shared SDMMC peripheral.
+
     try:
         from lib.sys.storage import mount_sdcard, init as storage_init
         mount_sdcard()
