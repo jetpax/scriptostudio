@@ -1,5 +1,5 @@
 // Service Worker for ScriptO Studio PWA
-const CACHE_NAME = 'scripto-studio-v14';
+const CACHE_NAME = 'scripto-studio-v15';
 const RUNTIME_CACHE = 'scripto-studio-runtime-v13';
 
 // Install event - skip pre-caching, activate immediately
