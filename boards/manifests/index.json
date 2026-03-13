@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-02-10",
+  "updated": "2026-03-12",
   "boards": [
     {
       "id": "generic_esp32s3",
@@ -50,6 +50,13 @@
       "chip": "ESP32-P4",
       "vendor": "waveshare",
       "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, PoE Ethernet, MIPI-DSI/CSI, Audio codec"
+    },
+    {
+      "id": "waveshare_p4_wifi6",
+      "name": "Waveshare ESP32-P4-WIFI6",
+      "chip": "ESP32-P4",
+      "vendor": "waveshare",
+      "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, MIPI-DSI/CSI, Audio codec"
     },
     {
       "id": "waveshare_rlcd_4.2",

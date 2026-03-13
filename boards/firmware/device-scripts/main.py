@@ -285,6 +285,14 @@ async def main_async():
     
     # Display init moved to boot.py for earliest splash screen
 
+    # Mount SD card (mandatory if board supports it, silent fail if no card)
+    try:
+        from lib.sys.storage import mount_sdcard, init as storage_init
+        mount_sdcard()
+        storage_init()  # Resolve paths, migrate flash→SD if needed
+    except Exception as e:
+        log("warning", f"Storage init failed: {e}", source="main")
+
     
     # Syslog is now auto-configured from settings by lib.sys.log
     log("info", "*******************************************************", source="main")

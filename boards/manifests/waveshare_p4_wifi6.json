@@ -1,11 +1,11 @@
 {
   "identity": {
-    "id": "waveshare_p4_poe",
-    "name": "Waveshare ESP32-P4-WIFI6-POE-ETH",
+    "id": "waveshare_p4_wifi6",
+    "name": "Waveshare ESP32-P4-WIFI6",
     "vendor": "waveshare",
     "chip": "ESP32-P4",
     "revision": "1.0.0",
-    "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, PoE Ethernet, MIPI-DSI/CSI, Audio codec"
+    "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, MIPI-DSI/CSI, Audio codec"
   },
 
   "network": {
@@ -17,12 +17,12 @@
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
-    "ethernet": true,
-    "poe": true,
+    "ethernet": false,
+    "poe": false,
     "neopixel": false,
     "status_led": false,
     "usb_otg": true,
-    "display": true,
+    "display": false,
     "camera": true,
     "audio": true,
     "microphone": true,
@@ -48,7 +48,7 @@
         "rx": 38
       },
       "c6_debug": {
-        "description": "ESP32-C6 debug UART (exposed on SH1.0 connector)"
+        "description": "ESP32-C6 debug UART (exposed on pad)"
       }
     },
 
@@ -70,21 +70,6 @@
         "d1": 15,
         "d2": 16,
         "d3": 17
-      }
-    },
-
-    "rmii": {
-      "ethernet": {
-        "txd0": 35,
-        "txd1": 34,
-        "rxd0": 29,
-        "rxd1": 30,
-        "tx_en": 49,
-        "crs_dv": 28,
-        "ref_clk": 50,
-        "mdc": 31,
-        "mdio": 52,
-        "reset": 51
       }
     },
 
@@ -112,9 +97,9 @@
 
     "usb": {
       "otg": {
-        "type": "Type-A",
+        "type": "4PIN",
         "speed": "HS",
-        "description": "USB 2.0 OTG High Speed"
+        "description": "USB 2.0 OTG High Speed (4-pin header)"
       },
       "uart": {
         "type": "Type-C",
@@ -124,25 +109,10 @@
   },
 
   "devices": {
-    "ethernet": {
-      "phy": "IP101",
-      "interface": "rmii",
-      "phy_addr": 1,
-      "pins": {
-        "mdc": 31,
-        "mdio": 52,
-        "reset": 51
-      },
-      "poe_capable": true,
-      "speed": "100Mbps",
-      "description": "IP101GRI Ethernet PHY with RMII interface and PoE support"
-    },
-
     "c6_coprocessor": {
-      "type": "ESP32-C6-MINI-1U-H8",
+      "type": "ESP32-C6-MINI-1",
       "interface": "sdio",
       "features": ["wifi6", "bluetooth5_le"],
-      "antenna": "IPEX_3",
       "description": "ESP32-C6 coprocessor for WiFi 6 (2.4GHz) and Bluetooth 5 LE via SDIO"
     },
 
@@ -168,11 +138,6 @@
       "description": "Onboard SMD MEMS microphone"
     },
 
-    "headphone_jack": {
-      "type": "3.5mm",
-      "description": "3.5mm stereo headphone jack"
-    },
-
     "sdcard": {
       "mode": "SDMMC",
       "bus": "sdmmc.sdcard",
@@ -190,7 +155,7 @@
       "lanes": 2,
       "max_resolution": "1280x800",
       "features": ["PPA", "2D_DMA", "JPEG_decode"],
-      "description": "MIPI-DSI 2-lane display connector for high-definition screens"
+      "description": "MIPI-DSI 2-lane display connector for high-definition screens (5/7/8/10.1 inch)"
     },
 
     "camera_port": {
@@ -204,7 +169,7 @@
   },
 
   "memory": {
-    "flash_size": "16MB",
+    "flash_size": "32MB",
     "psram_size": "32MB",
     "psram_mode": "octal"
   }
