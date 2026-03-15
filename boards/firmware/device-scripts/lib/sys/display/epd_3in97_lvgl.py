@@ -55,6 +55,7 @@ class EPD_3in97_lvgl(EPD_3in97):
         self._lv = None
         self._shadow = None
         self._dirty = False
+        self._baseline_set = False
         self.disp_drv = None
 
     def lvgl_init(self):
@@ -140,24 +141,43 @@ class EPD_3in97_lvgl(EPD_3in97):
         self._send_command(0x20)
 
     def refresh(self, full=True):
-        """Push shadow buffer to ePaper (non-blocking)."""
+        """Push shadow buffer to ePaper.
+
+        Args:
+            full: True = full waveform (both RAMs, ~2-4s, clears ghosting)
+                  False = partial waveform (0x24 only, ~300-500ms, only
+                  changed pixels drive ink). First call is always full
+                  to establish the baseline in RAM 0x26.
+        """
         if not self._dirty:
             return
-        if full:
+
+        if full or not self._baseline_set:
+            # Full refresh: write both RAMs (establishes baseline for partials)
             self._display_nowait(self._shadow)
+            self._baseline_set = True
         else:
+            # Partial refresh: write 0x24 only, partial waveform (0xFF)
+            # Controller diffs 0x24 vs 0x26 — only changed pixels refresh
             self._wait_busy(initial_ms=0)
+            self._send_command(0x3C)  # Border waveform for partial
+            self._send_data(0x80)
             self._send_command(0x24)
             self._send_data_buf(self._shadow)
             self._send_command(0x22)
-            self._send_data(0xD7)
+            self._send_data(0xFF)  # Partial waveform
             self._send_command(0x20)
         self._dirty = False
 
-    def lv_refresh(self):
-        """Render LVGL and push to ePaper in one call."""
+    def lv_refresh(self, partial=False):
+        """Render LVGL and push to ePaper.
+
+        Args:
+            partial: True = partial waveform (~300-500ms, less flicker)
+                     False = full waveform (~2-4s, clears ghosting)
+        """
         lv = self._lv
         if lv:
             lv.tick_inc(100)
             lv.refr_now(self.disp_drv)
-        self.refresh()
+        self.refresh(full=not partial)
