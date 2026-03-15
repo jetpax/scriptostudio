@@ -1,0 +1,177 @@
+{
+  "identity": {
+    "id": "waveshare_s3_epd_3in97",
+    "name": "Waveshare ESP32-S3 ePaper 3.97",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3 N16R8 with 3.97\" 800x480 e-Paper, IMU, audio, SD, RTC, temp/humidity"
+  },
+
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": false,
+    "imu": true,
+    "audio": true,
+    "microphone": true,
+    "sdcard": true,
+    "rtc": true,
+    "battery": true,
+    "temp_humidity": true
+  },
+
+  "resources": {
+    "pins": {
+      "boot": 0,
+      "button_up": 4,
+      "button_function": 5,
+      "button_down": 6,
+      "pwr_out": 1
+    },
+
+    "spi": {
+      "epaper": {
+        "sclk": 11,
+        "mosi": 12
+      }
+    },
+
+    "sdmmc": {
+      "sdcard": {
+        "clk": 16,
+        "cmd": 17,
+        "d0": 15,
+        "d1": 7,
+        "d2": 8,
+        "d3": 18
+      }
+    },
+
+    "i2c": {
+      "i2c0": {
+        "scl": 42,
+        "sda": 41
+      }
+    },
+
+    "i2s": {
+      "audio": {
+        "mclk": 13,
+        "bck": 14,
+        "ws": 47,
+        "din": 21,
+        "dout": 48
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+
+    "gpio": {
+      "epd_cs": 10,
+      "epd_dc": 9,
+      "epd_rst": 46,
+      "epd_busy": 3,
+      "pa_enable": 39,
+      "rtc_int": 45,
+      "axp_int": 38
+    }
+  },
+
+  "devices": {
+    "display": {
+      "type": "EPD_3in97",
+      "driver": "epd_3in97",
+      "bus": "spi.epaper",
+      "cs_pin": 10,
+      "dc_pin": 9,
+      "rst_pin": 46,
+      "busy_pin": 3,
+      "width": 800,
+      "height": 480,
+      "interface": "epd",
+      "spi_speed_hz": 20000000,
+      "color_bits": 1,
+      "grayscale_bits": 2,
+      "partial_refresh": true,
+      "description": "3.97\" 800x480 e-Paper display (mono + 4-gray, partial refresh)"
+    },
+
+    "imu": {
+      "type": "QMI8658A",
+      "driver": "qmi8658",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x6A",
+      "description": "6-axis accelerometer/gyroscope"
+    },
+
+    "rtc": {
+      "type": "PCF85063",
+      "driver": "pcf85063",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x51",
+      "int_pin": 45,
+      "description": "Real-time clock with alarm and interrupt"
+    },
+
+    "temp_humidity": {
+      "type": "SHTC3",
+      "driver": "shtc3",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x70",
+      "description": "Temperature and humidity sensor"
+    },
+
+    "audio_codec": {
+      "type": "ES8311",
+      "driver": "es8311",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x18",
+      "i2s_bus": "i2s.audio",
+      "pa_pin": 39,
+      "description": "Audio codec with speaker power amplifier"
+    },
+
+    "pmu": {
+      "type": "AXP2101",
+      "driver": "axp2101",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x34",
+      "int_pin": 38,
+      "description": "Power management unit — battery charging, voltage regulation"
+    },
+
+    "sdcard": {
+      "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "bus_width": 4,
+      "description": "TF/microSD card (4-bit SDMMC mode)"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}

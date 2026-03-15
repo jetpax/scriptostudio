@@ -190,12 +190,59 @@ def _init_spi_display(board, disp, brightness):
     return lcd
 
 
+def _init_epd_display(board, disp):
+    """Initialize an ePaper display (e.g. EPD_3in97)."""
+    import machine
+    import gc
+
+    # Power up ePaper via AXP2101 PMU (ALDO1 = EPD_VCC_AXP)
+    try:
+        i2c_cfg = board.i2c("i2c0")
+        i2c = machine.SoftI2C(
+            scl=machine.Pin(i2c_cfg.scl),
+            sda=machine.Pin(i2c_cfg.sda),
+            freq=400_000,
+        )
+        from lib.sys.drivers.axp2101 import AXP2101
+        pmu = AXP2101(i2c)
+        pmu.init()
+        print(f"[DISPLAY] AXP2101 OK — battery {pmu.battery_percent()}%")
+    except Exception as e:
+        print(f"[DISPLAY] AXP2101 init skipped: {e}")
+
+    # SPI bus for ePaper
+    spi_cfg = board.spi("epaper")
+    spi = machine.SPI(
+        1,
+        baudrate=getattr(disp, 'spi_speed_hz', 20_000_000),
+        polarity=0,
+        phase=0,
+        sck=machine.Pin(spi_cfg.sclk, machine.Pin.OUT),
+        mosi=machine.Pin(spi_cfg.mosi, machine.Pin.OUT),
+    )
+
+    gc.collect()
+
+    from lib.sys.display.epd_3in97 import EPD_3in97
+    epd = EPD_3in97(
+        spi=spi,
+        cs=disp.cs_pin,
+        dc=disp.dc_pin,
+        rst=disp.rst_pin,
+        busy=disp.busy_pin,
+    )
+
+    epd.init()
+    return epd
+
+
 def init_display(brightness=80):
     """
     Initialize display from board manifest. Safe to call multiple times
     (returns existing instance if already initialized).
 
     Dispatches based on the manifest's devices.display.interface field:
+      - "epd"  → ePaper display (e.g. EPD_3in97)
       - "qspi" → SPD2010 QSPI driver
       - "spi"  → ST7789 SPI driver (default)
 
@@ -214,7 +261,9 @@ def init_display(brightness=80):
     # Determine interface type from manifest
     interface = getattr(disp, 'interface', 'spi')
 
-    if interface == 'qspi':
+    if interface == 'epd':
+        _lcd = _init_epd_display(board, disp)
+    elif interface == 'qspi':
         _lcd = _init_qspi_display(board, disp, brightness)
     else:
         _lcd = _init_spi_display(board, disp, brightness)

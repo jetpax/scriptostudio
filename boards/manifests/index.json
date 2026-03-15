@@ -78,6 +78,13 @@
       "chip": "ESP32-S3",
       "vendor": "seeed",
       "description": "Ultra-compact ESP32-S3 with 8MB Flash, 8MB Octal PSRAM, native USB-C, camera connector"
+    },
+    {
+      "id": "waveshare_s3_epd_3in97",
+      "name": "Waveshare ESP32-S3 ePaper 3.97",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N16R8 with 3.97\" 800x480 e-Paper, IMU, audio, SD, RTC, temp/humidity"
     }
   ]
 }
