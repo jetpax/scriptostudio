@@ -85,11 +85,11 @@ class EPD_3in97:
             self.spi.write(mv[i:end])
         self.cs.value(1)
 
-    def _wait_busy(self):
+    def _wait_busy(self, initial_ms=50):
         """Wait until the BUSY pin goes LOW (display ready)."""
-        time.sleep_ms(100)
+        time.sleep_ms(initial_ms)
         while self.busy.value():
-            time.sleep_ms(20)
+            time.sleep_ms(10)
 
     def _reset(self):
         """Hardware reset sequence."""
@@ -146,7 +146,7 @@ class EPD_3in97:
         self._send_command(0x22)
         self._send_data(0xFF)
         self._send_command(0x20)
-        self._wait_busy()
+        self._wait_busy(5)
 
     # ── Initialization modes ──
 
@@ -316,15 +316,11 @@ class EPD_3in97:
         if (x + w) % 8:
             x_end += 1
 
-        byte_w = x_end - x_start
         x_end -= 1
         y_end = y + h - 1
 
-        self._reset()
-
-        # Temp sensor + border
-        self._send_command(0x18)
-        self._send_data(0x80)
+        # No hardware reset needed — display is already initialized.
+        # Just configure border for partial mode.
         self._send_command(0x3C)
         self._send_data(0x80)
 
