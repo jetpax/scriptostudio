@@ -121,7 +121,7 @@
       "type": "QMI8658A",
       "driver": "qmi8658",
       "bus": "i2c.i2c0",
-      "i2c_address": "0x6A",
+      "i2c_address": "0x6B",
       "description": "6-axis accelerometer/gyroscope"
     },
 
