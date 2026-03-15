@@ -225,8 +225,8 @@ def _init_epd_display(board, disp):
 
     gc.collect()
 
-    from lib.sys.display.epd_3in97 import EPD_3in97
-    epd = EPD_3in97(
+    from lib.sys.display.epd_3in97_lvgl import EPD_3in97_lvgl
+    epd = EPD_3in97_lvgl(
         spi=spi,
         cs=disp.cs_pin,
         dc=disp.dc_pin,
@@ -235,6 +235,9 @@ def _init_epd_display(board, disp):
     )
 
     epd.init()
+    gc.collect()
+
+    epd.lvgl_init()
     return epd
 
 
