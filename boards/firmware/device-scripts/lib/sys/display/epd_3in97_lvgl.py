@@ -1,12 +1,10 @@
 """
 LVGL backend for the EPD 3.97" (800×480) e-Paper display.
 
-CalmPilot portrait orientation: LVGL works in portrait coordinates
-(480×800). The flush callback rotates each band 90° CW into the
-800×480 shadow buffer using per-pixel bit manipulation, matching
-the Waveshare GUI_Paint rotation pattern.
+CalmPilot portrait orientation: LVGL renders in portrait (480×800).
+The flush callback calls lv_draw_sw_rotate() (C-level, patched for I1)
+to rotate the full frame 270° CW into the 800×480 hardware layout.
 
-The shadow buffer is always in hardware layout (800 wide × 480 tall).
 Rendering is demand-driven — call lv_refresh() to render and push.
 
 Usage:
@@ -32,25 +30,24 @@ from lib.sys.display.epd_3in97 import EPD_3in97
 HW_WIDTH = 800
 HW_HEIGHT = 480
 HW_STRIDE = HW_WIDTH // 8  # 100 bytes per row
-BUF_SIZE_MONO = HW_STRIDE * HW_HEIGHT  # 48000 bytes
 
 # LVGL logical dimensions (portrait, what apps see)
 LV_WIDTH = 480
 LV_HEIGHT = 800
+LV_STRIDE = LV_WIDTH // 8  # 60 bytes per row
+
+BUF_SIZE_MONO = HW_STRIDE * HW_HEIGHT  # 48000 bytes
 
 # I1 CLUT: 2 palette entries × 4 bytes (ARGB8888) = 8 bytes
 I1_CLUT_SIZE = 8
 
 
 class EPD_3in97_lvgl(EPD_3in97):
-    """EPD driver with LVGL integration (portrait orientation).
+    """EPD driver with LVGL integration (portrait via C rotation).
 
-    LVGL renders in portrait I1 (480×800). The flush callback
-    rotates each band 90° CW into a landscape shadow buffer
-    (800×480) for hardware. Per-pixel bit manipulation follows
-    the Waveshare GUI_Paint rotation pattern:
-        X_hw = 799 - y_lv
-        Y_hw = x_lv
+    LVGL renders at 480×800 in FULL mode. The flush callback uses
+    lv_draw_sw_rotate() (patched for I1 format) to rotate the full
+    frame 270° CW into a landscape shadow buffer (800×480).
     """
 
     def __init__(self, spi, cs, dc, rst, busy):
@@ -60,19 +57,13 @@ class EPD_3in97_lvgl(EPD_3in97):
         self._dirty = False
         self.disp_drv = None
 
-    def lvgl_init(self, factor=10):
-        """Initialize LVGL display driver for portrait ePaper.
-
-        Args:
-            factor: buffer height divisor (default 10 = 80-row bands)
-        """
+    def lvgl_init(self):
+        """Initialize LVGL display driver with C-level I1 rotation."""
         import lvgl as lv
         self._lv = lv
 
         if not lv.is_initialized():
             lv.init()
-
-        # No event loop — ePaper is demand-driven via lv_refresh()
 
         # Shadow buffer in HARDWARE layout (800×480, landscape)
         self._shadow = bytearray(BUF_SIZE_MONO)
@@ -91,17 +82,14 @@ class EPD_3in97_lvgl(EPD_3in97):
 
         color_format = lv.COLOR_FORMAT.I1
 
-        # Band height for partial rendering
-        band_h = LV_HEIGHT // factor
+        # Full-frame draw buffer (portrait: 480×800)
+        draw_buf = lv.draw_buf_create(LV_WIDTH, LV_HEIGHT, color_format, 0)
 
-        # Create draw buffer for one band (portrait width)
-        draw_buf = lv.draw_buf_create(LV_WIDTH, band_h, color_format, 0)
-
-        # Create LVGL display in PORTRAIT dimensions (480×800)
+        # Create LVGL display in portrait (480×800)
         self.disp_drv = lv.display_create(LV_WIDTH, LV_HEIGHT)
         self.disp_drv.set_color_format(color_format)
         self.disp_drv.set_draw_buffers(draw_buf, None)
-        self.disp_drv.set_render_mode(lv.DISPLAY_RENDER_MODE.PARTIAL)
+        self.disp_drv.set_render_mode(lv.DISPLAY_RENDER_MODE.FULL)
         self.disp_drv.set_flush_cb(self._flush_cb)
 
         # White background
@@ -109,62 +97,33 @@ class EPD_3in97_lvgl(EPD_3in97):
         if scr:
             scr.set_style_bg_color(lv.color_white(), 0)
 
-        print(f"[EPD] LVGL init OK (portrait 480x800, {factor} bands)")
+        print("[EPD] LVGL init OK (I1 portrait 480x800, FULL mode, C rotation)")
 
     def _flush_cb(self, disp_drv, area, color_p):
-        """LVGL flush callback — rotate portrait band into landscape shadow.
+        """LVGL flush callback — rotate portrait frame to landscape via C.
 
-        For each pixel in the LVGL portrait band, compute the rotated
-        position in the 800×480 landscape shadow buffer:
-            X_hw = 799 - y_lv      (portrait Y maps to hardware X, reversed)
-            Y_hw = x_lv            (portrait X maps to hardware Y)
-
-        Then set/clear the corresponding bit in the shadow buffer.
-        Skips the 8-byte I1 CLUT palette at the start of the band data.
+        Calls lv_draw_sw_rotate() with ROTATION_270 and COLOR_FORMAT_I1.
+        The I1 rotation was added to LVGL's lv_draw_sw_utils.c.
         """
-        lv_x1 = area.x1
-        lv_y1 = area.y1
-        lv_x2 = area.x2
-        lv_y2 = area.y2
-        w = lv_x2 - lv_x1 + 1
-        h = lv_y2 - lv_y1 + 1
+        lv = self._lv
+        w = area.x2 - area.x1 + 1
+        h = area.y2 - area.y1 + 1
 
-        # Band stride in the LVGL portrait buffer
-        band_stride = w // 8
+        src_stride = w // 8
         if w % 8:
-            band_stride += 1
+            src_stride += 1
 
-        # Dereference band data, skip CLUT header
-        pixel_size = band_stride * h
+        pixel_size = src_stride * h
         data_view = color_p.__dereference__(I1_CLUT_SIZE + pixel_size)
 
-        shadow = self._shadow
+        # Extract portrait pixel data (skip I1 CLUT header)
+        portrait_data = bytes(data_view[I1_CLUT_SIZE:I1_CLUT_SIZE + pixel_size])
 
-        # Rotate each pixel from portrait → landscape
-        for row in range(h):
-            lv_y = lv_y1 + row
-            src_row_offset = I1_CLUT_SIZE + row * band_stride
-
-            for col in range(w):
-                lv_x = lv_x1 + col
-
-                # Read source pixel from portrait band (I1: MSB first)
-                src_byte_idx = src_row_offset + (col >> 3)
-                src_bit_mask = 0x80 >> (col & 7)
-                pixel_set = data_view[src_byte_idx] & src_bit_mask
-
-                # 270° CW rotation: X_hw = y_lv, Y_hw = 479 - x_lv
-                hw_x = lv_y
-                hw_y = 479 - lv_x
-
-                # Write to shadow buffer (landscape 800×480)
-                dst_byte_idx = (hw_y * HW_STRIDE) + (hw_x >> 3)
-                dst_bit_mask = 0x80 >> (hw_x & 7)
-
-                if pixel_set:
-                    shadow[dst_byte_idx] |= dst_bit_mask
-                else:
-                    shadow[dst_byte_idx] &= ~dst_bit_mask & 0xFF
+        # C-level rotation: 90° CW, portrait (480×800) → landscape (800×480)
+        lv.draw_sw_rotate(portrait_data, self._shadow,
+                          w, h, src_stride, HW_STRIDE,
+                          lv.DISPLAY_ROTATION._90,
+                          lv.COLOR_FORMAT.I1)
 
         self._dirty = True
         disp_drv.flush_ready()
