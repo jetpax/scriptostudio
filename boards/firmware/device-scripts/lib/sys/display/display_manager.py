@@ -210,17 +210,16 @@ def _init_epd_display(board, disp):
     except Exception as e:
         print(f"[DISPLAY] AXP2101 init skipped: {e}")
 
-    # SPI bus for ePaper — use SoftSPI (bitbanged) because hardware SPI
-    # has an IOMUX routing issue on this board's GPIO11/12 pin assignment.
-    # SoftSPI CPU overhead is minimal for ePaper (~400ms per 48KB frame).
+    # SPI bus for ePaper — use hardware SPI1, same bus ID proven with ST7789.
+    # ESP32-S3 SPI buses can map to any GPIO through the GPIO matrix.
     spi_cfg = board.spi("epaper")
-    spi = machine.SoftSPI(
-        baudrate=getattr(disp, 'spi_speed_hz', 4_000_000),
+    spi = machine.SPI(
+        1,
+        baudrate=getattr(disp, 'spi_speed_hz', 20_000_000),
         polarity=0,
         phase=0,
         sck=machine.Pin(spi_cfg.sclk, machine.Pin.OUT),
         mosi=machine.Pin(spi_cfg.mosi, machine.Pin.OUT),
-        miso=machine.Pin(2),  # dummy — ePaper is write-only, GPIO 2 is free
     )
 
     gc.collect()
