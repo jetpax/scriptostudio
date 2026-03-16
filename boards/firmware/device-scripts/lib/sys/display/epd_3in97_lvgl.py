@@ -8,20 +8,27 @@ to rotate the full frame 270° CW into the 800×480 hardware layout.
 Rendering is demand-driven — call lv_refresh() to render and push.
 
 Usage:
-    from lib.sys.display.epd_3in97_lvgl import EPD_3in97_lvgl
 
-    epd = EPD_3in97_lvgl(spi=spi, cs=10, dc=9, rst=46, busy=3)
-    epd.init()
-    epd.lvgl_init()
+import lvgl as lv
+from lib.sys.display.display_manager import get_display
 
-    import lvgl as lv
-    scr = lv.screen_active()
-    scr.set_style_bg_color(lv.color_white(), 0)
-    label = lv.label(scr)
-    label.set_text("CalmPilot")
-    label.set_style_text_color(lv.color_black(), 0)
-    label.center()
-    epd.lv_refresh()
+epd = get_display()
+
+epd.init()
+epd.lvgl_init()
+
+import lvgl as lv
+scr = lv.screen_active()
+scr = lv.screen_active()
+scr.clean()  # removes all children (old labels etc.)
+scr.set_style_bg_color(lv.color_white(), 0)
+label = lv.label(scr)
+label.set_text("Hello World!")
+label.set_style_text_color(lv.color_black(), 0)
+label.set_style_text_font(lv.font_montserrat_48, 0)  # 48px
+label.align(lv.ALIGN.CENTER, 0, -40)
+epd.lv_refresh()
+
 """
 
 from lib.sys.display.epd_3in97 import EPD_3in97
