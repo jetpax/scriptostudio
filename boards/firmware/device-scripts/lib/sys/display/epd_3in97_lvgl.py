@@ -44,8 +44,15 @@ from lib.sys.display.epd_3in97 import (
     BORDER_WAVEFORM, BORDER_NORMAL, BORDER_PARTIAL,
     WRITE_RAM_BW, WRITE_RAM_RED,
     DISPLAY_UPDATE_CTRL2, MASTER_ACTIVATION,
+    DATA_ENTRY_MODE, ENTRY_X_INC_Y_DEC,
     WAVEFORM_FULL, WAVEFORM_PARTIAL,
+    SET_RAM_X_RANGE, SET_RAM_Y_RANGE,
+    SET_RAM_X_CURSOR, SET_RAM_Y_CURSOR,
 )
+
+# DATA_ENTRY_MODE value for partial refresh (matches SSD1677 post-reset default).
+# The C reference does a hardware reset before partial, which sets this implicitly.
+ENTRY_X_INC_Y_INC = 0x03
 
 # Hardware panel geometry (landscape, as wired)
 HW_WIDTH = 800
@@ -160,6 +167,21 @@ class EPD_3in97_lvgl(EPD_3in97):
         # Extract portrait pixel data (skip I1 CLUT header)
         portrait_data = bytes(data_view[I1_CLUT_SIZE:I1_CLUT_SIZE + pixel_size])
 
+        # Fix sub-byte alignment: the I1 rotation writes starting at
+        # bit 0 of the destination byte, but if area.y1 isn't byte-
+        # aligned the content should start at bit (area.y1 % 8).
+        # Padding the source with white rows shifts the output to the
+        # correct sub-byte position.
+        bit_offset = area.y1 % 8
+        if bit_offset > 0:
+            pad_bytes = bit_offset * src_stride
+            padded = bytearray(pad_bytes + pixel_size)
+            for i in range(pad_bytes):
+                padded[i] = 0xFF  # white padding
+            padded[pad_bytes:] = portrait_data
+            portrait_data = bytes(padded)
+            h += bit_offset
+
         # Rotation output placement in shadow:
         # rotate90 maps src(x,y) → dst(y, src_width-1-x)
         # Output row 0 = portrait x = x1 + w - 1 = x2
@@ -210,32 +232,46 @@ class EPD_3in97_lvgl(EPD_3in97):
     def _display_partial(self, col_start, col_end, row_start, row_end):
         """Windowed partial refresh: push only the dirty region.
 
+        The full display with DATA_ENTRY_MODE Y_DEC maps shadow rows
+        to RAM Y addresses as: RAM_Y = HW_HEIGHT - shadow_row.
+        The partial must target those same RAM Y addresses so the
+        updated pixels land at the correct display positions.
+
+        With Y_DEC and cursor at the high RAM Y, the controller
+        decrements Y for each row written. Streaming shadow rows
+        in ascending order (low shadow_row first = high RAM_Y first)
+        naturally aligns with this decrement.
+
         Args:
             col_start, col_end: byte columns [col_start, col_end)
-            row_start, row_end: pixel rows [row_start, row_end)
+            row_start, row_end: shadow rows [row_start, row_end)
         """
         x1_px = col_start * 8
         x2_px = col_end * 8 - 1
-        y1 = row_start
-        y2 = row_end - 1
         col_bytes = col_end - col_start
+
+        # Map shadow rows → RAM Y addresses (matching full display)
+        # Full display Y_DEC sequence: shadow[k] → RAM Y = HW_HEIGHT - k
+        ram_y_high = HW_HEIGHT - row_start       # shadow low → RAM high
+        ram_y_low = HW_HEIGHT - (row_end - 1)    # shadow high → RAM low
+
 
         self._wait_busy(initial_ms=0)
 
-        # Border waveform for partial
         self._send_command(BORDER_WAVEFORM)
         self._send_data(BORDER_PARTIAL)
 
-        # Set RAM window — match init pattern (Y high first, cursor at low)
-        self._set_window(x1_px, y2, x2_px, y1)
-        self._set_cursor(x1_px, y1)
+        # Window and cursor using mapped RAM Y coordinates
+        self._set_window(x1_px, ram_y_high, x2_px, ram_y_low)
+        self._set_cursor(x1_px, ram_y_high)
 
-        # Stream dirty region ascending (matches full refresh linear order)
+        # Stream shadow rows ascending — Y_DEC maps each to the
+        # correct descending RAM Y position
         self._send_command(WRITE_RAM_BW)
         mv = memoryview(self._shadow)
         self.dc.value(1)
         self.cs.value(0)
-        for row in range(y1, y2 + 1):
+        for row in range(row_start, row_end):
             offset = row * HW_STRIDE + col_start
             self.spi.write(mv[offset:offset + col_bytes])
         self.cs.value(1)

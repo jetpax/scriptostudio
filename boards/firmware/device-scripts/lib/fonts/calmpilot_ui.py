@@ -22,6 +22,7 @@ Icon codepoint reference:
 
 """
 import lvgl as lv
+import time
 from lib.sys.display.display_manager import get_display
 
 # ── Display init ──
@@ -39,9 +40,10 @@ import fs_driver
 fs_drv = lv.fs_drv_t()
 fs_driver.fs_register(fs_drv, 'A')
 
-# ── Load custom Tabler icon fonts ──
+# ── Load custom fonts ──
 tabler48 = lv.binfont_create("A:/lib/fonts/tabler48.bin")
-tabler36 = lv.binfont_create("A:/lib/fonts/tabler36.bin")
+gillsans28 = lv.binfont_create("A:/lib/fonts/gillsans28.bin")
+gillsans36 = lv.binfont_create("A:/lib/fonts/gillsans36.bin")
 
 # ── Layout constants ──
 W = 480
@@ -49,6 +51,23 @@ H = 800
 PAD = 20
 STATUS_H = 80
 NAV_H = 80
+
+# ── Time helper ──
+def _get_local_time():
+    """Get local time tuple, applying timezone offset from settings."""
+    try:
+        from lib.sys import settings
+        tz = settings.get('ntp.tz_offset', 0.0)
+    except:
+        tz = 0.0
+    utc_secs = time.mktime(time.gmtime())
+    local_secs = utc_secs + int(tz * 3600)
+    return time.localtime(local_secs)
+
+def _fmt_time():
+    """Return 'HH:MM' string in local time."""
+    t = _get_local_time()
+    return f"{t[3]:02d}:{t[4]:02d}"
 
 # ═══════════════════════════════════════
 # STATUS BAR
@@ -61,45 +80,38 @@ status.set_style_border_width(0, 0)
 status.set_style_radius(0, 0)
 status.set_scrollbar_mode(lv.SCROLLBAR_MODE.OFF)
 
-# Carrier name
-carrier = lv.label(status)
-carrier.set_text("T-Mobile")
-carrier.set_style_text_font(lv.font_montserrat_20, 0)
-carrier.set_style_text_color(lv.color_black(), 0)
-carrier.align(lv.ALIGN.LEFT_MID, PAD, 0)
+# Time (left) — wired to real clock, replaces carrier
+time_lbl = lv.label(status)
+time_lbl.set_text(_fmt_time())
+time_lbl.set_style_text_font(gillsans36, 0)
+time_lbl.set_style_text_color(lv.color_black(), 0)
+time_lbl.align(lv.ALIGN.LEFT_MID, PAD, 0)
 
 # Robot icon (Tabler)
 robot = lv.label(status)
 robot.set_text("\uf00b")
-robot.set_style_text_font(tabler36, 0)
+robot.set_style_text_font(tabler48, 0)
 robot.set_style_text_color(lv.color_black(), 0)
-robot.align_to(carrier, lv.ALIGN.OUT_RIGHT_MID, 12, 0)
+robot.align_to(time_lbl, lv.ALIGN.OUT_RIGHT_MID, 12, 0)
 
-# Time (center)
-time_lbl = lv.label(status)
-time_lbl.set_text("13:29")
-time_lbl.set_style_text_font(lv.font_montserrat_24, 0)
-time_lbl.set_style_text_color(lv.color_black(), 0)
-time_lbl.align(lv.ALIGN.CENTER, 0, 0)
-
-# Battery icon (Tabler, far right)
+# Battery icon (Tabler, far right) — battery-4 (nearly full)
 batt = lv.label(status)
-batt.set_text("\uea31")  # battery-3 (75%)
-batt.set_style_text_font(tabler36, 0)
+batt.set_text("\uea32")  # battery-4 (100%)
+batt.set_style_text_font(tabler48, 0)
 batt.set_style_text_color(lv.color_black(), 0)
 batt.align(lv.ALIGN.RIGHT_MID, -PAD, 0)
 
 # WiFi icon (Tabler, left of battery)
 wifi = lv.label(status)
 wifi.set_text("\ueb52")
-wifi.set_style_text_font(tabler36, 0)
+wifi.set_style_text_font(tabler48, 0)
 wifi.set_style_text_color(lv.color_black(), 0)
 wifi.align_to(batt, lv.ALIGN.OUT_LEFT_MID, -10, 0)
 
 # Signal bars (Tabler, left of WiFi)
 signal = lv.label(status)
 signal.set_text("\ueccb")
-signal.set_style_text_font(tabler36, 0)
+signal.set_style_text_font(tabler48, 0)
 signal.set_style_text_color(lv.color_black(), 0)
 signal.align_to(wifi, lv.ALIGN.OUT_LEFT_MID, -10, 0)
 
@@ -165,5 +177,27 @@ for i, sym in enumerate(icons):
     ic.set_style_text_color(lv.color_black(), 0)
     ic.align(lv.ALIGN.CENTER, (i - 2) * spacing, 0)
 
-# ── Push to ePaper ──
-epd.lv_refresh()
+# ═══════════════════════════════════════
+# INITIAL FULL REFRESH
+# ═══════════════════════════════════════
+print(f"[UI] Initial render, time: {_fmt_time()}")
+epd.lv_refresh(full=True)
+
+# ═══════════════════════════════════════
+# CLOCK UPDATE LOOP (partial refresh)
+# ═══════════════════════════════════════
+print("[UI] Starting clock loop (Ctrl-C to stop)")
+last_time = _fmt_time()
+try:
+    while True:
+        time.sleep(10)  # Check every 10s
+        now = _fmt_time()
+        if now != last_time:
+            time_lbl.set_text(now)
+            t0 = time.ticks_ms()
+            epd.lv_refresh()  # partial — only the time label area
+            t1 = time.ticks_ms()
+            print(f"[UI] {last_time} -> {now} ({time.ticks_diff(t1, t0)}ms)")
+            last_time = now
+except KeyboardInterrupt:
+    print("[UI] Clock stopped")
