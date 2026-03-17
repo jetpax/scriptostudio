@@ -2,10 +2,15 @@
 LVGL backend for the EPD 3.97" (800×480) e-Paper display.
 
 CalmPilot portrait orientation: LVGL renders in portrait (480×800).
-The flush callback calls lv_draw_sw_rotate() (C-level, patched for I1)
-to rotate the full frame 270° CW into the 800×480 hardware layout.
+The flush callback rotates each dirty band directly into the shadow
+buffer using lv_draw_sw_rotate() (C-level, patched for I1 — no
+memzero, explicit set/clear, safe for sub-region writes).
 
-Rendering is demand-driven — call lv_refresh() to render and push.
+Supports both full and partial (windowed) refresh:
+  - lv_refresh()          → partial by default (fast, no flash)
+  - lv_refresh(full=True) → full waveform (clears ghosting)
+
+First refresh is always full to establish the EPD baseline.
 
 Usage:
 
@@ -13,22 +18,25 @@ import lvgl as lv
 from lib.sys.display.display_manager import get_display
 
 epd = get_display()
-
 epd.init()
 epd.lvgl_init()
 
-import lvgl as lv
 scr = lv.screen_active()
-scr = lv.screen_active()
-scr.clean()  # removes all children (old labels etc.)
+scr.clean()
 scr.set_style_bg_color(lv.color_white(), 0)
 label = lv.label(scr)
 label.set_text("Hello World!")
 label.set_style_text_color(lv.color_black(), 0)
-label.set_style_text_font(lv.font_montserrat_48, 0)  # 48px
+label.set_style_text_font(lv.font_montserrat_48, 0)
 label.align(lv.ALIGN.CENTER, 0, -40)
-epd.lv_refresh()
 
+# First call: full refresh (establishes baseline)
+epd.lv_refresh(full=True)
+
+# Subsequent calls: partial (only changed pixels update)
+import time; time.sleep(5)
+label.set_text("Updated!")
+epd.lv_refresh()  # fast, no flash
 """
 
 from lib.sys.display.epd_3in97 import EPD_3in97
@@ -45,6 +53,9 @@ LV_STRIDE = LV_WIDTH // 8  # 60 bytes per row
 
 BUF_SIZE_MONO = HW_STRIDE * HW_HEIGHT  # 48000 bytes
 
+# Band buffer: 80 rows × 60 bytes/row = 4800 bytes (saves 43KB vs full frame)
+BAND_ROWS = 80
+
 # I1 CLUT: 2 palette entries × 4 bytes (ARGB8888) = 8 bytes
 I1_CLUT_SIZE = 8
 
@@ -52,21 +63,36 @@ I1_CLUT_SIZE = 8
 class EPD_3in97_lvgl(EPD_3in97):
     """EPD driver with LVGL integration (portrait via C rotation).
 
-    LVGL renders at 480×800 in FULL mode. The flush callback uses
-    lv_draw_sw_rotate() (patched for I1 format) to rotate the full
-    frame 270° CW into a landscape shadow buffer (800×480).
+    Uses PARTIAL render mode with an 80-row band buffer. LVGL only
+    renders dirty regions. Each band is rotated directly into the
+    correct position in the landscape shadow buffer (no memzero in C).
+
+    The flush callback tracks the dirty bounding box in hardware
+    coordinates. refresh() pushes only the dirty window via RAM
+    windowing commands for fast partial updates.
     """
 
     def __init__(self, spi, cs, dc, rst, busy):
         super().__init__(spi, cs, dc, rst, busy)
         self._lv = None
-        self._shadow = None
-        self._dirty = False
+        self._shadow = None      # Current frame (rotated hw layout)
         self._baseline_set = False
         self.disp_drv = None
+        # Dirty rect accumulators (hw pixel coords)
+        self._dirty_x1 = HW_WIDTH
+        self._dirty_x2 = 0
+        self._dirty_y1 = HW_HEIGHT
+        self._dirty_y2 = 0
+
+    def _reset_dirty(self):
+        """Reset dirty rect accumulators."""
+        self._dirty_x1 = HW_WIDTH
+        self._dirty_x2 = 0
+        self._dirty_y1 = HW_HEIGHT
+        self._dirty_y2 = 0
 
     def lvgl_init(self):
-        """Initialize LVGL display driver with C-level I1 rotation."""
+        """Initialize LVGL display driver with band-based partial rendering."""
         import lvgl as lv
         self._lv = lv
 
@@ -75,11 +101,10 @@ class EPD_3in97_lvgl(EPD_3in97):
 
         # Shadow buffer in HARDWARE layout (800×480, landscape)
         self._shadow = bytearray(BUF_SIZE_MONO)
-        self._dirty = False
-
-        # Fill shadow with white (0xFF = white in ePaper)
+        # Fill with white (0xFF = white in ePaper)
         for i in range(BUF_SIZE_MONO):
             self._shadow[i] = 0xFF
+        self._reset_dirty()
 
         # Reuse existing LVGL display if present
         existing = lv.display_get_default()
@@ -90,14 +115,14 @@ class EPD_3in97_lvgl(EPD_3in97):
 
         color_format = lv.COLOR_FORMAT.I1
 
-        # Full-frame draw buffer (portrait: 480×800)
-        draw_buf = lv.draw_buf_create(LV_WIDTH, LV_HEIGHT, color_format, 0)
+        # Band buffer (80 rows, saves 43KB vs full frame)
+        draw_buf = lv.draw_buf_create(LV_WIDTH, BAND_ROWS, color_format, 0)
 
         # Create LVGL display in portrait (480×800)
         self.disp_drv = lv.display_create(LV_WIDTH, LV_HEIGHT)
         self.disp_drv.set_color_format(color_format)
         self.disp_drv.set_draw_buffers(draw_buf, None)
-        self.disp_drv.set_render_mode(lv.DISPLAY_RENDER_MODE.FULL)
+        self.disp_drv.set_render_mode(lv.DISPLAY_RENDER_MODE.PARTIAL)
         self.disp_drv.set_flush_cb(self._flush_cb)
 
         # White background
@@ -105,86 +130,153 @@ class EPD_3in97_lvgl(EPD_3in97):
         if scr:
             scr.set_style_bg_color(lv.color_white(), 0)
 
-        print("[EPD] LVGL init OK (I1 portrait 480x800, FULL mode, C rotation)")
+        print("[EPD] LVGL init OK (I1 portrait 480x800, PARTIAL mode, band=80)")
 
     def _flush_cb(self, disp_drv, area, color_p):
-        """LVGL flush callback — rotate portrait frame to landscape via C.
+        """LVGL flush callback — rotate band directly into shadow.
 
-        Calls lv_draw_sw_rotate() with ROTATION_270 and COLOR_FORMAT_I1.
-        The I1 rotation was added to LVGL's lv_draw_sw_utils.c.
+        Each band is placed at the correct position in the shadow via
+        memoryview offset + dst_stride. The patched C rotation (no
+        memzero, explicit set/clear) preserves adjacent columns.
+
+        Portrait → hardware coordinate mapping (90° CW):
+          hw_x (column)   = portrait_y
+          shadow_row      = (LV_WIDTH - 1) - portrait_x
         """
         lv = self._lv
         w = area.x2 - area.x1 + 1
         h = area.y2 - area.y1 + 1
 
-        src_stride = w // 8
-        if w % 8:
-            src_stride += 1
-
+        src_stride = (w + 7) // 8
         pixel_size = src_stride * h
         data_view = color_p.__dereference__(I1_CLUT_SIZE + pixel_size)
 
         # Extract portrait pixel data (skip I1 CLUT header)
         portrait_data = bytes(data_view[I1_CLUT_SIZE:I1_CLUT_SIZE + pixel_size])
 
-        # C-level rotation: 90° CW, portrait (480×800) → landscape (800×480)
-        lv.draw_sw_rotate(portrait_data, self._shadow,
+        # Rotation output placement in shadow:
+        # rotate90 maps src(x,y) → dst(y, src_width-1-x)
+        # Output row 0 = portrait x = x1 + w - 1 = x2
+        # Shadow row for portrait x = (LV_WIDTH - 1) - x
+        # So output row 0 → shadow row (LV_WIDTH - 1) - x2
+        hw_col_byte = area.y1 // 8
+        shadow_row_start = (LV_WIDTH - 1) - area.x2
+        dst_offset = shadow_row_start * HW_STRIDE + hw_col_byte
+
+        dst = memoryview(self._shadow)[dst_offset:]
+
+        lv.draw_sw_rotate(portrait_data, dst,
                           w, h, src_stride, HW_STRIDE,
                           lv.DISPLAY_ROTATION._90,
                           lv.COLOR_FORMAT.I1)
 
-        self._dirty = True
+        # Accumulate dirty rect (hw pixel coordinates)
+        # Portrait y → hw column (x)
+        # Portrait x → shadow row = (LV_WIDTH - 1) - portrait_x
+        hw_row_start = (LV_WIDTH - 1) - area.x2
+        hw_row_end = LV_WIDTH - area.x1
+        if area.y1 < self._dirty_x1:
+            self._dirty_x1 = area.y1
+        if area.y2 + 1 > self._dirty_x2:
+            self._dirty_x2 = area.y2 + 1
+        if hw_row_start < self._dirty_y1:
+            self._dirty_y1 = hw_row_start
+        if hw_row_end > self._dirty_y2:
+            self._dirty_y2 = hw_row_end
+
         disp_drv.flush_ready()
 
-    def _display_nowait(self, buf):
-        """Push framebuffer and trigger refresh without blocking."""
+    def _display_full(self):
+        """Full refresh: write both RAMs (establishes baseline)."""
         self._wait_busy(initial_ms=0)
+        self._send_command(0x3C)  # Border waveform
+        self._send_data(0x01)
+        self._set_window(0, HW_HEIGHT - 1, HW_WIDTH - 1, 0)
+        self._set_cursor(0, 0)
         self._send_command(0x24)
-        self._send_data_buf(buf)
+        self._send_data_buf(self._shadow)
         self._send_command(0x26)
-        self._send_data_buf(buf)
+        self._send_data_buf(self._shadow)
         self._send_command(0x22)
         self._send_data(0xF7)
+        self._send_command(0x20)
+
+    def _display_partial(self, col_start, col_end, row_start, row_end):
+        """Windowed partial refresh: push only the dirty region.
+
+        Args:
+            col_start, col_end: byte columns [col_start, col_end)
+            row_start, row_end: pixel rows [row_start, row_end)
+        """
+        x1_px = col_start * 8
+        x2_px = col_end * 8 - 1
+        y1 = row_start
+        y2 = row_end - 1
+        col_bytes = col_end - col_start
+
+        self._wait_busy(initial_ms=0)
+
+        # Border waveform for partial
+        self._send_command(0x3C)
+        self._send_data(0x80)
+
+        # Set RAM window — match init pattern (Y high first, cursor at low)
+        self._set_window(x1_px, y2, x2_px, y1)
+        self._set_cursor(x1_px, y1)
+
+        # Stream dirty region ascending (matches full refresh linear order)
+        self._send_command(0x24)
+        mv = memoryview(self._shadow)
+        self.dc.value(1)
+        self.cs.value(0)
+        for row in range(y1, y2 + 1):
+            offset = row * HW_STRIDE + col_start
+            self.spi.write(mv[offset:offset + col_bytes])
+        self.cs.value(1)
+
+        # Partial waveform trigger
+        self._send_command(0x22)
+        self._send_data(0xFF)
         self._send_command(0x20)
 
     def refresh(self, full=True):
         """Push shadow buffer to ePaper.
 
         Args:
-            full: True = full waveform (both RAMs, ~2-4s, clears ghosting)
-                  False = partial waveform (0x24 only, ~300-500ms, only
-                  changed pixels drive ink). First call is always full
-                  to establish the baseline in RAM 0x26.
+            full: True = full waveform (both RAMs, ~2-4s)
+                  False = partial waveform (windowed, ~200-500ms)
         """
-        if not self._dirty:
-            return
-
         if full or not self._baseline_set:
-            # Full refresh: write both RAMs (establishes baseline for partials)
-            self._display_nowait(self._shadow)
+            self._display_full()
             self._baseline_set = True
         else:
-            # Partial refresh: write 0x24 only, partial waveform (0xFF)
-            # Controller diffs 0x24 vs 0x26 — only changed pixels refresh
-            self._wait_busy(initial_ms=0)
-            self._send_command(0x3C)  # Border waveform for partial
-            self._send_data(0x80)
-            self._send_command(0x24)
-            self._send_data_buf(self._shadow)
-            self._send_command(0x22)
-            self._send_data(0xFF)  # Partial waveform
-            self._send_command(0x20)
-        self._dirty = False
+            # Check if anything is dirty
+            if self._dirty_x1 >= self._dirty_x2:
+                return
+            # Byte-align column range
+            col_start = self._dirty_x1 // 8
+            col_end = (self._dirty_x2 + 7) // 8
+            if col_end > HW_STRIDE:
+                col_end = HW_STRIDE
+            row_start = self._dirty_y1
+            row_end = self._dirty_y2
+            if row_end > HW_HEIGHT:
+                row_end = HW_HEIGHT
+            self._display_partial(col_start, col_end, row_start, row_end)
 
-    def lv_refresh(self, partial=False):
+        self._reset_dirty()
+
+    def lv_refresh(self, full=False):
         """Render LVGL and push to ePaper.
 
         Args:
-            partial: True = partial waveform (~300-500ms, less flicker)
-                     False = full waveform (~2-4s, clears ghosting)
+            full: True = full waveform (de-ghosting)
+                  False = partial waveform (fast, default)
         """
         lv = self._lv
         if lv:
             lv.tick_inc(100)
             lv.refr_now(self.disp_drv)
-        self.refresh(full=not partial)
+        if not self._baseline_set:
+            full = True
+        self.refresh(full=full)
