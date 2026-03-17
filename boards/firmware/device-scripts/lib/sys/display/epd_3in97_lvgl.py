@@ -50,9 +50,6 @@ from lib.sys.display.epd_3in97 import (
     SET_RAM_X_CURSOR, SET_RAM_Y_CURSOR,
 )
 
-# DATA_ENTRY_MODE value for partial refresh (matches SSD1677 post-reset default).
-# The C reference does a hardware reset before partial, which sets this implicitly.
-ENTRY_X_INC_Y_INC = 0x03
 
 # Hardware panel geometry (landscape, as wired)
 HW_WIDTH = 800
@@ -230,56 +227,41 @@ class EPD_3in97_lvgl(EPD_3in97):
         self._send_command(MASTER_ACTIVATION)
 
     def _display_partial(self, col_start, col_end, row_start, row_end):
-        """Windowed partial refresh: push only the dirty region.
+        """Partial refresh: full-buffer differential.
 
-        The full display with DATA_ENTRY_MODE Y_DEC maps shadow rows
-        to RAM Y addresses as: RAM_Y = HW_HEIGHT - shadow_row.
-        The partial must target those same RAM Y addresses so the
-        updated pixels land at the correct display positions.
-
-        With Y_DEC and cursor at the high RAM Y, the controller
-        decrements Y for each row written. Streaming shadow rows
-        in ascending order (low shadow_row first = high RAM_Y first)
-        naturally aligns with this decrement.
-
-        Args:
-            col_start, col_end: byte columns [col_start, col_end)
-            row_start, row_end: shadow rows [row_start, row_end)
+        Writes full shadow to BW, compares RED vs BW, syncs RED after.
+        Pattern from papyrix-reader displayBuffer() single-buffer mode.
+        Total time: ~650ms (22ms BW + 400ms waveform + 100ms margin + 22ms RED)
         """
-        x1_px = col_start * 8
-        x2_px = col_end * 8 - 1
-        col_bytes = col_end - col_start
-
-        # Map shadow rows → RAM Y addresses (matching full display)
-        # Full display Y_DEC sequence: shadow[k] → RAM Y = HW_HEIGHT - k
-        ram_y_high = HW_HEIGHT - row_start       # shadow low → RAM high
-        ram_y_low = HW_HEIGHT - (row_end - 1)    # shadow high → RAM low
-
 
         self._wait_busy(initial_ms=0)
 
+        # Full window
+        self._set_window(0, HW_HEIGHT - 1, HW_WIDTH - 1, 0)
+        self._set_cursor(0, 0)
+
+        # Write full shadow to BW
+        self._send_command(WRITE_RAM_BW)
+        self._send_data_buf(self._shadow)
+
+        # Display Update Control 1: compare RED vs BW
+        self._send_command(0x21)
+        self._send_data(0x00)
+
+        # Border + partial waveform (0xFF: self-manages power on/off)
         self._send_command(BORDER_WAVEFORM)
         self._send_data(BORDER_PARTIAL)
-
-        # Window and cursor using mapped RAM Y coordinates
-        self._set_window(x1_px, ram_y_high, x2_px, ram_y_low)
-        self._set_cursor(x1_px, ram_y_high)
-
-        # Stream shadow rows ascending — Y_DEC maps each to the
-        # correct descending RAM Y position
-        self._send_command(WRITE_RAM_BW)
-        mv = memoryview(self._shadow)
-        self.dc.value(1)
-        self.cs.value(0)
-        for row in range(row_start, row_end):
-            offset = row * HW_STRIDE + col_start
-            self.spi.write(mv[offset:offset + col_bytes])
-        self.cs.value(1)
-
-        # Partial waveform trigger
         self._send_command(DISPLAY_UPDATE_CTRL2)
         self._send_data(WAVEFORM_PARTIAL)
         self._send_command(MASTER_ACTIVATION)
+
+        # Sync RED = current frame for next differential comparison
+        self._wait_busy(initial_ms=100)
+        self._set_window(0, HW_HEIGHT - 1, HW_WIDTH - 1, 0)
+        self._set_cursor(0, 0)
+        self._send_command(WRITE_RAM_RED)
+        self._send_data_buf(self._shadow)
+
 
     def refresh(self, full=True):
         """Push shadow buffer to ePaper.
