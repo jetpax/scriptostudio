@@ -4,6 +4,8 @@ EPD 3.97" (800×480) e-Paper SPI driver — MicroPython.
 Ported from Waveshare epaper_port.c (ESP-IDF C driver).
 Uses board manifest for pin configuration.
 
+Controller: SSD1677 (Solomon Systech)
+
 Usage:
     from lib.sys.display.epd_3in97 import EPD_3in97
 
@@ -32,9 +34,52 @@ HEIGHT = 480
 BUF_SIZE_MONO = (WIDTH // 8) * HEIGHT   # 48000
 BUF_SIZE_4GRAY = BUF_SIZE_MONO * 2      # 96000
 
+# ── SSD1677 Register Definitions ──
+# Reference: SSD1677 datasheet (Solomon Systech)
+
+# Control registers
+DRIVER_OUTPUT_CONTROL  = 0x01  # Gate line count + scan direction
+BOOSTER_SOFT_START     = 0x0C  # Charge pump phase timing
+DEEP_SLEEP_MODE        = 0x10  # Enter deep sleep (0x01 = deep sleep mode 1)
+DATA_ENTRY_MODE        = 0x11  # Address counter direction (X/Y inc/dec)
+SW_RESET               = 0x12  # Software reset — restores all defaults
+TEMP_SENSOR_CONTROL    = 0x18  # Temperature sensor selection (0x80 = internal)
+TEMP_SENSOR_WRITE      = 0x1A  # Write temperature value (fast/4gray speed)
+MASTER_ACTIVATION      = 0x20  # Trigger display update sequence
+DISPLAY_UPDATE_CTRL2   = 0x22  # Select waveform sequence (see WAVEFORM_*)
+WRITE_RAM_BW           = 0x24  # Write to B/W RAM (new image)
+WRITE_RAM_RED          = 0x26  # Write to RED/OLD RAM (baseline image)
+BORDER_WAVEFORM        = 0x3C  # Border waveform control
+SET_RAM_X_RANGE        = 0x44  # RAM X start/end address (pixel units)
+SET_RAM_Y_RANGE        = 0x45  # RAM Y start/end address (pixel units)
+SET_RAM_X_CURSOR       = 0x4E  # RAM X address counter
+SET_RAM_Y_CURSOR       = 0x4F  # RAM Y address counter
+
+# Display Update Control 2 waveform sequences (0x22 data byte)
+# Each bit enables a pipeline stage: LUT load, clock, analog, display, etc.
+WAVEFORM_FULL          = 0xF7  # Full: all stages, both RAMs, slowest/cleanest
+WAVEFORM_FAST          = 0xD7  # Fast: skip some stages (~1.5s, some ghosting)
+WAVEFORM_PARTIAL       = 0xFF  # Partial: drives only changed pixels (RAM XOR)
+
+# Data Entry Mode values (0x11 data byte)
+# Bit 0: X direction (0=dec, 1=inc)
+# Bit 1: Y direction (0=dec, 1=inc)
+ENTRY_X_INC_Y_DEC     = 0x01  # X increment, Y decrement (default for portrait)
+
+# Border Waveform values (0x3C data byte)
+BORDER_NORMAL          = 0x01  # Normal — border follows LUT waveform
+BORDER_PARTIAL         = 0x80  # Partial — keeps border stable (no flash)
+
+# Driver Output Control scan direction
+SCAN_DIRECTION         = 0x02  # Interlace scan
+
+# Temperature presets (0x1A data byte)
+TEMP_FAST              = 0x6A  # Fast refresh timing preset
+TEMP_4GRAY             = 0x5A  # 4-gray level timing preset
+
 
 class EPD_3in97:
-    """Driver for the 3.97" 800×480 B/W e-Paper display."""
+    """Driver for the 3.97" 800×480 B/W e-Paper display (SSD1677)."""
 
     def __init__(self, spi, cs, dc, rst, busy):
         """
@@ -101,16 +146,14 @@ class EPD_3in97:
         time.sleep_ms(50)
 
     def _set_window(self, x_start, y_start, x_end, y_end):
-        """Set the RAM X/Y window and cursor position."""
-        # RAM-X start/end (pixel units, 16-bit)
-        self._send_command(0x44)
+        """Set the RAM X/Y window."""
+        self._send_command(SET_RAM_X_RANGE)
         self._send_data(x_start & 0xFF)
         self._send_data((x_start >> 8) & 0xFF)
         self._send_data(x_end & 0xFF)
         self._send_data((x_end >> 8) & 0xFF)
 
-        # RAM-Y start/end (pixel units, 16-bit)
-        self._send_command(0x45)
+        self._send_command(SET_RAM_Y_RANGE)
         self._send_data(y_start & 0xFF)
         self._send_data((y_start >> 8) & 0xFF)
         self._send_data(y_end & 0xFF)
@@ -118,10 +161,10 @@ class EPD_3in97:
 
     def _set_cursor(self, x, y):
         """Set RAM X/Y cursor position."""
-        self._send_command(0x4E)
+        self._send_command(SET_RAM_X_CURSOR)
         self._send_data(x & 0xFF)
         self._send_data((x >> 8) & 0xFF)
-        self._send_command(0x4F)
+        self._send_command(SET_RAM_Y_CURSOR)
         self._send_data(y & 0xFF)
         self._send_data((y >> 8) & 0xFF)
 
@@ -129,23 +172,23 @@ class EPD_3in97:
 
     def _turn_on_display(self):
         """Full refresh (slowest, best quality)."""
-        self._send_command(0x22)
-        self._send_data(0xF7)
-        self._send_command(0x20)
+        self._send_command(DISPLAY_UPDATE_CTRL2)
+        self._send_data(WAVEFORM_FULL)
+        self._send_command(MASTER_ACTIVATION)
         self._wait_busy()
 
     def _turn_on_display_fast(self):
         """Fast refresh (~1.5s)."""
-        self._send_command(0x22)
-        self._send_data(0xD7)
-        self._send_command(0x20)
+        self._send_command(DISPLAY_UPDATE_CTRL2)
+        self._send_data(WAVEFORM_FAST)
+        self._send_command(MASTER_ACTIVATION)
         self._wait_busy()
 
     def _turn_on_display_partial(self):
         """Partial refresh (fastest, some ghosting)."""
-        self._send_command(0x22)
-        self._send_data(0xFF)
-        self._send_command(0x20)
+        self._send_command(DISPLAY_UPDATE_CTRL2)
+        self._send_data(WAVEFORM_PARTIAL)
+        self._send_command(MASTER_ACTIVATION)
         self._wait_busy(5)
 
     # ── Initialization modes ──
@@ -156,31 +199,26 @@ class EPD_3in97:
         self._reset()
         self._wait_busy()
 
-        self._send_command(0x12)  # SWRESET
+        self._send_command(SW_RESET)
         self._wait_busy()
 
-        # Temperature sensor internal
-        self._send_command(0x18)
-        self._send_data(0x80)
+        self._send_command(TEMP_SENSOR_CONTROL)
+        self._send_data(0x80)  # Use internal temperature sensor
 
-        # Booster soft start
-        self._send_command(0x0C)
+        self._send_command(BOOSTER_SOFT_START)
         for b in (0xAE, 0xC7, 0xC3, 0xC0, 0x80):
             self._send_data(b)
 
-        # Driver output control
-        self._send_command(0x01)
+        self._send_command(DRIVER_OUTPUT_CONTROL)
         self._send_data((HEIGHT - 1) & 0xFF)
         self._send_data(((HEIGHT - 1) >> 8) & 0xFF)
-        self._send_data(0x02)
+        self._send_data(SCAN_DIRECTION)
 
-        # Border waveform
-        self._send_command(0x3C)
-        self._send_data(0x01)
+        self._send_command(BORDER_WAVEFORM)
+        self._send_data(BORDER_NORMAL)
 
-        # Data entry mode: Y decrement, X increment
-        self._send_command(0x11)
-        self._send_data(0x01)
+        self._send_command(DATA_ENTRY_MODE)
+        self._send_data(ENTRY_X_INC_Y_DEC)
 
         # Window: full display
         self._set_window(0, HEIGHT - 1, WIDTH - 1, 0)
@@ -195,36 +233,32 @@ class EPD_3in97:
         self._reset()
         self._wait_busy()
 
-        self._send_command(0x12)  # SWRESET
+        self._send_command(SW_RESET)
         self._wait_busy()
 
-        # Booster soft start
-        self._send_command(0x0C)
+        self._send_command(BOOSTER_SOFT_START)
         for b in (0xAE, 0xC7, 0xC3, 0xC0, 0x80):
             self._send_data(b)
 
-        # Driver output control
-        self._send_command(0x01)
+        self._send_command(DRIVER_OUTPUT_CONTROL)
         self._send_data((HEIGHT - 1) & 0xFF)
         self._send_data(((HEIGHT - 1) >> 8) & 0xFF)
-        self._send_data(0x02)
+        self._send_data(SCAN_DIRECTION)
 
-        # Data entry mode
-        self._send_command(0x11)
-        self._send_data(0x01)
+        self._send_command(DATA_ENTRY_MODE)
+        self._send_data(ENTRY_X_INC_Y_DEC)
 
         # Window: full display
         self._set_window(0, HEIGHT - 1, WIDTH - 1, 0)
         self._set_cursor(0, 0)
         self._wait_busy()
 
-        # Border + fast mode
-        self._send_command(0x3C)
-        self._send_data(0x01)
-        self._send_command(0x18)
+        self._send_command(BORDER_WAVEFORM)
+        self._send_data(BORDER_NORMAL)
+        self._send_command(TEMP_SENSOR_CONTROL)
         self._send_data(0x80)
-        self._send_command(0x1A)
-        self._send_data(0x6A)
+        self._send_command(TEMP_SENSOR_WRITE)
+        self._send_data(TEMP_FAST)
 
         print("[EPD] init OK (fast refresh mode)")
 
@@ -234,31 +268,31 @@ class EPD_3in97:
         self._reset()
         self._wait_busy()
 
-        self._send_command(0x12)
+        self._send_command(SW_RESET)
         self._wait_busy()
 
-        self._send_command(0x0C)
+        self._send_command(BOOSTER_SOFT_START)
         for b in (0xAE, 0xC7, 0xC3, 0xC0, 0x80):
             self._send_data(b)
 
-        self._send_command(0x01)
+        self._send_command(DRIVER_OUTPUT_CONTROL)
         self._send_data((HEIGHT - 1) & 0xFF)
         self._send_data(((HEIGHT - 1) >> 8) & 0xFF)
-        self._send_data(0x02)
+        self._send_data(SCAN_DIRECTION)
 
-        self._send_command(0x11)
-        self._send_data(0x01)
+        self._send_command(DATA_ENTRY_MODE)
+        self._send_data(ENTRY_X_INC_Y_DEC)
 
         self._set_window(0, HEIGHT - 1, WIDTH - 1, 0)
         self._set_cursor(0, 0)
         self._wait_busy()
 
-        self._send_command(0x3C)
-        self._send_data(0x01)
-        self._send_command(0x18)
+        self._send_command(BORDER_WAVEFORM)
+        self._send_data(BORDER_NORMAL)
+        self._send_command(TEMP_SENSOR_CONTROL)
         self._send_data(0x80)
-        self._send_command(0x1A)
-        self._send_data(0x5A)
+        self._send_command(TEMP_SENSOR_WRITE)
+        self._send_data(TEMP_4GRAY)
 
         print("[EPD] init OK (4-gray mode)")
 
@@ -269,14 +303,14 @@ class EPD_3in97:
         w = WIDTH // 8
         row = bytes([color] * w)
 
-        self._send_command(0x24)
+        self._send_command(WRITE_RAM_BW)
         self.dc.value(1)
         self.cs.value(0)
         for _ in range(HEIGHT):
             self.spi.write(row)
         self.cs.value(1)
 
-        self._send_command(0x26)
+        self._send_command(WRITE_RAM_RED)
         self.dc.value(1)
         self.cs.value(0)
         for _ in range(HEIGHT):
@@ -288,18 +322,18 @@ class EPD_3in97:
     def display(self, buf):
         """Display a full framebuffer (48000 bytes, 1-bit mono).
 
-        Writes to both RAM channels (0x24 + 0x26) for clean base image.
+        Writes to both RAM channels for clean base image.
         Use this for initial/full display updates.
         """
-        self._send_command(0x24)
+        self._send_command(WRITE_RAM_BW)
         self._send_data_buf(buf)
-        self._send_command(0x26)
+        self._send_command(WRITE_RAM_RED)
         self._send_data_buf(buf)
         self._turn_on_display()
 
     def display_fast(self, buf):
         """Display with fast refresh (~1.5s). Call init_fast() first."""
-        self._send_command(0x24)
+        self._send_command(WRITE_RAM_BW)
         self._send_data_buf(buf)
         self._turn_on_display_fast()
 
@@ -319,34 +353,32 @@ class EPD_3in97:
         x_end -= 1
         y_end = y + h - 1
 
-        # No hardware reset needed — display is already initialized.
-        # Just configure border for partial mode.
-        self._send_command(0x3C)
-        self._send_data(0x80)
+        # Configure border for partial mode
+        self._send_command(BORDER_WAVEFORM)
+        self._send_data(BORDER_PARTIAL)
 
-        # Set partial window (pixel coordinates for X, row for Y)
-        self._send_command(0x44)
+        # Set partial window
+        self._send_command(SET_RAM_X_RANGE)
         self._send_data((x_start * 8) & 0xFF)
         self._send_data(((x_start * 8) >> 8) & 0xFF)
         self._send_data((x_end * 8) & 0xFF)
         self._send_data(((x_end * 8) >> 8) & 0xFF)
 
-        self._send_command(0x45)
+        self._send_command(SET_RAM_Y_RANGE)
         self._send_data(y_end & 0xFF)
         self._send_data((y_end >> 8) & 0xFF)
         self._send_data(y & 0xFF)
         self._send_data((y >> 8) & 0xFF)
 
-        # Set cursor
-        self._send_command(0x4E)
+        self._send_command(SET_RAM_X_CURSOR)
         self._send_data((x_start * 8) & 0xFF)
         self._send_data(((x_start * 8) >> 8) & 0xFF)
-        self._send_command(0x4F)
+        self._send_command(SET_RAM_Y_CURSOR)
         self._send_data(y & 0xFF)
         self._send_data((y >> 8) & 0xFF)
 
         # Write to RAM and refresh
-        self._send_command(0x24)
+        self._send_command(WRITE_RAM_BW)
         self._send_data_buf(buf)
         self._turn_on_display_partial()
 
@@ -354,7 +386,7 @@ class EPD_3in97:
 
     def sleep(self):
         """Enter deep sleep mode. Call init() to wake."""
-        self._send_command(0x10)
+        self._send_command(DEEP_SLEEP_MODE)
         self._send_data(0x01)
         time.sleep_ms(10)
         self.rst.value(0)

@@ -39,7 +39,13 @@ label.set_text("Updated!")
 epd.lv_refresh()  # fast, no flash
 """
 
-from lib.sys.display.epd_3in97 import EPD_3in97
+from lib.sys.display.epd_3in97 import (
+    EPD_3in97,
+    BORDER_WAVEFORM, BORDER_NORMAL, BORDER_PARTIAL,
+    WRITE_RAM_BW, WRITE_RAM_RED,
+    DISPLAY_UPDATE_CTRL2, MASTER_ACTIVATION,
+    WAVEFORM_FULL, WAVEFORM_PARTIAL,
+)
 
 # Hardware panel geometry (landscape, as wired)
 HW_WIDTH = 800
@@ -189,17 +195,17 @@ class EPD_3in97_lvgl(EPD_3in97):
     def _display_full(self):
         """Full refresh: write both RAMs (establishes baseline)."""
         self._wait_busy(initial_ms=0)
-        self._send_command(0x3C)  # Border waveform
-        self._send_data(0x01)
+        self._send_command(BORDER_WAVEFORM)
+        self._send_data(BORDER_NORMAL)
         self._set_window(0, HW_HEIGHT - 1, HW_WIDTH - 1, 0)
         self._set_cursor(0, 0)
-        self._send_command(0x24)
+        self._send_command(WRITE_RAM_BW)
         self._send_data_buf(self._shadow)
-        self._send_command(0x26)
+        self._send_command(WRITE_RAM_RED)
         self._send_data_buf(self._shadow)
-        self._send_command(0x22)
-        self._send_data(0xF7)
-        self._send_command(0x20)
+        self._send_command(DISPLAY_UPDATE_CTRL2)
+        self._send_data(WAVEFORM_FULL)
+        self._send_command(MASTER_ACTIVATION)
 
     def _display_partial(self, col_start, col_end, row_start, row_end):
         """Windowed partial refresh: push only the dirty region.
@@ -217,15 +223,15 @@ class EPD_3in97_lvgl(EPD_3in97):
         self._wait_busy(initial_ms=0)
 
         # Border waveform for partial
-        self._send_command(0x3C)
-        self._send_data(0x80)
+        self._send_command(BORDER_WAVEFORM)
+        self._send_data(BORDER_PARTIAL)
 
         # Set RAM window — match init pattern (Y high first, cursor at low)
         self._set_window(x1_px, y2, x2_px, y1)
         self._set_cursor(x1_px, y1)
 
         # Stream dirty region ascending (matches full refresh linear order)
-        self._send_command(0x24)
+        self._send_command(WRITE_RAM_BW)
         mv = memoryview(self._shadow)
         self.dc.value(1)
         self.cs.value(0)
@@ -235,9 +241,9 @@ class EPD_3in97_lvgl(EPD_3in97):
         self.cs.value(1)
 
         # Partial waveform trigger
-        self._send_command(0x22)
-        self._send_data(0xFF)
-        self._send_command(0x20)
+        self._send_command(DISPLAY_UPDATE_CTRL2)
+        self._send_data(WAVEFORM_PARTIAL)
+        self._send_command(MASTER_ACTIVATION)
 
     def refresh(self, full=True):
         """Push shadow buffer to ePaper.
