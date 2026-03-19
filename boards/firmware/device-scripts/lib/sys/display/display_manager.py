@@ -220,6 +220,7 @@ def _init_epd_display(board, disp):
         phase=0,
         sck=machine.Pin(spi_cfg.sclk, machine.Pin.OUT),
         mosi=machine.Pin(spi_cfg.mosi, machine.Pin.OUT),
+        miso=None,
     )
 
     gc.collect()
