@@ -199,8 +199,11 @@ async def system_root():
         def _watchdog_recovery(task_name):
             info = bg_tasks._tasks.get(task_name, {})
             if info.get("system", False):
-                # System tasks are victims of event loop starvation, not the cause
-                log("debug", f"Watchdog: '{task_name}' starved (system task, skipping)", source="taskwd")
+                # System tasks are victims of event loop starvation, not the cause.
+                # Re-feed the watchdog to prevent Tier 2 (KeyboardInterrupt) from
+                # killing whatever exec code is legitimately blocking the loop.
+                taskwatchdog.feed(task_name)
+                log("debug", f"Watchdog: '{task_name}' starved (system task, re-fed)", source="taskwd")
                 return
             log("warning", f"Watchdog: '{task_name}' stalled — killing it", source="taskwd")
             try:
