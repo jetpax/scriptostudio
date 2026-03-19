@@ -148,7 +148,7 @@ async def _runner(name, coro_func, *args):
 
     # Register with C watchdog if requested
     if wd_ms > 0 and _wd:
-        _wd.register(name, wd_ms)
+        _wd.register(name, wd_ms, is_system)
 
     try:
         while True:

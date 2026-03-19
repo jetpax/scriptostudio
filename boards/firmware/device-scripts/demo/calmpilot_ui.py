@@ -60,7 +60,7 @@ robot = lv.label(status)
 robot.set_text("\uf00b")
 robot.set_style_text_font(tabler48, 0)
 robot.set_style_text_color(lv.color_black(), 0)
-robot.align_to(time_lbl, lv.ALIGN.OUT_RIGHT_MID, 12, 0)
+robot.align_to(time_lbl, lv.ALIGN.OUT_RIGHT_MID, 16, 0)
 
 batt = lv.label(status)
 batt.set_text("\uea32")
