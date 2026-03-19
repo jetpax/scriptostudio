@@ -186,14 +186,37 @@ async def queue_pump():
                 log("warning", f"queue_pump(http): {e}", source="main")
         
         await asyncio.sleep_ms(10)
+        bg_tasks.feed("queue_pump")
 
 async def system_root():
     """Main async entry point - starts all background tasks"""
     log("info", "Starting background tasks...", source="main")
     
+    # Initialize task watchdog (C-native FreeRTOS monitor)
+    try:
+        import taskwatchdog
+
+        def _watchdog_recovery(task_name):
+            info = bg_tasks._tasks.get(task_name, {})
+            if info.get("system", False):
+                # System tasks are victims of event loop starvation, not the cause
+                log("debug", f"Watchdog: '{task_name}' starved (system task, skipping)", source="taskwd")
+                return
+            log("warning", f"Watchdog: '{task_name}' stalled — killing it", source="taskwd")
+            try:
+                bg_tasks.stop(task_name)
+            except RuntimeError:
+                # Can't cancel self — Tier 2 (KeyboardInterrupt) will handle it
+                log("debug", f"Watchdog: '{task_name}' can't cancel self, Tier 2 will escalate", source="taskwd")
+
+        taskwatchdog.set_recovery(_watchdog_recovery)
+        log("info", "Task watchdog initialized", source="main")
+    except ImportError:
+        log("debug", "taskwatchdog not available", source="main")
+    
     # Start system tasks (protected from Stop button)
-    bg_tasks.start("queue_pump", queue_pump, is_system=True)
-    log("debug", "queue_pump started (system)", source="main")
+    bg_tasks.start("queue_pump", queue_pump, is_system=True, watchdog_ms=5000)
+    log("debug", "queue_pump started (system, watchdog=5s)", source="main")
     
     log("info", f"Active tasks: {list(bg_tasks.list_tasks().keys())}", source="main")
     
@@ -284,6 +307,13 @@ async def main_async():
     
     
     # Display init moved to boot.py for earliest splash screen
+
+    # Start CalmOS display shell (blank notepad canvas for PFC agent)
+    try:
+        import lib.calmos as calmos
+        calmos.start()
+    except Exception as e:
+        log("warning", f"CalmOS skipped: {e}", source="main")
 
     # Mount SD card (mandatory if board supports it, silent fail if no card)
 

@@ -34,6 +34,12 @@ import asyncio
 import logging
 import webrepl_binary as webrepl
 
+# Import taskwatchdog at module level (top-level, not per-call)
+try:
+    import taskwatchdog as _wd
+except ImportError:
+    _wd = None
+
 # Setup logger for bg_tasks
 logger = logging.getLogger("bg_tasks")
 logger.handlers.clear()
@@ -53,7 +59,13 @@ def _log(level, msg):
 _tasks = {}
 
 
-def start(name, coro_func, *args, restart=False, is_system=False):
+def feed(name):
+    """Feed the watchdog for a named task. Call from within your task's loop."""
+    if _wd:
+        _wd.feed(name)
+
+
+def start(name, coro_func, *args, restart=False, is_system=False, watchdog_ms=0):
     """
     Start a named background task.
     
@@ -62,6 +74,7 @@ def start(name, coro_func, *args, restart=False, is_system=False):
     - args: arguments to pass to coro_func
     - restart: if True, cancel existing task first
     - is_system: if True, task is protected from stop_user_tasks()
+    - watchdog_ms: if > 0, register task with C watchdog (auto-fed by _runner)
     
     Returns True if started, False if already running (and restart=False)
     """
@@ -73,7 +86,7 @@ def start(name, coro_func, *args, restart=False, is_system=False):
                 return False
     
     # Store task info before creating task (so _runner can access is_system)
-    _tasks[name] = {"task": None, "state": "running", "system": is_system}
+    _tasks[name] = {"task": None, "state": "running", "system": is_system, "watchdog_ms": watchdog_ms}
     task = asyncio.create_task(_runner(name, coro_func, *args))
     _tasks[name]["task"] = task
     return True
@@ -127,35 +140,52 @@ async def _runner(name, coro_func, *args):
     - Catches KeyboardInterrupt and routes to stop_user_tasks()
     - Catches exceptions and marks task as crashed
     - Auto-restarts crashed tasks after backoff
+    - Feeds task watchdog each iteration (if watchdog_ms > 0)
     """
     info = _tasks.get(name, {})
     is_system = info.get("system", False)
-    
-    while True:
-        try:
-            await coro_func(*args)
-            # Task returned normally - unexpected for forever tasks
-            break
-        except asyncio.CancelledError:
-            # Normal cancellation via stop()
-            break
-        except KeyboardInterrupt:
-            # KeyboardInterrupt raised by mp_sched_keyboard_interrupt()
-            if is_system:
-                # System task caught it - stop user tasks, keep running
-                _log("debug", f"KeyboardInterrupt in {name} - stopping user tasks")
-                stop_user_tasks()
-                # Continue the system task's while loop
-                continue
-            else:
-                # User task - just stop
-                _log("debug", f"{name} interrupted")
+    wd_ms = info.get("watchdog_ms", 0)
+
+    # Register with C watchdog if requested
+    if wd_ms > 0 and _wd:
+        _wd.register(name, wd_ms)
+
+    try:
+        while True:
+            try:
+                await coro_func(*args)
+                # Task returned normally - unexpected for forever tasks
                 break
-        except Exception as e:
-            # Task crashed - mark state and retry after backoff
-            if name in _tasks:
-                _tasks[name]["state"] = "crashed"
-            _log("warning", f"{name} crashed: {e}")
-            await asyncio.sleep(1)  # backoff before restart
-            if name in _tasks:
-                _tasks[name]["state"] = "running"
+            except asyncio.CancelledError:
+                # Normal cancellation via stop()
+                break
+            except KeyboardInterrupt:
+                # KeyboardInterrupt raised by mp_sched_keyboard_interrupt()
+                if is_system:
+                    # System task caught it - stop user tasks, keep running
+                    _log("debug", f"KeyboardInterrupt in {name} - stopping user tasks")
+                    stop_user_tasks()
+                    # Continue the system task's while loop
+                    continue
+                else:
+                    # User task - just stop
+                    _log("debug", f"{name} interrupted")
+                    break
+            except Exception as e:
+                # Task crashed - mark state and retry after backoff
+                if name in _tasks:
+                    _tasks[name]["state"] = "crashed"
+                _log("warning", f"{name} crashed: {e}")
+                await asyncio.sleep(1)  # backoff before restart
+                if name in _tasks:
+                    _tasks[name]["state"] = "running"
+    finally:
+        # Unregister from watchdog on exit
+        if wd_ms > 0 and _wd:
+            try:
+                _wd.unregister(name)
+            except:
+                pass
+        # Mark task as stopped so the name can be reused
+        if name in _tasks:
+            _tasks[name]["state"] = "stopped"
