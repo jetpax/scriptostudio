@@ -76,6 +76,11 @@ class SPI(_View):
     pass
 
 
+class I2S(_View):
+    """View for I2S bus configuration."""
+    pass
+
+
 class QSPI(_View):
     """View for QSPI bus configuration."""
     pass
@@ -185,6 +190,10 @@ class Board:
     def qspi(self, name):
         """Get QSPI bus configuration."""
         return QSPI(self._bus("qspi", name))
+
+    def i2s(self, name):
+        """Get I2S bus configuration."""
+        return I2S(self._bus("i2s", name))
 
     def _bus(self, kind, name):
         """Internal: get bus configuration."""
