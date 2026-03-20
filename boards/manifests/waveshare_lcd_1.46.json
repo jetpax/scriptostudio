@@ -48,11 +48,12 @@
       }
     },
 
-    "spi": {
+    "sdmmc": {
       "sdcard": {
-        "sclk": 14,
-        "mosi": 17,
-        "miso": 16
+        "clk": 14,
+        "cmd": 17,
+        "d0": 16,
+        "slot": 0
       }
     },
 
@@ -168,10 +169,9 @@
     },
 
     "sdcard": {
-      "mode": "SPI",
-      "bus": "spi.sdcard",
-      "cs_expander_pin": 3,
-      "description": "TF/microSD card (SPI mode required - CS on expander, SDMMC not supported)"
+      "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "description": "TF/microSD card (1-bit SDMMC mode)"
     },
 
     "battery": {

@@ -108,7 +108,7 @@ def mount_sdcard():
     _sd_card = sd
 
     info = sd.info()
-    cap_gb = (info[0] * info[1]) / (1024**3)
+    cap_gb = info[0] / (1024**3)
     _log("info", f"SD card mounted ({cap_gb:.1f} GB)")
     return True
   except Exception as e:
