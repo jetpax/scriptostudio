@@ -14,6 +14,7 @@
     "btle": "低功耗蓝牙",
     "wwan": "移动网络",
     "mqtt": "MQTT",
+    "telephony": "电话",
     "ntp": "NTP",
     "can": "CAN",
     "peripherals": "外设",

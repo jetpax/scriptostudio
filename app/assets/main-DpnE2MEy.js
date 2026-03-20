@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-DUWV6KTD.js","assets/vendor-4K4sQ085.js","assets/vendor-YJ71nRLj.js","assets/vendor-Ck17KaKn.css","assets/index-D8uXHUWg.js","assets/index-BvC6oQL-.js","assets/index-CEIVfw6W.js","assets/index-Ckq7-Rzu.js","assets/index-BR6z4vJu.js","assets/index-Bvni1Ih1.js","assets/index-CzizjDTO.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/tree-sitter-CO03M566.js","assets/vendor-4K4sQ085.js","assets/vendor-YJ71nRLj.js","assets/vendor-Ck17KaKn.css","assets/index-D8uXHUWg.js","assets/index-BvC6oQL-.js","assets/index-CEIVfw6W.js","assets/index-Ckq7-Rzu.js","assets/index-BR6z4vJu.js","assets/index-Bvni1Ih1.js","assets/index-CzizjDTO.js","assets/xterm-DOrYoP_4.css"])))=>i.map(i=>d[i]);
 import{PANEL_TOO_SMALL as PANEL_TOO_SMALL$1,PANEL_CLOSED as PANEL_CLOSED$1,PANEL_DEFAULT as PANEL_DEFAULT$1}from"./vendor-4K4sQ085.js";import{c as cborExports,C as CBOR,h as html$1,a as Component$1,g,b as Choo}from"./vendor-YJ71nRLj.js";(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const o of document.querySelectorAll('link[rel="modulepreload"]'))s(o);new MutationObserver(o=>{for(const r of o)if(r.type==="childList")for(const d of r.addedNodes)d.tagName==="LINK"&&d.rel==="modulepreload"&&s(d)}).observe(document,{childList:!0,subtree:!0});function i(o){const r={};return o.integrity&&(r.integrity=o.integrity),o.referrerPolicy&&(r.referrerPolicy=o.referrerPolicy),o.crossOrigin==="use-credentials"?r.credentials="include":o.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function s(o){if(o.ep)return;o.ep=!0;const r=i(o);fetch(o.href,r)}})();function parseScriptOsConfig(e){const n="# === START_CONFIG_PARAMETERS ===",i="# === END_CONFIG_PARAMETERS ===",s=e.indexOf(n),o=e.indexOf(i);if(s===-1||o===-1)return console.warn("[ScriptOs Parser] Config markers not found"),null;const r=e.substring(s+n.length,o).trim();try{return parsePythonDict(r)}catch(d){return console.error("[ScriptOs Parser] Failed to parse config:",d),null}}function parsePythonDict(e){let n=e.trim();n.startsWith("dict(")&&n.endsWith(")")&&(n=n.substring(5,n.length-1).trim()),n=n.split(`
 `).map(o=>{let r=!1,d=null,a=!1;for(let c=0;c<o.length;c++){const l=o[c];if(a){a=!1;continue}if(l==="\\"){a=!0;continue}if((l==='"'||l==="'"||l==="`")&&!r){r=!0,d=l;continue}if(l===d&&r){r=!1,d=null;continue}if(l==="#"&&!r)return o.substring(0,c)}return o}).join(`
 `),n=n.replace(/\\\s*[\r\n]+\s*/g," ");let i="{";const s=smartSplit(n,",");for(let o=0;o<s.length;o++){const r=s[o].trim();if(!r)continue;const d=r.indexOf("=");if(d===-1)continue;const a=r.substring(0,d).trim();let c=r.substring(d+1).trim();c=convertPythonValue(c),o>0&&(i+=","),i+=`"${a}":${c}`}return i+="}",JSON.parse(i)}function smartSplit(e,n){const i=[];let s="",o=0,r=!1,d=null,a=!1;for(let c=0;c<e.length;c++){const l=e[c],p=c>0?e[c-1]:"";if(a){s+=l,a=!1;continue}if(l==="\\"){a=!0,s+=l;continue}if((l==='"'||l==="'"||l==="`")&&!r){r=!0,d=l,s+=l;continue}if(l===d&&r&&p!=="\\"){r=!1,d=null,s+=l;continue}if(r){s+=l;continue}if(l==="("||l==="["||l==="{"?o++:(l===")"||l==="]"||l==="}")&&o--,l===n&&o===0){i.push(s),s="";continue}s+=l}return s.trim()&&i.push(s),i}function convertPythonValue(e){if(e=e.trim(),e==="None")return"null";if(e==="True")return"true";if(e==="False")return"false";if(/^-?\d+(\.\d+)?$/.test(e))return e;if(e.startsWith("[")&&e.endsWith("]")){const n=e.substring(1,e.length-1);return"["+smartSplit(n,",").map(o=>convertPythonValue(o)).join(",")+"]"}if(e.startsWith("(")&&e.endsWith(")")){const n=e.substring(1,e.length-1);return"["+smartSplit(n,",").map(o=>convertPythonValue(o)).join(",")+"]"}if(e.startsWith("dict(")&&e.endsWith(")")){const n=e.substring(5,e.length-1);return convertDictContent(n)}if(e.startsWith("{")&&e.endsWith("}")){const n=e.substring(1,e.length-1);return convertDictLiteral(n)}if(e.includes("+")){const n=e.split("+").map(i=>{const s=i.trim();return s.startsWith("'")||s.startsWith('"')?s.substring(1,s.length-1):s});return JSON.stringify(n.join(""))}if(e.startsWith("'''")||e.startsWith('"""')){e.substring(0,3);let n=e.substring(3,e.length-3);return n=n.replace(/\s+/g," ").trim(),JSON.stringify(n)}return e.startsWith("'")&&e.endsWith("'")||e.startsWith('"')&&e.endsWith('"')?JSON.stringify(e.substring(1,e.length-1)):e==="str"?'"str"':e==="int"?'"int"':e==="float"?'"float"':e==="bool"?'"bool"':e==="list"?'"list"':e==="dict"?'"dict"':JSON.stringify(e)}function convertDictContent(e){let n="{";const i=smartSplit(e,",");let s=!0;for(let o=0;o<i.length;o++){const r=i[o].trim();if(!r)continue;const d=r.indexOf("=");if(d===-1)continue;const a=r.substring(0,d).trim();let c=r.substring(d+1).trim();c=convertPythonValue(c),s||(n+=","),n+=`"${a}":${c}`,s=!1}return n+="}",n}function convertDictLiteral(e){let n="{";const i=smartSplit(e,",");let s=!0;for(let o=0;o<i.length;o++){const r=i[o].trim();if(!r)continue;const d=r.indexOf(":");if(d===-1)continue;let a=r.substring(0,d).trim(),c=r.substring(d+1).trim();(a.startsWith("'")&&a.endsWith("'")||a.startsWith('"')&&a.endsWith('"'))&&(a=a.substring(1,a.length-1)),c=convertPythonValue(c),s||(n+=","),n+=`"${a}":${c}`,s=!1}return n+="}",n}function generateScriptOsCode(e,n,i){const s="# === START_CONFIG_PARAMETERS ===",o="# === END_CONFIG_PARAMETERS ===",r=e.indexOf(s),d=e.indexOf(o);if(r===-1||d===-1)return e;const a=e.substring(0,r).trim(),c=e.substring(d+o.length).trim();if(!n.args||Object.keys(n.args).length===0){const u=n.info||{};let f=`# ${u.name||"ScriptO"}
@@ -432,7 +432,7 @@ try:
     if _wr and hasattr(_wr, 'process_queue'):
         while _wr.process_queue() > 0: pass
 except: pass
-`;let parserInstance=null,pythonLanguage=null;async function getParser(){if(parserInstance&&pythonLanguage)return parserInstance;try{if(!Parser){console.log("[Debugger] Lazy loading Tree-sitter...");const[e,n,i]=await Promise.all([__vitePreload(()=>import("./tree-sitter-DUWV6KTD.js"),__vite__mapDeps([0,1,2,3])),__vitePreload(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),__vitePreload(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);Parser=e.Parser,Language=e.Language,wasmUrl=n.default,pythonWasmImportUrl=i.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await Parser.init({locateFile:()=>wasmUrl}),parserInstance=new Parser,console.log("[Debugger] Loading Python grammar..."),!pythonWasmImportUrl)throw new Error("tree-sitter-python.wasm URL not found in imports");return pythonLanguage=await Language.load(pythonWasmImportUrl),parserInstance.setLanguage(pythonLanguage),console.log("[Debugger] Tree-sitter parser initialized successfully"),parserInstance}catch(e){throw console.error("[Debugger] Failed to initialize parser:",e),new Error(`Tree-sitter initialization failed: ${e.message}`)}}async function identifyCodeRows(e){const n=await getParser();if(!n)return new Map;const i=n.parse(e),s=new Map,o=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],r=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],d=a=>{if(!a)return;let c=!1;const l=a.type;r.includes(l)?c=!1:o.includes(l)?(c=!0,(l==="function_definition"||l==="async_function_definition"||l==="class_definition")&&a.parent&&a.parent.type==="decorated_definition"&&(c=!1),l==="expression_statement"&&a.childCount===1&&a.firstChild.type==="string"&&(c=!1)):l==="decorated_definition"&&(c=!0),c&&s.set(a.startPosition.row,l);for(let p=0;p<a.childCount;p++)d(a.child(p))};return d(i.rootNode),s}function generateDebugBlock(e,n,i,s,o,r,d=null){let a="";if(d){const c=d.condition?`(${d.condition})`:"True",l=d.hitCount?`"${d.hitCount}"`:"None",p=d.enabled!==!1?"True":"False";a+=`${e}try:
+`;let parserInstance=null,pythonLanguage=null;async function getParser(){if(parserInstance&&pythonLanguage)return parserInstance;try{if(!Parser){console.log("[Debugger] Lazy loading Tree-sitter...");const[e,n,i]=await Promise.all([__vitePreload(()=>import("./tree-sitter-CO03M566.js"),__vite__mapDeps([0,1,2,3])),__vitePreload(()=>import("./tree-sitter-B3V3Ji9r.js"),[]),__vitePreload(()=>import("./tree-sitter-python-DxlSE_Ss.js"),[])]);Parser=e.Parser,Language=e.Language,wasmUrl=n.default,pythonWasmImportUrl=i.default,console.log("[Debugger] Tree-sitter modules loaded")}if(await Parser.init({locateFile:()=>wasmUrl}),parserInstance=new Parser,console.log("[Debugger] Loading Python grammar..."),!pythonWasmImportUrl)throw new Error("tree-sitter-python.wasm URL not found in imports");return pythonLanguage=await Language.load(pythonWasmImportUrl),parserInstance.setLanguage(pythonLanguage),console.log("[Debugger] Tree-sitter parser initialized successfully"),parserInstance}catch(e){throw console.error("[Debugger] Failed to initialize parser:",e),new Error(`Tree-sitter initialization failed: ${e.message}`)}}async function identifyCodeRows(e){const n=await getParser();if(!n)return new Map;const i=n.parse(e),s=new Map,o=["expression_statement","assignment","return_statement","if_statement","for_statement","while_statement","try_statement","with_statement","function_definition","async_function_definition","class_definition","break_statement","continue_statement","pass_statement","match_statement"],r=["else_clause","elif_clause","except_clause","finally_clause","case_clause"],d=a=>{if(!a)return;let c=!1;const l=a.type;r.includes(l)?c=!1:o.includes(l)?(c=!0,(l==="function_definition"||l==="async_function_definition"||l==="class_definition")&&a.parent&&a.parent.type==="decorated_definition"&&(c=!1),l==="expression_statement"&&a.childCount===1&&a.firstChild.type==="string"&&(c=!1)):l==="decorated_definition"&&(c=!0),c&&s.set(a.startPosition.row,l);for(let p=0;p<a.childCount;p++)d(a.child(p))};return d(i.rootNode),s}function generateDebugBlock(e,n,i,s,o,r,d=null){let a="";if(d){const c=d.condition?`(${d.condition})`:"True",l=d.hitCount?`"${d.hitCount}"`:"None",p=d.enabled!==!1?"True":"False";a+=`${e}try:
 `,a+=`${e}    _ds.us("${i}", ${s}, ${p} and ${c}, ${l})
 `,a+=`${e}except:
 `,a+=`${e}    pass
@@ -2444,15 +2444,15 @@ print(json.dumps({"ok": True}))
       <div class="info-grid">
         <div class="info-item">
           <span class="info-label">${e("sysinfo.studioVersion")}</span>
-          <span class="info-value">${"1.1.6"}</span>
+          <span class="info-value">${"1.2.0"}</span>
         </div>
         <div class="info-item">
           <span class="info-label">${e("sysinfo.studioCommit")}</span>
-          <span class="info-value info-mono">${"06399cb"}</span>
+          <span class="info-value info-mono">${"620ab8e"}</span>
         </div>
         <div class="info-item">
           <span class="info-label">${e("sysinfo.studioBuildDate")}</span>
-          <span class="info-value">${"2026-03-19"}</span>
+          <span class="info-value">${"2026-03-20"}</span>
         </div>
       </div>
     </div>
@@ -3252,12 +3252,6 @@ print(json.dumps({"ok": True}))
           </div>
         </form>
       </div>
-      
-      ${e.isConnected?"":html`
-        <div class="panel-message">
-          <p>Connect to device to configure WWAN settings.</p>
-        </div>
-      `}
     </div>
     
     <style>
@@ -3567,12 +3561,6 @@ print(json.dumps({"ok": True}))
           </div>
         </form>
       </div>
-      
-      ${e.isConnected?"":html`
-        <div class="panel-message">
-          <p>Connect to device to configure MQTT settings.</p>
-        </div>
-      `}
     </div>
   `}function NTPPanel(e,n){e.isConnected&&!e.ntpConfigLoaded&&!e.isLoadingNtpConfig&&n("load-ntp-config");const i=e.ntpConfig||{server:"pool.ntp.org",tzOffset:0,timezone:"UTC",autoDetect:!1},s=e.ntpSyncResult||null,o=l=>{if(!l)return"--:--:--";const{year:p,month:u,day:f,hour:h,minute:m,second:v}=l;return`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(v).padStart(2,"0")}`},r=l=>{if(!l)return"";const{year:p,month:u,day:f}=l;return`${p}-${String(u).padStart(2,"0")}-${String(f).padStart(2,"0")}`},d=[{value:"UTC",offset:0,label:"UTC (Coordinated Universal Time)"},{value:"EST",offset:-5,label:"EST (Eastern Standard Time)"},{value:"CST",offset:-6,label:"CST (Central Standard Time)"},{value:"MST",offset:-7,label:"MST (Mountain Standard Time)"},{value:"PST",offset:-8,label:"PST (Pacific Standard Time)"},{value:"GMT",offset:0,label:"GMT (Greenwich Mean Time)"},{value:"CET",offset:1,label:"CET (Central European Time)"},{value:"EET",offset:2,label:"EET (Eastern European Time)"},{value:"JST",offset:9,label:"JST (Japan Standard Time)"},{value:"AEST",offset:10,label:"AEST (Australian Eastern Standard Time)"}],a=i.timezone,c=[...d];return a&&!d.find(l=>l.value===a)&&c.unshift({value:a,offset:i.tzOffset||0,label:`${a} (Detected)`}),html`
     <div class="panel-container">
@@ -3682,12 +3670,6 @@ print(json.dumps({"ok": True}))
           </div>
         </form>
       </div>
-      
-      ${e.isConnected?"":html`
-        <div class="panel-message">
-          <p>Connect to device to synchronize time.</p>
-        </div>
-      `}
     </div>
   `}function CANPanel(e,n){e.isConnected&&!e.canConfigLoaded&&!e.isLoadingCanConfig&&n("load-can-config");const i=e.canConfig||{bitrate:5e5,enabled:!0};return html`
     <div class="panel-container">
@@ -3787,12 +3769,6 @@ print(json.dumps({"ok": True}))
           </div>
         </div>
       </div>
-      
-      ${e.isConnected?"":html`
-        <div class="panel-message">
-          <p>Connect to device to configure CAN settings.</p>
-        </div>
-      `}
     </div>
   `}function GPSPanel(e,n){e.isConnected&&!e.gpsDataLoaded&&!e.isLoadingGpsData&&n("load-gps-data");const i=e.gpsData||{},s=i.latitude!==void 0&&i.longitude!==void 0,o=37.3349,r=-122.009,d=s?i.latitude:o,a=s?i.longitude:r;return html`
     <div class="panel-container">
@@ -3937,11 +3913,6 @@ print(json.dumps({"ok": True}))
           `}
       `}
       
-      ${e.isConnected?"":html`
-        <div class="panel-message">
-          <p>Connect to device to view GPS location data.</p>
-        </div>
-      `}
     </div>
   `}function formatDate(e){if(!e||e.length!==6)return e;const n=e.substring(0,2),i=e.substring(2,4),s="20"+e.substring(4,6);return`${n}/${i}/${s}`}function formatTime(e){if(!e)return e;const n=e.indexOf("."),i=n!==-1?e.substring(0,n):e;if(i.length!==6)return e;const s=i.substring(0,2),o=i.substring(2,4),r=i.substring(4,6);return`${s}:${o}:${r}`}function ModemPanel(e,n){e.isConnected&&!e.modemStatusLoaded&&!e.isLoadingModemStatus&&n("load-modem-status");const i=e.modemStatus||{},s=i.info||{},o=i.signal||{},r=i.ppp||{},d=o.dbm,a=rssiToBars(d),c=rssiToQuality(d),l=getSignalColor(d);let p="Not detected",u="status-disconnected";return i.connected&&(r.connected?(p="PPP Active",u="status-ppp"):r.connecting?(p="PPP Connecting...",u="status-connecting"):(p="Connected (AT)",u="status-connected")),html`
     <div class="panel-container">
@@ -4040,12 +4011,6 @@ print(json.dumps({"ok": True}))
           <p class="no-data">${i.connected?"Loading...":"Modem not connected"}</p>
         `}
       </div>
-      
-      ${e.isConnected?"":html`
-        <div class="panel-message">
-          <p>Connect to device to view modem status.</p>
-        </div>
-      `}
     </div>
     
     <style>
@@ -5315,6 +5280,89 @@ print('KEY_OK')
         ${DiskFileList(e,n)}
       </div>
     </div>
+  `}function TwilioPanel(e,n){e.isConnected&&!e.twilioConfigLoaded&&!e.isLoadingTwilioConfig&&n("load-twilio-config");const i=e.twilioConfig||{};return html`
+    <div class="panel-container">
+      <div class="panel-header">
+        <h2>Telephony</h2>
+      </div>
+      
+      <div class="panel-section">
+        <div class="section-header">
+          <h3 class="panel-section-title">Account Credentials</h3>
+        </div>
+        
+        <form class="config-form" onsubmit=${s=>{s.preventDefault();const o=new FormData(s.target),r={account_sid:o.get("account_sid")||"",auth_token:o.get("auth_token")||"",from_number:o.get("from_number")||""};if(!r.account_sid){alert("Account SID is required");return}if(!r.auth_token){alert("Auth Token is required");return}n("save-twilio-config",r)}}>
+          <div class="form-group">
+            <label for="twilio-account-sid">
+              Account SID <span class="required">*</span>
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                <span class="tooltip">Your Twilio Account SID (starts with AC). Find it at twilio.com/console</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="twilio-account-sid" 
+              name="account_sid" 
+              value=${i.account_sid||""}
+              placeholder="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="twilio-auth-token">
+              Auth Token <span class="required">*</span>
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                <span class="tooltip">Your Twilio Auth Token. Find it at twilio.com/console</span>
+              </span>
+            </label>
+            <input 
+              type="password" 
+              id="twilio-auth-token" 
+              name="auth_token" 
+              value=${i.auth_token||""}
+              placeholder="Your auth token"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="twilio-from-number">
+              From Number
+              <span class="label-tooltip">
+                <svg class="label-tooltip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                <span class="tooltip">Your Twilio phone number in E.164 format (e.g. +12229876543)</span>
+              </span>
+            </label>
+            <input 
+              type="text" 
+              id="twilio-from-number" 
+              name="from_number" 
+              value=${i.from_number||""}
+              placeholder="+12229876543"
+            />
+          </div>
+          
+          <div class="config-actions">
+            <button type="submit" class="primary-button" disabled=${!e.isConnected}>
+              Save Configuration
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   `}function LandingView(e,n){return html$1`
     <div class="landing-view">
       <div class="landing-container">
@@ -5439,7 +5487,7 @@ print('KEY_OK')
     ${ReconnectDialog(e,n)}
     ${ExtensionsModal(e,n)}
     ${BreakpointModal(e,n)}
-  `}function SystemSidebar(e,n){const i=window.i18n?window.i18n.t:w=>w,s=[{id:"home",label:i("sidebar.home"),icon:"home"}],o=[{id:"editor",label:i("sidebar.editor"),icon:"code"},{id:"file-manager",label:i("sidebar.files"),icon:"folder"}],r=[{id:"about",label:i("sidebar.about"),icon:"info-circle"},{id:"settings",label:i("sidebar.settings"),icon:"adjustments-alt"},{id:"ai-agent",label:i("sidebar.aiAgent"),icon:"robot-face"},{id:"firmware",label:i("sidebar.firmware"),icon:"file-download"}],d=[{id:"wifi",label:i("sidebar.wifi"),icon:"wifi"},{id:"ethernet",label:i("sidebar.ethernet"),icon:"cloud-network"},{id:"vpn",label:i("sidebar.vpn"),icon:"shield-chevron"},{id:"btle",label:i("sidebar.btle"),icon:"bluetooth"},{id:"wwan",label:i("sidebar.wwan"),icon:"cell"},{id:"mqtt",label:i("sidebar.mqtt"),icon:"message-2"},{id:"ntp",label:i("sidebar.ntp"),icon:"clock-cog"},{id:"can",label:i("sidebar.can"),icon:"car-crash"}],a=[{id:"gps",label:i("sidebar.gps"),icon:"gps"},{id:"4g-modem",label:i("sidebar.modem"),icon:"signal-4g"},{id:"sdcard",label:i("sidebar.sdcard"),icon:"device-sd-card"}],c=s.map(w=>renderSidebarItem(w,e,n)),l=o.map(w=>renderSidebarItem(w,e,n)),p=e.expandedSystem!==!1,u=html$1`
+  `}function SystemSidebar(e,n){const i=window.i18n?window.i18n.t:w=>w,s=[{id:"home",label:i("sidebar.home"),icon:"home"}],o=[{id:"editor",label:i("sidebar.editor"),icon:"code"},{id:"file-manager",label:i("sidebar.files"),icon:"folder"}],r=[{id:"about",label:i("sidebar.about"),icon:"info-circle"},{id:"settings",label:i("sidebar.settings"),icon:"adjustments-alt"},{id:"ai-agent",label:i("sidebar.aiAgent"),icon:"robot-face"},{id:"firmware",label:i("sidebar.firmware"),icon:"file-download"}],d=[{id:"wifi",label:i("sidebar.wifi"),icon:"wifi"},{id:"ethernet",label:i("sidebar.ethernet"),icon:"cloud-network"},{id:"vpn",label:i("sidebar.vpn"),icon:"shield-chevron"},{id:"btle",label:i("sidebar.btle"),icon:"bluetooth"},{id:"wwan",label:i("sidebar.wwan"),icon:"cell"},{id:"mqtt",label:i("sidebar.mqtt"),icon:"message-2"},{id:"twilio",label:i("sidebar.telephony"),icon:"phone"},{id:"ntp",label:i("sidebar.ntp"),icon:"clock-cog"},{id:"can",label:i("sidebar.can"),icon:"car-crash"}],a=[{id:"gps",label:i("sidebar.gps"),icon:"gps"},{id:"4g-modem",label:i("sidebar.modem"),icon:"signal-4g"},{id:"sdcard",label:i("sidebar.sdcard"),icon:"device-sd-card"}],c=s.map(w=>renderSidebarItem(w,e,n)),l=o.map(w=>renderSidebarItem(w,e,n)),p=e.expandedSystem!==!1,u=html$1`
     <div class="system-sidebar-extension">
       <div 
         class="system-sidebar-item system-sidebar-toggle"
@@ -5521,7 +5569,7 @@ print('KEY_OK')
                 throw new Error('No extension class found');
               }
               return eval(classMatch[1]);
-            `)(DeviceAPI,html$1,n,e),O=new DeviceAPI(BridgeDevice),D=new N(O,n,e,html$1);e.loadedExtensions[w.id].instance=D}catch(_){console.error(`[System] Error instantiating extension ${w.id}:`,_)}if($.instance&&typeof $.instance.getMenuItems=="function")try{const _=$.instance.getMenuItems();_&&Array.isArray(_)&&(w.menu=_)}catch(_){console.error(`[System] Error getting menu items for ${w.id}:`,_)}if($.instance&&typeof $.instance.renderSidebarDevices=="function")try{I=$.instance.renderSidebarDevices()}catch(_){console.error(`[System] Error rendering sidebar devices for ${w.id}:`,_)}else console.warn(`[System] renderSidebarDevices not available for ${w.id}`)}if(k&&e.loadedExtensions[w.id]?.instance){const $=e.loadedExtensions[w.id];if($.instance&&typeof $.instance.getMenuItems=="function")try{const _=$.instance.getMenuItems();_&&Array.isArray(_)&&(w.menu=_)}catch(_){console.error(`[System] Error getting menu items for ${w.id}:`,_)}}return html$1`
+            `)(DeviceAPI,html$1,n,e),O=new DeviceAPI(BridgeDevice),F=new N(O,n,e,html$1);e.loadedExtensions[w.id].instance=F}catch(_){console.error(`[System] Error instantiating extension ${w.id}:`,_)}if($.instance&&typeof $.instance.getMenuItems=="function")try{const _=$.instance.getMenuItems();_&&Array.isArray(_)&&(w.menu=_)}catch(_){console.error(`[System] Error getting menu items for ${w.id}:`,_)}if($.instance&&typeof $.instance.renderSidebarDevices=="function")try{I=$.instance.renderSidebarDevices()}catch(_){console.error(`[System] Error rendering sidebar devices for ${w.id}:`,_)}else console.warn(`[System] renderSidebarDevices not available for ${w.id}`)}if(k&&e.loadedExtensions[w.id]?.instance){const $=e.loadedExtensions[w.id];if($.instance&&typeof $.instance.getMenuItems=="function")try{const _=$.instance.getMenuItems();_&&Array.isArray(_)&&(w.menu=_)}catch(_){console.error(`[System] Error getting menu items for ${w.id}:`,_)}}return html$1`
       <div class="system-sidebar-extension">
         <div 
           class="system-sidebar-item system-sidebar-toggle ${E?"active-extension":""}"
@@ -5596,7 +5644,7 @@ print('KEY_OK')
       ${IconSprite.renderIcon(e.icon,{className:"",size:20})}
       <span>${e.label}</span>
     </div>
-  `}function renderActivePanel(e,n){const i=e.systemSection;if(i==="editor")return EditorContent(e,n);if(i==="file-manager")return FileManagerContent(e,n);if(i==="landing")return LandingView(e,n);if(i?.startsWith("extension:"))return ExtensionContainer(e,n,html$1);if(i?.startsWith("network:"))switch(i.split(":")[1]){case"wifi":return WiFiPanel(e,n);case"ethernet":return EthernetPanel(e,n);case"vpn":return VPNPanel(e,n);case"btle":return BTLEPanel(e,n);case"wwan":return WWANPanel(e,n);case"mqtt":return MQTTPanel(e,n);case"ntp":return NTPPanel(e,n);case"can":return CANPanel(e,n);default:return WiFiPanel(e,n)}if(i?.startsWith("peripherals:"))switch(i.split(":")[1]){case"gps":return GPSPanel(e,n);case"4g-modem":return ModemPanel(e,n);case"sdcard":return SDCardPanel(e,n);default:return GPSPanel(e,n)}if(i?.startsWith("system:"))switch(i.split(":")[1]){case"about":return SysInfoPanel(e,n);case"settings":return AppearancePanel(e,n);case"ai-agent":return AIAgentPanel(e,n);case"firmware":return FirmwarePanel(e);default:return AppearancePanel(e,n)}return LandingView(e,n)}const cacheBuster=Date.now();window.i18nReady=Promise.all([fetch(`locales/en.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/de.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/es.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/fr.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/zh.json?v=${cacheBuster}`).then(e=>e.json())]).then(([e,n,i,s,o])=>{if(window.i18n){window.i18n.initTranslations(e,n,i,s,o);const r=localStorage.getItem("locale")||"en";window.i18n.setLocale(r),console.log("[i18n] Translations loaded, locale set to:",r),window.appInstance&&window.appInstance.emitter.emit("render")}else console.warn("[i18n] window.i18n not available yet");return!0}).catch(e=>(console.error("[i18n] Failed to load translations:",e),!1));const newFileContent=`# This program was created in ScriptO Studio for MicroPython
+  `}function renderActivePanel(e,n){const i=e.systemSection;if(i==="editor")return EditorContent(e,n);if(i==="file-manager")return FileManagerContent(e,n);if(i==="landing")return LandingView(e,n);if(i?.startsWith("extension:"))return ExtensionContainer(e,n,html$1);if(i?.startsWith("network:"))switch(i.split(":")[1]){case"wifi":return WiFiPanel(e,n);case"ethernet":return EthernetPanel(e,n);case"vpn":return VPNPanel(e,n);case"btle":return BTLEPanel(e,n);case"wwan":return WWANPanel(e,n);case"mqtt":return MQTTPanel(e,n);case"twilio":return TwilioPanel(e,n);case"ntp":return NTPPanel(e,n);case"can":return CANPanel(e,n);default:return WiFiPanel(e,n)}if(i?.startsWith("peripherals:"))switch(i.split(":")[1]){case"gps":return GPSPanel(e,n);case"4g-modem":return ModemPanel(e,n);case"sdcard":return SDCardPanel(e,n);default:return GPSPanel(e,n)}if(i?.startsWith("system:"))switch(i.split(":")[1]){case"about":return SysInfoPanel(e,n);case"settings":return AppearancePanel(e,n);case"ai-agent":return AIAgentPanel(e,n);case"firmware":return FirmwarePanel(e);default:return AppearancePanel(e,n)}return LandingView(e,n)}const cacheBuster=Date.now();window.i18nReady=Promise.all([fetch(`locales/en.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/de.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/es.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/fr.json?v=${cacheBuster}`).then(e=>e.json()),fetch(`locales/zh.json?v=${cacheBuster}`).then(e=>e.json())]).then(([e,n,i,s,o])=>{if(window.i18n){window.i18n.initTranslations(e,n,i,s,o);const r=localStorage.getItem("locale")||"en";window.i18n.setLocale(r),console.log("[i18n] Translations loaded, locale set to:",r),window.appInstance&&window.appInstance.emitter.emit("render")}else console.warn("[i18n] window.i18n not available yet");return!0}).catch(e=>(console.error("[i18n] Failed to load translations:",e),!1));const newFileContent=`# This program was created in ScriptO Studio for MicroPython
 
 print('Hello, ')
 print('ScriptO!') # ●
@@ -5947,7 +5995,34 @@ else:
 from lib.sys.network import eth
 import json
 print(json.dumps(eth.get_status()))
-`);i.onEthStatus&&i.onEthStatus(r)}catch(o){console.error("[Ethernet] Failed to get status:",o)}})}function registerHardwareConfigHandlers(e,n,i){const s=console.log;n.on("toggle-peripherals-menu",()=>{s("toggle-peripherals-menu"),e.expandedPeripherals=!e.expandedPeripherals,n.emit("render")}),n.on("change-peripherals-panel",o=>{s("change-peripherals-panel:",o),e.activePeripheralsPanel=o,e.activeNetworkPanel=null,e.activeSystemPanel=null,e.activeExtension=null,e.activeExtensionPanel=null,e.systemSection=`peripherals:${o}`,o==="gps"&&e.isConnected&&!e.gpsDataLoaded&&!e.isLoadingGpsData&&n.emit("load-gps-data"),o==="sdcard"&&e.isConnected&&(e.sdcardInfo=null,n.emit("sdcard-get-info")),n.emit("render")}),n.on("sdcard-unmount",async()=>{if(s("sdcard-unmount"),!e.isConnected){console.warn("[SD Card] Not connected to device");return}if(e.isUnmountingSDCard){console.log("[SD Card] Already unmounting, skipping");return}try{e.isUnmountingSDCard=!0,n.emit("render");const r=await i.exec(`
+`);i.onEthStatus&&i.onEthStatus(r)}catch(o){console.error("[Ethernet] Failed to get status:",o)}}),n.on("load-twilio-config",async()=>{if(s("load-twilio-config"),!e.isConnected){console.warn("[Twilio] Not connected to device");return}if(e.isLoadingTwilioConfig){console.log("[Twilio] Already loading config, skipping");return}try{e.isLoadingTwilioConfig=!0;const r=await i.exec(`
+from lib.sys import settings
+import json
+
+# Load config from settings API
+config = {
+    'account_sid': settings.get("twilio.account_sid", ""),
+    'auth_token': settings.get("twilio.auth_token", ""),
+    'from_number': settings.get("twilio.from_number", "")
+}
+
+print(json.dumps({'success': True, 'config': config}))
+`);r&&r.success&&r.config&&(e.twilioConfig=r.config,e.twilioConfigLoaded=!0),e.isLoadingTwilioConfig=!1,n.emit("render")}catch(o){console.error("[Twilio] Failed to load config:",o),e.isLoadingTwilioConfig=!1}}),n.on("save-twilio-config",async o=>{if(s("save-twilio-config",o),!e.isConnected){console.warn("[Twilio] Not connected to device");return}try{const d=`
+from lib.sys import settings
+import json
+
+config_json = '${JSON.stringify(o).replace(/'/g,"\\'")}'
+config = json.loads(config_json)
+
+# Save config using settings API
+settings.set("twilio.account_sid", config.get('account_sid', ''))
+settings.set("twilio.auth_token", config.get('auth_token', ''))
+settings.set("twilio.from_number", config.get('from_number', ''))
+
+settings.save()
+
+print(json.dumps({'success': True, 'message': 'Twilio configuration saved successfully'}))
+`,a=await i.exec(d);a&&a.success?(e.twilioConfig=o,e.twilioConfigLoaded=!0,n.emit("render"),alert("Twilio configuration saved!")):alert("Failed to save Twilio configuration")}catch(r){console.error("[Twilio] Failed to save config:",r),alert(`Failed to save Twilio configuration: ${r.message}`)}})}function registerHardwareConfigHandlers(e,n,i){const s=console.log;n.on("toggle-peripherals-menu",()=>{s("toggle-peripherals-menu"),e.expandedPeripherals=!e.expandedPeripherals,n.emit("render")}),n.on("change-peripherals-panel",o=>{s("change-peripherals-panel:",o),e.activePeripheralsPanel=o,e.activeNetworkPanel=null,e.activeSystemPanel=null,e.activeExtension=null,e.activeExtensionPanel=null,e.systemSection=`peripherals:${o}`,o==="gps"&&e.isConnected&&!e.gpsDataLoaded&&!e.isLoadingGpsData&&n.emit("load-gps-data"),o==="sdcard"&&e.isConnected&&(e.sdcardInfo=null,n.emit("sdcard-get-info")),n.emit("render")}),n.on("sdcard-unmount",async()=>{if(s("sdcard-unmount"),!e.isConnected){console.warn("[SD Card] Not connected to device");return}if(e.isUnmountingSDCard){console.log("[SD Card] Already unmounting, skipping");return}try{e.isUnmountingSDCard=!0,n.emit("render");const r=await i.exec(`
 import os
 import json
 
@@ -6252,7 +6327,7 @@ ${d.message}`)}})}async function getSkillVersionFiles(e,n,i){const s=n.latestVer
       ${SystemView(e,n)}
       ${Overlay(e,n)}
     </div>
-  `}async function initApp(){window.i18nReady&&(await window.i18nReady,console.log("[App] Translations loaded, starting app...")),console.log("%c ScriptO Studio v1.1.6 ","background: #9b59b6; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 3px;","build 06399cb (2026-03-19)");let e=Choo();e.use(store),e.route("*",App),e.mount("#app"),window.appState=e.state,window.appInstance=e,e.emitter.on("DOMContentLoaded",()=>{e.state.diskNavigationRoot&&e.emitter.emit("refresh-files");const n=new URLSearchParams(window.location.search),i=n.get("device");if(i){const d=`wss://${i}/webrepl`;localStorage.setItem("webrepl-url",d),console.log(`[App] Device URL from query param: ${d}`),setTimeout(()=>{e.emitter.emit("open-connection-dialog");const a=window.location.pathname;window.history.replaceState({},"",a)},500)}const s=n.get("configure");s&&setTimeout(()=>{e.emitter.emit("configure-scripto",s);const d=window.location.pathname;window.history.replaceState({},"",d)},500);const o=n.get("extension");if(o){localStorage.setItem("pending-extension-id",o),sessionStorage.setItem("extension-install-active",o),console.log(`[App] Extension from query param: ${o}`),n.delete("extension");const d=n.toString(),a=window.location.pathname+(d?"?"+d:"");window.history.replaceState({},"",a),i||setTimeout(()=>{console.log("[App] Fresh extension install — navigating to Device Setup"),e.emitter.emit("change-system-panel","firmware")},500)}const r=localStorage.getItem("pending-extension-id");if(r&&i&&setTimeout(async()=>{try{const c=(await new ExtensionRegistry().getInstalledExtensions()).find(l=>l.id===r);c&&c.menu&&c.menu.length>0&&(console.log(`[App] Auto-navigating to extension: ${r}`),e.emitter.emit("change-extension-panel",{extensionId:r,panelId:c.menu[0].id}))}catch(d){console.warn("[App] Could not auto-navigate to extension:",d)}},1e3),!e.state.isConnected){let d=document.getElementById("hand-click-hint");if(!d){d=document.createElement("div"),d.id="hand-click-hint";const l=document.createElementNS("http://www.w3.org/2000/svg","svg");l.setAttribute("width","36"),l.setAttribute("height","36"),l.setAttribute("viewBox","0 0 24 24"),l.setAttribute("fill","none"),l.setAttribute("stroke","currentColor"),l.setAttribute("stroke-width","2"),l.setAttribute("stroke-linecap","round"),l.setAttribute("stroke-linejoin","round"),l.innerHTML=`
+  `}async function initApp(){window.i18nReady&&(await window.i18nReady,console.log("[App] Translations loaded, starting app...")),console.log("%c ScriptO Studio v1.2.0 ","background: #9b59b6; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 3px;","build 620ab8e (2026-03-20)");let e=Choo();e.use(store),e.route("*",App),e.mount("#app"),window.appState=e.state,window.appInstance=e,e.emitter.on("DOMContentLoaded",()=>{e.state.diskNavigationRoot&&e.emitter.emit("refresh-files");const n=new URLSearchParams(window.location.search),i=n.get("device");if(i){const d=`wss://${i}/webrepl`;localStorage.setItem("webrepl-url",d),console.log(`[App] Device URL from query param: ${d}`),setTimeout(()=>{e.emitter.emit("open-connection-dialog");const a=window.location.pathname;window.history.replaceState({},"",a)},500)}const s=n.get("configure");s&&setTimeout(()=>{e.emitter.emit("configure-scripto",s);const d=window.location.pathname;window.history.replaceState({},"",d)},500);const o=n.get("extension");if(o){localStorage.setItem("pending-extension-id",o),sessionStorage.setItem("extension-install-active",o),console.log(`[App] Extension from query param: ${o}`),n.delete("extension");const d=n.toString(),a=window.location.pathname+(d?"?"+d:"");window.history.replaceState({},"",a),i||setTimeout(()=>{console.log("[App] Fresh extension install — navigating to Device Setup"),e.emitter.emit("change-system-panel","firmware")},500)}const r=localStorage.getItem("pending-extension-id");if(r&&i&&setTimeout(async()=>{try{const c=(await new ExtensionRegistry().getInstalledExtensions()).find(l=>l.id===r);c&&c.menu&&c.menu.length>0&&(console.log(`[App] Auto-navigating to extension: ${r}`),e.emitter.emit("change-extension-panel",{extensionId:r,panelId:c.menu[0].id}))}catch(d){console.warn("[App] Could not auto-navigate to extension:",d)}},1e3),!e.state.isConnected){let d=document.getElementById("hand-click-hint");if(!d){d=document.createElement("div"),d.id="hand-click-hint";const l=document.createElementNS("http://www.w3.org/2000/svg","svg");l.setAttribute("width","36"),l.setAttribute("height","36"),l.setAttribute("viewBox","0 0 24 24"),l.setAttribute("fill","none"),l.setAttribute("stroke","currentColor"),l.setAttribute("stroke-width","2"),l.setAttribute("stroke-linecap","round"),l.setAttribute("stroke-linejoin","round"),l.innerHTML=`
           <path d="M8 13v-8.5a1.5 1.5 0 0 1 3 0v7.5" />
           <path d="M11 11.5v-2a1.5 1.5 0 0 1 3 0v2.5" />
           <path d="M14 10.5a1.5 1.5 0 0 1 3 0v1.5" />
