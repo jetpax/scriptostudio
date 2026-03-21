@@ -1,6 +1,13 @@
 # CalmOS — ePaper notepad shell for PFC agent display
 import lvgl as lv
 import time
+import gc
+
+try:
+    from esp32 import mcu_temperature
+    _TEMP_OK = True
+except ImportError:
+    _TEMP_OK = False
 
 _epd = None
 _scr = None
@@ -14,6 +21,12 @@ _nav_sel = 0
 _nav_icons = None
 _fonts = {}
 _started = False
+
+# ── Page buffers (6 pages × LINE_COUNT entries) ──
+_pages = None      # list of lists: [[(text, icon), ...], ...]
+_active_page = 0
+SYSTEM_PAGE = 5
+_PAGE_NAMES = ['alerts', 'todo', 'calendar', 'calls', 'messages', 'system']
 
 W, H, PAD = 480, 800, 5
 STATUS_H = 80
@@ -75,10 +88,13 @@ def start():
     _fonts['cozette36'] = lv.binfont_create("A:/lib/fonts/cozette36.bin")
     _fonts['cozette48'] = lv.binfont_create("A:/lib/fonts/cozette48.bin")
 
+    _init_pages()
     _build_status_bar()
     _build_notepad()
     _build_nav_bar()
     _start_buttons()
+    _update_system_page()
+    _swap_page(0)
 
     print(f"[CalmOS] Ready, time: {_fmt_time()} {_fmt_date()}")
     _epd.lv_refresh(full=True)
@@ -229,11 +245,12 @@ def _update_sel_bar():
         _nav_sep.invalidate()
 
 def nav_select(idx):
-    """Move the selection bar to nav icon idx (0–5)."""
+    """Move the selection bar to nav icon idx (0–5) and show that page."""
     global _nav_sel
     idx = idx % NAV_ICON_COUNT
     _nav_sel = idx
     _update_sel_bar()
+    _swap_page(idx)
     if _epd:
         _epd.lv_refresh()
 
@@ -309,6 +326,7 @@ def _start_buttons():
 async def _clock_loop():
     last_time = _fmt_time()
     last_date = _fmt_date()
+    _sys_tick = 0
     while True:
         await __import__('asyncio').sleep(10)
         now_time = _fmt_time()
@@ -322,31 +340,183 @@ async def _clock_loop():
             _date_lbl.set_text(now_date)
             last_date = now_date
             changed = True
+        # Refresh system page every ~30s (3 ticks × 10s)
+        _sys_tick += 1
+        if _sys_tick >= 3:
+            _sys_tick = 0
+            _update_system_page()
+            if _active_page == SYSTEM_PAGE:
+                _swap_page(SYSTEM_PAGE)
+                changed = True
         if changed:
             _epd.lv_refresh()
+
+# ── Page management ──
+
+def _init_pages():
+    global _pages
+    _pages = [[("", "")] * LINE_COUNT for _ in range(NAV_ICON_COUNT)]
+
+def _swap_page(idx):
+    """Write page buffer idx to the visible labels."""
+    global _active_page
+    if _pages is None or _line_labels is None:
+        return
+    _active_page = idx
+    buf = _pages[idx]
+    cz36 = _fonts.get('cozette36')
+    c48 = _fonts.get('chicago48')
+    cz48 = _fonts.get('cozette48')
+    for i in range(LINE_COUNT):
+        text, icon = buf[i]
+        _line_labels[i].set_text(text)
+        # Line 0 uses title font if it has text
+        if i == 0 and text and c48:
+            _line_labels[i].set_style_text_font(c48, 0)
+        elif cz36:
+            _line_labels[i].set_style_text_font(cz36, 0)
+        if _icon_labels:
+            _icon_labels[i].set_text(icon)
+
+def _fmt_bytes(b):
+    """Human-readable byte count: 142K, 3.2M, etc."""
+    if b >= 1048576:
+        return f"{b / 1048576:.1f}M"
+    if b >= 1024:
+        return f"{b // 1024}K"
+    return str(b)
+
+def _update_system_page():
+    """Populate the System page buffer with live data."""
+    if _pages is None:
+        return
+    buf = _pages[SYSTEM_PAGE]
+
+    # Nerd Font codepoints (Cozette binfont, confirmed in calmpilot demo)
+    IC_WIFI  = "\uf1eb"   # nf-fa-wifi
+    IC_NET   = "\uf0ac"   # nf-fa-globe
+    IC_HOST  = "\uf108"   # nf-fa-desktop
+    IC_MEM   = "\uf0a0"   # nf-fa-hdd_o
+    IC_CLOCK = "\uf017"   # nf-fa-clock_o
+    IC_TEMP  = "\uf2c9"   # nf-fa-thermometer_half
+
+    # Title
+    buf[0] = ("System", "")
+
+    # WiFi signal
+    try:
+        import network
+        sta = network.WLAN(network.STA_IF)
+        if sta.active() and sta.isconnected():
+            rssi = sta.status('rssi')
+            buf[1] = (f"  WiFi: {rssi} dBm", IC_WIFI)
+            ip = sta.ifconfig()[0]
+            buf[2] = (f"  {ip}", IC_NET)
+            hostname = network.hostname()
+            buf[3] = (f"  {hostname}", IC_HOST)
+        else:
+            buf[1] = ("  WiFi: disconnected", IC_WIFI)
+            buf[2] = ("  --", IC_NET)
+            buf[3] = ("  --", IC_HOST)
+    except Exception:
+        buf[1] = ("  WiFi: n/a", IC_WIFI)
+        buf[2] = ("", "")
+        buf[3] = ("", "")
+
+    # Memory: internal heap + PSRAM
+    gc.collect()
+    heap_free = gc.mem_free()
+    mem_txt = f"  Heap: {_fmt_bytes(heap_free)}"
+    try:
+        import esp32
+        psram = esp32.idf_heap_info(0x80)  # MALLOC_CAP_SPIRAM
+        if psram and len(psram) > 0 and psram[0][0] > 0:
+            # Each region: (total, free, largest_free, min_free)
+            pf = sum(r[1] for r in psram if r[1] > 0)
+            mem_txt += f" / PS: {_fmt_bytes(pf)}"
+    except Exception:
+        pass
+    buf[4] = (mem_txt, IC_MEM)
+
+    # Uptime
+    ms = time.ticks_ms()
+    s = ms // 1000
+    d, s = divmod(s, 86400)
+    h, s = divmod(s, 3600)
+    m, s = divmod(s, 60)
+    parts = []
+    if d: parts.append(f"{d}d")
+    if h: parts.append(f"{h}h")
+    if m: parts.append(f"{m}m")
+    parts.append(f"{s}s")
+    buf[5] = (f"  Up: {' '.join(parts)}", IC_CLOCK)
+
+    # CPU temperature
+    if _TEMP_OK:
+        try:
+            t = mcu_temperature()
+            buf[6] = (f"  CPU: {t:.1f}\u00b0C", IC_TEMP)
+        except Exception:
+            buf[6] = ("  CPU: n/a", IC_TEMP)
+    else:
+        buf[6] = ("", "")
+
+    buf[7] = ("", "")
 
 # ── Public API ──
 
 def set_title(text):
+    """Set line 0 of the active page as a title."""
+    if _pages is None:
+        return
+    _pages[_active_page][0] = (text, "")
     if _line_labels:
         _line_labels[0].set_text(text)
         _line_labels[0].set_style_text_font(_fonts['chicago48'], 0)
 
 def set_line(n, text, icon=None):
-    if not _line_labels or n < 0 or n >= LINE_COUNT:
+    """Set line n of the active page."""
+    if _pages is None or n < 0 or n >= LINE_COUNT:
         return
-    _line_labels[n].set_text(text)
+    _pages[_active_page][n] = (text, icon or "")
+    if _line_labels:
+        _line_labels[n].set_text(text)
     if icon and _icon_labels:
         _icon_labels[n].set_text(icon)
 
+def set_page_line(page, n, text, icon=None):
+    """Write to a specific page buffer (by index or name)."""
+    if _pages is None or n < 0 or n >= LINE_COUNT:
+        return
+    if isinstance(page, str):
+        page = _PAGE_NAMES.index(page) if page in _PAGE_NAMES else -1
+    if page < 0 or page >= NAV_ICON_COUNT:
+        return
+    _pages[page][n] = (text, icon or "")
+    if page == _active_page and _line_labels:
+        _line_labels[n].set_text(text)
+        if icon and _icon_labels:
+            _icon_labels[n].set_text(icon)
+
+def clear_page(page):
+    """Clear all lines of a page buffer."""
+    if _pages is None:
+        return
+    if isinstance(page, str):
+        page = _PAGE_NAMES.index(page) if page in _PAGE_NAMES else -1
+    if page < 0 or page >= NAV_ICON_COUNT:
+        return
+    _pages[page] = [("", "")] * LINE_COUNT
+    if page == _active_page:
+        _swap_page(page)
+
 def clear():
-    if _line_labels:
-        for lbl in _line_labels:
-            lbl.set_text("")
-            lbl.set_style_text_font(_fonts['cozette36'], 0)
-    if _icon_labels:
-        for ilbl in _icon_labels:
-            ilbl.set_text("")
+    """Clear the active page."""
+    clear_page(_active_page)
+
+def get_active_page():
+    """Return the active page index (0–5)."""
+    return _active_page
 
 def refresh(full=False):
     if _epd:
