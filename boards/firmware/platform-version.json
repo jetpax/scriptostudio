@@ -1,4 +1,4 @@
 {
-  "version": "1.2.11",
+  "version": "1.2.12",
   "note": "Platform version \u2014 auto-bumped by GHA (feat:=minor, fix:=patch)"
 }
