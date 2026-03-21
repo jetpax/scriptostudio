@@ -89,7 +89,7 @@ Your device keeps running the Extension autonomously. Access its web UI directly
 | **[ScriptO Studio](https://scriptostudio.com/app/)** | Web IDE + Extension loader |
 | **[ScriptoHub](https://scriptohub.com)** | Extension & ScriptO marketplace |
 | **[PycoClaw](https://pycoclaw.com)** | Open-source AI agent platform |
-| **[pyDirect](https://github.com/jetpax/pyDirect)** | MicroPython fast-path C modules |
+| **[Docs](https://scriptostudio.com/docs/)** | Documentation|
 | **[WebREPL Binary Protocol](https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md)** | IANA-registered sub-protocol |
 | **[MicroPython](https://micropython.org)** | Python for microcontrollers |
 
