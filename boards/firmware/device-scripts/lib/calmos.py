@@ -62,17 +62,19 @@ def _nav_icon_x(i):
     """Return the center x-offset from screen center for nav icon i."""
     return int((i - (NAV_ICON_COUNT - 1) / 2.0) * NAV_SPACING)
 
-def start():
-    """Initialize display, build layout, start clock loop."""
+def init():
+    """Initialize display hardware, build layout, render first frame.
+
+    Synchronous — safe to call from boot.py (no event loop needed).
+    The 3-4s EPD full refresh happens here, overlapping with network startup.
+    """
     global _epd, _scr, _time_lbl, _date_lbl, _line_labels, _icon_labels
     global _fonts, _started, _sel_bar, _nav_sel, _nav_icons
     if _started:
         return
 
-    from lib.sys.display.display_manager import get_display
-    _epd = get_display()
-    _epd.init()
-    _epd.lvgl_init()
+    from lib.sys.display.display_manager import init_display
+    _epd = init_display()
 
     _scr = lv.screen_active()
     _scr.clean()
@@ -98,10 +100,25 @@ def start():
 
     print(f"[CalmOS] Ready, time: {_fmt_time()} {_fmt_date()}")
     _epd.lv_refresh(full=True)
+    _started = True
 
+def start_tasks():
+    """Start async background tasks (clock loop).
+
+    Must be called from an async context (after event loop is running).
+    Safe to call multiple times — skips if already started.
+    """
     import asyncio
     asyncio.create_task(_clock_loop())
-    _started = True
+
+def start():
+    """Convenience wrapper — init + start_tasks in one call.
+
+    For backward compat. Prefer calling init() from boot.py and
+    start_tasks() from main_async() separately.
+    """
+    init()
+    start_tasks()
 
 def _build_status_bar():
     global _time_lbl, _date_lbl

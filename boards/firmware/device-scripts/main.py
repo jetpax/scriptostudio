@@ -308,15 +308,12 @@ async def main_async():
     except Exception as e:
         log("warning", f"NTP sync failed: {e}", source="main")
     
-    
-    # Display init moved to boot.py for earliest splash screen
-
-    # Start CalmOS display shell (blank notepad canvas for PFC agent)
+    # Start CalmOS async tasks (clock loop) — display already initialized in boot.py
     try:
         import lib.calmos as calmos
-        calmos.start()
+        calmos.start_tasks()
     except Exception as e:
-        log("warning", f"CalmOS skipped: {e}", source="main")
+        log("warning", f"CalmOS tasks skipped: {e}", source="main")
 
     # Mount SD card (mandatory if board supports it, silent fail if no card)
 

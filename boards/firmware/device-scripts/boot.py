@@ -2,7 +2,8 @@
 boot.py - Boot Initialization
 ==============================
 
-Initializes the status LED at boot time.
+Initializes hardware before main.py: status LED, display (CalmOS for EPD,
+splash for LCD), and AXP2101 PMU (if present).
 
 This file runs automatically on boot.
 
@@ -32,13 +33,21 @@ from lib.sys.status_led import init_status_led, status_led
 
 init_status_led()
 
-# Initialize display + show boot splash ASAP (before network)
+# Initialize display — EPD boards use CalmOS (full lifecycle), LCD boards show splash
 try:
     from lib.sys import board
     if board.has("display"):
-        from lib.sys.display.display_manager import init_display
-        init_display()
-        print("Display initialized (splash)")
+        _dev = board.device("display")
+        if _dev and _dev.interface == "epd":
+            # EPD: CalmOS owns display — hardware init + layout + first refresh (~3-4s)
+            # This overlaps with network startup in main.py
+            import lib.calmos as calmos
+            calmos.init()
+        else:
+            # LCD: boot splash
+            from lib.sys.display.display_manager import init_display
+            init_display()
+            print("Display initialized (splash)")
 except Exception as e:
     print(f"Display init skipped: {e}")
 
@@ -116,3 +125,4 @@ try:
         gc.collect()
 except Exception as e:
     print(f"PMU init skipped: {e}")
+
