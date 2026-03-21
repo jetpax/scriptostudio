@@ -87,32 +87,26 @@ jobs:
             BOOTLOADER="$variant_dir/bootloader.bin"
             PARTITION_TABLE="$variant_dir/partition-table.bin"
             FIRMWARE="$variant_dir/micropython.bin"
+            PARTITION_CSV=$(find "$variant_dir" -name "partitions*.csv" | head -1)
+
             # Verify all components present
-            for f in "$BOOTLOADER" "$PARTITION_TABLE" "$FIRMWARE"; do
+            for f in "$BOOTLOADER" "$PARTITION_TABLE" "$FIRMWARE" "$PARTITION_CSV"; do
               if [ ! -f "$f" ]; then
                 echo "❌ Missing: $f"
                 exit 1
               fi
             done
 
-            # Derive flash size from variant name (ESP32_P4_32 → 32, ESP32_S3_8_OCT → 8)
-            # and construct the expected partition CSV filename deterministically
-            FLASH_MB=$(echo "$VARIANT" | sed 's/_[A-Z]*$//' | grep -oE '[0-9]+$')
-            PARTITION_CSV="$variant_dir/partitions-${FLASH_MB}mb.csv"
-            if [ ! -f "$PARTITION_CSV" ]; then
-              echo "❌ Missing partition CSV: $PARTITION_CSV"
-              exit 1
-            fi
-
             # Parse VFS partition offset and size from CSV
             VFS_LINE=$(grep "^vfs," "$PARTITION_CSV")
             VFS_OFFSET=$(echo "$VFS_LINE" | cut -d',' -f4 | xargs)
             VFS_SIZE=$(echo "$VFS_LINE" | cut -d',' -f5 | xargs)
+
             if [[ "$VFS_SIZE" == 0x* ]]; then
               VFS_SIZE=$((VFS_SIZE))
             fi
 
-            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes ($((VFS_SIZE/1024/1024))MB)"
+            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes"
 
             # Create VFS partition from device-scripts
             VFS_IMAGE="/tmp/vfs-${VARIANT}.bin"
@@ -124,10 +118,11 @@ jobs:
 
             echo "  ✅ VFS image: $(du -h "$VFS_IMAGE" | cut -f1)"
 
-            # Detect chip from variant name
+            # Detect chip and flash size from variant name
             CHIP="esp32s3"
             if [[ "$VARIANT" == *"P4"* ]]; then CHIP="esp32p4"; fi
 
+            FLASH_MB=$(echo "$VARIANT" | sed 's/_[A-Z]*$//' | grep -oE '[0-9]+$')
             FLASH_SIZE="${FLASH_MB}MB"
 
             # Detect bootloader offset (P4 uses 0x2000, others use 0x0)
