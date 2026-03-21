@@ -14,6 +14,7 @@
     "btle": "Bluetooth LE",
     "wwan": "WWAN",
     "mqtt": "MQTT",
+    "telephony": "Téléphonie",
     "ntp": "NTP",
     "can": "CAN",
     "peripherals": "Périphériques",
