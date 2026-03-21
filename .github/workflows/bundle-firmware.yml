@@ -87,26 +87,36 @@ jobs:
             BOOTLOADER="$variant_dir/bootloader.bin"
             PARTITION_TABLE="$variant_dir/partition-table.bin"
             FIRMWARE="$variant_dir/micropython.bin"
-            PARTITION_CSV=$(find "$variant_dir" -name "partitions*.csv" | head -1)
-
             # Verify all components present
-            for f in "$BOOTLOADER" "$PARTITION_TABLE" "$FIRMWARE" "$PARTITION_CSV"; do
+            for f in "$BOOTLOADER" "$PARTITION_TABLE" "$FIRMWARE"; do
               if [ ! -f "$f" ]; then
                 echo "❌ Missing: $f"
                 exit 1
               fi
             done
 
-            # Parse VFS partition offset and size from CSV
-            VFS_LINE=$(grep "^vfs," "$PARTITION_CSV")
-            VFS_OFFSET=$(echo "$VFS_LINE" | cut -d',' -f4 | xargs)
-            VFS_SIZE=$(echo "$VFS_LINE" | cut -d',' -f5 | xargs)
+            # Parse VFS partition offset and size directly from the compiled partition-table.bin
+            # (immune to stale CSV files — the binary is the actual source of truth)
+            read VFS_OFFSET VFS_SIZE < <(python3 -c "
+import struct, sys
+with open('$PARTITION_TABLE', 'rb') as f:
+    data = f.read()
+offset = 0
+while offset < len(data) - 32:
+    magic = struct.unpack_from('<H', data, offset)[0]
+    if magic != 0x50AA:
+        break
+    name = data[offset+12:offset+28].split(b'\x00')[0].decode()
+    if name == 'vfs':
+        part_offset, part_size = struct.unpack_from('<ii', data, offset+4)
+        print(f'0x{part_offset:x} {part_size}')
+        sys.exit(0)
+    offset += 32
+print('ERROR: no vfs partition found', file=sys.stderr)
+sys.exit(1)
+")
 
-            if [[ "$VFS_SIZE" == 0x* ]]; then
-              VFS_SIZE=$((VFS_SIZE))
-            fi
-
-            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes"
+            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes ($(python3 -c "print(f'{$VFS_SIZE/1024/1024:.1f}MB')"))"
 
             # Create VFS partition from device-scripts
             VFS_IMAGE="/tmp/vfs-${VARIANT}.bin"
