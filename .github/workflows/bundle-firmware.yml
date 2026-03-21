@@ -97,26 +97,24 @@ jobs:
 
             # Parse VFS partition offset and size directly from the compiled partition-table.bin
             # (immune to stale CSV files — the binary is the actual source of truth)
-            read VFS_OFFSET VFS_SIZE < <(python3 -c "
-import struct, sys
-with open('$PARTITION_TABLE', 'rb') as f:
-    data = f.read()
-offset = 0
-while offset < len(data) - 32:
-    magic = struct.unpack_from('<H', data, offset)[0]
-    if magic != 0x50AA:
-        break
-    name = data[offset+12:offset+28].split(b'\x00')[0].decode()
-    if name == 'vfs':
-        part_offset, part_size = struct.unpack_from('<ii', data, offset+4)
-        print(f'0x{part_offset:x} {part_size}')
-        sys.exit(0)
-    offset += 32
-print('ERROR: no vfs partition found', file=sys.stderr)
-sys.exit(1)
-")
+            python3 -c "
+            import struct, sys
+            with open(sys.argv[1], 'rb') as f: data = f.read()
+            off = 0
+            while off < len(data) - 32:
+                m = struct.unpack_from('<H', data, off)[0]
+                if m != 0x50AA: break
+                nm = data[off+12:off+28].split(b'\x00')[0].decode()
+                if nm == 'vfs':
+                    po, ps = struct.unpack_from('<ii', data, off+4)
+                    print(f'VFS_OFFSET=0x{po:x}'); print(f'VFS_SIZE={ps}')
+                    sys.exit(0)
+                off += 32
+            sys.exit(1)
+            " "$PARTITION_TABLE" > /tmp/vfs_params.sh
+            source /tmp/vfs_params.sh
 
-            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes ($(python3 -c "print(f'{$VFS_SIZE/1024/1024:.1f}MB')"))"
+            echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes"
 
             # Create VFS partition from device-scripts
             VFS_IMAGE="/tmp/vfs-${VARIANT}.bin"
