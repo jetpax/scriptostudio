@@ -478,7 +478,34 @@ def _update_system_page():
     else:
         buf[6] = ("", "")
 
-    buf[7] = ("", "")
+    # Battery (AXP2101 PMU)
+    IC_BAT = "\uf240"  # nf-fa-battery_full
+    try:
+        from lib.sys import board
+        _pmu = board.device("pmu") if board.has("battery") else None
+        if _pmu and _pmu.type == "AXP2101":
+            from machine import Pin, I2C
+            _i2c_cfg = board.i2c("i2c0")
+            _i2c = I2C(0, scl=Pin(_i2c_cfg.scl), sda=Pin(_i2c_cfg.sda), freq=400000)
+            _A = 0x34
+            # Percentage (fuel gauge register 0xA4)
+            _i2c.writeto(_A, bytes([0xA4]))
+            pct = _i2c.readfrom(_A, 1)[0]
+            # Voltage (14-bit: high byte 0x34, low byte 0x35)
+            _i2c.writeto(_A, bytes([0x34]))
+            vh = _i2c.readfrom(_A, 1)[0]
+            _i2c.writeto(_A, bytes([0x35]))
+            vl = _i2c.readfrom(_A, 1)[0]
+            mv = ((vh << 8) | vl) & 0x3FFF
+            # Charge status (reg 0x01 bits [2:0])
+            _i2c.writeto(_A, bytes([0x01]))
+            cs = _i2c.readfrom(_A, 1)[0] & 0x07
+            state = ["Trickle", "Pre-chg", "CC", "CV", "Charged", ""][cs] if cs < 6 else f"0x{cs:02x}"
+            buf[7] = (f"  Batt: {pct}% {mv}mV {state}", IC_BAT)
+        else:
+            buf[7] = ("", "")
+    except Exception:
+        buf[7] = ("  Bat: n/a", IC_BAT)
 
 # ── Public API ──
 
