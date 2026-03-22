@@ -130,8 +130,15 @@ def start_servers(ip):
             webrepl.start(webrepl_password, "/webrepl")
             log("info", "WebREPL started", source="main")
     except Exception as e:
-        log("error", f"Failed to start WebREPL: {e}", source="main")
-        return False
+        err_msg = str(e).lower()
+        if "already running" in err_msg:
+            # C-level WS handler survived soft reset — webrepl.running()
+            # returned false (Python state re-imported) but the C state
+            # is intact. Treat as success to avoid aborting server init.
+            log("info", f"WebREPL already running (C state survived reset)", source="main")
+        else:
+            log("error", f"Failed to start WebREPL: {e}", source="main")
+            return False
     
     # Register WebSocket connect and disconnect callbacks
     try:
