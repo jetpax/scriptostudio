@@ -47,8 +47,16 @@ async def request(url, *, method='GET', data=None, headers=None, timeout=10000):
         dict with keys: status (int), body (str), headers (dict)
 
     Raises:
-        OSError on network/timeout errors
+        OSError on network/timeout errors (including "no network")
     """
+    # Gate on network availability — fail fast instead of burning sockets/TLS
+    try:
+        from lib.sys.network import network_ready
+        if not network_ready.is_set():
+            raise OSError("no network")
+    except ImportError:
+        pass
+
     hdrs = _format_headers(headers)
     h = _c._start(url, method=method, data=data, headers=hdrs, timeout=timeout)
 
@@ -113,6 +121,15 @@ async def stream(url, *, method='POST', data=None, headers=None, timeout=60000, 
         dict: Final poll result (status, headers)
     """
     hdrs = _format_headers(headers)
+
+    # Gate on network availability — fail fast instead of burning sockets/TLS
+    try:
+        from lib.sys.network import network_ready
+        if not network_ready.is_set():
+            raise OSError("no network")
+    except ImportError:
+        pass
+
     h = _c._start(url, method=method, data=data, headers=hdrs,
                    timeout=timeout, stream=True)
 

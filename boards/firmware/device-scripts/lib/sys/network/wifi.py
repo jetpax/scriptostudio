@@ -381,17 +381,17 @@ async def task():
     hostname = get_hostname()
     
     # Load roaming threshold from settings
-    roam_threshold = -80  # default
+    roam_threshold = -85  # default: only roam when truly degraded
     try:
         from lib.sys import settings
-        roam_threshold = settings.get("wifi.roam_rssi_threshold", -80)
+        roam_threshold = settings.get("wifi.roam_rssi_threshold", -85)
     except:
         pass
     _log("info", f"RSSI roam threshold: {roam_threshold} dBm")
     
     # Cooldown: minimum seconds between roam attempts
     _ROAM_COOLDOWN_S = 30
-    _last_roam_tick = 0
+    _last_roam_tick = time.ticks_ms()  # don't roam-check immediately after connect
     
     # Check if already connected (soft reset)
     if is_connected():
@@ -430,19 +430,26 @@ async def task():
                         _ssid = ""
                     
                     if _ssid:
-                        _reset_connection()
-                        networks = _sta.scan()
+                        # Scan while still connected — ESP-IDF supports this.
+                        # Do NOT disconnect just to scan: if no better AP exists,
+                        # we'd lose connectivity for nothing (the main thrashing cause).
+                        try:
+                            networks = _sta.scan()
+                        except:
+                            networks = []
                         matching = [ap for ap in networks if ap[0].decode('utf-8') == _ssid]
                         if matching:
                             matching.sort(key=lambda x: x[3], reverse=True)
                             best_rssi = matching[0][3]
                             if best_rssi > rssi + _ROAM_HYSTERESIS:
                                 _log("info", f"Better AP found ({best_rssi} dBm vs {rssi} dBm), roaming...")
+                                network_ready.clear()
                                 try:
                                     from lib.sys import settings as _s2
                                     _pw = _s2.get("wifi.password", "")
                                 except:
                                     _pw = ""
+                                _reset_connection()
                                 ip = connect(_ssid, _pw, bssid=matching[0][1])
                                 if ip:
                                     _log("info", f"Roamed to stronger AP: {ip}")
