@@ -1,6 +1,6 @@
 # Architecture
 
-ScriptO Studio is a browser-based IDE for MicroPython development on ESP32 devices running pyDirect firmware.
+ScriptO Studio is a browser-based IDE for MicroPython development on ESP32 devices running pyDirect enabled firmware.
 
 ## System Overview
 
@@ -29,7 +29,7 @@ ScriptO Studio is a browser-based IDE for MicroPython development on ESP32 devic
                               │ WBP (WebREPL Binary Protocol)
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                      pyDirect Device                        │
+│                         Device                              │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │                webrepl_binary.py                      │  │
 │  │         (Unified WebREPL Binary Protocol)             │  │
@@ -59,7 +59,7 @@ ScriptO Studio is a browser-based IDE for MicroPython development on ESP32 devic
 | **Extensions** | JS Configurator | Pluggable UI panels |
 | **Transport** | WebRTC/WebSocket | Device communication |
 
-### pyDirect Device (ESP32)
+### Device (ESP32)
 
 | Component | Purpose |
 |-----------|---------|

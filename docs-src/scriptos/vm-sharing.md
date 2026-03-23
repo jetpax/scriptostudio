@@ -4,7 +4,7 @@ Understanding how your scripts share the single MicroPython VM with the system.
 
 ## Single VM, Cooperative Multitasking
 
-pyDirect runs **everything in one MicroPython VM** using `asyncio` for cooperative multitasking. There are no threads—only one thing executes at a time.
+The device runs **everything in one MicroPython VM** using `asyncio` for cooperative multitasking. There are no threads—only one thing executes at a time.
 
 ```
 main.py (Orchestrator)
@@ -75,7 +75,7 @@ When Scripto Studio calls a device function (like `getSysInfo()`), it happens vi
 
 ```
 ┌────────────────┐         ┌──────────────────┐
-│ Scripto Studio │         │  pyDirect Device │
+│ Scripto Studio │         │     Device       │
 │                │  exec() │                  │
 │ getSystemInfo()├────────►│ getSysInfo()     │
 │                │         │     │            │
@@ -238,7 +238,7 @@ async def run_and_cleanup(skill_path):
 
 ## Thread Safety in MicroPython
 
-While pyDirect primarily uses `asyncio`, some components (like the status LED) use `_thread` for background work. Threads work but have significant gotchas.
+While the firmware primarily uses `asyncio`, some components (like the status LED) use `_thread` for background work. Threads work but have significant gotchas.
 
 ### Known Thread Limitations
 
@@ -375,7 +375,7 @@ When multiple extensions or ScriptOs talk to devices on the same I2C or SPI bus,
 
 ### Why No Locking Is Needed
 
-In CircuitPython, the `busio.I2C` class has `try_lock()` / `unlock()` methods because its USB stack can preempt a transaction mid-byte. **MicroPython on pyDirect doesn't have this problem** — all I2C/SPI calls are synchronous C functions that run to completion. Since the VM is single-threaded and cooperative, no other coroutine can interleave on the bus between `await` points.
+In CircuitPython, the `busio.I2C` class has `try_lock()` / `unlock()` methods because its USB stack can preempt a transaction mid-byte. **MicroPython doesn't have this problem** — all I2C/SPI calls are synchronous C functions that run to completion. Since the VM is single-threaded and cooperative, no other coroutine can interleave on the bus between `await` points.
 
 The real risk is **configuration conflicts**, not data races. The `bus` module solves this with a singleton cache.
 

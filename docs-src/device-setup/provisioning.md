@@ -7,7 +7,7 @@ Generate HTTPS certificates and configure device security.
 Provisioning (also called "blessing") generates:
 
 - A unique **self-signed HTTPS certificate** for secure connections
-- Enables the device's **web interface** at `https://pydirect-xxxx.local`
+- Enables the device's **web interface** at `https://pybot-xxxx.local`
 
 ## When to Re-provision
 
@@ -83,5 +83,5 @@ This separation allows you to:
 ## Related
 
 - [Network Setup](network-setup.md) - Configure WiFi settings
-- [Flashing Firmware](flashing-firmware.md) - Install pyDirect firmware
+- [Flashing Firmware](flashing-firmware.md) - Install firmware
 - [Connection Guide](../getting-started/connection.md) - Connect to your device

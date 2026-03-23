@@ -1,6 +1,6 @@
 # WebREPL Binary Protocol (WBP)
 
-The WebREPL Binary Protocol is a custom binary protocol for efficient communication between ScriptO Studio and pyDirect devices.
+The WebREPL Binary Protocol is a custom binary protocol for efficient communication between ScriptO Studio and devices.
 
 ## Overview
 
@@ -109,7 +109,7 @@ Three-tier processing model:
 
 ## Implementation
 
-- **Device**: `webrepl_binary.py` in pyDirect firmware
+- **Device**: `webrepl_binary.py` in device firmware
 - **Client**: `webrepl.js` in ScriptO Studio
 
 ## Related

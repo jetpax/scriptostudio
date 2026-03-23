@@ -1,11 +1,11 @@
 # Network Setup
 
-Configure WiFi on your pyDirect device.
+Configure WiFi on your device.
 
 ## Using ScriptO Studio
 
 1. Go to [scriptostudio.com](https://scriptostudio.com) or use the embedded IDE
-2. Click **Onboard New Device** from the landing page
+2. Click **Onboard New Device** from the home screen
 3. Connect your device via USB and click **Connect Device**
 4. Select **Change WiFi** from the scenarios
 5. A modal displays available networks with signal strength
@@ -53,5 +53,5 @@ Simply run **Change WiFi** again to select a different network.
 ## Related
 
 - [Provisioning](provisioning.md) - Generate HTTPS certificates
-- [Flashing Firmware](flashing-firmware.md) - Install pyDirect firmware
+- [Flashing Firmware](flashing-firmware.md) - Install firmware
 - [Troubleshooting Connection](../troubleshooting/connection.md) - Connection issues

@@ -1,6 +1,6 @@
 # Connection
 
-Connect to your pyDirect device from ScriptO Studio.
+Connect to your device from ScriptO Studio.
 
 ## Connect Dialog
 
@@ -12,7 +12,7 @@ When you open ScriptO Studio or click **Connect**, the connection dialog appears
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| **Device URL** | Full URL to your device's WebREPL endpoint | `https://pydirect-2b88.local/webrepl` |
+| **Device URL** | Full URL to your device's WebREPL endpoint | `https://pybot-2b88.local/webrepl` |
 | **Password** | Access password set during provisioning | `******` |
 
 ### Device URL Format
@@ -22,7 +22,7 @@ https://{hostname}.local/webrepl
 ```
 
 Where `{hostname}` is your device's mDNS hostname, typically:
-- `pydirect-XXXX` (XXXX = last 4 chars of MAC address)
+- `pybot-XXXX` (XXXX = last 4 chars of MAC address)
 - Custom hostname if you changed it
 
 ### Alternative URLs

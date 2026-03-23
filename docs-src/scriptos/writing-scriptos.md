@@ -1,6 +1,6 @@
 # Writing ScriptOs
 
-A guide to writing MicroPython scripts for pyDirect devices.
+A guide to writing MicroPython scripts for your device.
 
 ## Script Basics
 
@@ -15,7 +15,7 @@ A ScriptO is simply a MicroPython script that runs on your device. You can:
 
 ```python
 # hello.py - A simple script
-print("Hello from pyDirect!")
+print("Hello from ScriptO!")
 ```
 
 ### Script with Imports
@@ -64,7 +64,7 @@ asyncio.run(main())
 
 ## Boot Scripts
 
-pyDirect executes scripts in this order on boot:
+The device executes scripts in this order on boot:
 
 1. `boot.py` - System initialization (don't edit unless you know what you're doing)
 2. `main.py` - Your application code

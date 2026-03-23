@@ -1,16 +1,16 @@
 # FAQ
 
-Frequently asked questions about ScriptO Studio and pyDirect.
+Frequently asked questions about ScriptO Studio.
 
 ## General
 
 ### What is ScriptO Studio?
 
-ScriptO Studio is a browser-based IDE for developing MicroPython applications on ESP32 devices. It provides code editing, file management, terminal access, and an extension system for specialized functionality.
+ScriptO Studio is a browser-based IDE for developing MicroPython applications on ESP32 devices. It provides code editing, file management, terminal access, device onboarding, firmware flashing, and an extension system for specialized functionality.
 
-### What is pyDirect?
+### What firmware do the devices run?
 
-pyDirect is custom MicroPython firmware for ESP32-S3 that includes:
+Devices run pyDirect enabled firmware — custom MicroPython firmware for ESP32-S3 that includes:
 - WebREPL Binary Protocol for fast communication
 - WebRTC support for low-latency connections
 - Hardware abstraction for CAN, I2C, SPI, and more
@@ -18,7 +18,7 @@ pyDirect is custom MicroPython firmware for ESP32-S3 that includes:
 
 ### Do I need to install anything?
 
-No installation required! ScriptO Studio runs entirely in your browser. Just navigate to [scriptostudio.pydirect.com](https://scriptostudio.pydirect.com) and connect to your device.
+No installation required! ScriptO Studio runs entirely in your browser. Just navigate to [scriptostudio.com](https://scriptostudio.com) and connect to your device.
 
 ### Which browsers are supported?
 
@@ -33,7 +33,7 @@ No installation required! ScriptO Studio runs entirely in your browser. Just nav
 
 Yes! Both projects are MIT licensed:
 - [ScriptO Studio](https://github.com/jetpax/scriptostudio)
-- [pyDirect](https://github.com/jetpax/pyDirect)
+- [pyDirect firmware](https://github.com/jetpax/pyDirect)
 
 ## Connection
 
@@ -139,7 +139,7 @@ PSRAM = larger scripts and data.
 
 ### Can I use this with Arduino?
 
-No. pyDirect is MicroPython firmware, not compatible with Arduino. However, the concepts are similar and many Arduino libraries have MicroPython equivalents.
+No. The firmware is MicroPython-based, not compatible with Arduino. However, the concepts are similar and many Arduino libraries have MicroPython equivalents.
 
 ## More Questions?
 

@@ -1,6 +1,6 @@
 # Home
 
-Welcome to the ScriptO Studio documentation! This wiki covers everything you need to get started with ScriptO Studio and pyDirect.
+Welcome to the ScriptO Studio documentation! This wiki covers everything you need to get started with ScriptO Studio.
 
 ![ScriptO Studio AI Assistant](assets/AI.png)
 
@@ -8,9 +8,9 @@ Welcome to the ScriptO Studio documentation! This wiki covers everything you nee
 
 | Your Situation | Go To |
 |----------------|-------|
-| **New ESP32 chip** (no firmware) | [pydirect.com](https://pydirect.com) → [Getting Started](getting-started/index.md) |
-| **Existing pyDirect device** | [scriptostudio.com](https://scriptostudio.com) → [Getting Started](getting-started/index.md) |
-| **Change WiFi on device** | [pydirect.com](https://pydirect.com) → WiFi button |
+| **New ESP32 chip** (no firmware) | [scriptostudio.com](https://scriptostudio.com) → **Onboard New Device** → [Getting Started](getting-started/index.md) |
+| **Existing device** | [scriptostudio.com](https://scriptostudio.com) → **Connect** → [Getting Started](getting-started/index.md) |
+| **Change WiFi on device** | [scriptostudio.com](https://scriptostudio.com) → **Onboard New Device** → Change WiFi |
 
 1. **[Getting Started](getting-started/index.md)** - Install firmware and connect
 2. **[First ScriptO](getting-started/first-scripto.md)** - Run your first script on the device
@@ -26,7 +26,7 @@ Welcome to the ScriptO Studio documentation! This wiki covers everything you nee
 - [Settings](user-guide/settings.md) - Configuring ScriptO Studio
 
 ### Device Setup
-- [Flashing Firmware](device-setup/flashing-firmware.md) - Installing pyDirect on your ESP32
+- [Flashing Firmware](device-setup/flashing-firmware.md) - Installing firmware on your ESP32
 - [Board Configurations](device-setup/board-configurations.md) - Supported boards and pinouts
 - [Network Setup](device-setup/network-setup.md) - WiFi provisioning and connection
 - [Provisioning](device-setup/provisioning.md) - First-time device setup

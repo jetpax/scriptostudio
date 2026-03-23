@@ -1,6 +1,6 @@
 # File Manager
 
-The File Manager lets you browse, edit, and manage files on your pyDirect device.
+The File Manager lets you browse, edit, and manage files on your device.
 
 ## Opening File Manager
 

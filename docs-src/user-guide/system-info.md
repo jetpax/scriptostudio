@@ -29,7 +29,7 @@ Click **System** in the left sidebar, then select **About** or the info icon.
 | **System** | Chip family | esp32 |
 | **Release** | MicroPython version | 1.27.0 |
 | **Version** | Detailed version info | v1.27.0-1_ge404eb262... |
-| **Implementation** | Firmware variant | ESP32-S3 16MB with pyDirect with ESP32S3 |
+| **Implementation** | Firmware variant | ESP32-S3 16MB with pyDirect enabled firmware |
 | **SPIRAM** | PSRAM availability | Yes |
 | **MPY Version** | Bytecode version | 6.3 |
 
@@ -46,7 +46,7 @@ The flash partition table shows how storage is allocated:
 
 ### Partition Types
 
-- **factory** - The main application (MicroPython + pyDirect)
+- **factory** - The main application (MicroPython + pyDirect enabled firmware)
 - **nvs** - Non-volatile storage for system settings
 - **phy_init** - WiFi/Bluetooth PHY calibration data
 - **vfs** - Virtual filesystem (your Python files and data)

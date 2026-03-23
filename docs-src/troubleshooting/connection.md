@@ -58,7 +58,7 @@ Before diving into detailed troubleshooting:
 
 When device can't connect to WiFi, it creates its own access point:
 
-1. Look for WiFi network: `pyDirect-XXXX`
+1. Look for WiFi network: `pybot-XXXX`
 2. Connect your computer to that network
 3. Access ScriptO Studio at `http://192.168.4.1`
 4. Configure WiFi credentials in Settings
