@@ -238,7 +238,7 @@
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 60px 24px 40px;
+      padding: 28px 24px 40px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -521,6 +521,52 @@
       color: var(--text-muted);
     }
 
+    /* ── Hub Showcase ── */
+    .hub-showcase {
+      text-align: center;
+      padding: 60px 0;
+    }
+
+    .hub-showcase-tagline {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      letter-spacing: 0.01em;
+    }
+
+    .hub-showcase-tagline em {
+      font-style: normal;
+      color: var(--accent-bright);
+    }
+
+    .hub-showcase img {
+      width: 100%;
+      max-width: 920px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      box-shadow:
+        0 8px 40px var(--shadow-accent-soft),
+        0 0 60px rgba(0, 200, 83, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hub-showcase img:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 16px 60px var(--shadow-accent-mid),
+        0 0 80px rgba(0, 200, 83, 0.12);
+    }
+
+    .hub-showcase-caption {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
     /* ── Footer ── */
     .footer {
       text-align: center;
@@ -672,7 +718,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
           </div>
           <h3 class="feature-title">Standalone Apps</h3>
-          <p class="feature-desc">Extensions are full MicroPython applications — not plugins. Load GVRET, OVMS, OpenInverter, or Dala's BMS emulator. Each one runs independently on the device; Studio provides the runtime, configurator, and UI.</p>
+          <p class="feature-desc">Extensions are full MicroPython applications — not plugins. Each one runs independently on the device; Studio provides the runtime, configurator, and UI.</p>
         </div>
 
         <div class="feature-card">
@@ -715,6 +761,15 @@
           <p class="feature-desc">Single-step execution, watchpoints, and live system monitoring. See RAM, temperature, uptime, and signal strength in real time from the device status bar.</p>
         </div>
       </div>
+    </section>
+
+    <!-- Hub Showcase -->
+    <section class="hub-showcase">
+      <p class="hub-showcase-tagline"><em>JS frontends</em> with <em>Python device backends</em></p>
+      <a href="https://scriptohub.ai" target="_blank" rel="noopener">
+        <img src="hub.png" alt="ScriptoHub — browse extensions and skills for ScriptO Studio" loading="lazy">
+      </a>
+      <span class="hub-showcase-caption">Browse standalone apps and skills on ScriptoHub</span>
     </section>
 
     <!-- Ecosystem -->
