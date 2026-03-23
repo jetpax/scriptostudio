@@ -2,362 +2,802 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ScriptO Studio - Program Embedded Devices with Natural Language</title>
-  <meta name="description" content="ScriptO Studio - A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ScriptO Studio — Program Embedded Devices with Natural Language</title>
+  <meta name="description" content="ScriptO Studio — A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <meta name="color-scheme" content="light dark">
   <link rel="icon" href="app/favicon.svg" type="image/svg+xml">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://scriptostudio.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ScriptO Studio — Program Embedded Devices with Natural Language">
+  <meta property="og:description" content="A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://scriptostudio.com/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ScriptO Studio — Program Embedded Devices with Natural Language">
+  <meta name="twitter:description" content="A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+
+  <!-- Fonts: Clash Display + Satoshi from Fontshare -->
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+  <!-- Prevent FOUC: apply saved theme before paint -->
+  <script>
+    (() => {
+      const saved = localStorage.getItem('ss-theme');
+      const theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+
   <style>
-    @font-face {
-      font-family: "OpenSans";
-      src: url("opensans-regular.woff2") format("woff2");
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    @font-face {
-      font-family: "OpenSans";
-      src: url("opensans-bold.woff2") format("woff2");
-      font-weight: bold;
-      font-style: normal;
-    }
-
     :root {
-      --bg-primary: #0f1419;
-      --bg-tertiary: #1a2332;
-      --panel-bg: #1e2836;
-      --border-color: #2d3a4d;
-      --text-primary: #e6e6e6;
-      --text-secondary: #e8eaed;
-      --scheme-primary: #00d4aa;
-      --scheme-primary-light: #00ffcc;
+      /* Deep space palette with emerald accents */
+      --bg-deep: #050810;
+      --bg-surface: #0a0f1a;
+      --bg-elevated: #111827;
+
+      /* Emerald green spectrum */
+      --accent-bright: #00c853;
+      --accent-mid: #00a844;
+      --accent-dark: #006d2c;
+
+      /* Bioluminescent cyan */
+      --cyan-bright: #00e5cc;
+      --cyan-mid: #14b8a6;
+      --cyan-glow: rgba(0, 229, 204, 0.4);
+
+      /* Text */
+      --text-primary: #f0f4ff;
+      --text-secondary: #8892b0;
+      --text-muted: #5a6480;
+
+      /* Borders */
+      --border-subtle: rgba(136, 146, 176, 0.15);
+      --border-accent: rgba(0, 200, 83, 0.3);
+
+      /* Surfaces & Shadows */
+      --surface-card: rgba(10, 15, 26, 0.65);
+      --surface-accent-soft: rgba(0, 200, 83, 0.15);
+      --shadow-accent-soft: rgba(0, 200, 83, 0.15);
+      --shadow-accent-mid: rgba(0, 200, 83, 0.25);
+      --shadow-accent-strong: rgba(0, 200, 83, 0.35);
+      --shadow-cyan-soft: rgba(0, 229, 204, 0.15);
+
+      /* Fonts */
+      --font-display: 'Clash Display', system-ui, sans-serif;
+      --font-body: 'Satoshi', system-ui, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+    /* ── Light Mode ── */
+    html[data-theme='light'] {
+      --bg-deep: #fcfeff;
+      --bg-surface: #ffffff;
+      --bg-elevated: #f5f9ff;
+
+      --accent-bright: #00a844;
+      --accent-mid: #008c38;
+      --accent-dark: #006d2c;
+
+      --cyan-bright: #008f87;
+      --cyan-mid: #00766e;
+      --cyan-glow: rgba(0, 143, 135, 0.24);
+
+      --text-primary: #0b1220;
+      --text-secondary: #2e405c;
+      --text-muted: #5f7290;
+
+      --border-subtle: rgba(15, 23, 42, 0.16);
+      --border-accent: rgba(0, 168, 68, 0.34);
+
+      --surface-card: rgba(255, 255, 255, 0.88);
+      --surface-accent-soft: rgba(0, 168, 68, 0.16);
+      --shadow-accent-soft: rgba(0, 168, 68, 0.19);
+      --shadow-accent-mid: rgba(0, 168, 68, 0.27);
+      --shadow-accent-strong: rgba(0, 168, 68, 0.33);
+      --shadow-cyan-soft: rgba(0, 143, 135, 0.22);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'OpenSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: var(--bg-primary);
+      font-family: var(--font-body);
+      background: var(--bg-deep);
       color: var(--text-primary);
+      line-height: 1.6;
       min-height: 100vh;
-      overflow-x: hidden;
-      zoom: 0.75;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Hero Section */
+    html[data-theme='light'] body {
+      background:
+        radial-gradient(1200px circle at 12% -10%, rgba(0, 168, 68, 0.04), transparent 58%),
+        radial-gradient(900px circle at 88% -12%, rgba(0, 143, 135, 0.05), transparent 56%),
+        var(--bg-deep);
+    }
+
+    html[data-theme='light'] .stars {
+      opacity: 0.28;
+      filter: saturate(0.6);
+    }
+
+    html[data-theme='light'] .nebula {
+      opacity: 0.45;
+    }
+
+    ::selection {
+      background: var(--accent-bright);
+      color: var(--bg-deep);
+    }
+
+    a { color: inherit; }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-card);
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px var(--shadow-accent-soft);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--cyan-bright);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle-icon {
+      font-size: 1.05rem;
+      line-height: 1;
+      color: var(--text-secondary);
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .theme-toggle:hover .theme-toggle-icon {
+      color: var(--text-primary);
+      transform: rotate(10deg) scale(1.04);
+    }
+
+    @media (max-width: 640px) {
+      .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    /* ── Starfield + Nebula Background ── */
+    .stars {
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 200px 60px, rgba(0,200,83,0.6), transparent),
+        radial-gradient(1px 1px at 250px 150px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 300px 40px, rgba(0,229,204,0.4), transparent);
+      background-size: 350px 200px;
+      animation: twinkle 8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.4; }
+      100% { opacity: 0.7; }
+    }
+
+    .nebula {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0, 200, 83, 0.1), transparent 50%),
+        radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0, 229, 204, 0.08), transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 90%, rgba(0, 200, 83, 0.05), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Container ── */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Hero Section ── */
     .hero {
       text-align: center;
-      padding: 60px 20px 40px;
-      position: relative;
-      background-color: var(--bg-tertiary);
-      background-image: url('science.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      margin-bottom: 72px;
+      animation: fadeInUp 0.8s ease-out;
     }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(26, 35, 50, 0.5);
-      pointer-events: none;
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .hero-logo {
+    .hero-icon {
       width: 100px;
       height: 100px;
-      margin-bottom: 1.5rem;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, var(--scheme-primary) 0%, var(--scheme-primary-light) 50%, var(--scheme-primary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: glow 2s ease-in-out infinite alternate;
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
-
-    .hero-tagline {
-      font-size: 1.3rem;
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      line-height: 1.7;
-      opacity: 0.9;
-      padding: 10px;
-    }
-
-    @keyframes glow {
-      from { filter: brightness(1) drop-shadow(0 0 5px var(--scheme-primary)); }
-      to { filter: brightness(1.1) drop-shadow(0 0 20px var(--scheme-primary-light)); }
+      margin: 0 auto 24px;
+      animation: float 4s ease-in-out infinite;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
     }
 
-    /* CTA Buttons */
-    .cta-section {
+    .hero-icon svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 20px rgba(0, 200, 83, 0.4));
+    }
+
+    .hero-icon .chip-core {
+      animation: pulse-core 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-core {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 500;
+      color: var(--accent-bright);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 540px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    /* ── Hero CTAs ── */
+    .hero-ctas {
       display: flex;
-      gap: 1rem;
+      gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 2rem;
-      position: relative;
     }
 
-    .cta-btn {
-      background: var(--scheme-primary);
-      color: var(--bg-primary);
-      border: none;
-      padding: 16px 32px;
-      border-radius: 50px;
-      font-size: 1.1rem;
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: var(--font-body);
       font-weight: 600;
-      cursor: pointer;
+      font-size: 0.95rem;
       text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 15px rgba(0, 212, 170, 0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
     }
 
-    .cta-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 255, 204, 0.5);
-      background: var(--scheme-primary-light);
+    .hero-btn svg {
+      width: 18px;
+      height: 18px;
     }
 
-    .cta-btn-secondary {
-      background: var(--panel-bg);
+    .hero-btn-primary {
+      background: var(--accent-bright);
+      color: var(--bg-deep);
+      box-shadow: 0 4px 20px var(--shadow-accent-mid);
+    }
+
+    .hero-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--shadow-accent-strong);
+    }
+
+    .hero-btn-secondary {
+      background: var(--surface-card);
       color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      box-shadow: none;
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
     }
 
-    .cta-btn-secondary:hover {
-      border-color: var(--scheme-primary);
-      box-shadow: 0 4px 15px rgba(0, 212, 170, 0.2);
-      background: var(--panel-bg);
+    .hero-btn-secondary:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--shadow-accent-soft);
     }
 
-    /* Features Section */
+    /* ── Section Titles ── */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .accent-marker {
+      color: var(--accent-bright);
+      margin-right: 8px;
+    }
+
+    /* ── Features Grid ── */
     .features {
+      margin-bottom: 72px;
+    }
+
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap: 32px;
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    @media (min-width: 600px) {
-      .features { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (min-width: 1024px) {
-      .features { grid-template-columns: repeat(3, 1fr); }
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
     }
 
     .feature-card {
-      background: var(--panel-bg);
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 32px;
-      border: 1px solid var(--border-color);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--scheme-primary), var(--scheme-primary-light), var(--scheme-primary));
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
     }
 
     .feature-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-      border-color: var(--scheme-primary-light);
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px var(--shadow-accent-soft);
     }
 
-    .feature-card:hover::before {
-      transform: scaleX(1);
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
     }
 
-    .feature-card h3 {
-      color: var(--scheme-primary);
-      margin-top: 0;
-      margin-bottom: 16px;
-      font-size: 1.25rem;
+    .feature-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
       font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
     }
 
-    .feature-card p {
+    .feature-desc {
       color: var(--text-secondary);
-      line-height: 1.7;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ── Ecosystem CTA Grid ── */
+    .ecosystem {
+      margin-bottom: 56px;
+    }
+
+    .cta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 24px 16px;
+      border-radius: 16px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.25s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-accent);
+    }
+
+    .cta-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+
+    .cta-label {
+      font-family: var(--font-display);
+      font-weight: 600;
       font-size: 0.95rem;
     }
 
-    .feature-card:nth-child(odd) {
-      animation: float 6s ease-in-out infinite;
+    .cta-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
     }
 
-    .feature-card:nth-child(even) {
-      animation: float 6s ease-in-out infinite reverse;
+    .cta-studio:hover { box-shadow: 0 12px 32px var(--shadow-accent-soft); }
+    .cta-studio .cta-icon { color: var(--accent-bright); }
+
+    .cta-hub:hover { box-shadow: 0 12px 32px var(--shadow-cyan-soft); }
+    .cta-hub .cta-icon { color: var(--cyan-bright); }
+
+    .cta-protocol:hover { box-shadow: 0 12px 32px rgba(136, 146, 176, 0.15); }
+    .cta-protocol .cta-icon { color: var(--text-secondary); }
+
+    .cta-github:hover { box-shadow: 0 12px 32px rgba(240, 244, 255, 0.1); }
+
+    .cta-docs:hover { box-shadow: 0 12px 32px var(--shadow-cyan-soft); }
+    .cta-docs .cta-icon { color: var(--cyan-bright); }
+
+    /* ── Hero Screenshot ── */
+    .hero-screenshot {
+      margin-top: 40px;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    /* Ecosystem Section */
-    .ecosystem {
-      background: var(--bg-tertiary);
-      padding: 60px 20px;
-      text-align: center;
+    .hero-screenshot img {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      box-shadow:
+        0 8px 40px var(--shadow-accent-soft),
+        0 0 60px rgba(0, 200, 83, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .ecosystem h2 {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      color: var(--scheme-primary);
-      font-family: 'Orbitron', monospace;
-    }
-
-    .ecosystem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .ecosystem-item {
-      background: var(--panel-bg);
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      text-decoration: none;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-    }
-
-    .ecosystem-item:hover {
-      border-color: var(--scheme-primary);
+    .hero-screenshot img:hover {
       transform: translateY(-4px);
+      box-shadow:
+        0 16px 60px var(--shadow-accent-mid),
+        0 0 80px rgba(0, 200, 83, 0.12);
     }
 
-    .ecosystem-item h4 {
-      color: var(--scheme-primary-light);
-      margin-bottom: 8px;
-    }
-
-    .ecosystem-item p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    /* Footer */
-    footer {
+    .hero-screenshot-caption {
+      display: block;
       text-align: center;
-      padding: 40px 20px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 32px 0;
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-nav {
+      margin-bottom: 12px;
+    }
+
+    .footer-nav a {
       color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: var(--scheme-primary);
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    .footer-nav a:hover { color: var(--accent-bright); }
+
+    .footer-sep {
+      margin: 0 8px;
+      color: var(--text-muted);
     }
 
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      margin-bottom: 1rem;
+    .footer a {
+      color: var(--accent-bright);
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .footer a:hover { opacity: 0.8; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .container {
+        padding: 40px 16px 32px;
+      }
+
+      .hero {
+        margin-bottom: 48px;
+      }
+
+      .features, .ecosystem {
+        margin-bottom: 48px;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+
+      .cta-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <img src="app/favicon.svg" alt="ScriptO Studio" class="hero-logo">
-    <h1>ScriptO Studio</h1>
-    <p class="hero-tagline">Program embedded devices with natural language. No firmware updates required.</p>
-    <div class="cta-section">
-      <a href="/app/" class="cta-btn">🚀 Launch Studio</a>
-      <a href="https://github.com/jetpax/scriptostudio" class="cta-btn cta-btn-secondary">View on GitHub</a>
-    </div>
-  </section>
+  <div class="stars"></div>
+  <div class="nebula"></div>
 
-  <section class="features">
-    <div class="feature-card">
-      <h3>🛡️ Fast, Secure Development</h3>
-      <p>Real-time code execution and debugging with no firmware updates required. Works in modern browsers and as an installable PWA on iOS and Android.</p>
-    </div>
+  <main class="container">
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Chip body -->
+          <rect x="30" y="30" width="60" height="60" rx="8" fill="url(#chip-g)" class="chip-body"/>
+          <!-- CPU die -->
+          <rect x="42" y="42" width="36" height="36" rx="4" fill="var(--bg-deep)" opacity="0.6"/>
+          <!-- Circuit traces -->
+          <path d="M50 50 L50 58 L58 58" stroke="var(--accent-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M70 50 L70 58 L62 58" stroke="var(--cyan-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M50 70 L50 62 L58 62" stroke="var(--cyan-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M70 70 L70 62 L62 62" stroke="var(--accent-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <!-- Center dot -->
+          <circle cx="60" cy="60" r="3" fill="var(--accent-bright)" class="chip-core"/>
+          <!-- Pins - top -->
+          <rect x="40" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="50" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="60" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="70" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <!-- Pins - bottom -->
+          <rect x="40" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="50" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="60" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="70" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <!-- Pins - left -->
+          <rect x="16" y="40" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="16" y="50" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="16" y="60" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="16" y="70" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <!-- Pins - right -->
+          <rect x="90" y="40" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="90" y="50" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="90" y="60" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="90" y="70" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <defs>
+            <linearGradient id="chip-g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00c853"/>
+              <stop offset="100%" stop-color="#006d2c"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
 
-    <div class="feature-card">
-      <h3>✏️ Smart Python Editor</h3>
-      <p>Agentic code editor for MicroPython with syntax highlighting and seamless deployment. Describe what you want and the AI agent does the rest.</p>
-    </div>
+      <h1>ScriptO Studio</h1>
+      <p class="tagline">The App Platform for Embedded Devices</p>
+      <p class="description">
+        Runtime, configurator, and development environment — in one PWA.<br>
+        Build and manage MicroPython apps. No firmware updates required.
+      </p>
 
-    <div class="feature-card">
-      <h3>🧩 ScriptO Automations</h3>
-      <p>Reusable Script Objects that combine code with contextual configuration. Choose from a library of ScriptOs or create your own.</p>
-    </div>
+      <div class="hero-ctas">
+        <a href="/app/" class="hero-btn hero-btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Launch Studio
+        </a>
+        <a href="https://github.com/jetpax/scriptostudio" class="hero-btn hero-btn-secondary" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
 
-    <div class="feature-card">
-      <h3>📦 System Extensions</h3>
-      <p>Add major features at the touch of a button. Load GVRET, OVMS, OpenInverter, or Dala's Battery Emulator — or create your own.</p>
-    </div>
+      <!-- Hero Screenshot -->
+      <div class="hero-screenshot">
+        <img src="editor.png" alt="ScriptO Studio — MicroPython app platform with code editor, REPL console, and skill panel" loading="lazy">
+        <span class="hero-screenshot-caption">Code editor · Live REPL · Skill browser · App configurator · Device telemetry</span>
+      </div>
+    </header>
 
-    <div class="feature-card">
-      <h3>⚙️ Device Management</h3>
-      <p>Connect and manage devices, configure board settings, manage files, and network settings. Access devices anywhere via secure P2P VPN.</p>
-    </div>
+    <!-- Features -->
+    <section class="features">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> What It Does
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+          </div>
+          <h3 class="feature-title">Standalone Apps</h3>
+          <p class="feature-desc">Extensions are full MicroPython applications — not plugins. Load GVRET, OVMS, OpenInverter, or Dala's BMS emulator. Each one runs independently on the device; Studio provides the runtime, configurator, and UI.</p>
+        </div>
 
-    <div class="feature-card">
-      <h3>🐞 Visual Debugger</h3>
-      <p>Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics.</p>
-    </div>
-  </section>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3 class="feature-title">ScriptO Skills</h3>
+          <p class="feature-desc">Reusable automation scripts that combine code with configuration UI. Browse a growing library on ScriptoHub — sensor drivers, protocols, display widgets — or create and publish your own.</p>
+        </div>
 
-  <section class="ecosystem">
-    <h2>The Ecosystem</h2>
-    <div class="ecosystem-grid">
-      <a href="/app/" class="ecosystem-item">
-        <h4>ScriptO Studio</h4>
-        <p>Web IDE + Extension loader</p>
-      </a>
-      <a href="https://scriptohub.ai" class="ecosystem-item">
-        <h4>ScriptO Hub</h4>
-        <p>Cloud catalogue of Extensions and ScriptOs</p>
-      </a>
-      <a href="https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md" class="ecosystem-item">
-        <h4>WebREPL Protocol</h4>
-        <p>IANA-registered binary sub-protocol</p>
-      </a>
-    </div>
-  </section>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+          </div>
+          <h3 class="feature-title">Agentic Editor</h3>
+          <p class="feature-desc">More than syntax highlighting. Describe what you want in natural language and the AI agent writes, deploys, and tests your code on the device — live, over WebREPL.</p>
+        </div>
 
-  <footer>
-    <p>Made with ❤️ for the Embedded Python community</p>
-  </footer>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          </div>
+          <h3 class="feature-title">Device Management</h3>
+          <p class="feature-desc">Flash firmware, configure boards, manage files, and monitor network settings. Access devices anywhere through secure P2P — from any browser or as an installable PWA.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="feature-title">40K LoC Runtime</h3>
+          <p class="feature-desc">MicroPython running 100+ modules with multiple concurrent TLS connections — on a $5 chip. No web framework involved; the entire app stack runs natively on the device.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9v-1a3 3 0 0 1 6 0v1"/><path d="M8 9h8a6 6 0 0 1 1 3v3a5 5 0 0 1 -10 0v-3a6 6 0 0 1 1 -3"/><path d="M3 13l4 0"/><path d="M17 13l4 0"/><path d="M12 20l0 -6"/><path d="M4 19l3.35 -2"/><path d="M20 19l-3.35 -2"/><path d="M4 7l3.75 2.4"/><path d="M20 7l-3.75 2.4"/></svg>
+          </div>
+          <h3 class="feature-title">Visual Debugger</h3>
+          <p class="feature-desc">Single-step execution, watchpoints, and live system monitoring. See RAM, temperature, uptime, and signal strength in real time from the device status bar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ecosystem -->
+    <section class="ecosystem">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> The Ecosystem
+      </h2>
+      <nav class="cta-grid">
+        <a href="/app/" class="cta cta-studio">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          <span class="cta-label">ScriptO Studio</span>
+          <span class="cta-sub">Open the IDE</span>
+        </a>
+
+        <a href="https://scriptohub.ai" class="cta cta-hub" target="_blank" rel="noopener">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 0 0-8-8v8h8z" opacity="0.5"/></svg>
+          <span class="cta-label">ScriptoHub</span>
+          <span class="cta-sub">Browse skills &amp; extensions</span>
+        </a>
+
+        <a href="https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md" class="cta cta-protocol" target="_blank" rel="noopener">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          <span class="cta-label">WebREPL Protocol</span>
+          <span class="cta-sub">IANA-registered spec</span>
+        </a>
+
+        <a href="https://github.com/jetpax/scriptostudio" class="cta cta-github" target="_blank" rel="noopener">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span class="cta-label">GitHub</span>
+          <span class="cta-sub">View the source</span>
+        </a>
+
+        <a href="/docs/" class="cta cta-docs">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span class="cta-label">Documentation</span>
+          <span class="cta-sub">User guide &amp; API</span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <nav class="footer-nav">
+        <a href="/app/">Studio</a>
+        <span class="footer-sep">·</span>
+        <a href="https://scriptohub.ai" target="_blank" rel="noopener">ScriptoHub</a>
+        <span class="footer-sep">·</span>
+        <a href="https://github.com/jetpax/scriptostudio" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-sep">·</span>
+        <a href="/docs/">Docs</a>
+      </nav>
+      <p>Made with ❤️ for the Embedded Python community</p>
+    </footer>
+  </main>
+
+  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+    <span class="theme-toggle-icon" data-theme-icon aria-hidden="true"></span>
+  </button>
+
+  <script>
+    (() => {
+      const key = 'ss-theme';
+      const root = document.documentElement;
+      const toggle = document.querySelector('[data-theme-toggle]');
+      const icon = document.querySelector('[data-theme-icon]');
+      if (!toggle || !icon) return;
+
+      const applyTheme = (theme, persist = true) => {
+        root.dataset.theme = theme;
+        root.style.colorScheme = theme;
+        const isDark = theme === 'dark';
+        icon.textContent = isDark ? '☀' : '☾';
+        toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        if (persist) localStorage.setItem(key, theme);
+      };
+
+      toggle.addEventListener('click', () => {
+        applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light');
+      });
+
+      applyTheme(root.dataset.theme === 'light' ? 'light' : 'dark', false);
+    })();
+  </script>
 </body>
 </html>
