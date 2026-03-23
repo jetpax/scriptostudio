@@ -1,6 +1,6 @@
-# Partition table for ESP32-P4 with 32MB flash and 8MB app partition (for LVGL)
+# Partition table for ESP32-P4 with 32MB flash and 10MB app partition (for LVGL+ulab)
 # Name,   Type, SubType, Offset,  Size, Flags
 nvs,      data, nvs,     0x9000,  0x6000,
 phy_init, data, phy,     0xf000,  0x1000,
-app,      app,  factory, 0x10000, 0x800000,
-vfs,      data, fat,     0x810000,0x17F0000,
+app,      app,  factory, 0x10000, 0xA00000,
+vfs,      data, fat,     0xA10000,0x15F0000,
