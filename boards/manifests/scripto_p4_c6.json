@@ -106,7 +106,8 @@
 
     "audio_codec": {
       "type": "ES8311",
-      "i2c_bus": "i2c0",
+      "driver": "es8311",
+      "bus": "i2c.i2c0",
       "i2c_address": "0x18",
       "i2s": {
         "dsdin": 9,

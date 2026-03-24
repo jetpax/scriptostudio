@@ -115,6 +115,7 @@
       "type": "QMI8658C",
       "driver": "qmi8658",
       "bus": "i2c.i2c0",
+      "i2c_address": "0x6B",
       "description": "6-axis accelerometer/gyroscope"
     },
 
@@ -122,6 +123,7 @@
       "type": "PCF85063",
       "driver": "pcf85063",
       "bus": "i2c.i2c0",
+      "i2c_address": "0x51",
       "int_pin": 15,
       "description": "Real-time clock with alarm and independent backup battery"
     },
@@ -130,6 +132,7 @@
       "type": "ES8311",
       "driver": "es8311",
       "bus": "i2c.i2c0",
+      "i2c_address": "0x18",
       "i2s_bus": "i2s.audio",
       "pa_pin": 46,
       "description": "Low-power audio codec for speaker output with NS4150B PA"
@@ -148,6 +151,7 @@
       "type": "SHTC3",
       "driver": "shtc3",
       "bus": "i2c.i2c0",
+      "i2c_address": "0x70",
       "description": "High-precision temperature and humidity sensor"
     },
 
