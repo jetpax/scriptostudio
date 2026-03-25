@@ -315,10 +315,15 @@ async def main_async():
     except Exception as e:
         log("warning", f"NTP sync failed: {e}", source="main")
     
-    # Start CalmOS async tasks (clock loop) — display already initialized in boot.py
+    # Start CalmOS async tasks — only on e-paper display boards
     try:
-        import lib.calmos as calmos
-        calmos.start_tasks()
+        from lib.sys import board
+        display = board.device("display")
+        if display and display.interface == "epd":
+            import lib.calmos as calmos
+            calmos.start_tasks()
+        else:
+            log("debug", "CalmOS skipped (not an e-paper display)", source="main")
     except Exception as e:
         log("warning", f"CalmOS tasks skipped: {e}", source="main")
 
