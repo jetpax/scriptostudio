@@ -394,6 +394,16 @@ def getStatusInfo():
         'uptime': uptime_min,
         'wifi_rssi': wifi_rssi
     }
+    
+    # Include BVM heap if running
+    try:
+        import bvm
+        s = bvm.status()
+        if s['running']:
+            result['bvm'] = {'total': s['heap_size'], 'used': s['heap_size'] - s['heap_total']}
+    except ImportError:
+        pass
+    
     print(json.dumps(result))
 
 def getNetworksInfo():
