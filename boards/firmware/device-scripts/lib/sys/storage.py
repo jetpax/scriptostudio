@@ -16,6 +16,9 @@ _sd_card = None
 DATA_DIR = '/pfc'
 SESSIONS_DIR = '/pfc/sessions'
 IMAGES_DIR = '/pfc/images'
+MEMORY_DIR = '/pfc/memory'
+SKILLS_DIR = '/pfc/skills'
+STATE_DIR = '/pfc/state'
 
 
 def has_sdcard():
@@ -31,16 +34,19 @@ def get_sd_card():
 def init():
   """Called after SD card mount attempt. Resolves paths and migrates.
   Must be called once during boot, after mount_sdcard()."""
-  global DATA_DIR, SESSIONS_DIR, IMAGES_DIR
+  global DATA_DIR, SESSIONS_DIR, IMAGES_DIR, MEMORY_DIR, SKILLS_DIR, STATE_DIR
 
   if has_sdcard():
     DATA_DIR = '/sd/pfc'
     SESSIONS_DIR = '/sd/pfc/sessions'
     IMAGES_DIR = '/sd/pfc/images'
+    MEMORY_DIR = '/sd/pfc/memory'
+    SKILLS_DIR = '/sd/pfc/skills'
+    STATE_DIR = '/sd/pfc/state'
     _migrate_flash_to_sd()
 
   # Ensure directories exist on whichever storage we're using
-  for d in [DATA_DIR, SESSIONS_DIR, IMAGES_DIR]:
+  for d in [DATA_DIR, SESSIONS_DIR, IMAGES_DIR, MEMORY_DIR, SKILLS_DIR, STATE_DIR]:
     try:
       os.mkdir(d)
     except:
@@ -133,9 +139,53 @@ def get_storage_info():
   }
 
 
+# Soul/identity files that migrate to SD (user-mutable, portable).
+# config.json, AGENTS.md, TOOLS.md stay on flash (firmware-deployed / system).
+_SOUL_FILES = (
+  'SOUL.md', 'IDENTITY.md', 'USER.md', 'MEMORY.md',
+  'HEARTBEAT.md', 'BOOTSTRAP.md',
+)
+
+
 def _migrate_flash_to_sd():
-  """One-time boot migration: /pfc/sessions|images → /sd/pfc/."""
-  for subdir in ('sessions', 'images'):
+  """One-time boot migration: /pfc → /sd/pfc.
+
+  Migrates:
+    - Soul/identity .md files (user-mutable, portable)
+    - Subdirectories: sessions/, images/, memory/, skills/, state/
+  Keeps on flash:
+    - config.json (API keys — don't put on removable media)
+    - AGENTS.md, TOOLS.md (firmware-deployed system files)
+  """
+  # Ensure /sd/pfc exists
+  try:
+    os.mkdir('/sd/pfc')
+  except:
+    pass
+
+  # Migrate individual soul files
+  migrated = 0
+  for fname in _SOUL_FILES:
+    src = f'/pfc/{fname}'
+    dst = f'/sd/pfc/{fname}'
+    try:
+      os.stat(dst)  # Already exists on SD — skip
+      continue
+    except:
+      pass
+    try:
+      with open(src, 'rb') as f:
+        data = f.read()
+      with open(dst, 'wb') as f:
+        f.write(data)
+      migrated += 1
+    except:
+      pass  # Source doesn't exist or write failed — skip
+  if migrated:
+    _log("info", f"Migrated {migrated} soul files to SD")
+
+  # Migrate subdirectories
+  for subdir in ('sessions', 'images', 'memory', 'skills', 'state'):
     src = f'/pfc/{subdir}'
     dst = f'/sd/pfc/{subdir}'
     try:
@@ -144,28 +194,30 @@ def _migrate_flash_to_sd():
       continue
     if not files:
       continue
-    # Ensure destination tree
-    for d in ['/sd/pfc', dst]:
-      try:
-        os.mkdir(d)
-      except:
-        pass
-    # Copy each file then remove original
-    migrated = 0
+    try:
+      os.mkdir(dst)
+    except:
+      pass
+    dir_migrated = 0
     for fname in files:
       src_path = f'{src}/{fname}'
       dst_path = f'{dst}/{fname}'
+      try:
+        os.stat(dst_path)  # Already on SD — skip
+        continue
+      except:
+        pass
       try:
         with open(src_path, 'rb') as f:
           data = f.read()
         with open(dst_path, 'wb') as f:
           f.write(data)
         os.remove(src_path)
-        migrated += 1
+        dir_migrated += 1
       except:
         pass  # Skip on error — don't lose data
-    if migrated:
-      _log("info", f"Migrated {migrated} files {src} → {dst}")
+    if dir_migrated:
+      _log("info", f"Migrated {dir_migrated} files {src} → {dst}")
 
 
 def _log(level, msg):
