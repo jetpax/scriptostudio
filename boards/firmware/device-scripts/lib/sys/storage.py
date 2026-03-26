@@ -1,11 +1,11 @@
 """
-Storage Manager — SD card detection and mount.
+Storage Manager — SD card detection, mount, and recovery.
 
 Generic infrastructure for SD-aware storage. App-specific paths
 and migration logic belong in the consuming application.
 
 Usage:
-    from lib.sys.storage import has_sdcard, sd_root
+    from lib.sys.storage import has_sdcard, sd_root, sd_recover
 """
 import os
 
@@ -14,6 +14,9 @@ _sd_card = None
 
 # Root prefix: '' for flash, '/sd' for SD card
 _sd_root = ''
+
+# Cached mount parameters for recovery (set by mount_sdcard)
+_mount_params = None
 
 
 def has_sdcard():
@@ -76,21 +79,33 @@ def mount_sdcard():
       p.value(0 if active_low else 1)  # power on
       time.sleep_ms(500)
 
-  # Mount SD card
+  if width == 4:
+    data_pins = (sd_bus.d0, sd_bus.d1, sd_bus.d2, sd_bus.d3)
+  else:
+    data_pins = (sd_bus.d0,)
+
+  params = dict(
+    slot=slot, width=width,
+    sck=sd_bus.clk, cmd=sd_bus.cmd,
+    data=data_pins, freq=4000000
+  )
+
+  return _do_mount(params)
+
+
+def _do_mount(params):
+  """Low-level mount using cached parameters. Used by both
+  mount_sdcard() and sd_recover()."""
+  global _sd_card, _mount_params
   try:
     from machine import SDCard
     import time
     time.sleep_ms(200)
 
-    if width == 4:
-      data_pins = (sd_bus.d0, sd_bus.d1, sd_bus.d2, sd_bus.d3)
-    else:
-      data_pins = (sd_bus.d0,)
-
     sd = SDCard(
-      slot=slot, width=width,
-      sck=sd_bus.clk, cmd=sd_bus.cmd,
-      data=data_pins, freq=4000000
+      slot=params['slot'], width=params['width'],
+      sck=params['sck'], cmd=params['cmd'],
+      data=params['data'], freq=params['freq']
     )
 
     try:
@@ -99,8 +114,8 @@ def mount_sdcard():
       pass
     os.mount(sd, '/sd')
 
-    global _sd_card
     _sd_card = sd
+    _mount_params = params
 
     info = sd.info()
     cap_gb = info[0] / (1024**3)
@@ -109,6 +124,45 @@ def mount_sdcard():
   except Exception as e:
     _log("info", f"SD card not available: {e}")
     return False
+
+
+def sd_recover():
+  """Recover from SD card EIO by unmounting and remounting.
+
+  Call this when an SD operation raises [Errno 5] EIO.
+  Returns True if recovery succeeded, False if not.
+
+  Usage:
+      try:
+          f = open('/sd/pfc/data.txt', 'w')
+          ...
+      except OSError as e:
+          if e.errno == 5 and sd_recover():
+              # retry the operation
+  """
+  global _sd_card
+  if _mount_params is None:
+    _log("warn", "SD recovery: no mount params cached")
+    return False
+
+  _log("info", "SD recovery: unmounting stale card...")
+
+  # Unmount stale filesystem
+  try:
+    os.umount('/sd')
+  except:
+    pass
+
+  # Clear old card reference
+  _sd_card = None
+
+  # Remount with cached params
+  ok = _do_mount(_mount_params)
+  if ok:
+    _log("info", "SD recovery: remounted OK")
+  else:
+    _log("warn", "SD recovery: remount failed")
+  return ok
 
 
 def get_storage_info():
