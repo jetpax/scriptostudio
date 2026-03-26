@@ -1,29 +1,32 @@
 """
-Storage Manager — SD card detection, path resolution, migration.
+Storage Manager — SD card detection and mount.
 
-Single source of truth for data storage paths.
-Import AFTER boot sequence has attempted SD card mount.
+Generic infrastructure for SD-aware storage. App-specific paths
+and migration logic belong in the consuming application.
 
 Usage:
-    from lib.sys.storage import SESSIONS_DIR, IMAGES_DIR, has_sdcard
+    from lib.sys.storage import has_sdcard, sd_root
 """
 import os
 
-# Module-level SD card object (replaces builtins.sd to avoid creating builtins module)
+# Module-level SD card object
 _sd_card = None
 
-# Defaults (flash fallback — /pfc on root VFS partition)
-DATA_DIR = '/pfc'
-SESSIONS_DIR = '/pfc/sessions'
-IMAGES_DIR = '/pfc/images'
-MEMORY_DIR = '/pfc/memory'
-SKILLS_DIR = '/pfc/skills'
-STATE_DIR = '/pfc/state'
+# Root prefix: '' for flash, '/sd' for SD card
+_sd_root = ''
 
 
 def has_sdcard():
   """Is a real SD card mounted (not just a flash directory)?"""
   return _sd_card is not None
+
+
+def sd_root():
+  """Get storage root prefix: '' for flash, '/sd' for SD card.
+
+  Apps build their own paths: f"{sd_root()}/myapp/data"
+  """
+  return _sd_root
 
 
 def get_sd_card():
@@ -32,25 +35,11 @@ def get_sd_card():
 
 
 def init():
-  """Called after SD card mount attempt. Resolves paths and migrates.
+  """Called after SD card mount attempt. Sets sd_root.
   Must be called once during boot, after mount_sdcard()."""
-  global DATA_DIR, SESSIONS_DIR, IMAGES_DIR, MEMORY_DIR, SKILLS_DIR, STATE_DIR
-
+  global _sd_root
   if has_sdcard():
-    DATA_DIR = '/sd/pfc'
-    SESSIONS_DIR = '/sd/pfc/sessions'
-    IMAGES_DIR = '/sd/pfc/images'
-    MEMORY_DIR = '/sd/pfc/memory'
-    SKILLS_DIR = '/sd/pfc/skills'
-    STATE_DIR = '/sd/pfc/state'
-    _migrate_flash_to_sd()
-
-  # Ensure directories exist on whichever storage we're using
-  for d in [DATA_DIR, SESSIONS_DIR, IMAGES_DIR, MEMORY_DIR, SKILLS_DIR, STATE_DIR]:
-    try:
-      os.mkdir(d)
-    except:
-      pass
+    _sd_root = '/sd'
 
 
 def mount_sdcard():
@@ -135,89 +124,7 @@ def get_storage_info():
     'type': 'sdcard' if has_sdcard() else 'flash',
     'total_mb': total // (1024 * 1024),
     'free_mb': free // (1024 * 1024),
-    'data_dir': DATA_DIR,
   }
-
-
-# Soul/identity files that migrate to SD (user-mutable, portable).
-# config.json, AGENTS.md, TOOLS.md stay on flash (firmware-deployed / system).
-_SOUL_FILES = (
-  'SOUL.md', 'IDENTITY.md', 'USER.md', 'MEMORY.md',
-  'HEARTBEAT.md', 'BOOTSTRAP.md',
-)
-
-
-def _migrate_flash_to_sd():
-  """One-time boot migration: /pfc → /sd/pfc.
-
-  Migrates:
-    - Soul/identity .md files (user-mutable, portable)
-    - Subdirectories: sessions/, images/, memory/, skills/, state/
-  Keeps on flash:
-    - config.json (API keys — don't put on removable media)
-    - AGENTS.md, TOOLS.md (firmware-deployed system files)
-  """
-  # Ensure /sd/pfc exists
-  try:
-    os.mkdir('/sd/pfc')
-  except:
-    pass
-
-  # Migrate individual soul files
-  migrated = 0
-  for fname in _SOUL_FILES:
-    src = f'/pfc/{fname}'
-    dst = f'/sd/pfc/{fname}'
-    try:
-      os.stat(dst)  # Already exists on SD — skip
-      continue
-    except:
-      pass
-    try:
-      with open(src, 'rb') as f:
-        data = f.read()
-      with open(dst, 'wb') as f:
-        f.write(data)
-      migrated += 1
-    except:
-      pass  # Source doesn't exist or write failed — skip
-  if migrated:
-    _log("info", f"Migrated {migrated} soul files to SD")
-
-  # Migrate subdirectories
-  for subdir in ('sessions', 'images', 'memory', 'skills', 'state'):
-    src = f'/pfc/{subdir}'
-    dst = f'/sd/pfc/{subdir}'
-    try:
-      files = os.listdir(src)
-    except:
-      continue
-    if not files:
-      continue
-    try:
-      os.mkdir(dst)
-    except:
-      pass
-    dir_migrated = 0
-    for fname in files:
-      src_path = f'{src}/{fname}'
-      dst_path = f'{dst}/{fname}'
-      try:
-        os.stat(dst_path)  # Already on SD — skip
-        continue
-      except:
-        pass
-      try:
-        with open(src_path, 'rb') as f:
-          data = f.read()
-        with open(dst_path, 'wb') as f:
-          f.write(data)
-        os.remove(src_path)
-        dir_migrated += 1
-      except:
-        pass  # Skip on error — don't lose data
-    if dir_migrated:
-      _log("info", f"Migrated {dir_migrated} files {src} → {dst}")
 
 
 def _log(level, msg):
