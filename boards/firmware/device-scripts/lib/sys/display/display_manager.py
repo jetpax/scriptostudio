@@ -82,12 +82,16 @@ def _init_qspi_display(board, disp, brightness):
     if driver == 'co5300':
         # CO5300 AMOLED — brightness via register, reset via GPIO
         rst_pin = getattr(disp, 'rst_pin', None)
+        ox = getattr(disp, 'offset_x', 0)
+        oy = getattr(disp, 'offset_y', 0)
         from lib.sys.display.co5300 import Co5300
         lcd = Co5300(
             bus=bus,
             res=(disp.width, disp.height),
             rst=rst_pin,
             color_bits=getattr(disp, 'color_bits', 16),
+            offset_x=ox,
+            offset_y=oy,
             doublebuffer=False,
             factor=32,
         )

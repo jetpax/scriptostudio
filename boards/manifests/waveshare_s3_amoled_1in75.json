@@ -123,6 +123,8 @@
       "te_pin": 13,
       "width": 466,
       "height": 466,
+      "offset_x": 6,
+      "offset_y": 0,
       "interface": "qspi",
       "color_bits": 16,
       "description": "1.75\" 466x466 round AMOLED (CO5300) with QSPI interface"

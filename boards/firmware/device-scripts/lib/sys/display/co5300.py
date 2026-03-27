@@ -68,7 +68,8 @@ def _qspi_color_cmd(cmd):
 class Co5300_hw:
     """Low-level CO5300 hardware driver (QSPI bus)."""
 
-    def __init__(self, *, bus, res, rst=None, rot=0, color_bits=16):
+    def __init__(self, *, bus, res, rst=None, rot=0, color_bits=16,
+                 offset_x=0, offset_y=0):
         """
         Args:
             bus: qspi_lcd.Bus instance
@@ -76,12 +77,16 @@ class Co5300_hw:
             rst: reset pin number (optional, GPIO — not via expander)
             rot: rotation (0-3)
             color_bits: 16 (RGB565) or 24 (RGB888)
+            offset_x: column offset into panel framebuffer (CO5300: 6)
+            offset_y: row offset into panel framebuffer (CO5300: 0)
         """
         self.bus = bus
         self.res = res
         self.rot = rot
         self.width, self.height = res
         self.color_bits = color_bits
+        self.offset_x = offset_x
+        self.offset_y = offset_y
 
         # Precompute QSPI-encoded commands
         self._caset = _qspi_cmd(_CASET)
@@ -119,12 +124,16 @@ class Co5300_hw:
 
     def set_memory_location(self, x1, y1, x2, y2):
         buf = self._param_buf
+        x1 += self.offset_x
+        x2 += self.offset_x
         buf[0] = (x1 >> 8) & 0xFF
         buf[1] = x1 & 0xFF
         buf[2] = (x2 >> 8) & 0xFF
         buf[3] = x2 & 0xFF
         self.bus.tx_param(self._caset, self._param_mv)
 
+        y1 += self.offset_y
+        y2 += self.offset_y
         buf[0] = (y1 >> 8) & 0xFF
         buf[1] = y1 & 0xFF
         buf[2] = (y2 >> 8) & 0xFF
@@ -286,7 +295,9 @@ class Co5300(Co5300_hw, Co5300_lvgl):
         lcd = Co5300(bus=bus, res=(466, 466), rst=39, doublebuffer=False, factor=32)
     """
     def __init__(self, *, bus, res, rst=None, rot=0,
-                 color_bits=16, doublebuffer=True, factor=32):
+                 color_bits=16, offset_x=0, offset_y=0,
+                 doublebuffer=True, factor=32):
         Co5300_hw.__init__(self, bus=bus, res=res, rst=rst,
-                             rot=rot, color_bits=color_bits)
+                             rot=rot, color_bits=color_bits,
+                             offset_x=offset_x, offset_y=offset_y)
         Co5300_lvgl.__init__(self, doublebuffer=doublebuffer, factor=factor)
