@@ -1,0 +1,207 @@
+{
+  "identity": {
+    "id": "waveshare_s3_amoled_1in75",
+    "name": "Waveshare ESP32-S3 Touch AMOLED 1.75",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3 N16R8 with 1.75\" 466x466 AMOLED, touch, dual mic, GNSS, IMU, audio, SD, RTC"
+  },
+
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": true,
+    "imu": true,
+    "audio": true,
+    "microphone": true,
+    "sdcard": true,
+    "rtc": true,
+    "battery": true,
+    "gnss": true,
+    "gpio_expander": true
+  },
+
+  "resources": {
+    "pins": {
+      "boot": 0,
+      "gpio_out": 16
+    },
+
+    "qspi": {
+      "lcd": {
+        "sck": 38,
+        "data0": 4,
+        "data1": 5,
+        "data2": 6,
+        "data3": 7,
+        "cs": 12,
+        "te": 13
+      }
+    },
+
+    "sdmmc": {
+      "sdcard": {
+        "clk": 2,
+        "cmd": 1,
+        "d0": 3,
+        "cs": 41,
+        "slot": 0
+      }
+    },
+
+    "i2c": {
+      "i2c0": {
+        "scl": 14,
+        "sda": 15
+      }
+    },
+
+    "i2s": {
+      "audio": {
+        "mclk": 42,
+        "bck": 9,
+        "ws": 45,
+        "din": 10,
+        "dout": 8
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      },
+      "gnss": {
+        "tx": 18,
+        "rx": 17
+      }
+    },
+
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+
+    "gpio": {
+      "lcd_rst": 39,
+      "tp_int": 11,
+      "tp_rst": 40,
+      "pa_enable": 46,
+      "imu_int2": 21
+    },
+
+    "expander": {
+      "chip": "TCA9554PWR",
+      "i2c_bus": "i2c0",
+      "pins": {
+        "rtc_int": 3,
+        "sys_out": 4,
+        "axp_irq": 5,
+        "imu_int1": 6,
+        "gnss_rst": 7
+      }
+    }
+  },
+
+  "devices": {
+    "display": {
+      "type": "CO5300",
+      "driver": "co5300",
+      "bus": "qspi.lcd",
+      "rst_pin": 39,
+      "te_pin": 13,
+      "width": 466,
+      "height": 466,
+      "interface": "qspi",
+      "color_bits": 16,
+      "description": "1.75\" 466x466 round AMOLED (CO5300) with QSPI interface"
+    },
+
+    "touch": {
+      "type": "CST92xx",
+      "driver": "cst92xx",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x5A",
+      "int_pin": 11,
+      "rst_pin": 40,
+      "description": "Capacitive touch controller (CST92xx series)"
+    },
+
+    "imu": {
+      "type": "QMI8658C",
+      "driver": "qmi8658",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x6B",
+      "int2_pin": 21,
+      "int1_expander_pin": 6,
+      "description": "6-axis accelerometer/gyroscope"
+    },
+
+    "rtc": {
+      "type": "PCF85063",
+      "driver": "pcf85063",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x51",
+      "int_expander_pin": 3,
+      "description": "Real-time clock with alarm and interrupt"
+    },
+
+    "audio_codec": {
+      "type": "ES8311",
+      "driver": "es8311",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x18",
+      "i2s_bus": "i2s.audio",
+      "pa_pin": 46,
+      "description": "Audio codec with speaker power amplifier and dual microphone input"
+    },
+
+    "gnss": {
+      "type": "LC76GABMD",
+      "driver": "nmea",
+      "bus": "uart.gnss",
+      "rst_expander_pin": 7,
+      "description": "Multi-constellation GNSS receiver (GPS/BDS/GLONASS/Galileo/QZSS)"
+    },
+
+    "pmu": {
+      "type": "AXP2101",
+      "driver": "axp2101",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x34",
+      "int_expander_pin": 5,
+      "description": "Power management unit — battery charging, voltage regulation"
+    },
+
+    "sdcard": {
+      "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "description": "TF/microSD card (1-bit SDMMC mode)"
+    },
+
+    "gpio_expander": {
+      "type": "TCA9554PWR",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x20",
+      "pins_used": 5,
+      "description": "8-bit I2C GPIO expander for peripheral control"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}

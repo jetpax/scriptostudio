@@ -52,16 +52,13 @@ def _reset_via_expander(board):
 
 
 def _init_qspi_display(board, disp, brightness):
-    """Initialize a QSPI display (e.g. SPD2010)."""
+    """Initialize a QSPI display (e.g. SPD2010, CO5300)."""
     import gc
 
     qspi_cfg = board.qspi("lcd")
 
     # Reset LCD via expander if wired that way
     _reset_via_expander(board)
-
-    # Backlight pin
-    bl_pin = board._res.get("gpio", {}).get("bl_pwm")
 
     gc.collect()
 
@@ -80,15 +77,32 @@ def _init_qspi_display(board, disp, brightness):
         spi_mode=getattr(disp, 'spi_mode', 0),
     )
 
-    from lib.sys.display.spd2010 import Spd2010
-    lcd = Spd2010(
-        bus=bus,
-        res=(disp.width, disp.height),
-        bl=bl_pin,
-        color_bits=getattr(disp, 'color_bits', 16),
-        doublebuffer=False,
-        factor=32,
-    )
+    driver = getattr(disp, 'driver', 'spd2010')
+
+    if driver == 'co5300':
+        # CO5300 AMOLED — brightness via register, reset via GPIO
+        rst_pin = getattr(disp, 'rst_pin', None)
+        from lib.sys.display.co5300 import Co5300
+        lcd = Co5300(
+            bus=bus,
+            res=(disp.width, disp.height),
+            rst=rst_pin,
+            color_bits=getattr(disp, 'color_bits', 16),
+            doublebuffer=False,
+            factor=32,
+        )
+    else:
+        # SPD2010 (default) — brightness via backlight PWM
+        bl_pin = board._res.get("gpio", {}).get("bl_pwm")
+        from lib.sys.display.spd2010 import Spd2010
+        lcd = Spd2010(
+            bus=bus,
+            res=(disp.width, disp.height),
+            bl=bl_pin,
+            color_bits=getattr(disp, 'color_bits', 16),
+            doublebuffer=False,
+            factor=32,
+        )
 
     lcd.set_backlight(0)
     lcd.clear(0x0000)
@@ -248,7 +262,7 @@ def init_display(brightness=80):
 
     Dispatches based on the manifest's devices.display.interface field:
       - "epd"  → ePaper display (e.g. EPD_3in97)
-      - "qspi" → SPD2010 QSPI driver
+      - "qspi" → QSPI AMOLED (SPD2010 or CO5300, selected by driver field)
       - "spi"  → ST7789 SPI driver (default)
 
     Returns the display instance, or None if no display capability.
