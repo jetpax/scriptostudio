@@ -166,7 +166,16 @@
       "i2c_address": "0x18",
       "i2s_bus": "i2s.audio",
       "pa_pin": 46,
-      "description": "Audio codec with speaker power amplifier and dual microphone input"
+      "description": "Audio codec for speaker output (DAC)"
+    },
+
+    "mic_codec": {
+      "type": "ES7210",
+      "driver": "es7210",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x40",
+      "i2s_bus": "i2s.audio",
+      "description": "4-channel ADC codec for dual microphone input"
     },
 
     "gnss": {
