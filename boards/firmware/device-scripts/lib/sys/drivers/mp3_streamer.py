@@ -155,6 +155,22 @@ class AudioStreamer:
         audioplayer.pause()
         audioplayer.clear()                # abort fetch + flush ring/decoder
 
+    def _restart_decoder(self):
+        """Stop + start the decode task for a clean slate between tracks.
+        Reuses existing I2S config — no codec/PA re-init needed."""
+        if self.codec:
+            self.codec.set_volume(0)
+        audioplayer.stop()
+        for _ in range(60):               # up to 3 s
+            try:
+                if audioplayer.status().get('state', 'idle') == 'idle':
+                    break
+            except Exception:
+                break
+            time.sleep_ms(50)
+        audioplayer.start()
+        time.sleep_ms(50)
+
     def _transition_end(self):
         """Resume decode task → restore DAC volume.  New data flowing; unmute."""
         audioplayer.resume()
@@ -177,13 +193,13 @@ class AudioStreamer:
         self._is_local = True
         self._playback_active = False
 
-        # clear() aborts any live fetch_task in C (stream→local transition)
-        # then flushes the ring buffer and decoder state.  No stop/start needed.
-        # SKIP on fresh start: the decode task is blocked on EV_BUFFERED, so
-        # pause() is a no-op and clear()'s redundant decoder reset can corrupt
-        # state after a deinit/config/start cycle (same issue as play_stream).
-        if self._playback_active or self.playing:
-            self._transition_begin()
+        # Fresh start (first play after config/start): decoder is already
+        # waiting on EV_BUFFERED — just resume and start feeding data.
+        # Any subsequent play (active or idle): restart the decode task
+        # for a clean slate.  clear() alone doesn't reliably reset the
+        # C decoder after a natural finish or flush().
+        if self._play_gen > 1:
+            self._restart_decoder()
         self._stop_requested = False  # allow new pump iteration to proceed
         self._transition_end()
         self._playback_active = True
@@ -195,23 +211,15 @@ class AudioStreamer:
         self.path = url
         self._is_local = False
 
-        # CRITICAL ORDER: stream() must be called BEFORE resume().
-        # stream() resets the decoder internally (esp_audio_simple_dec_reset).
-        # If resume() runs first, the decode task is actively calling
-        # esp_audio_simple_dec_process() on core 1 — a concurrent reset
-        # corrupts the decoder state and produces permanent silence.
-        # With stream() before resume(), both clear() and stream() resets
-        # happen while the decode task is paused (safe).
-        #
-        # SKIP _transition_begin on fresh start: when no track is active,
-        # the decode task is blocked on EV_BUFFERED (not decoding), so
-        # pause() is a no-op and clear() redundantly resets the decoder.
-        # stream() handles all reset internally.  The redundant
-        # esp_audio_simple_dec_reset() from clear() + stream() can corrupt
-        # the decoder after a close/open cycle, causing "Not supported
-        # format" errors on subsequent runs.
-        if self._playback_active or self.playing:
-            self._transition_begin()
+        # Restart decode task for clean slate on subsequent plays.
+        # On fresh start (first play after config/start), the decoder is
+        # already waiting on EV_BUFFERED — skip.
+        # CRITICAL: stream() must be called BEFORE resume() (in _transition_end).
+        # stream() resets the decoder internally; if resume() runs first,
+        # the decode task is actively decoding on core 1 — concurrent reset
+        # corrupts state and produces permanent silence.
+        if self._play_gen > 1:
+            self._restart_decoder()
 
         try:
             audioplayer.stream(url)
@@ -351,29 +359,37 @@ class AudioStreamer:
                     
                     await asyncio.sleep_ms(0)
 
-                # Signal C that no more data is coming — the decode task
-                # will drain the ring buffer, output the final PCM samples
-                # via I2S DMA, then transition to 'idle'.
+                # Signal C that no more data is coming.  The decode task
+                # checks write_done when the ring buffer empties and exits.
+                # Note: the C state never transitions to 'idle' on its own
+                # after flush — we must call stop() to clean up.
                 if not self._stop_requested and self._play_gen == gen:
                     audioplayer.flush()
 
-                    # Wait for C to finish decoding + DMA output
+                    # Wait for ring buffer to drain (decoder consuming at
+                    # real-time speed).  buffer_fill is exposed by status().
                     _drain_ms = 0
-                    _DRAIN_TIMEOUT = 20000
+                    _DRAIN_TIMEOUT = 30000
                     _DRAIN_POLL_MS = 100
                     while not self._stop_requested and _drain_ms < _DRAIN_TIMEOUT:
                         if self._play_gen != gen:
                             break
                         try:
-                            _st = audioplayer.status()
-                            if _st.get('state', 'idle') == 'idle':
+                            if audioplayer.status().get('buffer_fill', 0) == 0:
                                 break
                         except Exception:
                             break
                         await asyncio.sleep_ms(_DRAIN_POLL_MS)
                         _drain_ms += _DRAIN_POLL_MS
 
+                    # Decoder in_buf + I2S DMA drain (~220 ms in C).
+                    if self._play_gen == gen and not self._stop_requested:
+                        await asyncio.sleep_ms(500)
+
+                    # stop() sets state to idle and frees decode task resources.
+                    # _restart_decoder() in the next play will start() fresh.
                     if self._play_gen == gen:
+                        audioplayer.stop()
                         print('[STREAMER] Finished: %s' % active_path)
 
             except OSError as e:
@@ -390,6 +406,7 @@ class AudioStreamer:
                 # _play_gen has changed and _playback_active belongs to the new track.
                 if self._play_gen == gen:
                     self._playback_active = False
+                    self.playing = False
                     print('[STREAMER] Local playback ended')
 
             await asyncio.sleep_ms(50)
