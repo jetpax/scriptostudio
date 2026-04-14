@@ -322,7 +322,6 @@ class AudioStreamer:
             gen = self._play_gen
             active_path = self.path
 
-            print('[STREAMER] Playing Local: %s' % active_path)
             f = None
             try:
                 try:
@@ -390,7 +389,6 @@ class AudioStreamer:
                     # _restart_decoder() in the next play will start() fresh.
                     if self._play_gen == gen:
                         audioplayer.stop()
-                        print('[STREAMER] Finished: %s' % active_path)
 
             except OSError as e:
                 print('[STREAMER] Error reading %s: %s' % (active_path, e))
@@ -407,7 +405,6 @@ class AudioStreamer:
                 if self._play_gen == gen:
                     self._playback_active = False
                     self.playing = False
-                    print('[STREAMER] Local playback ended')
 
             await asyncio.sleep_ms(50)
 
