@@ -275,29 +275,28 @@ class AudioStreamer:
         # a previous session.
         audioplayer.deinit()
 
-    def is_active(self):
-        """Returns True if decoding engine is actively engaged on a track."""
+    def is_playing(self):
+        """True while a track is in progress (playing or paused).
+        Returns False when playback finishes or nothing has been started."""
         if not self._is_local:
             # Give the HTTP client 3 seconds to resolve DNS and start buffering
             if time.ticks_diff(time.ticks_ms(), self.play_start_ms) < 3000:
                 return True
-        # Poll native C status — covers both local and stream playback.
-        # For local files the Python pump may have finished writing but the
-        # C-side decode task and I2S DMA can still have buffered PCM to output.
         try:
             st = audioplayer.status()
             state = st.get('state', 'idle')
             if state != 'idle':
                 return True
         except Exception:
-            # Assume still active if status() fails (e.g., MemoryError).
-            # Returning False would trigger auto-advance → new stream →
-            # more memory pressure → death spiral.
             return True
         return self._playback_active
 
-    def is_playing(self):
-        return self.playing
+    def is_paused(self):
+        """True when playback is paused."""
+        return self._playback_active and not self.playing
+
+    # Backward compat
+    is_active = is_playing
 
     def elapsed_ms(self):
         """Returns accurate wall-clock ms since play started, minus any pauses."""
