@@ -24,7 +24,11 @@ import time
 import os
 
 class AudioStreamer:
+    _instance_gen = 0   # class-level: incremented each time a new instance is created
+
     def __init__(self, codec=None, start_volume=80, chunk_size=8192, i2c=None, pa_pin=None):
+        AudioStreamer._instance_gen += 1
+        self._gen = AudioStreamer._instance_gen
         self.codec = codec
         self.i2c = i2c              # shared I2C bus (for consumers like touch controllers)
         self.pa_pin = pa_pin        # PA enable pin (for clean shutdown)
@@ -175,7 +179,11 @@ class AudioStreamer:
 
         # clear() aborts any live fetch_task in C (stream→local transition)
         # then flushes the ring buffer and decoder state.  No stop/start needed.
-        self._transition_begin()
+        # SKIP on fresh start: the decode task is blocked on EV_BUFFERED, so
+        # pause() is a no-op and clear()'s redundant decoder reset can corrupt
+        # state after a deinit/config/start cycle (same issue as play_stream).
+        if self._playback_active or self.playing:
+            self._transition_begin()
         self._stop_requested = False  # allow new pump iteration to proceed
         self._transition_end()
         self._playback_active = True
@@ -234,7 +242,12 @@ class AudioStreamer:
         Call this before re-running the ScriptO or switching to a different
         audio script.  After deinit() the instance is unusable — create a
         new one via from_board().
+
+        Safe to call from async finally blocks: if a newer AudioStreamer
+        instance already owns the C singleton (rerun race), this is a no-op.
         """
+        if self._gen != AudioStreamer._instance_gen:
+            return  # a newer instance owns the C singleton — don't destroy it
         self.stop()
         # Mute DAC before killing clocks to avoid pop
         if self.codec:
@@ -260,16 +273,19 @@ class AudioStreamer:
             # Give the HTTP client 3 seconds to resolve DNS and start buffering
             if time.ticks_diff(time.ticks_ms(), self.play_start_ms) < 3000:
                 return True
-            # Poll native C status for HTTP streams
-            try:
-                st = audioplayer.status()
-                state = st.get('state', 'idle')
-                return state != 'idle'
-            except Exception:
-                # Assume still active if status() fails (e.g., MemoryError).
-                # Returning False would trigger auto-advance → new stream →
-                # more memory pressure → death spiral.
+        # Poll native C status — covers both local and stream playback.
+        # For local files the Python pump may have finished writing but the
+        # C-side decode task and I2S DMA can still have buffered PCM to output.
+        try:
+            st = audioplayer.status()
+            state = st.get('state', 'idle')
+            if state != 'idle':
                 return True
+        except Exception:
+            # Assume still active if status() fails (e.g., MemoryError).
+            # Returning False would trigger auto-advance → new stream →
+            # more memory pressure → death spiral.
+            return True
         return self._playback_active
 
     def is_playing(self):
@@ -335,34 +351,34 @@ class AudioStreamer:
                     
                     await asyncio.sleep_ms(0)
 
-                # Ring buffer drain handling before track completion
-                if not self._stop_requested:
+                # Signal C that no more data is coming — the decode task
+                # will drain the ring buffer, output the final PCM samples
+                # via I2S DMA, then transition to 'idle'.
+                if not self._stop_requested and self._play_gen == gen:
+                    audioplayer.flush()
+
+                    # Wait for C to finish decoding + DMA output
                     _drain_ms = 0
                     _DRAIN_TIMEOUT = 20000
-                    _DRAIN_POLL_MS = 80
+                    _DRAIN_POLL_MS = 100
                     while not self._stop_requested and _drain_ms < _DRAIN_TIMEOUT:
-                        # If another track was started during drain, abort immediately
                         if self._play_gen != gen:
                             break
-                        if not self.playing:
-                            await asyncio.sleep_ms(_DRAIN_POLL_MS)
-                            continue
                         try:
                             _st = audioplayer.status()
-                            _fill = _st.get('buffer_fill', 0)
+                            if _st.get('state', 'idle') == 'idle':
+                                break
                         except Exception:
-                            _fill = 0
-                        if _fill <= 5:
                             break
                         await asyncio.sleep_ms(_DRAIN_POLL_MS)
                         _drain_ms += _DRAIN_POLL_MS
 
                     if self._play_gen == gen:
                         print('[STREAMER] Finished: %s' % active_path)
-            
+
             except OSError as e:
                 print('[STREAMER] Error reading %s: %s' % (active_path, e))
-            
+
             finally:
                 if f:
                     try:
