@@ -1,0 +1,159 @@
+{
+  "identity": {
+    "id": "waveshare_s3_amoled_1in75_c",
+    "name": "Waveshare ESP32-S3 Touch AMOLED 1.75C",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3 N32R8 with 1.75\" 466x466 AMOLED, touch, dual mic, IMU, audio"
+  },
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
+  },
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": true,
+    "imu": true,
+    "audio": true,
+    "microphone": true,
+    "sdcard": false,
+    "rtc": false,
+    "battery": true,
+    "gnss": false,
+    "gpio_expander": false
+  },
+  "resources": {
+    "pins": {
+      "boot": 0,
+      "sys_out": 3
+    },
+    "qspi": {
+      "lcd": {
+        "sck": 38,
+        "data0": 4,
+        "data1": 5,
+        "data2": 6,
+        "data3": 7,
+        "cs": 12,
+        "te": 13
+      }
+    },
+    "i2c": {
+      "i2c0": {
+        "scl": 14,
+        "sda": 15
+      }
+    },
+    "i2s": {
+      "audio": {
+        "mclk": 16,
+        "bck": 9,
+        "ws": 45,
+        "din": 10,
+        "dout": 8
+      }
+    },
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      },
+      "gnss": {
+        "tx": 18,
+        "rx": 17
+      }
+    },
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+    "gpio": {
+      "lcd_rst": 39,
+      "tp_int": 11,
+      "tp_rst": 40,
+      "pa_enable": 46,
+      "imu_int1": 21
+    }
+  },
+  "devices": {
+    "display": {
+      "type": "CO5300",
+      "driver": "co5300",
+      "bus": "qspi.lcd",
+      "rst_pin": 39,
+      "te_pin": 13,
+      "width": 466,
+      "height": 466,
+      "offset_x": 6,
+      "offset_y": 0,
+      "interface": "qspi",
+      "color_bits": 16,
+      "description": "1.75\" 466x466 round AMOLED (CO5300) with QSPI interface"
+    },
+    "touch": {
+      "type": "CST92xx",
+      "driver": "cst92xx",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x5A",
+      "int_pin": 11,
+      "rst_pin": 40,
+      "description": "Capacitive touch controller (CST92xx series)"
+    },
+    "imu": {
+      "type": "QMI8658C",
+      "driver": "qmi8658",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x6B",
+      "int1_pin": 21,
+      "description": "6-axis accelerometer/gyroscope"
+    },
+    "rtc": {
+      "type": "PCF85063",
+      "driver": "pcf85063",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x51",
+      "int_expander_pin": 3,
+      "description": "Real-time clock with alarm and interrupt"
+    },
+    "audio_codec": {
+      "type": "ES8311",
+      "driver": "es8311",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x18",
+      "i2s_bus": "i2s.audio",
+      "pa_pin": 46,
+      "description": "Audio codec for speaker output (DAC)"
+    },
+    "mic_codec": {
+      "type": "ES7210",
+      "driver": "es7210",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x40",
+      "i2s_bus": "i2s.audio",
+      "description": "4-channel ADC codec for dual microphone input"
+    },
+    "pmu": {
+      "type": "AXP2101",
+      "driver": "axp2101",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x34",
+      "int_expander_pin": 5,
+      "description": "Power management unit — battery charging, voltage regulation"
+    }
+  },
+  "memory": {
+    "flash_size": "32MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}
