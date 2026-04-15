@@ -140,10 +140,10 @@ class Co5300_hw:
         buf[3] = y2 & 0xFF
         self.bus.tx_param(self._raset, self._param_mv)
 
-    def blit(self, x, y, w, h, data):
+    def blit(self, x, y, w, h, data, swap=False):
         """Write pixel data to a rectangular region."""
         self.set_memory_location(x, y, x + w - 1, y + h - 1)
-        self.bus.tx_color(self._ramwr, data)
+        self.bus.tx_color(self._ramwr, data, swap)
 
     def clear(self, color=0x0000):
         """Fill entire display with a single color (RGB565)."""
@@ -238,13 +238,11 @@ class Co5300_lvgl:
         size = w * h * self.pixel_size
         data_view = color_p.__dereference__(size)
 
-        if self.rgb565_swap_func:
-            self.rgb565_swap_func(data_view, w * h)
-
-        self.blit(x1, y1, w, h, data_view)
+        # RGB565 byte-swap in C during DMA bounce copy
+        self.blit(x1, y1, w, h, data_view, swap=True)
         self.disp_drv.flush_ready()
 
-    def __init__(self, doublebuffer=True, factor=32):
+    def __init__(self, doublebuffer=True, factor=4):
         import lvgl as lv
         try:
             import lv_utils
@@ -253,7 +251,6 @@ class Co5300_lvgl:
 
         color_format = lv.COLOR_FORMAT.RGB565
         self.pixel_size = lv.color_format_get_size(color_format)
-        self.rgb565_swap_func = lv.draw_sw_rgb565_swap
 
         if not lv.is_initialized():
             lv.init()
@@ -292,11 +289,11 @@ class Co5300(Co5300_hw, Co5300_lvgl):
     """Combined CO5300 hardware + LVGL driver.
 
     Usage:
-        lcd = Co5300(bus=bus, res=(466, 466), rst=39, doublebuffer=False, factor=32)
+        lcd = Co5300(bus=bus, res=(466, 466), rst=39, doublebuffer=True, factor=4)
     """
     def __init__(self, *, bus, res, rst=None, rot=0,
                  color_bits=16, offset_x=0, offset_y=0,
-                 doublebuffer=True, factor=32):
+                 doublebuffer=True, factor=4):
         Co5300_hw.__init__(self, bus=bus, res=res, rst=rst,
                              rot=rot, color_bits=color_bits,
                              offset_x=offset_x, offset_y=offset_y)
