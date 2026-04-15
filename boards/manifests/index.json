@@ -92,6 +92,13 @@
       "chip": "ESP32-S3",
       "vendor": "waveshare",
       "description": "ESP32-S3 N16R8 with 1.75\" 466x466 AMOLED, touch, dual mic, GNSS, IMU, audio, SD, RTC"
+    },
+    {
+      "id": "waveshare_s3_amoled_1in75_c",
+      "name": "Waveshare ESP32-S3 Touch AMOLED 1.75C",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N32R8 with 1.75\" 466x466 AMOLED, touch, dual mic, IMU, audio"
     }
   ]
 }
