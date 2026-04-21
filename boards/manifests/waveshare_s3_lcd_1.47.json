@@ -69,6 +69,7 @@
       "type": "ST7789",
       "driver": "st7789",
       "bus": "spi.lcd",
+      "interface": "spi",
       "width": 172,
       "height": 320,
       "offset_x": 34,

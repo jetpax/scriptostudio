@@ -38,7 +38,7 @@ try:
     from lib.sys import board
     if board.has("display"):
         _dev = board.device("display")
-        if _dev and _dev.interface == "epd":
+        if _dev and getattr(_dev, "interface", None) == "epd":
             # EPD: CalmOS owns display — hardware init + layout + first refresh (~3-4s)
             # This overlaps with network startup in main.py
             import lib.calmos as calmos
