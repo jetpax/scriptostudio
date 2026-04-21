@@ -204,20 +204,24 @@ async def system_root():
         import taskwatchdog
 
         def _watchdog_recovery(task_name):
+            # Tier 1 callback — runs when any watched task misses its deadline.
+            # The only watched task today is queue_pump (system), so the
+            # system-task branch is the hot path.  If user tasks are ever
+            # registered directly, the else branch handles them.
             info = bg_tasks._tasks.get(task_name, {})
             if info.get("system", False):
-                # System tasks are victims of event loop starvation, not the cause.
-                # Re-feed the watchdog to prevent Tier 2 (KeyboardInterrupt) from
-                # killing whatever exec code is legitimately blocking the loop.
+                # System task is the victim — user tasks hogging the event
+                # loop are the cause.  stop_user_tasks() delivers
+                # CancelledError at each user task's next await, which is
+                # more surgical than Tier 2's KeyboardInterrupt (that one
+                # hits whichever task is executing and can cause collateral).
+                stopped = bg_tasks.stop_user_tasks()
                 taskwatchdog.feed(task_name)
-                log("debug", f"Watchdog: '{task_name}' starved (system task, re-fed)", source="taskwd")
-                return
-            log("warning", f"Watchdog: '{task_name}' stalled — killing it", source="taskwd")
-            try:
+                if stopped:
+                    log("warning", f"Watchdog: '{task_name}' starved — stopped {stopped}", source="taskwd")
+            else:
                 bg_tasks.stop(task_name)
-            except RuntimeError:
-                # Can't cancel self — Tier 2 (KeyboardInterrupt) will handle it
-                log("debug", f"Watchdog: '{task_name}' can't cancel self, Tier 2 will escalate", source="taskwd")
+                log("warning", f"Watchdog: stopped stalled task '{task_name}'", source="taskwd")
 
         taskwatchdog.set_recovery(_watchdog_recovery)
         log("info", "Task watchdog initialized", source="main")
