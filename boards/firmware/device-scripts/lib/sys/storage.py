@@ -6,8 +6,26 @@ and migration logic belong in the consuming application.
 
 Usage:
     from lib.sys.storage import has_sdcard, sd_root, sd_recover
+
+Concurrency:
+    SD operations that want to be race-safe against sd_recover() should
+    run under the shared sd_lock. sd_recover_async() acquires it around
+    the unmount/remount window; a file op that also acquires it will
+    wait for recovery to finish (and vice versa) rather than hitting the
+    SDMMC driver while its queue semaphore is NULL.
+
+        from lib.sys.storage import sd_lock
+        async with sd_lock:
+            with open('/sd/foo') as f: ...
 """
 import os
+
+try:
+  import asyncio
+  sd_lock = asyncio.Lock()
+except ImportError:
+  asyncio = None
+  sd_lock = None
 
 # Module-level SD card object
 _sd_card = None
@@ -126,11 +144,57 @@ def _do_mount(params):
     return False
 
 
-def sd_recover():
-  """Recover from SD card EIO by unmounting and remounting.
+def _recover_inner():
+  """Do the actual unmount + remount. Callers must serialize via sd_lock
+  if they want race safety against concurrent SD operations."""
+  global _sd_card
+  if _mount_params is None:
+    _log("warn", "SD recovery: no mount params cached")
+    return False
 
-  Call this when an SD operation raises [Errno 5] EIO.
+  _log("info", "SD recovery: unmounting stale card...")
+
+  # Unmount stale filesystem — this frees the SDMMC host's internal
+  # queue semaphore. Any concurrent reader between here and the
+  # _do_mount() below will dereference a NULL handle and crash
+  # (LoadProhibited at offset 0x54). The lock in sd_recover_async()
+  # prevents that for cooperating callers.
+  try:
+    os.umount('/sd')
+  except:
+    pass
+
+  _sd_card = None
+
+  ok = _do_mount(_mount_params)
+  if ok:
+    _log("info", "SD recovery: remounted OK")
+  else:
+    _log("warn", "SD recovery: remount failed")
+  return ok
+
+
+async def sd_recover_async():
+  """Recover from SD card EIO — async, lock-safe variant.
+
+  Acquires sd_lock around the unmount/remount. Other coroutines that
+  also hold sd_lock during their SD operations will wait for recovery
+  to complete instead of racing the SDMMC host teardown.
+
   Returns True if recovery succeeded, False if not.
+  """
+  if sd_lock is None:
+    return _recover_inner()
+  async with sd_lock:
+    return _recover_inner()
+
+
+def sd_recover():
+  """Recover from SD card EIO — sync variant. No locking.
+
+  Safe to call only from boot-time code or contexts where no event loop
+  is running. Callers with a running loop should use sd_recover_async()
+  to avoid racing in-flight SD operations.
 
   Usage:
       try:
@@ -140,29 +204,7 @@ def sd_recover():
           if e.errno == 5 and sd_recover():
               # retry the operation
   """
-  global _sd_card
-  if _mount_params is None:
-    _log("warn", "SD recovery: no mount params cached")
-    return False
-
-  _log("info", "SD recovery: unmounting stale card...")
-
-  # Unmount stale filesystem
-  try:
-    os.umount('/sd')
-  except:
-    pass
-
-  # Clear old card reference
-  _sd_card = None
-
-  # Remount with cached params
-  ok = _do_mount(_mount_params)
-  if ok:
-    _log("info", "SD recovery: remounted OK")
-  else:
-    _log("warn", "SD recovery: remount failed")
-  return ok
+  return _recover_inner()
 
 
 def get_storage_info():
