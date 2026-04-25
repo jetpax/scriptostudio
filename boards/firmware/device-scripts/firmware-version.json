@@ -1,1 +1,1 @@
-{"platform": "gha", "micropython": "v1.28.0", "variant": "ESP32_P4_32", "built": "2026-04-25T01:38:34Z", "commit": "7740af1c861335f519d3f4daa72f1d32c1d7507f"}
+{"platform": "gha", "micropython": "v1.28.0", "variant": "ESP32_S3_8", "built": "2026-04-25T01:38:47Z", "commit": "7740af1c861335f519d3f4daa72f1d32c1d7507f"}
