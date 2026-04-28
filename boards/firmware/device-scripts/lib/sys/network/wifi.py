@@ -33,34 +33,17 @@ def _log(level, msg):
     else:
         print(f"[{level.upper()}] {msg}")
 
-# Import network_ready from parent module
-from lib.sys.network import network_ready, _set_network_ready
+# Aggregate state lives in the parent module; we report through _update().
+from lib.sys.network import network_ready, _update
 
 # Global STA reference
 _sta = None
 
 
 def get_hostname():
-    """Get device hostname from settings or compute from MAC."""
-    try:
-        from lib.sys import settings
-        
-        # Prefer saved hostname (set during provisioning from base MAC)
-        hostname = settings.get("device.hostname")
-        if hostname:
-            return hostname
-        
-        # Fallback: compute from WiFi STA MAC
-        import ubinascii
-        sta = network.WLAN(network.STA_IF)
-        mac = ubinascii.hexlify(sta.config('mac'), ':').decode()
-        mac_suffix = mac.replace(':', '')[-4:]
-        
-        prefix = settings.get("wifi.hostname_prefix", "pybot")
-        return f"{prefix}-{mac_suffix}"
-    except Exception as e:
-        _log("warning", f"Failed to get hostname: {e}")
-        return "pybot"
+    """Get device hostname (delegates to network.get_hostname for single source of truth)."""
+    from lib.sys import network as _net_pkg
+    return _net_pkg.get_hostname()
 
 
 def init():
@@ -83,15 +66,13 @@ def init():
         _sta.active(True)
         time.sleep_ms(100)
     
-    # Set hostname (only works after interface is active)
+    # Set DHCP hostname for this interface. Global mDNS hostname is owned by
+    # network.startup() — don't set it here, it would re-register mDNS each
+    # time WiFi reconnects.
     try:
         hostname = get_hostname()
         _sta.config(hostname=hostname)
-        # Also set global hostname for mDNS responder (.local resolution)
-        # _sta.config() only sets DHCP hostname, network.hostname() triggers
-        # the ESP-IDF mDNS service that responds to .local queries
-        network.hostname(hostname)
-        _log("debug", f"WiFi hostname: {hostname}")
+        _log("debug", f"WiFi DHCP hostname: {hostname}")
     except Exception as e:
         _log("warning", f"Failed to set hostname: {e}")
     
@@ -377,9 +358,7 @@ async def task():
     sta = init()
     if sta is None:
         return
-    
-    hostname = get_hostname()
-    
+
     # Load roaming threshold from settings
     roam_threshold = -85  # default: only roam when truly degraded
     try:
@@ -398,17 +377,18 @@ async def task():
         ip = get_ip()
         if ip:
             _log("info", f"WiFi already connected (soft reset): {ip}")
-            _set_network_ready("WiFi", ip, hostname)
-    
+            _update("wifi", True, ip)
+
     # Main connection/monitoring loop
     while True:
         if not is_connected():
-            # Clear network_ready so downstream services know we're offline
-            network_ready.clear()
+            # Report wifi-down. The aggregate network_ready stays set if
+            # ethernet or wwan is still up — we only flag this interface.
+            _update("wifi", False)
             # Try to connect (scan and connect to strongest AP)
             ip = scan_and_connect()
             if ip:
-                _set_network_ready("WiFi", ip, hostname)
+                _update("wifi", True, ip)
             else:
                 await asyncio.sleep(5)  # Retry after delay
         else:
@@ -420,7 +400,7 @@ async def task():
                 if rssi < roam_threshold and since_last >= _ROAM_COOLDOWN_S:
                     _log("info", f"Signal weak ({rssi} dBm < {roam_threshold}), scanning for better AP...")
                     _last_roam_tick = now
-                    
+
                     # Scan and check hysteresis before roaming
                     _ROAM_HYSTERESIS = 5  # dBm - candidate must be this much stronger
                     try:
@@ -428,7 +408,7 @@ async def task():
                         _ssid = _s.get("wifi.ssid", "")
                     except:
                         _ssid = ""
-                    
+
                     if _ssid:
                         # Scan while still connected — ESP-IDF supports this.
                         # Do NOT disconnect just to scan: if no better AP exists,
@@ -443,7 +423,7 @@ async def task():
                             best_rssi = matching[0][3]
                             if best_rssi > rssi + _ROAM_HYSTERESIS:
                                 _log("info", f"Better AP found ({best_rssi} dBm vs {rssi} dBm), roaming...")
-                                network_ready.clear()
+                                _update("wifi", False)
                                 try:
                                     from lib.sys import settings as _s2
                                     _pw = _s2.get("wifi.password", "")
@@ -453,7 +433,7 @@ async def task():
                                 ip = connect(_ssid, _pw, bssid=matching[0][1])
                                 if ip:
                                     _log("info", f"Roamed to stronger AP: {ip}")
-                                    _set_network_ready("WiFi", ip, hostname)
+                                    _update("wifi", True, ip)
                             else:
                                 _log("debug", f"Best candidate {best_rssi} dBm, not enough gain (need +{_ROAM_HYSTERESIS}), staying")
             except:

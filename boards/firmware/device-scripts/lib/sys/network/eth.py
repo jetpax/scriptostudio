@@ -32,8 +32,8 @@ def _log(level, msg):
     else:
         print(f"[{level.upper()}] {msg}")
 
-# Import network_ready from parent module
-from lib.sys.network import network_ready, _set_network_ready
+# Aggregate state lives in the parent module; we report through _update().
+from lib.sys.network import network_ready, _update
 
 # Global LAN reference (prevent garbage collection)
 _eth_lan = None
@@ -128,17 +128,9 @@ def init():
                 # Some builds need phy_type
                 _eth_lan = network.LAN(phy_type=phy_type, phy_addr=phy_addr)
         
-        # Set global hostname for mDNS BEFORE activating interface
-        # mDNS init happens in C on IP_EVENT_ETH_GOT_IP and reads mod_network_hostname_data
-        try:
-            from lib.sys.network import wifi
-            hostname = wifi.get_hostname()
-            network.hostname(hostname)
-            _log("debug", f"Ethernet hostname: {hostname}")
-        except Exception as e:
-            _log("warning", f"Failed to set Ethernet hostname: {e}")
-        
-        # Activate the interface (this triggers IP acquisition and mDNS init)
+        # Global mDNS hostname is owned by network.startup() and is already
+        # set before this task runs — no per-interface registration needed.
+        # Activate the interface (this triggers IP acquisition and mDNS init).
         _eth_lan.active(True)
         
         # Configure static IP if not using DHCP
@@ -314,46 +306,49 @@ def check_status_change():
 
 
 async def task():
-    """Ethernet manager - initializes, monitors, and handles failover"""
-    await asyncio.sleep_ms(100)  # Brief delay to let other tasks start
-    
+    """Ethernet manager - initializes, monitors, and handles failover.
+
+    Polls fast (500ms) until DHCP completes the first time so the boot path
+    isn't paying a full 5s tick to notice an IP that arrived 50ms after init.
+    Backs off to 5s for steady-state monitoring.
+    """
     # Check if Ethernet hardware is available
     if not is_available():
         _log("debug", "Ethernet hardware not available")
         return
-    
-    # Get hostname for mDNS
-    try:
-        from lib.sys.network import wifi
-        hostname = wifi.get_hostname()
-    except:
-        hostname = None
-    
+
     # Check if already initialized (soft reset)
+    first_ip_seen = False
     if is_connected():
         ip = get_ip()
         if ip:
             _log("info", f"Ethernet already connected (soft reset): {ip}")
-            _set_network_ready("Ethernet", ip, hostname)
+            _update("ethernet", True, ip)
+            first_ip_seen = True
     else:
         # Initialize Ethernet
         lan = init()
         if lan is None:
             _log("debug", "Ethernet not enabled or init failed")
             return
-    
-    # Main monitoring loop
+
+    # Main monitoring loop. Fast cadence pre-IP, slow cadence after.
     while True:
         if is_connected():
             ip = get_ip()
-            if ip and not network_ready.is_set():
-                _set_network_ready("Ethernet", ip, hostname)
+            if ip:
+                _update("ethernet", True, ip)
+                first_ip_seen = True
             # Check for status changes and send events
             check_status_change()
-        elif is_link_up():
-            _log("debug", "Ethernet link up, waiting for DHCP...")
-        
-        await asyncio.sleep(5)
+        else:
+            # Either link down or link up but DHCP pending
+            if first_ip_seen:
+                _update("ethernet", False)
+            if is_link_up():
+                _log("debug", "Ethernet link up, waiting for DHCP...")
+
+        await asyncio.sleep_ms(500 if not first_ip_seen else 5000)
 
 
 # Expose API - maintain backward compatibility with old names

@@ -936,47 +936,58 @@ def _detect_timezone():
 def sync_ntp(server=None, tz_offset=None, auto_detect=None, force=False):
     """
     Sync time from NTP server if enabled and not already synced.
-    
+
+    NTP (fast UDP) runs first so the wall clock is set even if the slower
+    HTTP-based timezone detection later fails. The last-saved tz_offset is
+    used as a fallback when auto-detect is unreachable.
+
     Args:
         server: NTP server hostname (uses settings default: pool.ntp.org)
         tz_offset: Timezone offset in hours (uses settings default)
         auto_detect: Auto-detect timezone from IP (uses settings default: True)
         force: Force re-sync even if already synced
-    
+
     Returns:
         dict: {'success': bool, 'utc': {...}, 'local': {...}, 'tz_offset': float, ...}
     """
     from lib.sys import settings
-    
+
     # NTP is always-on — no enable/disable toggle.
     # If unreachable (isolated LAN), sync fails gracefully and RTC keeps its time.
-    
+
     # Get settings with defaults
     server = server or settings.get('ntp.server', 'pool.ntp.org')
     auto_detect = auto_detect if auto_detect is not None else settings.get('ntp.auto_detect_tz', settings.get('ntp.auto_detect', True))
     tz_offset = tz_offset if tz_offset is not None else settings.get('ntp.tz_offset', 0.0)
     timezone_name = settings.get('ntp.timezone', 'UTC')
-    
-    # Auto-detect timezone if enabled (re-detect each sync to handle DST changes)
+
+    # Step 1 — NTP first. If this fails the call returns immediately; we don't
+    # burn 10s on HTTP timezone APIs only to discard the result. Skipped when
+    # the wall clock is already valid and force=False (e.g. the boot bg task
+    # running after the synchronous quick-sync already set the time).
+    if force or not _is_time_synced():
+        try:
+            import ntptime
+            ntptime.host = server
+            ntptime.settime()
+        except Exception as e:
+            return {'success': False, 'error': f'NTP sync failed: {e}'}
+
+    # Step 2 — timezone detection (slow, HTTP). Tolerated independently so a
+    # DNS hiccup here doesn't invalidate a successful NTP sync.
     if auto_detect:
-        detected_offset, detected_tz = _detect_timezone()
-        if detected_offset is not None:
-            tz_offset = detected_offset
-            timezone_name = detected_tz
-            # Save detected timezone to settings for next time
-            settings.set('ntp.tz_offset', tz_offset)
-            settings.set('ntp.timezone', timezone_name)
-            settings.save()
-    
-    # Sync time from NTP server
-    try:
-        import ntptime
-        ntptime.host = server
-        ntptime.settime()
-    except Exception as e:
-        return {'success': False, 'error': f'NTP sync failed: {e}'}
-    
-    # Get UTC time
+        try:
+            detected_offset, detected_tz = _detect_timezone()
+            if detected_offset is not None:
+                tz_offset = detected_offset
+                timezone_name = detected_tz
+                settings.set('ntp.tz_offset', tz_offset)
+                settings.set('ntp.timezone', timezone_name)
+                settings.save()
+        except Exception:
+            pass  # fall back to last-saved tz_offset
+
+    # Validate sync produced a sane wall-clock value
     from time import gmtime, localtime, mktime
     utc = gmtime()
     if utc[0] < 2023:

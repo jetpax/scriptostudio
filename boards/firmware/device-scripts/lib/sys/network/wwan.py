@@ -32,8 +32,8 @@ def _log(level, msg):
     else:
         print(f"[{level.upper()}] {msg}")
 
-# Import network_ready from parent module
-from lib.sys.network import network_ready, _set_network_ready
+# Aggregate state lives in the parent module; we report through _update().
+from lib.sys.network import network_ready, _update
 
 # Lazy import usbmodem to avoid import errors if not available
 _usbmodem = None
@@ -308,31 +308,39 @@ def load_config():
 
 
 async def task():
-    """WWAN manager - initializes modem, monitors PPP connection"""
-    await asyncio.sleep_ms(200)  # Brief delay to let other tasks start
-    
+    """WWAN manager - initializes modem, monitors PPP connection.
+
+    Polls fast (1s) until PPP is up, then backs off to 30s for monitoring.
+    PPP can take many seconds to negotiate even after the modem reports
+    ready, so the fast-poll window matters for boot-time time-to-IP.
+    """
+    await asyncio.sleep_ms(200)  # Brief delay so eth/wifi can race ahead
+
     # Check if WWAN hardware is available
     if not is_available():
         _log("debug", "WWAN hardware not available")
         return
-    
+
     # Initialize modem
     if not init():
         _log("debug", "WWAN not enabled or init failed")
         return
-    
-    # Main monitoring loop
+
+    first_ip_seen = False
     while True:
         config = load_config()
-        
+
         if config.get('mobile_data_enabled', False):
-            # Check if connected
             if is_connected():
                 ip = get_ip()
-                if ip and not network_ready.is_set():
-                    _set_network_ready("WWAN", ip)
-        
-        await asyncio.sleep(30)
+                if ip:
+                    _update("wwan", True, ip)
+                    first_ip_seen = True
+            else:
+                if first_ip_seen:
+                    _update("wwan", False)
+
+        await asyncio.sleep(1 if not first_ip_seen else 30)
 
 
 # Expose API - maintain backward compatibility with old names

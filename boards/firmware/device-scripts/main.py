@@ -15,13 +15,15 @@ Architecture:
     through the unified webrepl_binary module.
 
 Boot Sequence:
-1. Start network tasks and wait for IP address (WiFi, Ethernet, or WWAN)
-2. Start HTTP/HTTPS server
-3. Start WebREPL (WBP over WebSocket transport)
-4. Start WebRTC signaling server (WBP over WebRTC transport)
-5. Register connection callbacks for LED state management
-6. Start async background tasks:
+1. Start network tasks and wait for IP address (Ethernet preferred, then WiFi, WWAN)
+2. Quick NTP wall-clock sync (UDP only, ~1-3s) — required before any TLS work
+3. Start CalmOS / mount storage / run extension autostart
+4. Start HTTP/HTTPS server, WebREPL, WebRTC signaling
+5. Start ntp_sync_task as bg task (TZ detection, ongoing re-sync, retry-on-fail)
+6. Register connection callbacks for LED state management
+7. Start async background tasks:
    - queue_pump: Processes WBP queues for both transports (10ms interval)
+   - ntp:        Background TZ refresh + NTP retry if quick sync failed
 
 Helper Utilities (imported from lib.sys.utils):
     - getSysInfo()        - Comprehensive system info
@@ -299,26 +301,78 @@ def wsserver_disconnect_callback(client_id, event_name):
 # Track client connection state for LED management
 _webrepl_client_connected = False
 
+def _quick_ntp():
+    """One-shot synchronous NTP at boot. Sets the wall clock before any
+    TLS-using service starts so cert validity windows pass.
+
+    Skips TZ detection (slow HTTP) — that runs in ntp_sync_task() afterwards.
+    No-op if the RTC is already valid (soft reset). Failure is non-fatal:
+    ntp_sync_task() retries with backoff in the background.
+    """
+    try:
+        from lib.sys.utils import sync_ntp, _is_time_synced
+        if _is_time_synced():
+            return True
+        r = sync_ntp(auto_detect=False)
+        if r and r.get('success'):
+            log("info", "NTP wall clock set (TZ deferred to bg)", source="ntp")
+            return True
+        err = r.get('error') if r else 'unknown'
+        log("warning", f"Quick NTP failed: {err} — bg retry will continue", source="ntp")
+    except Exception as e:
+        log("warning", f"Quick NTP error: {e} — bg retry will continue", source="ntp")
+    return False
+
+
+async def ntp_sync_task():
+    """Background NTP/TZ task. Exits on first full success.
+
+    If _quick_ntp() already set the wall clock, sync_ntp(force=False) skips
+    the NTP step and only runs TZ detection — keeping the boot path fast.
+    On retry it re-evaluates: if NTP wasn't set, it tries NTP first.
+    """
+    from lib.sys.utils import sync_ntp
+    backoff = 5
+    while True:
+        try:
+            r = sync_ntp()
+            if r and r.get('success'):
+                log("info", f"NTP synced ({r.get('timezone', 'UTC')})", source="ntp")
+                return
+            err = r.get('error') if r else 'unknown'
+            log("debug", f"NTP not yet ready: {err}", source="ntp")
+        except Exception as e:
+            log("warning", f"NTP attempt error: {e}", source="ntp")
+        await asyncio.sleep(backoff)
+        backoff = min(backoff * 2, 300)  # cap at 5 min
+
+
 async def main_async():
     """Async main entry point"""
-    # Start network tasks and wait for connection
+    # Start network tasks and wait for the first interface to come up.
     await network.startup()
-    
-    # Get IP from whichever network connected (network.startup() already waited for connection)
-    # Check interfaces in priority order - at least one must have an IP
-    ip = network.eth.get_ip() or network.wifi.get_ip() or network.wwan.get_ip()
-    
+
+    # Resolve active interface from aggregated state (priority eth > wifi > wwan).
+    ip, iface = network.get_active_ip()
+    if not ip:
+        # Defensive fallback — shouldn't happen since network.startup() awaited
+        # network_ready, but keep the old per-interface query as a backstop.
+        ip = network.eth.get_ip() or network.wifi.get_ip() or network.wwan.get_ip()
+        iface = "unknown"
+    log("info", f"Active interface: {iface} ({ip})", source="main")
+
     # Set LED to network connected state (yellow solid - waiting for client)
     if status_led:
         status_led.set_state(StatusLED.STATE_NETWORK_CONNECTED)
-    
-    # Auto-sync NTP time if enabled (after network connection)
-    try:
-        from lib.sys.utils import sync_ntp
-        sync_ntp()  # Syncs if enabled and not already synced
-    except Exception as e:
-        log("warning", f"NTP sync failed: {e}", source="main")
-    
+
+    # Quick synchronous NTP — sets the wall clock before any TLS-using
+    # service (autostart extensions, HTTPS server) starts. Without this,
+    # outbound HTTPS calls fail mbedtls cert validation (-0x2700) because
+    # the RTC reads epoch and peer cert notBefore is "in the future".
+    # Bounded by ntptime's UDP timeout (~1-5s); failure falls through to
+    # the bg ntp_sync_task which retries.
+    _quick_ntp()
+
     # Start CalmOS async tasks — only on e-paper display boards
     try:
         from lib.sys import board
@@ -332,7 +386,6 @@ async def main_async():
         log("warning", f"CalmOS tasks skipped: {e}", source="main")
 
     # Mount SD card (mandatory if board supports it, silent fail if no card)
-
     try:
         from lib.sys.storage import mount_sdcard, init as storage_init
         mount_sdcard()
@@ -340,12 +393,11 @@ async def main_async():
     except Exception as e:
         log("warning", f"Storage init failed: {e}", source="main")
 
-    
     # Syslog is now auto-configured from settings by lib.sys.log
     log("info", "*******************************************************", source="main")
     log("info", "System initialized", source="main")
     log("info", "*******************************************************", source="main")
-    
+
     # Auto-start registered extensions (after network + syslog ready)
     try:
         from lib.sys.autostart import run_autostart
@@ -354,15 +406,19 @@ async def main_async():
         pass  # autostart module not available
     except Exception as e:
         log("warning", f"Extension autostart failed: {e}", source="main")
-    
-    # Start servers
+
+    # Start servers — client connectivity is no longer gated on NTP success.
     if not start_servers(ip):
         log("error", "Cannot continue without servers", source="main")
         return False
-    
+
+    # NTP runs in the background with retry, so a slow/failed sync doesn't
+    # delay anything that depends on server start.
+    bg_tasks.start("ntp", ntp_sync_task)
+
     # Enter system_root for other background tasks
     await system_root()
-    
+
     return True
 
 
