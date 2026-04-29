@@ -61,16 +61,81 @@ jobs:
           echo ""
           echo "📊 Total files: $(find boards/firmware/device-scripts -type f | wc -l)"
 
-      - name: Bake platform version into VFS
+      - name: Determine version
+        id: version
         run: |
-          # Read current platform version and write to VFS so device can report it
-          PLATFORM_FILE="boards/firmware/platform-version.json"
-          VERSION=$(python3 -c "import json; print(json.load(open('$PLATFORM_FILE'))['version'])")
+          # Read MicroPython base version from pyDirect build-info
           BUILD_INFO="boards/firmware/components/build-info.json"
-          MPY_VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO')).get('version','unknown'))" 2>/dev/null || echo "unknown")
+          if [ -f "$BUILD_INFO" ]; then
+            MPY_VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
+            PYDIRECT_COMMIT=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['commit'])")
+          else
+            MPY_VERSION="unknown"
+            PYDIRECT_COMMIT="${{ github.sha }}"
+          fi
+
+          # Read current platform version
+          PLATFORM_FILE="boards/firmware/platform-version.json"
+          CURRENT=$(python3 -c "import json; print(json.load(open('$PLATFORM_FILE'))['version'])")
+          echo "Current platform version: $CURRENT"
+
+          # Auto-bump based on conventional commits since last firmware tag
+          LAST_TAG=$(git tag -l 'firmware-*' --sort=-creatordate | head -1 || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            COMMITS=$(git log "$LAST_TAG"..HEAD --oneline 2>/dev/null || echo "")
+          else
+            COMMITS=$(git log --oneline -20 2>/dev/null || echo "")
+          fi
+
+          # Parse semver components
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+          # Check for feat: (minor bump) or fix: (patch bump)
+          if echo "$COMMITS" | grep -qiE '^[a-f0-9]+ feat(\(|:)'; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            echo "🔼 Minor bump (feat: detected)"
+          elif echo "$COMMITS" | grep -qiE '^[a-f0-9]+ fix(\(|:)'; then
+            PATCH=$((PATCH + 1))
+            echo "🔧 Patch bump (fix: detected)"
+          else
+            PATCH=$((PATCH + 1))
+            echo "🔧 Patch bump (default)"
+          fi
+
+          VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "New platform version: $VERSION"
+
+          # Write back the bumped version
+          python3 -c "
+          import json
+          with open('$PLATFORM_FILE', 'r+') as f:
+              d = json.load(f)
+              d['version'] = '$VERSION'
+              f.seek(0); json.dump(d, f, indent=2); f.write('\n'); f.truncate()
+          "
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "mpy_version=$MPY_VERSION" >> "$GITHUB_OUTPUT"
+          echo "commit=$PYDIRECT_COMMIT" >> "$GITHUB_OUTPUT"
+          TAG="firmware-${VERSION}-$(date -u +%Y%m%d%H%M%S)"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Bake firmware version into VFS
+        run: |
+          # Bake the *bumped* platform version into firmware-version.json so
+          # the device reports the same version as the bundled image. Schema:
+          #   platform_version  - semver of the platform release (e.g. "1.4.0")
+          #   micropython       - MicroPython base version
+          #   built             - ISO-8601 build timestamp
+          #   commit            - pyDirect commit baked in
+          #   origin            - "gha" for CI builds, "local" for hand-built
+          VERSION="${{ steps.version.outputs.version }}"
+          MPY_VERSION="${{ steps.version.outputs.mpy_version }}"
+          COMMIT="${{ steps.version.outputs.commit }}"
 
           cat > boards/firmware/device-scripts/firmware-version.json << EOF
-          {"platform": "$VERSION", "micropython": "$MPY_VERSION", "built": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          {"platform_version": "$VERSION", "micropython": "$MPY_VERSION", "built": "$(date -u +%Y-%m-%dT%H:%M:%SZ)", "commit": "$COMMIT", "origin": "gha"}
           EOF
           echo "📌 Baked firmware-version.json: $(cat boards/firmware/device-scripts/firmware-version.json)"
 
@@ -146,66 +211,6 @@ jobs:
 
             echo "  ✅ Created: $MERGED ($(du -h "$MERGED" | cut -f1))"
           done
-
-      - name: Determine version
-        id: version
-        run: |
-          # Read MicroPython base version from pyDirect build-info
-          BUILD_INFO="boards/firmware/components/build-info.json"
-          if [ -f "$BUILD_INFO" ]; then
-            MPY_VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
-            PYDIRECT_COMMIT=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['commit'])")
-          else
-            MPY_VERSION="unknown"
-            PYDIRECT_COMMIT="${{ github.sha }}"
-          fi
-
-          # Read current platform version
-          PLATFORM_FILE="boards/firmware/platform-version.json"
-          CURRENT=$(python3 -c "import json; print(json.load(open('$PLATFORM_FILE'))['version'])")
-          echo "Current platform version: $CURRENT"
-
-          # Auto-bump based on conventional commits since last firmware tag
-          LAST_TAG=$(git tag -l 'firmware-*' --sort=-creatordate | head -1 || echo "")
-          if [ -n "$LAST_TAG" ]; then
-            COMMITS=$(git log "$LAST_TAG"..HEAD --oneline 2>/dev/null || echo "")
-          else
-            COMMITS=$(git log --oneline -20 2>/dev/null || echo "")
-          fi
-
-          # Parse semver components
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
-
-          # Check for feat: (minor bump) or fix: (patch bump)
-          if echo "$COMMITS" | grep -qiE '^[a-f0-9]+ feat(\(|:)'; then
-            MINOR=$((MINOR + 1))
-            PATCH=0
-            echo "🔼 Minor bump (feat: detected)"
-          elif echo "$COMMITS" | grep -qiE '^[a-f0-9]+ fix(\(|:)'; then
-            PATCH=$((PATCH + 1))
-            echo "🔧 Patch bump (fix: detected)"
-          else
-            PATCH=$((PATCH + 1))
-            echo "🔧 Patch bump (default)"
-          fi
-
-          VERSION="${MAJOR}.${MINOR}.${PATCH}"
-          echo "New platform version: $VERSION"
-
-          # Write back the bumped version
-          python3 -c "
-          import json
-          with open('$PLATFORM_FILE', 'r+') as f:
-              d = json.load(f)
-              d['version'] = '$VERSION'
-              f.seek(0); json.dump(d, f, indent=2); f.write('\n'); f.truncate()
-          "
-
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "mpy_version=$MPY_VERSION" >> "$GITHUB_OUTPUT"
-          echo "commit=$PYDIRECT_COMMIT" >> "$GITHUB_OUTPUT"
-          TAG="firmware-${VERSION}-$(date -u +%Y%m%d%H%M%S)"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
       - name: Create firmware release
         uses: softprops/action-gh-release@v2
