@@ -1,6 +1,6 @@
 {
   "version": "v1.28.0",
-  "updated": "2026-04-28T02:16:01Z",
-  "commit": "7740af1c861335f519d3f4daa72f1d32c1d7507f",
+  "updated": "2026-04-29T02:14:39Z",
+  "commit": "d32f86c0d61a1f140f42e5597dcf08a73153ee5f",
   "variants": ["ESP32_S3_8", "ESP32_S3_8_OCT", "ESP32_S3_16", "ESP32_S3_32", "ESP32_P4_16", "ESP32_P4_32"]
 }
