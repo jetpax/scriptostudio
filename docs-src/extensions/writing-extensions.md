@@ -211,7 +211,7 @@ The bundler:
 For distribution, place bundles in the extension directory:
 
 ```
-ScriptoHub (see scriptohub.com)
+ScriptoHub (see scriptohub.ai)
 ├── dbe.bundle.js    # Bundled extension
 ├── package.json     # Minimal metadata
 └── README.md        # Documentation

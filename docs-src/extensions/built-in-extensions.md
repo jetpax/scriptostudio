@@ -88,4 +88,4 @@ ExtensionName/
     └── lib/
 ```
 
-Browse extensions at [ScriptoHub](https://scriptohub.com)
+Browse extensions at [ScriptoHub](https://scriptohub.ai)

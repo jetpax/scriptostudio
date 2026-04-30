@@ -39,7 +39,7 @@ Script Objects are the ultimate device customization tool. Create your own with 
 
 ### 📦 System Extensions
 
-Add major new features at the touch of a button. Browse and install extensions from **[ScriptoHub](https://scriptohub.com)** — including **PFC**, **OVMS**, **OpenInverter**, **GVRET**, and more. See [Extensions Overview](/docs/user-guide/extensions/).
+Add major new features at the touch of a button. Browse and install extensions from **[ScriptoHub](https://scriptohub.ai)** — including **PFC**, **OVMS**, **OpenInverter**, **GVRET**, and more. See [Extensions Overview](/docs/user-guide/extensions/).
 ![ScriptO Studio OI](.github/images/OI.png)
 
 ### ⚙️ Device Management
@@ -74,7 +74,7 @@ Visit **[scriptostudio.com/app/](https://scriptostudio.com/app/)** — works on 
 
 ### 3. Install an Extension
 
-Click **Extensions** → Browse → **Install**. Extensions are hosted on **[ScriptoHub](https://scriptohub.com)**. Your device starts running the extension immediately. See [Extensions Overview](/docs/user-guide/extensions/).
+Click **Extensions** → Browse → **Install**. Extensions are hosted on **[ScriptoHub](https://scriptohub.ai)**. Your device starts running the extension immediately. See [Extensions Overview](/docs/user-guide/extensions/).
 
 ### 4. Disconnect and Go
 
@@ -87,7 +87,7 @@ Your device keeps running the Extension autonomously. Access its web UI directly
 | Component | Description |
 |-----------|-------------|
 | **[ScriptO Studio](https://scriptostudio.com/app/)** | Web IDE + Extension loader |
-| **[ScriptoHub](https://scriptohub.com)** | Extension & ScriptO marketplace |
+| **[ScriptoHub](https://scriptohub.ai)** | Extension & ScriptO marketplace |
 | **[PycoClaw](https://pycoclaw.com)** | Open-source AI agent platform |
 | **[Docs](https://scriptostudio.com/docs/)** | Documentation|
 | **[WebREPL Binary Protocol](https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md)** | IANA-registered sub-protocol |
@@ -117,7 +117,7 @@ This repository hosts the deployment artefacts for ScriptO Studio:
 | `/boards/` | Board manifests & firmware scripts | — |
 | `/docs/` | Documentation | [scriptostudio.com/docs/](https://scriptostudio.com/docs/) |
 
-Extensions and ScriptOs are now managed via **[ScriptoHub](https://scriptohub.com)**.
+Extensions and ScriptOs are now managed via **[ScriptoHub](https://scriptohub.ai)**.
 
 ---
 
@@ -125,7 +125,7 @@ Extensions and ScriptOs are now managed via **[ScriptoHub](https://scriptohub.co
 
 ### Contributing Extensions
 
-Extensions are published via [ScriptoHub](https://scriptohub.com). See the [Contributing Guide](/docs/developer/contributing/) for full details.
+Extensions are published via [ScriptoHub](https://scriptohub.ai). See the [Contributing Guide](/docs/developer/contributing/) for full details.
 
 ---
 
