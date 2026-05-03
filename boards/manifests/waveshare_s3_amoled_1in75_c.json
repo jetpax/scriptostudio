@@ -150,10 +150,5 @@
       "int_expander_pin": 5,
       "description": "Power management unit — battery charging, voltage regulation"
     }
-  },
-  "memory": {
-    "flash_size": "32MB",
-    "psram_size": "8MB",
-    "psram_mode": "octal"
   }
 }

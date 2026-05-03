@@ -7,13 +7,14 @@
     "revision": "1.0.0",
     "description": "ESP32-S3 N16R8 with 3.97\" 800x480 e-Paper, IMU, audio, SD, RTC, temp/humidity"
   },
-
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
   },
-
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
@@ -30,7 +31,6 @@
     "battery": true,
     "temp_humidity": true
   },
-
   "resources": {
     "pins": {
       "boot": 0,
@@ -39,14 +39,12 @@
       "button_down": 6,
       "pwr_out": 1
     },
-
     "spi": {
       "epaper": {
         "sclk": 11,
         "mosi": 12
       }
     },
-
     "sdmmc": {
       "sdcard": {
         "clk": 16,
@@ -57,14 +55,12 @@
         "d3": 18
       }
     },
-
     "i2c": {
       "i2c0": {
         "scl": 42,
         "sda": 41
       }
     },
-
     "i2s": {
       "audio": {
         "mclk": 13,
@@ -74,19 +70,16 @@
         "dout": 48
       }
     },
-
     "uart": {
       "primary": {
         "tx": 43,
         "rx": 44
       }
     },
-
     "usb": {
       "dm": 19,
       "dp": 20
     },
-
     "gpio": {
       "epd_cs": 10,
       "epd_dc": 9,
@@ -97,7 +90,6 @@
       "axp_int": 38
     }
   },
-
   "devices": {
     "display": {
       "type": "EPD_3in97",
@@ -116,7 +108,6 @@
       "partial_refresh": true,
       "description": "3.97\" 800x480 e-Paper display (mono + 4-gray, partial refresh)"
     },
-
     "imu": {
       "type": "QMI8658A",
       "driver": "qmi8658",
@@ -124,7 +115,6 @@
       "i2c_address": "0x6B",
       "description": "6-axis accelerometer/gyroscope"
     },
-
     "rtc": {
       "type": "PCF85063",
       "driver": "pcf85063",
@@ -133,7 +123,6 @@
       "int_pin": 45,
       "description": "Real-time clock with alarm and interrupt"
     },
-
     "temp_humidity": {
       "type": "SHTC3",
       "driver": "shtc3",
@@ -141,7 +130,6 @@
       "i2c_address": "0x70",
       "description": "Temperature and humidity sensor"
     },
-
     "audio_codec": {
       "type": "ES8311",
       "driver": "es8311",
@@ -151,7 +139,6 @@
       "pa_pin": 39,
       "description": "Audio codec with speaker power amplifier"
     },
-
     "pmu": {
       "type": "AXP2101",
       "driver": "axp2101",
@@ -160,18 +147,11 @@
       "int_pin": 38,
       "description": "Power management unit — battery charging, voltage regulation"
     },
-
     "sdcard": {
       "mode": "SDMMC",
       "bus": "sdmmc.sdcard",
       "bus_width": 4,
       "description": "TF/microSD card (4-bit SDMMC mode)"
     }
-  },
-
-  "memory": {
-    "flash_size": "16MB",
-    "psram_size": "8MB",
-    "psram_mode": "octal"
   }
 }

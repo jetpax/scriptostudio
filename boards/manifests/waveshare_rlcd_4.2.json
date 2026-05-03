@@ -7,13 +7,14 @@
     "revision": "1.0.0",
     "description": "ESP32-S3 N16R8 with 4.2\" reflective LCD (300x400), dual-mic array, IMU, audio, SD, RTC, temp/humidity sensor"
   },
-
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
   },
-
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
@@ -31,12 +32,10 @@
     "gpio_expander": false,
     "temperature_humidity": true
   },
-
   "resources": {
     "pins": {
       "boot": 0
     },
-
     "spi": {
       "lcd": {
         "sclk": 11,
@@ -48,14 +47,12 @@
         "miso": 39
       }
     },
-
     "i2c": {
       "i2c0": {
         "scl": 14,
         "sda": 13
       }
     },
-
     "i2s": {
       "audio": {
         "mclk": 16,
@@ -65,23 +62,19 @@
         "din": 10
       }
     },
-
     "uart": {
       "primary": {
         "tx": 43,
         "rx": 44
       }
     },
-
     "usb": {
       "dm": 19,
       "dp": 20
     },
-
     "adc": {
       "battery": 4
     },
-
     "gpio": {
       "lcd_rs": 5,
       "lcd_te": 6,
@@ -93,7 +86,6 @@
       "key": 18
     }
   },
-
   "devices": {
     "display": {
       "type": "ST7305",
@@ -109,8 +101,6 @@
       "reset_pin": 41,
       "description": "4.2\" 300x400 fully reflective LCD (ST7305), no backlight required"
     },
-
-
     "imu": {
       "type": "QMI8658C",
       "driver": "qmi8658",
@@ -118,7 +108,6 @@
       "i2c_address": "0x6B",
       "description": "6-axis accelerometer/gyroscope"
     },
-
     "rtc": {
       "type": "PCF85063",
       "driver": "pcf85063",
@@ -127,7 +116,6 @@
       "int_pin": 15,
       "description": "Real-time clock with alarm and independent backup battery"
     },
-
     "audio_codec": {
       "type": "ES8311",
       "driver": "es8311",
@@ -137,7 +125,6 @@
       "pa_pin": 46,
       "description": "Low-power audio codec for speaker output with NS4150B PA"
     },
-
     "microphone": {
       "type": "ES7210",
       "driver": "es7210",
@@ -146,7 +133,6 @@
       "i2s_bus": "i2s.audio",
       "description": "Dual-microphone array ADC with echo cancellation"
     },
-
     "temperature_humidity": {
       "type": "SHTC3",
       "driver": "shtc3",
@@ -154,24 +140,16 @@
       "i2c_address": "0x70",
       "description": "High-precision temperature and humidity sensor"
     },
-
     "sdcard": {
       "mode": "SPI",
       "bus": "spi.sdcard",
       "cs_pin": 17,
       "description": "TF/microSD card slot (SPI mode, FAT32)"
     },
-
     "battery": {
       "adc_pin": 4,
       "key_pin": 18,
       "description": "18650 LiPo battery holder with charging circuit and power management"
     }
-  },
-
-  "memory": {
-    "flash_size": "16MB",
-    "psram_size": "8MB",
-    "psram_mode": "octal"
   }
 }

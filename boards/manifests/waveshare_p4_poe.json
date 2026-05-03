@@ -7,13 +7,14 @@
     "revision": "1.0.0",
     "description": "ESP32-P4 multimedia board with ESP32-C6 WiFi6/BT5 coprocessor, PoE Ethernet, MIPI-DSI/CSI, Audio codec"
   },
-
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
   },
-
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
@@ -29,19 +30,16 @@
     "sdcard": true,
     "coprocessor": true
   },
-
   "resources": {
     "pins": {
       "boot": 35
     },
-
     "i2c": {
       "i2c0": {
         "scl": 8,
         "sda": 7
       }
     },
-
     "uart": {
       "primary": {
         "tx": 37,
@@ -51,7 +49,6 @@
         "description": "ESP32-C6 debug UART (exposed on SH1.0 connector)"
       }
     },
-
     "sdmmc": {
       "sdcard": {
         "slot": 0,
@@ -72,7 +69,6 @@
         "d3": 17
       }
     },
-
     "rmii": {
       "ethernet": {
         "txd0": 35,
@@ -87,7 +83,6 @@
         "reset": 51
       }
     },
-
     "i2s": {
       "audio": {
         "mclk": 13,
@@ -98,7 +93,6 @@
         "description": "ES8311 codec I2S interface"
       }
     },
-
     "mipi": {
       "dsi": {
         "lanes": 2,
@@ -109,7 +103,6 @@
         "description": "MIPI-CSI 2-lane camera interface, 1080P @30fps"
       }
     },
-
     "usb": {
       "otg": {
         "type": "Type-A",
@@ -122,7 +115,6 @@
       }
     }
   },
-
   "devices": {
     "ethernet": {
       "phy": "IP101",
@@ -137,15 +129,16 @@
       "speed": "100Mbps",
       "description": "IP101GRI Ethernet PHY with RMII interface and PoE support"
     },
-
     "c6_coprocessor": {
       "type": "ESP32-C6-MINI-1U-H8",
       "interface": "sdio",
-      "features": ["wifi6", "bluetooth5_le"],
+      "features": [
+        "wifi6",
+        "bluetooth5_le"
+      ],
       "antenna": "IPEX_3",
       "description": "ESP32-C6 coprocessor for WiFi 6 (2.4GHz) and Bluetooth 5 LE via SDIO"
     },
-
     "audio_codec": {
       "type": "ES8311",
       "driver": "es8311",
@@ -154,7 +147,6 @@
       "i2s_bus": "i2s.audio",
       "description": "ES8311 mono audio codec with I2S interface"
     },
-
     "audio_amplifier": {
       "type": "NS4150B",
       "output": "speaker",
@@ -162,17 +154,14 @@
       "speaker_spec": "8Ω 2W",
       "description": "Class-D mono audio power amplifier"
     },
-
     "microphone": {
       "type": "SMD_MEMS",
       "description": "Onboard SMD MEMS microphone"
     },
-
     "headphone_jack": {
       "type": "3.5mm",
       "description": "3.5mm stereo headphone jack"
     },
-
     "sdcard": {
       "mode": "SDMMC",
       "bus": "sdmmc.sdcard",
@@ -184,28 +173,31 @@
       },
       "description": "MicroSD/TF card slot with 4-bit SDMMC interface"
     },
-
     "display_port": {
       "type": "MIPI-DSI",
       "lanes": 2,
       "max_resolution": "1280x800",
-      "features": ["PPA", "2D_DMA", "JPEG_decode"],
+      "features": [
+        "PPA",
+        "2D_DMA",
+        "JPEG_decode"
+      ],
       "description": "MIPI-DSI 2-lane display connector for high-definition screens"
     },
-
     "camera_port": {
       "type": "MIPI-CSI",
       "lanes": 2,
       "max_resolution": "1080P",
-      "features": ["ISP", "H264_encode", "JPEG_encode"],
-      "compatible_cameras": ["OV5647", "SC2336"],
+      "features": [
+        "ISP",
+        "H264_encode",
+        "JPEG_encode"
+      ],
+      "compatible_cameras": [
+        "OV5647",
+        "SC2336"
+      ],
       "description": "MIPI-CSI 2-lane camera connector with integrated ISP"
     }
-  },
-
-  "memory": {
-    "flash_size": "16MB",
-    "psram_size": "32MB",
-    "psram_mode": "octal"
   }
 }

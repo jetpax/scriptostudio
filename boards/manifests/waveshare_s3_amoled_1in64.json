@@ -7,13 +7,14 @@
     "revision": "1.0.0",
     "description": "ESP32-S3R8 with 1.64\" 280x456 AMOLED (CO5300), FT3168 touch, QMI8658 IMU, SD card"
   },
-
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
   },
-
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
@@ -31,12 +32,10 @@
     "gnss": false,
     "gpio_expander": false
   },
-
   "resources": {
     "pins": {
       "boot": 0
     },
-
     "qspi": {
       "lcd": {
         "sck": 10,
@@ -47,7 +46,6 @@
         "cs": 9
       }
     },
-
     "spi": {
       "sdcard": {
         "sck": 41,
@@ -56,36 +54,30 @@
         "cs": 38
       }
     },
-
     "i2c": {
       "i2c0": {
         "scl": 48,
         "sda": 47
       }
     },
-
     "uart": {
       "primary": {
         "tx": 43,
         "rx": 44
       }
     },
-
     "usb": {
       "dm": 19,
       "dp": 20
     },
-
     "adc": {
       "battery": 4
     },
-
     "gpio": {
       "lcd_rst": 21,
       "imu_int1": 46
     }
   },
-
   "devices": {
     "display": {
       "type": "CO5300",
@@ -100,7 +92,6 @@
       "color_bits": 16,
       "description": "1.64\" 280x456 AMOLED (CO5300) with QSPI interface"
     },
-
     "touch": {
       "type": "FT3168",
       "driver": "ft3168",
@@ -110,7 +101,6 @@
       "int_pin": null,
       "description": "Capacitive touch controller (FT3168) — INT and RST not connected on this board (Waveshare reference treats both as NC); driven polled-only over I2C"
     },
-
     "imu": {
       "type": "QMI8658C",
       "driver": "qmi8658",
@@ -119,23 +109,15 @@
       "int1_pin": 46,
       "description": "6-axis accelerometer/gyroscope"
     },
-
     "sdcard": {
       "mode": "SPI",
       "bus": "spi.sdcard",
       "description": "TF/microSD card (SPI mode)"
     },
-
     "battery": {
       "charger": "ETA6098",
       "adc_pin": 4,
       "description": "LiPo battery charging (ETA6098) and voltage monitoring via ADC divider"
     }
-  },
-
-  "memory": {
-    "flash_size": "16MB",
-    "psram_size": "8MB",
-    "psram_mode": "octal"
   }
 }

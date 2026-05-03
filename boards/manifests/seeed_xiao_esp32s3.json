@@ -7,17 +7,17 @@
     "revision": "1.0.0",
     "description": "Ultra-compact ESP32-S3 with 8MB Flash, 8MB Octal PSRAM, native USB-C, camera connector"
   },
-
   "firmware": {
     "variant": "ESP32_S3_8_OCT"
   },
-
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
   },
-
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
@@ -29,20 +29,17 @@
     "microphone": true,
     "sd_card": true
   },
-
   "resources": {
     "pins": {
       "status_led": 21,
       "boot": 0
     },
-
     "i2c": {
       "i2c0": {
         "sda": 5,
         "scl": 6
       }
     },
-
     "spi": {
       "spi2": {
         "sclk": 7,
@@ -51,7 +48,6 @@
         "cs": 44
       }
     },
-
     "sd_card": {
       "interface": "spi",
       "sclk": 7,
@@ -59,12 +55,10 @@
       "mosi": 9,
       "cs": 21
     },
-
     "usb": {
       "dm": 19,
       "dp": 20
     },
-
     "camera": {
       "interface": "dvp",
       "xclk": 10,
@@ -85,25 +79,17 @@
       },
       "description": "8-bit DVP camera via B2B connector (OV2640/OV5640 compatible)"
     },
-
     "microphone": {
       "type": "pdm",
       "clk": 42,
       "data": 41
     }
   },
-
   "devices": {
     "status_led": {
       "type": "gpio",
       "active_low": true,
       "description": "Onboard yellow LED on GPIO21 (active low)"
     }
-  },
-
-  "memory": {
-    "flash_size": "8MB",
-    "psram_size": "8MB",
-    "psram_mode": "octal"
   }
 }

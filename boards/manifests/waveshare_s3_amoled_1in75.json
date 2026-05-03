@@ -7,13 +7,14 @@
     "revision": "1.0.0",
     "description": "ESP32-S3 N16R8 with 1.75\" 466x466 AMOLED, touch, dual mic, GNSS, IMU, audio, SD, RTC"
   },
-
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
   },
-
   "capabilities": {
     "wifi": true,
     "bluetooth": true,
@@ -31,13 +32,11 @@
     "gnss": true,
     "gpio_expander": true
   },
-
   "resources": {
     "pins": {
       "boot": 0,
       "gpio_out": 16
     },
-
     "qspi": {
       "lcd": {
         "sck": 38,
@@ -49,7 +48,6 @@
         "te": 13
       }
     },
-
     "sdmmc": {
       "sdcard": {
         "clk": 2,
@@ -59,14 +57,12 @@
         "slot": 0
       }
     },
-
     "i2c": {
       "i2c0": {
         "scl": 14,
         "sda": 15
       }
     },
-
     "i2s": {
       "audio": {
         "mclk": 42,
@@ -76,7 +72,6 @@
         "dout": 8
       }
     },
-
     "uart": {
       "primary": {
         "tx": 43,
@@ -87,12 +82,10 @@
         "rx": 17
       }
     },
-
     "usb": {
       "dm": 19,
       "dp": 20
     },
-
     "gpio": {
       "lcd_rst": 39,
       "tp_int": 11,
@@ -100,7 +93,6 @@
       "pa_enable": 46,
       "imu_int2": 21
     },
-
     "expander": {
       "chip": "TCA9554PWR",
       "i2c_bus": "i2c0",
@@ -113,7 +105,6 @@
       }
     }
   },
-
   "devices": {
     "display": {
       "type": "CO5300",
@@ -129,7 +120,6 @@
       "color_bits": 16,
       "description": "1.75\" 466x466 round AMOLED (CO5300) with QSPI interface"
     },
-
     "touch": {
       "type": "CST92xx",
       "driver": "cst92xx",
@@ -139,7 +129,6 @@
       "rst_pin": 40,
       "description": "Capacitive touch controller (CST92xx series)"
     },
-
     "imu": {
       "type": "QMI8658C",
       "driver": "qmi8658",
@@ -149,7 +138,6 @@
       "int1_expander_pin": 6,
       "description": "6-axis accelerometer/gyroscope"
     },
-
     "rtc": {
       "type": "PCF85063",
       "driver": "pcf85063",
@@ -158,7 +146,6 @@
       "int_expander_pin": 3,
       "description": "Real-time clock with alarm and interrupt"
     },
-
     "audio_codec": {
       "type": "ES8311",
       "driver": "es8311",
@@ -168,7 +155,6 @@
       "pa_pin": 46,
       "description": "Audio codec for speaker output (DAC)"
     },
-
     "mic_codec": {
       "type": "ES7210",
       "driver": "es7210",
@@ -177,7 +163,6 @@
       "i2s_bus": "i2s.audio",
       "description": "4-channel ADC codec for dual microphone input"
     },
-
     "gnss": {
       "type": "LC76GABMD",
       "driver": "nmea",
@@ -185,7 +170,6 @@
       "rst_expander_pin": 7,
       "description": "Multi-constellation GNSS receiver (GPS/BDS/GLONASS/Galileo/QZSS)"
     },
-
     "pmu": {
       "type": "AXP2101",
       "driver": "axp2101",
@@ -194,13 +178,11 @@
       "int_expander_pin": 5,
       "description": "Power management unit — battery charging, voltage regulation"
     },
-
     "sdcard": {
       "mode": "SDMMC",
       "bus": "sdmmc.sdcard",
       "description": "TF/microSD card (1-bit SDMMC mode)"
     },
-
     "gpio_expander": {
       "type": "TCA9554PWR",
       "bus": "i2c.i2c0",
@@ -208,11 +190,5 @@
       "pins_used": 5,
       "description": "8-bit I2C GPIO expander for peripheral control"
     }
-  },
-
-  "memory": {
-    "flash_size": "16MB",
-    "psram_size": "8MB",
-    "psram_mode": "octal"
   }
 }
