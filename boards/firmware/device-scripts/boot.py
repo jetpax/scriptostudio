@@ -49,7 +49,9 @@ try:
             init_display()
             print("Display initialized (splash)")
 except Exception as e:
+    import sys
     print(f"Display init skipped: {e}")
+    sys.print_exception(e)
 
 # Initialize AXP2101 PMU — charging, ADC, fuel gauge, low-battery thresholds
 # Without this, battery voltage/percentage reads return stale/zero values

@@ -94,7 +94,7 @@
       "rst_pin": 21,
       "width": 280,
       "height": 456,
-      "offset_x": 0,
+      "offset_x": 20,
       "offset_y": 0,
       "interface": "qspi",
       "color_bits": 16,
@@ -106,8 +106,9 @@
       "driver": "ft3168",
       "bus": "i2c.i2c0",
       "i2c_address": "0x38",
-      "rst_pin": 21,
-      "description": "Capacitive touch controller (FT3168) — reset shared with display"
+      "rst_pin": null,
+      "int_pin": null,
+      "description": "Capacitive touch controller (FT3168) — INT and RST not connected on this board (Waveshare reference treats both as NC); driven polled-only over I2C"
     },
 
     "imu": {
