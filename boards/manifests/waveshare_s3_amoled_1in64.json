@@ -1,0 +1,140 @@
+{
+  "identity": {
+    "id": "waveshare_s3_amoled_1in64",
+    "name": "Waveshare ESP32-S3 Touch AMOLED 1.64",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3R8 with 1.64\" 280x456 AMOLED (CO5300), FT3168 touch, QMI8658 IMU, SD card"
+  },
+
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": ["http", "webrepl"]
+  },
+
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": true,
+    "imu": true,
+    "audio": false,
+    "microphone": false,
+    "sdcard": true,
+    "rtc": false,
+    "battery": true,
+    "gnss": false,
+    "gpio_expander": false
+  },
+
+  "resources": {
+    "pins": {
+      "boot": 0
+    },
+
+    "qspi": {
+      "lcd": {
+        "sck": 10,
+        "data0": 11,
+        "data1": 12,
+        "data2": 13,
+        "data3": 14,
+        "cs": 9
+      }
+    },
+
+    "spi": {
+      "sdcard": {
+        "sck": 41,
+        "mosi": 39,
+        "miso": 40,
+        "cs": 38
+      }
+    },
+
+    "i2c": {
+      "i2c0": {
+        "scl": 48,
+        "sda": 47
+      }
+    },
+
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+
+    "adc": {
+      "battery": 4
+    },
+
+    "gpio": {
+      "lcd_rst": 21,
+      "imu_int1": 46
+    }
+  },
+
+  "devices": {
+    "display": {
+      "type": "CO5300",
+      "driver": "co5300",
+      "bus": "qspi.lcd",
+      "rst_pin": 21,
+      "width": 280,
+      "height": 456,
+      "offset_x": 0,
+      "offset_y": 0,
+      "interface": "qspi",
+      "color_bits": 16,
+      "description": "1.64\" 280x456 AMOLED (CO5300) with QSPI interface"
+    },
+
+    "touch": {
+      "type": "FT3168",
+      "driver": "ft3168",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x38",
+      "rst_pin": 21,
+      "description": "Capacitive touch controller (FT3168) — reset shared with display"
+    },
+
+    "imu": {
+      "type": "QMI8658C",
+      "driver": "qmi8658",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x6B",
+      "int1_pin": 46,
+      "description": "6-axis accelerometer/gyroscope"
+    },
+
+    "sdcard": {
+      "mode": "SPI",
+      "bus": "spi.sdcard",
+      "description": "TF/microSD card (SPI mode)"
+    },
+
+    "battery": {
+      "charger": "ETA6098",
+      "adc_pin": 4,
+      "description": "LiPo battery charging (ETA6098) and voltage monitoring via ADC divider"
+    }
+  },
+
+  "memory": {
+    "flash_size": "16MB",
+    "psram_size": "8MB",
+    "psram_mode": "octal"
+  }
+}
