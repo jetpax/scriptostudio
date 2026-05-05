@@ -76,55 +76,79 @@ def mount_sdcard():
 
   try:
     sd_device = board.device('sdcard')
-    sd_bus = board.sdmmc('sdcard')
   except KeyError:
     return False
 
-  slot = getattr(sd_bus, 'slot', 0)
-  width = 4 if hasattr(sd_bus, 'd3') else 1
-
-  # Power cycle if board defines power_control
-  power_ctrl = getattr(sd_device, 'power_control', None)
-  if power_ctrl:
+  pc = getattr(sd_device, 'power_control', None)
+  if isinstance(pc, dict) and pc.get('pin') is not None:
     from machine import Pin
     import time
-    pin_num = power_ctrl.get('pin') if isinstance(power_ctrl, dict) else getattr(power_ctrl, 'pin', None)
-    active_low = power_ctrl.get('active_low', True) if isinstance(power_ctrl, dict) else getattr(power_ctrl, 'active_low', True)
-    if pin_num is not None:
-      p = Pin(pin_num, Pin.OUT)
-      p.value(1 if active_low else 0)  # power off
-      time.sleep_ms(200)
-      p.value(0 if active_low else 1)  # power on
-      time.sleep_ms(500)
+    pin = Pin(pc['pin'], Pin.OUT)
+    active_low = pc.get('active_low', True)
+    pin.value(1 if active_low else 0)
+    time.sleep_ms(200)
+    pin.value(0 if active_low else 1)
+    time.sleep_ms(500)
 
-  if width == 4:
-    data_pins = (sd_bus.d0, sd_bus.d1, sd_bus.d2, sd_bus.d3)
+  if sd_device.type == 'sd_spi':
+    params = _build_sd_spi_params(sd_device, board)
   else:
-    data_pins = (sd_bus.d0,)
-
-  params = dict(
-    slot=slot, width=width,
-    sck=sd_bus.clk, cmd=sd_bus.cmd,
-    data=data_pins, freq=4000000
-  )
+    params = _build_sd_sdmmc_params(sd_device, board)
+  if params is None:
+    return False
 
   return _do_mount(params)
 
 
+def _build_sd_sdmmc_params(sd_device, board):
+  try:
+    sd_bus = board.sdmmc('sdcard')
+  except KeyError:
+    return None
+  width = 4 if hasattr(sd_bus, 'd3') else 1
+  data_pins = (sd_bus.d0, sd_bus.d1, sd_bus.d2, sd_bus.d3) if width == 4 else (sd_bus.d0,)
+  return {
+    'kind': 'sdmmc',
+    'slot': getattr(sd_bus, 'slot', 0),
+    'width': width,
+    'sck': sd_bus.clk,
+    'cmd': sd_bus.cmd,
+    'data': data_pins,
+    'freq': 4_000_000,
+  }
+
+
+def _build_sd_spi_params(sd_device, board):
+  d = sd_device._data
+  spi_name = d.get('spi_bus')
+  if not spi_name:
+    return None
+  try:
+    bus = board.spi(spi_name)
+  except KeyError:
+    return None
+  return {
+    'kind': 'spi',
+    'spi_id': int(spi_name.replace('spi', '')),
+    'sck': bus.sck,
+    'mosi': bus.mosi,
+    'miso': bus.miso,
+    'cs': d['cs'],
+    'baud': 4_000_000,
+  }
+
+
 def _do_mount(params):
-  """Low-level mount using cached parameters. Used by both
-  mount_sdcard() and sd_recover()."""
+  """Build the SDCard object and mount it. Used by both mount_sdcard()
+  and sd_recover()."""
   global _sd_card, _mount_params
   try:
-    from machine import SDCard
-    import time
-    time.sleep_ms(200)
-
-    sd = SDCard(
-      slot=params['slot'], width=params['width'],
-      sck=params['sck'], cmd=params['cmd'],
-      data=params['data'], freq=params['freq']
-    )
+    if params.get('kind') == 'spi':
+      sd = _build_sdcard_spi(params)
+    else:
+      sd = _build_sdcard_sdmmc(params)
+    if sd is None:
+      return False
 
     try:
       os.mkdir('/sd')
@@ -135,13 +159,40 @@ def _do_mount(params):
     _sd_card = sd
     _mount_params = params
 
-    info = sd.info()
-    cap_gb = info[0] / (1024**3)
-    _log("info", f"SD card mounted ({cap_gb:.1f} GB)")
+    try:
+      info = sd.info()
+      _log("info", f"SD card mounted ({info[0] / (1024**3):.1f} GB)")
+    except (AttributeError, OSError):
+      _log("info", "SD card mounted")
     return True
   except Exception as e:
     _log("info", f"SD card not available: {e}")
     return False
+
+
+def _build_sdcard_sdmmc(params):
+  from machine import SDCard
+  import time
+  time.sleep_ms(200)
+  return SDCard(
+    slot=params['slot'], width=params['width'],
+    sck=params['sck'], cmd=params['cmd'],
+    data=params['data'], freq=params['freq']
+  )
+
+
+def _build_sdcard_spi(params):
+  from machine import Pin, SPI
+  try:
+    from sdcard import SDCard
+  except ImportError:
+    _log("warn", "sdcard driver missing — add require(\"sdcard\") to firmware manifest")
+    return None
+  spi = SPI(params['spi_id'], baudrate=params['baud'],
+            sck=Pin(params['sck']), mosi=Pin(params['mosi']),
+            miso=Pin(params['miso']))
+  cs = Pin(params['cs'], Pin.OUT, value=1)
+  return SDCard(spi, cs)
 
 
 def _recover_inner():

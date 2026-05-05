@@ -68,18 +68,14 @@ def _load_server_config():
         from lib.sys import settings
         return {
             'webrepl_password': settings.get('server.webrepl_password', 'password'),
-            'http_port': settings.get('server.http_port', 80),
-            'https_enabled': settings.get('server.https_enabled', False),
             'https_cert_file': settings.get('server.https_cert_file', '/certs/servercert.pem'),
             'https_key_file': settings.get('server.https_key_file', '/certs/prvtkey.pem')
         }
     except Exception as e:
         log("warning", f"Failed to load server settings: {e}", source="main")
-    
+
     return {
         'webrepl_password': 'password',
-        'http_port': 80,
-        'https_enabled': False,
         'https_cert_file': '/certs/servercert.pem',
         'https_key_file': '/certs/prvtkey.pem'
     }
@@ -91,25 +87,24 @@ from lib.sys import network
 
 
 def start_servers(ip):
-    """Start HTTP server (and optionally HTTPS) and WebREPL"""
+    """Start HTTPS server and WebREPL.
+
+    TLS-only: certs must be provisioned (typically via the PWA's flash
+    flow) before the device can serve. Plain HTTP/WS would be blocked by
+    browsers as mixed content from the HTTPS PWA anyway.
+    """
     log("info", "Starting servers...", source="main")
-    
-    http_port = _server_config.get('http_port', 80)
-    https_enabled = _server_config.get('https_enabled', False)
+
+    cert_file = _server_config.get('https_cert_file', '/certs/servercert.pem')
+    key_file  = _server_config.get('https_key_file',  '/certs/prvtkey.pem')
     webrepl_password = _server_config.get('webrepl_password', 'password')
-    
-    # Start HTTP server (and HTTPS if enabled)
+
     try:
-        if https_enabled:
-            cert_file = _server_config.get('https_cert_file')
-            key_file = _server_config.get('https_key_file')
-            httpserver.start(http_port, cert_file=cert_file, key_file=key_file)
-            log("info", f"HTTP/HTTPS server started on ports {http_port}/443", source="main")
-        else:
-            httpserver.start(http_port)
-            log("info", f"HTTP server started on port {http_port}", source="main")
+        httpserver.start(cert_file=cert_file, key_file=key_file)
+        log("info", "HTTPS server started on port 443", source="main")
     except Exception as e:
-        log("error", f"Failed to start HTTP server: {e}", source="main")
+        log("error", f"Failed to start HTTPS server: {e}", source="main")
+        log("error", f"  expected cert at {cert_file}, key at {key_file}", source="main")
         return False
     
     # Start WebREPL

@@ -1,0 +1,99 @@
+{
+  "identity": {
+    "id": "sparkfun_thingplus_rp2350",
+    "name": "SparkFun Thing Plus RP2350",
+    "vendor": "sparkfun",
+    "chip": "RP2350",
+    "revision": "1.0.0",
+    "description": "SparkFun Thing Plus RP2350 (Feather form factor, CYW43439 WiFi/BLE, 16 MB flash, 8 MB PSRAM, microSD)"
+  },
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
+  },
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": true,
+    "status_led": true,
+    "psram": true,
+    "sdcard": true,
+    "battery_charging": true,
+    "usb_otg": false,
+    "can": false
+  },
+  "resources": {
+    "pins": {
+      "neopixel": 14,
+      "periph_pow": 13,
+      "batt_alert": 15,
+      "sd_detect": 10
+    },
+    "uart": {
+      "uart0": {
+        "tx": 0,
+        "rx": 1
+      }
+    },
+    "i2c": {
+      "i2c1": {
+        "sda": 6,
+        "scl": 7
+      }
+    },
+    "spi": {
+      "spi0": {
+        "sck": 2,
+        "mosi": 3,
+        "miso": 4
+      },
+      "spi1": {
+        "sck": 26,
+        "mosi": 27,
+        "miso": 28
+      }
+    },
+    "psram": {
+      "cs": 8,
+      "size_bytes": 8388608
+    },
+    "flash": {
+      "size_bytes": 16777216,
+      "fs_bytes": 14680064
+    }
+  },
+  "devices": {
+    "status_led": {
+      "type": "cyw43_gpio",
+      "gpio": 0,
+      "description": "User LED on CYW43 WL_GPIO0 (Pin('LED'))"
+    },
+    "neopixel": {
+      "type": "neopixel",
+      "pin": 14,
+      "count": 1,
+      "pixel_order": "GRB",
+      "description": "Onboard WS2812 RGB LED on GPIO14"
+    },
+    "qwiic": {
+      "type": "i2c",
+      "bus": "i2c1",
+      "description": "Qwiic JST-SH connector on I2C1 (GPIO6/7)"
+    },
+    "sdcard": {
+      "type": "sd_spi",
+      "spi_bus": "spi0",
+      "cs": 9,
+      "detect": 10,
+      "power_control": {
+        "pin": 13,
+        "active_low": false
+      },
+      "description": "microSD socket J6, SPI mode on SPI0; powered via PERIPH_POW (GPIO13). Do not drive SPI pins while power is off."
+    }
+  }
+}
