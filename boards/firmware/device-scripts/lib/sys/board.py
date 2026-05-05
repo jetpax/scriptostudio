@@ -195,6 +195,14 @@ class Board:
         """Get I2S bus configuration."""
         return I2S(self._bus("i2s", name))
 
+    def flash(self):
+        """Flash info view (size_bytes, fs_bytes, ...). Empty if absent."""
+        return _View(self._res.get("flash", {}))
+
+    def psram(self):
+        """PSRAM info view (size_bytes, cs, ...). Empty if absent."""
+        return _View(self._res.get("psram", {}))
+
     def _bus(self, kind, name):
         """Internal: get bus configuration."""
         try:

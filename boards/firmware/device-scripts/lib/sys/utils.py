@@ -35,11 +35,7 @@ import time
 import gc
 import binascii
 
-try:
-    from esp32 import mcu_temperature
-    ESP32_TEMP_AVAILABLE = True
-except ImportError:
-    ESP32_TEMP_AVAILABLE = False
+from lib.sys import platform as _platform
 
 
 # --- Neofetch Configuration ---
@@ -128,12 +124,7 @@ def getSysInfo():
         # Silent error - M2M commands should not produce output
     
     # --- Flash Size ---
-    try:
-        from esp import flash_size
-        sys_info['flashSize'] = flash_size()  # Size in bytes
-    except Exception as e:
-        sys_info['flashSize'] = 4 * 1024 * 1024  # Default 4MB
-        # Silent error - M2M commands should not produce output
+    sys_info['flashSize'] = _platform.flash_size() or 4 * 1024 * 1024
     
     # --- Platform/OS Info ---
     try:
@@ -141,31 +132,7 @@ def getSysInfo():
         import os as _os
         uname = _os.uname()
         
-        # Check if SPIRAM is available
-        spiram_available = False
-        try:
-            import esp32
-            # Method 1: Check for PSRAM/SPIRAM in heap
-            if hasattr(esp32, 'idf_heap_info'):
-                try:
-                    # Try to get PSRAM heap info (capability 0x80 = MALLOC_CAP_SPIRAM)
-                    psram_info = esp32.idf_heap_info(0x80)
-                    if psram_info[0] > 0:  # If total PSRAM > 0
-                        spiram_available = True
-                except:
-                    pass
-            
-            # Method 2: Check if we can allocate from external RAM
-            if not spiram_available and hasattr(esp32, 'Partition'):
-                try:
-                    # Large heap usually indicates SPIRAM
-                    gc.collect()
-                    if gc.mem_free() > 2000000:  # > 2MB free suggests SPIRAM
-                        spiram_available = True
-                except:
-                    pass
-        except:
-            pass
+        spiram_available = _platform.psram_info() is not None
         
         # Get MicroPython version
         try:
@@ -305,22 +272,7 @@ def getSysInfo():
         # Silent error - M2M commands should not produce output
     
     # --- Partitions Info ---
-    try:
-        from esp32 import Partition
-        partitions = []
-        
-        # Get APP partitions
-        for p in Partition.find(Partition.TYPE_APP):
-            partitions.append(p.info())
-        
-        # Get DATA partitions
-        for p in Partition.find(Partition.TYPE_DATA):
-            partitions.append(p.info())
-        
-        sys_info['partitions'] = partitions
-    except Exception as e:
-        sys_info['partitions'] = []
-        # Silent error - M2M commands should not produce output
+    sys_info['partitions'] = _platform.flash_partitions()
     
     # --- Pins State ---
     try:
@@ -346,15 +298,9 @@ def getSysInfo():
     sys_info['bootcfg'] = []
     
     # --- Temperature (if available) ---
-    if ESP32_TEMP_AVAILABLE:
-        try:
-            temp_celsius = mcu_temperature()
-            if temp_celsius is not None:
-                sys_info['temperature'] = {
-                    'celsius': round(temp_celsius * 10) / 10
-                }
-        except:
-            pass
+    temp_celsius = _platform.cpu_temp()
+    if temp_celsius is not None:
+        sys_info['temperature'] = {'celsius': round(temp_celsius * 10) / 10}
     
     # Print JSON result (for M2M exec() calls via WebREPL Binary Protocol)
     print(json.dumps(sys_info))
@@ -368,14 +314,8 @@ def getStatusInfo():
     mem_alloc = gc.mem_alloc()
     mem_free = gc.mem_free()
     
-    temp_data = None
-    try:
-        if ESP32_TEMP_AVAILABLE:
-            temp_c = mcu_temperature()
-            if temp_c is not None:
-                temp_data = round(temp_c * 10) / 10
-    except:
-        pass
+    temp_c = _platform.cpu_temp()
+    temp_data = round(temp_c * 10) / 10 if temp_c is not None else None
     
     uptime_ms = time.ticks_ms()
     uptime_min = round(uptime_ms / 1000 / 60)
