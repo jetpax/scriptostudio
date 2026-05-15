@@ -1,11 +1,11 @@
 {
-  "version": "1.4.44",
+  "version": "1.4.45",
   "micropython_version": "v1.28.0",
-  "updated": "2026-05-14T02:38:51Z",
+  "updated": "2026-05-15T02:24:10Z",
   "pyDirect_commit": "2333a2d81095537c2fd97714a9ca1dcccb82efe8",
-  "scriptostudio_commit": "046ee32fe14f817f4db52d8bf9c29d2137220409",
-  "release_tag": "firmware-1.4.44-20260514023841",
-  "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-1.4.44-20260514023841",
+  "scriptostudio_commit": "dcb87e88bfa108eaf08cc3349a8f0b3c8e40f2d7",
+  "release_tag": "firmware-1.4.45-20260515022400",
+  "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-1.4.45-20260515022400",
   "variants": [
     { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "/boards/firmware/ESP32_S3_8-merged.bin" },
     { "id": "ESP32_S3_8_OCT", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8_OCT-merged.bin", "url": "/boards/firmware/ESP32_S3_8_OCT-merged.bin" },
