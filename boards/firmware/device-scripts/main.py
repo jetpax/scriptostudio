@@ -231,14 +231,13 @@ async def system_root():
     
     log("info", f"Active tasks: {list(bg_tasks.list_tasks().keys())}", source="main")
     
-    # Keep running forever
+    # Keep running forever. KeyboardInterrupt is intentionally NOT caught here:
+    # main() owns the KI counter (single → stop user tasks; 3× consecutive → drop
+    # to REPL). Catching locally would swallow KIs before main() sees them, and
+    # the escape sequence (the only way to drop to REPL on chips with no
+    # host-driven hardware reset, e.g. RP2350) would never fire.
     while True:
-        try:
-            await asyncio.sleep(3600)
-        except KeyboardInterrupt:
-            # Catch any stray KeyboardInterrupt at top level
-            log("debug", "KeyboardInterrupt in system_root - stopping user tasks", source="main")
-            bg_tasks.stop_user_tasks()
+        await asyncio.sleep(3600)
 
 
 def wsserver_connect_callback(client_id, event_name):
@@ -435,19 +434,46 @@ def main():
         print(f"[WARNING] Setup mode check failed: {e}")
     
     # Enter async event loop
-    # Loop handles KeyboardInterrupt by stopping user tasks and restarting
+    # Single Ctrl-C → stop user tasks + restart loop (existing UX).
+    # 3 Ctrl-Cs within 60s of each other (sliding window) → drop to UART REPL.
+    # Provisioning escape hatch for chips with no host-driven hardware reset
+    # (e.g. RP2350: no DTR/RTS path).
+    #
+    # The window is between consecutive Ctrl-Cs, not relative to asyncio.run
+    # start — the latter would falsely reset whenever network.startup() takes
+    # >window between buffered KIs.
+    kbi_count = 0
+    last_kbi_ms = 0
+    KBI_ESCAPE_THRESHOLD = 3
+    KBI_INTER_WINDOW_MS = 60000
     while True:
         try:
             asyncio.run(main_async())
             break  # Normal exit (shouldn't happen)
         except KeyboardInterrupt:
-            # Stop user tasks and restart event loop
-            # Wrap in try/except as logger may be unavailable after crash
+            now = time.ticks_ms()
+            if last_kbi_ms and time.ticks_diff(now, last_kbi_ms) < KBI_INTER_WINDOW_MS:
+                kbi_count += 1
+            else:
+                kbi_count = 1
+            last_kbi_ms = now
+
+            if kbi_count >= KBI_ESCAPE_THRESHOLD:
+                try:
+                    log("info", f"Escape sequence (Ctrl-C x{kbi_count}) — dropping to REPL", source="main")
+                except:
+                    pass
+                try:
+                    bg_tasks.stop_all()
+                except:
+                    pass
+                break  # Exit main(), drop to REPL
+
+            # Default: stop user tasks and restart event loop
             try:
                 bg_tasks.stop_user_tasks()
             except:
                 pass
-            # Clear task registry and reset network_ready event
             bg_tasks._tasks.clear()
             network.network_ready.clear()
             # Loop continues, main_async will restart network tasks
@@ -461,8 +487,9 @@ def main():
                 pass
             bg_tasks._tasks.clear()
             network.network_ready.clear()
+            kbi_count = 0  # Intentional restart resets escape counter
             # Loop continues, main_async will restart
-    
+
     return True
 
 # Auto-run if executed as main
