@@ -12,18 +12,17 @@ SPDX-License-Identifier: MIT
 """
 
 print("System booting...")
-import esp
-esp.osdebug(esp.LOG_INFO)  # or esp.LOG_DEBUG for more verbose
-
-# Check for PSRAM - firmware requires it for networking and WebREPL buffers
 import gc
-gc.collect()
-total = gc.mem_alloc() + gc.mem_free()
-if total < 1_000_000:  # Less than 1MB = no PSRAM
+from lib.sys import platform
+platform.osdebug(platform.LOG_INFO)  # or platform.LOG_DEBUG for more verbose
+
+# Memory sanity check — ESP32-S3 requires PSRAM for networking + WebREPL buffers;
+# on rp2/Zephyr the heap is always large enough, so this is effectively an
+# ESP32-only gate, but the shim keeps boot.py free of port-specific imports.
+_ok, _why = platform.verify_memory_requirements()
+if not _ok:
     print("\n" + "=" * 60)
-    print("FATAL: PSRAM not detected")
-    print("This firmware requires an ESP32-S3 with PSRAM (e.g. N16R8)")
-    print(f"Total heap: {total:,} bytes (expected >4,000,000 with PSRAM)")
+    print("FATAL: " + _why)
     print("=" * 60 + "\n")
     import sys
     sys.exit()

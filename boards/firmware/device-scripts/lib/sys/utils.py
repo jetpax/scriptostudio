@@ -129,8 +129,7 @@ def getSysInfo():
     # --- Platform/OS Info ---
     try:
         import sys as _sys
-        import os as _os
-        uname = _os.uname()
+        uname = _platform.uname()
         
         spiram_available = _platform.psram_info() is not None
         
@@ -744,8 +743,9 @@ def neofetch():
     
     # Get system information
     try:
-        version = os.uname().version
-        platform = os.uname().machine
+        _u = _platform.uname()
+        version = _u.version
+        platform = _u.machine
     except:
         version = "Unknown"
         platform = "ESP32"
