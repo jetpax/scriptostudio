@@ -1,0 +1,25 @@
+{
+  "identity": {
+    "id": "rpi_zero_2w",
+    "name": "Raspberry Pi Zero 2 W",
+    "vendor": "raspberrypi",
+    "chip": "BCM2710A1",
+    "revision": "1.0.0",
+    "description": "Raspberry Pi Zero 2 W (RP3A0 SiP, quad Cortex-A53, CYW43438 Wi-Fi) running MicroPython on Zephyr"
+  },
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
+  },
+  "capabilities": {
+    "wifi": true
+  },
+  "resources": {
+    "pins": {}
+  },
+  "devices": {}
+}
