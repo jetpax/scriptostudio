@@ -35,6 +35,7 @@ LOG_VERBOSE = 5
 _esp32 = None
 _esp = None
 _machine = None
+_zsensor = None
 
 if _PORT == 'esp32':
   try:
@@ -49,6 +50,12 @@ if _PORT == 'esp32':
 if _PORT == 'rp2':
   try:
     import machine as _machine
+  except ImportError:
+    pass
+
+if _PORT == 'zephyr':
+  try:
+    import zsensor as _zsensor
   except ImportError:
     pass
 
@@ -69,6 +76,17 @@ def cpu_temp():
     try:
       v = _machine.ADC(4).read_u16() * 3.3 / 65535
       return 27 - (v - 0.706) / 0.001721
+    except (OSError, ValueError):
+      return None
+  if _zsensor is not None:
+    # Zephyr: SoC die-temp sensor exposed as a SENSOR_CHAN_DIE_TEMP
+    # device. On the Pi boards this is the BCM2835 VideoCore thermal
+    # sensor (device name "vc-thermal"). ValueError if the board has
+    # no such device -> None, matching the unsupported-port contract.
+    try:
+      s = _zsensor.Sensor('vc-thermal')
+      s.measure()
+      return s.get_float(_zsensor.DIE_TEMP)
     except (OSError, ValueError):
       return None
   return None
