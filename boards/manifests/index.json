@@ -106,6 +106,20 @@
       "chip": "ESP32-S3",
       "vendor": "waveshare",
       "description": "ESP32-S3R8 with 1.64\" 280x456 AMOLED (CO5300), FT3168 touch, QMI8658 IMU, SD card"
+    },
+    {
+      "id": "waveshare_s3_amoled_1in8",
+      "name": "Waveshare ESP32-S3 Touch AMOLED 1.8",
+      "chip": "ESP32-S3",
+      "vendor": "waveshare",
+      "description": "ESP32-S3 N16R8 with 1.8\" 368x448 AMOLED, touch, dual mic, IMU, audio, SD, RTC"
+    },
+    {
+      "id": "waveshare_c3_lcd_1.47",
+      "name": "Waveshare ESP32-C3 LCD 1.47",
+      "chip": "ESP32-C3",
+      "vendor": "waveshare",
+      "description": "ESP32-C3FH4 with 1.47\" 172x320 IPS LCD, IO expander, SD card, battery charging"
     }
   ]
 }

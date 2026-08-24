@@ -1,0 +1,144 @@
+{
+  "identity": {
+    "id": "waveshare_s3_amoled_1in8",
+    "name": "Waveshare ESP32-S3 Touch AMOLED 1.8",
+    "vendor": "waveshare",
+    "chip": "ESP32-S3",
+    "revision": "1.0.0",
+    "description": "ESP32-S3 N16R8 with 1.8\" 368x448 AMOLED, touch, dual mic, IMU, audio, SD, RTC"
+  },
+  "network": {
+    "mdns_enabled": true,
+    "ap_password": null,
+    "default_services": [
+      "http",
+      "webrepl"
+    ]
+  },
+  "capabilities": {
+    "wifi": true,
+    "bluetooth": true,
+    "neopixel": false,
+    "status_led": false,
+    "usb_otg": true,
+    "display": true,
+    "touch": true,
+    "imu": true,
+    "audio": true,
+    "microphone": true,
+    "sdcard": true,
+    "rtc": true,
+    "battery": true,
+    "gnss": false,
+    "gpio_expander": false
+  },
+  "resources": {
+    "pins": {
+      "boot": 0
+    },
+    "qspi": {
+      "lcd": {
+        "sck": 11,
+        "data0": 4,
+        "data1": 5,
+        "data2": 6,
+        "data3": 7,
+        "cs": 12
+      }
+    },
+    "sdmmc": {
+      "sdcard": {
+        "clk": 2,
+        "cmd": 1,
+        "d0": 3,
+        "slot": 0
+      }
+    },
+    "i2c": {
+      "i2c0": {
+        "scl": 14,
+        "sda": 15
+      }
+    },
+    "i2s": {
+      "audio": {
+        "mclk": 16,
+        "bck": 9,
+        "ws": 45,
+        "din": 10,
+        "dout": 8
+      }
+    },
+    "uart": {
+      "primary": {
+        "tx": 43,
+        "rx": 44
+      }
+    },
+    "usb": {
+      "dm": 19,
+      "dp": 20
+    },
+    "gpio": {
+      "tp_int": 21,
+      "pa_enable": 46
+    }
+  },
+  "devices": {
+    "display": {
+      "type": "SH8601",
+      "driver": "sh8601",
+      "bus": "qspi.lcd",
+      "width": 368,
+      "height": 448,
+      "offset_x": 0,
+      "offset_y": 0,
+      "interface": "qspi",
+      "color_bits": 16,
+      "description": "1.8\" 368x448 AMOLED (SH8601) with QSPI interface"
+    },
+    "touch": {
+      "type": "FT3168",
+      "driver": "ft3168",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x38",
+      "int_pin": 21,
+      "description": "Capacitive touch controller (FT3168)"
+    },
+    "imu": {
+      "type": "QMI8658C",
+      "driver": "qmi8658",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x6B",
+      "description": "6-axis accelerometer/gyroscope"
+    },
+    "rtc": {
+      "type": "PCF85063",
+      "driver": "pcf85063",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x51",
+      "description": "Real-time clock with alarm and interrupt"
+    },
+    "audio_codec": {
+      "type": "ES8311",
+      "driver": "es8311",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x18",
+      "i2s_bus": "i2s.audio",
+      "pa_pin": 46,
+      "description": "Audio codec for speaker output (DAC)"
+    },
+    "pmu": {
+      "type": "AXP2101",
+      "driver": "axp2101",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x34",
+      "description": "Power management unit — battery charging, voltage regulation"
+    },
+    "sdcard": {
+      "mode": "SDMMC",
+      "bus": "sdmmc.sdcard",
+      "description": "TF/microSD card (1-bit SDMMC mode)"
+    }
+  }
+}
