@@ -64,7 +64,7 @@ ScriptO Studio runs on any device that runs MicroPython with **[pyDirect](https:
   </a>
 </p>
 
-Works directly in your browser. No software to install. See the [Flashing Firmware](/docs/device-setup/flashing-firmware/) page for details.
+Works directly in your browser. No software to install. See the [Flashing Firmware](https://scriptostudio.com/docs/device-setup/flashing-firmware/) page for details.
 
 ### 2. Open ScriptO Studio
 
