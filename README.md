@@ -14,8 +14,6 @@ Program embedded devices with natural language. No firmware updates required.
 
 ScriptO Studio is a next-generation Integrated Development and Execution Environment (IDEE) for embedded devices running MicroPython.
 
-Describe in natural language what you want your device to do — and watch it happen instantly. Add a temperature sensor, configure CAN bus logging, or build a custom vehicle monitoring system, all without compiling code or flashing firmware. Your changes take effect immediately, and when you disconnect, your device keeps running autonomously.
-
 Delivered as a PWA that runs in any modern browser, ScriptO Studio communicates over a secure link to the device, providing a rich extensible UI that takes no processing power or resources on the device.
 
 ---
@@ -29,7 +27,7 @@ All device access is through hw accelerated TLS and WebRTC, so it's fast and sec
 
 ### ✏️ Smart Python Editor
 
-Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. Just describe what you want, and the AI agent does the rest. See [Editor Features](https://scriptostudio.com/docs/user-guide/editor-features/) and [Using the Agent](https://scriptostudio.com/docs/agent/usage/).
+Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. See [Editor Features](https://scriptostudio.com/docs/user-guide/editor-features/) 
 ![ScriptO Studio AI](.github/images/AI.png)
 
 ### 🧩 ScriptO Automations
