@@ -59,7 +59,7 @@ ScriptO Studio runs on any device that runs MicroPython with **[pyDirect](https:
 ### 1. Flash pyDirect Firmware
 
 <p align="center">
-  <a href="https://jetpax.github.io/pyDirect/">
+  <a href="https://scriptostudio.com/">
     <img src="https://img.shields.io/badge/⚡_Flash_Now-No_Tools_Required-22c55e?style=for-the-badge" alt="Flash pyDirect" />
   </a>
 </p>
