@@ -24,31 +24,31 @@ Delivered as a PWA that runs in any modern browser, ScriptO Studio communicates 
 
 ### 🛡️ Fast, Secure Development
 
-All device access is through hw accelerated TLS and WebRTC, so it's fast and secure. See [Connection](/docs/getting-started/connection/) for details.
+All device access is through hw accelerated TLS and WebRTC, so it's fast and secure. See [Connection](https://scriptostudio.com/docs/getting-started/connection/) for details.
 ![ScriptO Studio Connect](.github/images/connect.png)
 
 ### ✏️ Smart Python Editor
 
-Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. Just describe what you want, and the AI agent does the rest. See [Editor Features](/docs/user-guide/editor-features/) and [Using the Agent](/docs/agent/usage/).
+Agentic code editor for MicroPython with syntax highlighting, file management, and seamless deployment. You get real-time code execution and debugging with no firmware updates required. Just describe what you want, and the AI agent does the rest. See [Editor Features](https://scriptostudio.com/docs/user-guide/editor-features/) and [Using the Agent](https://scriptostudio.com/docs/agent/usage/).
 ![ScriptO Studio AI](.github/images/AI.png)
 
 ### 🧩 ScriptO Automations
 
-Script Objects are the ultimate device customization tool. Create your own with the Smart Editor, or browse community-contributed scripts. See [Writing ScriptOs](/docs/user-guide/writing-scriptos/).
+Script Objects are the ultimate device customization tool. Create your own with the Smart Editor, or browse community-contributed scripts. See [Writing ScriptOs](https://scriptostudio.com/docs/user-guide/writing-scriptos/).
 ![ScriptO Studio ScriptO](.github/images/scripto.png)
 
 ### 📦 System Extensions
 
-Add major new features at the touch of a button. Browse and install extensions from **[ScriptoHub](https://scriptohub.ai)** — including **PFC**, **OVMS**, **OpenInverter**, **GVRET**, and more. See [Extensions Overview](/docs/user-guide/extensions/).
+Add major new features at the touch of a button. Browse and install extensions from **[ScriptoHub](https://scriptohub.ai)** — including **PFC**, **OVMS**, **OpenInverter**, **GVRET**, and more. See [Extensions Overview](https://scriptostudio.com/docs/user-guide/extensions/).
 ![ScriptO Studio OI](.github/images/OI.png)
 
 ### ⚙️ Device Management
 
-Connect and manage devices, configure board settings, manage files, and network settings. Access your devices from anywhere over a secure P2P VPN. See [File Manager](/docs/user-guide/file-manager/) and [System Information](/docs/user-guide/system-info/).
+Connect and manage devices, configure board settings, manage files, and network settings. Access your devices from anywhere over a secure P2P VPN. See [File Manager](https://scriptostudio.com/docs/user-guide/file-manager/) and [System Information](https://scriptostudio.com/docs/user-guide/system-info/).
 ![ScriptO SysInfo](.github/images/sysinfo.png)
 
 ### 🐞 Visual Debugger
-Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics. See [Debugger Overview](/docs/debugging/).
+Advanced debugger with single-step execution and watchpoints. Live system monitoring and performance metrics. See [Debugger Overview](https://scriptostudio.com/docs/debugging/).
 
 ---
 
@@ -74,7 +74,7 @@ Visit **[scriptostudio.com/app/](https://scriptostudio.com/app/)** — works on 
 
 ### 3. Install an Extension
 
-Click **Extensions** → Browse → **Install**. Extensions are hosted on **[ScriptoHub](https://scriptohub.ai)**. Your device starts running the extension immediately. See [Extensions Overview](/docs/user-guide/extensions/).
+Click **Extensions** → Browse → **Install**. Extensions are hosted on **[ScriptoHub](https://scriptohub.ai)**. Your device starts running the extension immediately. See [Extensions Overview](https://scriptostudio.com/docs/user-guide/extensions/).
 
 ### 4. Disconnect and Go
 
@@ -125,7 +125,7 @@ Extensions and ScriptOs are now managed via **[ScriptoHub](https://scriptohub.ai
 
 ### Contributing Extensions
 
-Extensions are published via [ScriptoHub](https://scriptohub.ai). See the [Contributing Guide](/docs/developer/contributing/) for full details.
+Extensions are published via [ScriptoHub](https://scriptohub.ai). See the [Contributing Guide](https://scriptostudio.com/docs/developer/contributing/) for full details.
 
 ---
 
