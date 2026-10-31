@@ -86,6 +86,18 @@ _server_config = _load_server_config()
 from lib.sys import network
 
 
+def _apply_webrepl_password(password):
+    """Push the current password into a WebREPL that survived soft reset.
+
+    start() refuses to run twice, so without this the C transport keeps the
+    password from the last hard reset.
+    """
+    if hasattr(webrepl, 'set_password'):
+        webrepl.set_password(password)
+    else:
+        log("warning", "webrepl.set_password() not available - password changes need a hard reset", source="main")
+
+
 def start_servers(ip):
     """Start HTTPS server and WebREPL.
 
@@ -111,6 +123,7 @@ def start_servers(ip):
     try:
         if webrepl.running():
             log("info", "WebREPL already running (Soft Reset detected)", source="main")
+            _apply_webrepl_password(webrepl_password)
             # Recover previous session (re-attach dupterm)
             if hasattr(webrepl, 'recover'):
                 if webrepl.recover():
@@ -133,6 +146,7 @@ def start_servers(ip):
             # returned false (Python state re-imported) but the C state
             # is intact. Treat as success to avoid aborting server init.
             log("info", f"WebREPL already running (C state survived reset)", source="main")
+            _apply_webrepl_password(webrepl_password)
         else:
             log("error", f"Failed to start WebREPL: {e}", source="main")
             return False
