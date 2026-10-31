@@ -54,8 +54,13 @@ def _apply_power_save():
     105 ms max to ~90 ms avg / 310 ms max, slowing a server-role device's
     WebREPL. Applied after every active(True) so it is in place before the
     association.
+
+    ESP32 only: that is where it was measured, and Zephyr's WLAN has no pm
+    config, so other ports keep their driver default.
     """
-    from lib.sys import settings
+    from lib.sys import platform, settings
+    if platform.port() != "esp32":
+        return
     enabled = settings.get("wifi.power_save", False)
     _sta.config(pm=network.WLAN.PM_PERFORMANCE if enabled else network.WLAN.PM_NONE)
 
