@@ -1,18 +1,17 @@
 {
-  "version": "1.4.187",
+  "version": "1.4.188",
   "micropython_version": "v1.29.0",
-  "updated": "2026-10-31T20:53:40Z",
+  "updated": "2026-10-31T21:07:37Z",
   "pyDirect_commit": "bb7956a6904b06da785964f09b6ed6f2a24b245a",
-  "scriptostudio_commit": "4406536f9df7bf6c834b2b0a308e6cad2fc33ecb",
-  "release_tag": "firmware-1.4.187-20261031205328",
-  "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-1.4.187-20261031205328",
+  "scriptostudio_commit": "4314fe41826a4a8e8c2bc7b0f5a6e8a4d0a0b99c",
+  "release_tag": "firmware-1.4.188-20261031210725",
+  "release_url": "https://github.com/jetpax/scriptostudio/releases/tag/firmware-1.4.188-20261031210725",
   "variants": [
     { "id": "ESP32_S3_8", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8-merged.bin", "url": "/boards/firmware/ESP32_S3_8-merged.bin" },
     { "id": "ESP32_S3_8_OCT", "chip": "esp32s3", "flash": "8MB", "file": "ESP32_S3_8_OCT-merged.bin", "url": "/boards/firmware/ESP32_S3_8_OCT-merged.bin" },
     { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "/boards/firmware/ESP32_S3_16-merged.bin" },
     { "id": "ESP32_S3_32", "chip": "esp32s3", "flash": "32MB", "file": "ESP32_S3_32-merged.bin", "url": "/boards/firmware/ESP32_S3_32-merged.bin" },
     { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "/boards/firmware/ESP32_P4_16-merged.bin" },
-    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "/boards/firmware/ESP32_P4_32-merged.bin" },
-    { "id": "RPI_RP2350", "chip": "rp2350", "file": "RPI_RP2350-merged.uf2", "url": "/boards/firmware/RPI_RP2350-merged.uf2" }
+    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "/boards/firmware/ESP32_P4_32-merged.bin" }
   ]
 }
