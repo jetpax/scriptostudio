@@ -4,6 +4,7 @@
 # Triggers:
 #   - Push to boards/firmware/components/** (new firmware from pyDirect CI)
 #   - Push to boards/firmware/device-scripts/** (VFS content changes)
+#   - Push to boards/manifests/generic_*.json (per-chip default board.json in VFS)
 #   - Manual trigger
 
 name: Bundle Firmware
@@ -13,6 +14,7 @@ on:
     paths:
       - 'boards/firmware/components/**'
       - 'boards/firmware/device-scripts/**'
+      - 'boards/manifests/generic_*.json'
     branches: [main]
   workflow_dispatch:
 
@@ -173,19 +175,29 @@ jobs:
 
             echo "  VFS offset: $VFS_OFFSET, size: $VFS_SIZE bytes"
 
+            # Detect chip and flash size from variant name
+            CHIP="esp32s3"
+            if [[ "$VARIANT" == *"P4"* ]]; then CHIP="esp32p4"; fi
+
+            # Stage device-scripts with this chip's generic board manifest.
+            # Only SS's Flash flow writes a selected board.json, so boards set
+            # up any other way (Provision, esptool) boot with the image's.
+            VFS_SRC="/tmp/vfs-src-${VARIANT}"
+            BOARD_MANIFEST="boards/manifests/generic_${CHIP}.json"
+            rm -rf "$VFS_SRC"
+            cp -R "$DEVICE_SCRIPTS" "$VFS_SRC"
+            cp "$BOARD_MANIFEST" "$VFS_SRC/settings/board.json"
+            echo "  Board manifest: $BOARD_MANIFEST"
+
             # Create VFS partition from device-scripts
             VFS_IMAGE="/tmp/vfs-${VARIANT}.bin"
             mklittlefs \
-              -c "$DEVICE_SCRIPTS" \
+              -c "$VFS_SRC" \
               -b 4096 -p 256 \
               -s "$VFS_SIZE" \
               "$VFS_IMAGE"
 
             echo "  ✅ VFS image: $(du -h "$VFS_IMAGE" | cut -f1)"
-
-            # Detect chip and flash size from variant name
-            CHIP="esp32s3"
-            if [[ "$VARIANT" == *"P4"* ]]; then CHIP="esp32p4"; fi
 
             FLASH_MB=$(echo "$VARIANT" | sed 's/_[A-Z]*$//' | grep -oE '[0-9]+$')
             FLASH_SIZE="${FLASH_MB}MB"
