@@ -16,6 +16,7 @@ import machine
 import time
 
 from lib.sys import settings
+from lib.sys.status_led import status_led, StatusLED
 
 # Embedded HTML for setup page (minified)
 SETUP_HTML = '''<!DOCTYPE html>
@@ -124,6 +125,10 @@ def run_setup_server():
     
     ip = wlan.ifconfig()[0]
     print(f"[SETUP] Connected! IP: {ip}")
+    
+    # Leave boot.py's "searching for network" pattern: on WiFi, waiting for the setup page
+    if status_led:
+        status_led.set_state(StatusLED.STATE_NETWORK_CONNECTED)
     
     # Prepare HTML with device info
     html = SETUP_HTML.replace('HOSTNAME', hostname).replace('IPADDR', ip)
