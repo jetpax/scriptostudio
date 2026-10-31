@@ -66,15 +66,29 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          # Read MicroPython base version from pyDirect build-info
-          BUILD_INFO="boards/firmware/components/build-info.json"
-          if [ -f "$BUILD_INFO" ]; then
-            MPY_VERSION=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['version'])")
-            PYDIRECT_COMMIT=$(python3 -c "import json; print(json.load(open('$BUILD_INFO'))['commit'])")
-          else
-            MPY_VERSION="unknown"
-            PYDIRECT_COMMIT="${{ github.sha }}"
-          fi
+          # pyDirect CI writes build-info.json beside each variant's components.
+          # Take the MicroPython base version and pyDirect commit from the newest
+          # build, and warn about variants that lack one or were built differently.
+          python3 -c "
+          import glob, json, os
+          infos = {}
+          for d in sorted(glob.glob('boards/firmware/components/*/')):
+              variant = os.path.basename(os.path.dirname(d))
+              path = os.path.join(d, 'build-info.json')
+              if not os.path.exists(path):
+                  print('::warning::%s has no build-info.json' % variant)
+                  continue
+              with open(path) as f:
+                  infos[variant] = json.load(f)
+          newest = max(infos.values(), key=lambda i: i['built']) if infos else {}
+          for variant, i in infos.items():
+              if (i['version'], i['commit']) != (newest['version'], newest['commit']):
+                  print('::warning::%s is %s @ %s, newest is %s @ %s' % (variant, i['version'], i['commit'], newest['version'], newest['commit']))
+          with open('/tmp/build-info.txt', 'w') as f:
+              f.write('%s %s\n' % (newest.get('version', 'unknown'), newest.get('commit', '')))
+          "
+          read -r MPY_VERSION PYDIRECT_COMMIT < /tmp/build-info.txt
+          PYDIRECT_COMMIT="${PYDIRECT_COMMIT:-${{ github.sha }}}"
 
           # Read current platform version
           PLATFORM_FILE="boards/firmware/platform-version.json"

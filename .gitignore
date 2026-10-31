@@ -33,3 +33,6 @@ docs_backup/
 
 # Local docs preview build
 docs-local/
+
+# Baked into the VFS by bundle-firmware.yml / pyDirect tools/local-flash.sh
+boards/firmware/device-scripts/firmware-version.json
