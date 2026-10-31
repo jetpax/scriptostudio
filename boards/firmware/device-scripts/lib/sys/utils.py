@@ -129,8 +129,7 @@ def getSysInfo():
     # --- Platform/OS Info ---
     try:
         import sys as _sys
-        import os as _os
-        uname = _os.uname()
+        uname = _platform.uname()
         
         spiram_available = _platform.psram_info() is not None
         
@@ -744,8 +743,9 @@ def neofetch():
     
     # Get system information
     try:
-        version = os.uname().version
-        platform = os.uname().machine
+        _u = _platform.uname()
+        version = _u.version
+        platform = _u.machine
     except:
         version = "Unknown"
         platform = "ESP32"
@@ -829,11 +829,8 @@ def neofetch():
 
 def _is_time_synced():
     """Check if RTC time is already synced (year >= 2023)."""
-    try:
-        from time import gmtime
-        return gmtime()[0] >= 2023
-    except:
-        return False
+    from time import gmtime
+    return gmtime()[0] >= 2023
 
 
 def _detect_timezone():
@@ -859,17 +856,20 @@ def _detect_timezone():
     ]
     
     for api in apis:
+        # Only the network call is guarded: a connection failure (DNS, timeout,
+        # refused) is an expected external condition, so fall through to the
+        # next API. A bad response or a code bug is left to surface.
         try:
             response = requests.get(api['url'], timeout=5)
-            if response.status_code == 200:
-                data = response.json()
-                offset_hours, timezone = api['parse'](data)
-                response.close()
-                return (offset_hours, timezone)
-            response.close()
-        except:
+        except OSError:
             continue
-    
+        if response.status_code == 200:
+            data = response.json()
+            offset_hours, timezone = api['parse'](data)
+            response.close()
+            return (offset_hours, timezone)
+        response.close()
+
     return (None, None)
 
 
@@ -913,19 +913,17 @@ def sync_ntp(server=None, tz_offset=None, auto_detect=None, force=False):
         except Exception as e:
             return {'success': False, 'error': f'NTP sync failed: {e}'}
 
-    # Step 2 — timezone detection (slow, HTTP). Tolerated independently so a
-    # DNS hiccup here doesn't invalidate a successful NTP sync.
+    # Step 2 — timezone detection (slow, HTTP). _detect_timezone() returns
+    # (None, None) on network failure, leaving the last-saved tz_offset in
+    # place; any other error is left to surface rather than be swallowed.
     if auto_detect:
-        try:
-            detected_offset, detected_tz = _detect_timezone()
-            if detected_offset is not None:
-                tz_offset = detected_offset
-                timezone_name = detected_tz
-                settings.set('ntp.tz_offset', tz_offset)
-                settings.set('ntp.timezone', timezone_name)
-                settings.save()
-        except Exception:
-            pass  # fall back to last-saved tz_offset
+        detected_offset, detected_tz = _detect_timezone()
+        if detected_offset is not None:
+            tz_offset = detected_offset
+            timezone_name = detected_tz
+            settings.set('ntp.tz_offset', tz_offset)
+            settings.set('ntp.timezone', timezone_name)
+            settings.save()
 
     # Validate sync produced a sane wall-clock value
     from time import gmtime, localtime, mktime

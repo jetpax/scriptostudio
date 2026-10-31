@@ -12,6 +12,7 @@
     { "id": "ESP32_S3_16", "chip": "esp32s3", "flash": "16MB", "file": "ESP32_S3_16-merged.bin", "url": "/boards/firmware/ESP32_S3_16-merged.bin" },
     { "id": "ESP32_S3_32", "chip": "esp32s3", "flash": "32MB", "file": "ESP32_S3_32-merged.bin", "url": "/boards/firmware/ESP32_S3_32-merged.bin" },
     { "id": "ESP32_P4_16", "chip": "esp32p4", "flash": "16MB", "file": "ESP32_P4_16-merged.bin", "url": "/boards/firmware/ESP32_P4_16-merged.bin" },
-    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "/boards/firmware/ESP32_P4_32-merged.bin" }
+    { "id": "ESP32_P4_32", "chip": "esp32p4", "flash": "32MB", "file": "ESP32_P4_32-merged.bin", "url": "/boards/firmware/ESP32_P4_32-merged.bin" },
+    { "id": "RPI_RP2350", "chip": "rp2350", "file": "RPI_RP2350-merged.uf2", "url": "/boards/firmware/RPI_RP2350-merged.uf2" }
   ]
 }
