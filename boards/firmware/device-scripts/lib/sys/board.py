@@ -147,6 +147,11 @@ class Board:
 
     # ---------- pins ----------
 
+    def pins(self):
+        """Every GPIO this board names, for a choice of pin."""
+        named = list(self._res.get("pins", {}).values()) + list(self._res.get("gpio", {}).values())
+        return sorted(set(p for p in named if isinstance(p, int)))
+
     def pin(self, name):
         """
         Get a pin number by name.

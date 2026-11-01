@@ -31,7 +31,7 @@ import httpserver
 import mcplink
 import wsserver
 
-from lib.sys import bg_tasks, events, streams
+from lib.sys import apps, bg_tasks, events, jobs, streams
 
 try:
     import esp32
@@ -47,13 +47,15 @@ PROTOCOL_VERSION_KEY = "io.modelcontextprotocol/protocolVersion"
 SERVER_INFO = {"name": "scriptostudio-device", "version": "2.0.0"}
 STREAMS_EXTENSION = "com.scriptostudio/streams"
 _STREAMS_INFO = {"kinds": list(streams.KINDS), "maxFrame": wsserver.MAX_MESSAGE}
-CAPABILITIES = {"tools": {}, "resources": {}, "logging": {}, "extensions": {STREAMS_EXTENSION: _STREAMS_INFO}}
+CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging": {}, "extensions": {STREAMS_EXTENSION: _STREAMS_INFO}}
 # The older protocol revisions have no extensions field
-LEGACY_CAPABILITIES = {"tools": {}, "resources": {}, "logging": {}, "experimental": {STREAMS_EXTENSION: _STREAMS_INFO}}
+LEGACY_CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging": {}, "experimental": {STREAMS_EXTENSION: _STREAMS_INFO}}
 INSTRUCTIONS = (
     "MicroPython device. exec runs in __main__ on the single interpreter thread "
     "and is stopped after 4 s, because a longer block would make the watchdog stop "
-    "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them."
+    "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them. "
+    "Installed apps add tools named <app>_<tool>, which can run for a long time and "
+    "report progress. On plain HTTP they return a job id to poll with job_status."
 )
 
 EXEC_TIMEOUT_MS = 4000
@@ -320,6 +322,30 @@ def _t_fs_write(a):
     return _text('{"written":%d,"offset":%d}' % (len(data), _write_cache[1]))
 
 
+def _t_apps_list(a):
+    return _json(apps.describe())
+
+
+def _t_app_installed(a):
+    return _json(apps.register(a["id"], a["version"], a.get("name"), a.get("folder")))
+
+
+def _t_app_remove(a):
+    return _json(apps.remove(a["id"]))
+
+
+def _t_job_start(a):
+    return _json(jobs.start(a["tool"], a.get("arguments") or {}, _client).status())
+
+
+def _t_job_status(a):
+    return _json(jobs.get(a["job"]).status() if "job" in a else jobs.list_all())
+
+
+def _t_job_cancel(a):
+    return _json(jobs.cancel(a["job"]).status())
+
+
 def _t_interrupt(a):
     # The C frame filter already acted on this call as it arrived, ahead of the
     # blocked exec. By the time this runs, that exec has returned.
@@ -440,6 +466,42 @@ _TOOLS = [
         read_only=True,
     ),
     _tool(
+        "apps_list",
+        _t_apps_list,
+        "The apps installed on this board, and the tools each one adds.",
+        read_only=True,
+    ),
+    _tool(
+        "app_installed",
+        _t_app_installed,
+        "Record an app as installed, once its files are in place.",
+        {"id": _S, "version": _S, "name": _S, "folder": _S},
+        ("id", "version"),
+    ),
+    _tool(
+        "app_remove",
+        _t_app_remove,
+        "Remove an app's code from this board. Its data stays. What it has running stops at the next reset.",
+        {"id": _S},
+        ("id",),
+        destructive=True,
+    ),
+    _tool(
+        "job_start",
+        _t_job_start,
+        "Start an app's tool and return at once with a job id, instead of waiting for it.",
+        {"tool": _S, "arguments": {"type": "object"}},
+        ("tool",),
+    ),
+    _tool(
+        "job_status",
+        _t_job_status,
+        "A job's state, progress, output and result. With no job, every recent job.",
+        {"job": _I},
+        read_only=True,
+    ),
+    _tool("job_cancel", _t_job_cancel, "Stop a job at its next await.", {"job": _I}, ("job",)),
+    _tool(
         "interrupt",
         _t_interrupt,
         "Break the exec running now, if any. Background tasks keep running.",
@@ -491,6 +553,8 @@ _TOOLS = [
 ]
 _TOOL_FNS = {t[0]["name"]: t[1] for t in _TOOLS}
 _TOOL_DEFS = [t[0] for t in _TOOLS]
+# The reply to this tools/call goes out when its job finishes
+_DEFERRED = object()
 
 
 # --- protocol ------------------------------------------------------------
@@ -518,14 +582,28 @@ def _m_initialize(p):
 
 
 def _m_tools_list(p):
-    return {"tools": _TOOL_DEFS, "ttlMs": 0, "cacheScope": "private"}
+    return {"tools": _TOOL_DEFS + apps.tool_defs(), "ttlMs": 0, "cacheScope": "private"}
+
+
+def _call_app_tool(name, p):
+    if name not in apps.tools():
+        raise _RpcError(-32602, "Unknown tool: %s" % name)
+    given = p.get("arguments") or {}
+    try:
+        if _client == HTTP_CLIENT:
+            # Nothing can hold an HTTP reply open
+            return _json(jobs.start(name, given).status())
+        jobs.start(name, given, _client, json.loads(_request_id), (p.get("_meta") or {}).get("progressToken"))
+        return _DEFERRED
+    except ValueError as e:
+        return _text(str(e), True)
 
 
 def _m_tools_call(p):
     name = p.get("name")
     fn = _TOOL_FNS.get(name)
     if fn is None:
-        raise _RpcError(-32602, "Unknown tool: %s" % name)
+        return _call_app_tool(name, p)
     if name != "fs_write":
         _close_write_cache()
     try:
@@ -606,6 +684,8 @@ def _call(mid, method, params):
         return _err(mid, -32601, "Method not found: %s" % method)
     try:
         result = fn(params)
+        if result is _DEFERRED:
+            return ""
         if "resultType" not in result:
             result["resultType"] = "complete"
         return json.dumps({"jsonrpc": "2.0", "id": mid, "result": result})
@@ -621,9 +701,11 @@ def _dispatch(msg, client):
     if not isinstance(msg, dict):
         return _err(None, -32600, "Invalid request")
     mid = msg.get("id")
-    # Notifications have nothing to do here. notifications/cancelled, the one
-    # that matters, was already acted on by the C frame filter.
+    # For an exec, the C frame filter has already acted on notifications/cancelled.
+    # A job is a task, so it's stopped from here.
     if mid is None:
+        if msg.get("method") == "notifications/cancelled":
+            jobs.cancel_request(client, (msg.get("params") or {}).get("requestId"))
         return ""
     saved = (_client, _request_id)
     _client = client
@@ -708,6 +790,7 @@ def _ws_disconnect(client, event, payload=None):
     _repl_lines.pop(client, None)
     events.forget(client)
     streams.on_disconnect(client)
+    jobs.on_disconnect(client)
     if _on_clients:
         _on_clients(wsserver.count_clients())
 
@@ -746,6 +829,12 @@ def after_pump():
     raise SystemExit
 
 
+def _notify_tools_changed():
+    text = json.dumps({"jsonrpc": "2.0", "method": "notifications/tools/list_changed"})
+    for client in wsserver.clients():
+        wsserver.send(client, text)
+
+
 def start(origins=(), on_clients=None):
     """Serve MCP on PATH over WebSocket and HTTP. httpserver must be running."""
     global _on_clients, _started
@@ -753,6 +842,7 @@ def start(origins=(), on_clients=None):
     mcplink.set_origins(origins)
     mcplink.start(PATH)
     streams.init(_terminal_text)
+    apps.on_change = _notify_tools_changed
     if _started:
         return
     # A real soft reset forgets Python's streams, while C's survive
