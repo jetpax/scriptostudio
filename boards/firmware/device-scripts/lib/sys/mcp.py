@@ -78,6 +78,10 @@ _repl_lines = {}
 _client = HTTP_CLIENT
 _request_id = None
 _long_calls = 0
+_advertised = False
+_advertise_next = 0
+_ADVERTISE_EVERY_MS = 2000
+HTTPS_PORT = 443
 
 
 class _RpcError(Exception):
@@ -708,9 +712,23 @@ def _ws_disconnect(client, event, payload=None):
         _on_clients(wsserver.count_clients())
 
 
+def _advertise():
+    """mDNS starts when the network does, so keep trying until then."""
+    global _advertised, _advertise_next
+    now = time.ticks_ms()
+    if time.ticks_diff(now, _advertise_next) < 0:
+        return
+    _advertise_next = time.ticks_add(now, _ADVERTISE_EVERY_MS)
+    from lib.sys import board
+
+    _advertised = mcplink.advertise(HTTPS_PORT, {"path": PATH, "tls": "1", "board": board.id.name})
+
+
 def after_pump():
     """Called by queue_pump between batches, so a reset's response has gone out first."""
     global _reset_mode
+    if not _advertised:
+        _advertise()
     mode = _reset_mode
     if mode is None:
         return

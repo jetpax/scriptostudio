@@ -88,6 +88,10 @@ def set_auth(human, agent):
     _verifiers[ROLE_AGENT] = agent
 
 
+def advertise(port, txt):
+    return True
+
+
 def set_origins(origins):
     global _origins
     _origins = tuple(origins)
