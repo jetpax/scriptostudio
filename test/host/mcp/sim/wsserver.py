@@ -101,7 +101,8 @@ def accept(conn, headers, uri):
     role = mcplink.handshake_role(headers, uri)
     free = [i for i in range(MAX_CLIENTS) if i not in _clients]
     if role < 0 or not free:
-        conn.write(_frame(8, struct.pack(">H", 1008)))
+        reason = "origin" if role == -2 else "token" if role < 0 else "full"
+        conn.write(_frame(8, struct.pack(">H", 1008) + reason.encode()))
         conn.close()
         return
     conn.setblocking(False)

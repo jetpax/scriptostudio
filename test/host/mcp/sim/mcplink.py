@@ -238,7 +238,7 @@ def _bearer(headers):
 
 def handshake_role(headers, uri):
     if not _origin_ok(headers):
-        return -1
+        return -2
     role = _bearer(headers)
     if role < 0:
         for p in headers.get("sec-websocket-protocol", "").split(","):

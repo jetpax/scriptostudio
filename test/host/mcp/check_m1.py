@@ -341,8 +341,8 @@ def check_watchdog(ck, ws_url, agent, human):
         c.tool("exec", code='bg_tasks.stop("wd_bystander")')
 
 
-def ws_refused(url, tok, via="bearer", origin=None):
-    """A refused client completes the upgrade, then gets close code 1008."""
+def ws_refused(url, tok, via="bearer", origin=None, reason="token"):
+    """A refused client completes the upgrade, then gets close code 1008 and why."""
     from websockets.exceptions import ConnectionClosed, InvalidStatus
 
     try:
@@ -354,7 +354,8 @@ def ws_refused(url, tok, via="bearer", origin=None):
     except ConnectionClosed as e:
         code = e.rcvd.code if e.rcvd else None
         expect(code == 1008, f"closed with {code}")
-        return {"close_code": code}
+        expect(e.rcvd.reason == reason, f"reason was {e.rcvd.reason!r}")
+        return {"close_code": code, "reason": reason}
     raise AssertionError("connection was accepted")
 
 
@@ -552,7 +553,7 @@ def main():
 
     ck.run("refused: wss bad token", lambda: ws_refused(ws_url, "0" * 32))
     ck.run("refused: wss bad token in subprotocol", lambda: ws_refused(ws_url, "0" * 32, via="subprotocol"))
-    ck.run("refused: wss bad Origin", lambda: ws_refused(ws_url, agent, origin="https://evil.example"))
+    ck.run("refused: wss bad Origin", lambda: ws_refused(ws_url, agent, origin="https://evil.example", reason="origin"))
     ck.run("accepted: wss allowed Origin", lambda: expect(once(lambda c: c.call("ping"), origin="https://scriptostudio.com") is not None, "ping"))
     ck.run("refused: http no token", lambda: expect(http_status(http_url, None) == 401, "not 401"))
     ck.run("refused: http bad token", lambda: expect(http_status(http_url, "0" * 32) == 401, "not 401"))
