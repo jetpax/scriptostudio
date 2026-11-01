@@ -32,8 +32,9 @@ import json
 import time
 import network
 
-# WBP protocol handler (C module)
-import webrepl_binary as webrepl
+import mcplink
+
+from lib.sys import mcp
 
 # Syslog helper (always available - no-op if not configured)
 from lib.sys.syslog_helper import syslog
@@ -92,14 +93,13 @@ def _on_ice_candidate(candidate):
 
 
 def _on_data(data):
-    """Called when data is received via DataChannel - routes to WBP handler"""
+    """Called when data is received via DataChannel - routes to MCP"""
     global _peer, _state
     try:
         if _peer is None or not _peer.is_connected():
             return
         
-        # Route to WBP handler
-        webrepl.on_data(data)
+        mcp.handle_text(data, _peer.send)
             
     except KeyboardInterrupt:
         # Ignore KeyboardInterrupt in system callbacks - it should only affect user tasks
@@ -123,26 +123,8 @@ def _on_state(state_code):
     _state['connected'] = (state_code == webrtc.STATE_DATA_CHANNEL_OPENED)
     
     if state_code == webrtc.STATE_DATA_CHANNEL_OPENED:
-        syslog.info("DataChannel OPENED - starting WBP handler", source="webrtc")
+        syslog.info("DataChannel OPENED", source="webrtc")
         _state['last_error'] = None
-        
-        if _peer is None:
-            syslog.warning("_peer is None", source="webrtc")
-        else:
-            try:
-                webrepl.update_channel_state(True)
-                webrepl.start_rtc(_peer)
-                syslog.info("WBP handler started on DataChannel", source="webrtc")
-                
-                # Note: No auth callback for WebRTC - already secured by HTTPS signaling + DTLS
-                # LED state can be handled by client if needed (banner() or explicit call)
-            except Exception as e:
-                syslog.error(f"Failed to start WBP handler: {e}", source="webrtc")
-                _state['last_error'] = str(e)
-    elif state_code == webrtc.STATE_DATA_CHANNEL_CLOSED:
-        # Stop WBP handler
-        webrepl.update_channel_state(False)
-        webrepl.stop()
     elif state_code == webrtc.STATE_CONNECT_FAILED:
         _state['last_error'] = 'Connection failed'
         syslog.error("Connection failed", source="webrtc")
@@ -383,6 +365,8 @@ def start():
     
     try:
         handler_id = httpserver.on('/webrtc/offer', _handle_offer, 'POST')
+        # A DataChannel has exec, so the offer needs the same token as /mcp
+        mcplink.protect(handler_id)
         _handler_ids.append(handler_id)
         
         handler_id = httpserver.on('/webrtc/status', _handle_status, 'GET')

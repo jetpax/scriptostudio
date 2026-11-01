@@ -16,18 +16,18 @@ SPDX-License-Identifier: MIT
 import network
 import logging
 import asyncio
-import webrepl_binary as webrepl
+from lib.sys import events
 
 # Setup logger
 logger = logging.getLogger("ethernet")
 logger.handlers.clear()
-handler = webrepl.logHandler(logging.DEBUG)
+handler = events.LogHandler(logging.DEBUG)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 def _log(level, msg):
     """Safe logging helper"""
-    if webrepl.running() and logger:
+    if events.running() and logger:
         getattr(logger, level)(msg)
     else:
         print(f"[{level.upper()}] {msg}")
@@ -251,14 +251,8 @@ def get_status():
 def send_status_event():
     """Send Ethernet status notification to the client."""
     try:
-        import webrepl_binary as webrepl
-        import json
-        if hasattr(webrepl, 'notify'):
-            status = get_status()
-            webrepl.notify(json.dumps({"eth_status": status}))
-            return True
-    except ImportError:
-        pass
+        events.notify({"eth_status": get_status()})
+        return True
     except Exception as e:
         _log("warning", f"Failed to send eth_status notification: {e}")
     return False

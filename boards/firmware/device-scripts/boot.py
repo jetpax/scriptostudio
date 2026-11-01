@@ -16,7 +16,7 @@ import gc
 from lib.sys import platform
 platform.osdebug(platform.LOG_INFO)  # or platform.LOG_DEBUG for more verbose
 
-# Memory sanity check — ESP32-S3 requires PSRAM for networking + WebREPL buffers;
+# Memory sanity check — ESP32-S3 requires PSRAM for networking + MCP buffers;
 # on rp2/Zephyr the heap is always large enough, so this is effectively an
 # ESP32-only gate, but the shim keeps boot.py free of port-specific imports.
 _ok, _why = platform.verify_memory_requirements()

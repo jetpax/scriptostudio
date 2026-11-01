@@ -206,7 +206,7 @@ def verify_memory_requirements():
   """Returns (ok, message). Replaces the historical ESP32-only PSRAM hard-check.
 
   ESP32-S3 firmwares assume PSRAM (>4 MiB heap); without it, networking and
-  WebREPL buffers won't fit. Other ports always have enough RAM (rp2 with
+  MCP buffers won't fit. Other ports always have enough RAM (rp2 with
   PSRAM-init, Zephyr with full DRAM-backed heap)."""
   import gc
   gc.collect()

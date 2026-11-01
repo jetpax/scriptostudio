@@ -18,7 +18,8 @@
     "mobile_data_enabled": false
   },
   "server": {
-    "webrepl_password": "password",
+    "auth_human": "6d5cb41d6a3991bb25b64b8f3c6ca4e3e5bffacc928b72b0365f26097a28c658",
+    "auth_agent": "4105c5e6aae29108d507a0bda33e85e7e2275542f21d32c7bd9f0fff6ced3696",
     "http_port": 80,
     "https_enabled": true,
     "https_cert_file": "/certs/servercert.pem",

@@ -2,7 +2,7 @@
 main.py - Boot Entry
 ====================
 
-Runs the pyDirect orchestrator in lib/sys/app.py. REPL and WebREPL code
+Runs the pyDirect orchestrator in lib/sys/app.py. REPL and MCP exec code
 executes in __main__ (this file's namespace), so only client conveniences
 belong here; system state stays in the app module where client code
 cannot rebind it.

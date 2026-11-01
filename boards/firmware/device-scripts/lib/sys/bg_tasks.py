@@ -32,7 +32,8 @@ SPDX-License-Identifier: MIT
 
 import asyncio
 import logging
-import webrepl_binary as webrepl
+
+from lib.sys import events
 
 # Import taskwatchdog at module level (top-level, not per-call)
 try:
@@ -43,7 +44,7 @@ except ImportError:
 # Setup logger for bg_tasks
 logger = logging.getLogger("bg_tasks")
 logger.handlers.clear()
-handler = webrepl.logHandler(logging.DEBUG)
+handler = events.LogHandler(logging.DEBUG)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 

@@ -12,7 +12,7 @@
     "ap_password": null,
     "default_services": [
       "http",
-      "webrepl"
+      "mcp"
     ]
   },
   "capabilities": {

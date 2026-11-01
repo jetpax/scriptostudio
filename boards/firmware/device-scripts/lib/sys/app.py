@@ -5,28 +5,22 @@ pyDirect Orchestrator (lib/sys/app.py)
 Main orchestrator for the pyDirect device. main.py imports this module and
 calls main() on boot to initialize servers and async background tasks.
 
-It lives in a module rather than in main.py because REPL and WebREPL code
+It lives in a module rather than in main.py because REPL and MCP exec code
 runs in __main__. Keeping these globals out of __main__ means client code
 such as "import network" cannot rebind names the system tasks depend on.
 
 Architecture:
-    - Protocol: WebREPL Binary Protocol (WBP) - unified message format & authentication
-    - Transports:
-        - WebRTC DataChannel: Primary - works on all platforms
-        - WebSocket (WSS): Fallback transport
-    
-    Both transports use WBP for message framing, authentication, and queue processing
-    through the unified webrepl_binary module.
+    - Protocol: MCP, for agents and Studio alike (lib/sys/mcp.py)
+    - Transports: held WSS and plain HTTP, both on /mcp
 
 Boot Sequence:
 1. Start network tasks and wait for IP address (Ethernet preferred, then WiFi, WWAN)
 2. Quick NTP wall-clock sync (UDP only, ~1-3s) — required before any TLS work
 3. Start CalmOS / mount storage / run extension autostart
-4. Start HTTP/HTTPS server, WebREPL, WebRTC signaling
+4. Start HTTP/HTTPS server and MCP
 5. Start ntp_sync_task as bg task (TZ detection, ongoing re-sync, retry-on-fail)
-6. Register connection callbacks for LED state management
-7. Start async background tasks:
-   - queue_pump: Processes WBP queues for both transports (10ms interval)
+6. Start async background tasks:
+   - queue_pump: Processes the HTTP and WebSocket queue (10ms interval)
    - ntp:        Background TZ refresh + NTP retry if quick sync failed
 
 Copyright (c) 2026 Jonathan Elliot Peace
@@ -35,16 +29,13 @@ SPDX-License-Identifier: MIT
 
 import time
 import httpserver
-import webrepl_binary as webrepl
-import json
 import asyncio
 
-from lib.sys import bg_tasks
+from lib.sys import auth, bg_tasks, mcp
 
 from lib.sys.status_led import status_led, StatusLED
 
-# Also imported into __main__ by main.py. Ports whose WebREPL still executes
-# in this module's globals (RP2350, Zephyr) look the helpers up here.
+# Also imported into __main__ by main.py.
 from lib.sys.utils import (
     getSysInfo, getNetworksInfo, neofetch, getStatusInfo,
     getDeviceURL, getDeviceIP
@@ -52,28 +43,30 @@ from lib.sys.utils import (
 
 # NOTE: Extension helper modules (e.g., in lib/) are imported lazily (on-demand)
 # to avoid caching issues when extension dependencies are uploaded after boot.
-# WebREPL clients can call extension functions directly - Python will import
-# them automatically when they're first called via exec().
+# Clients can call extension functions directly - Python will import them
+# automatically when they're first called via exec().
 
 from lib.sys.log import log
 
 # Server Configuration (from settings API)
+DEFAULT_ORIGINS = ('https://scriptostudio.com', 'https://jetpax.github.io')
+
 def _load_server_config():
     """Load server configuration from settings."""
     try:
         from lib.sys import settings
         return {
-            'webrepl_password': settings.get('server.webrepl_password', 'password'),
             'https_cert_file': settings.get('server.https_cert_file', '/certs/servercert.pem'),
-            'https_key_file': settings.get('server.https_key_file', '/certs/prvtkey.pem')
+            'https_key_file': settings.get('server.https_key_file', '/certs/prvtkey.pem'),
+            'allowed_origins': settings.get('server.allowed_origins', [])
         }
     except Exception as e:
         log("warning", f"Failed to load server settings: {e}", source="main")
 
     return {
-        'webrepl_password': 'password',
         'https_cert_file': '/certs/servercert.pem',
-        'https_key_file': '/certs/prvtkey.pem'
+        'https_key_file': '/certs/prvtkey.pem',
+        'allowed_origins': []
     }
 
 _server_config = _load_server_config()
@@ -82,20 +75,15 @@ _server_config = _load_server_config()
 from lib.sys import network
 
 
-def _apply_webrepl_password(password):
-    """Push the current password into a WebREPL that survived soft reset.
-
-    start() refuses to run twice, so without this the C transport keeps the
-    password from the last hard reset.
-    """
-    if hasattr(webrepl, 'set_password'):
-        webrepl.set_password(password)
-    else:
-        log("warning", "webrepl.set_password() not available - password changes need a hard reset", source="main")
+def _clients_changed(count):
+    """Keep the LED in step with whether any client is connected."""
+    if status_led:
+        status_led.set_state(StatusLED.STATE_CLIENT_CONNECTED if count else StatusLED.STATE_NETWORK_CONNECTED)
+    log("info", f"MCP clients connected: {count}", source="main")
 
 
 def start_servers(ip):
-    """Start HTTPS server and WebREPL.
+    """Start HTTPS server and MCP.
 
     TLS-only: certs must be provisioned (typically via the PWA's flash
     flow) before the device can serve. Plain HTTP/WS would be blocked by
@@ -105,7 +93,6 @@ def start_servers(ip):
 
     cert_file = _server_config.get('https_cert_file', '/certs/servercert.pem')
     key_file  = _server_config.get('https_key_file',  '/certs/prvtkey.pem')
-    webrepl_password = _server_config.get('webrepl_password', 'password')
 
     try:
         httpserver.start(cert_file=cert_file, key_file=key_file)
@@ -115,68 +102,14 @@ def start_servers(ip):
         log("error", f"  expected cert at {cert_file}, key at {key_file}", source="main")
         return False
     
-    # Start WebREPL
     try:
-        if webrepl.running():
-            log("info", "WebREPL already running (Soft Reset detected)", source="main")
-            _apply_webrepl_password(webrepl_password)
-            # Recover previous session (re-attach dupterm)
-            if hasattr(webrepl, 'recover'):
-                if webrepl.recover():
-                    log("info", "Session recovered (dupterm re-attached)", source="main")
-                    if status_led:
-                        status_led.set_state(StatusLED.STATE_CLIENT_CONNECTED)
-                    # Send welcome notification after soft reset recovery
-                    import os
-                    import json
-                    uname = os.uname()
-                    tagline = f"MicroPython {uname.version}; {uname.machine}"
-                    webrepl.notify(json.dumps({"welcome": {"banner": "", "tagline": tagline}}))
-        else:
-            webrepl.start(webrepl_password, "/webrepl")
-            log("info", "WebREPL started", source="main")
+        auth.apply()
+        origins = list(DEFAULT_ORIGINS) + list(_server_config.get('allowed_origins', []))
+        mcp.start(origins, _clients_changed)
+        log("info", f"MCP serving on {mcp.PATH}", source="main")
     except Exception as e:
-        err_msg = str(e).lower()
-        if "already running" in err_msg:
-            # C-level WS handler survived soft reset — webrepl.running()
-            # returned false (Python state re-imported) but the C state
-            # is intact. Treat as success to avoid aborting server init.
-            log("info", f"WebREPL already running (C state survived reset)", source="main")
-            _apply_webrepl_password(webrepl_password)
-        else:
-            log("error", f"Failed to start WebREPL: {e}", source="main")
-            return False
-    
-    # Register WebSocket connect and disconnect callbacks
-    try:
-        import wsserver
-        wsserver.on(wsserver.CONNECT, wsserver_connect_callback)
-        wsserver.on(wsserver.DISCONNECT, wsserver_disconnect_callback)
-        log("info", "WebSocket callbacks registered", source="main")
-    except Exception as e:
-        log("error", f"Failed to register callbacks: {e}", source="main")
-    
-    # Start WebRTC signaling server (optional)
-    try:
-        from lib.sys import webrtc_signaling
-        if webrtc_signaling.start():
-            log('info', '✓ WebRTC signaling server started', source='main')
-        else:
-            log('warning', 'WebRTC signaling server failed to start', source='main')
-    except ImportError:
-        log('debug', 'WebRTC signaling not available (module not found)', source='main')
-    except Exception as e:
-        log('error', f'Failed to start WebRTC signaling: {e}', source='main')
-    
-    # Register WebREPL authentication callback (fires after successful auth)
-    try:
-        if hasattr(webrepl, 'on_auth'):
-            webrepl.on_auth(webrepl_auth_callback)
-            log("info", "WebREPL auth callback registered", source="main")
-        else:
-            log("error", "webrepl.on_auth() not available - firmware may need update", source="main")
-    except Exception as e:
-        log("error", f"Failed to register WebREPL auth callback: {e}", source="main")
+        log("error", f"Failed to start MCP: {e}", source="main")
+        return False
     
     return True
 
@@ -185,20 +118,14 @@ def start_servers(ip):
 # =============================================================================
 
 async def queue_pump():
-    """Process webRTC, WebREPL and HTTP queues - core task that keeps REPL responsive"""
+    """Process the HTTP and WebSocket queue - core task that keeps MCP responsive"""
     while True:
-        try:
-            webrepl.process_queue()  # Handles both WebSocket and WebRTC transports
-        except Exception as e:
-            # "stream operation not supported" is a benign race during WS connect/auth cycle
-            if "stream" not in str(e):
-                log("warning", f"queue_pump(webrepl): {e}", source="main")
         try:
             httpserver.process_queue()
         except Exception as e:
-            if "stream" not in str(e):
-                log("warning", f"queue_pump(http): {e}", source="main")
+            log("warning", f"queue_pump: {e}", source="main")
         
+        mcp.after_pump()
         await asyncio.sleep_ms(10)
         bg_tasks.feed("queue_pump")
 
@@ -249,61 +176,6 @@ async def system_root():
     while True:
         await asyncio.sleep(3600)
 
-
-def wsserver_connect_callback(client_id, event_name):
-    """
-    Callback when a WebSocket client connects.
-    Note: This fires BEFORE authentication. We handle welcome message in auth callback instead.
-    """
-    global _webrepl_client_connected
-    # Note: Client is not authenticated yet, so we don't set LED or send welcome here
-    log("info", f"   WebSocket client {client_id} connected (waiting for authentication)", source="main")
-
-# WebREPL client ID constants
-WEBREPL_CLIENT_WEBSOCKET = 0  # Client ID 0-3 for WebSocket connections
-WEBREPL_CLIENT_WEBRTC = -2    # Special sentinel for WebRTC connections
-
-def webrepl_auth_callback(client_id=WEBREPL_CLIENT_WEBRTC):
-    """
-    Callback when a client successfully connects (WebSocket auth or WebRTC connection).
-    Just handles LED state - welcome banner is fetched by client via inline M2M script.
-    
-    Args:
-        client_id: WebSocket client ID (0-3) or WEBREPL_CLIENT_WEBRTC (-2) for WebRTC
-    """
-    try:
-        global _webrepl_client_connected
-        # Set LED to client connected state
-        if status_led:
-            status_led.set_state(StatusLED.STATE_CLIENT_CONNECTED)
-        _webrepl_client_connected = True
-        log("info", f"✅ WebREPL client authenticated", source="main")
-    
-    except Exception as e:
-        # Don't let callback exceptions break the connection
-        log("error", f"   Error in auth callback: {e}", source="main")
-        import sys
-        sys.print_exception(e)
-
-
-def wsserver_disconnect_callback(client_id, event_name):
-    """
-    Callback when a WebSocket client disconnects.
-    Now safely called from MicroPython task context (queued event).
-    Sets LED back to network connected state (yellow solid - waiting for client).
-    """
-    global _webrepl_client_connected
-    if not _webrepl_client_connected:
-        return  # Already disconnected, skip redundant callbacks
-    log("info", f"🔴 Disconnect callback: client_id={client_id}", source="main")
-    
-    # Set LED back to network connected state (network still connected, waiting for client)
-    if status_led:
-        status_led.set_state(StatusLED.STATE_NETWORK_CONNECTED)
-    _webrepl_client_connected = False
-
-# Track client connection state for LED management
-_webrepl_client_connected = False
 
 def _quick_ntp():
     """One-shot synchronous NTP at boot. Sets the wall clock before any
@@ -488,7 +360,7 @@ def main():
             network.network_ready.clear()
             # Loop continues, main_async will restart network tasks
         except SystemExit:
-            # Soft reset from WebREPL - restart MicroPython VM
+            # Soft reset from the reset tool - restart MicroPython VM
             # Network stays connected (C layer), just reinitialize Python state
             log("info", "Soft reset - restarting MicroPython...", source="main")
             try:

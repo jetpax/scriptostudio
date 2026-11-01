@@ -17,18 +17,18 @@ import network
 import time
 import logging
 import asyncio
-import webrepl_binary as webrepl
+from lib.sys import events
 
 # Setup logger
 logger = logging.getLogger("wifi")
 logger.handlers.clear()
-handler = webrepl.logHandler(logging.DEBUG)
+handler = events.LogHandler(logging.DEBUG)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 def _log(level, msg):
-    """Safe logging helper - uses logger if WebREPL available, otherwise prints to console"""
-    if webrepl.running() and logger:
+    """Safe logging helper - uses logger if a client is connected, otherwise prints to console"""
+    if events.running() and logger:
         getattr(logger, level)(msg)
     else:
         print(f"[{level.upper()}] {msg}")
@@ -52,7 +52,7 @@ def _apply_power_save():
     IDF defaults to WIFI_PS_MIN_MODEM, where the AP buffers inbound frames
     until the next DTIM wake. On an S3 that took pings from ~20 ms avg /
     105 ms max to ~90 ms avg / 310 ms max, slowing a server-role device's
-    WebREPL. Applied after every active(True) so it is in place before the
+    clients. Applied after every active(True) so it is in place before the
     association.
 
     ESP32 only: that is where it was measured, and Zephyr's WLAN has no pm

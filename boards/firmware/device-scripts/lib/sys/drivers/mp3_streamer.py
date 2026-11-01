@@ -231,7 +231,7 @@ class AudioStreamer:
         # Do not spin in Python waiting for prebuffer.
         # The native C player already keeps the decode task in AP_BUFFERING
         # and outputs silence until enough data has arrived (EV_BUFFERED).
-        # A blocking Python wait here starves queue_pump/WebREPL for up to 5 s,
+        # A blocking Python wait here starves queue_pump/MCP for up to 5 s,
         # which is exactly what causes the watchdog trips and reconnects.
 
         self._transition_end()

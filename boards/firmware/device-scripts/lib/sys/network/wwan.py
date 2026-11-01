@@ -16,18 +16,18 @@ SPDX-License-Identifier: MIT
 import json
 import logging
 import asyncio
-import webrepl_binary as webrepl
+from lib.sys import events
 
 # Setup logger
 logger = logging.getLogger("wwan")
 logger.handlers.clear()
-handler = webrepl.logHandler(logging.DEBUG)
+handler = events.LogHandler(logging.DEBUG)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 def _log(level, msg):
     """Safe logging helper"""
-    if webrepl.running() and logger:
+    if events.running() and logger:
         getattr(logger, level)(msg)
     else:
         print(f"[{level.upper()}] {msg}")

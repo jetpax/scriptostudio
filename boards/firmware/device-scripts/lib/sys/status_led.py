@@ -120,7 +120,7 @@ class StatusLED:
     # LED System States
     STATE_BOOT = "boot"                    # Yellow flashing - searching for network
     STATE_NETWORK_CONNECTED = "network"    # Yellow solid - network ready, waiting for client
-    STATE_CLIENT_CONNECTED = "client"      # Green solid - WebREPL client connected
+    STATE_CLIENT_CONNECTED = "client"      # Green solid - MCP client connected
     
     # State table mapping states to (color, mode, interval_ms)
     _STATE_TABLE = {

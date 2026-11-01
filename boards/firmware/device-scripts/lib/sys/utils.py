@@ -1,10 +1,10 @@
 """
-WebREPL Client Helper Functions
+Client Helper Functions
 ================================
 
-This module contains helper functions that are callable from the WebREPL client.
+This module contains helper functions that are callable from an MCP client through exec.
 These functions automatically send their JSON responses directly to the connected 
-WebREPL client without returning values (to avoid REPL echo).
+client without returning values (to avoid REPL echo).
 
 Client-callable functions (auto-send to client):
 - getSysInfo()            - Get comprehensive system info, send as JSON (SYS-INFO command)
@@ -102,7 +102,7 @@ def format_uptime():
 def getSysInfo():
     """
     Get comprehensive system information.
-    Prints JSON result for M2M exec() calls via WebREPL Binary Protocol.
+    Prints JSON result for exec() calls.
     """
     sys_info = {}
     
@@ -301,13 +301,13 @@ def getSysInfo():
     if temp_celsius is not None:
         sys_info['temperature'] = {'celsius': round(temp_celsius * 10) / 10}
     
-    # Print JSON result (for M2M exec() calls via WebREPL Binary Protocol)
+    # Print JSON result (for exec() calls)
     print(json.dumps(sys_info))
 
 def getStatusInfo():
     """
     Get status info (memory, temperature, uptime, WiFi RSSI) for status bar updates.
-    Prints JSON result for M2M exec() calls via WebREPL Binary Protocol.
+    Prints JSON result for exec() calls.
     This is called periodically by the client to update the status bar.
     """
     mem_alloc = gc.mem_alloc()
@@ -347,9 +347,9 @@ def getStatusInfo():
 
 def getNetworksInfo():
     """
-    Get comprehensive network information for all interfaces and send to WebREPL client.
+    Get comprehensive network information for all interfaces and send to the client.
     Returns information about WiFi STA, WiFi AP, Ethernet, BLE, VPN, and internet connectivity.
-    Sends the result directly to the WebREPL client as JSON.
+    Sends the result directly to the client as JSON.
     
     Returns a dictionary with the following structure:
     {
@@ -625,7 +625,7 @@ def getNetworksInfo():
         # Silent error - M2M commands should not produce output
         networks_info['internetOK'] = False
     
-    # Print JSON result (for M2M exec() calls via WebREPL Binary Protocol)
+    # Print JSON result (for exec() calls)
     print(json.dumps(networks_info))
 
 def getDeviceIP():
@@ -669,7 +669,7 @@ def getDeviceURL(path='/'):
     
     Example:
         >>> url = getDeviceURL('/my_app/index.html')
-        >>> webrepl.display_ui(url, 'My Application')
+        >>> events.notify({'display_ui': {'url': url, 'title': 'My Application'}})
     
     Note:
         - Uses mDNS hostname for certificate trust in iframes

@@ -15,7 +15,7 @@ import json
 import machine
 import time
 
-from lib.sys import settings
+from lib.sys import auth, settings
 from lib.sys.status_led import status_led, StatusLED
 
 # Embedded HTML for setup page (minified)
@@ -47,7 +47,7 @@ button:disabled{opacity:.5;cursor:default}
 <body>
 <div class="panel">
 <h1>⚡ pyBot Setup</h1>
-<div class="subtitle">Set your WebREPL password to complete setup</div>
+<div class="subtitle">Set your device password to complete setup</div>
 <div class="info">
 <strong>Device:</strong> HOSTNAME.local<br>
 <strong>IP:</strong> IPADDR
@@ -150,7 +150,7 @@ def run_setup_server():
                 return
             
             # Save password and clear setup mode
-            settings.set("server.webrepl_password", pw)
+            auth.set_password(pw)
             settings.set("setup_mode", False)
             settings.save()
             

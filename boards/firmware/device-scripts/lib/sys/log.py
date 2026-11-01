@@ -4,13 +4,13 @@ Unified Logging for pyDirect/Scripto Platform
 
 Single function that outputs to all available destinations:
 - Console (print)
-- WebREPL (via logging module)
+- MCP clients (via logging module)
 - Syslog UDP (RFC 3164, auto-configured from device settings)
 
 Usage:
     from lib.sys.log import log
-    log("info", "System started", source="main")      # console + WebREPL + syslog
-    log("info", "Starting servers...")                  # console + WebREPL only
+    log("info", "System started", source="main")      # console + MCP clients + syslog
+    log("info", "Starting servers...")                  # console + MCP clients only
     log("error", f"Connection failed: {e}", source="pfc")
 
 Copyright (c) 2026 Jonathan Elliot Peace
@@ -74,17 +74,17 @@ def _syslog_send(msg, source, severity=6):
 # --- Unified log function ---
 def log(level, msg, source=None):
     """
-    Log to all available outputs: console, WebREPL, and syslog.
+    Log to all available outputs: console, MCP clients, and syslog.
 
     Args:
         level: 'debug', 'info', 'warning', 'error'
         msg: Log message
         source: Syslog source tag (e.g. 'pfc', 'main'). If set, also sends via syslog UDP.
     """
-    # Console + WebREPL (via logging module if available)
+    # Console + MCP clients (via logging module if available)
     try:
-        import webrepl_binary as webrepl
-        if webrepl.running():
+        from lib.sys import events
+        if events.running():
             import logging
             logger = logging.getLogger(source or 'system')
             getattr(logger, level, logger.info)(msg)

@@ -44,7 +44,7 @@ led_pin = board['resources']['pins']['status_led']
 
 Edit `main.py` to customize:
 - HTTP/HTTPS ports
-- WebREPL password
+- Device password
 - Certificate paths
 - Module initialization
 
