@@ -57,6 +57,8 @@ INSTRUCTIONS = (
 )
 
 EXEC_TIMEOUT_MS = 4000
+# Only a person's panels may ask for longer, and they stop themselves at this
+EXEC_TIMEOUT_MAX_MS = 60000
 READ_TEXT_DEFAULT = 16384
 HASH_BLOCK = 4096
 LOGS_DEFAULT = 4096
@@ -106,21 +108,25 @@ def _decode(raw):
         return "".join(chr(c) if c < 128 else "?" for c in raw)
 
 
-def _run(src, timeout_ms, private):
+def _run(src, timeout_ms, private, echo=True):
     """Run src in __main__ with interrupt armed. Returns (output, traceback or None).
 
     With private set, its output goes only to the caller, not to terminal streams.
     Studio's panels run on exec all the time, and none of that belongs in a terminal.
+    With echo set, a lone expression prints its value, as at a REPL. A script that
+    prints JSON for its caller doesn't want that added.
     """
     start = mcplink.cursor(private)
     g = __main__.__dict__
 
     def body():
-        try:
-            code = compile(src, "<mcp>", "single")
-        except SyntaxError:
-            code = compile(src, "<mcp>", "exec")
-        exec(code, g, g)
+        code = None
+        if echo:
+            try:
+                code = compile(src, "<mcp>", "single")
+            except SyntaxError:
+                pass
+        exec(code or compile(src, "<mcp>", "exec"), g, g)
 
     tb = None
     try:
@@ -138,7 +144,10 @@ def _run(src, timeout_ms, private):
 
 
 def _t_exec(a):
-    out, tb = _run(a["code"], EXEC_TIMEOUT_MS, True)
+    timeout_ms = EXEC_TIMEOUT_MS
+    if wsserver.client_role(_client) == mcplink.ROLE_HUMAN:
+        timeout_ms = min(a.get("timeout_ms", EXEC_TIMEOUT_MS), EXEC_TIMEOUT_MAX_MS)
+    out, tb = _run(a["code"], timeout_ms, True, a.get("echo", True))
     return _text(out + tb if tb else out, tb is not None)
 
 
@@ -380,7 +389,7 @@ _TOOLS = [
         "exec",
         _t_exec,
         "Run MicroPython in __main__. Returns stdout and any traceback. Stopped after 4 s.",
-        {"code": _S},
+        {"code": _S, "echo": {"type": "boolean"}, "timeout_ms": _I},
         ("code",),
         destructive=True,
     ),
@@ -622,21 +631,33 @@ def _http(uri, body, ip):
     return (200, resp) if resp else (202, "")
 
 
-def _terminal_text(stream, client, text):
-    """What a stream terminal typed while nothing was running. Output is on its way
-    through the drain task, so flush it to keep the prompt behind it."""
+def _terminal_text(stream, client, text, whole):
+    """What a stream terminal sent while nothing was running: lines for the REPL, or
+    with whole set, a script to run as one. Output is on its way through the drain
+    task, so flush it to keep the prompt behind it."""
     global _client, _request_id
     saved = (_client, _request_id)
     _client = client
     _request_id = None
+    error = None
     try:
-        # A trailing newline ends the text, it isn't a blank line for the REPL
-        for line in (text[:-1] if text.endswith("\n") else text).split("\n"):
-            status, prompt = _repl_line(line)
+        if whole:
+            status, prompt = "ok", ">>> "
+            tb = _run(text, 0, False)[1]
+            if tb:
+                print(tb, end="")
+                error = tb.strip().split("\n")[-1]
+        else:
+            # A trailing newline ends the text, it isn't a blank line for the REPL
+            for line in (text[:-1] if text.endswith("\n") else text).split("\n"):
+                status, prompt = _repl_line(line)
     finally:
         _client, _request_id = saved
     mcplink.stream_flush(stream)
-    streams.notify(client, stream, "prompt", status=status, prompt=prompt)
+    if error:
+        streams.notify(client, stream, "prompt", status=status, prompt=prompt, error=error)
+    else:
+        streams.notify(client, stream, "prompt", status=status, prompt=prompt)
 
 
 def _ws_message(client, event, payload=None):
@@ -685,6 +706,10 @@ def after_pump():
     if mode == "hard":
         import machine
 
+        # A reboot sends no FIN, and a client that isn't sending would never notice
+        for client in wsserver.clients():
+            wsserver.close(client)
+        time.sleep_ms(_RESET_FLUSH_MS)
         machine.reset()
     # app.main() catches this and restarts the event loop
     raise SystemExit

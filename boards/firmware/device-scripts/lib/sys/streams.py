@@ -15,6 +15,7 @@ socket to hold, so it has no streams.
             credit: the offset the host may send up to, exclusive
             end: total bytes
     count   end: 0, or 1 for failure. The reason arrives first as a notification
+            terminal data to the device: 1 to run the text as one script, not as lines
 
 Kinds:
 
@@ -79,7 +80,7 @@ class _Stream:
 
 
 def init(on_terminal_text):
-    """on_terminal_text(stream_id, client, text) runs a line for the REPL."""
+    """on_terminal_text(stream_id, client, text, whole) runs what a terminal sent."""
     global _on_terminal_text
     _on_terminal_text = on_terminal_text
 
@@ -236,7 +237,7 @@ def on_frame(client, frame):
     """A binary frame from a client, in the pump. Terminal input during a call never gets here."""
     if len(frame) < HEADER_SIZE:
         return
-    frame_type, sid, _, seq = struct.unpack_from(HEADER, frame)
+    frame_type, sid, count, seq = struct.unpack_from(HEADER, frame)
     s = _streams.get(sid)
     # A late frame for a stream that has ended isn't an error
     if s is None or s.client != client:
@@ -251,7 +252,7 @@ def on_frame(client, frame):
         elif frame_type != mcplink.FRAME_DATA:
             return
         elif s.kind == mcplink.KIND_TERMINAL:
-            _on_terminal_text(s.id, client, bytes(payload).decode())
+            _on_terminal_text(s.id, client, bytes(payload).decode(), count == 1)
         elif s.kind == mcplink.KIND_APP:
             fn = _app_handlers.get(s.name)
             if fn:

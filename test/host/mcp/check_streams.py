@@ -216,6 +216,18 @@ def check_terminal(ck, url, tok, interrupts):
             expect("KeyboardInterrupt" in out and prompt == ">>> ", (out, prompt))
             t.close()
 
+    def abandoned_call():
+        c = Ws(url, tok)
+        t = Terminal(c)
+        t.line("input('abandoned ')")
+        t.read_until("abandoned ")
+        c.ws.close()
+        t0 = time.perf_counter()
+        with Ws(url, tok, timeout=8) as other:
+            other.call("ping")
+        return {"ms": round((time.perf_counter() - t0) * 1000)}
+
+    ck.run("terminal: a client gone mid-call frees the board", abandoned_call)
     ck.run("terminal: output arrives while the call runs", live_output)
     ck.run("terminal: input() over the stream", input_works)
     ck.run("terminal: interrupt, background task survives", interrupt_works)
