@@ -31,7 +31,7 @@ import httpserver
 import mcplink
 import wsserver
 
-from lib.sys import bg_tasks, events
+from lib.sys import bg_tasks, events, streams
 
 try:
     import esp32
@@ -45,7 +45,11 @@ LEGACY = ("2025-11-25", "2025-06-18", "2025-03-26")
 SUPPORTED = (MODERN,) + LEGACY
 PROTOCOL_VERSION_KEY = "io.modelcontextprotocol/protocolVersion"
 SERVER_INFO = {"name": "scriptostudio-device", "version": "2.0.0"}
-CAPABILITIES = {"tools": {}, "resources": {}, "logging": {}}
+STREAMS_EXTENSION = "com.scriptostudio/streams"
+_STREAMS_INFO = {"kinds": list(streams.KINDS), "maxFrame": wsserver.MAX_MESSAGE}
+CAPABILITIES = {"tools": {}, "resources": {}, "logging": {}, "extensions": {STREAMS_EXTENSION: _STREAMS_INFO}}
+# The older protocol revisions have no extensions field
+LEGACY_CAPABILITIES = {"tools": {}, "resources": {}, "logging": {}, "experimental": {STREAMS_EXTENSION: _STREAMS_INFO}}
 INSTRUCTIONS = (
     "MicroPython device. exec runs in __main__ on the single interpreter thread "
     "and is stopped after 4 s, because a longer block would make the watchdog stop "
@@ -102,9 +106,13 @@ def _decode(raw):
         return "".join(chr(c) if c < 128 else "?" for c in raw)
 
 
-def _run(src, timeout_ms):
-    """Run src in __main__ with interrupt armed. Returns (output, traceback or None)."""
-    start = mcplink.cursor()
+def _run(src, timeout_ms, private):
+    """Run src in __main__ with interrupt armed. Returns (output, traceback or None).
+
+    With private set, its output goes only to the caller, not to terminal streams.
+    Studio's panels run on exec all the time, and none of that belongs in a terminal.
+    """
+    start = mcplink.cursor(private)
     g = __main__.__dict__
 
     def body():
@@ -116,21 +124,21 @@ def _run(src, timeout_ms):
 
     tb = None
     try:
-        mcplink.guard(body, _client, _request_id, timeout_ms)
+        mcplink.guard(body, _client, _request_id, timeout_ms, private)
     except BaseException as e:
         # Client code can raise anything, and the caller is owed the traceback.
         # Its frames only, since the ones that called it aren't the caller's concern.
         tb = "\n".join(line for line in _traceback(e).split("\n") if _FRAME_MARKER not in line)
         if mcplink.interrupt_reason() == mcplink.REASON_TIMEOUT:
             tb += "exec stopped after %d ms. Run longer work as a background task.\n" % timeout_ms
-    return _decode(mcplink.output_since(start)[0]), tb
+    return _decode(mcplink.output_since(start, private)[0]), tb
 
 
 # --- tools ---------------------------------------------------------------
 
 
 def _t_exec(a):
-    out, tb = _run(a["code"], EXEC_TIMEOUT_MS)
+    out, tb = _run(a["code"], EXEC_TIMEOUT_MS, True)
     return _text(out + tb if tb else out, tb is not None)
 
 
@@ -164,6 +172,7 @@ def _t_device_info(a):
             "chip": board.id.chip,
             "heap": _heap(),
             "max_frame": wsserver.MAX_MESSAGE,
+            "streams": list(streams.KINDS),
             "clients": wsserver.count_clients(),
             "role": wsserver.client_role(_client),
             "transport": "http" if _client == HTTP_CLIENT else "websocket",
@@ -311,22 +320,43 @@ def _t_logs_read(a):
     return _json({"text": _decode(raw), "cursor": cursor})
 
 
-def _t_repl_input(a):
-    src = _repl_lines.get(_client, "") + a["text"]
+def _repl_line(text):
+    """One line for the current client's REPL. Returns (status, prompt)."""
+    src = _repl_lines.get(_client, "") + text
     if mcplink.needs_more(src):
         _repl_lines[_client] = src + "\n"
-        return _json({"status": "more", "prompt": "... ", "cursor": mcplink.cursor()})
+        return "more", "... "
     _repl_lines.pop(_client, None)
     # No time cap here. A person at a terminal stops what they started.
-    tb = _run(src, 0)[1]
+    tb = _run(src, 0, False)[1]
     if tb:
         print(tb, end="")
-    return _json({"status": "ok", "prompt": ">>> ", "cursor": mcplink.cursor()})
+    return "ok", ">>> "
+
+
+def _t_repl_input(a):
+    status, prompt = _repl_line(a["text"])
+    return _json({"status": status, "prompt": prompt, "cursor": mcplink.cursor()})
 
 
 def _t_repl_complete(a):
     suffix, printed = mcplink.complete(a["prefix"])
     return _json({"suffix": suffix, "candidates": printed.split()})
+
+
+def _t_stream_open(a):
+    if _client == HTTP_CLIENT:
+        raise ValueError("Streams need a held WebSocket")
+    return _json(streams.open_stream(a["kind"], a, _client))
+
+
+def _t_stream_status(a):
+    return _json(streams.status(a["stream"], _client))
+
+
+def _t_stream_close(a):
+    streams.close(a["stream"], _client)
+    return _json({"closed": a["stream"]})
 
 
 _S = {"type": "string"}
@@ -412,6 +442,26 @@ _TOOLS = [
     _tool("fs_write", _t_fs_write, "Write base64 at an offset. Offset 0 truncates.", {"path": _S, "offset": _I, "data": _S}, ("path", "data"), destructive=True, app_only=True),
     _tool("repl_input", _t_repl_input, "One terminal line. Output goes to repl://output.", {"text": _S}, ("text",), destructive=True, app_only=True),
     _tool("repl_complete", _t_repl_complete, "Tab completions.", {"prefix": _S}, ("prefix",), read_only=True, app_only=True),
+    _tool(
+        "stream_open",
+        _t_stream_open,
+        "Open a binary stream on this socket: terminal, file_read, file_write or app.",
+        {
+            "kind": {"type": "string", "enum": list(streams.KINDS)},
+            "path": _S,
+            "offset": _I,
+            "length": _I,
+            "chunk": _I,
+            "window": _I,
+            "name": _S,
+            "ring_size": _I,
+        },
+        ("kind",),
+        destructive=True,
+        app_only=True,
+    ),
+    _tool("stream_status", _t_stream_status, "Progress and loss on an open stream.", {"stream": _I}, ("stream",), read_only=True, app_only=True),
+    _tool("stream_close", _t_stream_close, "Stop a stream. A partial upload is discarded.", {"stream": _I}, ("stream",), app_only=True),
 ]
 _TOOL_FNS = {t[0]["name"]: t[1] for t in _TOOLS}
 _TOOL_DEFS = [t[0] for t in _TOOLS]
@@ -435,7 +485,7 @@ def _m_initialize(p):
     v = p.get("protocolVersion")
     return {
         "protocolVersion": v if v in LEGACY else LEGACY[0],
-        "capabilities": CAPABILITIES,
+        "capabilities": LEGACY_CAPABILITIES,
         "serverInfo": SERVER_INFO,
         "instructions": INSTRUCTIONS,
     }
@@ -572,9 +622,28 @@ def _http(uri, body, ip):
     return (200, resp) if resp else (202, "")
 
 
+def _terminal_text(stream, client, text):
+    """What a stream terminal typed while nothing was running. Output is on its way
+    through the drain task, so flush it to keep the prompt behind it."""
+    global _client, _request_id
+    saved = (_client, _request_id)
+    _client = client
+    _request_id = None
+    try:
+        # A trailing newline ends the text, it isn't a blank line for the REPL
+        for line in (text[:-1] if text.endswith("\n") else text).split("\n"):
+            status, prompt = _repl_line(line)
+    finally:
+        _client, _request_id = saved
+    mcplink.stream_flush(stream)
+    streams.notify(client, stream, "prompt", status=status, prompt=prompt)
+
+
 def _ws_message(client, event, payload=None):
     if not isinstance(payload, str):
-        return  # Binary frames carry streams, which aren't served yet
+        streams.on_frame(client, payload)
+        bg_tasks.feed("queue_pump")
+        return
     try:
         msg = json.loads(payload)
     except ValueError:
@@ -600,6 +669,7 @@ def _ws_connect(client, event, payload=None):
 def _ws_disconnect(client, event, payload=None):
     _repl_lines.pop(client, None)
     events.forget(client)
+    streams.on_disconnect(client)
     if _on_clients:
         _on_clients(wsserver.count_clients())
 
@@ -626,8 +696,11 @@ def start(origins=(), on_clients=None):
     _on_clients = on_clients
     mcplink.set_origins(origins)
     mcplink.start(PATH)
+    streams.init(_terminal_text)
     if _started:
         return
+    # A real soft reset forgets Python's streams, while C's survive
+    mcplink.streams_reset()
     wsserver.on(wsserver.MESSAGE, _ws_message)
     wsserver.on(wsserver.CONNECT, _ws_connect)
     wsserver.on(wsserver.DISCONNECT, _ws_disconnect)

@@ -5,7 +5,9 @@ import hashlib
 import http.client
 import json
 import ssl
+import struct
 import time
+from collections import deque
 from urllib.parse import urlparse
 
 MODERN = "2026-07-28"
@@ -15,6 +17,12 @@ _META = {
     "io.modelcontextprotocol/clientInfo": {"name": "ss-mcp-check", "version": "0.2.0"},
 }
 FRAME_CONTROL_INTERRUPT = bytes([3, 1, 0, 0, 0, 0, 0, 0])
+FRAME_HEADER = "<BBHI"
+FRAME_HEADER_SIZE = 8
+FRAME_DATA = 0
+FRAME_CREDIT = 1
+FRAME_END = 2
+STREAM_NOTIFICATION = "notifications/com.scriptostudio/stream"
 
 
 def token(password, role="agent"):
@@ -53,14 +61,14 @@ class _Base:
         p["_meta"] = _META
         return self.next_id, json.dumps({"jsonrpc": "2.0", "id": self.next_id, "method": method, "params": p})
 
-    def tool(self, name, **args):
+    def tool(self, name, /, **args):
         r = self.call("tools/call", {"name": name, "arguments": args})
         text = r["content"][0]["text"]
         if r.get("isError"):
             raise ToolError(text)
         return text
 
-    def tool_json(self, name, **args):
+    def tool_json(self, name, /, **args):
         return json.loads(self.tool(name, **args))
 
     def read_output(self, cursor):
@@ -143,6 +151,8 @@ class Ws(_Base):
             url = f"{url}?token={tok}"
         self.timeout = timeout
         self.replies = {}
+        self.frames = deque()
+        self.notes = deque()
         self.ws = connect(
             url,
             subprotocols=protocols,
@@ -159,22 +169,28 @@ class Ws(_Base):
         self.ws.send(body)
         return mid
 
+    def _receive(self, timeout):
+        """Take one frame off the socket and file it by what it is."""
+        frame = self.ws.recv(timeout=timeout)
+        if isinstance(frame, bytes):
+            self.frames.append(frame)
+            return
+        msg = json.loads(frame)
+        if msg.get("id") is not None:
+            self.replies[msg["id"]] = msg
+        elif "error" in msg:
+            raise RpcError(msg["error"])
+        else:
+            self.notes.append(msg)
+
     def wait(self, mid, timeout=None):
-        """Replies to other requests that arrive meanwhile are kept for their own wait()."""
+        """Anything else that arrives meanwhile is kept for whoever asks for it."""
         deadline = time.time() + (timeout or self.timeout)
         while mid not in self.replies:
             left = deadline - time.time()
             if left <= 0:
                 raise TimeoutError(f"no response to {mid}")
-            frame = self.ws.recv(timeout=left)
-            if isinstance(frame, bytes):
-                continue
-            msg = json.loads(frame)
-            if msg.get("id") is None:
-                if "error" in msg:
-                    raise RpcError(msg["error"])
-                continue
-            self.replies[msg["id"]] = msg
+            self._receive(left)
         msg = self.replies.pop(mid)
         if "error" in msg:
             raise RpcError(msg["error"])
@@ -191,6 +207,86 @@ class Ws(_Base):
 
     def send_interrupt_frame(self):
         self.ws.send(FRAME_CONTROL_INTERRUPT)
+
+    def stream_open(self, kind, **args):
+        return self.tool_json("stream_open", kind=kind, **args)
+
+    def send_frame(self, frame_type, stream, seq, payload=b"", count=0):
+        self.ws.send(struct.pack(FRAME_HEADER, frame_type, stream, count, seq) + payload)
+
+    def next_frame(self, timeout=None):
+        """(type, stream, count, seq, payload), or None if nothing comes in time."""
+        deadline = time.time() + (timeout or self.timeout)
+        while not self.frames:
+            left = deadline - time.time()
+            if left <= 0:
+                return None
+            try:
+                self._receive(left)
+            except TimeoutError:
+                return None
+        f = self.frames.popleft()
+        return (*struct.unpack_from(FRAME_HEADER, f), f[FRAME_HEADER_SIZE:])
+
+    def next_note(self, timeout=None):
+        deadline = time.time() + (timeout or self.timeout)
+        while not self.notes:
+            left = deadline - time.time()
+            if left <= 0:
+                return None
+            try:
+                self._receive(left)
+            except TimeoutError:
+                return None
+        return self.notes.popleft()
+
+    def read_file(self, path, chunk=16384, **args):
+        """Returns (data, seconds)."""
+        t0 = time.perf_counter()
+        info = self.stream_open("file_read", path=path, chunk=chunk, **args)
+        sid = info["stream"]
+        parts = []
+        while True:
+            f = self.next_frame()
+            if f is None:
+                raise TimeoutError(f"read of {path} stalled")
+            ftype, stream, count, seq, payload = f
+            if stream != sid:
+                continue
+            if ftype == FRAME_DATA:
+                parts.append(payload)
+            elif ftype == FRAME_END:
+                if count:
+                    raise RuntimeError(f"read failed: {self.next_note(1)}")
+                return b"".join(parts), time.perf_counter() - t0
+
+    def write_file(self, path, data, chunk=16384, **args):
+        """Returns seconds, up to the device confirming."""
+        t0 = time.perf_counter()
+        info = self.stream_open("file_write", path=path, chunk=chunk, **args)
+        sid = info["stream"]
+        limit = info["credit"]
+        offset = 0
+        while offset < len(data):
+            while offset >= limit or offset + chunk > limit:
+                f = self.next_frame()
+                if f is None:
+                    raise TimeoutError(f"write of {path} stalled at {offset}")
+                if f[1] == sid and f[0] == FRAME_CREDIT:
+                    limit = f[3]
+                elif f[1] == sid and f[0] == FRAME_END:
+                    raise RuntimeError(f"write failed: {self.next_note(1)}")
+            self.send_frame(FRAME_DATA, sid, offset, data[offset : offset + chunk])
+            offset += min(chunk, len(data) - offset)
+        self.send_frame(FRAME_END, sid, offset)
+        while True:
+            f = self.next_frame()
+            if f is None:
+                raise TimeoutError(f"no confirmation for {path}")
+            if f[1] == sid and f[0] == FRAME_END:
+                if f[2]:
+                    raise RuntimeError(f"write failed: {self.next_note(1)}")
+                return time.perf_counter() - t0
 
     def close(self):
         self.ws.close()

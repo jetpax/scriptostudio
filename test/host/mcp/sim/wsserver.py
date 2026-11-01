@@ -8,8 +8,6 @@ import binascii
 import select
 import struct
 
-import mcplink
-
 CONNECT = 0
 DISCONNECT = 1
 MESSAGE = 2
@@ -85,12 +83,14 @@ def send(client_id, data, is_binary=False):
     if isinstance(data, str):
         data = data.encode()
     c["sock"].setblocking(True)
-    c["sock"].write(_frame(2 if is_binary else 1, data))
+    c["sock"].write(_frame(2 if is_binary else 1, bytes(data)))
     c["sock"].setblocking(False)
     return True
 
 
 def accept(conn, headers, uri):
+    import mcplink
+
     key = headers["sec-websocket-key"] + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
     answer = binascii.b2a_base64(_sha1(key.encode())).decode().strip()
     resp = "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: %s\r\n" % answer
@@ -152,12 +152,18 @@ def _drop(cid):
     if c:
         _poll.unregister(c["sock"])
         c["sock"].close()
+        import mcplink
+
+        mcplink.on_disconnect(cid)
         if DISCONNECT in _cb:
             _cb[DISCONNECT](cid, "disconnect")
 
 
 def pump():
+    import mcplink
+
     n = 0
+    mcplink.drain()
     for sock, ev in _poll.poll(0):
         for cid, c in list(_clients.items()):
             if c["sock"] is not sock:
