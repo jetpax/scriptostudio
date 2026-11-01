@@ -77,6 +77,7 @@ _repl_lines = {}
 # so _dispatch saves and restores these around each message.
 _client = HTTP_CLIENT
 _request_id = None
+_long_calls = 0
 
 
 class _RpcError(Exception):
@@ -116,6 +117,7 @@ def _run(src, timeout_ms, private, echo=True):
     With echo set, a lone expression prints its value, as at a REPL. A script that
     prints JSON for its caller doesn't want that added.
     """
+    global _long_calls
     start = mcplink.cursor(private)
     g = __main__.__dict__
 
@@ -129,6 +131,8 @@ def _run(src, timeout_ms, private, echo=True):
         exec(code or compile(src, "<mcp>", "exec"), g, g)
 
     tb = None
+    long_call = 1 if timeout_ms == 0 or timeout_ms > EXEC_TIMEOUT_MS else 0
+    _long_calls += long_call
     try:
         mcplink.guard(body, _client, _request_id, timeout_ms, private)
     except BaseException as e:
@@ -137,7 +141,16 @@ def _run(src, timeout_ms, private, echo=True):
         tb = "\n".join(line for line in _traceback(e).split("\n") if _FRAME_MARKER not in line)
         if mcplink.interrupt_reason() == mcplink.REASON_TIMEOUT:
             tb += "exec stopped after %d ms. Run longer work as a background task.\n" % timeout_ms
+    finally:
+        _long_calls -= long_call
     return _decode(mcplink.output_since(start, private)[0]), tb
+
+
+def in_long_call():
+    """True while a call runs that may outlast the task watchdog's deadline. Its timer
+    bounds it, or a person is there to stop it. A call past the deadline that isn't one
+    of these is stuck."""
+    return _long_calls > 0
 
 
 # --- tools ---------------------------------------------------------------

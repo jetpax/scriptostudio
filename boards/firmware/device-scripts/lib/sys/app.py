@@ -142,17 +142,21 @@ async def system_root():
             # The only watched task today is queue_pump (system), so the
             # system-task branch is the hot path.  If user tasks are ever
             # registered directly, the else branch handles them.
+            #
+            # This runs inside whatever is holding the event loop, so that's
+            # the cause, and every other task is a victim.
             info = bg_tasks._tasks.get(task_name, {})
             if info.get("system", False):
-                # System task is the victim — user tasks hogging the event
-                # loop are the cause.  stop_user_tasks() delivers
-                # CancelledError at each user task's next await, which is
-                # more surgical than Tier 2's KeyboardInterrupt (that one
-                # hits whichever task is executing and can cause collateral).
-                stopped = bg_tasks.stop_user_tasks()
-                taskwatchdog.feed(task_name)
-                if stopped:
-                    log("warning", f"Watchdog: '{task_name}' starved — stopped {stopped}", source="taskwd")
+                if mcp.in_long_call():
+                    # A person's script or panel, in the pump. It's allowed
+                    # this long, and stopping anything else wouldn't help.
+                    taskwatchdog.feed(task_name)
+                else:
+                    # Stalling once isn't fatal, so it can finish. No feed:
+                    # if it hasn't yielded in 5 s, Tier 2's KeyboardInterrupt
+                    # breaks it, and it's the one that gets hit.
+                    hog = bg_tasks.running() or "an unnamed task"
+                    log("warning", f"Watchdog: '{task_name}' starved by '{hog}'", source="taskwd")
             else:
                 bg_tasks.stop(task_name)
                 log("warning", f"Watchdog: stopped stalled task '{task_name}'", source="taskwd")

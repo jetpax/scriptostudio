@@ -232,6 +232,115 @@ def check_interrupts(ck, c):
     c.tool("exec", code=STOP_TASK)
 
 
+WD_TASKS = """
+import asyncio, time
+from lib.sys import bg_tasks
+_wd = {"ticks": 0, "finished": False}
+async def _wd_bystander():
+    while True:
+        _wd["ticks"] += 1
+        await asyncio.sleep_ms(100)
+bg_tasks.start("wd_bystander", _wd_bystander, restart=True)
+"""
+WD_HOG_ENDS = """
+async def _wd_hog():
+    time.sleep(6)
+    await asyncio.sleep(0)
+    _wd["finished"] = True
+bg_tasks.start("wd_hog", _wd_hog, restart=True)
+"""
+WD_HOG_STUCK = """
+async def _wd_hog():
+    while True:
+        time.sleep_ms(100)
+bg_tasks.start("wd_hog", _wd_hog, restart=True)
+"""
+WD_STOPS_ITSELF = """
+_wd["finished"] = False
+async def _wd_hog():
+    bg_tasks.stop("wd_hog")
+    await asyncio.sleep(0)
+    _wd["finished"] = True
+bg_tasks.start("wd_hog", _wd_hog, restart=True)
+"""
+WD_STATE = """
+import json
+_t = bg_tasks.list_tasks()
+print(json.dumps({"ticks": _wd["ticks"], "finished": _wd["finished"], "hog": _t.get("wd_hog", {}).get("state"), "bystander": _t["wd_bystander"]["state"]}))
+"""
+WD_LONG_CALL = "import time\ntime.sleep(7)\nprint('done')"
+WD_DEADLINE_END_S = 7.5
+WD_TIER2_END_S = 11.5
+
+
+def check_watchdog(ck, ws_url, agent, human):
+    """Stall the loop past queue_pump's 5 s deadline. Only what's holding it may suffer."""
+    with Ws(ws_url, agent, timeout=30) as c, Ws(ws_url, human, timeout=30) as person:
+        c.tool("exec", code=WD_TASKS)
+
+        def state():
+            return json.loads(c.tool("exec", code=WD_STATE))
+
+        def logs_since(start):
+            now = c.tool_json("logs_read", max_bytes=1)["cursor"]
+            return c.tool_json("logs_read", max_bytes=max(1, now - start))["text"]
+
+        def cursor():
+            return c.tool_json("logs_read", max_bytes=1)["cursor"]
+
+        def bystander_alive(st):
+            expect(st["bystander"] == "running", st)
+            time.sleep(0.5)
+            expect(state()["ticks"] > st["ticks"], "bystander stopped ticking")
+
+        def stall_ends():
+            start = cursor()
+            c.tool("exec", code=WD_HOG_ENDS)
+            time.sleep(WD_DEADLINE_END_S)
+            st = state()
+            expect(st["finished"], f"hog was stopped: {st}")
+            log = logs_since(start)
+            expect("starved by 'wd_hog'" in log, log)
+            expect("Traceback" not in log, log)
+            bystander_alive(st)
+            return {"ticks": st["ticks"]}
+
+        def stuck():
+            start = cursor()
+            c.tool("exec", code=WD_HOG_STUCK)
+            time.sleep(WD_TIER2_END_S)
+            st = state()
+            expect(st["hog"] == "stopped", st)
+            log = logs_since(start)
+            expect("starved by 'wd_hog'" in log, log)
+            expect("Traceback" not in log, log)
+            bystander_alive(st)
+
+        def long_call():
+            start = cursor()
+            r = person.call("tools/call", {"name": "exec", "arguments": {"code": WD_LONG_CALL, "timeout_ms": 9000}})
+            text = r["content"][0]["text"]
+            expect(not r.get("isError") and "done" in text, text)
+            expect("starved" not in logs_since(start), "watchdog blamed someone")
+            bystander_alive(state())
+
+        def stops_itself():
+            start = cursor()
+            c.tool("exec", code=WD_STOPS_ITSELF)
+            time.sleep(0.3)
+            st = state()
+            expect(not st["finished"], "it ran on past its next await")
+            expect(st["hog"] == "stopped", st)
+            expect("Traceback" not in logs_since(start), "stop() raised")
+            bystander_alive(st)
+
+        ck.run("watchdog: a stall that ends, the hog finishes and others keep running", stall_ends)
+        ck.run("watchdog: a stuck task is broken, and others keep running", stuck)
+        ck.run("watchdog: a person's long call stops nothing", long_call)
+        ck.run("bg_tasks: a task can stop itself", stops_itself)
+        c.tool("exec", code='bg_tasks.stop("wd_bystander")')
+
+
 def ws_refused(url, tok, via="bearer", origin=None):
     """A refused client completes the upgrade, then gets close code 1008."""
     from websockets.exceptions import ConnectionClosed, InvalidStatus
@@ -473,6 +582,7 @@ def main():
 
     if not a.no_interrupt:
         once(lambda c: check_interrupts(ck, c))
+        check_watchdog(ck, ws_url, agent, human)
 
     ck.run("wss: two frames in one write", lambda: two_frames_one_write(a.host, not a.scheme_http, agent))
     ck.run("wss: client PINGs during a transfer", lambda: ping_during_transfer(ws_url, agent, a.fs_root))

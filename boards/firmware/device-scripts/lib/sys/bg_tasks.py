@@ -7,6 +7,7 @@ Documented functions used:
 - asyncio.create_task(coro)
 - asyncio.sleep(), asyncio.sleep_ms()
 - asyncio.CancelledError
+- asyncio.current_task()
 - Task.cancel()
 
 Usage:
@@ -93,14 +94,35 @@ def start(name, coro_func, *args, restart=False, is_system=False, watchdog_ms=0)
     return True
 
 
+async def _cancel(task):
+    task.cancel()
+
+
 def stop(name):
-    """Stop a named task via cancel()"""
+    """Stop a named task via cancel(). From inside that task, CancelledError lands at its next await."""
     if name not in _tasks:
         return False
-    if _tasks[name]["task"] is not None:
-        _tasks[name]["task"].cancel()
+    task = _tasks[name]["task"]
+    if task is not None:
+        try:
+            task.cancel()
+        except RuntimeError:
+            # A task can't cancel itself, so the loop does it once this one yields
+            asyncio.create_task(_cancel(task))
     _tasks[name]["state"] = "stopped"
     return True
+
+
+def running():
+    """Name of the task running now, or None if it isn't one of ours"""
+    try:
+        current = asyncio.current_task()
+    except RuntimeError:
+        return None
+    for name, info in _tasks.items():
+        if info["task"] is current:
+            return name
+    return None
 
 
 def stop_all():
