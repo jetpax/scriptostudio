@@ -239,14 +239,14 @@ class Device:
             raise DeviceError(reply["error"].get("message", str(reply["error"])))
         return reply.get("result", {})
 
-    async def tool(self, name, **args):
+    async def tool(self, name, /, **args):
         result = await self.request("tools/call", {"name": name, "arguments": args})
         text = "".join(c.get("text", "") for c in result.get("content", []))
         if result.get("isError"):
             raise ToolError(text.strip())
         return text
 
-    async def tool_json(self, name, **args):
+    async def tool_json(self, name, /, **args):
         return json.loads(await self.tool(name, **args))
 
     async def _send_frame(self, kind, sid, seq, payload=b""):

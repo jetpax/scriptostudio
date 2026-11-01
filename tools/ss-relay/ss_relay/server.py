@@ -163,6 +163,10 @@ class Relay:
             self._write(_reply(mid, _text(result)))
         except (DeviceError, OSError, KeyError) as e:
             self._write(_reply(mid, _text(str(e), True)))
+        except Exception as e:
+            # Whatever went wrong, the client is waiting for an answer
+            self._write(_reply(mid, _text(f"{type(e).__name__}: {e}", True)))
+            self._log("error", f"{name}: {type(e).__name__}: {e}")
 
     def _spawn(self, coroutine):
         task = asyncio.create_task(coroutine)

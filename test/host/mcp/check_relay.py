@@ -123,8 +123,10 @@ def check_device(ck, relay, folder, args):
             "            os.remove(p)\n"
             "        except OSError:\n"
             "            pass\n"
-            f"rm('{ROOT}')\nrm('/lib/ext/relaycheck')\n"
+            f"rm('{ROOT}')\n"
         ))
+        # Unregisters it too, or the board goes on listing an app with no files
+        relay.tool("app_remove", id="relaycheck")
 
     # A filtered or failed run can leave files, which would change what this one sees
     clean_up()

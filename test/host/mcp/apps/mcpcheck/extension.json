@@ -1,0 +1,25 @@
+{
+  "name": "MCP Check",
+  "id": "mcp-check",
+  "version": [
+    1,
+    0,
+    0
+  ],
+  "author": "JetPax",
+  "description": "A small app for testing app tools and jobs.",
+  "icon": "bolt",
+  "menu": [
+    {
+      "id": "main",
+      "label": "Main"
+    }
+  ],
+  "devicePaths": {
+    "tools/count.py": "/lib/ext/mcp_check/tools/count.py",
+    "tools/fail.py": "/lib/ext/mcp_check/tools/fail.py",
+    "tools/hog.py": "/lib/ext/mcp_check/tools/hog.py",
+    "tools/broken.py": "/lib/ext/mcp_check/tools/broken.py",
+    "../extension.json": "/lib/ext/mcp_check/extension.json"
+  }
+}

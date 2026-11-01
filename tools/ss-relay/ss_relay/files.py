@@ -144,9 +144,29 @@ def _is_app_data(target):
     return not target.startswith("/lib/")
 
 
-def _is_compiled(path, target):
-    """Same rule as the bundler: library code, not boot or settings files."""
-    return path.endswith(".py") and "/lib/" in target
+def _is_compiled(path, target, device_dir):
+    """Same rule as the bundler: an app's lib/ is compiled. Its tools/ isn't, since the
+    device reads their config blocks."""
+    if not path.endswith(".py"):
+        return False
+    if device_dir:
+        return os.path.relpath(path, device_dir).replace(os.sep, "/").startswith("lib/")
+    return target.startswith("/lib/")
+
+
+def _app_record(local, files):
+    """Enough for the board to know it has this app."""
+    with open(os.path.join(local, MANIFEST)) as f:
+        meta = json.load(f)
+    version = meta.get("version", "0")
+    record = {"id": meta["id"], "version": ".".join(str(v) for v in version) if isinstance(version, list) else str(version)}
+    if meta.get("name"):
+        record["name"] = meta["name"]
+    for _, target in files:
+        if target.startswith("/lib/ext/"):
+            record["folder"] = target.split("/")[3]
+            break
+    return record
 
 
 async def sync(device, local, remote="/", prune=False, mpy_cross=None, compile_py=None, force=False, dry_run=False, progress=None):
@@ -165,8 +185,9 @@ async def sync(device, local, remote="/", prune=False, mpy_cross=None, compile_p
         await _check_firmware(device, files)
 
     compile_py = is_app if compile_py is None else compile_py
+    device_dir = os.path.join(local, "device") if is_app else None
     tool = None
-    if compile_py and any(_is_compiled(path, target) for path, target in files):
+    if compile_py and any(_is_compiled(path, target, device_dir) for path, target in files):
         tool = _find_mpy_cross(mpy_cross)
         await _check_mpy_cross(device, tool)
 
@@ -178,7 +199,7 @@ async def sync(device, local, remote="/", prune=False, mpy_cross=None, compile_p
     with tempfile.TemporaryDirectory() as folder:
         for index, (path, target) in enumerate(files):
             source = path
-            if tool and _is_compiled(path, target):
+            if tool and _is_compiled(path, target, device_dir):
                 source = _compile(tool, path, target.removeprefix("/lib/ext/"), folder)
                 target = target[:-3] + ".mpy"
             with open(source, "rb") as f:
@@ -201,6 +222,8 @@ async def sync(device, local, remote="/", prune=False, mpy_cross=None, compile_p
                 await progress(index + 1, len(files), target)
 
     removed = await _prune(device, files, remote) if prune and not is_app and not dry_run else []
+    if is_app and not dry_run:
+        await device.tool("app_installed", **_app_record(local, files))
     return {
         "dry_run": dry_run,
         "copied": len(changed),
