@@ -49,7 +49,7 @@ import struct
 import mcplink
 import wsserver
 
-from lib.sys import can_tap
+from lib.sys import can_tap, events
 
 HEADER = "<BBHI"
 HEADER_SIZE = mcplink.FRAME_HEADER_SIZE
@@ -249,6 +249,7 @@ def _write_end(s, seq):
     s.file = None
     os.rename(s.path + TMP_SUFFIX, s.path)
     _send_frame(s, mcplink.FRAME_END, s.done)
+    events.file_changed(s.client, s.path)
     _forget(s)
 
 

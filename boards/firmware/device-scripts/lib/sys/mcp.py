@@ -44,6 +44,7 @@ MODERN = "2026-07-28"
 LEGACY = ("2025-11-25", "2025-06-18", "2025-03-26")
 SUPPORTED = (MODERN,) + LEGACY
 PROTOCOL_VERSION_KEY = "io.modelcontextprotocol/protocolVersion"
+CLIENT_INFO_KEY = "io.modelcontextprotocol/clientInfo"
 SERVER_INFO = {"name": "scriptostudio-device", "version": "2.0.0"}
 STREAMS_EXTENSION = "com.scriptostudio/streams"
 _STREAMS_INFO = {"kinds": list(streams.KINDS), "maxFrame": wsserver.MAX_MESSAGE}
@@ -256,6 +257,7 @@ def _t_fs_write_text(a):
         with open(tmp, "wb") as f:
             n = f.write(a["text"].encode())
         os.rename(tmp, path)
+    events.file_changed(_client, path)
     return _json({"written": n})
 
 
@@ -265,6 +267,7 @@ def _t_fs_rm(a):
         os.rmdir(path)
     else:
         os.remove(path)
+    events.file_changed(_client, path, "removed")
     return _json({"removed": path})
 
 
@@ -277,6 +280,7 @@ def _t_fs_mkdir(a):
             os.stat(made)
         except OSError:
             os.mkdir(made)
+    events.file_changed(_client, made, "made")
     return _json({"path": made})
 
 
@@ -301,6 +305,7 @@ def _close_write_cache():
     global _write_cache
     if _write_cache:
         _write_cache[2].close()
+        events.file_changed(_write_cache[3], _write_cache[0])
         _write_cache = None
 
 
@@ -326,7 +331,7 @@ def _t_fs_write(a):
         f = open(path, "wb" if offset == 0 else "r+b")
         if offset:
             f.seek(offset)
-        _write_cache = [path, offset, f]
+        _write_cache = [path, offset, f, _client]
     _write_cache[2].write(data)
     _write_cache[1] = offset + len(data)
     return _text('{"written":%d,"offset":%d}' % (len(data), _write_cache[1]))
@@ -340,8 +345,52 @@ def _t_app_installed(a):
     return _json(apps.register(a["id"], a["version"], a.get("name"), a.get("folder")))
 
 
+def _app_row(app_id):
+    for row in apps.describe()["apps"]:
+        if row["id"] == app_id:
+            return row
+    raise ValueError("No such app: %s" % app_id)
+
+
+def _app_folder(app_id):
+    return "%s/%s" % (apps.ROOT, apps.folder_of(app_id, apps.read().get(app_id)))
+
+
+def _start_app(app_id):
+    if wsserver.client_role(_client) == mcplink.ROLE_HUMAN:
+        apps.start(app_id)
+    else:
+        tx_gate.mark(apps.start(app_id))
+
+
+def _t_app_create(a):
+    apps.create(a["id"], a["code"], a.get("name"), a.get("version", "1.0.0"), a.get("tools"), a.get("run_at_boot", False))
+    if a.get("start", True):
+        _start_app(a["id"])
+    events.file_changed(_client, _app_folder(a["id"]))
+    return _json(_app_row(a["id"]))
+
+
+def _t_app_run_at_boot(a):
+    apps.set_run_at_boot(a["id"], a["on"])
+    return _json(_app_row(a["id"]))
+
+
+def _t_app_start(a):
+    _start_app(a["id"])
+    return _json(_app_row(a["id"]))
+
+
+def _t_app_stop(a):
+    apps.stop(a["id"])
+    return _json(_app_row(a["id"]))
+
+
 def _t_app_remove(a):
-    return _json(apps.remove(a["id"]))
+    folder = _app_folder(a["id"])
+    result = apps.remove(a["id"])
+    events.file_changed(_client, folder, "removed")
+    return _json(result)
 
 
 def _t_job_start(a):
@@ -363,7 +412,9 @@ def _t_interrupt(a):
 
 
 def _t_stop_user_tasks(a):
-    return _json({"stopped": bg_tasks.stop_user_tasks()})
+    stopped = bg_tasks.stop_user_tasks()
+    events.tell_people({"apps_changed": True})
+    return _json({"stopped": stopped})
 
 
 def _t_reset(a):
@@ -422,6 +473,7 @@ def _t_stream_close(a):
 
 
 _S = {"type": "string"}
+_B = {"type": "boolean"}
 _I = {"type": "integer"}
 
 
@@ -487,6 +539,42 @@ _TOOLS = [
         "Record an app as installed, once its files are in place.",
         {"id": _S, "version": _S, "name": _S, "folder": _S},
         ("id", "version"),
+    ),
+    _tool(
+        "app_create",
+        _t_app_create,
+        "Leave working code on this board as an app, so it survives resets and needs no one connected. code is a "
+        "MicroPython module defining async def run(), which should loop and await often, since one interpreter runs "
+        "everything. With run_at_boot it starts at every boot, even with no network. It starts now unless start is "
+        "false, and replaces an app of the same id. tools maps a tool's file name to its source. Try the code with "
+        "exec first. apps_list shows whether it's running, and its last error.",
+        {"id": _S, "code": _S, "name": _S, "version": _S, "run_at_boot": _B, "start": _B, "tools": {"type": "object"}},
+        ("id", "code"),
+        destructive=True,
+    ),
+    _tool(
+        "app_run_at_boot",
+        _t_app_run_at_boot,
+        "Say whether an app starts at every boot.",
+        {"id": _S, "on": _B},
+        ("id", "on"),
+        destructive=True,
+    ),
+    _tool(
+        "app_start",
+        _t_app_start,
+        "Start or restart an app's own work.",
+        {"id": _S},
+        ("id",),
+        destructive=True,
+    ),
+    _tool(
+        "app_stop",
+        _t_app_stop,
+        "Stop an app's own work, until it's started again or the next boot.",
+        {"id": _S},
+        ("id",),
+        destructive=True,
     ),
     _tool(
         "app_remove",
@@ -565,12 +653,27 @@ _TOOL_FNS = {t[0]["name"]: t[1] for t in _TOOLS}
 _TOOL_DEFS = [t[0] for t in _TOOLS]
 # The reply to this tools/call goes out when its job finishes
 _DEFERRED = object()
+_ACTIVITY_TEXT_MAX = 4096
+_ACTIVITY_ARG_MAX = 120
+# Polling and chunks would bury what a person wants to see
+_UNREPORTED = ("job_status", "stream_status", "fs_read", "fs_write", "fs_hash")
+_CONTENT_ARGS = ("code", "text", "data", "tools")
+_activity_seq = 0
+_streams_cleared = False
 
 
 # --- protocol ------------------------------------------------------------
 
 
+def _note_client(p):
+    """Remember what it calls itself, for what people see. HTTP has no one client to remember."""
+    info = p.get("clientInfo") or (p.get("_meta") or {}).get(CLIENT_INFO_KEY)
+    if info and info.get("name") and _client != HTTP_CLIENT:
+        events.set_name(_client, info["name"])
+
+
 def _m_discover(p):
+    _note_client(p)
     return {
         "supportedVersions": list(SUPPORTED),
         "capabilities": CAPABILITIES,
@@ -582,6 +685,7 @@ def _m_discover(p):
 
 
 def _m_initialize(p):
+    _note_client(p)
     v = p.get("protocolVersion")
     return {
         "protocolVersion": v if v in LEGACY else LEGACY[0],
@@ -595,6 +699,44 @@ def _m_tools_list(p):
     return {"tools": _TOOL_DEFS + apps.tool_defs(), "ttlMs": 0, "cacheScope": "private"}
 
 
+def _brief(args):
+    """An agent's arguments for a person to read, without what could be long."""
+    rows = {}
+    for key, value in args.items():
+        if key not in _CONTENT_ARGS:
+            rows[key] = value if value is None or isinstance(value, (bool, int, float)) else str(value)[:_ACTIVITY_ARG_MAX]
+    return rows
+
+
+def _activity_row(tool, args):
+    """Who is calling what, if a person should see it. None if not."""
+    global _activity_seq
+    if tool in _UNREPORTED or wsserver.client_role(_client) == mcplink.ROLE_HUMAN or not events.people():
+        return None
+    _activity_seq += 1
+    return {"id": _activity_seq, "who": events.name_of(_client), "tool": tool, "args": _brief(args)}
+
+
+def _activity_running(row):
+    row["state"] = "running"
+    events.tell_people({"agent_activity": row})
+
+
+def _activity_ended(row, started, failed, text=None):
+    row["state"] = "failed" if failed else "done"
+    row["ms"] = time.ticks_diff(time.ticks_ms(), started)
+    row.pop("code", None)
+    if text is not None:
+        row["output"] = text[:_ACTIVITY_TEXT_MAX]
+    events.tell_people({"agent_activity": row})
+
+
+def _job_finished(job):
+    row = job.activity
+    if row:
+        _activity_ended(row, job.started, job.state != "done", job.error)
+
+
 def _call_app_tool(name, p):
     if name not in apps.tools():
         raise _RpcError(-32602, "Unknown tool: %s" % name)
@@ -602,11 +744,17 @@ def _call_app_tool(name, p):
     try:
         if _client == HTTP_CLIENT:
             # Nothing can hold an HTTP reply open
-            return _json(jobs.start(name, given).status())
-        jobs.start(name, given, _client, json.loads(_request_id), (p.get("_meta") or {}).get("progressToken"))
-        return _DEFERRED
+            job = jobs.start(name, given)
+            result = _json(job.status())
+        else:
+            job = jobs.start(name, given, _client, json.loads(_request_id), (p.get("_meta") or {}).get("progressToken"))
+            result = _DEFERRED
     except ValueError as e:
         return _text(str(e), True)
+    job.activity = _activity_row(name, given)
+    if job.activity:
+        _activity_running(job.activity)
+    return result
 
 
 def _m_tools_call(p):
@@ -616,10 +764,21 @@ def _m_tools_call(p):
         return _call_app_tool(name, p)
     if name != "fs_write":
         _close_write_cache()
+    args = p.get("arguments") or {}
+    row = _activity_row(name, args)
+    started = time.ticks_ms()
+    if row and name == "exec":
+        # Ahead of the call, since it holds up the board until it returns
+        row["code"] = args.get("code", "")[:_ACTIVITY_TEXT_MAX]
+        _activity_running(row)
     try:
-        return fn(p.get("arguments") or {})
+        result = fn(args)
     except Exception as e:
-        return _text(_traceback(e), True)
+        result = _text(_traceback(e), True)
+    if row:
+        failed = result.get("isError")
+        _activity_ended(row, started, failed, result["content"][0]["text"] if failed or name == "exec" else None)
+    return result
 
 
 def _m_resources_list(p):
@@ -817,6 +976,19 @@ def _advertise():
     _advertised = mcplink.advertise(HTTPS_PORT, {"path": PATH, "tls": "1", "board": board.id.name})
 
 
+def started():
+    return _started
+
+
+def clear_old_streams():
+    """A real soft reset forgets Python's streams, while C's survive. This goes before anything
+    can open one, and an app at boot does that long before the servers start."""
+    global _streams_cleared
+    if not _streams_cleared:
+        _streams_cleared = True
+        mcplink.streams_reset()
+
+
 def after_pump():
     """Called by queue_pump between batches, so a reset's response has gone out first."""
     global _reset_mode, _tx_armed
@@ -857,11 +1029,11 @@ def start(origins=(), on_clients=None):
     mcplink.start(PATH)
     streams.init(_terminal_text)
     apps.on_change = _notify_tools_changed
+    apps.on_state = lambda: events.tell_people({"apps_changed": True})
+    jobs.on_finish = _job_finished
     mcplink.tx_gate(settings.get("can.agent_tx_needs_arm", False))
     if _started:
         return
-    # A real soft reset forgets Python's streams, while C's survive
-    mcplink.streams_reset()
     wsserver.on(wsserver.MESSAGE, _ws_message)
     wsserver.on(wsserver.CONNECT, _ws_connect)
     wsserver.on(wsserver.DISCONNECT, _ws_disconnect)

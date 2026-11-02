@@ -30,6 +30,7 @@ FINISHED_KEPT = 8
 OUTPUT_MAX = 4096
 PROGRESS_EVERY_MS = 200
 
+on_finish = None
 _jobs = {}
 _next_id = 1
 
@@ -79,6 +80,7 @@ class Job:
         self.result = None
         self.error = None
         self.quiet = False
+        self.activity = None
         self.started = time.ticks_ms()
         self.seconds = None
         self._last_sent = None
@@ -140,6 +142,8 @@ def _finish(job, state, error=None):
     job.seconds = time.ticks_diff(time.ticks_ms(), job.started) // 1000
     if job.mid is not None and not job.quiet:
         _send(job.client, {"jsonrpc": "2.0", "id": job.mid, "result": job.reply()})
+    if on_finish:
+        on_finish(job)
     _prune()
 
 

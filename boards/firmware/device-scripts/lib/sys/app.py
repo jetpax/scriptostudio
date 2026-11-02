@@ -31,7 +31,7 @@ import time
 import httpserver
 import asyncio
 
-from lib.sys import auth, bg_tasks, mcp
+from lib.sys import apps, auth, bg_tasks, mcp
 
 from lib.sys.status_led import status_led, StatusLED
 
@@ -120,17 +120,20 @@ def start_servers(ip):
 async def queue_pump():
     """Process the HTTP and WebSocket queue - core task that keeps MCP responsive"""
     while True:
-        try:
-            httpserver.process_queue()
-        except Exception as e:
-            log("warning", f"queue_pump: {e}", source="main")
-        
-        mcp.after_pump()
+        # Nothing can queue until the servers start, and that takes a network
+        if mcp.started():
+            try:
+                httpserver.process_queue()
+            except Exception as e:
+                log("warning", f"queue_pump: {e}", source="main")
+
+            mcp.after_pump()
         await asyncio.sleep_ms(10)
         bg_tasks.feed("queue_pump")
 
-async def system_root():
-    """Main async entry point - starts all background tasks"""
+def start_core_tasks():
+    """The watchdog, and the task it watches. Before anything else runs, so that an app
+    holding the event loop gets broken, even on a board that never gets a network."""
     log("info", "Starting background tasks...", source="main")
     
     # Initialize task watchdog (C-native FreeRTOS monitor)
@@ -171,14 +174,6 @@ async def system_root():
     log("debug", "queue_pump started (system, watchdog=5s)", source="main")
     
     log("info", f"Active tasks: {list(bg_tasks.list_tasks().keys())}", source="main")
-    
-    # Keep running forever. KeyboardInterrupt is intentionally NOT caught here:
-    # main() owns the KI counter (single → stop user tasks; 3× consecutive → drop
-    # to REPL). Catching locally would swallow KIs before main() sees them, and
-    # the escape sequence (the only way to drop to REPL on chips with no
-    # host-driven hardware reset, e.g. RP2350) would never fire.
-    while True:
-        await asyncio.sleep(3600)
 
 
 def _quick_ntp():
@@ -229,6 +224,12 @@ async def ntp_sync_task():
 
 async def main_async():
     """Async main entry point"""
+    start_core_tasks()
+    mcp.clear_old_streams()
+
+    # A board in the field may never see a network, and what it's there to do can't wait
+    apps.start_boot_apps()
+
     # Start network tasks and wait for the first interface to come up.
     await network.startup()
 
@@ -296,8 +297,13 @@ async def main_async():
     # delay anything that depends on server start.
     bg_tasks.start("ntp", ntp_sync_task)
 
-    # Enter system_root for other background tasks
-    await system_root()
+    # Keep running forever. KeyboardInterrupt is intentionally NOT caught here:
+    # main() owns the KI counter (single → stop user tasks; 3× consecutive → drop
+    # to REPL). Catching locally would swallow KIs before main() sees them, and
+    # the escape sequence (the only way to drop to REPL on chips with no
+    # host-driven hardware reset, e.g. RP2350) would never fire.
+    while True:
+        await asyncio.sleep(3600)
 
     return True
 
