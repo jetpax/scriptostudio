@@ -21,9 +21,10 @@ import json
 import sys
 import time
 
+import mcplink
 import wsserver
 
-from lib.sys import apps, bg_tasks
+from lib.sys import apps, bg_tasks, tx_gate
 
 FINISHED_KEPT = 8
 OUTPUT_MAX = 4096
@@ -185,6 +186,9 @@ def start(tool_name, given, client=-1, mid=None, token=None):
     _next_id += 1
     _jobs[job.id] = job
     bg_tasks.start(job.task_name, _run, job, entry["path"], args)
+    # A read-only tool has said it changes nothing, though a CAN read can take a transmit
+    if wsserver.client_role(client) != mcplink.ROLE_HUMAN and not entry["def"]["annotations"]["readOnlyHint"]:
+        tx_gate.mark(bg_tasks._tasks[job.task_name]["task"])
     return job
 
 

@@ -43,6 +43,9 @@ import time
 from lib.sys import bg_tasks, board
 
 ROOT = "/lib/ext"
+BUILTIN_TOOLS = "/lib/sys/tools"
+# A tool the board provides itself, and what the board needs for it
+_BUILTIN_NEEDS = {"can_capture": "can"}
 REGISTRY = ROOT + "/registry.json"
 TOOLS_FOLDER = "tools"
 CONFIG_START = "# === START_CONFIG_PARAMETERS ==="
@@ -210,10 +213,22 @@ def _tool_def(tool_name, config):
     }
 
 
+def _add_tool(tool_name, path, app_id):
+    try:
+        config = _config_block(path)
+        if config is not None:
+            _tools[tool_name] = {"def": _tool_def(tool_name, config), "path": path, "args": config.get("args", {}), "app": app_id}
+    except Exception as e:
+        _errors[tool_name] = str(e)
+
+
 def _scan():
     global _tools
     _tools = {}
     _errors.clear()
+    for tool_name, needs in _BUILTIN_NEEDS.items():
+        if board.has(needs):
+            _add_tool(tool_name, "%s/%s.py" % (BUILTIN_TOOLS, tool_name), None)
     for app_id, entry in read().items():
         folder = ROOT + "/" + folder_of(app_id, entry) + "/" + TOOLS_FOLDER
         try:
@@ -224,15 +239,7 @@ def _scan():
         for name in names:
             if not name.endswith(".py") or name.startswith("_"):
                 continue
-            path = folder + "/" + name
-            tool_name = "%s_%s" % (prefix, name[:-3])
-            try:
-                config = _config_block(path)
-                if config is None:
-                    continue
-                _tools[tool_name] = {"def": _tool_def(tool_name, config), "path": path, "args": config.get("args", {}), "app": app_id}
-            except Exception as e:
-                _errors[tool_name] = str(e)
+            _add_tool("%s_%s" % (prefix, name[:-3]), folder + "/" + name, app_id)
 
 
 def tools():

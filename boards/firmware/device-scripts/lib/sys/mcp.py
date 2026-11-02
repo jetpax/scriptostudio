@@ -31,7 +31,7 @@ import httpserver
 import mcplink
 import wsserver
 
-from lib.sys import apps, bg_tasks, events, jobs, streams
+from lib.sys import apps, bg_tasks, events, jobs, settings, streams, tx_gate
 
 try:
     import esp32
@@ -55,7 +55,8 @@ INSTRUCTIONS = (
     "and is stopped after 4 s, because a longer block would make the watchdog stop "
     "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them. "
     "Installed apps add tools named <app>_<tool>, which can run for a long time and "
-    "report progress. On plain HTTP they return a job id to poll with job_status."
+    "report progress. On plain HTTP they return a job id to poll with job_status. "
+    "If a CAN transmit is refused as not armed, ask the person to arm it."
 )
 
 EXEC_TIMEOUT_MS = 4000
@@ -73,6 +74,7 @@ _started = False
 _on_clients = None
 _write_cache = None
 _reset_mode = None
+_tx_armed = False
 _repl_lines = {}
 
 # The request being handled. Handlers can re-enter via a nested process_queue,
@@ -139,8 +141,14 @@ def _run(src, timeout_ms, private, echo=True):
     tb = None
     long_call = 1 if timeout_ms == 0 or timeout_ms > EXEC_TIMEOUT_MS else 0
     _long_calls += long_call
-    try:
+    def guarded():
         mcplink.guard(body, _client, _request_id, timeout_ms, private)
+
+    try:
+        if wsserver.client_role(_client) == mcplink.ROLE_HUMAN:
+            guarded()
+        else:
+            tx_gate.run_as_agent(guarded)
     except BaseException as e:
         # Client code can raise anything, and the caller is owed the traceback.
         # Its frames only, since the ones that called it aren't the caller's concern.
@@ -203,6 +211,8 @@ def _t_device_info(a):
             "streams": list(streams.KINDS),
             "clients": wsserver.count_clients(),
             "role": wsserver.client_role(_client),
+            "tx_gate": mcplink.tx_gate(),
+            "tx_armed_ms": mcplink.tx_armed_ms(),
             "transport": "http" if _client == HTTP_CLIENT else "websocket",
         }
     )
@@ -809,9 +819,13 @@ def _advertise():
 
 def after_pump():
     """Called by queue_pump between batches, so a reset's response has gone out first."""
-    global _reset_mode
+    global _reset_mode, _tx_armed
     if not _advertised:
         _advertise()
+    armed_ms = mcplink.tx_armed_ms()
+    if (armed_ms > 0) != _tx_armed:
+        _tx_armed = armed_ms > 0
+        events.notify({"tx_armed_ms": armed_ms})
     mode = _reset_mode
     if mode is None:
         return
@@ -843,6 +857,7 @@ def start(origins=(), on_clients=None):
     mcplink.start(PATH)
     streams.init(_terminal_text)
     apps.on_change = _notify_tools_changed
+    mcplink.tx_gate(settings.get("can.agent_tx_needs_arm", False))
     if _started:
         return
     # A real soft reset forgets Python's streams, while C's survive

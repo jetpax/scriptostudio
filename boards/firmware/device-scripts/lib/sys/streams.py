@@ -30,6 +30,12 @@ Kinds:
                 end. Replaces the target atomically, and the device confirms with end.
     app         Bytes a device app writes with app_write(name, data), and bytes it
                 receives with on_app_data(name, fn). Lossy toward the host.
+    can         Device to host: every frame the CAN bus receives, sent from C. Lossy, but
+                only ever in whole records, so a jump in seq is a number of frames.
+                ack: also acknowledge frames, for a person's session on a bus with no
+                other receiver. A record is 20 bytes, little-endian:
+                    time_us:u32 id:u32 flags:u8 dlc:u8 reserved:u16 data:8
+                flags: bit 0 extended, bit 1 RTR
 
 Copyright (c) 2026 Jonathan Elliot Peace
 SPDX-License-Identifier: MIT
@@ -43,6 +49,8 @@ import struct
 import mcplink
 import wsserver
 
+from lib.sys import can_tap
+
 HEADER = "<BBHI"
 HEADER_SIZE = mcplink.FRAME_HEADER_SIZE
 KINDS = {
@@ -50,6 +58,7 @@ KINDS = {
     "file_read": mcplink.KIND_FILE_READ,
     "file_write": mcplink.KIND_FILE_WRITE,
     "app": mcplink.KIND_APP,
+    "can": mcplink.KIND_CAN,
 }
 _KIND_NAMES = {v: k for k, v in KINDS.items()}
 DEFAULT_CHUNK = 16384
@@ -77,6 +86,7 @@ class _Stream:
         self.limit = 0
         self.window = 0
         self.closing = False
+        self.tap = None
 
 
 def init(on_terminal_text):
@@ -97,6 +107,9 @@ def _send_frame(s, frame_type, seq, count=0):
 
 def _forget(s):
     _streams.pop(s.id, None)
+    if s.tap is not None:
+        can_tap.close(s.tap)
+        s.tap = None
     mcplink.stream_close(s.id)
 
 
@@ -153,6 +166,12 @@ def open_stream(kind, args, client):
     s.file = f
     s.chunk = chunk
     s.name = args.get("name")
+    if code == mcplink.KIND_CAN:
+        try:
+            s.tap = can_tap.open(sid, args.get("ack") and wsserver.client_role(client) == mcplink.ROLE_HUMAN, args.get("bitrate"))
+        except Exception:
+            mcplink.stream_close(sid)
+            raise
     _streams[sid] = s
     result = {"stream": sid, "kind": kind, "max_frame": wsserver.MAX_MESSAGE, "chunk": chunk}
 
@@ -275,7 +294,7 @@ def _owned(sid, client):
 def status(sid, client):
     s = _owned(sid, client)
     st = mcplink.stream_status(sid)
-    return {
+    row = {
         "stream": sid,
         "kind": _KIND_NAMES[s.kind],
         "done": s.done,
@@ -283,6 +302,9 @@ def status(sid, client):
         "pending": st[4] - st[3],
         "dropped": st[5],
     }
+    if s.kind == mcplink.KIND_CAN:
+        row["bus"] = can_tap.stats()
+    return row
 
 
 def close(sid, client):
