@@ -21,6 +21,7 @@ APP_ID = "mcp-check"
 APP_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "apps", "mcpcheck")
 PREFIX = "mcp_check_"
 LONG_JOB_S = 30
+FINISHED_KEPT = 8
 WATCHDOG_TIER2_S = 14
 CHANGED = "notifications/tools/list_changed"
 
@@ -191,6 +192,18 @@ def check(ck, relay, args):
         result = relay.tool("job_status", job=99999)
         expect(result.get("isError"), result)
 
+    def finished_jobs_keep_the_newest():
+        ids = []
+        for _ in range(FINISHED_KEPT + 4):
+            job = relay.ok_json("job_start", tool=PREFIX + "count", arguments={"seconds": 0, "mode": "fast"})
+            ids.append(job["job"])
+            time.sleep(0.3)
+            status = relay.ok_json("job_status", job=job["job"])
+            expect(status["state"] == "done", status)
+        kept = [j["job"] for j in relay.ok_json("job_status")]
+        expect(kept[-FINISHED_KEPT:] == ids[-FINISHED_KEPT:], (ids, kept))
+        expect(ids[0] not in kept, (ids, kept))
+
     def a_job_finishes_with_its_result():
         job = relay.ok_json("job_start", tool=PREFIX + "count", arguments={"seconds": 2, "mode": "fast"})
         time.sleep(1.5)
@@ -262,6 +275,7 @@ def check(ck, relay, args):
     ck.run("job: stop_user_tasks stops a call and answers it", stop_user_tasks_stops_a_call_and_answers_it)
     ck.run("job: start, status, cancel", job_start_status_cancel)
     ck.run("job: finishes with its result", a_job_finishes_with_its_result)
+    ck.run("job: finished jobs keep the newest", finished_jobs_keep_the_newest)
     ck.run("job: plain HTTP gets a job id to poll", http_gets_a_job_id)
     ck.run("job: a client vanishing stops its call", disconnecting_stops_a_waiting_call)
     ck.run("job: a hog is named, broken and reported", a_hog_is_named_broken_and_reported)

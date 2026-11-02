@@ -142,9 +142,14 @@ def _finish(job, state, error=None):
     _prune()
 
 
+def _in_order():
+    # A dict here doesn't keep insertion order
+    return sorted(_jobs.values(), key=lambda j: j.id)
+
+
 def _prune():
-    finished = [j for j in _jobs.values() if j.state != "running"]
-    for job in finished[:-FINISHED_KEPT] if len(finished) > FINISHED_KEPT else ():
+    finished = [j for j in _in_order() if j.state != "running"]
+    for job in finished[:-FINISHED_KEPT]:
         del _jobs[job.id]
         bg_tasks._tasks.pop(job.task_name, None)
 
@@ -191,7 +196,7 @@ def get(job_id):
 
 
 def list_all():
-    return [j.status() for j in _jobs.values()]
+    return [j.status() for j in _in_order()]
 
 
 def cancel(job_id):
