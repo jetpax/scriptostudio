@@ -3,119 +3,131 @@ dict(
     info=dict(
         name="Capture CAN",
         description=(
-            "Listen to the CAN bus for a while, and report what's on it: frames per identifier, "
-            "their rates and latest data, a few frames in full, and anything lost. Sends nothing."
+            "Listen to the CAN bus for a while, and report what's on it, per identifier: rate, latest "
+            "data, and which bits changed and how often. Sends nothing. To find what an action does, "
+            "capture with baseline=true while nothing is happening, ask the person to do it, then "
+            "capture again: reaction lists the bits that moved or now differ, and were steady before, "
+            "steadiest first. Slow counters and analog values get in too, so repeat it to see what "
+            "follows the action. A bit toggling a few times a second is likely a flashing indicator. "
+            "An app reads what you find with can_tap.watch([ids]) from lib.sys, whose read() returns "
+            "(id, data) rows and never waits. It stays listen-only, so don't send anything to do this."
         ),
         effects=dict(readOnly=True, destructive=False, openWorld=False),
     ),
     args=dict(
         seconds=dict(label="How many seconds, up to 60:", type=int, value=5),
+        baseline=dict(label="Remember this as the baseline to compare later captures with:", type=bool, value=False),
         id=dict(label="Only this identifier, or those matching it under mask:", type=int, optional=True),
         mask=dict(label="Identifier bits that have to match:", type=int, optional=True),
-        frames=dict(label="How many frames to include in full, up to 200:", type=int, value=20),
     ),
 )
 # === END_CONFIG_PARAMETERS ===
 
+import __main__
 import asyncio
 import binascii
 import struct
 import time
 
-import mcplink
-
 from lib.sys import can_tap
 
 MAX_SECONDS = 60
-MAX_FRAMES = 200
-MAX_IDS = 128
-RING_BYTES = 64 * 1024
-READ_BYTES = 4000
-POLL_MS = 100
-RECORD = "<IIBBH8s"
-RECORD_SIZE = 20
+MAX_IDS = 256
+POLL_MS = 200
+FREE_DELAY_MS = 50
+EVERY_BIT = 0x1FFFFFFF
 EXTENDED = 1
-RTR = 2
-NO_MASK = 0x1FFFFFFF
+BASELINE = "_can_capture_baseline"
 
 
-def _hex(data, dlc):
-    return binascii.hexlify(data[:dlc]).decode()
+def _hex(data):
+    return binascii.hexlify(data).decode()
+
+
+def _bits(mask):
+    """Each set bit of some bytes, as (byte, bit)."""
+    return [(byte, bit) for byte in range(len(mask)) for bit in range(8) if mask[byte] & (1 << bit)]
+
+
+def _reaction(rows, baseline):
+    found = []
+    for key, row in rows.items():
+        before = baseline.get(key)
+        if before is None:
+            found.append({"id": key, "new_identifier": True, "data": _hex(row["last_raw"])})
+            continue
+        size = min(len(row["last_raw"]), len(before["last_raw"]))
+        moved = bytes(
+            (row["changed_raw"][i] | (row["last_raw"][i] ^ before["last_raw"][i])) & ~before["changed_raw"][i] & 0xFF
+            for i in range(size)
+        )
+        for byte, bit in _bits(moved):
+            mask = 1 << bit
+            found.append(
+                {
+                    "id": key,
+                    "byte": byte,
+                    "bit": bit,
+                    "was": 1 if before["last_raw"][byte] & mask else 0,
+                    "now": 1 if row["last_raw"][byte] & mask else 0,
+                    "toggles_per_s": round(row["toggles"][byte * 8 + bit] / row["took"], 2),
+                }
+            )
+    found.sort(key=lambda row: row.get("toggles_per_s", 0))
+    return found
 
 
 async def run(args, job):
     seconds = min(args.seconds, MAX_SECONDS)
-    wanted = min(args.frames, MAX_FRAMES)
-    mask = NO_MASK if args.mask is None else args.mask
-    match = None if args.id is None else args.id & mask
-
-    frames = 0
-    ids = {}
-    other_ids = 0
-    sample = []
-    first = None
-    sid = mcplink.stream_open(-1, mcplink.KIND_CAN, RING_BYTES)
-    tap = None
+    mask = EVERY_BIT if args.mask is None else args.mask
+    filters = () if args.id is None else ((args.id, mask),)
+    activity = can_tap.Activity(MAX_IDS, filters)
     try:
-        tap = can_tap.open(sid)
-        start = time.ticks_ms()
         missed_before = can_tap.stats().get("rx_missed", 0)
-        ends = seconds * 1000
-        while time.ticks_diff(time.ticks_ms(), start) < ends:
+        start = time.ticks_ms()
+        while time.ticks_diff(time.ticks_ms(), start) < seconds * 1000:
             job.progress(time.ticks_diff(time.ticks_ms(), start) // 1000, seconds)
             await asyncio.sleep_ms(POLL_MS)
-            chunk = mcplink.stream_take(sid, READ_BYTES)
-            # On a full bus this may never catch up, and that's reported as lost
-            while chunk and time.ticks_diff(time.ticks_ms(), start) < ends:
-                for at in range(0, len(chunk), RECORD_SIZE):
-                    t, frame_id, flags, dlc, _, data = struct.unpack_from(RECORD, chunk, at)
-                    if match is not None and frame_id & mask != match:
-                        continue
-                    if first is None:
-                        first = t
-                    frames += 1
-                    key = ("%08x" if flags & EXTENDED else "%03x") % frame_id
-                    row = ids.get(key)
-                    if row is None:
-                        if len(ids) >= MAX_IDS:
-                            other_ids += 1
-                            continue
-                        row = ids[key] = {"count": 0}
-                    row["count"] += 1
-                    row["dlc"] = dlc
-                    row["last"] = _hex(data, dlc)
-                    if len(sample) < wanted:
-                        sample.append(
-                            {
-                                "ms": time.ticks_diff(t, first) // 1000,
-                                "id": key,
-                                "rtr": bool(flags & RTR),
-                                "data": _hex(data, dlc),
-                            }
-                        )
-                # Let everything else run between batches, however full the bus is
-                await asyncio.sleep_ms(0)
-                chunk = mcplink.stream_take(sid, READ_BYTES)
         took = time.ticks_diff(time.ticks_ms(), start) / 1000
-        status = mcplink.stream_status(sid)
         stats = can_tap.stats()
+        activity.stop()
+        await asyncio.sleep_ms(FREE_DELAY_MS)
+        found, beyond = activity.read()
     finally:
-        if tap is not None:
-            can_tap.close(tap)
-        mcplink.stream_close(sid)
+        activity.free()
 
-    for row in ids.values():
-        row["per_s"] = round(row["count"] / took, 1)
-    return {
+    rows = {}
+    frames = 0
+    for frame_id, flags, dlc, count, first_us, last_us, first, last, changed, toggles in found:
+        frames += count
+        key = ("%08x" if flags & EXTENDED else "%03x") % frame_id
+        rows[key] = {"last_raw": last, "changed_raw": changed, "took": took, "toggles": struct.unpack("<64H", toggles), "count": count, "dlc": dlc, "first": first}
+
+    report = {}
+    for key, row in rows.items():
+        report[key] = {
+            "count": row["count"],
+            "per_s": round(row["count"] / took, 1),
+            "dlc": row["dlc"],
+            "first": _hex(row["first"]),
+            "last": _hex(row["last_raw"]),
+            "changing_bits": [
+                {"byte": byte, "bit": bit, "toggles_per_s": round(row["toggles"][byte * 8 + bit] / took, 2)}
+                for byte, bit in _bits(row["changed_raw"])
+            ],
+        }
+    result = {
         "seconds": round(took, 1),
         "frames": frames,
         "per_s": round(frames / took, 1),
-        "ids": ids,
-        "frames_beyond_id_limit": other_ids,
-        "sample": sample,
-        "lost": {
-            "behind_reader": status[5] // RECORD_SIZE,
-            "in_controller": stats.get("rx_missed", 0) - missed_before,
-        },
+        "ids": report,
+        "frames_beyond_id_limit": beyond,
+        "lost_in_controller": stats.get("rx_missed", 0) - missed_before,
         "bus": stats,
     }
+    if args.baseline:
+        setattr(__main__, BASELINE, rows)
+        result["baseline"] = "remembered"
+    elif hasattr(__main__, BASELINE):
+        result["reaction"] = _reaction(rows, getattr(__main__, BASELINE))
+    return result
