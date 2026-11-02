@@ -20,6 +20,23 @@ def _token(args):
     return derive_token(password)
 
 
+async def _arm(args):
+    """A person's arm, from a terminal. The device ends it when this connection goes, so stay
+    connected: run this and leave it, and Ctrl-C disarms."""
+    password = os.environ.get("SS_RELAY_PASSWORD")
+    if not password:
+        sys.exit("ss-relay: arm needs SS_RELAY_PASSWORD, since it takes a person's token")
+    device = Device(args.device, derive_token(password, "human"), args.cafile)
+    await device.connect()
+    try:
+        await device.arm_tx(args.seconds * 1000)
+        print(f"Agents can transmit for {args.seconds} s, or until this stops.", file=sys.stderr, flush=True)
+        await asyncio.sleep(args.seconds)
+    finally:
+        await device.close()
+    return {"armed_seconds": args.seconds}
+
+
 async def _with_device(args, work):
     device = Device(args.device, _token(args), args.cafile)
     await device.connect()
@@ -56,9 +73,11 @@ def main():
     flash.add_argument("image")
     flash.add_argument("port")
     flash.add_argument("--address", default="0x0")
+    arm = commands.add_parser("arm", help="let agents transmit on actuating buses for a while")
+    arm.add_argument("--seconds", type=int, default=60)
     args = parser.parse_args()
 
-    needs_device = args.command in (None, "serve", "push", "pull", "sync")
+    needs_device = args.command in (None, "serve", "push", "pull", "sync", "arm")
     if needs_device and not args.device:
         parser.error("--device is required")
 
@@ -72,6 +91,8 @@ def main():
             result = asyncio.run(_with_device(args, lambda d: files.pull(d, args.remote, args.local)))
         elif args.command == "sync":
             result = asyncio.run(_with_device(args, lambda d: files.sync(d, args.local, args.remote, prune=args.prune, mpy_cross=args.mpy_cross, force=args.force, dry_run=args.dry_run)))
+        elif args.command == "arm":
+            result = asyncio.run(_arm(args))
         elif args.command == "discover":
             result = asyncio.run(hosttools.discover(args.seconds))
         else:

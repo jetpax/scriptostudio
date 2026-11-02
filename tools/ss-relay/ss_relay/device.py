@@ -17,6 +17,8 @@ FRAME_HEADER_SIZE = struct.calcsize(FRAME_HEADER)
 FRAME_DATA = 0
 FRAME_CREDIT = 1
 FRAME_END = 2
+FRAME_CONTROL = 3
+CONTROL_TX_ARM = 2
 STREAM_NOTIFICATION = "notifications/com.scriptostudio/stream"
 CHUNK = 16384
 REPLY_TIMEOUT_S = 60
@@ -248,6 +250,10 @@ class Device:
 
     async def tool_json(self, name, /, **args):
         return json.loads(await self.tool(name, **args))
+
+    async def arm_tx(self, ms):
+        """Let agents transmit for a while. The device takes this only with a person's token."""
+        await self._send_frame(FRAME_CONTROL, CONTROL_TX_ARM, ms)
 
     async def _send_frame(self, kind, sid, seq, payload=b""):
         await self.socket.send(struct.pack(FRAME_HEADER, kind, sid, 0, seq) + payload)
