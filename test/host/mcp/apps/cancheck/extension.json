@@ -1,0 +1,23 @@
+{
+  "name": "CAN Check",
+  "id": "can-check",
+  "version": [
+    1,
+    0,
+    0
+  ],
+  "author": "JetPax",
+  "description": "A small app for testing the transmit latch.",
+  "icon": "bolt",
+  "menu": [
+    {
+      "id": "main",
+      "label": "Main"
+    }
+  ],
+  "devicePaths": {
+    "tools/send.py": "/lib/ext/can_check/tools/send.py",
+    "tools/read.py": "/lib/ext/can_check/tools/read.py",
+    "../extension.json": "/lib/ext/can_check/extension.json"
+  }
+}
