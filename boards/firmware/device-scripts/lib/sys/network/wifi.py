@@ -36,6 +36,8 @@ def _log(level, msg):
 # Aggregate state lives in the parent module; we report through _update().
 from lib.sys.network import network_ready, _update
 
+CONNECT_TIMEOUT_MS = 15000
+
 # Global STA reference
 _sta = None
 
@@ -62,7 +64,12 @@ def _apply_power_save():
     if platform.port() != "esp32":
         return
     enabled = settings.get("wifi.power_save", False)
-    _sta.config(pm=network.WLAN.PM_PERFORMANCE if enabled else network.WLAN.PM_NONE)
+    try:
+        _sta.config(pm=network.WLAN.PM_PERFORMANCE if enabled else network.WLAN.PM_NONE)
+    except OSError:
+        # config() sets pm, then rewrites the rest of the config, which the driver refuses
+        # while it's connecting. pm is set by then, and this mustn't stop the WiFi task.
+        pass
 
 
 def init():
@@ -192,7 +199,7 @@ def get_status():
         }
 
 
-def connect(ssid=None, password=None, bssid=None, timeout_ms=15000):
+def connect(ssid=None, password=None, bssid=None, timeout_ms=CONNECT_TIMEOUT_MS, wait=True):
     """
     Connect to WiFi network.
     
@@ -201,6 +208,7 @@ def connect(ssid=None, password=None, bssid=None, timeout_ms=15000):
         password: Network password (uses settings if None)
         bssid: Optional BSSID to connect to specific AP
         timeout_ms: Connection timeout in milliseconds
+        wait: Block until connected. If False, returns True once it has started
         
     Returns:
         str: IP address if connected, None otherwise
@@ -256,6 +264,9 @@ def connect(ssid=None, password=None, bssid=None, timeout_ms=15000):
         _log("warning", f"Connection failed: {e}")
         return None
     
+    if not wait:
+        return True
+    
     # Wait for connection
     start_ms = time.ticks_ms()
     while not _sta.isconnected():
@@ -269,7 +280,23 @@ def connect(ssid=None, password=None, bssid=None, timeout_ms=15000):
     return ip
 
 
-def scan_and_connect(ssid=None, password=None, timeout_ms=15000):
+async def _wait_for_connection(started, timeout_ms=CONNECT_TIMEOUT_MS):
+    """The rest of connect(wait=False), for the task. Holding the event loop this long
+    would stop everything else, and the watchdog would break it."""
+    if started is not True:
+        return started
+    start_ms = time.ticks_ms()
+    while not _sta.isconnected():
+        if time.ticks_diff(time.ticks_ms(), start_ms) > timeout_ms:
+            _log("warning", "Connection timeout")
+            return None
+        await asyncio.sleep_ms(100)
+    ip = _sta.ifconfig()[0]
+    _log("info", f"Connected: {ip}")
+    return ip
+
+
+def scan_and_connect(ssid=None, password=None, timeout_ms=CONNECT_TIMEOUT_MS, wait=True):
     """
     Scan for networks and connect to strongest matching AP.
     
@@ -329,7 +356,7 @@ def scan_and_connect(ssid=None, password=None, timeout_ms=15000):
         _log("debug", f"Scan failed: {e}")
     
     # Connect (with BSSID if found)
-    return connect(ssid, password, bssid=target_bssid, timeout_ms=timeout_ms)
+    return connect(ssid, password, bssid=target_bssid, timeout_ms=timeout_ms, wait=wait)
 
 
 def disconnect():
@@ -407,7 +434,7 @@ async def task():
             # ethernet or wwan is still up — we only flag this interface.
             _update("wifi", False)
             # Try to connect (scan and connect to strongest AP)
-            ip = scan_and_connect()
+            ip = await _wait_for_connection(scan_and_connect(wait=False))
             if ip:
                 _update("wifi", True, ip)
             else:
@@ -451,13 +478,13 @@ async def task():
                                 except:
                                     _pw = ""
                                 _reset_connection()
-                                ip = connect(_ssid, _pw, bssid=matching[0][1])
+                                ip = await _wait_for_connection(connect(_ssid, _pw, bssid=matching[0][1], wait=False))
                                 if ip:
                                     _log("info", f"Roamed to stronger AP: {ip}")
                                     _update("wifi", True, ip)
                             else:
                                 _log("debug", f"Best candidate {best_rssi} dBm, not enough gain (need +{_ROAM_HYSTERESIS}), staying")
-            except:
+            except Exception:
                 pass
             await asyncio.sleep(10)
 
