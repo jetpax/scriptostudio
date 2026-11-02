@@ -232,9 +232,11 @@ def check_interrupts(ck, c):
     c.tool("exec", code=STOP_TASK)
 
 
+# With a collection first, since what the watchdog calls has to survive one
 WD_TASKS = """
-import asyncio, time
+import asyncio, gc, time
 from lib.sys import bg_tasks
+gc.collect()
 _wd = {"ticks": 0, "finished": False}
 async def _wd_bystander():
     while True:
@@ -446,9 +448,9 @@ def client_limit(url, tok):
                 alive.append(h)
             except Exception:
                 pass
-        evicted = len(held) - len(alive)
+        refused = len(held) - len(alive)
         held = alive
-        row = {"alive": len(held), "evicted": evicted}
+        row = {"alive": len(held), "refused": refused}
         if held:
             row.update(internal_ram(held[-1].tool_json("device_info")["heap"]))
         detail[f"open_{n}"] = row

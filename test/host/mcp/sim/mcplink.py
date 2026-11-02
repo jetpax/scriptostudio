@@ -101,6 +101,10 @@ def protect(slot):
     _protected.add(slot)
 
 
+def boot_crashes():
+    return 0
+
+
 def guard(fn, client=-1, request_id=None, timeout_ms=0, private=False):
     global _private
     saved = _private

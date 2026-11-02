@@ -61,18 +61,18 @@ class Relay:
                 raise TimeoutError(f"no reply to {method}")
             return self.replies.pop(mid)
 
-    def tool(self, name, timeout=300, **args):
+    def tool(self, name, /, timeout=300, **args):
         reply = self.call("tools/call", {"name": name, "arguments": args}, timeout)
         expect("result" in reply, reply)
         return reply["result"]
 
-    def ok(self, name, **args):
+    def ok(self, name, /, **args):
         result = self.tool(name, **args)
         text = result["content"][0]["text"]
         expect(not result.get("isError"), f"{name} failed: {text}")
         return text
 
-    def ok_json(self, name, **args):
+    def ok_json(self, name, /, **args):
         return json.loads(self.ok(name, **args))
 
     def close(self):

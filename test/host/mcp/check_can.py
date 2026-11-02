@@ -42,6 +42,7 @@ LOAD_BATCH_S = 0.01
 LOAD_S = 30
 STALL_S = 5
 TOOL_P95_LIMIT_MS = 100
+MIN_CAPTURE_FPS = 3000
 BUS_BITS_PER_FRAME = 111
 MIN_SATURATED_LOAD_PCT = 80
 BITRATE = 500000
@@ -230,6 +231,9 @@ print('ok')
         expect(agent.tool_json("device_info")["tx_armed_ms"] > 0, "not armed")
         sent(agent, 0x109, b"\x01\x09", adapter)
         note = person.next_note(1)
+        # The person is also told what the agent called
+        while note and "agent_activity" in note["params"]:
+            note = person.next_note(1)
         expect(note and note["params"].get("tx_armed_ms", 0) > 0, note)
         disarm(person)
 
@@ -465,15 +469,89 @@ print('ok')
         generator = threading.Thread(target=lambda: adapter.generate(5), daemon=True)
         generator.start()
         time.sleep(0.5)
-        result = agent.call("tools/call", {"name": "can_capture", "arguments": {"seconds": 3, "frames": 3}})
+        result = agent.call("tools/call", {"name": "can_capture", "arguments": {"seconds": 3}})
         generator.join()
         expect(not result.get("isError"), result)
         report = json.loads(result["content"][0]["text"].split("\n")[0])
         key = "%03x" % LOAD_ID
         expect(key in report["ids"] and report["ids"][key]["count"] > 0, report)
-        expect(len(report["sample"]) == 3, report["sample"])
         expect(report["seconds"] <= 4.5, report["seconds"])
-        return {"seconds": report["seconds"], "per_s": report["per_s"], "lost": report["lost"]}
+        expect(report["per_s"] >= MIN_CAPTURE_FPS, report["per_s"])
+        expect(report["lost_in_controller"] == 0, report["lost_in_controller"])
+        # The counter in the frames is what's moving
+        expect(report["ids"][key]["changing_bits"], report["ids"][key])
+        return {"seconds": report["seconds"], "per_s": report["per_s"]}
+
+    def capture_finds_what_an_action_changed():
+        car = threading.Event()
+        lit = threading.Event()
+
+        def drive():
+            n = 0
+            while not car.is_set():
+                n += 1
+                batch = b"t0c08%016x\r" % n + b"t4708%02x00000000000000\r" % (0x08 if lit.is_set() else 0)
+                adapter.port.write(batch)
+                time.sleep(0.01)
+
+        thread = threading.Thread(target=drive, daemon=True)
+        thread.start()
+        try:
+            time.sleep(0.3)
+            result = agent.call("tools/call", {"name": "can_capture", "arguments": {"seconds": 3, "baseline": True}})
+            expect(not result.get("isError"), result)
+            lit.set()
+            time.sleep(0.2)
+            result = agent.call("tools/call", {"name": "can_capture", "arguments": {"seconds": 3}})
+            expect(not result.get("isError"), result)
+        finally:
+            car.set()
+            thread.join(1)
+        report = json.loads(result["content"][0]["text"].split("\n")[0])
+        # A counter's slow bits can move between captures too, so only they may join it
+        reaction = report["reaction"]
+        found = [row for row in reaction if row["id"] == "470"]
+        expect(len(found) == 1 and found[0]["byte"] == 0 and found[0]["bit"] == 3, reaction)
+        expect(found[0]["was"] == 0 and found[0]["now"] == 1, reaction)
+        expect(all(row["id"] in ("470", "0c0") for row in reaction), reaction)
+        return found[0]
+
+    def watch_only_sees_its_identifiers():
+        code = """
+import __main__, asyncio
+from lib.sys import can_tap, bg_tasks
+__main__._watched = None
+async def _watch_run():
+    watcher = can_tap.watch([0x470])
+    seen = {}
+    for _ in range(60):
+        for frame_id, data in watcher.read():
+            seen[frame_id] = seen.get(frame_id, 0) + 1
+        await asyncio.sleep_ms(50)
+    __main__._watched = (seen, watcher.lost())
+    watcher.close()
+bg_tasks.start('watch_check', _watch_run, restart=True)
+"""
+        text, failed = run(person, code)
+        expect(not failed, text)
+        stop = threading.Event()
+
+        def drive():
+            n = 0
+            while not stop.is_set():
+                n += 1
+                adapter.port.write(b"".join(b"t3218%016x\r" % (n + i) for i in range(20)) + b"t47080000000000000000\r")
+                time.sleep(0.01)
+
+        thread = threading.Thread(target=drive, daemon=True)
+        thread.start()
+        time.sleep(3.5)
+        stop.set()
+        thread.join(1)
+        seen, lost = eval(run(person, "import __main__\nprint(__main__._watched)")[0].strip())
+        expect(list(seen.keys()) == [0x470] and seen[0x470] > 50, seen)
+        expect(lost == 0, lost)
+        return {"frames": seen[0x470]}
 
     def capture_filters():
         generator = threading.Thread(target=lambda: adapter.generate(2), daemon=True)
@@ -482,6 +560,9 @@ print('ok')
         generator.join()
         report = json.loads(result["content"][0]["text"].split("\n")[0])
         expect(report["frames"] == 0, report)
+        result = agent.call("tools/call", {"name": "can_capture", "arguments": {"seconds": 1, "id": LOAD_ID}})
+        report = json.loads(result["content"][0]["text"].split("\n")[0])
+        expect(not report["ids"] or list(report["ids"].keys()) == ["%03x" % LOAD_ID], report)
 
     def closing_stops_it():
         sid = info["stream"]
@@ -499,6 +580,8 @@ print('ok')
     ck.run("can: closing the stream stops the tap", closing_stops_it)
     ck.run("can: can_capture summarises the bus for an agent", capture_summarises_the_bus)
     ck.run("can: can_capture filters by identifier", capture_filters)
+    ck.run("can: can_capture finds what an action changed", capture_finds_what_an_action_changed)
+    ck.run("can: an app's watch only sees its identifiers", watch_only_sees_its_identifiers)
 
 
 def main():
