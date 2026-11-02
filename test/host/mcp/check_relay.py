@@ -19,6 +19,7 @@ import time
 from queue import Empty, Queue
 
 from check_m1 import Check, expect
+from mcp_client import Ws, token
 
 ROOT = "/_relay_check"
 UNREACHABLE = "ws://127.0.0.1:9/mcp"
@@ -256,6 +257,32 @@ def check_device(ck, relay, folder, args):
             time.sleep(2)
         raise AssertionError("never came back")
 
+    def cancel_frees_the_board():
+        """What an agent's stop button comes down to: another client gets the board straight after."""
+        relay.next_id += 1
+        mid = relay.next_id
+        call = {"name": "exec", "arguments": {"code": "while True:\n    pass"}}
+        relay.process.stdin.write(json.dumps({"jsonrpc": "2.0", "id": mid, "method": "tools/call", "params": call}) + "\n")
+        relay.process.stdin.flush()
+        time.sleep(0.5)
+        begin = time.time()
+        note = {"jsonrpc": "2.0", "method": "notifications/cancelled", "params": {"requestId": mid}}
+        relay.process.stdin.write(json.dumps(note) + "\n")
+        relay.process.stdin.flush()
+        with relay.lock:
+            expect(relay.lock.wait_for(lambda: mid in relay.replies, 3), "the call didn't stop")
+            reply = relay.replies.pop(mid)
+        stopped = time.time() - begin
+        expect("KeyboardInterrupt" in reply["result"]["content"][0]["text"], reply)
+        other = Ws(f"{args.scheme}://{args.host}/mcp", token(args.password, "human"))
+        try:
+            begin = time.time()
+            expect("41" in other.tool("exec", code="print(40 + 1)"), "the other client got no answer")
+            answered = time.time() - begin
+        finally:
+            other.close()
+        return {"stopped_ms": int(stopped * 1000), "other_client_ms": int(answered * 1000)}
+
     def discover_finds_this_device():
         found = relay.ok_json("discover", seconds=4)
         expect(found, "found nothing")
@@ -265,6 +292,7 @@ def check_device(ck, relay, folder, args):
         return {"url": match[0]["url"], "board": match[0]["txt"].get("board")}
 
     ck.run("relay: passes device tools through", passes_device_tools_through)
+    ck.run("relay: cancelling a call frees the board for another client", cancel_frees_the_board)
     ck.run("relay: push and pull by path", push_and_pull)
     ck.run("relay: a missing file is refused", pull_missing_file_is_refused)
     ck.run("sync: copies, then skips, then copies only what changed", sync_copies_then_skips)
