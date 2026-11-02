@@ -79,6 +79,11 @@ async def _wifi_recovery():
 bg_tasks.start('wifi_recovery', _wifi_recovery, is_system=True)
 """
 
+NOTICE_WITHIN_S = 15
+FORGET_WIFI = "from lib.sys import network\nnetwork._update('wifi', False)"
+NETWORK_READY = "from lib.sys import network\nprint(network.network_ready.is_set())"
+
+
 def connect(relay_path, url, password):
     relay = Relay([relay_path, "--device", url], password)
     for _ in range(50):
@@ -144,11 +149,27 @@ def main():
     def user_tasks_survive():
         expect(out["user_task"] == "running", out["user_task"])
 
+    def a_connection_the_driver_made_is_noticed():
+        # The driver retries by itself, so it can connect while the task is waiting to try again.
+        # This leaves the same state: connected, with the task not having said so.
+        relay = connect(args.relay, url, args.password)
+        try:
+            relay.ok("exec", code=FORGET_WIFI, echo=False)
+            started = time.time()
+            while time.time() - started < NOTICE_WITHIN_S:
+                if relay.ok("exec", code=NETWORK_READY, echo=False).strip() == "True":
+                    return {"noticed_after_s": round(time.time() - started)}
+                time.sleep(0.5)
+            raise AssertionError("it's connected, and whatever waits for the network would wait forever")
+        finally:
+            relay.close()
+
     ck.run("wifi: recovers by itself once connecting works again", recovers)
     ck.run("wifi: the task never crashes", task_never_crashes)
     ck.run("wifi: the event loop keeps running throughout", loop_keeps_running)
     ck.run("wifi: no watchdog stalls", no_watchdog_stalls)
     ck.run("wifi: user tasks keep running", user_tasks_survive)
+    ck.run("wifi: a connection the driver made by itself is noticed", a_connection_the_driver_made_is_noticed)
 
     passed = sum(1 for r in ck.results.values() if r["ok"])
     print(f"\n{passed} of {len(ck.results)} passed.")

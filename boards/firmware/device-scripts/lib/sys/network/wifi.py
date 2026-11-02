@@ -17,6 +17,7 @@ import network
 import time
 import logging
 import asyncio
+import _thread
 from lib.sys import events
 
 # Setup logger
@@ -37,6 +38,7 @@ def _log(level, msg):
 from lib.sys.network import network_ready, _update
 
 CONNECT_TIMEOUT_MS = 15000
+SCAN_POLL_MS = 50
 
 # Global STA reference
 _sta = None
@@ -280,6 +282,51 @@ def connect(ssid=None, password=None, bssid=None, timeout_ms=CONNECT_TIMEOUT_MS,
     return ip
 
 
+async def _scan():
+    """Scan on a thread. scan() takes seconds, and frees the interpreter while it waits, so
+    this keeps the event loop running. A board with no network to find scans again and again,
+    and what it's there to do can't stop each time."""
+    result = []
+
+    def work():
+        try:
+            result.append(_sta.scan())
+        except Exception as e:
+            _log("debug", f"Scan failed: {e}")
+            result.append([])
+
+    _thread.start_new_thread(work, ())
+    while not result:
+        await asyncio.sleep_ms(SCAN_POLL_MS)
+    return result[0]
+
+
+async def _scan_and_connect_yielding():
+    """scan_and_connect, for the task, without holding the event loop."""
+    global _sta
+    if _sta is None:
+        _sta = init()
+        if _sta is None:
+            return None
+    from lib.sys import settings
+
+    ssid = settings.get("wifi.ssid", "")
+    password = settings.get("wifi.password", "")
+    if not ssid:
+        _log("warning", "No SSID configured")
+        return None
+    if not _sta.active():
+        _sta.active(True)
+    _reset_connection()
+    matching = [ap for ap in await _scan() if ap[0].decode('utf-8') == ssid]
+    target_bssid = None
+    if matching:
+        matching.sort(key=lambda x: x[3], reverse=True)
+        target_bssid = matching[0][1]
+        _log("debug", f"Found {len(matching)} AP(s), best signal: {matching[0][3]} dBm")
+    return await _wait_for_connection(connect(ssid, password, bssid=target_bssid, wait=False))
+
+
 async def _wait_for_connection(started, timeout_ms=CONNECT_TIMEOUT_MS):
     """The rest of connect(wait=False), for the task. Holding the event loop this long
     would stop everything else, and the watchdog would break it."""
@@ -434,12 +481,17 @@ async def task():
             # ethernet or wwan is still up — we only flag this interface.
             _update("wifi", False)
             # Try to connect (scan and connect to strongest AP)
-            ip = await _wait_for_connection(scan_and_connect(wait=False))
+            ip = await _scan_and_connect_yielding()
             if ip:
                 _update("wifi", True, ip)
             else:
                 await asyncio.sleep(5)  # Retry after delay
         else:
+            # The driver retries by itself, so this may be the first we've seen of it. Without
+            # saying so, nothing that waits for the network would ever start.
+            ip = get_ip()
+            if ip:
+                _update("wifi", True, ip)
             # Connected - check if signal is weak enough to roam
             try:
                 rssi = _sta.status('rssi')
@@ -461,11 +513,7 @@ async def task():
                         # Scan while still connected — ESP-IDF supports this.
                         # Do NOT disconnect just to scan: if no better AP exists,
                         # we'd lose connectivity for nothing (the main thrashing cause).
-                        try:
-                            networks = _sta.scan()
-                        except:
-                            networks = []
-                        matching = [ap for ap in networks if ap[0].decode('utf-8') == _ssid]
+                        matching = [ap for ap in await _scan() if ap[0].decode('utf-8') == _ssid]
                         if matching:
                             matching.sort(key=lambda x: x[3], reverse=True)
                             best_rssi = matching[0][3]
