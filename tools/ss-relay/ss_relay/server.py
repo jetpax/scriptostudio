@@ -90,6 +90,8 @@ class Relay:
         self.out = None
         self.connecting = None
         self.initialize = None
+        self.client_info = None
+        self.last_failure = None
         self.list_requests = set()
         self.tasks = set()
 
@@ -122,17 +124,22 @@ class Relay:
                     was_connected = False
                 try:
                     await self.device.connect()
+                    # The board forgets who's calling when it resets
+                    if self.client_info:
+                        await self.device.request("initialize", {"protocolVersion": "2025-11-25", "clientInfo": self.client_info})
                     was_connected = True
+                    self.last_failure = None
                     self._log("info", f"Connected to {self.device.url}")
                     self._write({"jsonrpc": "2.0", "method": "notifications/tools/list_changed"})
                 except DeviceError as e:
+                    self.last_failure = str(e)
                     self._log("warning", str(e))
             await asyncio.sleep(RECONNECT_S)
 
     async def _call_host_tool(self, mid, name, args, meta):
         try:
             if name in _NEEDS_DEVICE and not self.device.connected:
-                raise DeviceError("Not connected to the device")
+                raise DeviceError(self._not_connected())
             if name == "fs_push":
                 result = await files.push(self.device, args["local"], args["remote"])
             elif name == "fs_pull":
@@ -168,6 +175,9 @@ class Relay:
             self._write(_reply(mid, _text(f"{type(e).__name__}: {e}", True)))
             self._log("error", f"{name}: {type(e).__name__}: {e}")
 
+    def _not_connected(self):
+        return f"Not connected to the device. {self.last_failure}" if self.last_failure else "Not connected to the device"
+
     def _spawn(self, coroutine):
         task = asyncio.create_task(coroutine)
         self.tasks.add(task)
@@ -176,9 +186,9 @@ class Relay:
     async def _forward(self, line, message):
         try:
             await self.device.send_text(line)
-        except DeviceError as e:
+        except DeviceError:
             if "id" in message:
-                self._write({"jsonrpc": "2.0", "id": message["id"], "error": {"code": -32000, "message": str(e)}})
+                self._write({"jsonrpc": "2.0", "id": message["id"], "error": {"code": -32000, "message": self._not_connected()}})
 
     def _offline_answer(self, message):
         """Something for a client to work with until the board appears. True if answered."""
@@ -212,6 +222,8 @@ class Relay:
             return
         method = message.get("method")
         params = message.get("params") or {}
+        if method == "initialize":
+            self.client_info = params.get("clientInfo")
         if method == "tools/call" and params.get("name") in _HOST_NAMES:
             self._spawn(self._call_host_tool(message.get("id"), params["name"], params.get("arguments") or {}, params.get("_meta")))
             return

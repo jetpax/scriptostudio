@@ -168,7 +168,7 @@ class Device:
             pass
         finally:
             if ws.close_code == CLOSE_POLICY_VIOLATION:
-                reason = {"origin": "the Origin isn't allowed", "full": "it has no free connections"}.get(
+                reason = {"origin": "the Origin isn't allowed", "full": "it already holds the 3 connections it can. Close another agent or a Studio tab, and it connects by itself"}.get(
                     ws.close_reason, "the token is wrong"
                 )
             if self.socket is ws:
