@@ -227,6 +227,16 @@ async def _run_app(app_id, path):
     finally:
         # A retry or a restart opens its own, and there are only so many
         can_tap.close_watches(asyncio.current_task())
+        release_led(asyncio.current_task())
+
+
+def release_led(owner=None):
+    """Give the status LED back to the board's own colors, on a board that has one."""
+    if board.has("status_led"):
+        from lib.sys.status_led import status_led
+
+        if status_led:
+            status_led.release(owner)
 
 
 def start(app_id):
@@ -253,6 +263,7 @@ def start_boot_apps():
     and after repeated crashes none start, since one of them may be why."""
     # A restarted event loop dropped the tasks that had these open
     can_tap.close_watches()
+    release_led()
     crashes = mcplink.boot_crashes()
     for app_id, entry in read().items():
         if entry.get("run_at_boot"):

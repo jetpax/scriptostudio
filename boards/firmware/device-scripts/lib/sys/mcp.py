@@ -57,6 +57,8 @@ INSTRUCTIONS = (
     "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them. "
     "Installed apps add tools named <app>_<tool>, which can run for a long time and "
     "report progress. On plain HTTP they return a job id to poll with job_status. "
+    "An app shows things on the status LED with status_led.set_color((r, g, b)) from "
+    "lib.sys.status_led, and keeps it until the app ends. "
     "If a CAN transmit is refused as not armed, ask the person to arm it."
 )
 
@@ -413,6 +415,7 @@ def _t_interrupt(a):
 
 def _t_stop_user_tasks(a):
     stopped = bg_tasks.stop_user_tasks()
+    apps.release_led()
     events.tell_people({"apps_changed": True})
     return _json({"stopped": stopped})
 

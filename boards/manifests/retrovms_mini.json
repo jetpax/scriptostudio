@@ -20,7 +20,7 @@
 
   "resources": {
     "pins": {
-      "status_led": 48
+      "status_led": 18
     },
 
     "can": {

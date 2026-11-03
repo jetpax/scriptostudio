@@ -12,6 +12,7 @@ Copyright (c) 2026 Jonathan Elliot Peace
 SPDX-License-Identifier: MIT
 """
 
+import asyncio
 import time
 import _thread
 from machine import Pin
@@ -104,6 +105,14 @@ def get_neopixel_order(pixel_order):
         return ((2, 1, 0, 3), 3)
 
 
+def _who():
+    """Who's setting a color, so an app that ends only gives back the LED if it was using it."""
+    try:
+        return asyncio.current_task()
+    except RuntimeError:
+        return True
+
+
 class StatusLED:
     """
     NeoPixel status LED driver with animation support.
@@ -157,7 +166,11 @@ class StatusLED:
         self.last_update = time.ticks_ms()
         self.throb_phase = 0.0
         self.flash_state = False
-        
+
+        # The board's own state, and whoever is showing something else instead of it
+        self.state = None
+        self.owner = None
+
         # Get NeoPixel ORDER tuple and bpp from pixel_order string
         order_tuple, bpp = get_neopixel_order(pixel_order)
         
@@ -170,8 +183,9 @@ class StatusLED:
     def _write(self, color):
         """Write color to NeoPixel hardware (internal method)"""
         if self.np:
-            # Apply global brightness to final color
-            final_color = calculate_intensity(color, self.global_brightness)
+            # Apply global brightness to final color. Gamma has been applied by now, and
+            # applying it again would turn amber into red
+            final_color = tuple(int(c * self.global_brightness) for c in color)
             self.np[self.pixel_index] = final_color
             self.np.write()
     
@@ -183,6 +197,7 @@ class StatusLED:
             color: RGB tuple (r, g, b) or color constant
             intensity: Brightness 0.0-1.0 (default 1.0)
         """
+        self.owner = _who()
         self.mode = self.MODE_SOLID
         self.base_color = color
         self.intensity = intensity
@@ -198,6 +213,7 @@ class StatusLED:
             interval_ms: Flash interval in milliseconds (default 500)
             intensity: Brightness 0.0-1.0 (default 1.0)
         """
+        self.owner = _who()
         self.mode = self.MODE_FLASHING
         self.base_color = color
         self.interval_ms = interval_ms
@@ -216,6 +232,7 @@ class StatusLED:
             speed: Throb speed 1-100 (higher = faster, default 10)
             intensity: Maximum brightness 0.0-1.0 (default 1.0)
         """
+        self.owner = _who()
         self.mode = self.MODE_THROBBING
         self.base_color = color
         self.throb_speed = speed
@@ -234,21 +251,41 @@ class StatusLED:
     
     def set_state(self, state):
         """
-        Set LED to a system state.
-        
+        Set LED to a system state. While an app is showing something on the LED, it's
+        remembered, and shown once the app lets go.
+
         Args:
             state: One of STATE_BOOT, STATE_NETWORK_CONNECTED, STATE_CLIENT_CONNECTED
         """
         if state not in self._STATE_TABLE:
             return
-        
+
+        self.state = state
+        if self.owner is not None:
+            return
+
         color, mode, interval_ms = self._STATE_TABLE[state]
-        
+
         if mode == self.MODE_FLASHING:
             self.set_flashing(color, interval_ms)
         elif mode == self.MODE_SOLID:
             self.set_color(color)
-    
+        # That was the board's own, so nobody has taken the LED
+        self.owner = None
+
+    def release(self, owner=None):
+        """
+        Go back to the system state.
+
+        Args:
+            owner: Only if this is who's using the LED (default: whoever is)
+        """
+        if self.owner is None or (owner is not None and owner is not self.owner):
+            return
+        self.owner = None
+        if self.state:
+            self.set_state(self.state)
+
     def set_brightness(self, brightness):
         """
         Set global brightness multiplier.
