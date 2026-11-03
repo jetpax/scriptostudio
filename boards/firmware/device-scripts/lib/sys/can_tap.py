@@ -28,11 +28,16 @@ SPDX-License-Identifier: MIT
 import asyncio
 import struct
 
-import CAN
 import mcplink
-from machine import Pin
 
 from lib.sys import board, settings
+
+# Not every build has CAN, and this gets imported on all of them. available() says whether
+# there's a bus to use
+try:
+    import CAN
+except ImportError:
+    CAN = None
 
 BUS = "can0"
 DEFAULT_BITRATE = 500000
@@ -60,6 +65,8 @@ def _set_up_bus(bitrate):
     """Whatever already has the bus running keeps its settings."""
     if _running():
         return
+    from machine import Pin
+
     if not available():
         raise ValueError("This board has no CAN bus")
     bus = board.can(BUS)

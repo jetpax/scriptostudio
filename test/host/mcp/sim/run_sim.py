@@ -22,6 +22,10 @@ class _Id:
 class _Board:
     id = _Id
 
+    @staticmethod
+    def has(name):
+        return False
+
 
 sys.modules["lib.sys.board"] = _Board
 

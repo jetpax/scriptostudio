@@ -27,6 +27,7 @@ KIND_TERMINAL = 0
 KIND_FILE_READ = 1
 KIND_FILE_WRITE = 2
 KIND_APP = 3
+KIND_CAN = 4
 
 _RING_SIZE = 32768
 _DUPTERM_SLOT = 0
@@ -99,6 +100,20 @@ def set_origins(origins):
 
 def protect(slot):
     _protected.add(slot)
+
+
+_tx_gate = False
+
+
+def tx_gate(on=None):
+    global _tx_gate
+    if on is not None:
+        _tx_gate = on
+    return _tx_gate
+
+
+def tx_armed_ms():
+    return 0
 
 
 def boot_crashes():
