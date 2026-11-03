@@ -23,6 +23,7 @@ CRASH_ID = PREFIX + "-crash"
 OFFLINE_ID = PREFIX + "-offline"
 WATCH_ID = PREFIX + "-watch"
 PANIC_ID = PREFIX + "-panic"
+LED_ID = PREFIX + "-led"
 OFFLINE_RESULT = "/boot_check_offline.json"
 OFFLINE_SECONDS = 75
 OFFLINE_MAX_GAP_MS = 500
@@ -63,6 +64,16 @@ async def run():
     while True:
         watcher.read()
         await asyncio.sleep_ms(50)
+"""
+
+LED_CODE = """
+import asyncio
+from lib.sys.status_led import status_led
+
+async def run():
+    status_led.set_color((0, 255, 0))
+    while True:
+        await asyncio.sleep(1)
 """
 
 PANIC_CODE = """
@@ -144,6 +155,9 @@ class Bench:
     def evaluate(self, code):
         return self.relay.ok("exec", code=code, echo=False).strip()
 
+    def led(self):
+        return json.loads(self.evaluate("import json\nfrom lib.sys.status_led import status_led\nprint(json.dumps(status_led.np[0]))"))
+
     def remove_all(self):
         for row in self.relay.ok_json("apps_list")["apps"]:
             if row["id"].startswith(PREFIX):
@@ -190,6 +204,67 @@ def check(ck, bench, args):
         row = json.loads(bench.relay.ok("app_stop", id=COUNT_ID))
         time.sleep(0.5)
         expect(bench.app(COUNT_ID)["state"] != "running", row)
+
+    def a_restart_leaves_one_copy_running():
+        def ticks():
+            return int(bench.evaluate("import __main__\nprint(__main__._boot_ticks)"))
+
+        bench.create(COUNT_ID, COUNT_CODE)
+        time.sleep(0.5)
+        expect(bench.app(COUNT_ID)["state"] == "running", "a second app_create")
+        for _ in range(2):
+            bench.relay.ok("app_start", id=COUNT_ID)
+            time.sleep(0.5)
+            row = bench.app(COUNT_ID)
+            expect(row["state"] == "running", row)
+        bench.relay.ok("app_stop", id=COUNT_ID)
+        time.sleep(0.5)
+        expect(bench.app(COUNT_ID)["state"] != "running", "it didn't stop")
+        first = ticks()
+        time.sleep(1)
+        expect(ticks() == first, "a copy kept running")
+
+    def has_led():
+        return bench.evaluate("from lib.sys import board\nprint(board.has('status_led'))") == "True"
+
+    def led_colors_stay_what_they_are():
+        if not has_led():
+            return {"skipped": "no status LED on this board"}
+        code = "import json\nfrom lib.sys.status_led import status_led, AMBER, RED\nstatus_led.set_color(AMBER)\namber = status_led.np[0]\nstatus_led.set_color(RED)\nprint(json.dumps([amber, status_led.np[0]]))"
+        amber, red = json.loads(bench.evaluate(code))
+        expect(amber[0] > 0 and amber[1] > 0 and amber[1] * 3 > amber[0], amber)
+        expect(red[0] > 0 and red[1] == 0, red)
+        bench.relay.ok("stop_user_tasks")
+        expect(bench.led() != red, "stop didn't give the LED back")
+        return {"amber": amber, "red": red}
+
+    def an_app_keeps_the_led_until_it_ends():
+        if not has_led():
+            return {"skipped": "no status LED on this board"}
+
+        def the_apps_color(why):
+            red, green, blue = bench.led()
+            expect(green > 0 and red == 0 and blue == 0, (why, red, green, blue))
+
+        bench.create(LED_ID, LED_CODE, name="LED", run_at_boot=True)
+        time.sleep(0.5)
+        the_apps_color("started")
+        other = Relay([args.relay, "--device", f"{args.scheme}://{args.host}/mcp"], args.password)
+        other.call("tools/list")
+        the_apps_color("a client came")
+        other.close()
+        time.sleep(1)
+        the_apps_color("a client left")
+        bench.create(COUNT_ID, COUNT_CODE)
+        bench.relay.ok("app_stop", id=COUNT_ID)
+        time.sleep(0.5)
+        the_apps_color("another app ended")
+        bench.reset()
+        the_apps_color("after a reset")
+        bench.relay.ok("app_stop", id=LED_ID)
+        time.sleep(0.5)
+        expect(bench.led()[2] > 0, "the board's own color didn't come back")
+        bench.relay.tool("app_remove", id=LED_ID)
 
     def a_crash_is_reported_and_retried():
         bench.create(CRASH_ID, CRASH_CODE)
@@ -272,6 +347,9 @@ def check(ck, bench, args):
     ck.run("app_create: starts it, and says it runs at boot", create_starts_it_and_says_so)
     ck.run("run at boot: survives a reset", survives_a_reset)
     ck.run("run at boot: the switch turns it off, and start and stop still work", the_switch_turns_it_off)
+    ck.run("a restart leaves one copy running, and says so", a_restart_leaves_one_copy_running)
+    ck.run("status LED: colors stay what they are, and stop gives it back", led_colors_stay_what_they_are)
+    ck.run("status LED: an app keeps it until it ends", an_app_keeps_the_led_until_it_ends)
     ck.run("a crash is reported and retried", a_crash_is_reported_and_retried)
     ck.run("a hog at boot gets broken, and can't lock the board out", a_hog_at_boot_cant_lock_the_board_out)
     ck.run("a CAN app at boot keeps its stream, and restarts don't use them up", a_can_app_at_boot_keeps_its_stream)

@@ -14,9 +14,11 @@ app that makes the device acknowledge at the bus level, and sends no frames:
 
     bench_car.py --device 192.168.1.50 --relay /path/to/ss-relay --ack on
 
-The lights can be checked against a device, using the pins the agent was told to use:
+The lights can be checked against a device, using the pins the agent was told to use, or the
+status LED if that's what it was told to use:
 
     bench_car.py --adapter /dev/cu.usbmodem11201 --device 192.168.1.50 --relay /path/to/ss-relay --verify 1,2,3
+    bench_car.py --adapter /dev/cu.usbmodem11201 --device 192.168.1.50 --relay /path/to/ss-relay --verify led
 """
 
 import argparse
@@ -145,8 +147,11 @@ class BenchCar:
         self.port.close()
 
 
-def read_pins(relay, pins):
-    code = "from machine import Pin\nprint([Pin(p).value() for p in %r])" % (pins,)
+def read_outputs(relay, which):
+    if which == "led":
+        code = "from lib.sys.status_led import status_led\nprint(status_led.np[0])"
+    else:
+        code = "from machine import Pin\nprint([Pin(p).value() for p in %r])" % ([int(p) for p in which.split(",")],)
     return tuple(eval(relay.ok("exec", code=code, echo=False).strip()))
 
 
@@ -173,20 +178,19 @@ def set_ack(args):
 
 
 def verify(car, args):
-    pins = [int(p) for p in args.verify.split(",")]
     relay = connect(args)
     car.command("off")
     time.sleep(1)
-    print("all off:", read_pins(relay, pins))
+    print("all off:", read_outputs(relay, args.verify))
     for word in ("brake", "lights", "left", "right"):
         car.command(word)
         seen = set()
         begin = time.time()
         while time.time() - begin < 2.5:
-            seen.add(read_pins(relay, pins))
+            seen.add(read_outputs(relay, args.verify))
             time.sleep(0.05)
         car.command(word)
-        print(f"{word}: pins {pins} took the values {sorted(seen)}")
+        print(f"{word}: {args.verify} took the values {sorted(seen)}")
         time.sleep(1)
     print("frames heard from the device:", car.heard)
     relay.close()
@@ -198,7 +202,7 @@ def main():
     ap.add_argument("--device", help="the device's address")
     ap.add_argument("--relay")
     ap.add_argument("--ack", choices=("on", "off"), help="install or remove the app that acknowledges frames")
-    ap.add_argument("--verify", metavar="PINS", help="pins to read, for the lights, as 1,2,3")
+    ap.add_argument("--verify", metavar="PINS", help="what to read, for the lights: pins as 1,2,3, or led")
     ap.add_argument("--password", default="password")
     args = ap.parse_args()
 

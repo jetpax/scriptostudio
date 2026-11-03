@@ -4,8 +4,8 @@
     check_trailer.py --host 192.168.1.50 --relay /path/to/ss-relay --adapter /dev/cu.usbmodem11201
 
 Plays the bench car, finds its frames with the tools an agent has, then leaves an app on the
-device that follows them and runs at boot. The outputs are variables rather than pins, so it can
-run on a board whose free pins nobody has said. Installs and removes its apps, and resets the device.
+device that follows them on the status LED and runs at boot: brake is red, lights are green, and
+indicators are blue. Installs and removes its apps, and resets the device.
 """
 
 import argparse
@@ -30,20 +30,25 @@ EXPECTED = {
 FOLLOWS = {"brake": "brake", "lights": "lights", "left": "indicator", "right": "indicator"}
 
 APP_CODE = """
-import asyncio, __main__
+import asyncio
 from lib.sys import can_tap
+from lib.sys.status_led import status_led
 
 async def run():
     watcher = can_tap.watch([0x1F0, 0x470])
-    outputs = {"brake": 0, "lights": 0, "indicator": 0}
+    brake = lights = indicator = 0
+    shown = None
     while True:
         for frame_id, data in watcher.read():
             if frame_id == 0x1F0:
-                outputs["brake"] = (data[1] >> 3) & 1
+                brake = (data[1] >> 3) & 1
             else:
-                outputs["lights"] = data[5] & 1
-                outputs["indicator"] = 1 if data[0] & 3 else 0
-        __main__._trailer = dict(outputs)
+                lights = data[5] & 1
+                indicator = 1 if data[0] & 3 else 0
+        color = (255 * brake, 255 * lights, 255 * indicator)
+        if color != shown:
+            status_led.set_color(color)
+            shown = color
         await asyncio.sleep_ms(10)
 """
 
@@ -72,7 +77,9 @@ class Bench:
         return json.loads(self.relay.ok("can_capture", seconds=CAPTURE_S, **args).split("\n")[0])
 
     def outputs(self):
-        return json.loads(self.relay.ok("exec", code="import __main__, json\nprint(json.dumps(__main__._trailer))", echo=False))
+        code = "import json\nfrom lib.sys.status_led import status_led\nprint(json.dumps(status_led.np[0]))"
+        red, green, blue = json.loads(self.relay.ok("exec", code=code, echo=False))
+        return {"brake": int(red > 0), "lights": int(green > 0), "indicator": int(blue > 0)}
 
 
 def check(ck, bench, car):
