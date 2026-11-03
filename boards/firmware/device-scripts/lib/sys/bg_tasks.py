@@ -165,6 +165,8 @@ async def _runner(name, coro_func, *args):
     - Auto-restarts crashed tasks after backoff
     - Feeds task watchdog each iteration (if watchdog_ms > 0)
     """
+    # This run's own entry. A restart puts a new one under the same name, for the next run
+    # to report on, before this one has finished stopping
     info = _tasks.get(name, {})
     is_system = info.get("system", False)
     wd_ms = info.get("watchdog_ms", 0)
@@ -196,12 +198,10 @@ async def _runner(name, coro_func, *args):
                     break
             except Exception as e:
                 # Task crashed - mark state and retry after backoff
-                if name in _tasks:
-                    _tasks[name]["state"] = "crashed"
+                info["state"] = "crashed"
                 _log("warning", f"{name} crashed: {e}")
                 await asyncio.sleep(1)  # backoff before restart
-                if name in _tasks:
-                    _tasks[name]["state"] = "running"
+                info["state"] = "running"
     finally:
         # Unregister from watchdog on exit
         if wd_ms > 0 and _wd:
@@ -210,5 +210,4 @@ async def _runner(name, coro_func, *args):
             except:
                 pass
         # Mark task as stopped so the name can be reused
-        if name in _tasks:
-            _tasks[name]["state"] = "stopped"
+        info["state"] = "stopped"
