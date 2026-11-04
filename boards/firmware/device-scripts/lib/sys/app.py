@@ -363,7 +363,7 @@ def main():
 
             # Default: stop user tasks and restart event loop
             try:
-                bg_tasks.stop_user_tasks()
+                bg_tasks.stop_user_tasks(bg_tasks.INTERRUPTED % "the event loop")
             except:
                 pass
             bg_tasks._tasks.clear()
@@ -374,7 +374,7 @@ def main():
             # Network stays connected (C layer), just reinitialize Python state
             log("info", "Soft reset - restarting MicroPython...", source="main")
             try:
-                bg_tasks.stop_all()
+                bg_tasks.stop_all("Stopped by a soft reset")
             except:
                 pass
             bg_tasks._tasks.clear()

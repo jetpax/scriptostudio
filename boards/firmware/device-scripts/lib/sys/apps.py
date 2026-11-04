@@ -40,7 +40,8 @@ An app can also do its own work, with no UI needed, by shipping /lib/ext/<folder
 
 run_at_boot in its registry entry starts that at every boot, before the network, since
 a board in the field may never have one. It's a user task: the watchdog breaks it if it
-holds the event loop, and it restarts if it raises. describe() says how it's doing.
+holds the event loop, and it restarts if it raises. describe() says how it's doing, and
+why it stopped if it has.
 
 Copyright (c) 2026 Jonathan Elliot Peace
 SPDX-License-Identifier: MIT
@@ -66,6 +67,11 @@ TOOLS_FOLDER = "tools"
 MAIN_FILE = "main.py"
 TASK_PREFIX = "app_"
 HELD_THE_LOOP = "Stopped: it held the event loop too long. Long work has to await."
+RETURNED = "Stopped: its run() returned."
+CANCELLED = "Stopped: something cancelled it without saying why."
+CALLED_EXIT = "Stopped: it called sys.exit(), which is a soft reset."
+CLOCK_SET_SINCE = 2023
+SECONDS_TO_2000 = 946684800
 CRASHES_BEFORE_LEAVING_OUT = 3
 LEFT_OUT = "Not started: the board crashed %d times in a row, so it started without its boot apps. Turn off run at startup or fix this app. A reset tries again."
 CONFIG_START = "# === START_CONFIG_PARAMETERS ==="
@@ -205,6 +211,23 @@ def _state_changed():
         on_state()
 
 
+def _stopped(run, why):
+    """Say why this run ended, and when if the clock can be believed."""
+    run["why"] = why
+    if time.gmtime()[0] >= CLOCK_SET_SINCE:
+        # In Unix time, whichever year this port's clock counts from
+        run["stopped_at"] = time.time() + (SECONDS_TO_2000 if time.gmtime(0)[0] == 2000 else 0)
+    _state_changed()
+
+
+def _on_task_stop(name, why):
+    if name.startswith(TASK_PREFIX) and name[len(TASK_PREFIX) :] in _runs:
+        _stopped(_runs[name[len(TASK_PREFIX) :]], why)
+
+
+bg_tasks.on_stop = _on_task_stop
+
+
 async def _run_app(app_id, path):
     run = _runs.setdefault(app_id, {"restarts": 0, "error": None})
     try:
@@ -213,9 +236,17 @@ async def _run_app(app_id, path):
         namespace = {"__name__": app_id}
         exec(source, namespace)
         await namespace["run"]()
+    except asyncio.CancelledError:
+        # Everything that stops an app on purpose has said why by now
+        if not run.get("why"):
+            _stopped(run, CANCELLED)
+        raise
     except KeyboardInterrupt:
         run["error"] = HELD_THE_LOOP
-        _state_changed()
+        _stopped(run, HELD_THE_LOOP)
+        raise
+    except SystemExit:
+        _stopped(run, CALLED_EXIT)
         raise
     except Exception as e:
         trace = io.StringIO()
@@ -224,6 +255,8 @@ async def _run_app(app_id, path):
         run["error"] = trace.getvalue()
         _state_changed()
         raise
+    else:
+        _stopped(run, RETURNED)
     finally:
         # A retry or a restart opens its own, and there are only so many
         can_tap.close_watches(asyncio.current_task())
@@ -253,8 +286,8 @@ def start(app_id):
     return bg_tasks._tasks[TASK_PREFIX + app_id]["task"]
 
 
-def stop(app_id):
-    bg_tasks.stop(TASK_PREFIX + app_id)
+def stop(app_id, why=None):
+    bg_tasks.stop(TASK_PREFIX + app_id, why)
     _state_changed()
 
 
@@ -431,5 +464,8 @@ def describe():
             row["state"] = task["state"] if task else "not started"
             row["restarts"] = run.get("restarts", 0)
             row["error"] = run.get("error")
+            if row["state"] != "running" and run.get("why"):
+                row["why"] = run["why"]
+                row["stopped_at"] = run.get("stopped_at")
         out.append(row)
     return {"apps": out, "tool_errors": dict(_errors)}

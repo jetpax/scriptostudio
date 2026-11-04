@@ -384,7 +384,7 @@ def _t_app_start(a):
 
 
 def _t_app_stop(a):
-    apps.stop(a["id"])
+    apps.stop(a["id"], "Stopped by " + events.name_of(_client))
     return _json(_app_row(a["id"]))
 
 
@@ -414,7 +414,7 @@ def _t_interrupt(a):
 
 
 def _t_stop_user_tasks(a):
-    stopped = bg_tasks.stop_user_tasks()
+    stopped = bg_tasks.stop_user_tasks("Stopped by %s, with every other user task" % events.name_of(_client))
     apps.release_led()
     events.tell_people({"apps_changed": True})
     return _json({"stopped": stopped})

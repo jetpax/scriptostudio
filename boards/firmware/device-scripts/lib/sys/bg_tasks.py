@@ -60,6 +60,12 @@ def _log(level, msg):
 # name -> {"task": Task, "state": "running"|"stopped"|"crashed", "system": bool}
 _tasks = {}
 
+# Told (name, why) when a running task is stopped and whoever stopped it said why
+on_stop = None
+
+# What every user task gets told when an interrupt lands somewhere other than in it
+INTERRUPTED = "Stopped with every other user task: a KeyboardInterrupt reached %s. The watchdog sends one when something holds the event loop, and so does Ctrl-C on the console."
+
 
 def feed(name):
     """Feed the watchdog for a named task. Call from within your task's loop."""
@@ -98,7 +104,7 @@ async def _cancel(task):
     task.cancel()
 
 
-def stop(name):
+def stop(name, why=None):
     """Stop a named task via cancel(). From inside that task, CancelledError lands at its next await."""
     if name not in _tasks:
         return False
@@ -109,6 +115,9 @@ def stop(name):
         except RuntimeError:
             # A task can't cancel itself, so the loop does it once this one yields
             asyncio.create_task(_cancel(task))
+    # Stopping what's already stopped doesn't change why it stopped
+    if why and on_stop and _tasks[name]["state"] != "stopped":
+        on_stop(name, why)
     _tasks[name]["state"] = "stopped"
     return True
 
@@ -125,18 +134,18 @@ def running():
     return None
 
 
-def stop_all():
+def stop_all(why=None):
     """Stop all tasks (including system tasks)"""
     for name in list(_tasks.keys()):
-        stop(name)
+        stop(name, why)
 
 
-def stop_user_tasks():
+def stop_user_tasks(why=None):
     """Stop all non-system tasks (called on KeyboardInterrupt or directly from client)"""
     stopped = []
     for name, info in list(_tasks.items()):
         if not info.get("system", False) and info["state"] == "running":
-            stop(name)
+            stop(name, why)
             stopped.append(name)
     if stopped:
         _log("info", f"Stopped user tasks: {stopped}")
@@ -189,7 +198,7 @@ async def _runner(name, coro_func, *args):
                 if is_system:
                     # System task caught it - stop user tasks, keep running
                     _log("debug", f"KeyboardInterrupt in {name} - stopping user tasks")
-                    stop_user_tasks()
+                    stop_user_tasks(INTERRUPTED % name)
                     # Continue the system task's while loop
                     continue
                 else:
