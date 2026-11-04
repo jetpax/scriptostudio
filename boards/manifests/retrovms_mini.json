@@ -14,6 +14,7 @@
     "i2c": true,
     "neopixel": true,
     "status_led": true,
+    "buzzer": true,
     "digital_inputs": true,
     "digital_outputs": true,
     "wwan": true
@@ -21,7 +22,8 @@
 
   "resources": {
     "pins": {
-      "status_led": 18
+      "status_led": 18,
+      "buzzer": 3
     },
 
     "can": {
@@ -58,6 +60,13 @@
       "type": "neopixel",
       "pixel_order": "GRB",
       "description": "Onboard RGB status LED - GRB order"
+    },
+
+    "buzzer": {
+      "type": "passive",
+      "part": "MLT-8530",
+      "frequency_hz": 2700,
+      "description": "Magnetic buzzer on a transistor. It needs a tone, so PWM the pin at frequency_hz with 50% duty, then drive it low: held high, DC runs through the coil. A MicroMod processor in the socket shares this line on G2"
     },
 
     "tic12400_inputs": {
