@@ -18,7 +18,8 @@
     "digital_inputs": true,
     "digital_outputs": true,
     "wwan": true,
-    "rtc": true
+    "rtc": true,
+    "imu": true
   },
 
   "resources": {
@@ -104,6 +105,13 @@
       "bus": "i2c.i2c0",
       "i2c_address": "0x32",
       "description": "Real-time clock holding UTC, kept going by two 47 uF capacitors while the board is off. The firmware sets the system clock from it at boot and sets it whenever NTP syncs, so time.time() already uses it. lib.sys.drivers.rx8111 reads and writes it directly"
+    },
+    "imu": {
+      "type": "LIS3DH",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x19",
+      "int1_pin": 35,
+      "description": "3-axis accelerometer, with no driver yet, and powered down until written. Write 0x57 to register 0x20 for 100 Hz on all axes, and 0x08 to 0x23 for high resolution at +/-2 g. Read 6 bytes from 0xA8 as x, y and z, little-endian signed 16-bit, and shift each right 4 for milli-g. Write 0x07 to 0x20 to power it down. WHO_AM_I at 0x0F reads 0x33. INT1 on int1_pin is shared with the MicroMod socket's I2C_INT"
     },
     "micromod": {
       "type": "MicroMod Processor socket",
