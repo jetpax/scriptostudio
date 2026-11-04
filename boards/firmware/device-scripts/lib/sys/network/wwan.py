@@ -75,7 +75,7 @@ def init():
         return False
     
     try:
-        from lib.sys import settings
+        from lib.sys import board, settings
         
         # Get settings
         apn = settings.get("wwan.apn", "")
@@ -93,6 +93,11 @@ def init():
         
         # Initialize modem
         if auto_init:
+            # A board with a power pin leaves its modem off until this says otherwise
+            power_pin = getattr(board.device("wwan"), "power_pin", None)
+            if power_pin is not None:
+                from machine import Pin
+                Pin(power_pin, Pin.OUT, value=1)
             usbmodem.init()
             _log("info", "USB Modem initialized")
             return True
