@@ -24,6 +24,8 @@ OFFLINE_ID = PREFIX + "-offline"
 WATCH_ID = PREFIX + "-watch"
 PANIC_ID = PREFIX + "-panic"
 LED_ID = PREFIX + "-led"
+ENDS_ID = PREFIX + "-ends"
+INTERRUPT_TASK = PREFIX + "-interrupt"
 OFFLINE_RESULT = "/boot_check_offline.json"
 OFFLINE_SECONDS = 75
 OFFLINE_MAX_GAP_MS = 500
@@ -31,6 +33,8 @@ HOG_BROKEN_S = 16
 # More than there are streams, so a watch left open by each run would run out
 WATCH_RESTARTS = 12
 LEFT_OUT_AFTER_CRASHES = 3
+# Long enough for a crashed app to retry twice, if it's going to
+CRASH_RETRIES_S = 2.5
 
 COUNT_CODE = """
 import asyncio, __main__, time
@@ -74,6 +78,40 @@ async def run():
     status_led.set_color((0, 255, 0))
     while True:
         await asyncio.sleep(1)
+"""
+
+RETURNS_CODE = """
+async def run():
+    pass
+"""
+
+CANCELS_CODE = """
+import asyncio
+
+async def run():
+    raise asyncio.CancelledError()
+"""
+
+INTERRUPT_A_SYSTEM_TASK = """
+from lib.sys import bg_tasks
+
+_interrupted = []
+
+async def _interrupt():
+    if not _interrupted:
+        _interrupted.append(1)
+        raise KeyboardInterrupt
+
+bg_tasks.start(%r, _interrupt, is_system=True)
+"""
+
+INTERRUPT_THE_LOOP = """
+import asyncio
+
+async def _interrupt():
+    raise KeyboardInterrupt
+
+asyncio.create_task(_interrupt())
 """
 
 PANIC_CODE = """
@@ -266,6 +304,61 @@ def check(ck, bench, args):
         expect(bench.led()[2] > 0, "the board's own color didn't come back")
         bench.relay.tool("app_remove", id=LED_ID)
 
+    def it_says_why_it_stopped():
+        name = "boot-check"
+        bench.relay.call("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": name, "version": "1"}})
+        bench.create(COUNT_ID, COUNT_CODE)
+        row = bench.app(COUNT_ID)
+        expect(row["state"] == "running" and "why" not in row, row)
+
+        bench.relay.ok("app_stop", id=COUNT_ID)
+        row = bench.app(COUNT_ID)
+        expect(row["state"] == "stopped" and row["why"] == f"Stopped by {name}", row)
+        expect(abs(row["stopped_at"] - time.time()) < 300, ("the clock", row))
+        expect(not row["error"], row)
+
+        bench.relay.ok("app_start", id=COUNT_ID)
+        time.sleep(0.3)
+        row = bench.app(COUNT_ID)
+        expect(row["state"] == "running" and "why" not in row, ("start forgets it", row))
+        bench.relay.ok("stop_user_tasks")
+        row = bench.app(COUNT_ID)
+        expect(row["why"] == f"Stopped by {name}, with every other user task", row)
+
+        bench.create(ENDS_ID, RETURNS_CODE)
+        time.sleep(0.3)
+        row = bench.app(ENDS_ID)
+        expect(row["state"] == "stopped" and "run() returned" in row["why"] and not row["error"], row)
+        bench.relay.ok("app_stop", id=ENDS_ID)
+        expect("run() returned" in bench.app(ENDS_ID)["why"], "stopping it again changed why it stopped")
+
+        bench.create(ENDS_ID, CANCELS_CODE)
+        time.sleep(0.3)
+        row = bench.app(ENDS_ID)
+        expect(row["state"] == "stopped" and "without saying why" in row["why"], row)
+        bench.relay.tool("app_remove", id=ENDS_ID)
+
+    def an_interrupt_says_where_it_landed():
+        bench.create(COUNT_ID, COUNT_CODE)
+        bench.evaluate(INTERRUPT_A_SYSTEM_TASK % INTERRUPT_TASK)
+        time.sleep(0.5)
+        row = bench.app(COUNT_ID)
+        expect(row["state"] == "stopped" and f"KeyboardInterrupt reached {INTERRUPT_TASK}" in row["why"], row)
+
+        bench.create(COUNT_ID, COUNT_CODE)
+        bench.create(LED_ID, COUNT_CODE, run_at_boot=True)
+        bench.relay.tool("exec", code=INTERRUPT_THE_LOOP, echo=False)
+        bench.relay.close()
+        time.sleep(3)
+        expect(wait_for_board(args.host, gone_first=False), "the device never came back")
+        bench.connect()
+        row = bench.app(COUNT_ID)
+        expect(row["state"] == "not started" and "KeyboardInterrupt reached the event loop" in row["why"], ("left stopped", row))
+        row = bench.app(LED_ID)
+        expect(row["state"] == "running" and "why" not in row, ("started again", row))
+        bench.relay.tool("app_remove", id=LED_ID)
+        bench.relay.tool("app_remove", id=COUNT_ID)
+
     def a_crash_is_reported_and_retried():
         bench.create(CRASH_ID, CRASH_CODE)
         time.sleep(3.5)
@@ -274,12 +367,45 @@ def check(ck, bench, args):
         bench.relay.ok("app_stop", id=CRASH_ID)
         return {"restarts": row["restarts"]}
 
+    def waiting_to_retry(app_id):
+        row = bench.app(app_id)
+        expect(row["state"] == "crashed", ("it isn't waiting to retry", row))
+
+    def it_stays_stopped(app_id):
+        before = bench.app(app_id)
+        expect(before["state"] == "stopped", before)
+        time.sleep(CRASH_RETRIES_S)
+        after = bench.app(app_id)
+        expect(after["restarts"] == before["restarts"], ("still retrying", before, after))
+        return after
+
+    def stopping_everything_stops_a_crashing_app():
+        bench.create(CRASH_ID, CRASH_CODE)
+        time.sleep(0.3)
+        waiting_to_retry(CRASH_ID)
+        bench.relay.ok("stop_user_tasks")
+        row = it_stays_stopped(CRASH_ID)
+        expect("with every other user task" in (row.get("why") or ""), row)
+        return {"restarts": row["restarts"]}
+
+    def a_restart_while_it_waits_leaves_one_copy():
+        bench.create(CRASH_ID, CRASH_CODE)
+        time.sleep(0.3)
+        waiting_to_retry(CRASH_ID)
+        bench.relay.ok("app_start", id=CRASH_ID)
+        time.sleep(0.3)
+        waiting_to_retry(CRASH_ID)
+        bench.relay.ok("app_stop", id=CRASH_ID)
+        row = it_stays_stopped(CRASH_ID)
+        return {"restarts": row["restarts"]}
+
     def a_hog_at_boot_cant_lock_the_board_out():
         bench.create(HOG_ID, HOG_CODE, run_at_boot=True, start=False)
         bench.reset()
         time.sleep(HOG_BROKEN_S)
         row = bench.app(HOG_ID)
         expect(row["state"] != "running" and "held the event loop" in (row["error"] or ""), row)
+        expect(row["why"] == row["error"], row)
         bench.relay.ok("app_run_at_boot", id=HOG_ID, on=False)
         return {"state": row["state"]}
 
@@ -350,7 +476,11 @@ def check(ck, bench, args):
     ck.run("a restart leaves one copy running, and says so", a_restart_leaves_one_copy_running)
     ck.run("status LED: colors stay what they are, and stop gives it back", led_colors_stay_what_they_are)
     ck.run("status LED: an app keeps it until it ends", an_app_keeps_the_led_until_it_ends)
+    ck.run("it says why it stopped", it_says_why_it_stopped)
+    ck.run("an interrupt says where it landed", an_interrupt_says_where_it_landed)
     ck.run("a crash is reported and retried", a_crash_is_reported_and_retried)
+    ck.run("stopping everything stops an app waiting to retry", stopping_everything_stops_a_crashing_app)
+    ck.run("a restart while it waits to retry leaves one copy", a_restart_while_it_waits_leaves_one_copy)
     ck.run("a hog at boot gets broken, and can't lock the board out", a_hog_at_boot_cant_lock_the_board_out)
     ck.run("a CAN app at boot keeps its stream, and restarts don't use them up", a_can_app_at_boot_keeps_its_stream)
     ck.run("a crash in C at boot can't lock the board out", a_crash_in_c_at_boot_cant_lock_the_board_out)
