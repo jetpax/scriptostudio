@@ -54,7 +54,9 @@ CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging": {}, 
 # The older protocol revisions have no extensions field
 LEGACY_CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging": {}, "experimental": {STREAMS_EXTENSION: _STREAMS_INFO}}
 INSTRUCTIONS = (
-    "MicroPython device. exec runs in __main__ on the single interpreter thread "
+    "MicroPython device. A person watching in ScriptO Studio sees exec's code and "
+    "output in its terminal, so print there to show them something. "
+    "exec runs in __main__ on the single interpreter thread "
     "and is stopped after 4 s, because a longer block would make the watchdog stop "
     "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them. "
     "Installed apps add tools named <app>_<tool>, which can run for a long time and "
@@ -498,7 +500,7 @@ _TOOLS = [
     _tool(
         "exec",
         _t_exec,
-        "Run MicroPython in __main__. Returns stdout and any traceback. Stopped after 4 s.",
+        "Run MicroPython in __main__. Returns stdout and any traceback, which also appear in the terminal of anyone watching in Studio. Stopped after 4 s.",
         {"code": _S, "echo": {"type": "boolean"}, "timeout_ms": _I},
         ("code",),
         destructive=True,
