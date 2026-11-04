@@ -15,7 +15,8 @@
     "neopixel": true,
     "status_led": true,
     "digital_inputs": true,
-    "digital_outputs": true
+    "digital_outputs": true,
+    "wwan": true
   },
 
   "resources": {
@@ -35,6 +36,12 @@
         "miso": 14,
         "mosi": 47,
         "sck": 10
+      },
+      "spi2": {
+        "id": 2,
+        "miso": 13,
+        "mosi": 11,
+        "sck": 12
       }
     },
 
@@ -69,6 +76,22 @@
       "cs_pin": 1,
       "channels": 12,
       "description": "12-channel half-bridge output driver"
+    },
+
+    "mcp2515_can1": {
+      "type": "MCP2515",
+      "driver": "MCP2515",
+      "bus": "spi2",
+      "cs_pin": 9,
+      "int_pin": 16,
+      "clock_hz": 20000000,
+      "description": "CAN1 controller, whose RX0BF and RX1BF pins switch CAN0 and CAN1 termination"
+    },
+
+    "wwan": {
+      "type": "M.2 B-key",
+      "power_pin": 17,
+      "description": "Cellular modem socket on USB, off until power_pin is high"
     }
   }
 }
