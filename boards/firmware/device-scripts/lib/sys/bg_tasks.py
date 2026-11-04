@@ -87,7 +87,8 @@ def start(name, coro_func, *args, restart=False, is_system=False, watchdog_ms=0)
     Returns True if started, False if already running (and restart=False)
     """
     if name in _tasks:
-        if _tasks[name]["state"] == "running":
+        # A crashed task is still alive, waiting to retry
+        if _tasks[name]["state"] != "stopped":
             if restart:
                 stop(name)
             else:
@@ -144,7 +145,7 @@ def stop_user_tasks(why=None):
     """Stop all non-system tasks (called on KeyboardInterrupt or directly from client)"""
     stopped = []
     for name, info in list(_tasks.items()):
-        if not info.get("system", False) and info["state"] == "running":
+        if not info.get("system", False) and info["state"] != "stopped":
             stop(name, why)
             stopped.append(name)
     if stopped:
