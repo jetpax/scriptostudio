@@ -167,7 +167,8 @@ import CAN
 from machine import Pin
 from lib.sys import board
 bus = board.can('can0')
-Pin(bus.standby, Pin.OUT, value=0)
+if getattr(bus, 'standby', None) is not None:
+    Pin(bus.standby, Pin.OUT, value=0)
 CAN(0, extframe=False, tx=bus.tx, rx=bus.rx, mode=CAN.NORMAL, bitrate=%d)
 print('ok')
 """ % BITRATE
