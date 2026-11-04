@@ -546,6 +546,7 @@ def main():
         Http(http_url, agent).post(json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}))[0] == 202, "not 202"))
     ck.run("http: 400 for bad JSON", lambda: expect(Http(http_url, agent).post("{nope")[0] == 400, "not 400"))
     ck.run("http: GET is 405, so SSE clients move on", lambda: expect(http_get_status(a.host) == 405, "not 405"))
+    ck.run("http: / says what to do after accepting the certificate", lambda: expect("Go back to Studio" in http_home(a.host), "no page"))
 
     ck.run("wss: discover, tools, exec, traceback", lambda: once(discover_and_work))
     for via in ("bearer", "subprotocol", "query"):
@@ -600,6 +601,18 @@ def main():
         json.dump(ck.results, f, indent=1)
     print(f"\n{len(ck.results) - ck.failed} of {len(ck.results)} passed. Saved {out}")
     return 1 if ck.failed else 0
+
+
+def http_home(host):
+    import http.client
+
+    conn = http.client.HTTPConnection(host, timeout=10)
+    conn.request("GET", "/")
+    response = conn.getresponse()
+    expect("text/html" in (response.getheader("Content-Type") or ""), "not a page")
+    page = response.read().decode()
+    conn.close()
+    return page
 
 
 def http_get_status(host):

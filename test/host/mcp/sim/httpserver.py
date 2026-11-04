@@ -12,6 +12,7 @@ import wsserver
 _handlers = {}
 _slots = {}
 _srv = None
+_conn = None
 _poll = select.poll()
 
 
@@ -32,16 +33,24 @@ def on(uri, fn, method="GET"):
     return slot
 
 
-def _send(conn, status, body=""):
+def _send(conn, status, body="", kind="application/json"):
     data = body.encode()
-    head = "HTTP/1.1 %d S\r\nContent-Type: application/json\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % (status, len(data))
+    head = "HTTP/1.1 %d S\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % (status, kind, len(data))
     conn.write(head.encode())
     if data:
         conn.write(data)
     conn.close()
 
 
+def send(body):
+    """A handler answering with a page, which returning a string doesn't do."""
+    global _conn
+    _send(_conn, 200, body, "text/html")
+    _conn = None
+
+
 def _serve(conn):
+    global _conn
     conn.setblocking(True)
     raw = b""
     while b"\r\n\r\n" not in raw:
@@ -76,7 +85,11 @@ def _serve(conn):
         if refused:
             _send(conn, refused)
             return
+    _conn = conn
     result = fn(uri, body.decode(), "127.0.0.1")
+    if _conn is None:
+        return
+    _conn = None
     if isinstance(result, tuple):
         _send(conn, result[0], result[1])
     else:
