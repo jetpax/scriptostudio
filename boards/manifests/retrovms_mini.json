@@ -26,23 +26,22 @@
     "can": {
       "can0": {
         "tx": 4,
-        "rx": 5,
-        "standby": 6
+        "rx": 5
       }
     },
 
     "spi": {
       "spi1": {
-        "miso": 13,
-        "mosi": 11,
-        "sclk": 12
+        "miso": 14,
+        "mosi": 47,
+        "sck": 10
       }
     },
 
     "i2c": {
       "i2c0": {
-        "sda": 8,
-        "scl": 9
+        "sda": 6,
+        "scl": 7
       }
     }
   },
@@ -58,7 +57,7 @@
       "type": "TIC12400",
       "driver": "TIC12400",
       "bus": "spi1",
-      "cs_pin": 15,
+      "cs_pin": 8,
       "channels": 24,
       "description": "24-channel digital input IC"
     },
@@ -67,7 +66,7 @@
       "type": "DRV8912",
       "driver": "DRV8912",
       "bus": "spi1",
-      "cs_pin": 16,
+      "cs_pin": 1,
       "channels": 12,
       "description": "12-channel half-bridge output driver"
     }
