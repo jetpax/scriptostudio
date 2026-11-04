@@ -8,7 +8,7 @@ for reading and writing OpenInverter parameters over CAN bus.
 SDO Protocol:
 - Client TX: 0x600 + node_id
 - Client RX: 0x580 + node_id
-- Expedited transfer only (4 bytes or less)
+- Expedited transfer (4 bytes or less), and segmented for reading longer values
 
 OpenInverter Parameter Addressing:
 - Index: 0x2100 + (param_id >> 8)
@@ -27,6 +27,15 @@ import time
 SDO_CMD_UPLOAD_INITIATE = 0x40  # Read from device
 SDO_CMD_DOWNLOAD_INITIATE = 0x23  # Write to device (4 bytes, expedited)
 SDO_CMD_UPLOAD_RESPONSE = 0x43  # Device response to upload (4 bytes)
+SDO_CMD_UPLOAD_SEGMENT = 0x60  # Read the next segment
+SDO_REPLY_KIND = 0xE0  # The bits of a reply's first byte that say what it answers
+SDO_REPLY_UPLOAD = 0x40
+SDO_REPLY_DOWNLOAD = 0x60
+SDO_REPLY_SEGMENT = 0x00
+SDO_SEGMENT_TOGGLE = 0x10  # Alternates from one segment to the next
+SDO_SEGMENT_LAST = 0x01
+SDO_SEGMENT_BYTES = 7
+SDO_ABORT_TOGGLE = 0x05030000
 SDO_CMD_DOWNLOAD_RESPONSE = 0x60  # Device response to download
 SDO_CMD_ABORT = 0x80  # Abort transfer
 
@@ -121,72 +130,59 @@ class SDOClient:
         # Clear any pending messages before sending
         while self.can.any():
             self.can.recv()
-        
-        # Build upload initiate request
-        request = struct.pack('<BBHB3x',
-            SDO_CMD_UPLOAD_INITIATE,
-            index & 0xFF,
-            index >> 8,
-            subindex
-        )
-        
-        # Send SDO request
+
+        request = struct.pack('<BHB4x', SDO_CMD_UPLOAD_INITIATE, index, subindex)
         self.can.send(list(request), self.tx_cobid)
-        
-        # Wait for response
-        # Use ticks_ms for better precision in MicroPython
-        try:
-            start_time = time.ticks_ms()
-            timeout_ms = int(self.timeout * 1000)
-        except AttributeError:
-            # Fallback to time.time() if ticks_ms not available
-            start_time = time.time()
-            timeout_ms = None
-        
-        while True:
+        return struct.unpack('<i', self._reply(index, subindex, SDO_REPLY_UPLOAD)[4:8])[0]
+
+    def _reply(self, index, subindex, kind):
+        start_time = time.ticks_ms()
+        timeout_ms = int(self.timeout * 1000)
+        while time.ticks_diff(time.ticks_ms(), start_time) < timeout_ms:
             if self.can.any():
                 response = self.can.recv()
-                can_id = response[0]
-                payload = response[3]  # Payload bytes
-                
-                # Convert payload to bytes if it's a list
-                if isinstance(payload, list):
-                    data = bytes(payload)
-                else:
-                    data = payload
-                
-                # Check if it's our response
-                if can_id == self.rx_cobid and len(data) >= 8:
-                    cmd = data[0]
-                    
-                    # Check for abort (0x80-0xFF range)
-                    if (cmd & 0x80) == 0x80:
-                        abort_code = struct.unpack('<I', data[4:8])[0]
-                        raise SDOAbortError(abort_code)
-                    
-                    # Check for upload response (0x4x pattern where x indicates data size)
-                    if (cmd & 0xE0) == 0x40:  # Upload response pattern
-                        # Extract 4-byte value (little-endian, bytes 4-7)
-                        value = struct.unpack('<I', data[4:8])[0]
-                        # Convert to signed 32-bit
-                        if value >= 0x80000000:
-                            value -= 0x100000000
-                        return value
-            
-            # Check timeout
-            if timeout_ms is not None:
-                elapsed = time.ticks_diff(time.ticks_ms(), start_time)
-                if elapsed >= timeout_ms:
-                    raise SDOTimeoutError(f"SDO read timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
-                time.sleep_ms(1)
-            else:
-                if time.time() - start_time > self.timeout:
-                    raise SDOTimeoutError(f"SDO read timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
-                try:
-                    time.sleep_ms(1)
-                except AttributeError:
-                    time.sleep(0.001)  # Fallback for systems without sleep_ms
-    
+                data = bytes(response[3])
+                if response[0] == self.rx_cobid and len(data) >= 8:
+                    if data[0] & 0x80:
+                        raise SDOAbortError(struct.unpack('<I', data[4:8])[0])
+                    if data[0] & SDO_REPLY_KIND == kind:
+                        return data
+        raise SDOTimeoutError(f"SDO timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
+
+    def read_segmented(self, index, subindex):
+        """
+        Read a value too long for one frame, such as a JSON string (SDO segmented upload).
+
+        Args:
+            index: Object dictionary index (0x0000-0xFFFF)
+            subindex: Object dictionary subindex (0x00-0xFF)
+
+        Returns:
+            bytes
+
+        Raises:
+            SDOTimeoutError: If no response within timeout
+            SDOAbortError: If device aborts the transfer
+        """
+        while self.can.any():
+            self.can.recv()
+        request = struct.pack('<BHB4x', SDO_CMD_UPLOAD_INITIATE, index, subindex)
+        self.can.send(list(request), self.tx_cobid)
+        self._reply(index, subindex, SDO_REPLY_UPLOAD)
+
+        value = bytearray()
+        toggle = 0
+        while True:
+            self.can.send([SDO_CMD_UPLOAD_SEGMENT | toggle, 0, 0, 0, 0, 0, 0, 0], self.tx_cobid)
+            data = self._reply(index, subindex, SDO_REPLY_SEGMENT)
+            if data[0] & SDO_SEGMENT_TOGGLE != toggle:
+                raise SDOAbortError(SDO_ABORT_TOGGLE)
+            if data[0] & SDO_SEGMENT_LAST:
+                value.extend(data[1:1 + SDO_SEGMENT_BYTES - ((data[0] >> 1) & 7)])
+                return bytes(value)
+            value.extend(data[1:1 + SDO_SEGMENT_BYTES])
+            toggle ^= SDO_SEGMENT_TOGGLE
+
     def write(self, index, subindex, value):
         """
         Write a value to the device (SDO download).
@@ -209,70 +205,10 @@ class SDOClient:
             value += 0x100000000
         
         # Build download initiate request (expedited, 4 bytes)
-        request = struct.pack('<BBHBI',
-            SDO_CMD_DOWNLOAD_INITIATE,
-            index & 0xFF,
-            index >> 8,
-            subindex,
-            value
-        )
-        
-        # Send SDO request
+        request = struct.pack('<BHBI', SDO_CMD_DOWNLOAD_INITIATE, index, subindex, value)
         self.can.send(list(request), self.tx_cobid)
-        
-        # Wait for response
-        # Use ticks_ms for better precision in MicroPython
-        try:
-            start_time = time.ticks_ms()
-            timeout_ms = int(self.timeout * 1000)
-        except AttributeError:
-            # Fallback to time.time() if ticks_ms not available
-            start_time = time.time()
-            timeout_ms = None
-        
-        while True:
-            if self.can.any():
-                response = self.can.recv()
-                can_id = response[0]
-                payload = response[3]  # Payload bytes
-                
-                # Convert payload to bytes if it's a list
-                if isinstance(payload, list):
-                    data = bytes(payload)
-                else:
-                    data = payload
-                
-                # Check if it's our response
-                if can_id == self.rx_cobid and len(data) >= 8:
-                    cmd = data[0]
-                    
-                    # Check for abort (0x80-0xFF range)
-                    if (cmd & 0x80) == 0x80:
-                        abort_code = struct.unpack('<I', data[4:8])[0]
-                        raise SDOAbortError(abort_code)
-                    
-                    # Check for download response (0x60)
-                    if cmd == SDO_CMD_DOWNLOAD_RESPONSE:
-                        # Verify index and subindex match
-                        resp_index = data[1] | (data[2] << 8)
-                        resp_subindex = data[3]
-                        if resp_index == index and resp_subindex == subindex:
-                            return  # Success
-            
-            # Check timeout
-            if timeout_ms is not None:
-                elapsed = time.ticks_diff(time.ticks_ms(), start_time)
-                if elapsed >= timeout_ms:
-                    raise SDOTimeoutError(f"SDO write timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
-                time.sleep_ms(1)
-            else:
-                if time.time() - start_time > self.timeout:
-                    raise SDOTimeoutError(f"SDO write timeout (index=0x{index:04X}, subindex=0x{subindex:02X})")
-                try:
-                    time.sleep_ms(1)
-                except AttributeError:
-                    time.sleep(0.001)  # Fallback for systems without sleep_ms
-    
+        self._reply(index, subindex, SDO_REPLY_DOWNLOAD)
+
     def abort_code_to_string(self, code):
         """Convert SDO abort code to human-readable string"""
         return SDO_ABORT_CODES.get(code, f"Unknown abort code: 0x{code:08X}")
