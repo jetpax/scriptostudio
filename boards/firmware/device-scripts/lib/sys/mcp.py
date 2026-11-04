@@ -39,6 +39,8 @@ except ImportError:
     esp32 = None
 
 PATH = "/mcp"
+# Studio sends a browser here to accept this board's certificate
+HOME_PAGE = "<!doctype html><meta charset=utf-8><title>ScriptO Studio board</title><p>This board is running. If ScriptO Studio sent you here to accept its certificate, that's done. Go back to Studio and connect.</p>"
 
 MODERN = "2026-07-28"
 LEGACY = ("2025-11-25", "2025-06-18", "2025-03-26")
@@ -893,6 +895,10 @@ def _dispatch(msg, client):
 # --- carriers ------------------------------------------------------------
 
 
+def _home(uri, body, ip):
+    httpserver.send(HOME_PAGE)
+
+
 def _http(uri, body, ip):
     try:
         msg = json.loads(body)
@@ -1041,4 +1047,5 @@ def start(origins=(), on_clients=None):
     wsserver.on(wsserver.CONNECT, _ws_connect)
     wsserver.on(wsserver.DISCONNECT, _ws_disconnect)
     mcplink.protect(httpserver.on(PATH, _http, "POST"))
+    httpserver.on("/", _home, "GET")
     _started = True
