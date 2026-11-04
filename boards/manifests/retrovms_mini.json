@@ -97,6 +97,13 @@
       "description": "CAN1 controller, whose RX0BF and RX1BF pins switch CAN0 and CAN1 termination"
     },
 
+    "micromod": {
+      "type": "MicroMod Processor socket",
+      "boot_uart_tx": 6,
+      "boot_uart_rx": 7,
+      "description": "Takes an STM32F405 module, whose ROM bootloader is a UART on these pins, shared with I2C. Install the micromod app to program it"
+    },
+
     "wwan": {
       "type": "M.2 B-key",
       "power_pin": 17,

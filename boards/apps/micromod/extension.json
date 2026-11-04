@@ -1,0 +1,25 @@
+{
+  "name": "MicroMod",
+  "id": "micromod",
+  "version": [
+    1,
+    0,
+    0
+  ],
+  "author": "JetPax",
+  "description": "Program the STM32 module in a board's MicroMod socket, from the board.",
+  "icon": "cpu",
+  "menu": [
+    {
+      "id": "main",
+      "label": "Main"
+    }
+  ],
+  "devicePaths": {
+    "lib/rom.py": "/lib/ext/micromod/lib/rom.py",
+    "tools/info.py": "/lib/ext/micromod/tools/info.py",
+    "tools/program.py": "/lib/ext/micromod/tools/program.py",
+    "tools/erase.py": "/lib/ext/micromod/tools/erase.py",
+    "../extension.json": "/lib/ext/micromod/extension.json"
+  }
+}

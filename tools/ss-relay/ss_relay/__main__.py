@@ -37,9 +37,14 @@ async def _arm(args):
     return {"armed_seconds": args.seconds}
 
 
-async def _with_device(args, work):
+async def _connect(args):
     device = Device(args.device, _token(args), args.cafile)
     await device.connect()
+    return device
+
+
+async def _with_device(args, work):
+    device = await _connect(args)
     try:
         return await work(device)
     finally:
@@ -73,11 +78,17 @@ def main():
     flash.add_argument("image")
     flash.add_argument("port")
     flash.add_argument("--address", default="0x0")
+    stm32 = commands.add_parser("stm32", help="program the STM32 in a MicroMod socket, from the board, entering its bootloader through this serial port")
+    stm32.add_argument("image")
+    stm32.add_argument("port")
+    stm32_boot = commands.add_parser("stm32-boot", help="hold the STM32 in a MicroMod socket in its bootloader, for the micromod app's tools")
+    stm32_boot.add_argument("port")
+    stm32_boot.add_argument("--seconds", type=int, default=300)
     arm = commands.add_parser("arm", help="let agents transmit on actuating buses for a while")
     arm.add_argument("--seconds", type=int, default=60)
     args = parser.parse_args()
 
-    needs_device = args.command in (None, "serve", "push", "pull", "sync", "arm")
+    needs_device = args.command in (None, "serve", "push", "pull", "sync", "arm", "stm32")
     if needs_device and not args.device:
         parser.error("--device is required")
 
@@ -93,6 +104,10 @@ def main():
             result = asyncio.run(_with_device(args, lambda d: files.sync(d, args.local, args.remote, prune=args.prune, mpy_cross=args.mpy_cross, force=args.force, dry_run=args.dry_run)))
         elif args.command == "arm":
             result = asyncio.run(_arm(args))
+        elif args.command == "stm32":
+            result = asyncio.run(hosttools.stm32_program(args.image, args.port, lambda: _connect(args)))
+        elif args.command == "stm32-boot":
+            result = asyncio.run(hosttools.stm32_boot(args.port, args.seconds))
         elif args.command == "discover":
             result = asyncio.run(hosttools.discover(args.seconds))
         else:
