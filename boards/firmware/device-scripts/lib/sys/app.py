@@ -31,7 +31,7 @@ import time
 import httpserver
 import asyncio
 
-from lib.sys import apps, auth, bg_tasks, mcp
+from lib.sys import apps, auth, bg_tasks, clock_chip, mcp
 
 from lib.sys.status_led import status_led, StatusLED
 
@@ -210,7 +210,8 @@ async def ntp_sync_task():
     backoff = 5
     while True:
         try:
-            r = sync_ntp()
+            # Time from the clock chip is good enough to start with, but has drifted
+            r = sync_ntp(force=clock_chip.restored)
             if r and r.get('success'):
                 log("info", f"NTP synced ({r.get('timezone', 'UTC')})", source="ntp")
                 return
@@ -228,6 +229,7 @@ async def main_async():
     mcp.clear_old_streams()
 
     # A board in the field may never see a network, and what it's there to do can't wait
+    clock_chip.restore()
     apps.start_boot_apps()
 
     # Start network tasks and wait for the first interface to come up.

@@ -912,6 +912,8 @@ def sync_ntp(server=None, tz_offset=None, auto_detect=None, force=False):
             ntptime.settime()
         except Exception as e:
             return {'success': False, 'error': f'NTP sync failed: {e}'}
+        from lib.sys import clock_chip
+        clock_chip.save()
 
     # Step 2 — timezone detection (slow, HTTP). _detect_timezone() returns
     # (None, None) on network failure, leaving the last-saved tz_offset in

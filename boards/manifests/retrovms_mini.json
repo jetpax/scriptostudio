@@ -17,7 +17,8 @@
     "buzzer": true,
     "digital_inputs": true,
     "digital_outputs": true,
-    "wwan": true
+    "wwan": true,
+    "rtc": true
   },
 
   "resources": {
@@ -97,6 +98,13 @@
       "description": "CAN1 controller, whose RX0BF and RX1BF pins switch CAN0 and CAN1 termination"
     },
 
+    "rtc": {
+      "type": "RX8111",
+      "driver": "rx8111",
+      "bus": "i2c.i2c0",
+      "i2c_address": "0x32",
+      "description": "Real-time clock holding UTC, kept going by two 47 uF capacitors while the board is off. The firmware sets the system clock from it at boot and sets it whenever NTP syncs, so time.time() already uses it. lib.sys.drivers.rx8111 reads and writes it directly"
+    },
     "micromod": {
       "type": "MicroMod Processor socket",
       "boot_uart_tx": 6,
