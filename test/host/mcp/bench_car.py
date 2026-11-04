@@ -170,9 +170,9 @@ def set_ack(args):
     relay = connect(args)
     try:
         if args.ack == "on":
-            print(relay.ok("app_create", id=ACK_APP_ID, code=ACK_APP, name="Bench ACK", run_at_boot=True))
+            print(relay.ok("scripto_create", id=ACK_APP_ID, code=ACK_APP, name="Bench ACK", run_at_boot=True))
         else:
-            print(relay.ok("app_remove", id=ACK_APP_ID))
+            print(relay.ok("scripto_remove", id=ACK_APP_ID))
     finally:
         relay.close()
 

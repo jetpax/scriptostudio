@@ -62,10 +62,10 @@ class Bench:
     def connect(self):
         self.relay = Relay([self.args.relay, "--device", f"ws://{self.args.host}/mcp"], self.args.password)
         for _ in range(100):
-            if "app_create" in {t["name"] for t in self.relay.call("tools/list")["result"]["tools"]}:
+            if "scripto_create" in {t["name"] for t in self.relay.call("tools/list")["result"]["tools"]}:
                 return
             time.sleep(0.2)
-        raise TimeoutError("the device has no app_create tool")
+        raise TimeoutError("the device has no scripto_create tool")
 
     def reset(self):
         self.relay.tool("reset", mode="hard")
@@ -123,7 +123,7 @@ def check(ck, bench, car):
         return outputs_follow
 
     def runs_at_boot_and_says_so():
-        rows = {r["id"]: r for r in bench.relay.ok_json("apps_list")["apps"]}
+        rows = {r["id"]: r for r in bench.relay.ok_json("scriptos_list")["scriptos"]}
         row = rows[APP_ID]
         expect(row["run_at_boot"] is True and row["state"] == "running" and not row["error"], row)
 
@@ -134,7 +134,7 @@ def check(ck, bench, car):
     ck.run("trailer: the bus is visible", the_bus_is_visible)
     for word in EXPECTED:
         ck.run(f"trailer: {word} shows up in the reaction", finding(word))
-    bench.relay.ok("app_create", id=APP_ID, code=APP_CODE, name="Trailer rehearsal", run_at_boot=True)
+    bench.relay.ok("scripto_create", id=APP_ID, code=APP_CODE, name="Trailer rehearsal", run_at_boot=True)
     ck.run("trailer: the outputs follow", follows("before the reset"))
     ck.run("trailer: it's marked to run at boot", runs_at_boot_and_says_so)
     bench.reset()
@@ -155,7 +155,7 @@ def main():
 
     ck = Check(args.only)
     bench = Bench(args)
-    bench.relay.ok("app_create", id=ACK_APP_ID, code=ACK_APP, name="Bench ACK", run_at_boot=True)
+    bench.relay.ok("scripto_create", id=ACK_APP_ID, code=ACK_APP, name="Bench ACK", run_at_boot=True)
     car = BenchCar(args.adapter)
     try:
         time.sleep(0.5)
@@ -163,7 +163,7 @@ def main():
     finally:
         car.close()
         for app_id in (APP_ID, ACK_APP_ID):
-            bench.relay.tool("app_remove", id=app_id)
+            bench.relay.tool("scripto_remove", id=app_id)
         bench.relay.close()
 
     passed = sum(1 for r in ck.results.values() if r["ok"])

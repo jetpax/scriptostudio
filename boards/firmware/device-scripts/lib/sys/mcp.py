@@ -59,10 +59,11 @@ INSTRUCTIONS = (
     "exec runs in __main__ on the single interpreter thread "
     "and is stopped after 4 s, because a longer block would make the watchdog stop "
     "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them. "
-    "Installed apps add tools named <app>_<tool>, which can run for a long time and "
+    "A ScriptO is MicroPython left on this board to stay, made with scripto_create. "
+    "Installed ScriptOs add tools named <scripto>_<tool>, which can run for a long time and "
     "report progress. On plain HTTP they return a job id to poll with job_status. "
-    "An app shows things on the status LED with status_led.set_color((r, g, b)) from "
-    "lib.sys.status_led, and keeps it until the app ends. "
+    "A ScriptO shows things on the status LED with status_led.set_color((r, g, b)) from "
+    "lib.sys.status_led, and keeps it until it ends. "
     "If a CAN transmit is refused as not armed, ask the person to arm it."
 )
 
@@ -352,10 +353,10 @@ def _t_app_installed(a):
 
 
 def _app_row(app_id):
-    for row in apps.describe()["apps"]:
+    for row in apps.describe()["scriptos"]:
         if row["id"] == app_id:
             return row
-    raise ValueError("No such app: %s" % app_id)
+    raise ValueError("No such ScriptO: %s" % app_id)
 
 
 def _app_folder(app_id):
@@ -535,58 +536,58 @@ _TOOLS = [
         read_only=True,
     ),
     _tool(
-        "apps_list",
+        "scriptos_list",
         _t_apps_list,
-        "The apps installed on this board, and the tools each one adds.",
+        "The ScriptOs on this board, whether they're running, and the tools each one adds. An App's device side shows here too.",
         read_only=True,
     ),
     _tool(
-        "app_installed",
+        "scripto_installed",
         _t_app_installed,
-        "Record an app as installed, once its files are in place.",
+        "Record a ScriptO or App as installed, once its files are in place.",
         {"id": _S, "version": _S, "name": _S, "folder": _S},
         ("id", "version"),
     ),
     _tool(
-        "app_create",
+        "scripto_create",
         _t_app_create,
-        "Leave working code on this board as an app, so it survives resets and needs no one connected. code is a "
+        "Leave working code on this board as a ScriptO, so it survives resets and needs no one connected. code is a "
         "MicroPython module defining async def run(), which should loop and await often, since one interpreter runs "
         "everything. With run_at_boot it starts at every boot, even with no network. It starts now unless start is "
-        "false, and replaces an app of the same id. tools maps a tool's file name to its source. Try the code with "
-        "exec first. apps_list shows whether it's running, and its last error.",
+        "false, and replaces a ScriptO of the same id. tools maps a tool's file name to its source. Try the code with "
+        "exec first. scriptos_list shows whether it's running, and its last error.",
         {"id": _S, "code": _S, "name": _S, "version": _S, "run_at_boot": _B, "start": _B, "tools": {"type": "object"}},
         ("id", "code"),
         destructive=True,
     ),
     _tool(
-        "app_run_at_boot",
+        "scripto_run_at_boot",
         _t_app_run_at_boot,
-        "Say whether an app starts at every boot.",
+        "Say whether a ScriptO starts at every boot.",
         {"id": _S, "on": _B},
         ("id", "on"),
         destructive=True,
     ),
     _tool(
-        "app_start",
+        "scripto_start",
         _t_app_start,
-        "Start or restart an app's own work.",
+        "Start or restart a ScriptO's own work.",
         {"id": _S},
         ("id",),
         destructive=True,
     ),
     _tool(
-        "app_stop",
+        "scripto_stop",
         _t_app_stop,
-        "Stop an app's own work, until it's started again or the next boot.",
+        "Stop a ScriptO's own work, until it's started again or the next boot.",
         {"id": _S},
         ("id",),
         destructive=True,
     ),
     _tool(
-        "app_remove",
+        "scripto_remove",
         _t_app_remove,
-        "Remove an app's code from this board. Its data stays. What it has running stops at the next reset.",
+        "Remove a ScriptO's code from this board. Its data stays. What it has running stops at the next reset.",
         {"id": _S},
         ("id",),
         destructive=True,
@@ -594,7 +595,7 @@ _TOOLS = [
     _tool(
         "job_start",
         _t_job_start,
-        "Start an app's tool and return at once with a job id, instead of waiting for it.",
+        "Start a ScriptO's tool and return at once with a job id, instead of waiting for it.",
         {"tool": _S, "arguments": {"type": "object"}},
         ("tool",),
     ),

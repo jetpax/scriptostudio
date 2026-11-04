@@ -620,7 +620,7 @@ def main():
         ck.failed += 1
     finally:
         adapter.close()
-        agent.tool("app_remove", id=APP_ID)
+        agent.tool("scripto_remove", id=APP_ID)
         person.close()
         agent.close()
 

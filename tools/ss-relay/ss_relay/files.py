@@ -223,7 +223,7 @@ async def sync(device, local, remote="/", prune=False, mpy_cross=None, compile_p
 
     removed = await _prune(device, files, remote) if prune and not is_app and not dry_run else []
     if is_app and not dry_run:
-        await device.tool("app_installed", **_app_record(local, files))
+        await device.tool("scripto_installed", **_app_record(local, files))
     return {
         "dry_run": dry_run,
         "copied": len(changed),

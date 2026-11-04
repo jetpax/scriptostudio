@@ -323,11 +323,11 @@ def main():
         time.sleep(0.2)
     device = Device(relay)
     try:
-        relay.tool("app_remove", id=APP_ID)
+        relay.tool("scripto_remove", id=APP_ID)
         check(ck, relay, device, model, url)
     finally:
         device.tear_down()
-        relay.tool("app_remove", id=APP_ID)
+        relay.tool("scripto_remove", id=APP_ID)
         relay.close()
         server.shutdown()
 

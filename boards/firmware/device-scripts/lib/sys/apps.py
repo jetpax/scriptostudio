@@ -2,6 +2,9 @@
 Installed apps (lib/sys/apps.py)
 ================================
 
+What an agent makes is a ScriptO, MicroPython that stays on the board. An App adds a browser
+side, in JS. Both live here, and "app" in this file's names means either.
+
 The board is the record of what's installed, in /lib/ext/registry.json, so any browser
 or agent gets the same answer from it. An app's code lives in /lib/ext/<folder>/. Its
 data, anywhere else, is its own and stays when it's removed.
@@ -67,7 +70,7 @@ TOOLS_FOLDER = "tools"
 MAIN_FILE = "main.py"
 TASK_PREFIX = "app_"
 HELD_THE_LOOP = "Stopped: it held the event loop too long. Long work has to await."
-RETURNED = "Stopped: its run() returned."
+RETURNED = "Finished"
 CANCELLED = "Stopped: something cancelled it without saying why."
 CALLED_EXIT = "Stopped: it called sys.exit(), which is a soft reset."
 CLOCK_SET_SINCE = 2023
@@ -161,11 +164,11 @@ def _write_atomic(path, text):
 def create(app_id, code, name=None, version="1.0.0", tools=None, run_at_boot=False):
     """Write an app that does its own work, or replace one. code has to define async def run()."""
     if not _valid_id(app_id):
-        raise ValueError("An app id is lowercase letters, digits and hyphens: %s" % app_id)
+        raise ValueError("A ScriptO id is lowercase letters, digits and hyphens: %s" % app_id)
     # Before anything is written, so a mistake can't replace what's working
     compile(code, MAIN_FILE, "exec")
     if "async def run(" not in code:
-        raise ValueError("An app's code has to define async def run()")
+        raise ValueError("A ScriptO's code has to define async def run()")
     for tool_name in tools or {}:
         if "/" in tool_name or tool_name.startswith("."):
             raise ValueError("Bad tool name: %s" % tool_name)
@@ -190,7 +193,7 @@ def create(app_id, code, name=None, version="1.0.0", tools=None, run_at_boot=Fal
 def set_run_at_boot(app_id, on):
     registry = read()
     if app_id not in registry:
-        raise ValueError("No such app: %s" % app_id)
+        raise ValueError("No such ScriptO: %s" % app_id)
     entry = registry[app_id]
     if bool(entry.get("run_at_boot")) == bool(on):
         return
@@ -276,7 +279,7 @@ def start(app_id):
     """Start or restart an app's own work."""
     entry = read().get(app_id)
     if entry is None:
-        raise ValueError("No such app: %s" % app_id)
+        raise ValueError("No such ScriptO: %s" % app_id)
     path = _main_path(app_id, entry)
     if not _exists(path):
         raise ValueError("%s has no %s" % (app_id, MAIN_FILE))
@@ -337,7 +340,7 @@ def remove(app_id):
     """Remove an app's code and its record. Its data stays. What it has running stops at the next reset."""
     registry = read()
     if app_id not in registry:
-        raise ValueError("No such app: %s" % app_id)
+        raise ValueError("No such ScriptO: %s" % app_id)
     stop(app_id)
     _runs.pop(app_id, None)
     folder = folder_of(app_id, registry[app_id])
@@ -468,4 +471,4 @@ def describe():
                 row["why"] = run["why"]
                 row["stopped_at"] = run.get("stopped_at")
         out.append(row)
-    return {"apps": out, "tool_errors": dict(_errors)}
+    return {"scriptos": out, "tool_errors": dict(_errors)}

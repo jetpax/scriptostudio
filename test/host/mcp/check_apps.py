@@ -77,7 +77,7 @@ def check(ck, relay, args):
     def absent_before_install():
         relay.call("initialize", {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "check", "version": "1"}})
         expect(not [n for n in tools() if n.startswith(PREFIX)], "already installed")
-        expect(APP_ID not in [a["id"] for a in relay.ok_json("apps_list")["apps"]], "already listed")
+        expect(APP_ID not in [a["id"] for a in relay.ok_json("scriptos_list")["scriptos"]], "already listed")
 
     def install_appears_mid_session():
         drain(relay)
@@ -86,14 +86,14 @@ def check(ck, relay, args):
         defs.update(tools())
         names = [n for n in defs if n.startswith(PREFIX)]
         expect(sorted(names) == [PREFIX + "count", PREFIX + "fail", PREFIX + "hog"], names)
-        listed = relay.ok_json("apps_list")
-        row = [a for a in listed["apps"] if a["id"] == APP_ID][0]
+        listed = relay.ok_json("scriptos_list")
+        row = [a for a in listed["scriptos"] if a["id"] == APP_ID][0]
         expect(row["version"] == "1.0.0" and row["folder"] == "mcp_check", row)
         expect(sorted(row["tools"]) == sorted(names), row)
         return {"tools": names}
 
     def a_broken_tool_is_reported():
-        listed = relay.ok_json("apps_list")
+        listed = relay.ok_json("scriptos_list")
         expect(PREFIX + "broken" in listed["tool_errors"], listed)
 
     def schema_comes_from_the_config_block():
@@ -252,15 +252,15 @@ def check(ck, relay, args):
 
     def removing_takes_tools_and_files():
         drain(relay)
-        done = relay.ok_json("app_remove", id=APP_ID)
+        done = relay.ok_json("scripto_remove", id=APP_ID)
         expect(done["files"] >= 5, done)
         expect(wait_note(relay, CHANGED), "no tools/list_changed")
         expect(not [n for n in tools() if n.startswith(PREFIX)], "tools still listed")
         expect(relay.tool("fs_stat", path="/lib/ext/mcp_check").get("isError"), "files still there")
-        expect(APP_ID not in [a["id"] for a in relay.ok_json("apps_list")["apps"]], "still listed")
+        expect(APP_ID not in [a["id"] for a in relay.ok_json("scriptos_list")["scriptos"]], "still listed")
         reply = relay.call("tools/call", {"name": PREFIX + "count", "arguments": {}})
         expect("error" in reply, reply)
-        result = relay.tool("app_remove", id=APP_ID)
+        result = relay.tool("scripto_remove", id=APP_ID)
         expect(result.get("isError"), result)
 
     ck.run("apps: absent before install", absent_before_install)
@@ -300,10 +300,10 @@ def main():
             break
         time.sleep(0.2)
     try:
-        relay.tool("app_remove", id=APP_ID)
+        relay.tool("scripto_remove", id=APP_ID)
         check(ck, relay, args)
     finally:
-        relay.tool("app_remove", id=APP_ID)
+        relay.tool("scripto_remove", id=APP_ID)
         relay.close()
 
     passed = sum(1 for r in ck.results.values() if r["ok"])

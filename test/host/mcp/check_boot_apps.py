@@ -172,10 +172,10 @@ class Bench:
     def connect(self):
         self.relay = Relay([self.args.relay, "--device", f"{self.args.scheme}://{self.args.host}/mcp"], self.args.password)
         for _ in range(100):
-            if "app_create" in {t["name"] for t in self.relay.call("tools/list")["result"]["tools"]}:
+            if "scripto_create" in {t["name"] for t in self.relay.call("tools/list")["result"]["tools"]}:
                 return
             time.sleep(0.2)
-        raise TimeoutError("the device has no app_create tool")
+        raise TimeoutError("the device has no scripto_create tool")
 
     def reset(self):
         self.relay.tool("reset", mode="hard")
@@ -184,11 +184,11 @@ class Bench:
         self.connect()
 
     def app(self, app_id):
-        rows = self.relay.ok_json("apps_list")["apps"]
+        rows = self.relay.ok_json("scriptos_list")["scriptos"]
         return next((row for row in rows if row["id"] == app_id), None)
 
     def create(self, app_id, code, **args):
-        return json.loads(self.relay.ok("app_create", id=app_id, code=code, **args))
+        return json.loads(self.relay.ok("scripto_create", id=app_id, code=code, **args))
 
     def evaluate(self, code):
         return self.relay.ok("exec", code=code, echo=False).strip()
@@ -197,9 +197,9 @@ class Bench:
         return json.loads(self.evaluate("import json\nfrom lib.sys.status_led import status_led\nprint(json.dumps(status_led.np[0]))"))
 
     def remove_all(self):
-        for row in self.relay.ok_json("apps_list")["apps"]:
+        for row in self.relay.ok_json("scriptos_list")["scriptos"]:
             if row["id"].startswith(PREFIX):
-                self.relay.tool("app_remove", id=row["id"])
+                self.relay.tool("scripto_remove", id=row["id"])
 
 
 def check(ck, bench, args):
@@ -209,7 +209,7 @@ def check(ck, bench, args):
             (COUNT_ID, "async def run(:\n", "syntax"),
             (COUNT_ID, "x = 1\n", "async def run"),
         ):
-            result = bench.relay.tool("app_create", id=app_id, code=code)
+            result = bench.relay.tool("scripto_create", id=app_id, code=code)
             expect(result.get("isError"), (why, result))
         expect(bench.app(COUNT_ID) is None, "a refused app was recorded")
 
@@ -232,14 +232,14 @@ def check(ck, bench, args):
         return {"started_at_ms": started}
 
     def the_switch_turns_it_off():
-        row = json.loads(bench.relay.ok("app_run_at_boot", id=COUNT_ID, on=False))
+        row = json.loads(bench.relay.ok("scripto_run_at_boot", id=COUNT_ID, on=False))
         expect(row["run_at_boot"] is False, row)
         bench.reset()
         row = bench.app(COUNT_ID)
         expect(row["run_at_boot"] is False and row["state"] == "not started", row)
-        row = json.loads(bench.relay.ok("app_start", id=COUNT_ID))
+        row = json.loads(bench.relay.ok("scripto_start", id=COUNT_ID))
         expect(row["state"] == "running", row)
-        row = json.loads(bench.relay.ok("app_stop", id=COUNT_ID))
+        row = json.loads(bench.relay.ok("scripto_stop", id=COUNT_ID))
         time.sleep(0.5)
         expect(bench.app(COUNT_ID)["state"] != "running", row)
 
@@ -249,13 +249,13 @@ def check(ck, bench, args):
 
         bench.create(COUNT_ID, COUNT_CODE)
         time.sleep(0.5)
-        expect(bench.app(COUNT_ID)["state"] == "running", "a second app_create")
+        expect(bench.app(COUNT_ID)["state"] == "running", "a second scripto_create")
         for _ in range(2):
-            bench.relay.ok("app_start", id=COUNT_ID)
+            bench.relay.ok("scripto_start", id=COUNT_ID)
             time.sleep(0.5)
             row = bench.app(COUNT_ID)
             expect(row["state"] == "running", row)
-        bench.relay.ok("app_stop", id=COUNT_ID)
+        bench.relay.ok("scripto_stop", id=COUNT_ID)
         time.sleep(0.5)
         expect(bench.app(COUNT_ID)["state"] != "running", "it didn't stop")
         first = ticks()
@@ -294,15 +294,15 @@ def check(ck, bench, args):
         time.sleep(1)
         the_apps_color("a client left")
         bench.create(COUNT_ID, COUNT_CODE)
-        bench.relay.ok("app_stop", id=COUNT_ID)
+        bench.relay.ok("scripto_stop", id=COUNT_ID)
         time.sleep(0.5)
         the_apps_color("another app ended")
         bench.reset()
         the_apps_color("after a reset")
-        bench.relay.ok("app_stop", id=LED_ID)
+        bench.relay.ok("scripto_stop", id=LED_ID)
         time.sleep(0.5)
         expect(bench.led()[2] > 0, "the board's own color didn't come back")
-        bench.relay.tool("app_remove", id=LED_ID)
+        bench.relay.tool("scripto_remove", id=LED_ID)
 
     def it_says_why_it_stopped():
         name = "boot-check"
@@ -311,13 +311,13 @@ def check(ck, bench, args):
         row = bench.app(COUNT_ID)
         expect(row["state"] == "running" and "why" not in row, row)
 
-        bench.relay.ok("app_stop", id=COUNT_ID)
+        bench.relay.ok("scripto_stop", id=COUNT_ID)
         row = bench.app(COUNT_ID)
         expect(row["state"] == "stopped" and row["why"] == f"Stopped by {name}", row)
         expect(abs(row["stopped_at"] - time.time()) < 300, ("the clock", row))
         expect(not row["error"], row)
 
-        bench.relay.ok("app_start", id=COUNT_ID)
+        bench.relay.ok("scripto_start", id=COUNT_ID)
         time.sleep(0.3)
         row = bench.app(COUNT_ID)
         expect(row["state"] == "running" and "why" not in row, ("start forgets it", row))
@@ -328,15 +328,15 @@ def check(ck, bench, args):
         bench.create(ENDS_ID, RETURNS_CODE)
         time.sleep(0.3)
         row = bench.app(ENDS_ID)
-        expect(row["state"] == "stopped" and "run() returned" in row["why"] and not row["error"], row)
-        bench.relay.ok("app_stop", id=ENDS_ID)
-        expect("run() returned" in bench.app(ENDS_ID)["why"], "stopping it again changed why it stopped")
+        expect(row["state"] == "stopped" and "Finished" in row["why"] and not row["error"], row)
+        bench.relay.ok("scripto_stop", id=ENDS_ID)
+        expect("Finished" in bench.app(ENDS_ID)["why"], "stopping it again changed why it stopped")
 
         bench.create(ENDS_ID, CANCELS_CODE)
         time.sleep(0.3)
         row = bench.app(ENDS_ID)
         expect(row["state"] == "stopped" and "without saying why" in row["why"], row)
-        bench.relay.tool("app_remove", id=ENDS_ID)
+        bench.relay.tool("scripto_remove", id=ENDS_ID)
 
     def an_interrupt_says_where_it_landed():
         bench.create(COUNT_ID, COUNT_CODE)
@@ -356,15 +356,15 @@ def check(ck, bench, args):
         expect(row["state"] == "not started" and "KeyboardInterrupt reached the event loop" in row["why"], ("left stopped", row))
         row = bench.app(LED_ID)
         expect(row["state"] == "running" and "why" not in row, ("started again", row))
-        bench.relay.tool("app_remove", id=LED_ID)
-        bench.relay.tool("app_remove", id=COUNT_ID)
+        bench.relay.tool("scripto_remove", id=LED_ID)
+        bench.relay.tool("scripto_remove", id=COUNT_ID)
 
     def a_crash_is_reported_and_retried():
         bench.create(CRASH_ID, CRASH_CODE)
         time.sleep(3.5)
         row = bench.app(CRASH_ID)
         expect(row["restarts"] >= 2 and "failed on purpose" in (row["error"] or ""), row)
-        bench.relay.ok("app_stop", id=CRASH_ID)
+        bench.relay.ok("scripto_stop", id=CRASH_ID)
         return {"restarts": row["restarts"]}
 
     def waiting_to_retry(app_id):
@@ -392,10 +392,10 @@ def check(ck, bench, args):
         bench.create(CRASH_ID, CRASH_CODE)
         time.sleep(0.3)
         waiting_to_retry(CRASH_ID)
-        bench.relay.ok("app_start", id=CRASH_ID)
+        bench.relay.ok("scripto_start", id=CRASH_ID)
         time.sleep(0.3)
         waiting_to_retry(CRASH_ID)
-        bench.relay.ok("app_stop", id=CRASH_ID)
+        bench.relay.ok("scripto_stop", id=CRASH_ID)
         row = it_stays_stopped(CRASH_ID)
         return {"restarts": row["restarts"]}
 
@@ -406,7 +406,7 @@ def check(ck, bench, args):
         row = bench.app(HOG_ID)
         expect(row["state"] != "running" and "held the event loop" in (row["error"] or ""), row)
         expect(row["why"] == row["error"], row)
-        bench.relay.ok("app_run_at_boot", id=HOG_ID, on=False)
+        bench.relay.ok("scripto_run_at_boot", id=HOG_ID, on=False)
         return {"state": row["state"]}
 
     def a_can_app_at_boot_keeps_its_stream():
@@ -419,13 +419,13 @@ def check(ck, bench, args):
         status = bench.evaluate("import __main__, mcplink\nprint(mcplink.stream_status(__main__._boot_watch))")
         expect(status.startswith("(True"), status)
         for _ in range(WATCH_RESTARTS):
-            bench.relay.ok("app_stop", id=WATCH_ID)
+            bench.relay.ok("scripto_stop", id=WATCH_ID)
             time.sleep(0.1)
-            bench.relay.ok("app_start", id=WATCH_ID)
+            bench.relay.ok("scripto_start", id=WATCH_ID)
             time.sleep(0.2)
         row = bench.app(WATCH_ID)
         expect(row["state"] == "running" and not row["error"], row)
-        bench.relay.ok("app_remove", id=WATCH_ID)
+        bench.relay.ok("scripto_remove", id=WATCH_ID)
 
     def a_crash_in_c_at_boot_cant_lock_the_board_out():
         bench.create(PANIC_ID, PANIC_CODE, run_at_boot=True, start=False)
@@ -434,7 +434,7 @@ def check(ck, bench, args):
         expect(row["state"] == "not started" and "crashed" in (row["error"] or ""), row)
         crashes = int(bench.evaluate("import mcplink\nprint(mcplink.boot_crashes())"))
         expect(crashes == LEFT_OUT_AFTER_CRASHES, crashes)
-        bench.relay.ok("app_remove", id=PANIC_ID)
+        bench.relay.ok("scripto_remove", id=PANIC_ID)
         bench.reset()
         crashes_after = int(bench.evaluate("import mcplink\nprint(mcplink.boot_crashes())"))
         expect(crashes_after == 0, crashes_after)
@@ -443,7 +443,7 @@ def check(ck, bench, args):
     def removing_it_stops_it():
         bench.create(COUNT_ID, COUNT_CODE)
         first = int(bench.evaluate("import __main__\ntime = __import__('time')\ntime.sleep_ms(100)\nprint(__main__._boot_ticks)"))
-        bench.relay.ok("app_remove", id=COUNT_ID)
+        bench.relay.ok("scripto_remove", id=COUNT_ID)
         time.sleep(0.5)
         expect(bench.app(COUNT_ID) is None, "still listed")
         one = int(bench.evaluate("import __main__\nprint(__main__._boot_ticks)"))
@@ -469,8 +469,8 @@ def check(ck, bench, args):
         expect(result["worst_gap_ms"] <= OFFLINE_MAX_GAP_MS, f"held up: {result}")
         return result
 
-    ck.run("app_create: refuses a bad id, bad syntax, and code with no run()", refuses_bad_code)
-    ck.run("app_create: starts it, and says it runs at boot", create_starts_it_and_says_so)
+    ck.run("scripto_create: refuses a bad id, bad syntax, and code with no run()", refuses_bad_code)
+    ck.run("scripto_create: starts it, and says it runs at boot", create_starts_it_and_says_so)
     ck.run("run at boot: survives a reset", survives_a_reset)
     ck.run("run at boot: the switch turns it off, and start and stop still work", the_switch_turns_it_off)
     ck.run("a restart leaves one copy running, and says so", a_restart_leaves_one_copy_running)

@@ -154,20 +154,20 @@ def check(ck, args, url):
 
     def app_changes_are_pushed():
         drain(person)
-        agent.tool("app_create", id=APP_ID, code=APP_CODE, name="Watch check")
+        agent.tool("scripto_create", id=APP_ID, code=APP_CODE, name="Watch check")
         wait_for(person, "apps_changed")
-        row = wait_for(person, "agent_activity", lambda row: row["tool"] == "app_create")
+        row = wait_for(person, "agent_activity", lambda row: row["tool"] == "scripto_create")
         expect(row["args"]["id"] == APP_ID and "code" not in row["args"], row)
         drain(person)
-        agent.tool("app_create", id=APP_ID, code=CRASH_CODE)
+        agent.tool("scripto_create", id=APP_ID, code=CRASH_CODE)
         wait_for(person, "apps_changed")
         time.sleep(1)
-        rows = {r["id"]: r for r in person.tool_json("apps_list")["apps"]}
+        rows = {r["id"]: r for r in person.tool_json("scriptos_list")["scriptos"]}
         expect("on purpose" in (rows[APP_ID]["error"] or ""), rows[APP_ID])
         drain(person)
         person.tool("stop_user_tasks")
         wait_for(person, "apps_changed")
-        agent.tool("app_remove", id=APP_ID)
+        agent.tool("scripto_remove", id=APP_ID)
 
     def an_app_tool_shows_while_it_runs():
         if "can_capture" not in {t["name"] for t in agent.call("tools/list")["tools"]}:
