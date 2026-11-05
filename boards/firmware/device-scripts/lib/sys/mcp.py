@@ -53,18 +53,18 @@ _STREAMS_INFO = {"kinds": list(streams.KINDS), "maxFrame": wsserver.MAX_MESSAGE}
 CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging": {}, "extensions": {STREAMS_EXTENSION: _STREAMS_INFO}}
 # The older protocol revisions have no extensions field
 LEGACY_CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging": {}, "experimental": {STREAMS_EXTENSION: _STREAMS_INFO}}
+# A client can cut this short (Claude Code keeps about 4 KB), so a rule about one tool goes in that
+# tool's description, which has its own allowance. _instructions() follows this with the hardware.
 INSTRUCTIONS = (
-    "MicroPython device. A person watching in ScriptO Studio sees exec's code and "
-    "output in its terminal, so print there to show them something. "
-    "exec runs in __main__ on the single interpreter thread "
-    "and is stopped after 4 s, because a longer block would make the watchdog stop "
-    "user tasks. No os.path. Use lib.sys.board for pins, never hardcode them. "
-    "A ScriptO is MicroPython left on this board to stay, made with scripto_create. "
-    "Installed ScriptOs add tools named <scripto>_<tool>, which can run for a long time and "
-    "report progress. On plain HTTP they return a job id to poll with job_status. "
-    "A ScriptO shows things on the status LED with status_led.set_color((r, g, b)) from "
-    "lib.sys.status_led, and keeps it until it ends. "
-    "If a CAN transmit is refused as not armed, ask the person to arm it."
+    "You're working on one MicroPython board. Its hardware is listed below, and in full in device_info.\n"
+    "- Follow that list exactly and use no other pins, because a wrong pin can fight whatever's wired to it. "
+    "Where a device's description names a helper, use the helper rather than its registers or pins. Otherwise "
+    'read pins from lib.sys.board, as in board.pin("status_led") and board.i2c("i2c0").scl.\n'
+    "- Try hardware with exec before relying on it. Print real readings, and see what they are at rest before "
+    "choosing a threshold. All zeros, or a reading that never changes, means it isn't working yet.\n"
+    "- Say only what you saw. Code that's running hasn't been shown to work, so say what you checked, and ask "
+    "the person to try what only they can see or hear, like whether it beeped.\n"
+    "- If a CAN transmit is refused as not armed, ask the person to arm it."
 )
 
 EXEC_TIMEOUT_MS = 4000
@@ -207,7 +207,8 @@ def _firmware():
 def _t_device_info(a):
     from lib.sys import board
 
-    return _json(
+    info = board.facts()
+    info.update(
         {
             "machine": getattr(sys.implementation, "_machine", sys.platform),
             "micropython": sys.version,
@@ -224,6 +225,7 @@ def _t_device_info(a):
             "transport": "http" if _client == HTTP_CLIENT else "websocket",
         }
     )
+    return _json(info)
 
 
 def _t_fs_list(a):
@@ -501,12 +503,15 @@ _TOOLS = [
     _tool(
         "exec",
         _t_exec,
-        "Run MicroPython in __main__. Returns stdout and any traceback, which also appear in the terminal of anyone watching in Studio. Stopped after 4 s.",
+        "Run MicroPython in __main__. Returns stdout and any traceback, which also appear in the terminal of anyone "
+        "watching in ScriptO Studio, so print to show them something. It holds the single interpreter thread and is "
+        "stopped after 4 s, because a longer block would make the watchdog stop user tasks. There's no os.path or "
+        "inspect, and int.from_bytes ignores signed, so read signed values with struct.",
         {"code": _S, "echo": {"type": "boolean"}, "timeout_ms": _I},
         ("code",),
         destructive=True,
     ),
-    _tool("device_info", _t_device_info, "Versions, board, heap, and limits.", read_only=True),
+    _tool("device_info", _t_device_info, "Versions, everything about this board's hardware, heap, and limits.", read_only=True),
     _tool("fs_list", _t_fs_list, "List a directory.", {"path": _S}, read_only=True),
     _tool("fs_stat", _t_fs_stat, "Type, size and mtime of a path.", {"path": _S}, ("path",), read_only=True),
     _tool(
@@ -538,7 +543,8 @@ _TOOLS = [
     _tool(
         "scriptos_list",
         _t_apps_list,
-        "The ScriptOs on this board, whether they're running, and the tools each one adds. An App's device side shows here too.",
+        "The ScriptOs on this board, whether they're running, and the tools each one adds, named <scripto>_<tool>. An "
+        "App's device side shows here too.",
         read_only=True,
     ),
     _tool(
@@ -551,11 +557,16 @@ _TOOLS = [
     _tool(
         "scripto_create",
         _t_app_create,
-        "Leave working code on this board as a ScriptO, so it survives resets and needs no one connected. code is a "
-        "MicroPython module defining async def run(), which should loop and await often, since one interpreter runs "
-        "everything. With run_at_boot it starts at every boot, even with no network. It starts now unless start is "
-        "false, and replaces a ScriptO of the same id. tools maps a tool's file name to its source. Try the code with "
-        "exec first. scriptos_list shows whether it's running, and its last error.",
+        "Leave working code on this board as a ScriptO, so it survives resets and needs no one connected. id is "
+        "lowercase letters, digits and hyphens. code is a MicroPython module defining async def run(), which should "
+        "loop and await often, since one interpreter runs everything. A function that awaits has to be async def and "
+        "awaited itself, or it never runs. It runs as its own module, so it imports everything it uses, even what "
+        "exec finds already there, like board. To show something on the status LED, from lib.sys.status_led import "
+        "status_led, then status_led.set_color((r, g, b)), which stays until it ends. With run_at_boot it "
+        "starts at every boot, even with no network. It starts now unless start is false, and replaces a ScriptO of "
+        "the same id. tools maps a tool's file name to its source. Try the code with exec first. This answers before "
+        "the code has run, so look at scriptos_list a few seconds later for whether it's running and its last error, "
+        "and at logs_read for what it printed.",
         {"id": _S, "code": _S, "name": _S, "version": _S, "run_at_boot": _B, "start": _B, "tools": {"type": "object"}},
         ("id", "code"),
         destructive=True,
@@ -602,7 +613,8 @@ _TOOLS = [
     _tool(
         "job_status",
         _t_job_status,
-        "A job's state, progress, output and result. With no job, every recent job.",
+        "A job's state, progress, output and result. With no job, every recent job. A ScriptO's tool can run for a long "
+        "time and report progress, and on plain HTTP it returns a job id to poll here.",
         {"job": _I},
         read_only=True,
     ),
@@ -680,12 +692,31 @@ def _note_client(p):
         events.set_name(_client, info["name"])
 
 
+def _instructions():
+    """INSTRUCTIONS and this board's hardware."""
+    from lib.sys import board
+
+    try:
+        facts = board.facts()
+    except ValueError:
+        # A bad manifest mustn't stop anyone connecting to fix it
+        return INSTRUCTIONS + "\n/settings/board.json doesn't parse, so what's on this board isn't known."
+    # In this order since a client may cut it short, and a dict here keeps no order of its own
+    return "%s\n\nThis board: %s\nDevices: %s\nResources: %s\nCapabilities: %s" % (
+        INSTRUCTIONS,
+        json.dumps(facts["identity"]),
+        json.dumps(facts["devices"]),
+        json.dumps(facts["resources"]),
+        json.dumps(facts["capabilities"]),
+    )
+
+
 def _m_discover(p):
     _note_client(p)
     return {
         "supportedVersions": list(SUPPORTED),
         "capabilities": CAPABILITIES,
-        "instructions": INSTRUCTIONS,
+        "instructions": _instructions(),
         "ttlMs": 0,
         "cacheScope": "private",
         "_meta": {"io.modelcontextprotocol/serverInfo": SERVER_INFO},
@@ -699,7 +730,7 @@ def _m_initialize(p):
         "protocolVersion": v if v in LEGACY else LEGACY[0],
         "capabilities": LEGACY_CAPABILITIES,
         "serverInfo": SERVER_INFO,
-        "instructions": INSTRUCTIONS,
+        "instructions": _instructions(),
     }
 
 

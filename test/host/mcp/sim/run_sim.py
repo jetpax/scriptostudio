@@ -26,6 +26,10 @@ class _Board:
     def has(name):
         return False
 
+    @staticmethod
+    def facts():
+        return {"identity": {"name": _Id.name, "chip": _Id.chip}, "capabilities": [], "resources": {}, "devices": {}}
+
 
 sys.modules["lib.sys.board"] = _Board
 

@@ -103,6 +103,15 @@ class Board:
         self._res = data.get("resources", {})
         self._dev = data.get("devices", {})
 
+    def facts(self):
+        """What the manifest says about this board's hardware, in a form to hand to an agent."""
+        return {
+            "identity": self._data.get("identity", {}),
+            "capabilities": [name for name, on in self._cap.items() if on],
+            "resources": self._res,
+            "devices": self._dev,
+        }
+
     # ---------- capabilities ----------
 
     def has(self, name):

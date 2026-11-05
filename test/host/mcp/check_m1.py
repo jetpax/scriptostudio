@@ -102,6 +102,10 @@ def discover_and_work(c):
     expect("2026-07-28" in d["supportedVersions"], d)
     legacy = c.call("initialize", {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "t", "version": "0"}})
     expect(legacy["protocolVersion"] == "2025-11-25", legacy)
+    expect(d["instructions"] == legacy["instructions"], "the two ways in say different things")
+    info = c.tool_json("device_info")
+    expect("devices" in info and "resources" in info, "device_info doesn't give the hardware")
+    expect(info["identity"]["name"] in d["instructions"], "the instructions don't name the board")
     tools = [t["name"] for t in c.call("tools/list")["tools"]]
     for want in ("exec", "device_info", "fs_list", "fs_read_text", "fs_write_text", "interrupt", "stop_user_tasks", "reset", "logs_read"):
         expect(want in tools, f"{want} missing from {tools}")

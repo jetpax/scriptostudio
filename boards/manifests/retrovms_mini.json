@@ -68,7 +68,7 @@
       "type": "passive",
       "part": "MLT-8530",
       "frequency_hz": 2700,
-      "description": "Magnetic buzzer on a transistor. It needs a tone, so PWM the pin at frequency_hz with 50% duty, then drive it low: held high, DC runs through the coil. A MicroMod processor in the socket shares this line on G2"
+      "description": "Magnetic buzzer on a transistor. from lib.sys import buzzer, then buzzer.beep(ms) returns at once and stops by itself, so it's safe in a loop. A tone pulls imu.read() about 400 mg off until shortly after it stops, so beep() ignores calls until then. Don't hold its pin high, because DC then runs through the coil. A MicroMod processor in the socket shares this line on G2"
     },
 
     "tic12400_inputs": {
@@ -111,7 +111,7 @@
       "bus": "i2c.i2c0",
       "i2c_address": "0x19",
       "int1_pin": 35,
-      "description": "3-axis accelerometer, with no driver yet, and powered down until written. Write 0x57 to register 0x20 for 100 Hz on all axes, and 0x08 to 0x23 for high resolution at +/-2 g. Read 6 bytes from 0xA8 as x, y and z, little-endian signed 16-bit, and shift each right 4 for milli-g. Write 0x07 to 0x20 to power it down. WHO_AM_I at 0x0F reads 0x33. INT1 on int1_pin is shared with the MicroMod socket's I2C_INT"
+      "description": "3-axis accelerometer. from lib.sys import imu, then imu.read() gives x, y and z in milli-g, and wakes it the first time. At rest, gravity reads about 1000 mg on the axis facing down, and tilting moves it between the axes, so to notice a tilt, compare with a reading taken at rest. INT1 on int1_pin is shared with the MicroMod socket's I2C_INT"
     },
     "micromod": {
       "type": "MicroMod Processor socket",
