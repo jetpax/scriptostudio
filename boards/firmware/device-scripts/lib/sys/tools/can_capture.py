@@ -9,8 +9,11 @@ dict(
             "capture again: reaction lists the bits that moved or now differ, and were steady before, "
             "steadiest first. Slow counters and analog values get in too, so repeat it to see what "
             "follows the action. A bit toggling a few times a second is likely a flashing indicator. "
-            "An app reads what you find with can_tap.watch([ids]) from lib.sys, whose read() returns "
-            "(id, data) rows and never waits. It stays listen-only, so don't send anything to do this."
+            "A ScriptO reads what you find on can0 with from lib.sys import can_tap, then watcher = "
+            "can_tap.watch([0x470]), and watcher.read() returns (id, data) rows and never waits. "
+            "watch([]) gets every identifier, and watcher.lost() says how many frames read() was too "
+            "slow for. It stays listen-only, so don't send anything to do this. To send a frame, "
+            "can_tap.bus().send([1, 6], 0x123). If that's refused as not armed, ask the person to arm it."
         ),
         effects=dict(readOnly=True, destructive=False, openWorld=False),
     ),

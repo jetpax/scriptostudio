@@ -61,7 +61,7 @@
     "status_led": {
       "type": "neopixel",
       "pixel_order": "GRB",
-      "description": "Onboard RGB status LED - GRB order"
+      "description": "RGB status LED. from lib.sys.status_led import status_led, then status_led.set_color((r, g, b)), set_flashing(color), set_throbbing(color), off(), or release() to give it back"
     },
 
     "buzzer": {
@@ -73,30 +73,27 @@
 
     "tic12400_inputs": {
       "type": "TIC12400",
-      "driver": "TIC12400",
       "bus": "spi1",
       "cs_pin": 8,
       "channels": 24,
-      "description": "24-channel digital input IC"
+      "description": "24-channel digital input IC. No MicroPython driver yet"
     },
 
     "drv8912_outputs": {
       "type": "DRV8912",
-      "driver": "DRV8912",
       "bus": "spi1",
       "cs_pin": 1,
       "channels": 12,
-      "description": "12-channel half-bridge output driver"
+      "description": "12-channel half-bridge output driver. No MicroPython driver yet"
     },
 
     "mcp2515_can1": {
       "type": "MCP2515",
-      "driver": "MCP2515",
       "bus": "spi2",
       "cs_pin": 9,
       "int_pin": 16,
       "clock_hz": 20000000,
-      "description": "CAN1 controller, whose RX0BF and RX1BF pins switch CAN0 and CAN1 termination"
+      "description": "CAN1 controller, whose RX0BF and RX1BF pins switch CAN0 and CAN1 termination. No MicroPython driver yet"
     },
 
     "rtc": {
@@ -104,7 +101,7 @@
       "driver": "rx8111",
       "bus": "i2c.i2c0",
       "i2c_address": "0x32",
-      "description": "Real-time clock holding UTC, kept going by two 47 uF capacitors while the board is off. The firmware sets the system clock from it at boot and sets it whenever NTP syncs, so time.time() already uses it. lib.sys.drivers.rx8111 reads and writes it directly"
+      "description": "Real-time clock holding UTC, kept going by capacitors while the board is off. The firmware sets the system clock from it at boot and sets it, to the second, whenever NTP syncs, so time.time() already uses it. To read the chip, from lib.sys import bus and from lib.sys.drivers.rx8111 import RX8111, then RX8111(bus.get_i2c(\"i2c0\"), 0x32).read() gives (y, m, d, h, min, s), or None if it isn't valid"
     },
     "imu": {
       "type": "LIS3DH",
@@ -123,7 +120,7 @@
     "wwan": {
       "type": "M.2 B-key",
       "power_pin": 17,
-      "description": "Cellular modem socket on USB, off until power_pin is high"
+      "description": "Cellular modem socket on USB, powered at boot. import usbmodem, then usbmodem.connected(), and usbmodem.send_at(\"AT\") returns its reply, from about 15 s after power. OSError 259 or 263 means it isn't ready"
     }
   }
 }

@@ -63,8 +63,7 @@ INSTRUCTIONS = (
     "- Try hardware with exec before relying on it. Print real readings, and see what they are at rest before "
     "choosing a threshold. All zeros, or a reading that never changes, means it isn't working yet.\n"
     "- Say only what you saw. Code that's running hasn't been shown to work, so say what you checked, and ask "
-    "the person to try what only they can see or hear, like whether it beeped.\n"
-    "- If a CAN transmit is refused as not armed, ask the person to arm it."
+    "the person to try what only they can see or hear, like whether it beeped."
 )
 
 EXEC_TIMEOUT_MS = 4000

@@ -19,7 +19,8 @@ of a busy bus costs it nothing:
             ...
         await asyncio.sleep_ms(10)
 
-A watch opened by an app's own work is closed when that work ends, however it ends.
+watch([]) gets every identifier. A watch opened by an app's own work is closed when that work
+ends, however it ends.
 
 Copyright (c) 2026 Jonathan Elliot Peace
 SPDX-License-Identifier: MIT
@@ -78,6 +79,12 @@ def _set_up_bus(bitrate):
     # Normal only says what this object may do if it's used. The bus itself stays listen-only
     # until something that can transmit is active, and anything that opens it later can send.
     CAN(0, extframe=False, tx=bus.tx, rx=bus.rx, mode=CAN.NORMAL, bitrate=rate)
+
+
+def bus(bitrate=None):
+    """The bus, set up if nothing has yet, to send on with send(data, id)."""
+    _set_up_bus(bitrate)
+    return CAN(0)
 
 
 def _client(ack, filters):
