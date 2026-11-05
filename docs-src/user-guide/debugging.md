@@ -36,10 +36,10 @@ The toolbar shows these buttons during a session:
 | Button | Action |
 |--------|--------|
 | **Stop** | End the session and interrupt the board. |
-| **Continue** | Run until the next breakpoint. |
-| **Step** | Step over the current line. |
-| **Step In** | Step into a call. |
-| **Step Out** | Run until the current function returns. |
+| **Continue** | Run until the next breakpoint. F5. |
+| **Step** | Step over the current line. F10. |
+| **Step In** | Step into a call. F11. |
+| **Step Out** | Run until the current function returns. F12. |
 
 The sidebar, titled **Debug Session**, shows **Live Variables**: your watch expressions and the local variables at the stop. The terminal prints the stop as well, with the file and line, the watches, the locals, the memory in use and the elapsed time.
 

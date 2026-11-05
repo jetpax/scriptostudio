@@ -76,7 +76,7 @@ is a good template for an S3 + ST7789 SPI LCD board:
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http"]
+    "default_services": ["http", "mcp"]
   },
 
   "capabilities": {

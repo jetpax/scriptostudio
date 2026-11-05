@@ -11,7 +11,7 @@
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": ["http", "mcp"]
   },
 
   "capabilities": {

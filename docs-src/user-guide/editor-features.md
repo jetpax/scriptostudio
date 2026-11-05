@@ -42,7 +42,8 @@ Click the gutter beside a line number to set a breakpoint. See [Debugging](debug
 | Shortcut | Action |
 |----------|--------|
 | Ctrl+L / Cmd+L | Clear the terminal. |
-| Ctrl+Shift+C / Cmd+Shift+C | Open the connect dialog. |
+
+These act in the Editor, apart from clearing the terminal, so Cmd+R reloads the page anywhere else. Browsers keep Cmd+N for themselves in a tab, so that one needs Studio installed as an app.
 
 ## Related
 
