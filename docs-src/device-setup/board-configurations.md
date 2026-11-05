@@ -7,8 +7,9 @@ without hardcoded board-specific code, so the same firmware binary can drive
 many different boards.
 
 Studio downloads the manifest for the board you pick during setup and writes
-it to `/settings/board.json` on the device. Python code then reads it via
-`lib.sys.board`:
+it to `/settings/board.json` on the device. Whenever it connects, it replaces
+that copy if the published manifest has a later `identity.revision`. Python
+code reads it via `lib.sys.board`:
 
 ```python
 from lib.sys import board
@@ -207,6 +208,10 @@ is connected. Selecting it causes Studio to write the manifest to
 }
 ```
 
+Raise `revision` whenever you change a published manifest. Studio compares it
+with the copy on each board it connects to and replaces an older copy, so
+boards set up earlier get the change, along with any edits made to that copy.
+
 ### `capabilities`
 
 Boolean flags queried by firmware code via `board.has("name")`. Common keys:
@@ -306,6 +311,10 @@ be set or the display silently fails to initialize.
 Supported driver values: `st7789` (SPI IPS LCDs), `spd2010` (QSPI
 round LCDs with touch), `co5300` (1.75" QSPI AMOLED), `epd` (e-paper).
 
+Agents read each device's `description`, so a display's should say how to
+draw on it. On the QSPI boards, boot starts LVGL on the panel, and their
+descriptions tell agents to use it.
+
 #### `status_led`
 
 ```json
@@ -377,7 +386,8 @@ Purely informational: Studio uses this to pick the right firmware variant:
   [`lib/sys/display/display_manager.py`](https://github.com/jetpax/scriptostudio/blob/main/boards/firmware/device-scripts/lib/sys/display/display_manager.py)).
 - **Testing locally:** you can drop a manifest straight into
   `/settings/board.json` on the device with the Files view and reboot to try it
-  without committing the file.
+  without committing the file. Keep its `identity.revision` at or above the
+  published one, or Studio replaces it the next time it connects.
 - **Boot log:** `boot.py` logs display and peripheral init errors. If
   something isn't working, connect to the REPL and check for
   `Display init skipped: …` or similar messages.

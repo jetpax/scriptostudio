@@ -4,7 +4,7 @@
     "name": "Waveshare ESP32-S3 Touch AMOLED 1.75C",
     "vendor": "waveshare",
     "chip": "ESP32-S3",
-    "revision": "1.0.0",
+    "revision": "1.1.0",
     "description": "ESP32-S3 N32R8 with 1.75\" 466x466 AMOLED, touch, dual mic, IMU, audio"
   },
   "network": {
@@ -98,7 +98,7 @@
       "offset_y": 0,
       "interface": "qspi",
       "color_bits": 16,
-      "description": "1.75\" 466x466 round AMOLED (CO5300) with QSPI interface"
+      "description": "1.75\" 466x466 round AMOLED (CO5300). LVGL is already running on it from boot: import lvgl as lv, then scr = lv.obj(), add widgets to scr, and lv.screen_load(scr). Don't start another display driver or use lgfx, which takes the panel away from LVGL. Only a circle 466 px across is visible, so keep things away from the corners. For brightness, from lib.sys.display.display_manager import get_display, then get_display().set_backlight(percent)."
     },
     "touch": {
       "type": "CST92xx",

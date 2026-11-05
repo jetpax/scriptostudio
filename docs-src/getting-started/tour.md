@@ -24,7 +24,7 @@ It stays in every view:
 
 - **The board** and what it has, or a list of boards you've used when none is connected.
 - **ScriptOs**, each with Start or Stop, At startup, Code and Remove.
-- **The terminal**, the board's one REPL. See [Terminal](../user-guide/terminal.md).
+- **The terminal**, the board's one REPL, once a board is connected. See [Terminal](../user-guide/terminal.md).
 
 Drag the divider on its left to make it wider, for long terminal output. Studio remembers the width.
 

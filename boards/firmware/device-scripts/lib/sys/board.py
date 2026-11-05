@@ -273,6 +273,13 @@ def _load():
     return _board
 
 
+def reload():
+    """Read /settings/board.json again, after it's been replaced."""
+    global _board
+    _board = None
+    return _load()
+
+
 # Module-level attribute delegation to singleton
 def __getattr__(name):
     """Delegate attribute access to the board singleton."""

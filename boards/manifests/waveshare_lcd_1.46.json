@@ -4,7 +4,7 @@
     "name": "Waveshare ESP32-S3 Touch LCD 1.46",
     "vendor": "waveshare",
     "chip": "ESP32-S3",
-    "revision": "1.0.0",
+    "revision": "1.1.0",
     "description": "ESP32-S3 N16R8 with 1.46\" SPD2010 QSPI LCD+touch, IMU, audio, SD, RTC"
   },
   "network": {
@@ -114,7 +114,7 @@
       "interface": "qspi",
       "spi_mode": 3,
       "color_bits": 16,
-      "description": "1.46\" 412x412 round AMOLED with integrated touch"
+      "description": "1.46\" 412x412 round display (SPD2010). LVGL is already running on it from boot: import lvgl as lv, then scr = lv.obj(), add widgets to scr, and lv.screen_load(scr). Don't start another display driver or use lgfx, which takes the panel away from LVGL. Only a circle 412 px across is visible, so keep things away from the corners."
     },
     "touch": {
       "type": "SPD2010",
