@@ -1,114 +1,54 @@
 # File Manager
 
-The File Manager lets you browse, edit, and manage files on your device.
+The File Manager shows the board's files next to files kept in your browser, and moves files between them.
 
-## Opening File Manager
+Open it with **Files** in the menu.
 
-Click **Files** in the left sidebar to open the File Manager view.
+![The Files view](../assets/files.png)
 
-![File Manager](https://raw.githubusercontent.com/jetpax/scriptostudio/main/.github/images/FM.png)
+## The two panes
 
-## Interface
+| Pane | Shows |
+|------|-------|
+| Left | The board's filesystem. It reads **Connect to board** until a board is connected. |
+| Right | Browser storage: files Studio keeps in your browser, on your computer. |
 
-The File Manager shows a dual-pane view:
+Each pane has a header with its path and three buttons: new folder, new file, and upload (left pane) or import (right pane). Files show their size. Folders are listed first.
 
-| Pane | Purpose |
-|------|---------|
-| **Left** | Directory listing - folders and files on device |
-| **Right** | File actions and preview |
+Between the panes is a column of buttons that act on what you've selected:
 
-### Device Filesystem
+| Button | Action |
+|--------|--------|
+| Edit (pencil) | Open the selected files in the editor. |
+| Left arrow | Copy the selection from browser storage to the board. |
+| Right arrow | Copy the selection from the board to browser storage. |
+| Down arrow | Export the selected files to your computer, as browser downloads. |
+| Trash | Delete the selection. |
 
-The left pane shows the device's flash filesystem:
+## Select, open and navigate
 
-```
-/
-├── certs/          # SSL certificates
-├── config/         # Legacy config files
-├── lib/            # Python libraries (installed packages)
-├── settings/       # Device settings (JSON files)
-├── boot.py         # System boot script
-└── main.py         # Your application script
-```
+- Click an item to select it. Click it again to clear it.
+- Double-click a file to open it in the editor.
+- Double-click a folder to go into it. Click `..` at the top of the list to go up.
 
-### File Information
+## Create, rename and delete
 
-Each file shows:
-- **Name** - Filename
-- **Size** - File size in bytes/KB
-
-Folders are indicated with a folder icon.
-
-## File Operations
-
-### Creating Files
-
-1. Click the **New File** icon (📄) in the toolbar
-2. Enter a filename (include `.py` extension for Python files)
-3. Click **Create**
-4. The empty file opens in the editor
-
-### Creating Folders
-
-1. Click the **New Folder** icon (📁) in the toolbar
-2. Enter a folder name
-3. Click **Create**
-
-### Opening Files
-
-- **Single click** a file to select it
-- **Double click** to open it in the editor
-
-Supported file types:
-- `.py` - Python scripts (syntax highlighted)
-- `.json` - Configuration files
-- `.txt` - Text files
-- Others - Opened as plain text
-
-### Deleting Files
-
-1. Select the file or folder
-2. Click the **Delete** icon (🗑️) in the right pane
-3. Confirm deletion
+- **New file** and **New folder** add an empty entry to the list with a name field. Type a name and press Enter. Press Escape to cancel.
+- **Rename**: click the text-cursor icon at the end of a row, edit the name, and press Enter.
+- **Delete**: select items, click the trash button and confirm. The confirmation lists what will go.
 
 > [!WARNING]
-> Deleting `boot.py` or corrupting `main.py` may prevent your device from booting properly.
+> Deleting `boot.py` or breaking `main.py` can keep the board from starting.
 
-### Uploading Files
+## Move files
 
-1. Click the **Upload** icon in the toolbar
-2. Select a file from your computer
-3. File is transferred to the current directory
-
-### Downloading Files
-
-1. Select a file
-2. Click the **Download** icon in the right pane
-3. File is saved to your computer
-
-## Navigating
-
-- Click a **folder** to enter it
-- Click the **parent folder** icon (↑) to go up one level
-- The path bar shows your current location
-
-## Status Bar Integration
-
-The status bar at the bottom shows device info:
-
-| Indicator | Meaning |
-|-----------|---------|
-| **RAM** | Memory usage (e.g., `182.91 KB / 31.62 MB`) |
-| **TEMP** | Chip temperature |
-| **UPTIME** | Time since last boot |
-| **RSSI** | WiFi signal strength |
-
-## Refreshing
-
-Click the **Refresh** icon to reload the file listing from the device.
+- **Copy to the board or to browser storage** with the arrow buttons. If a file of the same name is already at the destination, Studio lists the files it would overwrite and asks first.
+- **Upload** (left pane header) sends files from your computer straight to the board.
+- **Import** (right pane header) brings files from your computer into browser storage.
+- **Export** (down arrow) saves the selected files from either pane to your computer.
 
 ## Related
 
-- [Writing ScriptOs](../scriptos/writing-scriptos.md) - Creating Python scripts
-- [Editor Features](../user-guide/editor-features.md) - Editing files
-- [Settings](../user-guide/settings.md) - Device configuration
+- [Editor Features](editor-features.md)
+- [Terminal](terminal.md)
+- [Settings](settings.md)

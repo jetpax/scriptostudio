@@ -1,12 +1,12 @@
 # Board Configurations
 
 A **board configuration** (or "board manifest") is a JSON file that describes
-the hardware of a specific ESP32 board — its display, pin assignments, buses,
+the hardware of a specific ESP32 board: its display, pin assignments, buses,
 sensors, and capabilities. The firmware uses this to set up peripherals
 without hardcoded board-specific code, so the same firmware binary can drive
 many different boards.
 
-The IDE downloads the manifest for the board you pick during setup and writes
+Studio downloads the manifest for the board you pick during setup and writes
 it to `/settings/board.json` on the device. Python code then reads it via
 `lib.sys.board`:
 
@@ -25,7 +25,7 @@ uart_cfg = board.uart("primary")
 
 Use an existing board config when:
 
-- Your board is in the list shown during **Device Setup** — just pick it.
+- Your board is in the list under **System > Firmware**. Pick it.
 
 Create a custom config when:
 
@@ -47,10 +47,10 @@ boards/manifests/
 └── ...
 ```
 
-The `index.json` file is the registry the IDE reads to populate the board
+The `index.json` file is the registry Studio reads to populate the board
 dropdown. Every manifest file must have a matching entry in `index.json`.
 
-## Adding a custom board — step by step
+## Adding a custom board, step by step
 
 We'll walk through adding a fictional **"Acme ESP32-S3 Widget Board"** with
 an ST7789 SPI display and a NeoPixel status LED.
@@ -76,7 +76,7 @@ is a good template for an S3 + ST7789 SPI LCD board:
   "network": {
     "mdns_enabled": true,
     "ap_password": null,
-    "default_services": ["http", "webrepl"]
+    "default_services": ["http"]
   },
 
   "capabilities": {
@@ -174,11 +174,11 @@ be on the HTTP server that hosts `/boards/manifests/`. For the public
 scriptostudio.com deployment, submit a pull request against
 [jetpax/scriptostudio](https://github.com/jetpax/scriptostudio).
 
-### 4. Pick it during Device Setup
+### 4. Pick it under System > Firmware
 
-After deployment (or a local refresh), the new board appears in the
+After deployment (or a local refresh), the board appears in the
 **Board Configuration** dropdown on the firmware panel when a matching chip
-is connected. Selecting it causes the IDE to write the manifest to
+is connected. Selecting it causes Studio to write the manifest to
 `/settings/board.json` on the device during provisioning.
 
 ## Manifest reference
@@ -229,7 +229,7 @@ Boolean flags queried by firmware code via `board.has("name")`. Common keys:
 | `gnss` | Has GNSS/GPS receiver |
 | `gpio_expander` | Uses an I/O expander for board pins |
 
-You can add custom flags — anything `board.has()` queries will work as long
+You can add custom flags, and anything `board.has()` queries will work as long
 as the key exists in this dict.
 
 ### `resources.pins`
@@ -246,7 +246,7 @@ Direct GPIO assignments, addressed by name:
 
 Accessed as `board.pin("status_led")`.
 
-### `resources` — buses
+### `resources`: buses
 
 Each bus type is a dict of named bus instances. The instance name is what
 firmware code looks up (e.g., `board.spi("lcd")` returns the `lcd` entry
@@ -278,7 +278,7 @@ it's connected to. The most important device entries are shown below.
 
 #### `display`
 
-The `interface` field dispatches to the correct init path at boot — it must
+The `interface` field dispatches to the correct init path at boot, and it must
 be set or the display silently fails to initialize.
 
 ```json
@@ -286,7 +286,7 @@ be set or the display silently fails to initialize.
   "type": "ST7789",            // hardware marking
   "driver": "st7789",          // firmware driver module: st7789, spd2010, co5300, epd
   "bus": "spi.lcd",            // which bus instance from resources.*
-  "interface": "spi",          // spi | qspi | epd  — REQUIRED, selects init path
+  "interface": "spi",          // spi | qspi | epd, REQUIRED, selects init path
   "width": 240,
   "height": 240,
   "offset_x": 0,               // origin offset in the controller's RAM
@@ -303,7 +303,7 @@ be set or the display silently fails to initialize.
 }
 ```
 
-Driver values currently supported: `st7789` (SPI IPS LCDs), `spd2010` (QSPI
+Supported driver values: `st7789` (SPI IPS LCDs), `spd2010` (QSPI
 round LCDs with touch), `co5300` (1.75" QSPI AMOLED), `epd` (e-paper).
 
 #### `status_led`
@@ -357,7 +357,7 @@ Python driver module:
 
 ### `memory`
 
-Purely informational — the IDE uses this to pick the right firmware variant:
+Purely informational: Studio uses this to pick the right firmware variant:
 
 ```json
 "memory": {
@@ -369,16 +369,16 @@ Purely informational — the IDE uses this to pick the right firmware variant:
 
 ## Validation tips
 
-- **Pin conflicts** — the firmware doesn't check for conflicts between
+- **Pin conflicts:** the firmware doesn't check for conflicts between
   buses and devices; a wrong pin is usually a silent failure. Cross-check
   against the board's schematic.
-- **Missing `interface`** — the display init path depends on this field
+- **Missing `interface`:** the display init path depends on this field
   being present; without it the boot splash is silently skipped (see
   [`lib/sys/display/display_manager.py`](https://github.com/jetpax/scriptostudio/blob/main/boards/firmware/device-scripts/lib/sys/display/display_manager.py)).
-- **Testing locally** — you can drop a manifest straight into
-  `/settings/board.json` on the device via WebREPL and reboot to try it
+- **Testing locally:** you can drop a manifest straight into
+  `/settings/board.json` on the device with the Files view and reboot to try it
   without committing the file.
-- **Boot log** — `boot.py` logs display and peripheral init errors. If
+- **Boot log:** `boot.py` logs display and peripheral init errors. If
   something isn't working, connect to the REPL and check for
   `Display init skipped: …` or similar messages.
 

@@ -1,148 +1,47 @@
 # FAQ
 
-Frequently asked questions about ScriptO Studio.
-
 ## General
 
-### What is ScriptO Studio?
+**What boards does it run on?**
+ESP32 boards running Studio's firmware. **System > Firmware** lists what can be flashed, and [Board Configurations](../device-setup/board-configurations.md) describes the board manifests.
 
-ScriptO Studio is a browser-based IDE for developing MicroPython applications on ESP32 devices. It provides code editing, file management, terminal access, device onboarding, firmware flashing, and an extension system for specialized functionality.
+**Which browser do I need?**
+Any modern browser can connect to a board. Flashing firmware over USB needs Chrome or Edge, because it uses Web Serial.
 
-### What firmware do the devices run?
+**Does a board need Studio to keep running?**
+No. A ScriptO keeps running with nobody connected, and one set to start at boot runs even with no network.
 
-Devices run pyDirect enabled firmware — custom MicroPython firmware for ESP32-S3 that includes:
-- WebREPL Binary Protocol for fast communication
-- WebRTC support for low-latency connections
-- Hardware abstraction for CAN, I2C, SPI, and more
-- Pre-configured drivers for common peripherals
+## Agents
 
-### Do I need to install anything?
+**Do I need an API key?**
+For Studio's agent, yes, an OpenRouter key. For an outside agent like Claude Code, no: it uses its own account.
 
-No installation required! ScriptO Studio runs entirely in your browser. Just navigate to [scriptostudio.com](https://scriptostudio.com) and connect to your device.
+**What does it cost?**
+Studio's agent is billed to your OpenRouter account. OpenRouter has free models with daily limits. Every round of tool calls sends the chat so far, so long chats cost more, and Studio summarises them to keep that down.
 
-### Which browsers are supported?
+**Which model should I use?**
+Any model that supports tools can work. They vary in how well they use tools, so try another if one struggles.
 
-| Browser | Status |
-|---------|--------|
-| Chrome 90+ | ✅ Full support |
-| Edge 90+ | ✅ Full support |
-| Firefox 85+ | ✅ Full support |
-| Safari 15+ | ⚠️ WebRTC may be limited |
+**Can an agent damage my board?**
+`exec` runs any Python, so it could erase files or drive a pin. Studio's agent asks before what's plainly hard to undo, and you can Stop it at any moment, but that guards against accidents and isn't a sandbox. Follow what's wired to the board, and don't leave an agent alone with anything that could cause harm.
 
-### Is it open source?
+**Where does my chat go?**
+To the model you chose, through OpenRouter. It's stored in this browser, one chat per board, until you click **New chat**. It includes whatever the board printed.
 
-Yes! Both projects are MIT licensed:
-- [ScriptO Studio](https://github.com/jetpax/scriptostudio)
-- [pyDirect firmware](https://github.com/jetpax/pyDirect)
+**Can I use my key on another computer?**
+The key stays in the browser you entered it in, so add it again there.
 
-## Connection
+## ScriptOs and Apps
 
-### Why can't I connect to my device?
+**What's the difference?**
+A ScriptO is MicroPython on the board. An App has a browser side as well. See [Apps](../apps/index.md).
 
-See [Troubleshooting Connection](../troubleshooting/connection.md) for detailed help. Quick checks:
-1. Device and browser on same network
-2. Correct IP address
-3. WebREPL password correct
-4. No other client connected
+**Where is a ScriptO's code?**
+In `/lib/ext/<folder>/main.py`. **Code** on its row opens it.
 
-### What's the difference between WebRTC and WebSocket?
+**I changed the code and nothing happened.**
+A running ScriptO keeps running the old code. Stop it and Start it.
 
-| Feature | WebRTC | WebSocket |
-|---------|--------|-----------|
-| Latency | Lower | Higher |
-| Setup | Requires STUN | Simple |
-| Reliability | P2P dependent | More reliable |
-| NAT traversal | Sometimes fails | Always works |
+## Connecting
 
-ScriptO Studio tries WebRTC first, then falls back to WebSocket.
-
-### Can I connect over the internet?
-
-WebSocket works over the internet if your device has a public IP or you set up port forwarding. WebRTC requires TURN servers for NAT traversal (not included by default).
-
-### Why is only one client allowed?
-
-The WebREPL Binary Protocol uses a single-client model to:
-- Avoid race conditions on file operations
-- Ensure consistent stdout/stderr streaming
-- Simplify authentication and session management
-
-## Development
-
-### How do I run code on the device?
-
-1. Write code in the editor
-2. Click **Run** (or press F5)
-3. Output appears in the Terminal
-
-The code is sent to the device and executed immediately.
-
-### How do I save files to the device?
-
-1. Open File Manager (sidebar)
-2. Create or select a file
-3. Edit in the editor
-4. Press Ctrl+S to save
-
-Files are saved directly to the device's flash filesystem.
-
-### Can I use pip packages?
-
-MicroPython uses `mip` for package management:
-
-```python
-import mip
-mip.install("github:org/repo/package")
-```
-
-Many micropython-lib packages are available, but not all PyPI packages work on MicroPython.
-
-## Extensions
-
-### How do I install an extension?
-
-1. Click **Extensions** in the sidebar (or the + icon)
-2. Search for the extension
-3. Click **Install**
-
-Device-side libraries are installed automatically.
-
-### Can I create my own extensions?
-
-Yes! See [Writing Extensions](../extensions/writing-extensions.md) for a complete guide.
-
-### Where are extensions stored?
-
-- **UI code**: Loaded from ScriptoHub at runtime
-- **Device libraries**: Installed to `/lib/` on the device
-
-## Hardware
-
-### Which ESP32 chip should I use?
-
-**Recommended:** ESP32-S3 with 8MB PSRAM
-
-Other variants may work but have limitations:
-- ESP32-S2: No Bluetooth
-- ESP32-C3: Limited RAM
-- Original ESP32: Not officially supported
-
-### How much RAM/Flash do I need?
-
-| Resource | Minimum | Recommended |
-|----------|---------|-------------|
-| Flash | 4MB | 16MB |
-| PSRAM | None | 8MB |
-
-More flash = more files and extensions.
-PSRAM = larger scripts and data.
-
-### Can I use this with Arduino?
-
-No. The firmware is MicroPython-based, not compatible with Arduino. However, the concepts are similar and many Arduino libraries have MicroPython equivalents.
-
-## More Questions?
-
-- Check the [Wiki Home](../index.md) for documentation
-- Search [existing issues](https://github.com/jetpax/scriptostudio/issues)
-- [Open a new issue](https://github.com/jetpax/scriptostudio/issues/new) for bugs or questions
+See [Connection Issues](../troubleshooting/connection.md).

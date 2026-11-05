@@ -1,124 +1,40 @@
-# Troubleshooting Connection
+# Connection Issues
 
-Common connection issues and their solutions.
+## Can't connect to the board
 
-## Quick Checks
+Check these in order:
 
-Before diving into detailed troubleshooting:
+1. **The address.** It should look like `wss://pybot-6014.local/mcp`. Studio adds `/mcp` for you.
+2. **The network.** The board and your computer need to be on the same network. If the `.local` name doesn't resolve, try the board's IP address.
+3. **The certificate.** The board signs its own certificate, so your browser refuses it until you've accepted it once. Open `https://<host>/` in a tab, proceed past the warning, then try again. The connection dialog offers a link to this.
+4. **The password.** It's the one you chose at setup.
 
-- [ ] Device is powered on
-- [ ] Device and browser on same network
-- [ ] Correct IP address entered
-- [ ] WebREPL password is correct
-- [ ] No other client connected (single-client model)
+## "This board doesn't accept connections from..."
 
-## Connection Errors
+The board only accepts WebSockets from Studio's own addresses. If you're running Studio from somewhere else, add that address to the board's `server.allowed_origins` setting.
 
-### "Connection refused" or timeout
+## The board refuses another client
 
-**Cause**: Device unreachable or WebREPL not running
+A board holds three WebSockets. A fourth client is refused with a message saying why, and nobody is pushed off. Studio holds one, and a second once its agent has run, until you press Stop or start a New chat. Close another client on your computer, or use plain HTTP for it, which holds none between calls.
 
-**Solutions**:
-1. Ping the device: `ping <device-ip>`
-2. Check device is on WiFi (status LED should be solid)
-3. Verify WebREPL is enabled in `boot.py`
-4. Try connecting via serial to verify device is running
+## Forgot the password
 
-### "Authentication failed"
+Connect the board by USB and open **System > Firmware**. **Re-provision** gives the board new certificates and a new password, and keeps its WiFi settings. **Change WiFi** changes only the network. See [Provisioning](../device-setup/provisioning.md).
 
-**Cause**: Wrong password
+## Studio's agent
 
-**Solutions**:
-1. Default password is `micropython`
-2. Check `settings/wifi.json` on device for custom password
-3. Reset password via serial REPL if forgotten
+**It says it needs a key.** Click **Add an API key** under the message box.
 
-### "WebRTC connection failed"
+**"Your OpenRouter account is out of credits."** Add credit at OpenRouter, or pick a free model.
 
-**Cause**: NAT/firewall blocking P2P
+**A free model stops with a rate limit.** Free models have daily limits. Wait, or choose another model.
 
-**Solutions**:
-1. Try WebSocket fallback (automatic after WebRTC timeout)
-2. Ensure devices are on same subnet
-3. Check router doesn't block P2P connections
-4. Disable VPN if active
+**"Connect a board, and an agent can get to work on it."** Studio needs a board connected before the agent can start. A saved chat still shows while you're disconnected.
 
-### "Another client is connected"
+## An outside agent
 
-**Cause**: Only one WebREPL client allowed at a time
+**It can't reach the board.** Check that the address and token match **System > Agent**. They change if you change the board's password.
 
-**Solutions**:
-1. Close other browser tabs with ScriptO Studio
-2. Wait 30 seconds for stale connection to timeout
-3. Power cycle device to force disconnect
+**A tool is missing or "Unknown tool".** A session can keep the tool list it started with. Start a new session.
 
-## Network Issues
-
-### Device in AP Mode
-
-When device can't connect to WiFi, it creates its own access point:
-
-1. Look for WiFi network: `pybot-XXXX`
-2. Connect your computer to that network
-3. Access ScriptO Studio at `http://192.168.4.1`
-4. Configure WiFi credentials in Settings
-
-### Wrong IP Address
-
-Find your device's IP:
-
-**From serial REPL:**
-```python
-import network
-sta = network.WLAN(network.STA_IF)
-print(sta.ifconfig()[0])
-```
-
-**From router:**
-Check your router's DHCP client list for the device.
-
-## Performance Issues
-
-### Slow Response
-
-**Causes & Solutions**:
-
-| Symptom | Cause | Solution |
-|---------|-------|----------|
-| Commands take 4-6s | Memory pressure | Reboot device |
-| Gradual slowdown | Memory leak | Check for unclosed files/sockets |
-| Intermittent lag | WiFi interference | Move device closer to router |
-
-### Memory Warnings
-
-If device shows low memory:
-
-```python
-import gc
-gc.collect()
-print(gc.mem_free())
-```
-
-Target: >50KB free for stable operation.
-
-## Debug Logging
-
-Enable verbose logging for diagnosis:
-
-**In ScriptO Studio:**
-1. Open browser DevTools (F12)
-2. Check Console tab for connection logs
-3. Look for `[WebRTC]` or `[WebSocket]` prefixed messages
-
-**On Device:**
-Check UART output for `ESP_LOGD` messages.
-
-## Still Stuck?
-
-1. Check [FAQ](../reference/faq.md) for known issues
-2. Review device serial output for errors
-3. [Open an issue](https://github.com/jetpax/scriptostudio/issues) with:
-   - Browser and version
-   - Device board type
-   - Error messages from console
-   - Network configuration
+**It connected to the wrong board.** Each `claude mcp add` line names one board. See what's configured with `claude mcp list`.

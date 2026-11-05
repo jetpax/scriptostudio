@@ -1,10 +1,10 @@
-# Extension API
+# App API
 
-API reference for extension developers.
+What the browser side of an App can use.
 
-## Constructor Arguments
+## Constructor arguments
 
-Extensions receive four arguments:
+Your App's class receives four arguments:
 
 ```javascript
 constructor(deviceAPI, emit, state, html) {
@@ -36,42 +36,42 @@ Write a file to the device filesystem.
 await this.device.saveFile('/lib/my_module.py', 'print("hello")')
 ```
 
-### readFile(path)
-
-Read a file from the device. Returns content as string.
-
-```javascript
-const content = await this.device.readFile('/boot.py')
-```
-
 ### mkdir(path)
 
 Create a directory. Succeeds silently if directory exists.
 
 ```javascript
-await this.device.mkdir('/lib/ext/my-extension')
+await this.device.mkdir('/lib/ext/my_app')
 ```
 
-### listDir(path)
+### subscribe(type, handler) and unsubscribe(type)
 
-List directory contents. Returns array of entries.
+Listen for an event the board sends. `type` is a key in the event, and `handler` gets that key's value. There is one handler per type, so subscribing again replaces it.
 
 ```javascript
-const files = await this.device.listDir('/lib')
-// files = [{ name: 'sys', isDir: true }, { name: 'boot.py', isDir: false }]
+this.device.subscribe('my_event', (value) => {
+  this.state.myApp.last = value
+  this.emit('render')
+})
+// later
+this.device.unsubscribe('my_event')
 ```
 
-### removeFile(path)
+### openCanStream({ ack, onFrames })
 
-Delete a file from the device.
+Receive every frame the CAN bus gets. `onFrames(payload, lost)` is called with whole 20-byte records, laid out as `lib/sys/streams.py` on the board says, and with how many frames were lost just before them. It returns a promise of `{ status(), close() }`.
 
 ```javascript
-await this.device.removeFile('/temp.txt')
+const stream = await this.device.openCanStream({
+  onFrames: (payload, lost) => this.handleFrames(payload, lost)
+})
+// later
+await stream.close()
 ```
 
 ## State Object
 
-The `state` object is shared across all extensions and the main app:
+The `state` object is shared by all Apps and Studio:
 
 ```javascript
 // Read connection status
@@ -79,19 +79,17 @@ if (this.state.isConnected) {
   // Device is connected
 }
 
-// Store extension-specific data
-if (!this.state.myExtension) {
-  this.state.myExtension = { config: {} }
+// Store your App's data
+if (!this.state.myApp) {
+  this.state.myApp = { config: {} }
 }
 ```
 
-### Common State Properties
+### State properties
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `isConnected` | boolean | Device connected via WebREPL |
-| `deviceInfo` | object | Device metadata (board, flash, etc.) |
-| `files` | array | Current file listing |
+| `isConnected` | boolean | A board is connected |
 
 ## Emit Function
 
@@ -101,7 +99,7 @@ Trigger events in the application:
 // Re-render the current panel
 this.emit('render')
 
-// Refresh file listing
+// Refresh the file listing
 this.emit('refresh-files')
 ```
 
@@ -137,7 +135,7 @@ return this.html`
   </button>
   <input 
     type="text" 
-    value=${this.state.myExtension.name}
+    value=${this.state.myApp.name}
     oninput=${(e) => this.handleInput(e.target.value)}
   />
 `
@@ -158,7 +156,7 @@ return this.html`
 
 ### onInstall()
 
-Called when user installs the extension while connected to a device:
+Called when the user installs the App with a board connected:
 
 ```javascript
 async onInstall() {
@@ -199,7 +197,7 @@ Use these system classes for consistent styling:
 | `.panel-header` | Panel header with h2 and actions |
 | `.panel-message` | Centered message text |
 
-Define extension-specific styles in `extension.json`:
+Define your App's styles in `extension.json`:
 
 ```json
 {

@@ -1,134 +1,47 @@
-# Getting Started
+# Set Up a Board and Connect
 
-Get started with ScriptO Studio.
+You need an ESP32 board, a USB cable, and Chrome or Edge, because flashing uses Web Serial. Once a board is set up, it connects over your network from any browser.
 
-![ScriptO Studio Home](../assets/home.png)
+## 1. Open Studio
 
-## Onboard New Device
+Go to [scriptostudio.com/app](https://scriptostudio.com/app/). You can install it as an app from your browser's menu.
 
-ScriptO Studio includes a built-in onboarding tool for all device scenarios. Click **Onboard New Device** from the home screen, connect your ESP32 via USB, and choose from four options:
+## 2. Set up a new board
 
-| Scenario | Description |
-|----------|-------------|
-| **New Device** | Flash fresh firmware onto a blank ESP32 |
-| **Forgot Credentials** | View saved hostname and password |
-| **Change WiFi** | Update network settings on existing device |
-| **Re-provision** | Generate new certificates for HTTPS |
+1. Plug the board in with USB.
+2. Click **Set up a new board** at the bottom of the sidebar. That opens **System > Firmware**.
+3. Follow the steps to flash the firmware and give the board your WiFi details. Its certificate is generated for you.
+4. Choose the board's password at `https://<host>.local/setup`. Your browser warns about the board's certificate the first time, because the board signed it itself. That's expected, so proceed to it.
+5. The board sends you back to Studio with its address filled in.
 
-## New Device Setup
+See [Flashing Firmware](../device-setup/flashing-firmware.md) and [Provisioning](../device-setup/provisioning.md) for the details.
 
-If you have a brand new ESP32 chip without firmware:
+## 3. Connect
 
-1. **Go to [scriptostudio.com](https://scriptostudio.com)**
-2. Click **Onboard New Device** from the home screen
-3. Connect your ESP32 via USB
-4. Click **Connect Device**
-5. Select **New Device** when the chip is detected
-6. Flash the firmware (automatically selected for your chip)
-7. **Configure WiFi** when the network modal appears
-   - Select your network from the list (shows signal strength in dBm)
-   - Enter the WiFi password
-   - Device connects and saves settings
-   - You're returned to the scenarios screen
-8. Select **Re-provision Device** to generate certificates
-   - Certificate is generated and installed
-   - Device resets and connects to WiFi
-9. **Accept the security warning modal** and click to open device
-10. **Accept the browser security warning** (click Advanced → Proceed)
-11. **Set an access password** on the device's web interface
-12. You'll be redirected to ScriptO Studio
-13. When ScriptO Studio prompts for connection, **use the same password** you set in step 11
+Click **Connect a board**, or **Connect** beside a board you've used before.
 
-> [!IMPORTANT]
-> The password you set during provisioning is used both for the device's local web interface AND for ScriptO Studio connections. Remember this password!
+![The connection dialog](../assets/connect-dialog.png)
 
-## Existing Device
+- **Device URL** is the board's address, such as `wss://pybot-6014.local/mcp`.
+- **Password** is the one you chose during setup.
 
-If you already have a device running pyDirect enabled firmware:
+The board then appears in the sidebar with what it has, such as CAN, Clock or Motion, and the ScriptOs on it.
 
-1. **Go to [scriptostudio.com](https://scriptostudio.com)**
-2. Click **Connect**
-3. Enter your device's IP address or hostname (e.g. `pybot-xxxx.local`)
-4. Enter the access password (set during initial provisioning)
-5. Click **Connect**
+## 4. Add an API key
 
-## Forgot Credentials
+Studio's agent runs in your browser and uses models through [OpenRouter](https://openrouter.ai), on your own account.
 
-If you can't remember your device's hostname or password:
+1. Click **Add an API key** under the message box, and paste your key.
+2. Click the model's name beside it to choose another model. Tick **Free only** to see the free ones.
 
-1. **Go to [scriptostudio.com](https://scriptostudio.com)**
-2. Click **Onboard New Device**
-3. Connect via USB and click **Connect Device**
-4. Select **Forgot Credentials**
-5. Your device's hostname, password, and WiFi SSID are displayed
+The key stays in this browser, in a separate frame that Studio's pages and Apps can't read.
 
-## Change WiFi
+If you'd rather use Claude Code or another agent, see [Other Agents](../agent/other-agents.md). You don't need a key for that.
 
-To update network settings on an existing device:
+## 5. Ask for something
 
-1. **Go to [scriptostudio.com](https://scriptostudio.com)**
-2. Click **Onboard New Device**
-3. Connect via USB and click **Connect Device**
-4. Select **Change WiFi**
-5. A modal shows available networks with signal strength (dBm)
-6. Select your network and enter the WiFi password
-7. Device connects and you're returned to scenarios
+![Home, ready for a request](../assets/home-start.png)
 
-> [!NOTE]
-> Change WiFi only updates network settings. If you need new HTTPS certificates, 
-> select **Re-provision Device** afterward.
+Type what the board should do, or pick a suggestion. Suggestions come from what the board says it has.
 
-## Re-provision
-
-To generate new HTTPS certificates:
-
-1. **Go to [scriptostudio.com](https://scriptostudio.com)**
-2. Click **Onboard New Device**
-3. Connect via USB and click **Connect Device**
-4. Select **Re-provision Device**
-5. New certificate is generated and installed
-6. Device resets and connects to WiFi
-7. A modal explains the security warning you'll see
-8. Click **Connect to [hostname]** to open device in new tab
-9. Accept the browser security warning
-10. Set a new password on the device's web interface
-
-## Connection Requirements
-
-- **Browser**: Chrome, Edge, or Opera (WebSerial/WebRTC support required)
-- **Device**: ESP32-S3 or ESP32-P4 with pyDirect enabled firmware
-- **Network**: Device and browser on same network for ScriptO Studio
-
-## Accepting the Security Certificate
-
-Devices use HTTPS with a self-signed certificate generated during setup. When you first connect:
-
-1. Browser shows "Your connection is not private" warning
-2. Click **Advanced** (or "Show Details" on Safari)
-3. Click **Proceed to [device-hostname]** (or "visit this website")
-4. The certificate is now trusted for this device
-
-This only needs to be done once per device per browser.
-
-## Next Steps
-
-- **[First ScriptO](first-scripto.md)** - Run your first script
-- **[IDE Overview](ide-overview.md)** - Learn the interface
-- **[Troubleshooting Connection](../troubleshooting/connection.md)** - If you have issues
-
-## Troubleshooting
-
-**Can't connect via USB?**
-
-- Check USB cable supports data (not charge-only)
-- Install USB drivers if needed (CP210x or CH340)
-- Put device in boot mode (hold BOOT, press RESET, release BOOT)
-
-**Can't connect from scriptostudio.com?**
-
-- Verify device is powered and on the network
-- Check the IP address is correct
-- Make sure you're using the password set during provisioning
-- Accept the self-signed certificate warning first
-
-See [Troubleshooting Connection](../troubleshooting/connection.md) for more help.
+Next: [Your First ScriptO](first-scripto.md).

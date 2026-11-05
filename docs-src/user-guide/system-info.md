@@ -1,96 +1,66 @@
 # System Information
 
-View detailed information about your connected device.
+**System > About** shows what Studio, the firmware and the board report about themselves. Without a board connected, it shows only the Studio section.
 
-## Opening System Info
+## Studio
 
-Click **System** in the left sidebar, then select **About** or the info icon.
+| Field | Meaning |
+|-------|---------|
+| **Studio Version** | The version of Studio you're running. |
+| **Build** | The commit it was built from. |
+| **Build Date** | When it was built. |
 
-![System Information](https://raw.githubusercontent.com/jetpax/scriptostudio/main/.github/images/sysinfo.png)
+## Firmware
 
-## Board Information
+| Field | Meaning |
+|-------|---------|
+| **Firmware Version** | The firmware release on the board. |
+| **Built** | When the firmware was built. |
+| **Origin** | `gha` for a CI build, `local` for one built by hand. |
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| **Board Name** | Human-readable board name | Generic ESP32-S3 |
-| **Board ID** | Board identifier | generic_esp32s3 |
-| **Chip** | ESP chip variant | ESP32-S3 |
-| **Version** | Board definition version | 1.0.0 |
-| **Description** | Board capabilities | Generic ESP32-S3 dev board with RGB LED on GPIO48 |
+## Board
+
+| Field | Meaning |
+|-------|---------|
+| **Board Name** | The board's name, from its manifest. |
+| **Board ID** | The manifest's identifier, for example `generic_esp32s3`. |
+| **Chip** | The chip family. |
+| **Hardware Revision** | The board's revision. Hidden when the manifest has none. |
+| **Description** | What the board has on it. |
+
+See [Board Configurations](../device-setup/board-configurations.md).
 
 ## MCU & MicroPython
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| **Unique ID** | Device unique identifier | 8095453208B... |
-| **Frequency** | CPU clock speed | 160 MHz |
-| **Flash Size** | Total flash memory | 16.00 MB |
-| **Platform** | MicroPython platform | esp32 |
-| **System** | Chip family | esp32 |
-| **Release** | MicroPython version | 1.27.0 |
-| **Version** | Detailed version info | v1.27.0-1_ge404eb262... |
-| **Implementation** | Firmware variant | ESP32-S3 16MB with pyDirect enabled firmware |
-| **SPIRAM** | PSRAM availability | Yes |
-| **MPY Version** | Bytecode version | 6.3 |
+| Field | Meaning |
+|-------|---------|
+| **Unique ID** | The chip's unique ID. |
+| **Frequency** | CPU clock, in MHz. |
+| **Flash Size** | Total flash. |
+| **Platform** | The MicroPython platform, for example `esp32`. |
+| **System** | The system name. |
+| **Release** | The MicroPython release. |
+| **Version** | The detailed MicroPython version string. |
+| **Implementation** | The firmware variant. |
+| **SPIRAM** | Whether the board has PSRAM. |
+| **MPY Version** | The bytecode version. |
 
 ## Flash Partitions
 
-The flash partition table shows how storage is allocated:
+A table of the flash partitions, with each one's **Name**, **Type**, **Offset** and **Size**. The `vfs` partition holds the board's files.
 
-| Name | Type | Offset | Size |
-|------|------|--------|------|
-| **factory** | APP | 0x10000 | 4.00 MB |
-| **nvs** | DATA | 0x9000 | 24.0 KB |
-| **phy_init** | DATA | 0xf000 | 4.0 KB |
-| **vfs** | DATA | 0x410000 | 11.94 MB |
+## Status bar
 
-### Partition Types
+The bar at the bottom of Studio shows live readings:
 
-- **factory** - The main application (MicroPython + pyDirect enabled firmware)
-- **nvs** - Non-volatile storage for system settings
-- **phy_init** - WiFi/Bluetooth PHY calibration data
-- **vfs** - Virtual filesystem (your Python files and data)
-
-## Status Bar
-
-The status bar at the bottom of ScriptO Studio shows real-time device metrics:
-
-| Indicator | Description | Example |
-|-----------|-------------|---------|
-| **RAM** | Used / Total memory | 77.64 KB / 7.97 MB |
-| **TEMP** | Chip temperature | 38.9°C |
-| **UPTIME** | Time since boot | 18m |
-| **RSSI** | WiFi signal strength | -41 dBm |
-
-### Understanding RAM
-
-- **Used** - Currently allocated memory
-- **Total** - Total available (includes PSRAM if present)
-- PSRAM (SPIRAM) significantly increases available RAM
-
-### Temperature
-
-Normal operating range: 30-60°C. Higher temperatures may indicate:
-- Heavy processing load
-- Poor ventilation
-- High ambient temperature
-
-## Using This Information
-
-### For Debugging
-
-- Check **Flash Size** to ensure sufficient storage
-- Monitor **RAM** to detect memory leaks
-- Verify **SPIRAM** is enabled if needed
-
-### For Development
-
-- Use **Board ID** for conditional code
-- Check **Frequency** for timing calculations
-- Reference **MPY Version** for compatibility
+| Indicator | Meaning |
+|-----------|---------|
+| **RAM** | Memory used and total. PSRAM counts toward the total. |
+| **TEMP** | Chip temperature. Set the unit in [Settings](settings.md). |
+| **UPTIME** | Time since boot. |
+| **RSSI** | WiFi signal strength. |
 
 ## Related
 
-- [Board Configurations](../device-setup/board-configurations.md) - Supported boards
-- [Troubleshooting Memory](../troubleshooting/memory.md) - Memory issues
-- [Settings](../user-guide/settings.md) - Device configuration
+- [Board Configurations](../device-setup/board-configurations.md)
+- [Settings](settings.md)

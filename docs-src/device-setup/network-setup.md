@@ -1,57 +1,49 @@
 # Network Setup
 
-Configure WiFi on your device.
+Set the WiFi network a board joins, and see its network state.
 
-## Using ScriptO Studio
+## Change WiFi over USB
 
-1. Go to [scriptostudio.com](https://scriptostudio.com) or use the embedded IDE
-2. Click **Onboard New Device** from the home screen
-3. Connect your device via USB and click **Connect Device**
-4. Select **Change WiFi** from the scenarios
-5. A modal displays available networks with signal strength
-6. Select your network and enter the password
-7. Device connects and saves settings
-8. You're returned to the scenarios screen
+1. On Home, click **Set up a new board**. This opens **System > Firmware**.
+2. Plug the board in over USB and click **Connect Device**.
+3. Choose **Change WiFi**.
+4. Studio scans and lists the networks it finds.
+5. Pick your network and enter the password.
+6. The board connects and saves the settings, and Studio returns to the options screen.
 
-> [!NOTE]
-> Changing WiFi only updates network settings. To generate new certificates, 
-> use **Re-provision Device** afterward.
+Changing WiFi only updates the network settings. Run **Re-provision** if you also want a new certificate. See [Provisioning](provisioning.md).
 
-## Network Selection Modal
+The list shows each network's name (SSID), its signal strength in dBm, and a lock for networks that need a password. About -50 dBm is excellent, -70 is fair and -90 is weak.
 
-The network selection shows:
+## Networks > WiFi
 
-- **Network name (SSID)** - The name of the WiFi network
-- **Signal strength in dBm** - e.g., -49 dBm is excellent, -70 dBm is fair, -90 dBm is weak
-- **Lock icon** - Indicates the network requires a password
+With a board connected, open **Networks > WiFi** to see its WiFi state:
 
-## After Changing WiFi
+- **Wi-Fi Client Interface**: active or inactive, with MAC address, SSID, IP address, subnet mask, gateway, DNS server and signal strength.
+- **Wi-Fi Access Point Interface**: active or inactive, with MAC address, SSID, IP address, subnet mask, gateway, DNS server and connected clients.
 
-After WiFi is configured, you're returned to the scenarios screen where you can:
-
-- **Disconnect** - If you just needed to update network settings
-- **Re-provision Device** - If you need new HTTPS certificates
+Other panels under **Networks** cover Ethernet, VPN, Bluetooth LE, WWAN, MQTT, Telephony, NTP and CAN. You can switch an interface on or off in **System > Settings** under **Network Interfaces**. See [Settings](../user-guide/settings.md).
 
 ## Troubleshooting
 
-### Network not appearing?
+**The network doesn't appear**
 
-- Make sure the network is broadcasting its SSID (not hidden)
-- Move device closer to the router
-- Try rescanning by going back and selecting Change WiFi again
+- The network must broadcast its name. Hidden networks aren't listed.
+- Move the board closer to the router.
+- Go back and choose **Change WiFi** again to rescan.
 
-### Connection fails?
+**The connection fails**
 
-- Verify the password is correct
-- Check if MAC filtering is enabled on your router
-- Ensure you're connecting to a 2.4 GHz network (ESP32 doesn't support 5 GHz)
+- Check the password.
+- Check for MAC filtering on your router.
+- Use a 2.4 GHz network.
 
-### Wrong network saved?
+**The wrong network was saved**
 
-Simply run **Change WiFi** again to select a different network.
+Run **Change WiFi** again and pick another network.
 
 ## Related
 
-- [Provisioning](provisioning.md) - Generate HTTPS certificates
-- [Flashing Firmware](flashing-firmware.md) - Install firmware
-- [Troubleshooting Connection](../troubleshooting/connection.md) - Connection issues
+- [Provisioning](provisioning.md)
+- [Flashing Firmware](flashing-firmware.md)
+- [Connection troubleshooting](../troubleshooting/connection.md)

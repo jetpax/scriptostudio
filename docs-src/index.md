@@ -1,77 +1,39 @@
-# Home
+# ScriptO Studio
 
-Welcome to the ScriptO Studio documentation! This wiki covers everything you need to get started with ScriptO Studio.
+Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board. You watch every call, and you can stop it at any moment.
 
-![ScriptO Studio AI Assistant](assets/AI.png)
+![Studio's agent working on a board](assets/home.png)
 
-## 🚀 Quick Start
+## Start here
 
-| Your Situation | Go To |
-|----------------|-------|
-| **New ESP32 chip** (no firmware) | [scriptostudio.com](https://scriptostudio.com) → **Onboard New Device** → [Getting Started](getting-started/index.md) |
-| **Existing device** | [scriptostudio.com](https://scriptostudio.com) → **Connect** → [Getting Started](getting-started/index.md) |
-| **Change WiFi on device** | [scriptostudio.com](https://scriptostudio.com) → **Onboard New Device** → Change WiFi |
+- [Set up a board and connect](getting-started/index.md)
+- [Make your first ScriptO](getting-started/first-scripto.md)
+- [Use Studio's agent](agent/studio-agent.md), which runs in the browser with nothing to install
+- [Connect Claude Code or another agent](agent/other-agents.md)
 
-1. **[Getting Started](getting-started/index.md)** - Install firmware and connect
-2. **[First ScriptO](getting-started/first-scripto.md)** - Run your first script on the device
-3. **[IDE Overview](getting-started/ide-overview.md)** - Tour of the ScriptO Studio interface
+## The words used here
 
-## 📚 Documentation
+**Studio**
+:   The app you run in a browser or install. It's where you work with an agent and watch what it does.
 
-### User Guide
-- [File Manager](user-guide/file-manager.md) - Managing device files
-- [Editor Features](user-guide/editor-features.md) - Code editing and syntax highlighting
-- [Terminal & REPL](user-guide/terminal-repl.md) - Interactive Python shell
-- [Extensions](extensions/index.md) - Installing and using extensions
-- [Settings](user-guide/settings.md) - Configuring ScriptO Studio
+**Board**
+:   An ESP32 running MicroPython and Studio's firmware. Each board is an MCP server, so any agent that speaks MCP can use it.
 
-### Device Setup
-- [Flashing Firmware](device-setup/flashing-firmware.md) - Installing firmware on your ESP32
-- [Board Configurations](device-setup/board-configurations.md) - Supported boards and pinouts
-- [Network Setup](device-setup/network-setup.md) - WiFi provisioning and connection
-- [Provisioning](device-setup/provisioning.md) - First-time device setup
+**ScriptO**
+:   MicroPython left on the board to stay. It keeps running with nobody connected and can start at boot. It's what an agent leaves behind. See [ScriptOs](scriptos/index.md).
 
-### AI Agent
-- [Agent Overview](agent/index.md) - AI-powered coding assistant
-- [Agent Setup](agent/setup.md) - Configure API keys
-- [Using the Agent](agent/usage.md) - Examples and tips
+**App**
+:   A ScriptO with a browser side as well, for tools that need a screen, like OpenInverter. See [Apps](apps/index.md).
 
-### Debugging
-- [Debugger Overview](debugging/index.md) - Debugging tools
-- [Setting Breakpoints](debugging/breakpoints.md) - Print-based debugging
-- [Debug Console](debugging/debug-console.md) - REPL debugging tips
+**MCP**
+:   The Model Context Protocol, the open standard that agents use to call tools. It's the board's only protocol, and Studio uses it too.
 
-### Extensions Development
-- [Writing Extensions](extensions/writing-extensions.md) - Create your own extensions
-- [Extension API](extensions/extension-api.md) - JavaScript API reference
-- [Device Libraries](extensions/device-libraries.md) - MicroPython MIP packages
-- [Built-in Extensions](extensions/built-in-extensions.md) - DBE, OVMS, DTC, OpenInverter
+## How it fits together
 
-### Protocol & API
-- [WebREPL Binary Protocol](protocol/webrepl-binary-protocol.md) - WBP specification
-- [WebRTC Transport](protocol/webrtc-transport.md) - Primary connection method
-- [WebSocket Transport](protocol/websocket-transport.md) - Fallback connection
-- [Message Types](protocol/message-types.md) - Command and response formats
+The board is the source of truth. What's installed, what runs at boot, what tools exist and what hardware it has all live on the board, so any agent finds them there.
 
-### Developer Guide
-- [Architecture](developer/architecture.md) - System design overview
-- [Building from Source](developer/building-from-source.md) - Development setup
-- [Contributing](developer/contributing.md) - How to contribute
-- [ESM Modules](developer/esm-modules.md) - JavaScript module structure
+- **Studio's agent** runs in the page, on your own OpenRouter key.
+- **Outside agents** like Claude Code run on your computer and connect to the board directly. They keep your repos, your shell and their own tools.
+- **Studio** stays connected beside them and shows every call as it happens.
 
-## 🛠️ Troubleshooting
-
-- [Connection Issues](troubleshooting/connection.md)
-- [Memory & Performance](troubleshooting/memory.md)
-- [Common Errors](troubleshooting/errors.md)
-- [Debug Logging](troubleshooting/debug-logging.md)
-
-## 📋 Reference
-
-- [Changelog](reference/changelog.md)
-- [Roadmap](reference/roadmap.md)
-- [FAQ](reference/faq.md)
-
----
-
-**Need help?** [Open an issue](https://github.com/jetpax/scriptostudio/issues) or check the [FAQ](reference/faq.md).
+Read [how agents work with a board](agent/index.md) for more, or the [architecture](developer/architecture.md) for how it's built.

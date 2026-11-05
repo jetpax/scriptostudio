@@ -1,48 +1,41 @@
-# Agent Overview
+# How Agents Work with a Board
 
-ScriptO Studio includes an AI-powered coding agent that helps you write, debug, and optimize MicroPython code for your device.
+An agent is a model with tools. A board gives it tools over MCP: run code, read and write files, make ScriptOs. There are three ways to run one, and they all use those same tools.
 
-![AI Agent](../assets/AI.png)
+| | Studio's agent | An outside agent | PFC |
+|---|---|---|---|
+| **Runs in** | The browser page | Your computer | The board |
+| **Install** | Nothing | The agent, such as Claude Code | An App |
+| **Model** | Yours on OpenRouter | Whatever the agent uses | A provider you configure |
+| **Reaches** | One board | Your repos, shell and other tools as well | Its own board |
+| **Asks first** | In the chat | In its own prompts | |
 
-## What is the Agent?
+Use [Studio's agent](studio-agent.md) to get something working on a board. Use an [outside agent](other-agents.md) when the work also needs your repos or a shell.
 
-The Agent is an AI assistant integrated into ScriptO Studio that can:
-- **Generate code** from natural language descriptions
-- **Explain code** and device behavior
-- **Debug issues** by analyzing errors and logs
-- **Suggest optimizations** for performance and memory
-- **Answer questions** about MicroPython and ESP32
-- **Stream responses** in real-time via C-native SSE (Server-Sent Events)
+## What makes this work
 
-## How It Works
+**The board explains itself.** When an agent connects, the board tells it the rules and its hardware, built from its manifest, so the agent needs no setup. See [What a Board Tells an Agent](board-context.md).
 
-The Agent uses large language models (LLMs) to understand your requests and generate appropriate responses. It has context about:
-- Your device configuration
-- Currently open files
-- Recent terminal output
-- Error messages
+**The agent can try things.** `exec` runs Python on the board and returns what it printed, so an agent can check a pin or a sensor instead of assuming. It stops after 4 seconds, and longer work belongs in a ScriptO.
 
-## Features
+**The work stays.** `scripto_create` leaves code on the board that keeps running with nobody connected. See [ScriptOs](../scriptos/index.md).
 
-| Feature | Description |
-|---------|-------------|
-| **Code Generation** | Describe what you want, get working code |
-| **Error Analysis** | Paste an error, get an explanation and fix |
-| **Device Awareness** | Knows your board's pins and capabilities |
-| **Context Retention** | Remembers conversation history |
-| **SSE Streaming** | C-native Server-Sent Events for real-time token delivery |
+**A person can see it.** Studio stays connected beside the agent, and the board reports every agent call to it.
 
-## Getting Started
+## What you see
 
-See [Agent Setup](../agent/setup.md) to configure the agent with your API key.
+| The agent | Where it shows |
+|---|---|
+| Runs `exec` | Code and output in the terminal, tagged with the client's name |
+| Changes something on the board | A dim line in the terminal, or a red one if it failed |
+| Finishes any call | A line in the Logs window, with its name and how long it took |
+| Writes or removes a file | The file list refreshes, and an open tab reloads unless it has unsaved edits |
+| Creates or changes a ScriptO | Its row in the sidebar updates |
 
-See [Using the Agent](../agent/usage.md) for usage examples.
+## What keeps it safe
 
-## Privacy
+Connecting takes a password, and an agent gets less than a person does. Its `exec` stops after 4 seconds where a person's can run for 60, it can only break its own call, and it can't arm CAN transmit.
 
-The Agent sends your prompts and relevant context to the configured LLM provider. Review your provider's privacy policy for details on data handling.
+That protects against accidents. It isn't a sandbox, because `exec` runs any Python. Don't give an agent a board you wouldn't trust it with, and don't connect a board to anything it could damage without someone watching.
 
-## Related
-
-- [Agent Setup](../agent/setup.md)
-- [Using the Agent](../agent/usage.md)
+All the tools are listed in the [MCP tools reference](../reference/mcp-tools.md).

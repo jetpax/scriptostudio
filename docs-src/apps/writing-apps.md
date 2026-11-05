@@ -1,32 +1,34 @@
-# Writing Extensions
+# Writing Apps
 
-Extensions add new functionality to ScriptO Studio through the **JS Configurator** pattern - a JavaScript class that provides UI tabs and device-side Python libraries.
+An App is a JavaScript class that provides panels in Studio, plus the MicroPython files that go on the board. See [Apps](index.md) for what that means for users.
 
-## Extension Structure
+## Structure
 
-Extensions use a modular source structure that gets bundled for distribution:
+An App's source is bundled into one file for distribution:
 
 ```
-MyExtension/
+MyApp/
 ├── extension.json          # Metadata and configuration
 ├── src/
 │   └── index.js           # Entry point (exports class)
-└── device/                 # Device-side files (optional)
-    └── lib/
-        └── my_helpers.py
+└── device/                 # Files that go on the board (optional)
+    ├── my_helpers.py
+    ├── main.py            # Runs on the board (optional)
+    └── tools/
+        └── read_status.py # A tool for agents (optional)
 ```
 
 ## extension.json
 
-The manifest file defines your extension:
+The manifest defines your App:
 
 ```json
 {
-  "name": "My Extension",
-  "id": "my-extension",
+  "name": "My App",
+  "id": "my-app",
   "version": [1, 0, 0],
   "author": "Your Name",
-  "description": "What your extension does",
+  "description": "What your App does",
   "icon": "settings",
   "menu": [
     { "id": "config", "label": "Configuration" },
@@ -34,7 +36,7 @@ The manifest file defines your extension:
   ],
   "styles": ".my-class { color: blue; }",
   "devicePaths": {
-    "lib/my_helpers.py": "/lib/ext/my-extension/my_helpers.py"
+    "my_helpers.py": "/lib/ext/my_app/my_helpers.py"
   }
 }
 ```
@@ -51,24 +53,24 @@ The manifest file defines your extension:
 | `icon` | | Tabler icon name (e.g., `bolt`, `battery-charging`) |
 | `iconSvg` | | Custom SVG icon (overrides `icon`) |
 | `menu` | | Array of menu items with `id` and `label` |
-| `styles` | | CSS styles injected when extension loads |
+| `styles` | | CSS injected when the App loads |
 | `devicePaths` | | Map of source → device paths for bundler |
 
-## Extension Class
+## The class
 
-Create `src/index.js` with a class that extends the base pattern:
+Create `src/index.js` with a class that is the default export:
 
 ```javascript
-class MyExtension {
+class MyApp {
   constructor(deviceAPI, emit, state, html) {
     this.device = deviceAPI  // Device communication
     this.emit = emit         // Trigger re-render
     this.state = state       // Shared state object
     this.html = html         // Tagged template literal for rendering
     
-    // Initialize your extension's state
-    if (!this.state.myExtension) {
-      this.state.myExtension = {
+    // Initialize your App's state
+    if (!this.state.myApp) {
+      this.state.myApp = {
         config: {},
         status: 'idle'
       }
@@ -96,14 +98,14 @@ class MyExtension {
           <h2>Status</h2>
         </div>
         <div style="padding: 20px;">
-          <p>Status: ${this.state.myExtension.status}</p>
+          <p>Status: ${this.state.myApp.status}</p>
         </div>
       </div>
     `
   }
 }
 
-export { MyExtension as default }
+export { MyApp as default }
 ```
 
 ### Render Methods
@@ -120,24 +122,54 @@ For each menu item with `id: "foo"`, implement `renderFoo()` (capitalized). The 
 
 Device-side Python files live in `device/` and get deployed during installation.
 
-### devicePaths Mapping
+### devicePaths mapping
 
-In `extension.json`, map source files to device destinations:
+In `extension.json`, map source files under `device/` to board paths:
 
 ```json
 {
   "devicePaths": {
-    "lib/helpers.py": "/lib/ext/my-extension/helpers.py",
-    "lib/utils.py": "/lib/ext/my-extension/utils.py"
+    "helpers.py": "/lib/ext/my_app/helpers.py",
+    "main.py": "/lib/ext/my_app/main.py",
+    "tools/read_status.py": "/lib/ext/my_app/tools/read_status.py"
   }
 }
 ```
 
-**Convention:** Device files go to `/lib/ext/<extension-id>/`
+Device files go to `/lib/ext/<folder>/`. Use underscores in the folder name, because Python can't import a name with a hyphen. Without `devicePaths`, the bundler puts everything under `device/` in `/lib/ext/<id>/`.
 
-### onInstall Hook
+### main.py
 
-Implement `onInstall()` to deploy device files:
+`/lib/ext/<folder>/main.py` with an `async def run()` works as it does for a [ScriptO](../scriptos/writing-scriptos.md). It loops and awaits often, because one interpreter runs everything. It can start at every boot.
+
+### tools/
+
+Each file in `/lib/ext/<folder>/tools/` becomes a tool that agents can call, named `<app>_<file>`. Files starting with `_` aren't tools. A tool has a configuration block that gives its name, description and arguments, and an `async def run(args, job)`:
+
+```python
+# === START_CONFIG_PARAMETERS ===
+dict(
+    info = dict(
+        name = "Read status",
+        description = "What an agent reads to decide to use this.",
+        effects = dict(readOnly=True, destructive=False, openWorld=False),
+    ),
+    args = dict(
+        name = dict(label="Parameter name", type=str),
+    ),
+)
+# === END_CONFIG_PARAMETERS ===
+
+async def run(args, job):
+    job.progress(1, 2, "halfway")
+    return {"value": 1}
+```
+
+Effects you leave out take the conservative defaults.
+
+### onInstall hook
+
+Implement `onInstall()` to write the device files:
 
 ```javascript
 async onInstall() {
@@ -145,7 +177,7 @@ async onInstall() {
   
   try {
     // Create directories
-    await this.device.mkdir('/lib/ext/my-extension')
+    await this.device.mkdir('/lib/ext/my_app')
     
     // Write all device files (injected by loader)
     for (const [path, content] of Object.entries(this.deviceFiles)) {
@@ -164,21 +196,19 @@ The `this.deviceFiles` object is injected by the loader and contains base64-deco
 
 ## Device API
 
-Use `this.device` to communicate with the connected device:
+Use `this.device` to talk to the connected board. The full list is in the [App API](app-api.md).
 
 | Method | Description |
 |--------|-------------|
 | `device.execute(code)` | Run Python code, returns output |
 | `device.saveFile(path, content)` | Write file to device |
-| `device.readFile(path)` | Read file from device |
 | `device.mkdir(path)` | Create directory |
-| `device.listDir(path)` | List directory contents |
 
 ```javascript
 // Example: Get config from device
 async getConfig() {
   const result = await this.device.execute(`
-    from lib.ext.my_extension.helpers import get_config
+    from lib.ext.my_app.helpers import get_config
     import json
     print(json.dumps(get_config()))
   `)
@@ -188,17 +218,19 @@ async getConfig() {
 
 ## Bundling
 
-Use the bundler tool to create a distributable bundle:
+`tools/bundle_extensions.js` in the PFC repository builds a bundle. It needs esbuild (`npm install` in that repository):
 
 ```bash
-# In-place mode (default) - writes bundle to extension directory
-node tools/bundle_extensions.js --extensions-dir /path/to/your/extensions
+# Writes each bundle into its App's directory
+node tools/bundle_extensions.js --extensions-dir /path/to/your/apps
 
-# Or central output mode
+# Or collect the bundles in one place
 node tools/bundle_extensions.js \
-  --extensions-dir /path/to/extensions \
+  --extensions-dir /path/to/your/apps \
   --output-dir /path/to/bundles
 ```
+
+Add `--mpy` to cross-compile the `.py` files to `.mpy` (it needs `mpy-cross`).
 
 The bundler:
 1. Reads `extension.json` for metadata
@@ -206,16 +238,9 @@ The bundler:
 3. Base64-encodes device files from `device/`
 4. Produces a single `{id}.bundle.js` file
 
-### ScriptoHub Structure
+### Publishing
 
-For distribution, place bundles in the extension directory:
-
-```
-ScriptoHub (see scriptohub.ai)
-├── dbe.bundle.js    # Bundled extension
-├── package.json     # Minimal metadata
-└── README.md        # Documentation
-```
+Publish the bundle to [ScriptoHub](https://scriptohub.ai). Bump the version first, as [Versioning](versioning.md) describes.
 
 ## Best Practices
 
@@ -223,17 +248,14 @@ ScriptoHub (see scriptohub.ai)
 2. **Error handling** - Wrap device calls in try/catch
 3. **Responsive UI** - Use async/await, show loading states
 4. **Minimal device code** - Keep Python files focused and small
-5. **Avoid import verification** - Device files may have dependencies; just write files in onInstall
+5. **Don't verify imports in onInstall** - Device files may depend on others that aren't there yet; just write the files
 
 ## Examples
 
-See these extensions for reference patterns:
-
-- **[DBE](../../DBE/)** - Battery emulator with multiple panels
-- **[OpenInverter](../../OpenInverter/)** - Device discovery with dynamic menus
+Look at the Apps on ScriptoHub for patterns. DBE has multiple panels, and OpenInverter discovers devices and builds its menu from them. See [Available Apps](available-apps.md).
 
 ## Next Steps
 
-- [Extension API](extension-api.md) - Full API reference
-- [Device Libraries](device-libraries.md) - Python library patterns
-- [Built-in Extensions](built-in-extensions.md) - More examples
+- [App API](app-api.md)
+- [Device libraries](device-libraries.md)
+- [Available Apps](available-apps.md)

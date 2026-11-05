@@ -1,184 +1,89 @@
 # Writing ScriptOs
 
-A guide to writing MicroPython scripts for your device.
+An agent will usually write these for you. This is what it's writing, for when you want to read or change one yourself.
 
-## Script Basics
+## The code
 
-A ScriptO is simply a MicroPython script that runs on your device. You can:
-- Run scripts directly from the editor (temporary execution)
-- Save scripts to the device (persistent storage)
-- Set scripts to run on boot (via `main.py`)
-
-## Script Structure
-
-### Simple Script
+A ScriptO's `main.py` defines `async def run()`:
 
 ```python
-# hello.py - A simple script
-print("Hello from ScriptO!")
-```
-
-### Script with Imports
-
-```python
-# blink.py - Blink an LED
-from machine import Pin
-import time
-
-led = Pin(2, Pin.OUT)
-
-for i in range(5):
-    led.on()
-    time.sleep(0.5)
-    led.off()
-    time.sleep(0.5)
-
-print("Done blinking!")
-```
-
-### Async Script
-
-For non-blocking operations, use asyncio:
-
-```python
-# async_example.py
 import asyncio
-from machine import Pin
+from lib.sys import imu, buzzer
 
-led = Pin(2, Pin.OUT)
-
-async def blink():
+async def run():
     while True:
-        led.toggle()
-        await asyncio.sleep(0.5)
-
-async def main():
-    # Run tasks concurrently
-    await asyncio.gather(
-        blink(),
-        other_task(),
-    )
-
-asyncio.run(main())
+        x, y, z = imu.read()
+        if abs(x) > 500:
+            buzzer.beep(200)
+        await asyncio.sleep(0.1)
 ```
 
-## Boot Scripts
+All Python on the board runs on one thread, shared with the server that Studio and agents talk to. So:
 
-The device executes scripts in this order on boot:
+- **Await often.** Code that doesn't await holds up every client and ScriptO, and the watchdog breaks it after a few seconds.
+- **Use `await asyncio.sleep()`**, never `time.sleep()`.
+- **Get pins from the board.** Use `lib.sys.board`, as in `board.pin("status_led")` and `board.i2c("i2c0").scl`, or the helper a device's description names.
 
-1. `boot.py` - System initialization (don't edit unless you know what you're doing)
-2. `main.py` - Your application code
+This is MicroPython, so there's no `os.path`. See the [MicroPython Reference](../developer/micropython-reference.md).
 
-### Creating main.py
+## Making one yourself
+
+In the terminal:
 
 ```python
-# main.py - Runs on every boot
-print("Device starting...")
-
-# Your application logic here
-import my_app
-my_app.run()
+from lib.sys import apps
+apps.create("my-scripto", open("/my_code.py").read(), name="My ScriptO")
+apps.start("my-scripto")
 ```
 
-> [!WARNING]
-> If `main.py` has an error or infinite loop, you may need to connect via USB REPL to fix it.
+An id is lowercase letters, digits and hyphens. The code is compiled before anything is written, so a mistake can't replace what's working.
 
-## Working with Hardware
+## Changing one
 
-### GPIO
+Click **Code** on its row, edit it and save. A running ScriptO keeps running the old code until you **Stop** and **Start** it.
+
+!!! warning "Leave `/main.py` alone"
+    The board's own `/main.py` and `/boot.py` start its server. If you break them, you can't connect. A ScriptO's code goes in its own folder under `/lib/ext/`.
+
+## Giving agents a tool
+
+A file at `/lib/ext/<folder>/tools/<name>.py` appears to any agent as `<scripto>_<name>`. Its config block becomes the tool's schema:
 
 ```python
-from machine import Pin
+# === START_CONFIG_PARAMETERS ===
+dict(
+    info = dict(
+        name = "Read parameter",
+        description = "What an agent reads to decide to use this.",
+        effects = dict(readOnly=True, destructive=False, openWorld=False),
+    ),
+    args = dict(
+        name = dict(label="Parameter name", type=str),
+        pin = dict(label="Pin", type=list, optional=True),
+        mode = dict(label="Mode", type=dict, items=dict(a="First", b="Second"), value="a"),
+    ),
+)
+# === END_CONFIG_PARAMETERS ===
 
-# Digital output
-led = Pin(2, Pin.OUT)
-led.on()
-led.off()
-led.toggle()
-
-# Digital input
-button = Pin(0, Pin.IN, Pin.PULL_UP)
-if button.value() == 0:
-    print("Button pressed")
+async def run(args, job):
+    job.progress(1, 2, "halfway")
+    return {"value": 1}
 ```
 
-### I2C
+`type=list` means a GPIO, with its choices taken from the board's manifest. Files starting with `_` aren't tools.
+
+A tool runs as a task, so it can take as long as it needs. A client on a WebSocket stays on the call and gets progress. A client on plain HTTP gets a job id to poll with `job_status`.
+
+## Reading CAN
+
+`lib.sys.can_tap` lets a ScriptO watch the bus without getting in the way of anything else:
 
 ```python
-from machine import I2C, Pin
+from lib.sys import can_tap
 
-i2c = I2C(0, scl=Pin(9), sda=Pin(8), freq=400000)
-
-# Scan for devices
-devices = i2c.scan()
-print(f"Found: {[hex(d) for d in devices]}")
-
-# Read from device
-data = i2c.readfrom(0x68, 7)
+watcher = can_tap.watch([0x470])
+for can_id, data in watcher.read():
+    ...
 ```
 
-### CAN Bus
-
-```python
-from machine import CAN
-
-can = CAN(0, mode=CAN.NORMAL, baudrate=500000,
-          tx=Pin(5), rx=Pin(4))
-
-# Send message
-can.send([0x11, 0x22, 0x33], 0x123)
-
-# Receive message
-id, data = can.recv()
-print(f"Received: ID={hex(id)}, data={data}")
-```
-
-## Best Practices
-
-### Memory Management
-
-```python
-import gc
-
-# Force garbage collection to free memory
-gc.collect()
-
-# Check available memory
-print(f"Free: {gc.mem_free()} bytes")
-```
-
-### Error Handling
-
-```python
-try:
-    risky_operation()
-except OSError as e:
-    print(f"OS error: {e}")
-except Exception as e:
-    import sys
-    sys.print_exception(e)
-```
-
-### Modular Code
-
-Split large scripts into modules:
-
-```
-/lib/
-  my_sensors.py
-  my_network.py
-main.py  # imports from lib/
-```
-
-## Testing Scripts
-
-1. **Run in editor** - Quick iteration, no save required
-2. **Save and run** - Test persistent behavior
-3. **Soft reset** - Ctrl+D in REPL to restart without power cycle
-4. **Hard reset** - Power cycle or reset button
-
-## Related
-
-- [First ScriptO](../getting-started/first-scripto.md) - Your first script
-- [Writing Extensions](../extensions/writing-extensions.md) - Create UI extensions
-- [Debugger Overview](../debugging/index.md) - Debug your code
+`read()` never waits. `watch([])` gets every identifier, and `watcher.lost()` says how many frames it was too slow for.

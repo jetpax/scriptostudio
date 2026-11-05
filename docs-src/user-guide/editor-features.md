@@ -1,110 +1,52 @@
 # Editor Features
 
-The ScriptO Studio editor is built on CodeMirror 6 and provides a modern code editing experience.
+The Editor edits files on the board or in your browser storage. Open it with **Editor** in the menu.
 
-## Overview
+![The Editor](../assets/editor.png)
 
-![ScriptO Studio Editor](https://raw.githubusercontent.com/jetpax/scriptostudio/main/.github/images/AI.png)
-
-The editor supports:
-- Python syntax highlighting
-- Multiple file tabs
-- Line numbers
-- Code execution
-- AI Agent integration
+The editor is CodeMirror 6. It has Python and JSON highlighting, line numbers, folding, bracket matching, search and undo history.
 
 ## Toolbar
 
-The toolbar provides quick access to common actions:
-
 | Button | Action | Shortcut |
 |--------|--------|----------|
-| **Reset** | Soft reset device | - |
-| **Run** | Execute current file | Ctrl+R / Cmd+R |
-| **Stop** | Send interrupt (Ctrl+C) | - |
-| **Debug** | Toggle debug mode | - |
-| **New** | Create new file | Ctrl+N / Cmd+N |
-| **Save** | Save current file | Ctrl+S / Cmd+S |
-| **ScriptO** | Open ScriptO browser | - |
-| **AI Agent** | Toggle AI Agent panel | - |
+| **New** | Create a file. | Ctrl+N / Cmd+N |
+| **Save** | Save the current file. | Ctrl+S / Cmd+S |
+| **Reset** | Reset the board. | |
+| **Stop** | Interrupt what's running and stop background tasks. | |
+| **Run** | Run the current file on the board. | Ctrl+R / Cmd+R |
+| **Debug** | Start a debug session. See [Debugging](debugging.md). | |
 
 ## Tabs
 
-Multiple files can be open simultaneously in tabs:
+Each open file has a tab. A CPU icon means the file is on the board, and a desktop icon means it's in browser storage. A `*` marks unsaved changes.
 
-- Click a tab to switch to that file
-- Click the **×** on a tab to close it
-- Modified files show an indicator
-- Right-click for tab options
+- Click a tab to switch to it.
+- Click the name on the active tab to rename the file.
+- Click the **x** to close it.
 
-Tab examples shown:
-- `New1.py`
-- `CAN_TWAI_Loopb...`
-- `Terminal_Sine_W...`
-- `Tesla_M3_Brake_...`
+## Run
 
-## Syntax Highlighting
+**Run** sends the editor's current text to the board, saved or not. Output appears in the [terminal](terminal.md) in the sidebar.
 
-Python code is highlighted with:
-- **Keywords** (import, def, class, return) in distinct colors
-- **Strings** highlighted
-- **Comments** in muted colors
-- **Numbers** highlighted
-- **Function calls** distinguished
+## JSON mode
 
-## Line Numbers
+Files that end in `.json` get JSON highlighting. When you open one that holds a JSON object or array, Studio reformats it with two-space indentation.
 
-Line numbers appear on the left margin. Click a line number to:
-- Select the entire line
-- Set a cursor position
+## Breakpoints
 
-## Code Execution
+Click the gutter beside a line number to set a breakpoint. See [Debugging](debugging.md).
 
-To run your code:
-
-1. Write or edit code in the editor
-2. Click **Run** or press **Ctrl+R** / **Cmd+R**
-3. Output appears in the Terminal below
-
-The code is sent to the device and executed immediately. You don't need to save first - the editor content is executed directly.
-
-## Terminal Integration
-
-The Terminal panel below the editor shows:
-- Script output (print statements)
-- Error messages and tracebacks
-- REPL prompt for interactive commands
-
-Example output:
-```
-=== Tesla Model 3 Brake Pedal Emulator Started ===
-Config: TX Pin(5), RX Pin(4), ForceLevel=50N, Interval=20ms
-Transmitting...
-
-Stopping emulator...
-```
-
-## Keyboard Shortcuts
+## Other shortcuts
 
 | Shortcut | Action |
 |----------|--------|
-| **Ctrl+S** / **Cmd+S** | Save file to device |
-| **Ctrl+R** / **Cmd+R** | Run code |
-| **Ctrl+N** / **Cmd+N** | New file dialog |
-| **Ctrl+L** / **Cmd+L** | Clear terminal |
-| **Ctrl+Shift+C** / **Cmd+Shift+C** | Connect to device |
-
-## AI Agent Panel
-
-The AI Agent panel on the right provides:
-- Natural language code generation
-- Error explanation
-- Code suggestions
-
-See [Using the Agent](../agent/usage.md) for details.
+| Ctrl+L / Cmd+L | Clear the terminal. |
+| Ctrl+Shift+C / Cmd+Shift+C | Open the connect dialog. |
 
 ## Related
 
-- [Writing ScriptOs](../scriptos/writing-scriptos.md) - Script development
-- [Terminal & REPL](../user-guide/terminal-repl.md) - Interactive programming
-- [Using the Agent](../agent/usage.md) - AI assistance
+- [File Manager](file-manager.md)
+- [Terminal](terminal.md)
+- [Debugging](debugging.md)
+- [Writing ScriptOs](../scriptos/writing-scriptos.md)

@@ -1,14 +1,14 @@
 # Contributing
 
-Thank you for considering contributing to ScriptO Studio!
+Thanks for considering a contribution to ScriptO Studio.
 
 ## Ways to Contribute
 
-- 🐛 **Report bugs** - [Open an issue](https://github.com/jetpax/scriptostudio/issues/new)
-- 💡 **Suggest features** - Describe your idea in an issue
-- 📖 **Improve docs** - Edit wiki pages or README
-- 🔧 **Submit code** - Fix bugs or add features
-- 🧩 **Create extensions** - Share your extensions
+- **Report bugs** - [Open an issue](https://github.com/jetpax/scripto-studio/issues/new)
+- **Suggest features** - Describe your idea in an issue
+- **Improve docs** - Edit the pages under `docs-src/`
+- **Submit code** - Fix bugs or add features
+- **Create Apps** - Publish them on ScriptoHub
 
 ## Development Setup
 
@@ -20,8 +20,8 @@ Thank you for considering contributing to ScriptO Studio!
 ### Clone and Install
 
 ```bash
-git clone https://github.com/jetpax/scriptostudio.git
-cd scriptostudio
+git clone https://github.com/jetpax/scripto-studio.git
+cd scripto-studio
 npm install
 ```
 
@@ -31,7 +31,15 @@ npm install
 npm run dev
 ```
 
-Opens at `http://localhost:5174`
+Opens at `http://localhost:5173`
+
+### Run the tests
+
+```bash
+npm test
+```
+
+This runs Node's built-in test runner (`node:test`) over `test/*.test.js`.
 
 ## Code Style
 
@@ -67,4 +75,4 @@ Include:
 ## Questions?
 
 - Check [FAQ](../reference/faq.md)
-- Open a [Discussion](https://github.com/jetpax/scriptostudio/discussions)
+- Open a [Discussion](https://github.com/jetpax/scripto-studio/discussions)

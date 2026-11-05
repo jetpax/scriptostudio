@@ -1,87 +1,57 @@
 # Provisioning
 
-Generate HTTPS certificates and configure device security.
+Provisioning gives a board its HTTPS certificate and its password. A new board gets this automatically at the end of setup. You can also run it again on its own.
 
-## What is Provisioning?
+## What it does
 
-Provisioning (also called "blessing") generates:
+- Generates a self-signed HTTPS certificate for `https://<hostname>.local`, where the hostname looks like `pybot-xxxx`.
+- Restarts the board into setup mode, where it serves a password page.
+- Sends you to Studio with the board's address filled in.
 
-- A unique **self-signed HTTPS certificate** for secure connections
-- Enables the device's **web interface** at `https://pybot-xxxx.local`
+## New board
 
-## When to Re-provision
+When you set up a new board, WiFi and the certificate happen back to back after the flash:
 
-Use **Re-provision Device** when:
+1. Studio saves your WiFi settings and the hostname, then generates and installs the certificate.
+2. The board restarts on your network and serves its setup page.
+3. A dialog, **Accept Security Warning**, offers to open the board. Click the button to open `https://<hostname>.local` in a new tab.
+4. Your browser warns about the certificate. This is expected, because the certificate is self-signed. Choose **Advanced**, then **Proceed**. You do this once per browser.
+5. The page redirects from `/setup` and asks for a password. Set one (at least 4 characters).
+6. The board restarts and Studio opens with the connect dialog filled in with `wss://<hostname>/mcp`. Enter the password to connect.
 
-- Setting up a new device after flashing firmware and configuring WiFi
-- Renewing expired certificates
-- After changing the device hostname
-- Troubleshooting connection issues
-- You want a fresh start with new credentials
+## Re-provision
 
-## Provisioning Steps
+Use **Re-provision** in **System > Firmware** to:
 
-1. Connect device via USB in ScriptO Studio
-2. Click **Connect Device** and wait for detection
-3. Select **Re-provision Device** from the scenarios
-4. The IDE generates a new certificate and installs it
-5. Device resets and connects to WiFi
-6. A modal explains you'll see a security warning
-7. Click **Connect to [hostname]** to open the device
-8. **Accept the browser security warning** (Advanced → Proceed)
-9. Set your device password on the web interface
+- Renew an expired certificate.
+- Make a certificate for a changed hostname.
+- Start fresh with a new certificate and a new password.
 
-> [!TIP]
-> The security warning is expected! It appears because the certificate 
-> is self-signed. You only need to accept it once per browser.
+Connect the board over USB, choose **Re-provision**, and follow the same steps as above from the security warning on. Your WiFi settings are kept.
 
-## The Security Warning Modal
+## Forgot Credentials
 
-After provisioning completes, a styled modal appears explaining:
-
-- Device is restarting and connecting to WiFi (~10 seconds)
-- You'll see a browser security warning - this is expected
-- Click **"Advanced"** → **"Proceed"** to trust the certificate
-
-Click the **Connect** button to open your device's web interface in a new tab.
-
-## Two-Step Onboarding Flow
-
-The onboarding flow is now two separate steps:
-
-| Step | Scenario | Purpose |
-|------|----------|---------|
-| 1 | **Change WiFi** | Configure network settings only |
-| 2 | **Re-provision** | Generate certificates and enable HTTPS |
-
-This separation allows you to:
-
-- ✅ Update WiFi without regenerating certificates
-- ✅ Re-provision without reconfiguring WiFi
-- ✅ Choose when to generate new certificates
+Choose **Forgot Credentials** in **System > Firmware** with the board connected over USB. It shows the board's hostname and the WiFi network it's set to join. It doesn't show the password. If you've lost the password, run **Re-provision** to set a new one.
 
 ## Troubleshooting
 
-### Device doesn't appear after reset?
+**The board doesn't appear after the restart**
 
-- Wait 10-15 seconds for WiFi connection
-- Try accessing device via IP address if `.local` doesn't resolve
-- Check your router's connected devices list
+- Wait 10 to 15 seconds for it to join WiFi.
+- If `.local` doesn't resolve, open the board by its IP address from your router's device list.
 
-### Certificate warning keeps appearing?
+**The certificate warning keeps appearing**
 
-- Make sure you clicked "Proceed" to trust the certificate
-- Try clearing browser cache for the device hostname
-- Re-provision to generate a fresh certificate
+- Make sure you chose **Proceed**.
+- Run **Re-provision** to make a fresh certificate.
 
-### Can't access device after provisioning?
+**You can't reach the board after provisioning**
 
-- Verify device is on the same network as your computer
-- Check that WiFi was configured before provisioning
-- Try the device's IP address instead of hostname
+- Check that it's on the same network as your computer.
+- Check that the WiFi settings are right with **Forgot Credentials**.
 
 ## Related
 
-- [Network Setup](network-setup.md) - Configure WiFi settings
-- [Flashing Firmware](flashing-firmware.md) - Install firmware
-- [Connection Guide](../getting-started/connection.md) - Connect to your device
+- [Flashing Firmware](flashing-firmware.md)
+- [Network Setup](network-setup.md)
+- [Connection troubleshooting](../troubleshooting/connection.md)

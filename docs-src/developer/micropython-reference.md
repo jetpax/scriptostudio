@@ -183,16 +183,14 @@ Before committing code, verify:
 
 ## Project-Specific Notes
 
-### ESP32 Port Specifics
+### ESP32 port specifics
 
-- Uses ESP-IDF v5.4.2
-- Has access to hardware-specific modules (`machine`, `network`, etc.)
-- WebREPL available for remote access
-- File system is typically SPIFFS or LittleFS
+- MicroPython v1.29 on ESP-IDF 5.5.1
+- Has hardware-specific modules (`machine`, `network`, etc.)
 
-### ScriptO Studio Integration
+### How ScriptO Studio uses the board
 
-- Extensions run in MicroPython on the device
-- Communication via WebREPL Binary Protocol (WBP)
-- Notifications via `webrepl.notify({"key": value})` - sends CBOR-encoded INFO events
-- Device API provides `execute()` for running code and parsing responses
+- ScriptOs and Apps run as MicroPython on the board.
+- Agents and Studio reach the board through MCP tools over `/mcp`. See the [MCP tools reference](../reference/mcp-tools.md).
+- `lib.sys.events.notify({"key": value})` sends an event to every connected client. An App's browser side hears it with `subscribe`.
+- The `exec` tool runs code in `__main__` and returns what it prints.

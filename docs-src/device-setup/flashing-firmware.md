@@ -1,60 +1,58 @@
 # Flashing Firmware
 
-Install pyDirect enabled firmware on your ESP32 device.
+Put ScriptO Studio's firmware on a board over USB. You do this from **Set up a new board** on Home, which opens **System > Firmware**.
 
-## Supported Hardware
+## Supported chips
 
-| Board | Chip | Flash | PSRAM | Status |
-|-------|------|-------|-------|--------|
-| ESP32-S3-DevKitC-1 | ESP32-S3 | 16MB | 8MB | ✅ Recommended |
-| ESP32-S3-WROOM-1 | ESP32-S3 | 8MB+ | 2MB+ | ✅ Supported |
-| LilyGO T-Display-S3 | ESP32-S3 | 16MB | 8MB | ✅ Supported |
-| Generic ESP32-S3 | ESP32-S3 | 4MB+ | Optional | ⚠️ Limited |
+The Firmware panel flashes boards with an ESP32-S3 or an ESP32-P4. It reads the chip, the flash size and, on the S3, the in-package PSRAM, then picks the build for you:
 
-> [!IMPORTANT]
-> ESP32-S3 with SPIRAM (PSRAM) is strongly recommended for reliable operation.
+| Chip | Builds |
+|------|--------|
+| ESP32-S3 | `ESP32_S3_8` (quad PSRAM), `ESP32_S3_8_OCT` (octal PSRAM), `ESP32_S3_16`, `ESP32_S3_32` |
+| ESP32-P4 | `ESP32_P4_16`, `ESP32_P4_32` |
 
-## Flashing via ScriptO Studio
+The 16 MB and 32 MB S3 builds need octal PSRAM. A quad PSRAM part gets `ESP32_S3_8`, even on larger flash.
 
-1. Go to [scriptostudio.com](https://scriptostudio.com)
-2. Click **Onboard New Device** from the home screen
-3. Connect your device via USB and click **Connect Device**
-4. Select **New Device** when the chip is detected
-5. Firmware is automatically selected for your chip and flashed
+After you pick the build, a **Board Configuration** menu lists the board manifests for your chip, with the generic board for that chip selected. Choose your board if it's listed. These are the boards offered:
 
-> [!NOTE]
-> Requires Chrome or Edge browser with WebSerial support.
+| Chip | Boards |
+|------|--------|
+| ESP32-S3 | Generic ESP32-S3, RetroVMS Mini, Seeed XIAO ESP32-S3, Waveshare ESP32-S3 Touch LCD 1.46, Touch LCD 1.69, LCD 1.47, ESP32-S3-RLCD-4.2, ePaper 3.97, Touch AMOLED 1.64, 1.75 and 1.75C |
+| ESP32-P4 | Generic ESP32-P4, Scripto P4+C6, Waveshare ESP32-P4-WIFI6, ESP32-P4-WIFI6-POE-ETH |
 
-## After Flashing
+See [Board Configurations](board-configurations.md) for what a manifest holds.
 
-1. Device will reboot and create AP: `pybot-XXXX`
-2. Connect to the AP network
-3. Open ScriptO Studio at `http://192.168.4.1`
-4. Configure WiFi in Settings
-5. Device will reboot and connect to your network
+## Flash a board
+
+You need Chrome or Edge, which provide Web Serial.
+
+1. On Home, click **Set up a new board**. This opens **System > Firmware**.
+2. Plug the board in over USB and click **Connect Device**. Pick the port in the browser's chooser.
+3. Studio shows the chip, MAC address and flash size under **Device Information**, then offers four options:
+    - **Flash Device**: flash fresh firmware onto a blank ESP32.
+    - **Forgot Credentials**: see the saved hostname and WiFi network. See [Provisioning](provisioning.md).
+    - **Change WiFi**: update network settings on a board that's already set up. See [Network Setup](network-setup.md).
+    - **Re-provision**: fresh start with new certificates. See [Provisioning](provisioning.md).
+4. Click **Flash Device**. Check the firmware and board shown, then click **Flash Firmware** and confirm. The flash erases everything on the board.
+5. When **Flash Complete** appears, click **Configure WiFi**. Pick your network and enter its password.
+
+Studio then generates a certificate and restarts the board into setup mode. The rest is in [Provisioning](provisioning.md).
 
 ## Troubleshooting
 
-### "Failed to connect to ESP32-S3"
+**The board doesn't connect**
 
-- Check USB cable supports data (not charge-only)
-- Try a different USB port
-- Install USB drivers (CP210x or CH340 depending on board)
-- Put device in boot mode manually
+- Use a USB cable that carries data, not a charge-only cable.
+- Try another USB port.
 
-### "A fatal error occurred: MD5 of file does not match"
+**The board doesn't boot after a flash**
 
-- Download firmware again (file may be corrupted)
-- Use a slower baud rate: `--baud 115200`
-
-### Device doesn't boot after flash
-
-- Verify correct firmware for your board
-- Try erasing flash first
-- Check PSRAM configuration matches your hardware
+- Check that you picked the right build and board.
+- Flash again. The flash erases the board first.
+- Check that the PSRAM type matches the build.
 
 ## Related
 
-- [Board Configurations](../device-setup/board-configurations.md)
-- [Network Setup](../device-setup/network-setup.md)
-- [Provisioning](../device-setup/provisioning.md)
+- [Provisioning](provisioning.md)
+- [Network Setup](network-setup.md)
+- [Board Configurations](board-configurations.md)

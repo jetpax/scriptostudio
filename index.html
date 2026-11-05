@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ScriptO Studio — Program Embedded Devices with Natural Language</title>
-  <meta name="description" content="ScriptO Studio — A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <title>ScriptO Studio: agents that program MicroPython boards</title>
+  <meta name="description" content="Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board, while you watch and can stop it.">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="app/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://scriptostudio.com/">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="ScriptO Studio — Program Embedded Devices with Natural Language">
-  <meta property="og:description" content="A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <meta property="og:title" content="ScriptO Studio: agents that program MicroPython boards">
+  <meta property="og:description" content="Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board, while you watch and can stop it.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://scriptostudio.com/">
+  <meta property="og:image" content="https://scriptostudio.com/docs/assets/home.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ScriptO Studio — Program Embedded Devices with Natural Language">
-  <meta name="twitter:description" content="A next-generation IDE for MicroPython. Program embedded devices with natural language. No firmware updates required.">
+  <meta name="twitter:title" content="ScriptO Studio: agents that program MicroPython boards">
+  <meta name="twitter:description" content="Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board, while you watch and can stop it.">
 
   <!-- Fonts: Clash Display + Satoshi from Fontshare -->
   <link rel="preconnect" href="https://api.fontshare.com">
@@ -307,7 +308,7 @@
     .description {
       color: var(--text-secondary);
       font-size: 1.1rem;
-      max-width: 540px;
+      max-width: 620px;
       margin: 0 auto 32px;
       line-height: 1.7;
     }
@@ -480,9 +481,6 @@
     .cta-hub:hover { box-shadow: 0 12px 32px var(--shadow-cyan-soft); }
     .cta-hub .cta-icon { color: var(--cyan-bright); }
 
-    .cta-protocol:hover { box-shadow: 0 12px 32px rgba(136, 146, 176, 0.15); }
-    .cta-protocol .cta-icon { color: var(--text-secondary); }
-
     .cta-github:hover { box-shadow: 0 12px 32px rgba(240, 244, 255, 0.1); }
 
     .cta-docs:hover { box-shadow: 0 12px 32px var(--shadow-cyan-soft); }
@@ -491,7 +489,7 @@
     /* ── Hero Screenshot ── */
     .hero-screenshot {
       margin-top: 40px;
-      max-width: 860px;
+      max-width: 1000px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -520,49 +518,109 @@
       color: var(--text-muted);
     }
 
-    /* ── Hub Showcase ── */
-    .hub-showcase {
-      text-align: center;
-      padding: 60px 0;
+    /* ── Steps ── */
+    .steps {
+      margin-bottom: 72px;
     }
 
-    .hub-showcase-tagline {
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      counter-reset: step;
+    }
+
+    .step {
+      counter-increment: step;
+      padding: 24px;
+      border-left: 2px solid var(--border-accent);
+    }
+
+    .step::before {
+      content: counter(step);
+      display: block;
+      margin-bottom: 8px;
       font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 28px;
-      letter-spacing: 0.01em;
-    }
-
-    .hub-showcase-tagline em {
-      font-style: normal;
+      font-size: 1.6rem;
+      font-weight: 600;
       color: var(--accent-bright);
     }
 
-    .hub-showcase img {
+    /* ── Try Asking ── */
+    .asks {
+      margin-bottom: 72px;
+    }
+
+    .asks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .asks-list li {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ── Other Agents ── */
+    .outside {
+      margin-bottom: 72px;
+    }
+
+    .outside-text {
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .outside-line {
+      display: block;
+      overflow-x: auto;
+      margin-bottom: 24px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      white-space: pre;
+    }
+
+    .outside img {
+      display: block;
       width: 100%;
-      max-width: 920px;
       border-radius: 14px;
       box-shadow:
         0 8px 40px var(--shadow-accent-soft),
         0 0 60px rgba(0, 200, 83, 0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .hub-showcase img:hover {
-      transform: translateY(-4px);
-      box-shadow:
-        0 16px 60px var(--shadow-accent-mid),
-        0 0 80px rgba(0, 200, 83, 0.12);
-    }
-
-    .hub-showcase-caption {
+    .outside-caption {
       display: block;
       text-align: center;
       margin-top: 12px;
       font-size: 0.8rem;
       color: var(--text-muted);
+    }
+
+    /* ── Apps ── */
+    .apps {
+      margin-bottom: 72px;
+    }
+
+    .apps-text {
+      color: var(--text-secondary);
+      max-width: 720px;
+    }
+
+    .apps-text a {
+      color: var(--accent-bright);
     }
 
     /* ── Footer ── */
@@ -610,7 +668,7 @@
         margin-bottom: 48px;
       }
 
-      .features, .ecosystem {
+      .features, .ecosystem, .steps, .asks, .outside, .apps {
         margin-bottom: 48px;
       }
 
@@ -627,6 +685,10 @@
 
       .cta-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-screenshot {
+        max-width: 100%;
       }
     }
   </style>
@@ -681,16 +743,19 @@
       </div>
 
       <h1>ScriptO Studio</h1>
-      <p class="tagline">The App Platform for Embedded Devices</p>
+      <p class="tagline">Tell your board what to do.</p>
       <p class="description">
-        Runtime, configurator, and development environment — in one PWA.<br>
-        Build and manage MicroPython apps. No firmware updates required.
+        An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board. You watch every call, and you can stop it at any moment.
       </p>
 
       <div class="hero-ctas">
         <a href="/app/" class="hero-btn hero-btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           Launch Studio
+        </a>
+        <a href="/docs/" class="hero-btn hero-btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Read the Docs
         </a>
         <a href="https://github.com/jetpax/scriptostudio" class="hero-btn hero-btn-secondary" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -700,74 +765,113 @@
 
       <!-- Hero Screenshot -->
       <div class="hero-screenshot">
-        <img src="docs/assets/editor.png" alt="ScriptO Studio — MicroPython app platform with code editor, REPL console, and skill panel" loading="lazy">
-        <span class="hero-screenshot-caption">Code editor · Live REPL · Skill browser · App configurator · Device telemetry</span>
+        <img src="docs/assets/home.png" alt="ScriptO Studio with an agent's chat in the centre, and the board, its ScriptOs and a terminal on the right">
+        <span class="hero-screenshot-caption">Asked to beep when the board is tilted, the agent reads the accelerometer, leaves a ScriptO running, and says what it couldn't check.</span>
       </div>
     </header>
 
-    <!-- Features -->
-    <section class="features">
+    <!-- How it works -->
+    <section class="steps">
       <h2 class="section-title">
-        <span class="accent-marker">⟩</span> What It Does
+        <span class="accent-marker">⟩</span> How It Works
       </h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
-          </div>
-          <h3 class="feature-title">Standalone Apps</h3>
-          <p class="feature-desc">Extensions are full MicroPython applications — not plugins. Each one runs independently on the device; Studio provides the runtime, configurator, and UI.</p>
+      <div class="steps-grid">
+        <div class="step">
+          <h3 class="feature-title">Connect a board</h3>
+          <p class="feature-desc">Flash the firmware from your browser, then connect with the board's password. Studio runs in the browser or as an installable app.</p>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
-          <h3 class="feature-title">ScriptO Skills</h3>
-          <p class="feature-desc">Reusable automation scripts that combine code with configuration UI. Browse a growing library on ScriptoHub — sensor drivers, protocols, display widgets — or create and publish your own.</p>
+        <div class="step">
+          <h3 class="feature-title">Ask for something</h3>
+          <p class="feature-desc">Say what the board should do. The agent looks at what it has, tries things on the hardware and asks you to do what only you can see or hear.</p>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
-          </div>
-          <h3 class="feature-title">Agentic Editor</h3>
-          <p class="feature-desc">More than syntax highlighting. Describe what you want in natural language and the AI agent writes, deploys, and tests your code on the device — live, over WebREPL.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
-          </div>
-          <h3 class="feature-title">Device Management</h3>
-          <p class="feature-desc">Flash firmware, configure boards, manage files, and monitor network settings. Access devices anywhere through secure P2P — from any browser or as an installable PWA.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <h3 class="feature-title">40K LoC Runtime</h3>
-          <p class="feature-desc">MicroPython running 100+ modules with multiple concurrent TLS connections — on a $5 chip. No web framework involved; the entire app stack runs natively on the device.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9v-1a3 3 0 0 1 6 0v1"/><path d="M8 9h8a6 6 0 0 1 1 3v3a5 5 0 0 1 -10 0v-3a6 6 0 0 1 1 -3"/><path d="M3 13l4 0"/><path d="M17 13l4 0"/><path d="M12 20l0 -6"/><path d="M4 19l3.35 -2"/><path d="M20 19l-3.35 -2"/><path d="M4 7l3.75 2.4"/><path d="M20 7l-3.75 2.4"/></svg>
-          </div>
-          <h3 class="feature-title">Visual Debugger</h3>
-          <p class="feature-desc">Single-step execution, watchpoints, and live system monitoring. See RAM, temperature, uptime, and signal strength in real time from the device status bar.</p>
+        <div class="step">
+          <h3 class="feature-title">It stays on the board</h3>
+          <p class="feature-desc">The result is a ScriptO: MicroPython left on the board to keep running. Start it, stop it or read its code from its row in the sidebar.</p>
         </div>
       </div>
     </section>
 
-    <!-- Hub Showcase -->
-    <section class="hub-showcase">
-      <p class="hub-showcase-tagline"><em>JS frontends</em> with <em>Python device backends</em></p>
-      <a href="https://scriptohub.ai" target="_blank" rel="noopener">
-        <img src="docs/assets/hub.png" alt="ScriptoHub — browse extensions and skills for ScriptO Studio" loading="lazy">
-      </a>
-      <span class="hub-showcase-caption">Browse standalone apps and skills on ScriptoHub</span>
+    <!-- Features -->
+    <section class="features">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> What You Get
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="feature-title">An agent in the browser</h3>
+          <p class="feature-desc">Nothing to install. Pick any model on OpenRouter, free ones included, on your own key. The key stays in a frame of its own, where the rest of the page can't read it.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          </div>
+          <h3 class="feature-title">Or bring your own</h3>
+          <p class="feature-desc">Every board is an MCP server. Studio gives you one line to connect Claude Code or any MCP client, which keeps your repos, shell and subagents and uses the same tools.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+          </div>
+          <h3 class="feature-title">Boards that explain themselves</h3>
+          <p class="feature-desc">When an agent connects, the board says what it is: its chip, pins and devices, and how to use each one. An agent given nothing else can get to work.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-title">You stay in charge</h3>
+          <p class="feature-desc">Every call shows in the chat and its code in the terminal. Studio asks before what's hard to undo, like deleting a file or resetting the board, and Stop is always there.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="feature-title">ScriptOs outlive the chat</h3>
+          <p class="feature-desc">What an agent makes stays on the board and runs with no computer attached. It can start at boot, before the network comes up, and if it stops, its row says why.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+          </div>
+          <h3 class="feature-title">Made for real hardware</h3>
+          <p class="feature-desc">CAN capture finds a signal by what changed when you pressed the brake. A board's manifest can say how to use each part, down to the import line, so an agent doesn't have to guess.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Try asking -->
+    <section class="asks">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> Things to Ask For
+      </h2>
+      <ul class="asks-list">
+        <li>Beep when the board is tilted</li>
+        <li>Log CAN traffic to a file</li>
+        <li>Show how far the clock chip drifts from NTP</li>
+        <li>Find the CAN messages for the indicators, brake and rear lights, and drive outputs from them</li>
+      </ul>
+    </section>
+
+    <!-- Other agents -->
+    <section class="outside">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> Bring Your Own Agent
+      </h2>
+      <p class="outside-text">For work that needs your repos or a shell, connect an agent that runs on your computer. Studio gives you this line, with the board's name and token filled in, and shows what the agent does as it happens.</p>
+      <code class="outside-line">claude mcp add --scope user --transport http &lt;board&gt; http://&lt;board&gt;/mcp --header "Authorization: Bearer &lt;agent token&gt;"</code>
+      <img src="docs/assets/other-agents.png" alt="ScriptO Studio showing an outside agent's calls under Other agents, and a sine wave it plotted in the terminal" loading="lazy">
+      <span class="outside-caption">An outside agent's calls appear under Other agents, and its code and output in the terminal.</span>
+    </section>
+
+    <!-- Apps -->
+    <section class="apps">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> Apps
+      </h2>
+      <p class="apps-text">Some jobs want a screen as well as code on the board. An App has a browser side too, for tools like OpenInverter and CAN Monitor. Install them from <a href="https://scriptohub.ai" target="_blank" rel="noopener">ScriptoHub</a>.</p>
     </section>
 
     <!-- Ecosystem -->
@@ -779,19 +883,13 @@
         <a href="/app/" class="cta cta-studio">
           <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
           <span class="cta-label">ScriptO Studio</span>
-          <span class="cta-sub">Open the IDE</span>
+          <span class="cta-sub">Open it in your browser</span>
         </a>
 
         <a href="https://scriptohub.ai" class="cta cta-hub" target="_blank" rel="noopener">
           <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 0 0-8-8v8h8z" opacity="0.5"/></svg>
           <span class="cta-label">ScriptoHub</span>
-          <span class="cta-sub">Browse skills &amp; extensions</span>
-        </a>
-
-        <a href="https://jetpax.github.io/webrepl/webrepl_binary_protocol_rfc.md" class="cta cta-protocol" target="_blank" rel="noopener">
-          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-          <span class="cta-label">WebREPL Protocol</span>
-          <span class="cta-sub">IANA-registered spec</span>
+          <span class="cta-sub">Browse Apps</span>
         </a>
 
         <a href="https://github.com/jetpax/scriptostudio" class="cta cta-github" target="_blank" rel="noopener">
@@ -803,7 +901,7 @@
         <a href="/docs/" class="cta cta-docs">
           <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           <span class="cta-label">Documentation</span>
-          <span class="cta-sub">User guide &amp; API</span>
+          <span class="cta-sub">Guides and reference</span>
         </a>
       </nav>
     </section>
