@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for ScriptO Studio - Program embedded devices with natural language">
+        <meta name="description" content="Documentation for ScriptO Studio: agents that program MicroPython boards">
       
       
         <meta name="author" content="jetpax">
@@ -15,28 +15,28 @@
         <link rel="canonical" href="https://scriptostudio.com/docs/agent/">
       
       
-        <link rel="prev" href="../extensions/versioning/">
+        <link rel="prev" href="../getting-started/tour/">
       
       
-        <link rel="next" href="setup/">
+        <link rel="next" href="studio-agent/">
       
       
         
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
-        <title>Agent Overview - ScriptO Studio Docs</title>
+        <title>How Agents Work - ScriptO Studio Docs</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#agent-overview" class="md-skip">
+        <a href="#how-agents-work-with-a-board" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Agent Overview
+              How Agents Work
             
           </span>
         </div>
@@ -326,7 +326,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    Set Up and Connect
   
 
     
@@ -354,7 +354,7 @@
   <span class="md-ellipsis">
     
   
-    First ScriptO
+    Your First ScriptO
   
 
     
@@ -375,42 +375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/connection/" class="md-nav__link">
+      <a href="../getting-started/tour/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Connection
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../getting-started/ide-overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    IDE Overview
+    A Tour of Studio
   
 
     
@@ -435,8 +407,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -447,13 +421,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -463,7 +435,7 @@
   <span class="md-ellipsis">
     
   
-    Device Setup
+    Agents
   
 
     
@@ -474,12 +446,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Device Setup
+    Agents
   
 
           </label>
@@ -489,17 +461,125 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../device-setup/flashing-firmware/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How Agents Work
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Flashing Firmware
+    How Agents Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-this-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes this work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-keeps-it-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What keeps it safe
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="studio-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio's Agent
   
 
     
@@ -520,14 +600,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../device-setup/board-configurations/" class="md-nav__link">
+      <a href="other-agents/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Board Configurations
+    Other Agents
   
 
     
@@ -548,42 +628,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../device-setup/network-setup/" class="md-nav__link">
+      <a href="board-context/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Network Setup
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../device-setup/provisioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Provisioning
+    What a Board Tells an Agent
   
 
     
@@ -636,7 +688,7 @@
   <span class="md-ellipsis">
     
   
-    User Guide
+    ScriptOs
   
 
     
@@ -649,207 +701,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    User Guide
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../user-guide/file-manager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    File Manager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../user-guide/editor-features/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Editor Features
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../user-guide/terminal-repl/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminal & REPL
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../user-guide/system-info/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    System Information
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../user-guide/settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settings
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -922,6 +773,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../scriptos/vm-sharing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../scriptos/ui-plugin-hello-world/" class="md-nav__link">
         
   
@@ -929,7 +808,236 @@
   <span class="md-ellipsis">
     
   
-    UI Plugin - Hello World
+    UI Plugin Example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/available-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/writing-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/app-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/device-libraries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
   
 
     
@@ -982,7 +1090,7 @@
   <span class="md-ellipsis">
     
   
-    Extensions
+    Boards
   
 
     
@@ -998,7 +1106,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extensions
+    Boards
   
 
           </label>
@@ -1011,14 +1119,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/" class="md-nav__link">
+      <a href="../device-setup/flashing-firmware/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extensions
+    Flashing Firmware
   
 
     
@@ -1039,14 +1147,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/writing-extensions/" class="md-nav__link">
+      <a href="../device-setup/provisioning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Writing Extensions
+    Provisioning
   
 
     
@@ -1067,14 +1175,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/extension-api/" class="md-nav__link">
+      <a href="../device-setup/network-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extension API
+    Network Setup
   
 
     
@@ -1095,70 +1203,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/device-libraries/" class="md-nav__link">
+      <a href="../device-setup/board-configurations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Device Libraries
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/built-in-extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Built-in Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/versioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Versioning
+    Board Configurations
   
 
     
@@ -1183,8 +1235,6 @@
       
   
   
-    
-  
   
   
     
@@ -1197,11 +1247,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
@@ -1211,7 +1263,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent
+    Using Studio
   
 
     
@@ -1222,12 +1274,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI Agent
+    Using Studio
   
 
           </label>
@@ -1237,158 +1289,17 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Agent Overview
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Agent Overview
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-the-agent" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What is the Agent?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-it-works" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How It Works
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting Started
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#privacy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Privacy
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
-      <a href="setup/" class="md-nav__link">
+      <a href="../user-guide/file-manager/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setup
+    Files
   
 
     
@@ -1409,14 +1320,126 @@
   
   
     <li class="md-nav__item">
-      <a href="usage/" class="md-nav__link">
+      <a href="../user-guide/editor-features/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Usage
+    Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/system-info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
   
 
     
@@ -1469,7 +1492,7 @@
   <span class="md-ellipsis">
     
   
-    Debugging
+    Reference
   
 
     
@@ -1485,7 +1508,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Debugging
+    Reference
   
 
           </label>
@@ -1498,14 +1521,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../debugging/" class="md-nav__link">
+      <a href="../reference/mcp-tools/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debugger Overview
+    MCP Tools
   
 
     
@@ -1526,14 +1549,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../debugging/breakpoints/" class="md-nav__link">
+      <a href="../reference/faq/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setting Breakpoints
+    FAQ
   
 
     
@@ -1554,14 +1577,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../debugging/debug-console/" class="md-nav__link">
+      <a href="../troubleshooting/connection/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debug Console
+    Connection Issues
   
 
     
@@ -1614,7 +1637,7 @@
   <span class="md-ellipsis">
     
   
-    Troubleshooting
+    Developer
   
 
     
@@ -1627,179 +1650,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Troubleshooting
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../troubleshooting/connection/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Connection Issues
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../troubleshooting/memory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memory & Performance
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../troubleshooting/errors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common Errors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../troubleshooting/debug-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Developer
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1824,34 +1674,6 @@
     
   
     Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../developer/building-from-source/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Building from Source
   
 
     
@@ -1900,42 +1722,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../developer/esm-modules/" class="md-nav__link">
+      <a href="../developer/display-drivers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    ESM Modules
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../developer/shortcuts.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Keyboard Shortcuts
+    Display Drivers
   
 
     
@@ -1964,352 +1758,6 @@
     
   
     MicroPython Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../developer/registry.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
-        
-          
-          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Protocol
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Protocol
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../protocol/webrepl-binary-protocol/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebREPL Binary Protocol
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../protocol/webrtc-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebRTC Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../protocol/websocket-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebSocket Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../protocol/message-types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Message Types
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
-        
-          
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Changelog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
   
 
     
@@ -2357,10 +1805,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-the-agent" class="md-nav__link">
+  <a href="#what-makes-this-work" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is the Agent?
+        What makes this work
       
     </span>
   </a>
@@ -2368,10 +1816,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-it-works" class="md-nav__link">
+  <a href="#what-you-see" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How It Works
+        What you see
       
     </span>
   </a>
@@ -2379,43 +1827,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#what-keeps-it-safe" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting Started
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#privacy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Privacy
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related
+        What keeps it safe
       
     </span>
   </a>
@@ -2442,64 +1857,91 @@
   
 
 
-<h1 id="agent-overview">Agent Overview<a class="headerlink" href="#agent-overview" title="Permanent link">&para;</a></h1>
-<p>ScriptO Studio includes an AI-powered coding agent that helps you write, debug, and optimize MicroPython code for your device.</p>
-<p><img alt="AI Agent" src="../assets/AI.png" /></p>
-<h2 id="what-is-the-agent">What is the Agent?<a class="headerlink" href="#what-is-the-agent" title="Permanent link">&para;</a></h2>
-<p>The Agent is an AI assistant integrated into ScriptO Studio that can:
-- <strong>Generate code</strong> from natural language descriptions
-- <strong>Explain code</strong> and device behavior
-- <strong>Debug issues</strong> by analyzing errors and logs
-- <strong>Suggest optimizations</strong> for performance and memory
-- <strong>Answer questions</strong> about MicroPython and ESP32
-- <strong>Stream responses</strong> in real-time via C-native SSE (Server-Sent Events)</p>
-<h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
-<p>The Agent uses large language models (LLMs) to understand your requests and generate appropriate responses. It has context about:
-- Your device configuration
-- Currently open files
-- Recent terminal output
-- Error messages</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+<h1 id="how-agents-work-with-a-board">How Agents Work with a Board<a class="headerlink" href="#how-agents-work-with-a-board" title="Permanent link">&para;</a></h1>
+<p>An agent is a model with tools. A board gives it tools over MCP: run code, read and write files, make ScriptOs. There are three ways to run one, and they all use those same tools.</p>
 <table>
 <thead>
 <tr>
-<th>Feature</th>
-<th>Description</th>
+<th></th>
+<th>Studio's agent</th>
+<th>An outside agent</th>
+<th>PFC</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Code Generation</strong></td>
-<td>Describe what you want, get working code</td>
+<td><strong>Runs in</strong></td>
+<td>The browser page</td>
+<td>Your computer</td>
+<td>The board</td>
 </tr>
 <tr>
-<td><strong>Error Analysis</strong></td>
-<td>Paste an error, get an explanation and fix</td>
+<td><strong>Install</strong></td>
+<td>Nothing</td>
+<td>The agent, such as Claude Code</td>
+<td>An App</td>
 </tr>
 <tr>
-<td><strong>Device Awareness</strong></td>
-<td>Knows your board's pins and capabilities</td>
+<td><strong>Model</strong></td>
+<td>Yours on OpenRouter</td>
+<td>Whatever the agent uses</td>
+<td>A provider you configure</td>
 </tr>
 <tr>
-<td><strong>Context Retention</strong></td>
-<td>Remembers conversation history</td>
+<td><strong>Reaches</strong></td>
+<td>One board</td>
+<td>Your repos, shell and other tools as well</td>
+<td>Its own board</td>
 </tr>
 <tr>
-<td><strong>SSE Streaming</strong></td>
-<td>C-native Server-Sent Events for real-time token delivery</td>
+<td><strong>Asks first</strong></td>
+<td>In the chat</td>
+<td>In its own prompts</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
-<p>See <a href="setup/">Agent Setup</a> to configure the agent with your API key.</p>
-<p>See <a href="usage/">Using the Agent</a> for usage examples.</p>
-<h2 id="privacy">Privacy<a class="headerlink" href="#privacy" title="Permanent link">&para;</a></h2>
-<p>The Agent sends your prompts and relevant context to the configured LLM provider. Review your provider's privacy policy for details on data handling.</p>
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="setup/">Agent Setup</a></li>
-<li><a href="usage/">Using the Agent</a></li>
-</ul>
+<p>Use <a href="studio-agent/">Studio's agent</a> to get something working on a board. Use an <a href="other-agents/">outside agent</a> when the work also needs your repos or a shell.</p>
+<h2 id="what-makes-this-work">What makes this work<a class="headerlink" href="#what-makes-this-work" title="Permanent link">&para;</a></h2>
+<p><strong>The board explains itself.</strong> When an agent connects, the board tells it the rules and its hardware, built from its manifest, so the agent needs no setup. See <a href="board-context/">What a Board Tells an Agent</a>.</p>
+<p><strong>The agent can try things.</strong> <code>exec</code> runs Python on the board and returns what it printed, so an agent can check a pin or a sensor instead of assuming. It stops after 4 seconds, and longer work belongs in a ScriptO.</p>
+<p><strong>The work stays.</strong> <code>scripto_create</code> leaves code on the board that keeps running with nobody connected. See <a href="../scriptos/">ScriptOs</a>.</p>
+<p><strong>A person can see it.</strong> Studio stays connected beside the agent, and the board reports every agent call to it.</p>
+<h2 id="what-you-see">What you see<a class="headerlink" href="#what-you-see" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>The agent</th>
+<th>Where it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Runs <code>exec</code></td>
+<td>Code and output in the terminal, tagged with the client's name</td>
+</tr>
+<tr>
+<td>Changes something on the board</td>
+<td>A dim line in the terminal, or a red one if it failed</td>
+</tr>
+<tr>
+<td>Finishes any call</td>
+<td>A line in the Logs window, with its name and how long it took</td>
+</tr>
+<tr>
+<td>Writes or removes a file</td>
+<td>The file list refreshes, and an open tab reloads unless it has unsaved edits</td>
+</tr>
+<tr>
+<td>Creates or changes a ScriptO</td>
+<td>Its row in the sidebar updates</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-keeps-it-safe">What keeps it safe<a class="headerlink" href="#what-keeps-it-safe" title="Permanent link">&para;</a></h2>
+<p>Connecting takes a password, and an agent gets less than a person does. Its <code>exec</code> stops after 4 seconds where a person's can run for 60, it can only break its own call, and it can't arm CAN transmit.</p>
+<p>That protects against accidents. It isn't a sandbox, because <code>exec</code> runs any Python. Don't give an agent a board you wouldn't trust it with, and don't connect a board to anything it could damage without someone watching.</p>
+<p>All the tools are listed in the <a href="../reference/mcp-tools/">MCP tools reference</a>.</p>
 
 
 
@@ -2571,10 +2013,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

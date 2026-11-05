@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for ScriptO Studio - Program embedded devices with natural language">
+        <meta name="description" content="Documentation for ScriptO Studio: agents that program MicroPython boards">
       
       
         <meta name="author" content="jetpax">
@@ -15,17 +15,17 @@
         <link rel="canonical" href="https://scriptostudio.com/docs/device-setup/flashing-firmware/">
       
       
-        <link rel="prev" href="../../getting-started/ide-overview/">
+        <link rel="prev" href="../../apps/versioning/">
       
       
-        <link rel="next" href="../board-configurations/">
+        <link rel="next" href="../provisioning/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -33,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -326,7 +326,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    Set Up and Connect
   
 
     
@@ -354,7 +354,7 @@
   <span class="md-ellipsis">
     
   
-    First ScriptO
+    Your First ScriptO
   
 
     
@@ -375,42 +375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/connection/" class="md-nav__link">
+      <a href="../../getting-started/tour/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Connection
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/ide-overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    IDE Overview
+    A Tour of Studio
   
 
     
@@ -435,8 +407,6 @@
       
   
   
-    
-  
   
   
     
@@ -449,11 +419,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -463,7 +435,7 @@
   <span class="md-ellipsis">
     
   
-    Device Setup
+    Agents
   
 
     
@@ -474,12 +446,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Device Setup
+    Agents
   
 
           </label>
@@ -489,186 +461,17 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flashing Firmware
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flashing Firmware
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#supported-hardware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported Hardware
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#flashing-via-scripto-studio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flashing via ScriptO Studio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#after-flashing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        After Flashing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshooting
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#failed-to-connect-to-esp32-s3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Failed to connect to ESP32-S3"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#a-fatal-error-occurred-md5-of-file-does-not-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "A fatal error occurred: MD5 of file does not match"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-doesnt-boot-after-flash" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device doesn't boot after flash
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
-      <a href="../board-configurations/" class="md-nav__link">
+      <a href="../../agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Board Configurations
+    How Agents Work
   
 
     
@@ -689,14 +492,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../network-setup/" class="md-nav__link">
+      <a href="../../agent/studio-agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Network Setup
+    Studio's Agent
   
 
     
@@ -717,14 +520,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../provisioning/" class="md-nav__link">
+      <a href="../../agent/other-agents/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Provisioning
+    Other Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent/board-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a Board Tells an Agent
   
 
     
@@ -777,7 +608,7 @@
   <span class="md-ellipsis">
     
   
-    User Guide
+    ScriptOs
   
 
     
@@ -790,207 +621,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    User Guide
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/file-manager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    File Manager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/editor-features/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Editor Features
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/terminal-repl/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminal & REPL
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/system-info/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    System Information
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settings
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1063,6 +693,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../scriptos/vm-sharing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../scriptos/ui-plugin-hello-world/" class="md-nav__link">
         
   
@@ -1070,7 +728,7 @@
   <span class="md-ellipsis">
     
   
-    UI Plugin - Hello World
+    UI Plugin Example
   
 
     
@@ -1113,17 +771,17 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Extensions
+    Apps
   
 
     
@@ -1134,12 +792,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extensions
+    Apps
   
 
           </label>
@@ -1152,14 +810,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/" class="md-nav__link">
+      <a href="../../apps/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extensions
+    Apps
   
 
     
@@ -1180,14 +838,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/writing-extensions/" class="md-nav__link">
+      <a href="../../apps/available-apps/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Writing Extensions
+    Available Apps
   
 
     
@@ -1208,14 +866,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/extension-api/" class="md-nav__link">
+      <a href="../../apps/writing-apps/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extension API
+    Writing Apps
   
 
     
@@ -1236,7 +894,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/device-libraries/" class="md-nav__link">
+      <a href="../../apps/app-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/device-libraries/" class="md-nav__link">
         
   
   
@@ -1264,14 +950,222 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/built-in-extensions/" class="md-nav__link">
+      <a href="../../apps/versioning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Built-in Extensions
+    Versioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boards
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Boards
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flashing Firmware
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flashing Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#supported-chips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported chips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flash-a-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flash a board
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../provisioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisioning
   
 
     
@@ -1292,14 +1186,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/versioning/" class="md-nav__link">
+      <a href="../network-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Versioning
+    Network Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../board-configurations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Board Configurations
   
 
     
@@ -1352,7 +1274,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent
+    Using Studio
   
 
     
@@ -1368,7 +1290,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI Agent
+    Using Studio
   
 
           </label>
@@ -1381,14 +1303,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/" class="md-nav__link">
+      <a href="../../user-guide/file-manager/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Agent Overview
+    Files
   
 
     
@@ -1409,14 +1331,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/setup/" class="md-nav__link">
+      <a href="../../user-guide/editor-features/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setup
+    Editor
   
 
     
@@ -1437,14 +1359,98 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/usage/" class="md-nav__link">
+      <a href="../../user-guide/debugging/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Usage
+    Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/system-info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
   
 
     
@@ -1497,7 +1503,7 @@
   <span class="md-ellipsis">
     
   
-    Debugging
+    Reference
   
 
     
@@ -1513,7 +1519,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Debugging
+    Reference
   
 
           </label>
@@ -1526,14 +1532,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/" class="md-nav__link">
+      <a href="../../reference/mcp-tools/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debugger Overview
+    MCP Tools
   
 
     
@@ -1554,14 +1560,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/breakpoints/" class="md-nav__link">
+      <a href="../../reference/faq/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setting Breakpoints
+    FAQ
   
 
     
@@ -1582,14 +1588,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/debug-console/" class="md-nav__link">
+      <a href="../../troubleshooting/connection/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debug Console
+    Connection Issues
   
 
     
@@ -1642,7 +1648,7 @@
   <span class="md-ellipsis">
     
   
-    Troubleshooting
+    Developer
   
 
     
@@ -1655,179 +1661,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Troubleshooting
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/connection/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Connection Issues
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/memory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memory & Performance
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/errors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common Errors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/debug-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Developer
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1852,34 +1685,6 @@
     
   
     Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/building-from-source/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Building from Source
   
 
     
@@ -1928,42 +1733,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/esm-modules/" class="md-nav__link">
+      <a href="../../developer/display-drivers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    ESM Modules
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/shortcuts.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Keyboard Shortcuts
+    Display Drivers
   
 
     
@@ -1992,352 +1769,6 @@
     
   
     MicroPython Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/registry.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
-        
-          
-          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Protocol
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Protocol
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrepl-binary-protocol/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebREPL Binary Protocol
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrtc-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebRTC Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/websocket-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebSocket Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/message-types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Message Types
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
-        
-          
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Changelog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
   
 
     
@@ -2385,10 +1816,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#supported-hardware" class="md-nav__link">
+  <a href="#supported-chips" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supported Hardware
+        Supported chips
       
     </span>
   </a>
@@ -2396,21 +1827,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#flashing-via-scripto-studio" class="md-nav__link">
+  <a href="#flash-a-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flashing via ScriptO Studio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#after-flashing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        After Flashing
+        Flash a board
       
     </span>
   </a>
@@ -2425,45 +1845,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#failed-to-connect-to-esp32-s3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Failed to connect to ESP32-S3"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#a-fatal-error-occurred-md5-of-file-does-not-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "A fatal error occurred: MD5 of file does not match"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-doesnt-boot-after-flash" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device doesn't boot after flash
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2499,97 +1880,81 @@
 
 
 <h1 id="flashing-firmware">Flashing Firmware<a class="headerlink" href="#flashing-firmware" title="Permanent link">&para;</a></h1>
-<p>Install pyDirect enabled firmware on your ESP32 device.</p>
-<h2 id="supported-hardware">Supported Hardware<a class="headerlink" href="#supported-hardware" title="Permanent link">&para;</a></h2>
+<p>Put ScriptO Studio's firmware on a board over USB. You do this from <strong>Set up a new board</strong> on Home, which opens <strong>System &gt; Firmware</strong>.</p>
+<h2 id="supported-chips">Supported chips<a class="headerlink" href="#supported-chips" title="Permanent link">&para;</a></h2>
+<p>The Firmware panel flashes boards with an ESP32-S3 or an ESP32-P4. It reads the chip, the flash size and, on the S3, the in-package PSRAM, then picks the build for you:</p>
 <table>
 <thead>
 <tr>
-<th>Board</th>
 <th>Chip</th>
-<th>Flash</th>
-<th>PSRAM</th>
-<th>Status</th>
+<th>Builds</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>ESP32-S3-DevKitC-1</td>
 <td>ESP32-S3</td>
-<td>16MB</td>
-<td>8MB</td>
-<td>✅ Recommended</td>
+<td><code>ESP32_S3_8</code> (quad PSRAM), <code>ESP32_S3_8_OCT</code> (octal PSRAM), <code>ESP32_S3_16</code>, <code>ESP32_S3_32</code></td>
 </tr>
 <tr>
-<td>ESP32-S3-WROOM-1</td>
-<td>ESP32-S3</td>
-<td>8MB+</td>
-<td>2MB+</td>
-<td>✅ Supported</td>
-</tr>
-<tr>
-<td>LilyGO T-Display-S3</td>
-<td>ESP32-S3</td>
-<td>16MB</td>
-<td>8MB</td>
-<td>✅ Supported</td>
-</tr>
-<tr>
-<td>Generic ESP32-S3</td>
-<td>ESP32-S3</td>
-<td>4MB+</td>
-<td>Optional</td>
-<td>⚠️ Limited</td>
+<td>ESP32-P4</td>
+<td><code>ESP32_P4_16</code>, <code>ESP32_P4_32</code></td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>[!IMPORTANT]
-ESP32-S3 with SPIRAM (PSRAM) is strongly recommended for reliable operation.</p>
-</blockquote>
-<h2 id="flashing-via-scripto-studio">Flashing via ScriptO Studio<a class="headerlink" href="#flashing-via-scripto-studio" title="Permanent link">&para;</a></h2>
+<p>The 16 MB and 32 MB S3 builds need octal PSRAM. A quad PSRAM part gets <code>ESP32_S3_8</code>, even on larger flash.</p>
+<p>After you pick the build, a <strong>Board Configuration</strong> menu lists the board manifests for your chip, with the generic board for that chip selected. Choose your board if it's listed. These are the boards offered:</p>
+<table>
+<thead>
+<tr>
+<th>Chip</th>
+<th>Boards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ESP32-S3</td>
+<td>Generic ESP32-S3, RetroVMS Mini, Seeed XIAO ESP32-S3, Waveshare ESP32-S3 Touch LCD 1.46, Touch LCD 1.69, LCD 1.47, ESP32-S3-RLCD-4.2, ePaper 3.97, Touch AMOLED 1.64, 1.75 and 1.75C</td>
+</tr>
+<tr>
+<td>ESP32-P4</td>
+<td>Generic ESP32-P4, Scripto P4+C6, Waveshare ESP32-P4-WIFI6, ESP32-P4-WIFI6-POE-ETH</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../board-configurations/">Board Configurations</a> for what a manifest holds.</p>
+<h2 id="flash-a-board">Flash a board<a class="headerlink" href="#flash-a-board" title="Permanent link">&para;</a></h2>
+<p>You need Chrome or Edge, which provide Web Serial.</p>
 <ol>
-<li>Go to <a href="https://scriptostudio.com">scriptostudio.com</a></li>
-<li>Click <strong>Onboard New Device</strong> from the home screen</li>
-<li>Connect your device via USB and click <strong>Connect Device</strong></li>
-<li>Select <strong>New Device</strong> when the chip is detected</li>
-<li>Firmware is automatically selected for your chip and flashed</li>
+<li>On Home, click <strong>Set up a new board</strong>. This opens <strong>System &gt; Firmware</strong>.</li>
+<li>Plug the board in over USB and click <strong>Connect Device</strong>. Pick the port in the browser's chooser.</li>
+<li>Studio shows the chip, MAC address and flash size under <strong>Device Information</strong>, then offers four options:<ul>
+<li><strong>Flash Device</strong>: flash fresh firmware onto a blank ESP32.</li>
+<li><strong>Forgot Credentials</strong>: see the saved hostname and WiFi network. See <a href="../provisioning/">Provisioning</a>.</li>
+<li><strong>Change WiFi</strong>: update network settings on a board that's already set up. See <a href="../network-setup/">Network Setup</a>.</li>
+<li><strong>Re-provision</strong>: fresh start with new certificates. See <a href="../provisioning/">Provisioning</a>.</li>
+</ul>
+</li>
+<li>Click <strong>Flash Device</strong>. Check the firmware and board shown, then click <strong>Flash Firmware</strong> and confirm. The flash erases everything on the board.</li>
+<li>When <strong>Flash Complete</strong> appears, click <strong>Configure WiFi</strong>. Pick your network and enter its password.</li>
 </ol>
-<blockquote>
-<p>[!NOTE]
-Requires Chrome or Edge browser with WebSerial support.</p>
-</blockquote>
-<h2 id="after-flashing">After Flashing<a class="headerlink" href="#after-flashing" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Device will reboot and create AP: <code>pybot-XXXX</code></li>
-<li>Connect to the AP network</li>
-<li>Open ScriptO Studio at <code>http://192.168.4.1</code></li>
-<li>Configure WiFi in Settings</li>
-<li>Device will reboot and connect to your network</li>
-</ol>
+<p>Studio then generates a certificate and restarts the board into setup mode. The rest is in <a href="../provisioning/">Provisioning</a>.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<h3 id="failed-to-connect-to-esp32-s3">"Failed to connect to ESP32-S3"<a class="headerlink" href="#failed-to-connect-to-esp32-s3" title="Permanent link">&para;</a></h3>
+<p><strong>The board doesn't connect</strong></p>
 <ul>
-<li>Check USB cable supports data (not charge-only)</li>
-<li>Try a different USB port</li>
-<li>Install USB drivers (CP210x or CH340 depending on board)</li>
-<li>Put device in boot mode manually</li>
+<li>Use a USB cable that carries data, not a charge-only cable.</li>
+<li>Try another USB port.</li>
 </ul>
-<h3 id="a-fatal-error-occurred-md5-of-file-does-not-match">"A fatal error occurred: MD5 of file does not match"<a class="headerlink" href="#a-fatal-error-occurred-md5-of-file-does-not-match" title="Permanent link">&para;</a></h3>
+<p><strong>The board doesn't boot after a flash</strong></p>
 <ul>
-<li>Download firmware again (file may be corrupted)</li>
-<li>Use a slower baud rate: <code>--baud 115200</code></li>
-</ul>
-<h3 id="device-doesnt-boot-after-flash">Device doesn't boot after flash<a class="headerlink" href="#device-doesnt-boot-after-flash" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Verify correct firmware for your board</li>
-<li>Try erasing flash first</li>
-<li>Check PSRAM configuration matches your hardware</li>
+<li>Check that you picked the right build and board.</li>
+<li>Flash again. The flash erases the board first.</li>
+<li>Check that the PSRAM type matches the build.</li>
 </ul>
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../board-configurations/">Board Configurations</a></li>
-<li><a href="../network-setup/">Network Setup</a></li>
 <li><a href="../provisioning/">Provisioning</a></li>
+<li><a href="../network-setup/">Network Setup</a></li>
+<li><a href="../board-configurations/">Board Configurations</a></li>
 </ul>
 
 
@@ -2662,10 +2027,10 @@ Requires Chrome or Edge browser with WebSerial support.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

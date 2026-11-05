@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for ScriptO Studio - Program embedded devices with natural language">
+        <meta name="description" content="Documentation for ScriptO Studio: agents that program MicroPython boards">
       
       
         <meta name="author" content="jetpax">
@@ -15,24 +15,28 @@
         <link rel="canonical" href="https://scriptostudio.com/docs/scriptos/vm-sharing/">
       
       
+        <link rel="prev" href="../writing-scriptos/">
+      
+      
+        <link rel="next" href="../ui-plugin-hello-world/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
-        <title>VM Sharing & Async Architecture - ScriptO Studio Docs</title>
+        <title>Sharing the Interpreter - ScriptO Studio Docs</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#vm-sharing-async-architecture" class="md-skip">
+        <a href="#sharing-the-interpreter" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              VM Sharing &amp; Async Architecture
+              Sharing the Interpreter
             
           </span>
         </div>
@@ -322,7 +326,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    Set Up and Connect
   
 
     
@@ -350,7 +354,7 @@
   <span class="md-ellipsis">
     
   
-    First ScriptO
+    Your First ScriptO
   
 
     
@@ -371,42 +375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/connection/" class="md-nav__link">
+      <a href="../../getting-started/tour/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Connection
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/ide-overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    IDE Overview
+    A Tour of Studio
   
 
     
@@ -459,7 +435,7 @@
   <span class="md-ellipsis">
     
   
-    Device Setup
+    Agents
   
 
     
@@ -475,7 +451,767 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Device Setup
+    Agents
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How Agents Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent/studio-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio's Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent/other-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent/board-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a Board Tells an Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScriptOs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ScriptOs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScriptOs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-scriptos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing ScriptOs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#one-interpreter-cooperative-multitasking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One interpreter, cooperative multitasking
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-queue-pump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The queue pump
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-scripto-that-yields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing a ScriptO that yields
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-and-user-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System and user tasks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bus-sharing-i2c-spi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bus Sharing (I2C / SPI)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bus Sharing (I2C / SPI)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-no-locking-is-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why No Locking Is Needed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bus-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bus Module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui-plugin-hello-world/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI Plugin Example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/available-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/writing-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/app-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/device-libraries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boards
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Boards
   
 
           </label>
@@ -516,14 +1252,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/board-configurations/" class="md-nav__link">
+      <a href="../../device-setup/provisioning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Board Configurations
+    Provisioning
   
 
     
@@ -572,14 +1308,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/provisioning/" class="md-nav__link">
+      <a href="../../device-setup/board-configurations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Provisioning
+    Board Configurations
   
 
     
@@ -622,17 +1358,17 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    User Guide
+    Using Studio
   
 
     
@@ -643,12 +1379,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
-    User Guide
+    Using Studio
   
 
           </label>
@@ -668,7 +1404,7 @@
   <span class="md-ellipsis">
     
   
-    File Manager
+    Files
   
 
     
@@ -696,7 +1432,7 @@
   <span class="md-ellipsis">
     
   
-    Editor Features
+    Editor
   
 
     
@@ -717,14 +1453,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-guide/terminal-repl/" class="md-nav__link">
+      <a href="../../user-guide/debugging/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Terminal & REPL
+    Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
   
 
     
@@ -752,7 +1516,7 @@
   <span class="md-ellipsis">
     
   
-    System Information
+    About
   
 
     
@@ -823,525 +1587,6 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    ScriptOs
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../writing-scriptos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Writing ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ui-plugin-hello-world/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    UI Plugin - Hello World
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extensions
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Extensions
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/writing-extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Writing Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/extension-api/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extension API
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/device-libraries/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Device Libraries
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/built-in-extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Built-in Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/versioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Versioning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
-        
-          
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    AI Agent
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    AI Agent
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../agent/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Agent Overview
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../agent/setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Setup
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../agent/usage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Usage
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
         
           
@@ -1352,7 +1597,7 @@
   <span class="md-ellipsis">
     
   
-    Debugging
+    Reference
   
 
     
@@ -1368,7 +1613,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Debugging
+    Reference
   
 
           </label>
@@ -1381,14 +1626,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/" class="md-nav__link">
+      <a href="../../reference/mcp-tools/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debugger Overview
+    MCP Tools
   
 
     
@@ -1409,14 +1654,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/breakpoints/" class="md-nav__link">
+      <a href="../../reference/faq/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setting Breakpoints
+    FAQ
   
 
     
@@ -1437,14 +1682,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/debug-console/" class="md-nav__link">
+      <a href="../../troubleshooting/connection/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debug Console
+    Connection Issues
   
 
     
@@ -1497,7 +1742,7 @@
   <span class="md-ellipsis">
     
   
-    Troubleshooting
+    Developer
   
 
     
@@ -1510,179 +1755,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Troubleshooting
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/connection/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Connection Issues
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/memory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memory & Performance
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/errors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common Errors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/debug-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Developer
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1707,34 +1779,6 @@
     
   
     Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/building-from-source/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Building from Source
   
 
     
@@ -1783,42 +1827,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/esm-modules/" class="md-nav__link">
+      <a href="../../developer/display-drivers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    ESM Modules
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/shortcuts.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Keyboard Shortcuts
+    Display Drivers
   
 
     
@@ -1847,352 +1863,6 @@
     
   
     MicroPython Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/registry.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
-        
-          
-          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Protocol
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Protocol
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrepl-binary-protocol/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebREPL Binary Protocol
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrtc-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebRTC Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/websocket-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebSocket Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/message-types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Message Types
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
-        
-          
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Changelog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
   
 
     
@@ -2240,82 +1910,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#single-vm-cooperative-multitasking" class="md-nav__link">
+  <a href="#one-interpreter-cooperative-multitasking" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Single VM, Cooperative Multitasking
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-tasks-share-cpu-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How Tasks Share CPU Time
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#writing-async-scripts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Writing Async Scripts
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Writing Async Scripts">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#good-yields-regularly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ✅ Good: Yields Regularly
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bad-blocks-the-vm" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ❌ Bad: Blocks the VM
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#system-vs-user-tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        System vs User Tasks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#m2m-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        M2M Commands
+        One interpreter, cooperative multitasking
       
     </span>
   </a>
@@ -2326,7 +1924,29 @@
   <a href="#the-queue-pump" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Queue Pump
+        The queue pump
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-scripto-that-yields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing a ScriptO that yields
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-and-user-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System and user tasks
       
     </span>
   </a>
@@ -2337,7 +1957,7 @@
   <a href="#task-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Task Lifecycle
+        Task lifecycle
       
     </span>
   </a>
@@ -2345,168 +1965,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#defensive-skill-loading" class="md-nav__link">
+  <a href="#threads" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Defensive Skill Loading
+        Threads
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Defensive Skill Loading">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-wrap-everything-in-tryexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Wrap Everything in Try/Except
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-pre-flight-memory-check" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Pre-flight Memory Check
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-syntax-validation-before-exec" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Syntax Validation Before Exec
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-timeout-protection-cooperative" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Timeout Protection (Cooperative)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-isolated-namespace" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Isolated Namespace
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-cleanup-after-skills" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Cleanup After Skills
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#thread-safety-in-micropython" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Thread Safety in MicroPython
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Thread Safety in MicroPython">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#known-thread-limitations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Known Thread Limitations
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dangerous-patterns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ❌ Dangerous Patterns
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#safe-thread-pattern" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ✅ Safe Thread Pattern
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#thread-stop-flag-pattern" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Thread + Stop Flag Pattern
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#when-to-use-threads" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When to Use Threads
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#thread-pool-pattern-advanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Thread Pool Pattern (Advanced)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2602,427 +2067,123 @@
   
 
 
-<h1 id="vm-sharing-async-architecture">VM Sharing &amp; Async Architecture<a class="headerlink" href="#vm-sharing-async-architecture" title="Permanent link">&para;</a></h1>
-<p>Understanding how your scripts share the single MicroPython VM with the system.</p>
-<h2 id="single-vm-cooperative-multitasking">Single VM, Cooperative Multitasking<a class="headerlink" href="#single-vm-cooperative-multitasking" title="Permanent link">&para;</a></h2>
-<p>The device runs <strong>everything in one MicroPython VM</strong> using <code>asyncio</code> for cooperative multitasking. There are no threads—only one thing executes at a time.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>main.py (Orchestrator)
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    └── asyncio.run()
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>            ├── queue_pump()      ← processes M2M commands every 10ms
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            ├── wifi_task()       ← manages WiFi connection
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>            ├── eth_task()        ← manages Ethernet (if available)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>            └── your_script()     ← your ScriptO runs here
+<h1 id="sharing-the-interpreter">Sharing the interpreter<a class="headerlink" href="#sharing-the-interpreter" title="Permanent link">&para;</a></h1>
+<p>Everything on the board runs in one MicroPython interpreter, so your ScriptO shares it with the system. This page covers what that means for the code you write.</p>
+<h2 id="one-interpreter-cooperative-multitasking">One interpreter, cooperative multitasking<a class="headerlink" href="#one-interpreter-cooperative-multitasking" title="Permanent link">&para;</a></h2>
+<p>The board runs <code>asyncio</code>. Only one task executes at a time, and a task gives up the interpreter when it awaits.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>asyncio event loop
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    ├── queue_pump()      serves MCP and HTTP every 10 ms
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    ├── network tasks     WiFi, Ethernet and the like
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    └── your ScriptO      its run() in /lib/ext/&lt;folder&gt;/main.py
 </code></pre></div>
-<h2 id="how-tasks-share-cpu-time">How Tasks Share CPU Time<a class="headerlink" href="#how-tasks-share-cpu-time" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Component</th>
-<th>Runs As</th>
-<th>Yields Via</th>
+<th>Runs as</th>
+<th>Yields by</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Orchestrator</strong></td>
-<td>System task</td>
-<td><code>await asyncio.sleep()</code></td>
-</tr>
-<tr>
-<td><strong>Queue Pump</strong></td>
-<td>System task (10ms loop)</td>
+<td>Queue pump</td>
+<td>System task, a 10 ms loop</td>
 <td><code>await asyncio.sleep_ms(10)</code></td>
 </tr>
 <tr>
-<td><strong>Your Scripts</strong></td>
+<td>Your ScriptO</td>
 <td>User task</td>
-<td>Must <code>await</code> periodically</td>
+<td>Your <code>await</code>s</td>
 </tr>
 <tr>
-<td><strong>M2M Commands</strong></td>
-<td>Synchronous exec</td>
-<td>Runs to completion</td>
+<td><code>exec</code> calls from an agent or Studio</td>
+<td>Synchronous, on the interpreter thread</td>
+<td>Running to completion</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p>[!IMPORTANT]
-If your script runs a loop without <code>await</code>, <strong>everything freezes</strong>—including M2M commands from Scripto Studio.</p>
+A loop with no <code>await</code> freezes everything, including the queue pump. Agents and Studio can't reach the board until it yields. If something holds the event loop too long, the watchdog breaks it with a <code>KeyboardInterrupt</code> and the ScriptO stops with the reason "it held the event loop too long".</p>
 </blockquote>
-<h2 id="writing-async-scripts">Writing Async Scripts<a class="headerlink" href="#writing-async-scripts" title="Permanent link">&para;</a></h2>
-<h3 id="good-yields-regularly">✅ Good: Yields Regularly<a class="headerlink" href="#good-yields-regularly" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys</span><span class="w"> </span><span class="kn">import</span> <span class="n">bg_tasks</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_task</span><span class="p">():</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">do_work</span><span class="p">()</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># Yields to other tasks</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">bg_tasks</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s2">&quot;my_task&quot;</span><span class="p">,</span> <span class="n">my_task</span><span class="p">)</span>
+<p>An <code>exec</code> call is stopped after 4 seconds by default, because a longer block would make the watchdog stop user tasks. Put long work in a ScriptO and await in it.</p>
+<h2 id="the-queue-pump">The queue pump<a class="headerlink" href="#the-queue-pump" title="Permanent link">&para;</a></h2>
+<p><code>queue_pump()</code> in <code>lib/sys/app.py</code> is a system task:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">queue_pump</span><span class="p">():</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="k">if</span> <span class="n">mcp</span><span class="o">.</span><span class="n">started</span><span class="p">():</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            <span class="n">httpserver</span><span class="o">.</span><span class="n">process_queue</span><span class="p">()</span>   <span class="c1"># MCP over WebSocket and HTTP, and any routes you add</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>            <span class="n">mcp</span><span class="o">.</span><span class="n">after_pump</span><span class="p">()</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="n">bg_tasks</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s2">"queue_pump"</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="bad-blocks-the-vm">❌ Bad: Blocks the VM<a class="headerlink" href="#bad-blocks-the-vm" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># DON&#39;T DO THIS - blocks everything!</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">do_work</span><span class="p">()</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># time.sleep() does NOT yield!</span>
+<p>Every tool call, from an agent or from Studio, is handled here. The task feeds a watchdog on each pass, which is how a ScriptO that holds the loop gets caught.</p>
+<h2 id="writing-a-scripto-that-yields">Writing a ScriptO that yields<a class="headerlink" href="#writing-a-scripto-that-yields" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">do_work</span><span class="p">()</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="system-vs-user-tasks">System vs User Tasks<a class="headerlink" href="#system-vs-user-tasks" title="Permanent link">&para;</a></h2>
-<p>Tasks registered via <code>bg_tasks</code> are classified as:</p>
+<p>Don't use <code>time.sleep()</code> in a loop. It blocks the interpreter and doesn't yield.</p>
+<h2 id="system-and-user-tasks">System and user tasks<a class="headerlink" href="#system-and-user-tasks" title="Permanent link">&para;</a></h2>
+<p><code>lib/sys/bg_tasks.py</code> keeps the board's tasks by name. A ScriptO's <code>run()</code> runs as a user task named <code>app_&lt;id&gt;</code>.</p>
 <table>
 <thead>
 <tr>
 <th>Type</th>
-<th>Protected?</th>
-<th>Stopped By</th>
+<th>Stopped by</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>System</strong> (<code>is_system=True</code>)</td>
-<td>Yes</td>
+<td>System (<code>is_system=True</code>)</td>
 <td>Only <code>bg_tasks.stop_all()</code></td>
 </tr>
 <tr>
-<td><strong>User</strong> (<code>is_system=False</code>)</td>
-<td>No</td>
-<td>Stop button, Ctrl+C, soft reset</td>
+<td>User (<code>is_system=False</code>)</td>
+<td>The Stop button, Ctrl+C, a watchdog break, a reset</td>
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># System task - keeps running even after Stop button</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">bg_tasks</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s2">&quot;critical_monitor&quot;</span><span class="p">,</span> <span class="n">monitor_func</span><span class="p">,</span> <span class="n">is_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># User task - stopped by Stop button</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">bg_tasks</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s2">&quot;my_animation&quot;</span><span class="p">,</span> <span class="n">animate_leds</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys</span><span class="w"> </span><span class="kn">import</span> <span class="n">bg_tasks</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">bg_tasks</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s2">"my_animation"</span><span class="p">,</span> <span class="n">animate_leds</span><span class="p">)</span>                  <span class="c1"># user task</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">bg_tasks</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s2">"monitor"</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">is_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>            <span class="c1"># survives Stop</span>
 </code></pre></div>
-<h2 id="m2m-commands">M2M Commands<a class="headerlink" href="#m2m-commands" title="Permanent link">&para;</a></h2>
-<p>When Scripto Studio calls a device function (like <code>getSysInfo()</code>), it happens via the <strong>M2M pattern</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>┌────────────────┐         ┌──────────────────┐
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>│ Scripto Studio │         │     Device       │
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│                │  exec() │                  │
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│ getSystemInfo()├────────►│ getSysInfo()     │
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│                │         │     │            │
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│                │◄────────┤ print(json)      │
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>│ parse response │  output │                  │
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>└────────────────┘         └──────────────────┘
-</code></pre></div>
-<p>M2M commands run <strong>synchronously</strong> in the REPL context—they block until complete. Keep them fast (&lt;100ms).</p>
-<h2 id="the-queue-pump">The Queue Pump<a class="headerlink" href="#the-queue-pump" title="Permanent link">&para;</a></h2>
-<p>The <code>queue_pump()</code> task is the system's heartbeat:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">queue_pump</span><span class="p">():</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        <span class="n">webrepl</span><span class="o">.</span><span class="n">process_queue</span><span class="p">()</span>   <span class="c1"># Handle WebSocket/WebRTC messages</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="n">httpserver</span><span class="o">.</span><span class="n">process_queue</span><span class="p">()</span> <span class="c1"># Handle HTTP requests</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># Yield every 10ms</span>
-</code></pre></div>
-<p>This ensures:</p>
+<p>Useful calls: <code>stop(name)</code>, <code>stop_user_tasks()</code>, <code>is_running(name)</code>, <code>list_tasks()</code>, and <code>feed(name)</code> to feed a task's watchdog from inside its loop. Stop, above the editor, calls <code>stop_user_tasks()</code>.</p>
+<h2 id="task-lifecycle">Task lifecycle<a class="headerlink" href="#task-lifecycle" title="Permanent link">&para;</a></h2>
+<p>A user task that raises is marked crashed. It restarts after one second, and the ScriptO's row in the sidebar shows it as crashed with the restart count and last error. A task that returns ends as stopped. A task that's stopped by Stop or a break records why it stopped.</p>
+<p>If the board crashes three times in a row at boot, it starts without its run-at-boot ScriptOs and says so in each one's status. A reset tries again.</p>
+<h2 id="threads">Threads<a class="headerlink" href="#threads" title="Permanent link">&para;</a></h2>
+<p><code>_thread</code> works, but use it rarely. The status LED animation runs in a thread, and that pattern is safe because it's created once at boot, reads a singleton, does short bounded work and sleeps each pass.</p>
 <ul>
-<li>M2M commands are processed promptly</li>
-<li>HTTP requests are served</li>
-<li>Your UI stays responsive</li>
+<li>Don't use <code>await</code>, <code>asyncio</code> or the network from a thread.</li>
+<li>Don't share mutable data between threads without a flag or lock.</li>
+<li>A thread can't be joined or killed, and an uncaught exception ends it silently.</li>
+<li>Create threads once and reuse them. Creating and destroying them fragments the heap.</li>
 </ul>
-<h2 id="task-lifecycle">Task Lifecycle<a class="headerlink" href="#task-lifecycle" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Start Script
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>     │
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>     ▼
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>┌─────────────┐
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│   Running   │◄──────────────────┐
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>└──────┬──────┘                   │
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>       │                          │
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  Exception?                  Restart
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>       │                      (after 1s)
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>       ▼                          │
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>┌─────────────┐                   │
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>│   Crashed   │───────────────────┘
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>└─────────────┘
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>       │ Stop button / Ctrl+C
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>       ▼
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>┌─────────────┐
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>│   Stopped   │
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>└─────────────┘
-</code></pre></div>
-<p>Crashed user tasks auto-restart after a 1-second backoff.</p>
-<h2 id="defensive-skill-loading">Defensive Skill Loading<a class="headerlink" href="#defensive-skill-loading" title="Permanent link">&para;</a></h2>
-<p>When an agent (like PFC) dynamically loads skills/scriptos, use these patterns to avoid crashing:</p>
-<h3 id="1-wrap-everything-in-tryexcept">1. Wrap Everything in Try/Except<a class="headerlink" href="#1-wrap-everything-in-tryexcept" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_skill</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>        <span class="n">skill_globals</span> <span class="o">=</span> <span class="p">{}</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>            <span class="n">code</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="n">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">),</span> <span class="n">skill_globals</span><span class="p">)</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        <span class="k">if</span> <span class="s1">&#39;run&#39;</span> <span class="ow">in</span> <span class="n">skill_globals</span><span class="p">:</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>            <span class="k">return</span> <span class="k">await</span> <span class="n">skill_globals</span><span class="p">[</span><span class="s1">&#39;run&#39;</span><span class="p">]()</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="k">except</span> <span class="ne">SyntaxError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Syntax error in skill: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="k">except</span> <span class="ne">MemoryError</span><span class="p">:</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Out of memory loading skill&quot;</span><span class="p">}</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Skill failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
-</code></pre></div>
-<h3 id="2-pre-flight-memory-check">2. Pre-flight Memory Check<a class="headerlink" href="#2-pre-flight-memory-check" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">can_load_skill</span><span class="p">(</span><span class="n">min_free_kb</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we have enough memory to load a skill&quot;&quot;&quot;</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">free_kb</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">mem_free</span><span class="p">()</span> <span class="o">//</span> <span class="mi">1024</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="k">return</span> <span class="n">free_kb</span> <span class="o">&gt;=</span> <span class="n">min_free_kb</span>
-</code></pre></div>
-<h3 id="3-syntax-validation-before-exec">3. Syntax Validation Before Exec<a class="headerlink" href="#3-syntax-validation-before-exec" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_skill</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;skill&quot;</span><span class="p">):</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check syntax without executing&quot;&quot;&quot;</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="nb">compile</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="k">except</span> <span class="ne">SyntaxError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="4-timeout-protection-cooperative">4. Timeout Protection (Cooperative)<a class="headerlink" href="#4-timeout-protection-cooperative" title="Permanent link">&para;</a></h3>
-<p>Since MicroPython is single-threaded, true timeouts aren't possible. Instead, skills must cooperate:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Pass a deadline to the skill</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_skill_with_timeout</span><span class="p">(</span><span class="n">skill_func</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_add</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">ticks_ms</span><span class="p">(),</span> <span class="n">timeout_ms</span><span class="p">)</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="c1"># Skill must check this periodically</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="k">return</span> <span class="k">await</span> <span class="n">skill_func</span><span class="p">(</span><span class="n">deadline</span><span class="o">=</span><span class="n">deadline</span><span class="p">)</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1"># Inside skill:</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_skill</span><span class="p">(</span><span class="n">deadline</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    <span class="k">while</span> <span class="n">work_remaining</span><span class="p">:</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>        <span class="k">if</span> <span class="n">deadline</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_diff</span><span class="p">(</span><span class="n">deadline</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_ms</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Skill timed out&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>        <span class="n">do_chunk_of_work</span><span class="p">()</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Yield</span>
-</code></pre></div>
-<h3 id="5-isolated-namespace">5. Isolated Namespace<a class="headerlink" href="#5-isolated-namespace" title="Permanent link">&para;</a></h3>
-<p>Prevent skills from polluting globals:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">exec_isolated</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;skill&quot;</span><span class="p">):</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute code in isolated namespace&quot;&quot;&quot;</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">skill_ns</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="s1">&#39;__name__&#39;</span><span class="p">:</span> <span class="s1">&#39;skill&#39;</span><span class="p">,</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>        <span class="s1">&#39;__builtins__&#39;</span><span class="p">:</span> <span class="n">__builtins__</span><span class="p">,</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>        <span class="c1"># Explicitly provide allowed modules</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        <span class="s1">&#39;asyncio&#39;</span><span class="p">:</span> <span class="nb">__import__</span><span class="p">(</span><span class="s1">&#39;asyncio&#39;</span><span class="p">),</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>        <span class="s1">&#39;json&#39;</span><span class="p">:</span> <span class="nb">__import__</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">),</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>        <span class="s1">&#39;gc&#39;</span><span class="p">:</span> <span class="nb">__import__</span><span class="p">(</span><span class="s1">&#39;gc&#39;</span><span class="p">),</span>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="p">}</span>
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    <span class="n">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">),</span> <span class="n">skill_ns</span><span class="p">)</span>
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="k">return</span> <span class="n">skill_ns</span>
-</code></pre></div>
-<h3 id="6-cleanup-after-skills">6. Cleanup After Skills<a class="headerlink" href="#6-cleanup-after-skills" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_and_cleanup</span><span class="p">(</span><span class="n">skill_path</span><span class="p">):</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">run_skill</span><span class="p">(</span><span class="n">skill_path</span><span class="p">)</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>        <span class="k">return</span> <span class="n">result</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="k">finally</span><span class="p">:</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>        <span class="c1"># Always clean up</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
-</code></pre></div>
-<blockquote>
-<p>[!TIP]
-Log execution results via <code>syslog</code> so you can debug failures remotely.</p>
-</blockquote>
-<h2 id="thread-safety-in-micropython">Thread Safety in MicroPython<a class="headerlink" href="#thread-safety-in-micropython" title="Permanent link">&para;</a></h2>
-<p>While the firmware primarily uses <code>asyncio</code>, some components (like the status LED) use <code>_thread</code> for background work. Threads work but have significant gotchas.</p>
-<h3 id="known-thread-limitations">Known Thread Limitations<a class="headerlink" href="#known-thread-limitations" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Issue</th>
-<th>Description</th>
-<th>Impact</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>No thread-safe data structures</strong></td>
-<td>No <code>Queue</code>, basic <code>Lock</code> only</td>
-<td>Race conditions if sharing data</td>
-</tr>
-<tr>
-<td><strong>GIL contention</strong></td>
-<td>Only one thread runs Python at a time</td>
-<td>Blocked thread affects all</td>
-</tr>
-<tr>
-<td><strong>No <code>thread.join()</code></strong></td>
-<td>Can't wait for thread completion</td>
-<td>Must use flags for coordination</td>
-</tr>
-<tr>
-<td><strong>No <code>thread.kill()</code></strong></td>
-<td>Can't forcibly terminate</td>
-<td>Runaway thread can't be stopped</td>
-</tr>
-<tr>
-<td><strong>Silent exception death</strong></td>
-<td>Uncaught exceptions crash thread silently</td>
-<td>Hard to debug</td>
-</tr>
-<tr>
-<td><strong>Small stack</strong></td>
-<td>~4KB default stack size</td>
-<td>Deep recursion crashes</td>
-</tr>
-<tr>
-<td><strong>Memory fragmentation</strong></td>
-<td>Create/destroy fragments heap</td>
-<td>Create once, reuse</td>
-</tr>
-</tbody>
-</table>
-<h3 id="dangerous-patterns">❌ Dangerous Patterns<a class="headerlink" href="#dangerous-patterns" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># DANGEROUS: Shared mutable state without locks</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">shared_data</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">skill_thread</span><span class="p">():</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">shared_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;from thread&quot;</span><span class="p">)</span>  <span class="c1"># Race condition!</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1"># DANGEROUS: Async/await in thread</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">skill_thread</span><span class="p">():</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># CRASHES - asyncio not thread-safe!</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># DANGEROUS: WebREPL/network from thread  </span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">skill_thread</span><span class="p">():</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">webrepl</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">)</span>  <span class="c1"># Undefined behavior!</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1"># DANGEROUS: Frequent thread creation</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>    <span class="n">_thread</span><span class="o">.</span><span class="n">start_new_thread</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="p">())</span>  <span class="c1"># Memory fragmentation!</span>
-</code></pre></div>
-<h3 id="safe-thread-pattern">✅ Safe Thread Pattern<a class="headerlink" href="#safe-thread-pattern" title="Permanent link">&para;</a></h3>
-<p>The status LED thread demonstrates the safe pattern:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">_thread</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">_animation_thread</span><span class="p">():</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>        <span class="k">if</span> <span class="n">status_led</span><span class="p">:</span>            <span class="c1"># Read-only check</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>            <span class="n">status_led</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>   <span class="c1"># Self-contained, fast work</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>        <span class="n">time</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>         <span class="c1"># Always yields GIL</span>
-</code></pre></div>
-<p><strong>Why this works:</strong></p>
-<ul>
-<li>Read-only access to singleton (no mutation races)</li>
-<li>Short, bounded work per iteration</li>
-<li>Regular <code>sleep_ms()</code> to yield GIL</li>
-<li>Created once at boot, never destroyed</li>
-<li>No asyncio or network calls</li>
-</ul>
-<h3 id="thread-stop-flag-pattern">Thread + Stop Flag Pattern<a class="headerlink" href="#thread-stop-flag-pattern" title="Permanent link">&para;</a></h3>
-<p>If you need to run skills in a thread:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">_thread</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">_skill_stop</span> <span class="o">=</span> <span class="kc">False</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_skill_threaded</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="k">global</span> <span class="n">_skill_stop</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="n">_skill_stop</span> <span class="o">=</span> <span class="kc">False</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">runner</span><span class="p">():</span>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>        <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>            <span class="n">skill_globals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;should_stop&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">_skill_stop</span><span class="p">}</span>
-<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>            <span class="n">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">),</span> <span class="n">skill_globals</span><span class="p">)</span>
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Thread error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Log, don&#39;t crash silently</span>
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>
-<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>    <span class="n">_thread</span><span class="o">.</span><span class="n">start_new_thread</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="p">())</span>
-<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>
-<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">stop_skill</span><span class="p">():</span>
-<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>    <span class="k">global</span> <span class="n">_skill_stop</span>
-<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a>    <span class="n">_skill_stop</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Skill must check this!</span>
-</code></pre></div>
-<blockquote>
-<p>[!WARNING]
-The skill must cooperate by checking <code>should_stop()</code>. A skill that ignores this cannot be terminated.</p>
-</blockquote>
-<h3 id="when-to-use-threads">When to Use Threads<a class="headerlink" href="#when-to-use-threads" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Use Case</th>
-<th>Recommendation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Most skills</td>
-<td><strong>Use asyncio</strong> - safer, simpler</td>
-</tr>
-<tr>
-<td>Blocking hardware I/O</td>
-<td><strong>Thread OK</strong> - like NeoPixel animations</td>
-</tr>
-<tr>
-<td>Network/WebREPL calls</td>
-<td><strong>Use asyncio only</strong> - not thread-safe</td>
-</tr>
-<tr>
-<td>CPU-intensive work</td>
-<td><strong>Thread with yields</strong> - call <code>time.sleep_ms(0)</code> frequently</td>
-</tr>
-<tr>
-<td>Long-lived background</td>
-<td><strong>Thread OK</strong> - create once, run forever</td>
-</tr>
-<tr>
-<td>Short one-off tasks</td>
-<td><strong>Avoid threads</strong> - use asyncio task</td>
-</tr>
-</tbody>
-</table>
-<h3 id="thread-pool-pattern-advanced">Thread Pool Pattern (Advanced)<a class="headerlink" href="#thread-pool-pattern-advanced" title="Permanent link">&para;</a></h3>
-<p>For frequent skill execution, use a single long-lived worker thread:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">_thread</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">_skill_queue</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Skill code to run</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">_skill_result</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">_worker_thread</span><span class="p">():</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="k">global</span> <span class="n">_skill_queue</span><span class="p">,</span> <span class="n">_skill_result</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>        <span class="k">if</span> <span class="n">_skill_queue</span><span class="p">:</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>            <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>                <span class="n">_skill_result</span> <span class="o">=</span> <span class="n">exec_skill</span><span class="p">(</span><span class="n">_skill_queue</span><span class="p">)</span>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>                <span class="n">_skill_result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>            <span class="n">_skill_queue</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>        <span class="n">time</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>
-<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="c1"># Start once at boot</span>
-<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="n">_thread</span><span class="o">.</span><span class="n">start_new_thread</span><span class="p">(</span><span class="n">_worker_thread</span><span class="p">,</span> <span class="p">())</span>
-<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>
-<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="k">def</span><span class="w"> </span><span class="nf">submit_skill</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
-<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>    <span class="k">global</span> <span class="n">_skill_queue</span>
-<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>    <span class="n">_skill_queue</span> <span class="o">=</span> <span class="n">code</span>
-</code></pre></div>
-<p>This avoids memory fragmentation from creating/destroying threads.</p>
+<p>For nearly everything else, use an asyncio task.</p>
 <h2 id="bus-sharing-i2c-spi">Bus Sharing (I2C / SPI)<a class="headerlink" href="#bus-sharing-i2c-spi" title="Permanent link">&para;</a></h2>
-<p>When multiple extensions or ScriptOs talk to devices on the same I2C or SPI bus, they must share a <strong>single <code>machine.I2C</code> or <code>machine.SPI</code> instance</strong>. If two extensions each create their own instance for the same hardware peripheral, the second one silently reconfigures the bus — potentially breaking the first.</p>
+<p>When multiple Apps or ScriptOs talk to devices on the same I2C or SPI bus, they must share a <strong>single <code>machine.I2C</code> or <code>machine.SPI</code> instance</strong>. If two of them each create their own instance for the same hardware peripheral, the second one silently reconfigures the bus, potentially breaking the first.</p>
 <h3 id="why-no-locking-is-needed">Why No Locking Is Needed<a class="headerlink" href="#why-no-locking-is-needed" title="Permanent link">&para;</a></h3>
-<p>In CircuitPython, the <code>busio.I2C</code> class has <code>try_lock()</code> / <code>unlock()</code> methods because its USB stack can preempt a transaction mid-byte. <strong>MicroPython doesn't have this problem</strong> — all I2C/SPI calls are synchronous C functions that run to completion. Since the VM is single-threaded and cooperative, no other coroutine can interleave on the bus between <code>await</code> points.</p>
+<p>In CircuitPython, the <code>busio.I2C</code> class has <code>try_lock()</code> / <code>unlock()</code> methods because its USB stack can preempt a transaction mid-byte. <strong>MicroPython doesn't have this problem</strong>, all I2C/SPI calls are synchronous C functions that run to completion. Since the VM is single-threaded and cooperative, no other coroutine can interleave on the bus between <code>await</code> points.</p>
 <p>The real risk is <strong>configuration conflicts</strong>, not data races. The <code>bus</code> module solves this with a singleton cache.</p>
 <h3 id="the-bus-module">The <code>bus</code> Module<a class="headerlink" href="#the-bus-module" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys</span><span class="w"> </span><span class="kn">import</span> <span class="n">bus</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="c1"># Board-manifest-aware (recommended — uses board.json pin definitions)</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="n">i2c</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_i2c</span><span class="p">(</span><span class="s2">&quot;sensors&quot;</span><span class="p">)</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="c1"># Explicit pins</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">i2c</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_i2c</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">scl</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">sda</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">400000</span><span class="p">)</span>
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
-<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="c1"># SPI works the same way</span>
-<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="n">spi</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_spi</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">)</span>
-<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="n">spi</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_spi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sck</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">mosi</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">miso</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="mi">10000000</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys</span><span class="w"> </span><span class="kn">import</span> <span class="n">bus</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Board-manifest-aware (recommended: uses board.json pin definitions)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">i2c</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_i2c</span><span class="p">(</span><span class="s2">"sensors"</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Explicit pins</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">i2c</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_i2c</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">scl</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">sda</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">400000</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># SPI works the same way</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">spi</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_spi</span><span class="p">(</span><span class="s2">"display"</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">spi</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">get_spi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sck</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">mosi</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">miso</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="mi">10000000</span><span class="p">)</span>
 </code></pre></div>
-<p>Calling <code>bus.get_i2c("sensors")</code> twice returns the <strong>same object</strong> — no reconfiguration, no conflicts.</p>
+<p>Calling <code>bus.get_i2c("sensors")</code> twice returns the <strong>same object</strong>, no reconfiguration, no conflicts.</p>
 <h3 id="comparison">Comparison<a class="headerlink" href="#comparison" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3047,8 +2208,8 @@ The skill must cooperate by checking <code>should_stop()</code>. A skill that ig
 </tbody>
 </table>
 <h3 id="utility-functions">Utility Functions<a class="headerlink" href="#utility-functions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">bus</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>                  <span class="c1"># Print all cached buses</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">bus</span><span class="o">.</span><span class="n">release_i2c</span><span class="p">(</span><span class="s2">&quot;sensors&quot;</span><span class="p">)</span>  <span class="c1"># Remove from cache (doesn&#39;t deinit hardware)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">bus</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>                  <span class="c1"># Print all cached buses</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">bus</span><span class="o">.</span><span class="n">release_i2c</span><span class="p">(</span><span class="s2">"sensors"</span><span class="p">)</span>  <span class="c1"># Remove from cache (doesn't deinit hardware)</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -3056,8 +2217,8 @@ The skill must cooperate by checking <code>should_stop()</code>. A skill that ig
 </div>
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../writing-scriptos/">Writing ScriptOs</a> - Script basics</li>
-<li><a href="../api/bg-tasks.md">bg_tasks API</a> - Task management functions</li>
+<li><a href="../writing-scriptos/">Writing ScriptOs</a></li>
+<li><a href="../../developer/micropython-reference/">MicroPython reference</a></li>
 </ul>
 
 
@@ -3130,10 +2291,10 @@ The skill must cooperate by checking <code>should_stop()</code>. A skill that ig
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

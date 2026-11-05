@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for ScriptO Studio - Program embedded devices with natural language">
+        <meta name="description" content="Documentation for ScriptO Studio: agents that program MicroPython boards">
       
       
         <meta name="author" content="jetpax">
@@ -15,17 +15,17 @@
         <link rel="canonical" href="https://scriptostudio.com/docs/troubleshooting/connection/">
       
       
-        <link rel="prev" href="../../debugging/debug-console/">
+        <link rel="prev" href="../../reference/faq/">
       
       
-        <link rel="next" href="../memory/">
+        <link rel="next" href="../../developer/architecture/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -33,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#troubleshooting-connection" class="md-skip">
+        <a href="#connection-issues" class="md-skip">
           Skip to content
         </a>
       
@@ -326,7 +326,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    Set Up and Connect
   
 
     
@@ -354,7 +354,7 @@
   <span class="md-ellipsis">
     
   
-    First ScriptO
+    Your First ScriptO
   
 
     
@@ -375,42 +375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/connection/" class="md-nav__link">
+      <a href="../../getting-started/tour/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Connection
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/ide-overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    IDE Overview
+    A Tour of Studio
   
 
     
@@ -463,7 +435,7 @@
   <span class="md-ellipsis">
     
   
-    Device Setup
+    Agents
   
 
     
@@ -479,7 +451,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Device Setup
+    Agents
   
 
           </label>
@@ -492,14 +464,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
+      <a href="../../agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Flashing Firmware
+    How Agents Work
   
 
     
@@ -520,14 +492,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/board-configurations/" class="md-nav__link">
+      <a href="../../agent/studio-agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Board Configurations
+    Studio's Agent
   
 
     
@@ -548,14 +520,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/network-setup/" class="md-nav__link">
+      <a href="../../agent/other-agents/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Network Setup
+    Other Agents
   
 
     
@@ -576,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/provisioning/" class="md-nav__link">
+      <a href="../../agent/board-context/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Provisioning
+    What a Board Tells an Agent
   
 
     
@@ -636,7 +608,7 @@
   <span class="md-ellipsis">
     
   
-    User Guide
+    ScriptOs
   
 
     
@@ -649,207 +621,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    User Guide
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/file-manager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    File Manager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/editor-features/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Editor Features
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/terminal-repl/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminal & REPL
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/system-info/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    System Information
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settings
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -922,6 +693,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../scriptos/vm-sharing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../scriptos/ui-plugin-hello-world/" class="md-nav__link">
         
   
@@ -929,7 +728,236 @@
   <span class="md-ellipsis">
     
   
-    UI Plugin - Hello World
+    UI Plugin Example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/available-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/writing-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/app-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/device-libraries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
   
 
     
@@ -982,7 +1010,7 @@
   <span class="md-ellipsis">
     
   
-    Extensions
+    Boards
   
 
     
@@ -998,7 +1026,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extensions
+    Boards
   
 
           </label>
@@ -1011,14 +1039,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/" class="md-nav__link">
+      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extensions
+    Flashing Firmware
   
 
     
@@ -1039,14 +1067,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/writing-extensions/" class="md-nav__link">
+      <a href="../../device-setup/provisioning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Writing Extensions
+    Provisioning
   
 
     
@@ -1067,14 +1095,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/extension-api/" class="md-nav__link">
+      <a href="../../device-setup/network-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extension API
+    Network Setup
   
 
     
@@ -1095,70 +1123,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/device-libraries/" class="md-nav__link">
+      <a href="../../device-setup/board-configurations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Device Libraries
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/built-in-extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Built-in Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/versioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Versioning
+    Board Configurations
   
 
     
@@ -1211,7 +1183,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent
+    Using Studio
   
 
     
@@ -1227,7 +1199,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI Agent
+    Using Studio
   
 
           </label>
@@ -1240,14 +1212,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/" class="md-nav__link">
+      <a href="../../user-guide/file-manager/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Agent Overview
+    Files
   
 
     
@@ -1268,14 +1240,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/setup/" class="md-nav__link">
+      <a href="../../user-guide/editor-features/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setup
+    Editor
   
 
     
@@ -1296,61 +1268,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/usage/" class="md-nav__link">
+      <a href="../../user-guide/debugging/" class="md-nav__link">
         
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Usage
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
-            
   
   
   <span class="md-ellipsis">
@@ -1364,19 +1283,11 @@
   
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Debugging
+      </a>
+    </li>
   
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+              
             
               
                 
@@ -1385,14 +1296,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/" class="md-nav__link">
+      <a href="../../user-guide/terminal/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debugger Overview
+    Terminal
   
 
     
@@ -1413,14 +1324,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/breakpoints/" class="md-nav__link">
+      <a href="../../user-guide/system-info/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setting Breakpoints
+    About
   
 
     
@@ -1441,14 +1352,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/debug-console/" class="md-nav__link">
+      <a href="../../user-guide/settings/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debug Console
+    Settings
   
 
     
@@ -1491,17 +1402,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Troubleshooting
+    Reference
   
 
     
@@ -1512,16 +1423,72 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Troubleshooting
+    Reference
   
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/mcp-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1590,10 +1557,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quick-checks" class="md-nav__link">
+  <a href="#cant-connect-to-the-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Checks
+        Can't connect to the board
       
     </span>
   </a>
@@ -1601,149 +1568,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#connection-errors" class="md-nav__link">
+  <a href="#this-board-doesnt-accept-connections-from" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Connection Errors
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection Errors">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#connection-refused-or-timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Connection refused" or timeout
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#authentication-failed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Authentication failed"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#webrtc-connection-failed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "WebRTC connection failed"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#another-client-is-connected" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Another client is connected"
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Network Issues
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Network Issues">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#device-in-ap-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device in AP Mode
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#wrong-ip-address" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Wrong IP Address
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#performance-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Performance Issues
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Performance Issues">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#slow-response" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Slow Response
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#memory-warnings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Memory Warnings
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#debug-logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Debug Logging
+        "This board doesn't accept connections from..."
       
     </span>
   </a>
@@ -1751,10 +1579,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#still-stuck" class="md-nav__link">
+  <a href="#the-board-refuses-another-client" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Still Stuck?
+        The board refuses another client
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forgot-the-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forgot the password
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#studios-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Studio's agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-outside-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An outside agent
       
     </span>
   </a>
@@ -1765,90 +1626,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../memory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memory & Performance
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../errors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common Errors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../debug-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1883,10 +1660,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
         
           
-          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
             
   
   
@@ -1904,8 +1681,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1930,34 +1707,6 @@
     
   
     Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/building-from-source/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Building from Source
   
 
     
@@ -2006,42 +1755,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/esm-modules/" class="md-nav__link">
+      <a href="../../developer/display-drivers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    ESM Modules
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/shortcuts.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Keyboard Shortcuts
+    Display Drivers
   
 
     
@@ -2070,352 +1791,6 @@
     
   
     MicroPython Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developer/registry.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
-        
-          
-          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Protocol
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Protocol
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrepl-binary-protocol/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebREPL Binary Protocol
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrtc-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebRTC Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/websocket-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebSocket Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/message-types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Message Types
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
-        
-          
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Changelog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
   
 
     
@@ -2463,10 +1838,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quick-checks" class="md-nav__link">
+  <a href="#cant-connect-to-the-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Checks
+        Can't connect to the board
       
     </span>
   </a>
@@ -2474,149 +1849,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#connection-errors" class="md-nav__link">
+  <a href="#this-board-doesnt-accept-connections-from" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Connection Errors
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection Errors">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#connection-refused-or-timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Connection refused" or timeout
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#authentication-failed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Authentication failed"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#webrtc-connection-failed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "WebRTC connection failed"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#another-client-is-connected" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        "Another client is connected"
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Network Issues
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Network Issues">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#device-in-ap-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device in AP Mode
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#wrong-ip-address" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Wrong IP Address
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#performance-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Performance Issues
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Performance Issues">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#slow-response" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Slow Response
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#memory-warnings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Memory Warnings
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#debug-logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Debug Logging
+        "This board doesn't accept connections from..."
       
     </span>
   </a>
@@ -2624,10 +1860,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#still-stuck" class="md-nav__link">
+  <a href="#the-board-refuses-another-client" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Still Stuck?
+        The board refuses another client
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forgot-the-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forgot the password
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#studios-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Studio's agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-outside-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An outside agent
       
     </span>
   </a>
@@ -2654,116 +1923,30 @@
   
 
 
-<h1 id="troubleshooting-connection">Troubleshooting Connection<a class="headerlink" href="#troubleshooting-connection" title="Permanent link">&para;</a></h1>
-<p>Common connection issues and their solutions.</p>
-<h2 id="quick-checks">Quick Checks<a class="headerlink" href="#quick-checks" title="Permanent link">&para;</a></h2>
-<p>Before diving into detailed troubleshooting:</p>
-<ul>
-<li>[ ] Device is powered on</li>
-<li>[ ] Device and browser on same network</li>
-<li>[ ] Correct IP address entered</li>
-<li>[ ] WebREPL password is correct</li>
-<li>[ ] No other client connected (single-client model)</li>
-</ul>
-<h2 id="connection-errors">Connection Errors<a class="headerlink" href="#connection-errors" title="Permanent link">&para;</a></h2>
-<h3 id="connection-refused-or-timeout">"Connection refused" or timeout<a class="headerlink" href="#connection-refused-or-timeout" title="Permanent link">&para;</a></h3>
-<p><strong>Cause</strong>: Device unreachable or WebREPL not running</p>
-<p><strong>Solutions</strong>:
-1. Ping the device: <code>ping &lt;device-ip&gt;</code>
-2. Check device is on WiFi (status LED should be solid)
-3. Verify WebREPL is enabled in <code>boot.py</code>
-4. Try connecting via serial to verify device is running</p>
-<h3 id="authentication-failed">"Authentication failed"<a class="headerlink" href="#authentication-failed" title="Permanent link">&para;</a></h3>
-<p><strong>Cause</strong>: Wrong password</p>
-<p><strong>Solutions</strong>:
-1. Default password is <code>micropython</code>
-2. Check <code>settings/wifi.json</code> on device for custom password
-3. Reset password via serial REPL if forgotten</p>
-<h3 id="webrtc-connection-failed">"WebRTC connection failed"<a class="headerlink" href="#webrtc-connection-failed" title="Permanent link">&para;</a></h3>
-<p><strong>Cause</strong>: NAT/firewall blocking P2P</p>
-<p><strong>Solutions</strong>:
-1. Try WebSocket fallback (automatic after WebRTC timeout)
-2. Ensure devices are on same subnet
-3. Check router doesn't block P2P connections
-4. Disable VPN if active</p>
-<h3 id="another-client-is-connected">"Another client is connected"<a class="headerlink" href="#another-client-is-connected" title="Permanent link">&para;</a></h3>
-<p><strong>Cause</strong>: Only one WebREPL client allowed at a time</p>
-<p><strong>Solutions</strong>:
-1. Close other browser tabs with ScriptO Studio
-2. Wait 30 seconds for stale connection to timeout
-3. Power cycle device to force disconnect</p>
-<h2 id="network-issues">Network Issues<a class="headerlink" href="#network-issues" title="Permanent link">&para;</a></h2>
-<h3 id="device-in-ap-mode">Device in AP Mode<a class="headerlink" href="#device-in-ap-mode" title="Permanent link">&para;</a></h3>
-<p>When device can't connect to WiFi, it creates its own access point:</p>
+<h1 id="connection-issues">Connection Issues<a class="headerlink" href="#connection-issues" title="Permanent link">&para;</a></h1>
+<h2 id="cant-connect-to-the-board">Can't connect to the board<a class="headerlink" href="#cant-connect-to-the-board" title="Permanent link">&para;</a></h2>
+<p>Check these in order:</p>
 <ol>
-<li>Look for WiFi network: <code>pybot-XXXX</code></li>
-<li>Connect your computer to that network</li>
-<li>Access ScriptO Studio at <code>http://192.168.4.1</code></li>
-<li>Configure WiFi credentials in Settings</li>
+<li><strong>The address.</strong> It should look like <code>wss://pybot-6014.local/mcp</code>. Studio adds <code>/mcp</code> for you.</li>
+<li><strong>The network.</strong> The board and your computer need to be on the same network. If the <code>.local</code> name doesn't resolve, try the board's IP address.</li>
+<li><strong>The certificate.</strong> The board signs its own certificate, so your browser refuses it until you've accepted it once. Open <code>https://&lt;host&gt;/</code> in a tab, proceed past the warning, then try again. The connection dialog offers a link to this.</li>
+<li><strong>The password.</strong> It's the one you chose at setup.</li>
 </ol>
-<h3 id="wrong-ip-address">Wrong IP Address<a class="headerlink" href="#wrong-ip-address" title="Permanent link">&para;</a></h3>
-<p>Find your device's IP:</p>
-<p><strong>From serial REPL:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">network</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">sta</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">WLAN</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">STA_IF</span><span class="p">)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">sta</span><span class="o">.</span><span class="n">ifconfig</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-</code></pre></div></p>
-<p><strong>From router:</strong>
-Check your router's DHCP client list for the device.</p>
-<h2 id="performance-issues">Performance Issues<a class="headerlink" href="#performance-issues" title="Permanent link">&para;</a></h2>
-<h3 id="slow-response">Slow Response<a class="headerlink" href="#slow-response" title="Permanent link">&para;</a></h3>
-<p><strong>Causes &amp; Solutions</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Symptom</th>
-<th>Cause</th>
-<th>Solution</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Commands take 4-6s</td>
-<td>Memory pressure</td>
-<td>Reboot device</td>
-</tr>
-<tr>
-<td>Gradual slowdown</td>
-<td>Memory leak</td>
-<td>Check for unclosed files/sockets</td>
-</tr>
-<tr>
-<td>Intermittent lag</td>
-<td>WiFi interference</td>
-<td>Move device closer to router</td>
-</tr>
-</tbody>
-</table>
-<h3 id="memory-warnings">Memory Warnings<a class="headerlink" href="#memory-warnings" title="Permanent link">&para;</a></h3>
-<p>If device shows low memory:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">gc</span><span class="o">.</span><span class="n">mem_free</span><span class="p">())</span>
-</code></pre></div>
-<p>Target: &gt;50KB free for stable operation.</p>
-<h2 id="debug-logging">Debug Logging<a class="headerlink" href="#debug-logging" title="Permanent link">&para;</a></h2>
-<p>Enable verbose logging for diagnosis:</p>
-<p><strong>In ScriptO Studio:</strong>
-1. Open browser DevTools (F12)
-2. Check Console tab for connection logs
-3. Look for <code>[WebRTC]</code> or <code>[WebSocket]</code> prefixed messages</p>
-<p><strong>On Device:</strong>
-Check UART output for <code>ESP_LOGD</code> messages.</p>
-<h2 id="still-stuck">Still Stuck?<a class="headerlink" href="#still-stuck" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Check <a href="../../reference/faq/">FAQ</a> for known issues</li>
-<li>Review device serial output for errors</li>
-<li><a href="https://github.com/jetpax/scriptostudio/issues">Open an issue</a> with:</li>
-<li>Browser and version</li>
-<li>Device board type</li>
-<li>Error messages from console</li>
-<li>Network configuration</li>
-</ol>
+<h2 id="this-board-doesnt-accept-connections-from">"This board doesn't accept connections from..."<a class="headerlink" href="#this-board-doesnt-accept-connections-from" title="Permanent link">&para;</a></h2>
+<p>The board only accepts WebSockets from Studio's own addresses. If you're running Studio from somewhere else, add that address to the board's <code>server.allowed_origins</code> setting.</p>
+<h2 id="the-board-refuses-another-client">The board refuses another client<a class="headerlink" href="#the-board-refuses-another-client" title="Permanent link">&para;</a></h2>
+<p>A board holds three WebSockets. A fourth client is refused with a message saying why, and nobody is pushed off. Studio holds one, and a second once its agent has run, until you press Stop or start a New chat. Close another client on your computer, or use plain HTTP for it, which holds none between calls.</p>
+<h2 id="forgot-the-password">Forgot the password<a class="headerlink" href="#forgot-the-password" title="Permanent link">&para;</a></h2>
+<p>Connect the board by USB and open <strong>System &gt; Firmware</strong>. <strong>Re-provision</strong> gives the board new certificates and a new password, and keeps its WiFi settings. <strong>Change WiFi</strong> changes only the network. See <a href="../../device-setup/provisioning/">Provisioning</a>.</p>
+<h2 id="studios-agent">Studio's agent<a class="headerlink" href="#studios-agent" title="Permanent link">&para;</a></h2>
+<p><strong>It says it needs a key.</strong> Click <strong>Add an API key</strong> under the message box.</p>
+<p><strong>"Your OpenRouter account is out of credits."</strong> Add credit at OpenRouter, or pick a free model.</p>
+<p><strong>A free model stops with a rate limit.</strong> Free models have daily limits. Wait, or choose another model.</p>
+<p><strong>"Connect a board, and an agent can get to work on it."</strong> Studio needs a board connected before the agent can start. A saved chat still shows while you're disconnected.</p>
+<h2 id="an-outside-agent">An outside agent<a class="headerlink" href="#an-outside-agent" title="Permanent link">&para;</a></h2>
+<p><strong>It can't reach the board.</strong> Check that the address and token match <strong>System &gt; Agent</strong>. They change if you change the board's password.</p>
+<p><strong>A tool is missing or "Unknown tool".</strong> A session can keep the tool list it started with. Start a new session.</p>
+<p><strong>It connected to the wrong board.</strong> Each <code>claude mcp add</code> line names one board. See what's configured with <code>claude mcp list</code>.</p>
 
 
 
@@ -2835,10 +2018,10 @@ Check UART output for <code>ESP_LOGD</code> messages.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

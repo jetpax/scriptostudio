@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for ScriptO Studio - Program embedded devices with natural language">
+        <meta name="description" content="Documentation for ScriptO Studio: agents that program MicroPython boards">
       
       
         <meta name="author" content="jetpax">
@@ -15,13 +15,17 @@
         <link rel="canonical" href="https://scriptostudio.com/docs/developer/display-drivers/">
       
       
+        <link rel="prev" href="../contributing/">
+      
+      
+        <link rel="next" href="../micropython-reference/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -29,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -322,7 +326,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    Set Up and Connect
   
 
     
@@ -350,7 +354,7 @@
   <span class="md-ellipsis">
     
   
-    First ScriptO
+    Your First ScriptO
   
 
     
@@ -371,42 +375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/connection/" class="md-nav__link">
+      <a href="../../getting-started/tour/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Connection
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/ide-overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    IDE Overview
+    A Tour of Studio
   
 
     
@@ -459,7 +435,7 @@
   <span class="md-ellipsis">
     
   
-    Device Setup
+    Agents
   
 
     
@@ -475,7 +451,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Device Setup
+    Agents
   
 
           </label>
@@ -488,14 +464,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
+      <a href="../../agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Flashing Firmware
+    How Agents Work
   
 
     
@@ -516,14 +492,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/board-configurations/" class="md-nav__link">
+      <a href="../../agent/studio-agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Board Configurations
+    Studio's Agent
   
 
     
@@ -544,14 +520,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/network-setup/" class="md-nav__link">
+      <a href="../../agent/other-agents/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Network Setup
+    Other Agents
   
 
     
@@ -572,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/provisioning/" class="md-nav__link">
+      <a href="../../agent/board-context/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Provisioning
+    What a Board Tells an Agent
   
 
     
@@ -632,7 +608,7 @@
   <span class="md-ellipsis">
     
   
-    User Guide
+    ScriptOs
   
 
     
@@ -645,207 +621,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    User Guide
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/file-manager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    File Manager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/editor-features/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Editor Features
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/terminal-repl/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminal & REPL
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/system-info/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    System Information
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settings
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -918,6 +693,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../scriptos/vm-sharing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../scriptos/ui-plugin-hello-world/" class="md-nav__link">
         
   
@@ -925,7 +728,236 @@
   <span class="md-ellipsis">
     
   
-    UI Plugin - Hello World
+    UI Plugin Example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/available-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/writing-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/app-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/device-libraries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
   
 
     
@@ -978,7 +1010,7 @@
   <span class="md-ellipsis">
     
   
-    Extensions
+    Boards
   
 
     
@@ -994,7 +1026,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extensions
+    Boards
   
 
           </label>
@@ -1007,14 +1039,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/" class="md-nav__link">
+      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extensions
+    Flashing Firmware
   
 
     
@@ -1035,14 +1067,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/writing-extensions/" class="md-nav__link">
+      <a href="../../device-setup/provisioning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Writing Extensions
+    Provisioning
   
 
     
@@ -1063,14 +1095,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/extension-api/" class="md-nav__link">
+      <a href="../../device-setup/network-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extension API
+    Network Setup
   
 
     
@@ -1091,70 +1123,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/device-libraries/" class="md-nav__link">
+      <a href="../../device-setup/board-configurations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Device Libraries
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/built-in-extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Built-in Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/versioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Versioning
+    Board Configurations
   
 
     
@@ -1207,7 +1183,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent
+    Using Studio
   
 
     
@@ -1223,7 +1199,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI Agent
+    Using Studio
   
 
           </label>
@@ -1236,14 +1212,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/" class="md-nav__link">
+      <a href="../../user-guide/file-manager/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Agent Overview
+    Files
   
 
     
@@ -1264,14 +1240,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/setup/" class="md-nav__link">
+      <a href="../../user-guide/editor-features/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setup
+    Editor
   
 
     
@@ -1292,14 +1268,98 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/usage/" class="md-nav__link">
+      <a href="../../user-guide/debugging/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Usage
+    Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/system-info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
   
 
     
@@ -1352,7 +1412,7 @@
   <span class="md-ellipsis">
     
   
-    Debugging
+    Reference
   
 
     
@@ -1368,7 +1428,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Debugging
+    Reference
   
 
           </label>
@@ -1381,14 +1441,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/" class="md-nav__link">
+      <a href="../../reference/mcp-tools/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debugger Overview
+    MCP Tools
   
 
     
@@ -1409,14 +1469,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/breakpoints/" class="md-nav__link">
+      <a href="../../reference/faq/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setting Breakpoints
+    FAQ
   
 
     
@@ -1429,95 +1489,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../debugging/debug-console/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Console
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Troubleshooting
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Troubleshooting
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1547,90 +1518,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/memory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memory & Performance
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/errors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common Errors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/debug-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -1642,8 +1529,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1654,16 +1543,14 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
             
   
   
@@ -1681,8 +1568,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1707,34 +1594,6 @@
     
   
     Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../building-from-source/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Building from Source
   
 
     
@@ -1780,154 +1639,26 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../esm-modules/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
     
   
-    ESM Modules
-  
-
-    
-  </span>
   
   
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../shortcuts.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Keyboard Shortcuts
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../micropython-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MicroPython Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../registry.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
+    <li class="md-nav__item md-nav__item--active">
       
-    </li>
-  
-
-    
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
         
       
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-        
-        
+        <label class="md-nav__link md-nav__link--active" for="__toc">
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
-        
-          
-          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
-            
   
   
   <span class="md-ellipsis">
     
   
-    Protocol
+    Display Drivers
   
 
     
@@ -1935,35 +1666,17 @@
   
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Protocol
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrepl-binary-protocol/" class="md-nav__link">
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    WebREPL Binary Protocol
+    Display Drivers
   
 
     
@@ -1972,259 +1685,8 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrtc-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebRTC Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/websocket-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebSocket Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/message-types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Message Types
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
       
         
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
-        
-          
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Changelog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-  </ul>
-</nav>
-                  </div>
-                </div>
-              </div>
-            
-            
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
 
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
@@ -2243,7 +1705,7 @@
   <a href="#supported-displays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supported Displays
+        Supported displays
       
     </span>
   </a>
@@ -2320,7 +1782,165 @@
   <a href="#file-layout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        File Layout
+        File layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../micropython-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MicroPython Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#supported-displays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported displays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boot-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boot Sequence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#qspi-command-encoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        QSPI Command Encoding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dma-and-buffer-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DMA and Buffer Sizing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-fonts-tinyttf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Fonts (TinyTTF)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-from-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using from Scripts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File layout
       
     </span>
   </a>
@@ -2347,9 +1967,9 @@
   
 
 
-<h1 id="display-drivers">Display Drivers<a class="headerlink" href="#display-drivers" title="Permanent link">&para;</a></h1>
-<p>ScriptO Studio supports two display interfaces, configured in the board manifest.</p>
-<h2 id="supported-displays">Supported Displays<a class="headerlink" href="#supported-displays" title="Permanent link">&para;</a></h2>
+<h1 id="display-drivers">Display drivers<a class="headerlink" href="#display-drivers" title="Permanent link">&para;</a></h1>
+<p>The board manifest names a display, and <code>lib/sys/display/display_manager.py</code> picks the driver from it.</p>
+<h2 id="supported-displays">Supported displays<a class="headerlink" href="#supported-displays" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2364,55 +1984,68 @@
 <tr>
 <td>QSPI</td>
 <td><code>spd2010.py</code></td>
-<td>Round AMOLED</td>
+<td>Round LCD</td>
 <td>412×412</td>
 <td>SPD2010</td>
+</tr>
+<tr>
+<td>QSPI</td>
+<td><code>co5300.py</code></td>
+<td>AMOLED</td>
+<td>466×466 and 280×456, by board</td>
+<td>CO5300</td>
 </tr>
 <tr>
 <td>SPI</td>
 <td><code>st77xx.py</code></td>
 <td>Rectangular LCD</td>
-<td>240×320</td>
+<td>240×320, and other sizes by board</td>
 <td>ST7789</td>
+</tr>
+<tr>
+<td>EPD</td>
+<td><code>epd_3in97.py</code>, <code>epd_3in97_lvgl.py</code></td>
+<td>3.97" e-paper</td>
+<td>800×480</td>
+<td>SSD1677</td>
 </tr>
 </tbody>
 </table>
+<p>The manifest's <code>devices.display.interface</code> chooses the path: <code>qspi</code>, <code>spi</code> or <code>epd</code>. For QSPI, the <code>driver</code> field chooses between <code>spd2010</code> (the default) and <code>co5300</code>.</p>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│           display_manager.py               │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   init_display() → reads board manifest    │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   Dispatches: QSPI → spd2010, SPI → st77xx │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├────────────────┬───────────────────────────┤
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  spd2010.py    │       st77xx.py           │
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  (QSPI AMOLED) │       (SPI LCD)           │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  Spd2010_hw    │                           │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  Spd2010_lvgl  │                           │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>├────────────────┼───────────────────────────┤
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│  qspi_lcd.Bus  │     machine.SPI           │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│  (C module)    │     (MicroPython)         │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>├────────────────┴───────────────────────────┤
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│            ESP-IDF SPI Driver              │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│         (DMA, bounce buffering)            │
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>└────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                  display_manager.py                 │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   init_display() reads the board manifest, then     │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   qspi -&gt; spd2010 or co5300                         │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   spi  -&gt; st77xx                                    │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   epd  -&gt; epd_3in97_lvgl                            │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├────────────┬───────────┬───────────┬────────────────┤
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│ spd2010.py │ co5300.py │ st77xx.py │ epd_3in97.py   │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│            │           │           │ epd_3in97_lvgl │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>├────────────┴───────────┼───────────┼────────────────┤
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│ qspi_lcd.Bus (C module)│machine.SPI│  machine.SPI   │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├────────────────────────┴───────────┴────────────────┤
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│                 ESP-IDF SPI driver                  │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>└─────────────────────────────────────────────────────┘
 </code></pre></div>
 <h2 id="boot-sequence">Boot Sequence<a class="headerlink" href="#boot-sequence" title="Permanent link">&para;</a></h2>
-<p><code>display_manager.init_display()</code> is called at boot from <code>boot.py</code>:</p>
+<p><code>boot.py</code> calls <code>init_display()</code> on boards with a QSPI or SPI display. On a board with an e-paper display, <code>boot.py</code> calls <code>lib.calmos.init()</code> instead, and that calls <code>init_display()</code>. For a QSPI or SPI display, <code>init_display()</code>:</p>
 <ol>
-<li><strong>Read manifest</strong> — <code>board.device("display")</code> determines interface type</li>
-<li><strong>Hardware reset</strong> — Toggle LCD RST via I2C GPIO expander (if wired)</li>
-<li><strong>Create bus</strong> — Initialize QSPI or SPI bus with correct pinout</li>
-<li><strong>Init driver</strong> — Run the full register init sequence (~600 writes)</li>
-<li><strong>Clear to black</strong> — Fill framebuffer before DISPON to prevent flash</li>
-<li><strong>Blit splash</strong> — Center 128×128 boot logo from <code>splash.bin</code></li>
-<li><strong>DISPON</strong> — Turn on the AMOLED/LCD panel</li>
-<li><strong>Backlight on</strong> — Ramp up brightness</li>
+<li>Reads the manifest with <code>board.device("display")</code> to get the interface.</li>
+<li>Resets the panel through the I2C GPIO expander, if it's wired that way (QSPI).</li>
+<li>Creates the QSPI or SPI bus with the manifest's pins.</li>
+<li>Runs the driver's register init sequence.</li>
+<li>Clears the screen to black before turning the display on, to avoid a flash.</li>
+<li>Draws the 128×128 boot logo from <code>splash.bin</code> in the centre.</li>
+<li>Turns the display on and sets the brightness.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># boot.py</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys.display.display_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_display</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">lcd</span> <span class="o">=</span> <span class="n">init_display</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<p>For e-paper, <code>init_display()</code> powers the panel through the AXP2101, creates the SPI bus, and initializes the EPD and its LVGL backend.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lib.sys.display.display_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_display</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">lcd</span> <span class="o">=</span> <span class="n">init_display</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </code></pre></div>
+<p><code>init_display()</code> returns the existing instance if it has already run. <code>get_display()</code> returns it later, or <code>None</code> before init.</p>
 <h2 id="qspi-command-encoding">QSPI Command Encoding<a class="headerlink" href="#qspi-command-encoding" title="Permanent link">&para;</a></h2>
-<p>The SPD2010 uses a 32-bit QSPI command format. Due to ESP-IDF's byte reversal
+<p>The SPD2010 and CO5300 use a 32-bit QSPI command format. Due to ESP-IDF's byte reversal
 in the SPI peripheral, commands must be pre-encoded:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># On wire: PREFIX, 0x00, CMD, 0x00</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># Encoding: (cmd &lt;&lt; 8) | (prefix &lt;&lt; 24)</span>
@@ -2425,31 +2058,10 @@ in the SPI peripheral, commands must be pre-encoded:</p>
 <h2 id="dma-and-buffer-sizing">DMA and Buffer Sizing<a class="headerlink" href="#dma-and-buffer-sizing" title="Permanent link">&para;</a></h2>
 <p>For QSPI displays with PSRAM-backed LVGL draw buffers:</p>
 <ul>
-<li><strong>Bounce buffer</strong>: 12KB pre-allocated in internal SRAM (<code>modqspi_lcd.c</code>)</li>
-<li><strong>Draw buffer factor</strong>: <code>factor=32</code> → chunks of ~11KB (fits in 12KB bounce)</li>
-<li><strong>Double buffering</strong>: Disabled by default to conserve PSRAM</li>
+<li><strong>Bounce buffer</strong>: pre-allocated in internal SRAM by the <code>qspi_lcd</code> C module (<code>BOUNCE_BUF_SIZE</code>). It sets the largest single DMA transfer.</li>
+<li><strong>Draw buffer factor</strong>: <code>factor=32</code> splits the screen into chunks that fit in the bounce buffer. On a 412×412 panel a chunk is <code>412 × (412/32) × 2</code>, about 11 KB.</li>
+<li><strong>Double buffering</strong>: off, to save PSRAM.</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>Setting</th>
-<th>Value</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>BOUNCE_BUF_SIZE</code></td>
-<td>12KB</td>
-<td>Max single DMA transfer</td>
-</tr>
-<tr>
-<td><code>factor</code></td>
-<td>32</td>
-<td><code>412 × (412/32) × 2 ≈ 11KB</code> per flush chunk</td>
-</tr>
-</tbody>
-</table>
 <h2 id="custom-fonts-tinyttf">Custom Fonts (TinyTTF)<a class="headerlink" href="#custom-fonts-tinyttf" title="Permanent link">&para;</a></h2>
 <p>The build enables <a href="https://docs.lvgl.io/master/details/libs/tiny_ttf.html">TinyTTF</a>
 for runtime <code>.ttf</code> font loading:</p>
@@ -2458,10 +2070,10 @@ for runtime <code>.ttf</code> font loading:</p>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Register MicroPython FS bridge (once)</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">fs_drv</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">fs_drv_t</span><span class="p">()</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">fs_driver</span><span class="o">.</span><span class="n">fs_register</span><span class="p">(</span><span class="n">fs_drv</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">fs_driver</span><span class="o">.</span><span class="n">fs_register</span><span class="p">(</span><span class="n">fs_drv</span><span class="p">,</span> <span class="s1">'S'</span><span class="p">)</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Load any TTF at any size</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">font</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">tiny_ttf_create_file</span><span class="p">(</span><span class="s1">&#39;S:/lib/fonts/MyFont.ttf&#39;</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">font</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">tiny_ttf_create_file</span><span class="p">(</span><span class="s1">'S:/lib/fonts/MyFont.ttf'</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">label</span><span class="o">.</span><span class="n">set_style_text_font</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
 <p>Built-in Montserrat sizes: 14, 16, 20, 24, 28, 32, 36, 48.</p>
@@ -2474,21 +2086,23 @@ driver and just create widgets:</p>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">scr</span><span class="o">.</span><span class="n">set_style_bg_color</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">color_hex</span><span class="p">(</span><span class="mh">0x000000</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">label</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">scr</span><span class="p">)</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">label</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">label</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">"Hello World"</span><span class="p">)</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">label</span><span class="o">.</span><span class="n">set_style_text_color</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">color_hex</span><span class="p">(</span><span class="mh">0xFFFFFF</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">label</span><span class="o">.</span><span class="n">set_style_text_font</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">font_montserrat_36</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">label</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">lv</span><span class="o">.</span><span class="n">ALIGN</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="n">lv</span><span class="o">.</span><span class="n">screen_load</span><span class="p">(</span><span class="n">scr</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="file-layout">File Layout<a class="headerlink" href="#file-layout" title="Permanent link">&para;</a></h2>
+<h2 id="file-layout">File layout<a class="headerlink" href="#file-layout" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>lib/sys/display/
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── display_manager.py   # Boot init + splash + singleton
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├── spd2010.py           # SPD2010 QSPI AMOLED driver
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── st77xx.py            # ST7789 SPI LCD driver
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├── lv_utils.py          # LVGL event loop helper
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>├── splash.bin           # 128×128 RGB565 boot logo
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>└── fs_driver.py         # LVGL ↔ MicroPython filesystem bridge
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── display_manager.py   # Init from the manifest, splash, singleton
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├── spd2010.py           # SPD2010 QSPI LCD driver
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── co5300.py            # CO5300 QSPI AMOLED driver
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├── st77xx.py            # ST7789 SPI LCD driver
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>├── epd_3in97.py         # 3.97" e-paper driver (SSD1677)
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>├── epd_3in97_lvgl.py    # LVGL backend for the e-paper display
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>├── lv_utils.py          # LVGL event loop helper
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>└── splash.bin           # 128×128 RGB565 boot logo
 </code></pre></div>
 
 
@@ -2561,10 +2175,10 @@ driver and just create widgets:</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

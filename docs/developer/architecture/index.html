@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for ScriptO Studio - Program embedded devices with natural language">
+        <meta name="description" content="Documentation for ScriptO Studio: agents that program MicroPython boards">
       
       
         <meta name="author" content="jetpax">
@@ -15,17 +15,17 @@
         <link rel="canonical" href="https://scriptostudio.com/docs/developer/architecture/">
       
       
-        <link rel="prev" href="../../troubleshooting/debug-logging/">
+        <link rel="prev" href="../../troubleshooting/connection/">
       
       
-        <link rel="next" href="../building-from-source/">
+        <link rel="next" href="../contributing/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -33,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -326,7 +326,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    Set Up and Connect
   
 
     
@@ -354,7 +354,7 @@
   <span class="md-ellipsis">
     
   
-    First ScriptO
+    Your First ScriptO
   
 
     
@@ -375,42 +375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/connection/" class="md-nav__link">
+      <a href="../../getting-started/tour/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Connection
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/ide-overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    IDE Overview
+    A Tour of Studio
   
 
     
@@ -463,7 +435,7 @@
   <span class="md-ellipsis">
     
   
-    Device Setup
+    Agents
   
 
     
@@ -479,7 +451,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Device Setup
+    Agents
   
 
           </label>
@@ -492,14 +464,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
+      <a href="../../agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Flashing Firmware
+    How Agents Work
   
 
     
@@ -520,14 +492,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/board-configurations/" class="md-nav__link">
+      <a href="../../agent/studio-agent/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Board Configurations
+    Studio's Agent
   
 
     
@@ -548,14 +520,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/network-setup/" class="md-nav__link">
+      <a href="../../agent/other-agents/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Network Setup
+    Other Agents
   
 
     
@@ -576,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../device-setup/provisioning/" class="md-nav__link">
+      <a href="../../agent/board-context/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Provisioning
+    What a Board Tells an Agent
   
 
     
@@ -636,7 +608,7 @@
   <span class="md-ellipsis">
     
   
-    User Guide
+    ScriptOs
   
 
     
@@ -649,207 +621,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    User Guide
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/file-manager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    File Manager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/editor-features/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Editor Features
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/terminal-repl/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminal & REPL
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/system-info/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    System Information
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../user-guide/settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settings
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ScriptOs
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -922,6 +693,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../scriptos/vm-sharing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing the Interpreter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../scriptos/ui-plugin-hello-world/" class="md-nav__link">
         
   
@@ -929,7 +728,236 @@
   <span class="md-ellipsis">
     
   
-    UI Plugin - Hello World
+    UI Plugin Example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/available-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/writing-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/app-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    App API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/device-libraries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
   
 
     
@@ -982,7 +1010,7 @@
   <span class="md-ellipsis">
     
   
-    Extensions
+    Boards
   
 
     
@@ -998,7 +1026,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extensions
+    Boards
   
 
           </label>
@@ -1011,14 +1039,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/" class="md-nav__link">
+      <a href="../../device-setup/flashing-firmware/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extensions
+    Flashing Firmware
   
 
     
@@ -1039,14 +1067,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/writing-extensions/" class="md-nav__link">
+      <a href="../../device-setup/provisioning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Writing Extensions
+    Provisioning
   
 
     
@@ -1067,14 +1095,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/extension-api/" class="md-nav__link">
+      <a href="../../device-setup/network-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extension API
+    Network Setup
   
 
     
@@ -1095,70 +1123,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/device-libraries/" class="md-nav__link">
+      <a href="../../device-setup/board-configurations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Device Libraries
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/built-in-extensions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Built-in Extensions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../extensions/versioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Versioning
+    Board Configurations
   
 
     
@@ -1211,7 +1183,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent
+    Using Studio
   
 
     
@@ -1227,7 +1199,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI Agent
+    Using Studio
   
 
           </label>
@@ -1240,14 +1212,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/" class="md-nav__link">
+      <a href="../../user-guide/file-manager/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Agent Overview
+    Files
   
 
     
@@ -1268,14 +1240,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/setup/" class="md-nav__link">
+      <a href="../../user-guide/editor-features/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setup
+    Editor
   
 
     
@@ -1296,14 +1268,98 @@
   
   
     <li class="md-nav__item">
-      <a href="../../agent/usage/" class="md-nav__link">
+      <a href="../../user-guide/debugging/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Usage
+    Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/system-info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
   
 
     
@@ -1356,7 +1412,7 @@
   <span class="md-ellipsis">
     
   
-    Debugging
+    Reference
   
 
     
@@ -1372,7 +1428,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Debugging
+    Reference
   
 
           </label>
@@ -1385,14 +1441,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/" class="md-nav__link">
+      <a href="../../reference/mcp-tools/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Debugger Overview
+    MCP Tools
   
 
     
@@ -1413,14 +1469,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../debugging/breakpoints/" class="md-nav__link">
+      <a href="../../reference/faq/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Setting Breakpoints
+    FAQ
   
 
     
@@ -1433,95 +1489,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../debugging/debug-console/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Console
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Troubleshooting
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Troubleshooting
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1538,90 +1505,6 @@
     
   
     Connection Issues
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/memory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memory & Performance
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/errors/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common Errors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../troubleshooting/debug-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Debug Logging
   
 
     
@@ -1664,10 +1547,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
         
           
-          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
             
   
   
@@ -1685,8 +1568,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_10">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1763,10 +1646,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#system-overview" class="md-nav__link">
+  <a href="#the-pieces" class="md-nav__link">
     <span class="md-ellipsis">
       
-        System Overview
+        The pieces
       
     </span>
   </a>
@@ -1774,49 +1657,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-components" class="md-nav__link">
+  <a href="#the-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Components
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Key Components">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#scripto-studio-browser" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ScriptO Studio (Browser)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-esp32" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device (ESP32)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#communication-flow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Communication Flow
+        The board
       
     </span>
   </a>
@@ -1824,10 +1668,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#esm-module-structure" class="md-nav__link">
+  <a href="#studio" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ESM Module Structure
+        Studio
       
     </span>
   </a>
@@ -1835,10 +1679,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-principles" class="md-nav__link">
+  <a href="#studios-agent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Design Principles
+        Studio's agent
       
     </span>
   </a>
@@ -1846,10 +1690,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#scriptos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        ScriptOs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits-to-design-around" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits to design around
       
     </span>
   </a>
@@ -1860,34 +1715,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../building-from-source/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Building from Source
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1928,42 +1755,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../esm-modules/" class="md-nav__link">
+      <a href="../display-drivers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    ESM Modules
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../shortcuts.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Keyboard Shortcuts
+    Display Drivers
   
 
     
@@ -1992,352 +1791,6 @@
     
   
     MicroPython Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../registry.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
-        
-          
-          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Protocol
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Protocol
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrepl-binary-protocol/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebREPL Binary Protocol
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/webrtc-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebRTC Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/websocket-transport/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    WebSocket Transport
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../protocol/message-types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Message Types
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
-        
-          
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Changelog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
   
 
     
@@ -2385,10 +1838,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#system-overview" class="md-nav__link">
+  <a href="#the-pieces" class="md-nav__link">
     <span class="md-ellipsis">
       
-        System Overview
+        The pieces
       
     </span>
   </a>
@@ -2396,49 +1849,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-components" class="md-nav__link">
+  <a href="#the-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Components
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Key Components">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#scripto-studio-browser" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ScriptO Studio (Browser)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-esp32" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Device (ESP32)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#communication-flow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Communication Flow
+        The board
       
     </span>
   </a>
@@ -2446,10 +1860,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#esm-module-structure" class="md-nav__link">
+  <a href="#studio" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ESM Module Structure
+        Studio
       
     </span>
   </a>
@@ -2457,10 +1871,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-principles" class="md-nav__link">
+  <a href="#studios-agent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Design Principles
+        Studio's agent
       
     </span>
   </a>
@@ -2468,10 +1882,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#scriptos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        ScriptOs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits-to-design-around" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits to design around
       
     </span>
   </a>
@@ -2499,147 +1924,64 @@
 
 
 <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
-<p>ScriptO Studio is a browser-based IDE for MicroPython development on ESP32 devices running pyDirect enabled firmware.</p>
-<h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                      ScriptO Studio                         │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  │   Editor    │  │ File Manager│  │     Extensions      │  │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  │ (CodeMirror)│  │             │  │  (JS Configurator)  │  │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘  │
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│         │                │                    │             │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  ┌──────┴────────────────┴────────────────────┴──────────┐  │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  │                   WebREPL Client                      │  │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│  │              (webrepl_binary.js)                      │  │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│  └──────────────────────┬────────────────────────────────┘  │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│                         │                                   │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│  ┌──────────────────────┴────────────────────────────────┐  │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  │              Transport Layer                          │  │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  │   ┌─────────────┐          ┌─────────────────────┐    │  │
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│  │   │   WebRTC    │◄────────►│     WebSocket       │    │  │
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│  │   │  (Primary)  │          │     (Fallback)      │    │  │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│  │   └─────────────┘          └─────────────────────┘    │  │
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│  └───────────────────────────────────────────────────────┘  │
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>└─────────────────────────────────────────────────────────────┘
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>                              │
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>                              │ WBP (WebREPL Binary Protocol)
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>                              ▼
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>┌─────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│                         Device                              │
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│  ┌───────────────────────────────────────────────────────┐  │
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│  │                webrepl_binary.py                      │  │
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│  │         (Unified WebREPL Binary Protocol)             │  │
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│  └──────────────────────────┬────────────────────────────┘  │
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│                             │                               │
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│  ┌──────────┐  ┌────────────┴───────────┐  ┌──────────────┐ │
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│  │   VFS    │  │     MicroPython        │  │   Settings   │ │
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│  │  (Files) │  │      Runtime           │  │   (JSON)     │ │
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│  └──────────┘  └────────────────────────┘  └──────────────┘ │
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│                                                             │
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│  ┌───────────────────────────────────────────────────────┐  │
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│  │              Hardware Abstraction Layer               │  │
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│  │   CAN • I2C • SPI • UART • GPIO • WiFi • BLE          │  │
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│  └───────────────────────────────────────────────────────┘  │
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>└─────────────────────────────────────────────────────────────┘
-</code></pre></div>
-<h2 id="key-components">Key Components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h2>
-<h3 id="scripto-studio-browser">ScriptO Studio (Browser)<a class="headerlink" href="#scripto-studio-browser" title="Permanent link">&para;</a></h3>
+<p>The board is the server, and everything else is a client of it. Studio, Studio's agent and outside agents all use the same dispatcher and the same tools.</p>
+<h2 id="the-pieces">The pieces<a class="headerlink" href="#the-pieces" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Technology</th>
-<th>Purpose</th>
+<th>Repository</th>
+<th>Holds</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Editor</strong></td>
-<td>CodeMirror 6</td>
-<td>Code editing with syntax highlighting</td>
+<td><code>pyDirect</code></td>
+<td>Firmware: C modules on MicroPython v1.29 and ESP-IDF 5.5.1</td>
 </tr>
 <tr>
-<td><strong>File Manager</strong></td>
-<td>Custom ESM</td>
-<td>Device filesystem navigation</td>
+<td><code>scriptostudio</code></td>
+<td>Device scripts (<code>lib/sys</code>), board manifests, <code>ss-relay</code>, on-device tests, this site</td>
 </tr>
 <tr>
-<td><strong>Terminal</strong></td>
-<td>xterm.js</td>
-<td>Interactive REPL</td>
+<td><code>scripto-studio</code></td>
+<td>Studio, the browser app</td>
 </tr>
 <tr>
-<td><strong>Extensions</strong></td>
-<td>JS Configurator</td>
-<td>Pluggable UI panels</td>
+<td><code>PFC</code></td>
+<td>The agent that runs on the board</td>
 </tr>
 <tr>
-<td><strong>Transport</strong></td>
-<td>WebRTC/WebSocket</td>
-<td>Device communication</td>
+<td><code>scriptohub</code></td>
+<td>The App catalogue</td>
 </tr>
 </tbody>
 </table>
-<h3 id="device-esp32">Device (ESP32)<a class="headerlink" href="#device-esp32" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>webrepl_binary</strong></td>
-<td>Binary protocol handler</td>
-</tr>
-<tr>
-<td><strong>MicroPython</strong></td>
-<td>Python runtime (1.27)</td>
-</tr>
-<tr>
-<td><strong>ESP-IDF</strong></td>
-<td>Hardware SDK (v5.5)</td>
-</tr>
-<tr>
-<td><strong>Settings</strong></td>
-<td>JSON configuration store</td>
-</tr>
-</tbody>
-</table>
-<h2 id="communication-flow">Communication Flow<a class="headerlink" href="#communication-flow" title="Permanent link">&para;</a></h2>
-<ol>
-<li><strong>Connection</strong>: Client negotiates WebRTC (or falls back to WebSocket)</li>
-<li><strong>Authentication</strong>: Challenge-response with hashed password</li>
-<li><strong>Commands</strong>: Client sends requests, device responds</li>
-<li><strong>Streaming</strong>: Device pushes logs and stdout continuously</li>
-</ol>
-<h2 id="esm-module-structure">ESM Module Structure<a class="headerlink" href="#esm-module-structure" title="Permanent link">&para;</a></h2>
-<p>ScriptO Studio uses ES Modules for clean separation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pwa/
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── js/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── app.js              # Application bootstrap
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── connection.js       # Connection management
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── terminal.js         # Terminal integration
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├── file-operations.js  # File manager logic
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   ├── store.js            # State management
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   └── webrepl/
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│       ├── webrepl.js      # Client protocol
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│       └── transports/     # WebRTC, WebSocket
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>└── components/             # UI components
-</code></pre></div>
-<h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
-<ol>
-<li><strong>Lazy Loading</strong> - Components loaded on demand</li>
-<li><strong>Single Connection</strong> - One client per device</li>
-<li><strong>Client-Provided Scripts</strong> - M2M logic stays under 10KB</li>
-<li><strong>Minimalist UI</strong> - Clean, focused interface</li>
-</ol>
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<h2 id="the-board">The board<a class="headerlink" href="#the-board" title="Permanent link">&para;</a></h2>
+<p>Every message lands in one dispatcher, <code>lib/sys/mcp.py</code>, whichever carrier brought it. See the <a href="../../reference/mcp-tools/">MCP tools reference</a> for the tools, carriers and tokens.</p>
+<p>All Python runs on one interpreter thread, and that shapes the rest. A blocking call holds up every client and ScriptO, so anything that must work while Python is blocked is in C (<code>mcplink</code>, <code>wsserver</code>, <code>httpserver</code>): token checks, breaking a call, the output rings and CAN capture. Tools, ScriptOs and policy are Python, so they update without a reflash.</p>
+<p><code>events.py</code> tells sockets holding a human token about every agent call and file write, and that's how Studio shows what an agent is doing. Its Stop button sends a control frame that C acts on at once.</p>
+<h2 id="studio">Studio<a class="headerlink" href="#studio" title="Permanent link">&para;</a></h2>
+<p>Studio is a browser app with no server of its own, written in strict ES modules on choo and nanohtml and built with Vite. It holds its own socket to the board with the human token.</p>
+<h2 id="studios-agent">Studio's agent<a class="headerlink" href="#studios-agent" title="Permanent link">&para;</a></h2>
+<p>The agent is a tool loop in the page. It lists the board's tools, sends them to the model with the board's own instructions, runs each call on its own socket with the agent token, and repeats until the model stops calling tools.</p>
+<p><strong>The key is kept apart.</strong> Model calls go through an iframe on another origin, which holds the OpenRouter key, because Apps run in Studio's page and could read anything stored there. Studio can ask that frame for a reply, but can't read the key or choose where it's sent.</p>
+<p><strong>Everything is an event.</strong> Each request, reply, call, result, answer and note is appended to a log in IndexedDB, with one chat per board. One function applies an event both as it happens and when a reload replays it. A tab holds a Web Lock on a board's log, so two tabs can't interleave their events.</p>
+<p><strong>History only grows.</strong> On recent Claude models, each block of reasoning is bound to the system prompt, the tools and every message before it, so changing any of them makes later reasoning invalid. So:</p>
 <ul>
-<li><a href="../building-from-source/">Building from Source</a></li>
-<li><a href="../esm-modules/">ESM Modules</a></li>
-<li><a href="../../protocol/webrepl-binary-protocol/">WebREPL Binary Protocol</a></li>
+<li>Tool output is cut once, as it arrives, and never edited afterwards.</li>
+<li>A long chat is replaced whole by a summary and the latest request, with no tail of tool calls kept.</li>
+<li>All reasoning is dropped when the model, system prompt or tool list changes, and after a reload. Dropping all of it is valid, and dropping some from the middle isn't.</li>
+</ul>
+<p>If the API still says the chat is too long or its reasoning is stale, the agent recovers and retries once.</p>
+<h2 id="scriptos">ScriptOs<a class="headerlink" href="#scriptos" title="Permanent link">&para;</a></h2>
+<p><code>/lib/ext/registry.json</code> is the record of what's installed, and it's on the board so that any client gets the same answer. See <a href="../../scriptos/">ScriptOs</a>. Every way a ScriptO ends is recorded and shown on its row.</p>
+<h2 id="limits-to-design-around">Limits to design around<a class="headerlink" href="#limits-to-design-around" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A board holds three WebSockets, and nothing is evicted.</li>
+<li>Plain HTTP has no encryption or live progress.</li>
+<li>A board is reached on its own network. There's no remote path from Studio.</li>
+<li>An agent's <code>exec</code> stops after 4 seconds.</li>
+<li>Studio's crash check only sees the first two seconds after a ScriptO starts. Later failures show on its row.</li>
 </ul>
 
 
@@ -2712,10 +2054,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
