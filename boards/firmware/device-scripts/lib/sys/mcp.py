@@ -542,9 +542,9 @@ _TOOLS = [
         "exec",
         _t_exec,
         "Run MicroPython in __main__. Returns stdout and any traceback, which also appear in the terminal of anyone "
-        "watching in ScriptO Studio, so print to show them something. It holds the single interpreter thread and is "
-        "stopped after 4 s, because a longer block would make the watchdog stop user tasks. There's no os.path or "
-        "inspect, and int.from_bytes ignores signed, so read signed values with struct." + _ULAB,
+        "watching in ScriptO Studio, so print to show them something. It holds the single interpreter thread, so every "
+        "ScriptO and client waits until it returns, and it's stopped after 4 s. Put longer work in a ScriptO. "
+        "There's no os.path or inspect, and int.from_bytes ignores signed, so read signed values with struct." + _ULAB,
         {"code": _S, "echo": {"type": "boolean"}, "timeout_ms": _I},
         ("code",),
         destructive=True,
