@@ -34,9 +34,12 @@ Other panels under **Networks** cover Ethernet, VPN, Bluetooth LE, WWAN, MQTT, T
 
 **The connection fails**
 
+The status log says why, as the board reported it: the network refused it, it can't see the network, it lost the signal, or nothing answered in time.
+
 - Check the password.
 - Check for MAC filtering on your router.
 - Use a 2.4 GHz network.
+- If the board joins only while your finger is on its antenna, lower its transmit power. Some cheap boards need this. In the terminal, run `from lib.sys import settings; settings.set("wifi.txpower", 8.5); settings.save()`, then reset the board. It takes 2 to 20 dBm, and `None` puts back the default of 20.
 
 **The wrong network was saved**
 

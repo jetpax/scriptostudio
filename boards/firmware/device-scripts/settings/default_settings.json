@@ -5,7 +5,8 @@
     "password": "",
     "hostname_prefix": "pybot",
     "roam_rssi_threshold": -80,
-    "power_save": false
+    "power_save": false,
+    "txpower": null
   },
   "ethernet": {
     "dhcp": true,

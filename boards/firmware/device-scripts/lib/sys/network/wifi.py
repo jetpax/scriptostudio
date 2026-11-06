@@ -50,27 +50,44 @@ def get_hostname():
     return _net_pkg.get_hostname()
 
 
-def _apply_power_save():
-    """Set modem sleep from settings (default off).
+TXPOWER_MIN_DBM = 2
+TXPOWER_MAX_DBM = 20
 
-    IDF defaults to WIFI_PS_MIN_MODEM, where the AP buffers inbound frames
-    until the next DTIM wake. On an S3 that took pings from ~20 ms avg /
-    105 ms max to ~90 ms avg / 310 ms max, slowing a server-role device's
-    clients. Applied after every active(True) so it is in place before the
-    association.
 
-    ESP32 only: that is where it was measured, and Zephyr's WLAN has no pm
-    config, so other ports keep their driver default.
+def _apply_radio():
+    """Set modem sleep and transmit power from settings, after every active(True), so both are
+    in place before the association.
+
+    Modem sleep, wifi.power_save, defaults off. IDF defaults to WIFI_PS_MIN_MODEM, where the AP
+    buffers inbound frames until the next DTIM wake. On an S3 that took pings from ~20 ms avg /
+    105 ms max to ~90 ms avg / 310 ms max, slowing a server-role device's clients.
+
+    wifi.txpower caps transmit power in dBm, or None for the driver's 20. Some cheap boards
+    only join and stay joined at a lower power, around 8.5, and otherwise only while a finger
+    is on the antenna.
+
+    ESP32 only: that is where both were needed, and Zephyr's WLAN has neither config, so other
+    ports keep their driver defaults.
     """
     from lib.sys import platform, settings
     if platform.port() != "esp32":
         return
     enabled = settings.get("wifi.power_save", False)
+    txpower = settings.get("wifi.txpower")
+    # config() sets the keyword, then rewrites the rest of the config, which the driver refuses
+    # while it's connecting. The keyword is set by then, and this mustn't stop the WiFi task.
     try:
         _sta.config(pm=network.WLAN.PM_PERFORMANCE if enabled else network.WLAN.PM_NONE)
     except OSError:
-        # config() sets pm, then rewrites the rest of the config, which the driver refuses
-        # while it's connecting. pm is set by then, and this mustn't stop the WiFi task.
+        pass
+    if txpower is None:
+        return
+    if not TXPOWER_MIN_DBM <= txpower <= TXPOWER_MAX_DBM:
+        _log("warning", f"wifi.txpower {txpower} is outside {TXPOWER_MIN_DBM} to {TXPOWER_MAX_DBM} dBm, so it's ignored")
+        return
+    try:
+        _sta.config(txpower=txpower)
+    except OSError:
         pass
 
 
@@ -93,7 +110,7 @@ def init():
     if not _sta.active():
         _sta.active(True)
         time.sleep_ms(100)
-    _apply_power_save()
+    _apply_radio()
     
     # Set DHCP hostname for this interface. Global mDNS hostname is owned by
     # network.startup() — don't set it here, it would re-register mDNS each
@@ -436,7 +453,7 @@ def _reset_connection():
         time.sleep_ms(100)
         _sta.active(True)
         time.sleep_ms(100)
-        _apply_power_save()
+        _apply_radio()
     except:
         pass
     _log("debug", "WiFi driver reset to idle state")

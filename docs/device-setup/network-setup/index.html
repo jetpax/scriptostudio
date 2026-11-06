@@ -1907,10 +1907,12 @@
 <li>Go back and choose <strong>Change WiFi</strong> again to rescan.</li>
 </ul>
 <p><strong>The connection fails</strong></p>
+<p>The status log says why, as the board reported it: the network refused it, it can't see the network, it lost the signal, or nothing answered in time.</p>
 <ul>
 <li>Check the password.</li>
 <li>Check for MAC filtering on your router.</li>
 <li>Use a 2.4 GHz network.</li>
+<li>If the board joins only while your finger is on its antenna, lower its transmit power. Some cheap boards need this. In the terminal, run <code>from lib.sys import settings; settings.set("wifi.txpower", 8.5); settings.save()</code>, then reset the board. It takes 2 to 20 dBm, and <code>None</code> puts back the default of 20.</li>
 </ul>
 <p><strong>The wrong network was saved</strong></p>
 <p>Run <strong>Change WiFi</strong> again and pick another network.</p>
