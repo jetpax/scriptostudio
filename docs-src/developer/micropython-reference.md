@@ -187,6 +187,7 @@ Before committing code, verify:
 
 - MicroPython v1.29 on ESP-IDF 5.5.1
 - Has hardware-specific modules (`machine`, `network`, etc.)
+- Every image has ulab: `from ulab import numpy as np` gives numpy-style arrays and `np.fft`, and `from ulab import scipy` gives `scipy.signal.sosfilt` for filtering.
 
 ### How ScriptO Studio uses the board
 

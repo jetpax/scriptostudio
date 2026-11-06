@@ -498,6 +498,22 @@ def _tool(name, fn, desc, props=None, required=(), read_only=False, destructive=
     return t, fn
 
 
+def _has(module):
+    try:
+        __import__(module)
+        return True
+    except ImportError:
+        return False
+
+
+# Named only where the firmware has it, so an agent doesn't reach for what isn't there
+_ULAB = (
+    " This firmware has ulab: from ulab import numpy as np gives numpy-style arrays and np.fft, and from ulab "
+    "import scipy gives scipy.signal.sosfilt for filtering."
+    if _has("ulab")
+    else ""
+)
+
 _TOOLS = [
     _tool(
         "exec",
@@ -505,7 +521,7 @@ _TOOLS = [
         "Run MicroPython in __main__. Returns stdout and any traceback, which also appear in the terminal of anyone "
         "watching in ScriptO Studio, so print to show them something. It holds the single interpreter thread and is "
         "stopped after 4 s, because a longer block would make the watchdog stop user tasks. There's no os.path or "
-        "inspect, and int.from_bytes ignores signed, so read signed values with struct.",
+        "inspect, and int.from_bytes ignores signed, so read signed values with struct." + _ULAB,
         {"code": _S, "echo": {"type": "boolean"}, "timeout_ms": _I},
         ("code",),
         destructive=True,
