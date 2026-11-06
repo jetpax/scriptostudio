@@ -4,7 +4,7 @@
     "name": "Seeed XIAO ESP32-S3",
     "vendor": "seeed",
     "chip": "ESP32-S3",
-    "revision": "1.0.0",
+    "revision": "1.1.0",
     "description": "Ultra-compact ESP32-S3 with 8MB Flash, 8MB Octal PSRAM, native USB-C, camera connector"
   },
   "firmware": {
@@ -37,7 +37,8 @@
     "i2c": {
       "i2c0": {
         "sda": 5,
-        "scl": 6
+        "scl": 6,
+        "default": true
       }
     },
     "spi": {

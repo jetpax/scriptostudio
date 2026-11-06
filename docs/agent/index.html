@@ -556,6 +556,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#compared-with-a-bridge-on-your-computer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compared with a bridge on your computer
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1837,6 +1848,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#compared-with-a-bridge-on-your-computer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compared with a bridge on your computer
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1942,6 +1964,60 @@
 <p>Connecting takes a password, and an agent gets less than a person does. Its <code>exec</code> stops after 4 seconds where a person's can run for 60, it can only break its own call, and it can't arm CAN transmit.</p>
 <p>That protects against accidents. It isn't a sandbox, because <code>exec</code> runs any Python. Don't give an agent a board you wouldn't trust it with, and don't connect a board to anything it could damage without someone watching.</p>
 <p>All the tools are listed in the <a href="../reference/mcp-tools/">MCP tools reference</a>.</p>
+<h2 id="compared-with-a-bridge-on-your-computer">Compared with a bridge on your computer<a class="headerlink" href="#compared-with-a-bridge-on-your-computer" title="Permanent link">&para;</a></h2>
+<p>Another way to give an agent a board is an MCP server on your computer that drives MicroPython's REPL, such as <a href="https://github.com/SWITCHSCIENCE/mcp-micropython-bridge">mcp-micropython-bridge</a>. Both give the agent general tools, so it writes code rather than picking from a menu. They differ in where MCP runs.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A bridge on your computer</th>
+<th>ScriptO Studio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCP runs on</strong></td>
+<td>Your computer, which types into the REPL</td>
+<td>The board</td>
+</tr>
+<tr>
+<td><strong>Firmware</strong></td>
+<td>Standard MicroPython, on any port</td>
+<td>ScriptO Studio's firmware</td>
+</tr>
+<tr>
+<td><strong>On your computer</strong></td>
+<td>Python and the bridge, and a USB cable or the REPL set up on Wi-Fi</td>
+<td>A browser, or any MCP client</td>
+</tr>
+<tr>
+<td><strong>Clients at once</strong></td>
+<td>One, which holds the REPL</td>
+<td>Several, so a person can watch while an agent works</td>
+</tr>
+<tr>
+<td><strong>While the agent works</strong></td>
+<td>The REPL is the agent's, so a program running on the board is stopped first</td>
+<td>ScriptOs keep running, and <code>exec</code> shares the interpreter with them</td>
+</tr>
+<tr>
+<td><strong>When code hangs</strong></td>
+<td>Ctrl-C down the same line</td>
+<td>The connection is held in C beneath MicroPython, so it stays up and <code>interrupt</code> breaks the call</td>
+</tr>
+<tr>
+<td><strong>What the agent knows of the hardware</strong></td>
+<td>A notes file it writes and reads itself</td>
+<td>The board's manifest, and what you've wired once an agent has it working, given to every client when it connects</td>
+</tr>
+<tr>
+<td><strong>More tools</strong></td>
+<td>A fixed set</td>
+<td>Apps add tools for their hardware</td>
+</tr>
+</tbody>
+</table>
+<p>A bridge suits any board running standard MicroPython, worked on from one computer. ScriptO Studio suits a board that keeps running on its own, that you reach from anywhere on your network with nothing installed, and that a person can watch while an agent works.</p>
 
 
 

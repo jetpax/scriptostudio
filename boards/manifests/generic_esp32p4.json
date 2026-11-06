@@ -4,7 +4,7 @@
     "name": "Generic ESP32-P4",
     "vendor": "espressif",
     "chip": "ESP32-P4",
-    "revision": "1.0.0",
+    "revision": "1.1.0",
     "description": "Generic ESP32-P4 dev board with C6 WiFi coprocessor"
   },
 
@@ -40,14 +40,16 @@
     "i2c": {
       "i2c0": {
         "sda": 7,
-        "scl": 8
+        "scl": 8,
+        "default": true
       }
     },
 
     "can": {
       "twai": {
         "tx": 20,
-        "rx": 21
+        "rx": 21,
+        "default": true
       }
     },
 

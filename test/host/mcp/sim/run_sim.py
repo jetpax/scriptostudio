@@ -6,11 +6,14 @@
 #   D=boards/firmware/device-scripts
 #   MICROPYPATH=test/host/mcp/sim:$D:$D/lib:micropython/extmod <dir>/micropython test/host/mcp/sim/run_sim.py [port]
 #
-# The loop mirrors app.py's queue_pump. The password is "password".
+# The loop mirrors app.py's queue_pump. The password is "password". With SIM_MANIFEST set to a
+# manifest such as boards/manifests/generic_esp32s3.json, it runs the real board module on it, and
+# keeps what's wired in SIM_WIRED, /tmp/ss-sim-wired.json unless given.
 
 import asyncio
 import binascii
 import hashlib
+import os
 import sys
 
 
@@ -31,7 +34,13 @@ class _Board:
         return {"identity": {"name": _Id.name, "chip": _Id.chip}, "capabilities": [], "resources": {}, "devices": {}}
 
 
-sys.modules["lib.sys.board"] = _Board
+if os.getenv("SIM_MANIFEST"):
+    from lib.sys import board
+
+    board.PATH = os.getenv("SIM_MANIFEST")
+    board.WIRED_PATH = os.getenv("SIM_WIRED") or "/tmp/ss-sim-wired.json"
+else:
+    sys.modules["lib.sys.board"] = _Board
 
 import httpserver
 import mcplink

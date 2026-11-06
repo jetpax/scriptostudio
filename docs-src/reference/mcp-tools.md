@@ -9,6 +9,7 @@ A board is an MCP server at `/mcp`. It speaks the 2026-07-28 revision and the ol
 | Run code | `exec` | Runs in `__main__`. Returns output and any traceback |
 | Files | `fs_list`, `fs_stat`, `fs_read_text`, `fs_write_text`, `fs_rm`, `fs_mkdir`, `fs_hash` | Writes go to a temporary file and are renamed, so a half-written file never replaces the real one |
 | Board | `device_info`, `logs_read`, `reset` | `reset` takes `soft` or `hard`. After changing files in `lib/sys`, use `hard`, since soft keeps loaded modules |
+| What's wired | `wired_add`, `wired_remove` | See below |
 | ScriptOs | `scriptos_list`, `scripto_create`, `scripto_installed`, `scripto_run_at_boot`, `scripto_start`, `scripto_stop`, `scripto_remove` | See below |
 | Jobs | `job_start`, `job_status`, `job_cancel` | For a ScriptO's long tools |
 | Stopping | `interrupt`, `stop_user_tasks` | Separate, so an agent can end its own call without stopping anyone's ScriptOs |
@@ -29,6 +30,18 @@ A board is an MCP server at `/mcp`. It speaks the 2026-07-28 revision and the ol
 | `tools` | Tool files to write, by name |
 
 It compiles the code before it writes anything, then writes atomically, registers the ScriptO and starts it. It answers before the code has run, so look at `scriptos_list` and `logs_read` to see what became of it.
+
+### `wired_add`
+
+| Argument | Meaning |
+|---|---|
+| `name` | Required. Lowercase letters, digits and underscores. The same name replaces what's there |
+| `entry` | Required. Like a manifest device: `type`, `description`, and its GPIOs as `pin` or `<role>_pin`, or `bus` and `i2c_address` to share a bus |
+| `kind` | `device`, the default, or `i2c`, `spi`, `uart` or `can` for a bus on pins of its own, which devices then name |
+
+It writes `/settings/wired.json` and reloads the board module, so `board.pin()` and `board.device()` find the entry at once, and the next client to connect sees it. It refuses a pin the board or something already wired uses, and on an ESP32-S3 GPIO 26 to 37, which flash and PSRAM hold. A description is at most 300 characters, and at most 16 things can be wired. Its notes say which default bus, if any, it took a pin from. See [What a Board Tells an Agent](../agent/board-context.md#what-you-wire).
+
+`wired_remove` takes out one entry by name, but not a bus a wired device still names. Helper files stay.
 
 ## Connecting
 

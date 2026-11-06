@@ -1523,6 +1523,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#wired_add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wired_add
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1855,6 +1866,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#wired_add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wired_add
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1941,6 +1963,11 @@
 <td><code>reset</code> takes <code>soft</code> or <code>hard</code>. After changing files in <code>lib/sys</code>, use <code>hard</code>, since soft keeps loaded modules</td>
 </tr>
 <tr>
+<td>What's wired</td>
+<td><code>wired_add</code>, <code>wired_remove</code></td>
+<td>See below</td>
+</tr>
+<tr>
 <td>ScriptOs</td>
 <td><code>scriptos_list</code>, <code>scripto_create</code>, <code>scripto_installed</code>, <code>scripto_run_at_boot</code>, <code>scripto_start</code>, <code>scripto_stop</code>, <code>scripto_remove</code></td>
 <td>See below</td>
@@ -2004,6 +2031,31 @@
 </tbody>
 </table>
 <p>It compiles the code before it writes anything, then writes atomically, registers the ScriptO and starts it. It answers before the code has run, so look at <code>scriptos_list</code> and <code>logs_read</code> to see what became of it.</p>
+<h3 id="wired_add"><code>wired_add</code><a class="headerlink" href="#wired_add" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>Required. Lowercase letters, digits and underscores. The same name replaces what's there</td>
+</tr>
+<tr>
+<td><code>entry</code></td>
+<td>Required. Like a manifest device: <code>type</code>, <code>description</code>, and its GPIOs as <code>pin</code> or <code>&lt;role&gt;_pin</code>, or <code>bus</code> and <code>i2c_address</code> to share a bus</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td><code>device</code>, the default, or <code>i2c</code>, <code>spi</code>, <code>uart</code> or <code>can</code> for a bus on pins of its own, which devices then name</td>
+</tr>
+</tbody>
+</table>
+<p>It writes <code>/settings/wired.json</code> and reloads the board module, so <code>board.pin()</code> and <code>board.device()</code> find the entry at once, and the next client to connect sees it. It refuses a pin the board or something already wired uses, and on an ESP32-S3 GPIO 26 to 37, which flash and PSRAM hold. A description is at most 300 characters, and at most 16 things can be wired. Its notes say which default bus, if any, it took a pin from. See <a href="../../agent/board-context/#what-you-wire">What a Board Tells an Agent</a>.</p>
+<p><code>wired_remove</code> takes out one entry by name, but not a bus a wired device still names. Helper files stay.</p>
 <h2 id="connecting">Connecting<a class="headerlink" href="#connecting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

@@ -276,6 +276,8 @@ Example:
 }
 ```
 
+On a bare dev board, where an `i2c`, `spi`, `uart` or `can` bus is only where it goes by convention, mark it `"default": true`. Something the person wires can then take its pins, and the bus is left out while it does. Leave it off a bus with something on it, such as a transceiver or the console UART. See [What a Board Tells an Agent](../agent/board-context.md#what-you-wire).
+
 ### `devices`
 
 Higher-level peripherals. Each entry names a driver and references the bus

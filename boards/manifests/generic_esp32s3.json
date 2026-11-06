@@ -4,7 +4,7 @@
     "name": "Generic ESP32-S3",
     "vendor": "espressif",
     "chip": "ESP32-S3",
-    "revision": "1.0.0",
+    "revision": "1.1.0",
     "description": "Generic ESP32-S3 dev board with RGB LED on GPIO48"
   },
   "network": {
@@ -31,7 +31,8 @@
     "can": {
       "can0": {
         "tx": 5,
-        "rx": 4
+        "rx": 4,
+        "default": true
       }
     },
     "uart": {
@@ -43,7 +44,8 @@
     "i2c": {
       "i2c0": {
         "sda": 8,
-        "scl": 9
+        "scl": 9,
+        "default": true
       }
     },
     "spi": {
@@ -51,7 +53,8 @@
         "mosi": 11,
         "miso": 13,
         "sclk": 12,
-        "cs": 10
+        "cs": 10,
+        "default": true
       }
     },
     "usb": {

@@ -57,8 +57,9 @@ LEGACY_CAPABILITIES = {"tools": {"listChanged": True}, "resources": {}, "logging
 # tool's description, which has its own allowance. _instructions() follows this with the hardware.
 INSTRUCTIONS = (
     "You're working on one MicroPython board. Its hardware is listed below, and in full in device_info.\n"
-    "- Follow that list exactly and use no other pins, because a wrong pin can fight whatever's wired to it. "
-    "Where a device's description names a helper, use the helper rather than its registers or pins. Otherwise "
+    "- Use only pins in that list or ones the person says they've wired, because a wrong pin can fight what's on "
+    "it. Record what they've wired with wired_add once it works, so later sessions know it. "
+    "Where a description names a helper, use it rather than registers or pins. Otherwise "
     'read pins from lib.sys.board, as in board.pin("status_led") and board.i2c("i2c0").scl.\n'
     "- Try hardware with exec before relying on it. Print real readings, and see what they are at rest before "
     "choosing a threshold. All zeros, or a reading that never changes, means it isn't working yet.\n"
@@ -225,6 +226,28 @@ def _t_device_info(a):
         }
     )
     return _json(info)
+
+
+def _t_wired_add(a):
+    from lib.sys import board
+
+    try:
+        notes = board.add_wired(a.get("kind", "device"), a.get("name"), a.get("entry"))
+    except ValueError as e:
+        return _text(str(e), True)
+    events.file_changed(_client, board.WIRED_PATH)
+    return _json({"wired": a.get("name"), "notes": notes})
+
+
+def _t_wired_remove(a):
+    from lib.sys import board
+
+    try:
+        board.remove_wired(a.get("name"))
+    except ValueError as e:
+        return _text(str(e), True)
+    events.file_changed(_client, board.WIRED_PATH)
+    return _json({"removed": a.get("name")})
 
 
 def _t_fs_list(a):
@@ -527,6 +550,28 @@ _TOOLS = [
         destructive=True,
     ),
     _tool("device_info", _t_device_info, "Versions, everything about this board's hardware, heap, and limits.", read_only=True),
+    _tool(
+        "wired_add",
+        _t_wired_add,
+        "Record something the person has wired to this board, so every later session sees it with the board's own "
+        "hardware, and code can use board.pin(name) or board.device(name). Add it once you've seen it work with exec, "
+        "or the person has confirmed what only they can see. entry is like a manifest device: a type, the GPIOs it "
+        "uses as pin or <role>_pin, and a description under 300 characters that says what normal looks like. To "
+        "share a bus, give bus as kind.name, such as i2c.i2c0, and i2c_address. kind is device, or i2c, spi, uart or "
+        "can for a bus on pins of its own, which devices then name. Put a helper in /lib/wired/<name>.py and give its "
+        "import line in the description, as in from lib.wired.door import door. It refuses pins the board already "
+        "uses, and replaces anything wired under the same name.",
+        {"name": _S, "entry": {"type": "object"}, "kind": {"type": "string", "enum": ["device", "i2c", "spi", "uart", "can"]}},
+        ("name", "entry"),
+    ),
+    _tool(
+        "wired_remove",
+        _t_wired_remove,
+        "Take out something recorded with wired_add, such as hardware the person has disconnected. Its helper file "
+        "stays.",
+        {"name": _S},
+        ("name",),
+    ),
     _tool("fs_list", _t_fs_list, "List a directory.", {"path": _S}, read_only=True),
     _tool("fs_stat", _t_fs_stat, "Type, size and mtime of a path.", {"path": _S}, ("path",), read_only=True),
     _tool(
@@ -717,10 +762,16 @@ def _instructions():
         # A bad manifest mustn't stop anyone connecting to fix it
         return INSTRUCTIONS + "\n/settings/board.json doesn't parse, so what's on this board isn't known."
     # In this order since a client may cut it short, and a dict here keeps no order of its own
-    return "%s\n\nThis board: %s\nDevices: %s\nResources: %s\nCapabilities: %s" % (
+    wired = ""
+    if facts.get("wired"):
+        wired = "\nWired by the person: %s" % json.dumps(facts["wired"])
+    if facts.get("wired_error"):
+        wired += "\n%s, so what's wired to this board isn't known." % facts["wired_error"]
+    return "%s\n\nThis board: %s\nDevices: %s%s\nResources: %s\nCapabilities: %s" % (
         INSTRUCTIONS,
         json.dumps(facts["identity"]),
         json.dumps(facts["devices"]),
+        wired,
         json.dumps(facts["resources"]),
         json.dumps(facts["capabilities"]),
     )
