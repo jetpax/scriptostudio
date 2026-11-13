@@ -1,0 +1,22 @@
+# Cleanup old GitHub Actions artifacts to prevent storage quota exhaustion
+# github-pages artifacts accumulate ~48MB each on every Pages deployment
+
+name: Cleanup Artifacts
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    name: Delete old artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Cleanup old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '1 day'
+          skip-recent: 2

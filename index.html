@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ScriptO Studio: agents that program MicroPython boards</title>
+  <meta name="description" content="Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board, while you watch and can stop it.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="app/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://scriptostudio.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ScriptO Studio: agents that program MicroPython boards">
+  <meta property="og:description" content="Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board, while you watch and can stop it.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://scriptostudio.com/">
+  <meta property="og:image" content="https://scriptostudio.com/docs/assets/home.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ScriptO Studio: agents that program MicroPython boards">
+  <meta name="twitter:description" content="Tell your board what to do. An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board, while you watch and can stop it.">
+
+  <!-- Fonts: Clash Display + Satoshi from Fontshare -->
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+  <!-- Prevent FOUC: apply saved theme before paint -->
+  <script>
+    (() => {
+      const saved = localStorage.getItem('ss-theme');
+      const theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+
+  <style>
+    :root {
+      /* Deep space palette with emerald accents */
+      --bg-deep: #050810;
+      --bg-surface: #0a0f1a;
+      --bg-elevated: #111827;
+
+      /* Emerald green spectrum */
+      --accent-bright: #00c853;
+      --accent-mid: #00a844;
+      --accent-dark: #006d2c;
+
+      /* Bioluminescent cyan */
+      --cyan-bright: #00e5cc;
+      --cyan-mid: #14b8a6;
+      --cyan-glow: rgba(0, 229, 204, 0.4);
+
+      /* Text */
+      --text-primary: #f0f4ff;
+      --text-secondary: #8892b0;
+      --text-muted: #5a6480;
+
+      /* Borders */
+      --border-subtle: rgba(136, 146, 176, 0.15);
+      --border-accent: rgba(0, 200, 83, 0.3);
+
+      /* Surfaces & Shadows */
+      --surface-card: rgba(10, 15, 26, 0.65);
+      --surface-accent-soft: rgba(0, 200, 83, 0.15);
+      --shadow-accent-soft: rgba(0, 200, 83, 0.15);
+      --shadow-accent-mid: rgba(0, 200, 83, 0.25);
+      --shadow-accent-strong: rgba(0, 200, 83, 0.35);
+      --shadow-cyan-soft: rgba(0, 229, 204, 0.15);
+
+      /* Fonts */
+      --font-display: 'Clash Display', system-ui, sans-serif;
+      --font-body: 'Satoshi', system-ui, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+    }
+
+    /* ── Light Mode ── */
+    html[data-theme='light'] {
+      --bg-deep: #fcfeff;
+      --bg-surface: #ffffff;
+      --bg-elevated: #f5f9ff;
+
+      --accent-bright: #00a844;
+      --accent-mid: #008c38;
+      --accent-dark: #006d2c;
+
+      --cyan-bright: #008f87;
+      --cyan-mid: #00766e;
+      --cyan-glow: rgba(0, 143, 135, 0.24);
+
+      --text-primary: #0b1220;
+      --text-secondary: #2e405c;
+      --text-muted: #5f7290;
+
+      --border-subtle: rgba(15, 23, 42, 0.16);
+      --border-accent: rgba(0, 168, 68, 0.34);
+
+      --surface-card: rgba(255, 255, 255, 0.88);
+      --surface-accent-soft: rgba(0, 168, 68, 0.16);
+      --shadow-accent-soft: rgba(0, 168, 68, 0.19);
+      --shadow-accent-mid: rgba(0, 168, 68, 0.27);
+      --shadow-accent-strong: rgba(0, 168, 68, 0.33);
+      --shadow-cyan-soft: rgba(0, 143, 135, 0.22);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html[data-theme='light'] body {
+      background:
+        radial-gradient(1200px circle at 12% -10%, rgba(0, 168, 68, 0.04), transparent 58%),
+        radial-gradient(900px circle at 88% -12%, rgba(0, 143, 135, 0.05), transparent 56%),
+        var(--bg-deep);
+    }
+
+    html[data-theme='light'] .stars {
+      opacity: 0.28;
+      filter: saturate(0.6);
+    }
+
+    html[data-theme='light'] .nebula {
+      opacity: 0.45;
+    }
+
+    ::selection {
+      background: var(--accent-bright);
+      color: var(--bg-deep);
+    }
+
+    a { color: inherit; }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-card);
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px var(--shadow-accent-soft);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--cyan-bright);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle-icon {
+      font-size: 1.05rem;
+      line-height: 1;
+      color: var(--text-secondary);
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .theme-toggle:hover .theme-toggle-icon {
+      color: var(--text-primary);
+      transform: rotate(10deg) scale(1.04);
+    }
+
+    @media (max-width: 640px) {
+      .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    /* ── Starfield + Nebula Background ── */
+    .stars {
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 200px 60px, rgba(0,200,83,0.6), transparent),
+        radial-gradient(1px 1px at 250px 150px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 300px 40px, rgba(0,229,204,0.4), transparent);
+      background-size: 350px 200px;
+      animation: twinkle 8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.4; }
+      100% { opacity: 0.7; }
+    }
+
+    .nebula {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0, 200, 83, 0.1), transparent 50%),
+        radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0, 229, 204, 0.08), transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 90%, rgba(0, 200, 83, 0.05), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Container ── */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Hero Section ── */
+    .hero {
+      text-align: center;
+      margin-bottom: 72px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    .hero-icon svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 20px rgba(0, 200, 83, 0.4));
+    }
+
+    .hero-icon .chip-core {
+      animation: pulse-core 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-core {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 500;
+      color: var(--accent-bright);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 620px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    /* ── Hero CTAs ── */
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .hero-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .hero-btn-primary {
+      background: var(--accent-bright);
+      color: var(--bg-deep);
+      box-shadow: 0 4px 20px var(--shadow-accent-mid);
+    }
+
+    .hero-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--shadow-accent-strong);
+    }
+
+    .hero-btn-secondary {
+      background: var(--surface-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-btn-secondary:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--shadow-accent-soft);
+    }
+
+    /* ── Section Titles ── */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .accent-marker {
+      color: var(--accent-bright);
+      margin-right: 8px;
+    }
+
+    /* ── Features Grid ── */
+    .features {
+      margin-bottom: 72px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px var(--shadow-accent-soft);
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
+    }
+
+    .feature-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .feature-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ── Ecosystem CTA Grid ── */
+    .ecosystem {
+      margin-bottom: 56px;
+    }
+
+    .cta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 24px 16px;
+      border-radius: 16px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.25s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-accent);
+    }
+
+    .cta-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+
+    .cta-label {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .cta-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .cta-studio:hover { box-shadow: 0 12px 32px var(--shadow-accent-soft); }
+    .cta-studio .cta-icon { color: var(--accent-bright); }
+
+    .cta-hub:hover { box-shadow: 0 12px 32px var(--shadow-cyan-soft); }
+    .cta-hub .cta-icon { color: var(--cyan-bright); }
+
+    .cta-github:hover { box-shadow: 0 12px 32px rgba(240, 244, 255, 0.1); }
+
+    .cta-docs:hover { box-shadow: 0 12px 32px var(--shadow-cyan-soft); }
+    .cta-docs .cta-icon { color: var(--cyan-bright); }
+
+    /* ── Hero Screenshot ── */
+    .hero-screenshot {
+      margin-top: 40px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-screenshot img {
+      width: 100%;
+      border-radius: 14px;
+      box-shadow:
+        0 8px 40px var(--shadow-accent-soft),
+        0 0 60px rgba(0, 200, 83, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero-screenshot img:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 16px 60px var(--shadow-accent-mid),
+        0 0 80px rgba(0, 200, 83, 0.12);
+    }
+
+    .hero-screenshot-caption {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Steps ── */
+    .steps {
+      margin-bottom: 72px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      counter-reset: step;
+    }
+
+    .step {
+      counter-increment: step;
+      padding: 24px;
+      border-left: 2px solid var(--border-accent);
+    }
+
+    .step::before {
+      content: counter(step);
+      display: block;
+      margin-bottom: 8px;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--accent-bright);
+    }
+
+    /* ── Try Asking ── */
+    .asks {
+      margin-bottom: 72px;
+    }
+
+    .asks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .asks-list li {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ── Other Agents ── */
+    .outside {
+      margin-bottom: 72px;
+    }
+
+    .outside-text {
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .outside-line {
+      display: block;
+      overflow-x: auto;
+      margin-bottom: 24px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      white-space: pre;
+    }
+
+    .outside img {
+      display: block;
+      width: 100%;
+      border-radius: 14px;
+      box-shadow:
+        0 8px 40px var(--shadow-accent-soft),
+        0 0 60px rgba(0, 200, 83, 0.08);
+    }
+
+    .outside-caption {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Apps ── */
+    .apps {
+      margin-bottom: 72px;
+    }
+
+    .apps-text {
+      color: var(--text-secondary);
+      max-width: 720px;
+    }
+
+    .apps-text a {
+      color: var(--accent-bright);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 32px 0;
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-nav {
+      margin-bottom: 12px;
+    }
+
+    .footer-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-nav a:hover { color: var(--accent-bright); }
+
+    .footer-sep {
+      margin: 0 8px;
+      color: var(--text-muted);
+    }
+
+    .footer a {
+      color: var(--accent-bright);
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .footer a:hover { opacity: 0.8; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .container {
+        padding: 40px 16px 32px;
+      }
+
+      .hero {
+        margin-bottom: 48px;
+      }
+
+      .features, .ecosystem, .steps, .asks, .outside, .apps {
+        margin-bottom: 48px;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+
+      .cta-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-screenshot {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="nebula"></div>
+
+  <main class="container">
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Chip body -->
+          <rect x="30" y="30" width="60" height="60" rx="8" fill="url(#chip-g)" class="chip-body"/>
+          <!-- CPU die -->
+          <rect x="42" y="42" width="36" height="36" rx="4" fill="var(--bg-deep)" opacity="0.6"/>
+          <!-- Circuit traces -->
+          <path d="M50 50 L50 58 L58 58" stroke="var(--accent-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M70 50 L70 58 L62 58" stroke="var(--cyan-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M50 70 L50 62 L58 62" stroke="var(--cyan-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M70 70 L70 62 L62 62" stroke="var(--accent-bright)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <!-- Center dot -->
+          <circle cx="60" cy="60" r="3" fill="var(--accent-bright)" class="chip-core"/>
+          <!-- Pins - top -->
+          <rect x="40" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="50" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="60" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="70" y="20" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <!-- Pins - bottom -->
+          <rect x="40" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="50" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="60" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="70" y="86" width="3" height="14" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <!-- Pins - left -->
+          <rect x="16" y="40" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="16" y="50" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="16" y="60" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="16" y="70" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <!-- Pins - right -->
+          <rect x="90" y="40" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="90" y="50" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="90" y="60" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <rect x="90" y="70" width="14" height="3" rx="1.5" fill="var(--accent-bright)" opacity="0.7"/>
+          <defs>
+            <linearGradient id="chip-g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00c853"/>
+              <stop offset="100%" stop-color="#006d2c"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h1>ScriptO Studio</h1>
+      <p class="tagline">Tell your board what to do.</p>
+      <p class="description">
+        An agent writes the MicroPython, tries it on your real hardware and leaves it running on the board. You watch every call, and you can stop it at any moment.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="/app/" class="hero-btn hero-btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Launch Studio
+        </a>
+        <a href="/docs/" class="hero-btn hero-btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Read the Docs
+        </a>
+        <a href="https://github.com/jetpax/scriptostudio" class="hero-btn hero-btn-secondary" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+
+      <!-- Hero Screenshot -->
+      <div class="hero-screenshot">
+        <img src="docs/assets/home.png" alt="ScriptO Studio with an agent's chat in the centre, and the board, its ScriptOs and a terminal on the right">
+        <span class="hero-screenshot-caption">Asked to beep when the board is tilted, the agent reads the accelerometer, leaves a ScriptO running, and says what it couldn't check.</span>
+      </div>
+    </header>
+
+    <!-- How it works -->
+    <section class="steps">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> How It Works
+      </h2>
+      <div class="steps-grid">
+        <div class="step">
+          <h3 class="feature-title">Connect a board</h3>
+          <p class="feature-desc">Flash the firmware from your browser, then connect with the board's password. Studio runs in the browser or as an installable app.</p>
+        </div>
+        <div class="step">
+          <h3 class="feature-title">Ask for something</h3>
+          <p class="feature-desc">Say what the board should do. The agent looks at what it has, tries things on the hardware and asks you to do what only you can see or hear.</p>
+        </div>
+        <div class="step">
+          <h3 class="feature-title">It stays on the board</h3>
+          <p class="feature-desc">The result is a ScriptO: MicroPython left on the board to keep running. Start it, stop it or read its code from its row in the sidebar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> What You Get
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="feature-title">An agent in the browser</h3>
+          <p class="feature-desc">Nothing to install. Pick any model on OpenRouter, free ones included, on your own key. The key stays in a frame of its own, where the rest of the page can't read it.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          </div>
+          <h3 class="feature-title">Or bring your own</h3>
+          <p class="feature-desc">Every board is an MCP server. Studio gives you one line to connect Claude Code or any MCP client, which keeps your repos, shell and subagents and uses the same tools.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+          </div>
+          <h3 class="feature-title">Boards that explain themselves</h3>
+          <p class="feature-desc">When an agent connects, the board says what it is: its chip, pins and devices, and how to use each one. An agent given nothing else can get to work.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-title">You stay in charge</h3>
+          <p class="feature-desc">Every call shows in the chat and its code in the terminal. Studio asks before what's hard to undo, like deleting a file or resetting the board, and Stop is always there.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="feature-title">ScriptOs outlive the chat</h3>
+          <p class="feature-desc">What an agent makes stays on the board and runs with no computer attached. It can start at boot, before the network comes up, and if it stops, its row says why.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+          </div>
+          <h3 class="feature-title">Made for real hardware</h3>
+          <p class="feature-desc">CAN capture finds a signal by what changed when you pressed the brake. A board's manifest can say how to use each part, down to the import line, so an agent doesn't have to guess.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Try asking -->
+    <section class="asks">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> Things to Ask For
+      </h2>
+      <ul class="asks-list">
+        <li>Beep when the board is tilted</li>
+        <li>Log CAN traffic to a file</li>
+        <li>Show how far the clock chip drifts from NTP</li>
+        <li>Find the CAN messages for the indicators, brake and rear lights, and drive outputs from them</li>
+      </ul>
+    </section>
+
+    <!-- Other agents -->
+    <section class="outside">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> Bring Your Own Agent
+      </h2>
+      <p class="outside-text">For work that needs your repos or a shell, connect an agent that runs on your computer. Studio gives you this line, with the board's name and token filled in, and shows what the agent does as it happens.</p>
+      <code class="outside-line">claude mcp add --scope user --transport http &lt;board&gt; http://&lt;board&gt;/mcp --header "Authorization: Bearer &lt;agent token&gt;"</code>
+      <img src="docs/assets/other-agents.png" alt="ScriptO Studio showing an outside agent's calls under Other agents, and a sine wave it plotted in the terminal" loading="lazy">
+      <span class="outside-caption">An outside agent's calls appear under Other agents, and its code and output in the terminal.</span>
+    </section>
+
+    <!-- Apps -->
+    <section class="apps">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> Apps
+      </h2>
+      <p class="apps-text">Some jobs want a screen as well as code on the board. An App has a browser side too, for tools like OpenInverter and CAN Monitor. Install them from <a href="https://scriptohub.ai" target="_blank" rel="noopener">ScriptoHub</a>.</p>
+    </section>
+
+    <!-- Ecosystem -->
+    <section class="ecosystem">
+      <h2 class="section-title">
+        <span class="accent-marker">⟩</span> The Ecosystem
+      </h2>
+      <nav class="cta-grid">
+        <a href="/app/" class="cta cta-studio">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          <span class="cta-label">ScriptO Studio</span>
+          <span class="cta-sub">Open it in your browser</span>
+        </a>
+
+        <a href="https://scriptohub.ai" class="cta cta-hub" target="_blank" rel="noopener">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 0 0-8-8v8h8z" opacity="0.5"/></svg>
+          <span class="cta-label">ScriptoHub</span>
+          <span class="cta-sub">Browse Apps</span>
+        </a>
+
+        <a href="https://github.com/jetpax/scriptostudio" class="cta cta-github" target="_blank" rel="noopener">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span class="cta-label">GitHub</span>
+          <span class="cta-sub">View the source</span>
+        </a>
+
+        <a href="/docs/" class="cta cta-docs">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span class="cta-label">Documentation</span>
+          <span class="cta-sub">Guides and reference</span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <nav class="footer-nav">
+        <a href="/app/">Studio</a>
+        <span class="footer-sep">·</span>
+        <a href="https://scriptohub.ai" target="_blank" rel="noopener">ScriptoHub</a>
+        <span class="footer-sep">·</span>
+        <a href="https://github.com/jetpax/scriptostudio" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-sep">·</span>
+        <a href="/docs/">Docs</a>
+      </nav>
+      <p>Made with ❤️ for the Embedded Python community</p>
+    </footer>
+  </main>
+
+  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+    <span class="theme-toggle-icon" data-theme-icon aria-hidden="true"></span>
+  </button>
+
+  <script>
+    (() => {
+      const key = 'ss-theme';
+      const root = document.documentElement;
+      const toggle = document.querySelector('[data-theme-toggle]');
+      const icon = document.querySelector('[data-theme-icon]');
+      if (!toggle || !icon) return;
+
+      const applyTheme = (theme, persist = true) => {
+        root.dataset.theme = theme;
+        root.style.colorScheme = theme;
+        const isDark = theme === 'dark';
+        icon.textContent = isDark ? '☀' : '☾';
+        toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        if (persist) localStorage.setItem(key, theme);
+      };
+
+      toggle.addEventListener('click', () => {
+        applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light');
+      });
+
+      applyTheme(root.dataset.theme === 'light' ? 'light' : 'dark', false);
+    })();
+  </script>
+</body>
+</html>

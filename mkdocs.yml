@@ -1,0 +1,101 @@
+site_name: ScriptO Studio Docs
+site_url: https://scriptostudio.com/docs/
+site_description: "Documentation for ScriptO Studio: agents that program MicroPython boards"
+site_author: jetpax
+repo_url: https://github.com/jetpax/scriptostudio
+repo_name: jetpax/scriptostudio
+edit_uri: edit/main/docs-src/
+
+# Source and output directories
+docs_dir: docs-src
+site_dir: docs
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: teal
+    accent: cyan
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Set Up and Connect: getting-started/index.md
+    - Your First ScriptO: getting-started/first-scripto.md
+    - A Tour of Studio: getting-started/tour.md
+  - Agents:
+    - How Agents Work: agent/index.md
+    - Studio's Agent: agent/studio-agent.md
+    - Other Agents: agent/other-agents.md
+    - What a Board Tells an Agent: agent/board-context.md
+  - ScriptOs:
+    - scriptos/index.md
+    - Writing ScriptOs: scriptos/writing-scriptos.md
+    - Sharing the Interpreter: scriptos/vm-sharing.md
+    - UI Plugin Example: scriptos/ui-plugin-hello-world.md
+  - Apps:
+    - apps/index.md
+    - Available Apps: apps/available-apps.md
+    - Writing Apps: apps/writing-apps.md
+    - App API: apps/app-api.md
+    - Device Libraries: apps/device-libraries.md
+    - Versioning: apps/versioning.md
+  - Boards:
+    - Flashing Firmware: device-setup/flashing-firmware.md
+    - Provisioning: device-setup/provisioning.md
+    - Network Setup: device-setup/network-setup.md
+    - Board Configurations: device-setup/board-configurations.md
+  - Using Studio:
+    - Files: user-guide/file-manager.md
+    - Editor: user-guide/editor-features.md
+    - Debugging: user-guide/debugging.md
+    - Terminal: user-guide/terminal.md
+    - About: user-guide/system-info.md
+    - Settings: user-guide/settings.md
+  - Reference:
+    - MCP Tools: reference/mcp-tools.md
+    - FAQ: reference/faq.md
+    - Connection Issues: troubleshooting/connection.md
+  - Developer:
+    - Architecture: developer/architecture.md
+    - Contributing: developer/contributing.md
+    - Display Drivers: developer/display-drivers.md
+    - MicroPython Reference: developer/micropython-reference.md
+
+markdown_extensions:
+  - admonition
+  - def_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/jetpax/scriptostudio

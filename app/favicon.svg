@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="ScriptO Studio favicon">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#4ade80"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background - rounded square -->
+  <rect width="512" height="512" fill="transparent"/>
+  <rect x="16" y="16" width="480" height="480" rx="80" ry="80" fill="url(#g)"/>
+
+  <!-- lightning bolt icon (centered) -->
+  <!-- Original path has viewBox 0 0 24 24, so center is at 12,12 -->
+  <!-- We want to center it at 256,256 in our 512x512 canvas -->
+  <g transform="translate(256, 256) scale(16) translate(-12, -12)">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" 
+          fill="none" 
+          stroke="#ffffff" 
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </g>
+</svg>

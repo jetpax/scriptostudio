@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Studio agent key</title>
+  <style>
+    :root { --bg: #f8f8f3; --text: #1f1f1f; --muted: #5f6368; --line: #dadce0; --accent: #008184; }
+    :root.dark { --bg: #1f2d3b; --text: #e8eaed; --muted: #9aa0a6; --line: #4a5f7f; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { background: var(--bg); color: var(--text); font: 14px system-ui, sans-serif; }
+    form { display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 20px; }
+    h1 { margin: 0; font-size: 16px; font-weight: 600; }
+    p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    input { flex-shrink: 0; width: 100%; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--text); font: 13px monospace; }
+    .buttons { display: flex; align-items: center; gap: 8px; margin-top: auto; }
+    .gap { flex: 1; }
+    button { height: 30px; padding: 0 12px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--text); font: 13px system-ui, sans-serif; cursor: pointer; }
+    button.save { border-color: var(--accent); background: var(--accent); color: white; }
+    button.quiet { padding: 0; border: none; color: var(--muted); font-size: 12px; text-decoration: underline; }
+    .problem { color: #c5221f; }
+    :root.dark .problem { color: #f28b82; }
+    [hidden] { display: none !important; }
+  </style>
+  <script type="module" crossorigin src="/app/assets/agentFrame-CQe3wCnv.js"></script>
+  <link rel="modulepreload" crossorigin href="/app/assets/modulepreload-polyfill-B5Qt9EMX.js">
+</head>
+<body hidden>
+  <form id="form">
+    <h1 id="title"></h1>
+    <p id="hint"></p>
+    <input id="key" type="password" autocomplete="off" spellcheck="false" aria-labelledby="title">
+    <p id="problem" class="problem" role="alert" hidden></p>
+    <div class="buttons">
+      <button type="button" class="quiet" id="forget"></button>
+      <span class="gap"></span>
+      <button type="button" id="cancel"></button>
+      <button type="submit" class="save" id="save"></button>
+    </div>
+  </form>
+</body>
+</html>
