@@ -1,0 +1,18 @@
+{
+  "id": "caffimax",
+  "name": "CaffiMax",
+  "release": "1.0.0",
+  "address": "app.caffimax.com",
+  "look": {
+    "accent": { "light": "#b4662a", "dark": "#d9955b" },
+    "accent_contrast": { "light": "#ffffff", "dark": "#10202f" },
+    "theme_color": "#233242",
+    "background_color": "#233242",
+    "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\"><rect width=\"64\" height=\"64\" rx=\"14\" fill=\"#d9955b\"/><path d=\"M18 28h24v9a11 11 0 0 1-11 11h-2a11 11 0 0 1-11-11z M42 30h3a5 5 0 0 1 0 10h-3 M25 15v7 M33 15v7\" fill=\"none\" stroke=\"#10202f\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+  },
+  "platform": { "botiq": "2.1.0", "boards": ["caffimax-rev5"] },
+  "scriptos": [{ "id": "caffimax" }],
+  "app": { "id": "caffimax", "opens": "dashboard" },
+  "setup": ["flash", "wifi", "install", "app:machine"],
+  "studio": { "system": ["wifi", "firmware", "about"], "agent": "optional" }
+}

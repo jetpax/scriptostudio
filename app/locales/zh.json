@@ -266,7 +266,15 @@
     "deny": "拒绝",
     "allowed": "已允许",
     "denied": "已拒绝",
-    "agentWaiting": "智能体正在等待你的答复"
+    "agentWaiting": "智能体正在等待你的答复",
+    "address": "Address",
+    "addressHint": "Its name on your network, such as pybot-2b88.local",
+    "password": "Password",
+    "disconnect": "Disconnect",
+    "reconnecting": "Reconnecting…",
+    "chat": "Chat",
+    "certHint": "If this browser hasn't opened this board before, it may need to accept the board's certificate first.",
+    "certOpen": "Open {host} to accept it, then connect again."
   },
   "firmware": {
     "deviceSetup": "设备设置",

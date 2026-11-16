@@ -266,7 +266,15 @@
     "deny": "Deny",
     "allowed": "Allowed",
     "denied": "Denied",
-    "agentWaiting": "The agent is waiting for your answer"
+    "agentWaiting": "The agent is waiting for your answer",
+    "address": "Address",
+    "addressHint": "Its name on your network, such as pybot-2b88.local",
+    "password": "Password",
+    "disconnect": "Disconnect",
+    "reconnecting": "Reconnecting…",
+    "chat": "Chat",
+    "certHint": "If this browser hasn't opened this board before, it may need to accept the board's certificate first.",
+    "certOpen": "Open {host} to accept it, then connect again."
   },
   "firmware": {
     "deviceSetup": "Device Setup",
