@@ -1,6 +1,6 @@
 # Flashing Firmware
 
-Put ScriptO Studio's firmware on a board over USB. You do this from **Set up a new board** on Home, which opens **Settings > Firmware**.
+Put ScriptO Studio's firmware on a board over USB. You do this from **Settings > Firmware**: the gear at the top of the sidebar, then **Firmware**.
 
 ## Supported chips
 
@@ -26,7 +26,7 @@ See [Board Configurations](board-configurations.md) for what a manifest holds.
 
 You need Chrome or Edge, which provide Web Serial.
 
-1. On Home, click **Set up a new board**. This opens **Settings > Firmware**.
+1. Click the gear at the top of the sidebar, then **Firmware**.
 2. Plug the board in over USB and click **Connect Device**. Pick the port in the browser's chooser.
 3. Studio shows the chip, MAC address and flash size under **Device Information**, then offers four options:
     - **Flash Device**: flash fresh firmware onto a blank ESP32.

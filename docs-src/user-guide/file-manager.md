@@ -1,51 +1,49 @@
-# File Manager
+# Files
 
-The File Manager shows the board's files next to files kept in your browser, and moves files between them.
+The folder button at the top of the sidebar shows **Files** in place of the Apps. Whatever is in the centre stays there, and opening a file brings Studio forward. Click the **×** in the button's place to go back to the Apps. Drag the sidebar's right edge to make it wider.
 
-Open it with **Files** in the menu.
+![Files, with a log file's menu open](../assets/files.png)
 
-![The Files view](../assets/files.png)
+Files has three parts.
 
-## The two panes
-
-| Pane | Shows |
+| Part | Shows |
 |------|-------|
-| Left | The board's filesystem. It reads **Connect to board** until a board is connected. |
-| Right | Browser storage: files Studio keeps in your browser, on your computer. |
+| **ScriptOs** | What's installed on the board, and whether each is running. |
+| **Board** | The board's files and folders. |
+| **This computer** | A folder on your computer, once you open one. |
 
-Each pane has a header with its path and three buttons: new folder, new file, and upload (left pane) or import (right pane). Files show their size. Folders are listed first.
+## ScriptOs
 
-Between the panes is a column of buttons that act on what you've selected:
+Each row has a dot that says whether the ScriptO is running, stopped or crashed.
 
-| Button | Action |
-|--------|--------|
-| Edit (pencil) | Open the selected files in the editor. |
-| Left arrow | Copy the selection from browser storage to the board. |
-| Right arrow | Copy the selection from the board to browser storage. |
-| Down arrow | Export the selected files to your computer, as browser downloads. |
-| Trash | Delete the selection. |
+- Hover over a row for its start or stop button.
+- Click a row to open its code in the editor.
+- Right-click it, or click its **⋯**, for **Run at startup**, **Open the code**, **Ask about the crash** when it has crashed, and **Remove**.
 
-## Select, open and navigate
+Click the **ScriptOs** heading to fold the list away. An App's own ScriptO belongs to the App, so it isn't listed here.
 
-- Click an item to select it. Click it again to clear it.
-- Double-click a file to open it in the editor.
-- Double-click a folder to go into it. Click `..` at the top of the list to go up.
+## The board's files
 
-## Create, rename and delete
+- Click a file to open it in the editor. Click a folder to open or close it.
+- Shift-click or Cmd-click to select several.
+- Right-click for **Open**, **Download**, **Ask about this**, **Rename**, **Duplicate** and **Delete**.
+- The upload button in the **Board** heading sends files from your computer to the board. Its **+** has **New file**, **New folder**, **Upload files**, **Back up the board** and **Refresh**.
+- Drag a file or folder onto a folder to move it. Drop files from your computer onto the list to upload them.
 
-- **New file** and **New folder** add an empty entry to the list with a name field. Type a name and press Enter. Press Escape to cancel.
-- **Rename**: click the text-cursor icon at the end of a row, edit the name, and press Enter.
-- **Delete**: select items, click the trash button and confirm. The confirmation lists what will go.
+The board's own files, the ones botIQ runs on, are folded away under **The board's own files**. Studio warns before you rename or delete one of them.
 
 > [!WARNING]
 > Deleting `boot.py` or breaking `main.py` can keep the board from starting.
 
-## Move files
+The bar at the bottom shows how much space the board has free.
 
-- **Copy to the board or to browser storage** with the arrow buttons. If a file of the same name is already at the destination, Studio lists the files it would overwrite and asks first.
-- **Upload** (left pane header) sends files from your computer straight to the board.
-- **Import** (right pane header) brings files from your computer into browser storage.
-- **Export** (down arrow) saves the selected files from either pane to your computer.
+## This computer
+
+Click **Open a folder** to keep files on your computer beside the board's. Chrome and Edge allow this; the browser asks again before Studio uses the folder in a later visit.
+
+- Drag between the two places to copy.
+- Right-click a folder on your computer for **Restore to the board**, which writes everything in it to the same place on the board.
+- **Back up the board**, in the board's **+**, copies all the board's files into a dated folder here. It leaves out the board's certificate and its settings file, which holds the Wi-Fi password.
 
 ## Related
 

@@ -21,7 +21,7 @@ Each ScriptO shows whether it's running. Hover over one for its start or stop bu
 
 ## Studio, in the centre
 
-The editor fills the top. **Debug** in its toolbar shows or hides the debugger beside the code, and a debug session keeps it showing. See [Debugging](../user-guide/debugging.md).
+The editor fills the top. **Debug** in its toolbar shows the debugger beside the code; while it shows, **Run** runs the file in it, a line at a time. See [Debugging](../user-guide/debugging.md).
 
 Beneath the editor are the **Terminal**, the board's REPL, and the **Log**. **Log** in the terminal's bar shows or hides the Log. See [Terminal](../user-guide/terminal.md).
 

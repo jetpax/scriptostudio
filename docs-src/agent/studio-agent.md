@@ -1,6 +1,6 @@
 # Studio's Agent
 
-Studio's agent runs in the browser page on Home. There's nothing to install. It works on one board, with that board's tools, and it's meant for getting something working on the board rather than for general coding.
+Studio's agent runs in the browser page, in the Agent on the right of Studio. There's nothing to install. It works on one board, with that board's tools, and it's meant for getting something working on the board rather than for general coding.
 
 ## Your key and model
 

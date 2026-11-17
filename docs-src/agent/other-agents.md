@@ -27,7 +27,7 @@ A client that keeps a WebSocket open at `wss://<board>/mcp` gets more: live prog
 
 ## Watching it work
 
-Stay connected in Studio. The agent's calls appear under **Other agents** on Home, and its code and output appear in the terminal, tagged with its name.
+Stay connected in Studio. The agent's calls appear under **Other agents** in Studio's Agent, and its code and output appear in the terminal, tagged with its name.
 
 ![Another agent's calls and output in Studio](../assets/other-agents.png)
 

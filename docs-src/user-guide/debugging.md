@@ -6,11 +6,12 @@ The debugger runs the file you're editing on the board and stops it at breakpoin
 
 1. Connect a board and open a Python file in the **Editor**.
 2. Optionally, set breakpoints in the gutter (below).
-3. Click **Debug** in the toolbar. The debugger opens beside the code, with the file, its breakpoints and the watch expressions. **Debug** needs a board connected and a file open.
-4. Add watch expressions if you want them.
-5. Click **Start debugging**.
+3. Click **Debug** in the toolbar, or press F5. The debugger opens beside the code, with the file's breakpoints and your watch expressions.
+4. Click **Run**, or press F5 again. The file runs, and stops at its first breakpoint, or at its first line if it has none.
 
-Studio prepares the file in the browser, interrupts whatever is running, and runs the prepared file in the terminal. While a session is open the editor is read-only, and **New** and **Save** are disabled.
+Click **Debug** again to hide the debugger; **Run** then runs the file as usual.
+
+Running in the debugger needs a board connected and a file open. Studio prepares the file in the browser, interrupts whatever is running, and runs the prepared file in the terminal. While a session is open the editor is read-only, and **New** and **Save** are disabled.
 
 ## Breakpoints
 
@@ -27,7 +28,7 @@ Click **Save** to keep your changes.
 
 ## Watch expressions
 
-**Watch Expressions** takes one expression per line, for example `x * 2`. Studio evaluates them each time the program stops.
+**Watch**, in the debugger, takes one expression per line, for example `x * 2`. Studio works them out each time the program stops. They become part of the file that runs, so watches you add during a session are worked out from the next time you click **Run**. Studio keeps them for next time.
 
 ## While the program is stopped
 
@@ -41,7 +42,7 @@ The toolbar shows these buttons during a session:
 | **Step In** | Step into a call. F11. |
 | **Step Out** | Run until the current function returns. F12. |
 
-The sidebar, titled **Debug Session**, shows **Live Variables**: your watch expressions and the local variables at the stop. The terminal prints the stop as well, with the file and line, the watches, the locals, the memory in use and the elapsed time.
+The debugger shows where the program stopped, its **Variables** and your **Watch** expressions, with the values that changed since the last stop highlighted. **Ask about this** hands the file and the values to the agent. The terminal marks each stop with its line.
 
 ## How it connects
 

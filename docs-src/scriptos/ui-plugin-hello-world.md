@@ -11,7 +11,7 @@ A ScriptO can serve its own web page from the board and ask Studio to show it in
 
 ## Running it
 
-Ask the agent on Home to make it, or put the code below in a file in the **Editor** and click **Run**. The page opens in a modal over Studio. To keep it on the board as a ScriptO, ask the agent to leave it there with `scripto_create`.
+Ask Studio's agent to make it, or put the code below in a file in the **Editor** and click **Run**. The page opens in a modal over Studio. To keep it on the board as a ScriptO, ask the agent to leave it there with `scripto_create`.
 
 The code is the template below. Change `title` and the HTML to make your own.
 

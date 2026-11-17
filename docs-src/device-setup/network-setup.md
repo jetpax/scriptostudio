@@ -4,7 +4,7 @@ Set the WiFi network a board joins, and see its network state.
 
 ## Change WiFi over USB
 
-1. On Home, click **Set up a new board**. This opens **Settings > Firmware**.
+1. Click the gear at the top of the sidebar, then **Firmware**.
 2. Plug the board in over USB and click **Connect Device**.
 3. Choose **Change WiFi**.
 4. Studio scans and lists the networks it finds.

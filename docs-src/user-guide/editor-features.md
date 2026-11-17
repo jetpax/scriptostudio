@@ -1,8 +1,8 @@
 # Editor Features
 
-The Editor edits files on the board or in your browser storage. Open it with **Editor** in the menu.
+The editor fills the top of Studio. It edits files on the board, or in a folder on your computer that you've opened in [Files](file-manager.md).
 
-![The Editor](../assets/editor.png)
+![A ScriptO's code in the editor, with Files in the sidebar](../assets/editor.png)
 
 The editor is CodeMirror 6. It has Python and JSON highlighting, line numbers, folding, bracket matching, search and undo history.
 
@@ -10,44 +10,37 @@ The editor is CodeMirror 6. It has Python and JSON highlighting, line numbers, f
 
 | Button | Action | Shortcut |
 |--------|--------|----------|
-| **New** | Create a file. | Ctrl+N / Cmd+N |
-| **Save** | Save the current file. | Ctrl+S / Cmd+S |
-| **Reset** | Reset the board. | |
-| **Stop** | Interrupt what's running and stop background tasks. | |
-| **Run** | Run the current file on the board. | Ctrl+R / Cmd+R |
-| **Debug** | Start a debug session. See [Debugging](debugging.md). | |
+| **New** | Start a new file. A new Python file holds a short test: it prints Hello, ScriptO! and calls `neofetch()`. | |
+| **Save** | Save the file. A new file asks where on the board it goes. | Ctrl+S / Cmd+S |
+| **Reset** | Restart the board's Python, or the whole board. | |
+| **Stop** | Break whatever is running, and stop ScriptOs and Apps too. | |
+| **Run** | Run the file, or only what's selected in it. With the debugger showing, run the file in it. | Ctrl+Enter / Cmd+Enter |
+| **Debug** | Show or hide the debugger. See [Debugging](debugging.md). | F5 |
+
+Studio opens on a new file when nothing is open, so **Run** is a one-click test of the board.
 
 ## Tabs
 
-Each open file has a tab. A CPU icon means the file is on the board, and a desktop icon means it's in browser storage. A `*` marks unsaved changes.
+Each open file has a tab. A dot marks unsaved changes; Studio keeps unsaved files in this browser until you save them.
 
 - Click a tab to switch to it.
-- Click the name on the active tab to rename the file.
-- Click the **x** to close it.
+- Click the **×** to close it. If it has unsaved changes, Studio asks first.
 
 ## Run
 
-**Run** sends the editor's current text to the board, saved or not. Output appears in the [terminal](terminal.md) in the sidebar.
+**Run** sends the editor's text to the board, saved or not, and its output appears in the [terminal](terminal.md) beneath. With part of the file selected, it runs only that.
 
-## JSON mode
+## JSON
 
-Files that end in `.json` get JSON highlighting. When you open one that holds a JSON object or array, Studio reformats it with two-space indentation.
+Files that end in `.json` get JSON highlighting.
 
 ## Breakpoints
 
 Click the gutter beside a line number to set a breakpoint. See [Debugging](debugging.md).
 
-## Other shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| Ctrl+L / Cmd+L | Clear the terminal. |
-
-These act in the Editor, apart from clearing the terminal, so Cmd+R reloads the page anywhere else. Browsers keep Cmd+N for themselves in a tab, so that one needs Studio installed as an app.
-
 ## Related
 
-- [File Manager](file-manager.md)
+- [Files](file-manager.md)
 - [Terminal](terminal.md)
 - [Debugging](debugging.md)
 - [Writing ScriptOs](../scriptos/writing-scriptos.md)
