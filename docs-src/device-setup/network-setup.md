@@ -4,7 +4,7 @@ Set the WiFi network a board joins, and see its network state.
 
 ## Change WiFi over USB
 
-1. On Home, click **Set up a new board**. This opens **System > Firmware**.
+1. On Home, click **Set up a new board**. This opens **Settings > Firmware**.
 2. Plug the board in over USB and click **Connect Device**.
 3. Choose **Change WiFi**.
 4. Studio scans and lists the networks it finds.
@@ -22,7 +22,7 @@ With a board connected, open **Networks > WiFi** to see its WiFi state:
 - **Wi-Fi Client Interface**: active or inactive, with MAC address, SSID, IP address, subnet mask, gateway, DNS server and signal strength.
 - **Wi-Fi Access Point Interface**: active or inactive, with MAC address, SSID, IP address, subnet mask, gateway, DNS server and connected clients.
 
-Other panels under **Networks** cover Ethernet, VPN, Bluetooth LE, WWAN, MQTT, Telephony, NTP and CAN. You can switch an interface on or off in **System > Settings** under **Network Interfaces**. See [Settings](../user-guide/settings.md).
+Other panels under **Networks** cover Ethernet, VPN, Bluetooth LE, WWAN, MQTT, Telephony, NTP and CAN. See [Settings](../user-guide/settings.md).
 
 ## Troubleshooting
 

@@ -9,7 +9,7 @@ Go to [scriptostudio.com/app](https://scriptostudio.com/app/). You can install i
 ## 2. Set up a new board
 
 1. Plug the board in with USB.
-2. Click **Set up a new board** at the bottom of the sidebar. That opens **System > Firmware**.
+2. Click **Set up a new board** at the bottom of the sidebar. That opens **Settings > Firmware**.
 3. Follow the steps to flash the firmware and give the board your WiFi details. Its certificate is generated for you.
 4. Choose the board's password at `https://<host>.local/setup`. Your browser warns about the board's certificate the first time, because the board signed it itself. That's expected, so proceed to it.
 5. The board sends you back to Studio with its address filled in.

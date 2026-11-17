@@ -5,7 +5,7 @@ Every board is an MCP server, so any MCP client can use it. An agent on your com
 ## Claude Code
 
 1. Connect Studio to the board.
-2. Open **System > Agent**.
+2. Open **Settings > Agent**.
 3. Copy the line under **Claude Code** and paste it into a terminal, once, from any folder.
 4. Start a new Claude Code session and ask it something, like "plot a sine wave on the board's terminal".
 

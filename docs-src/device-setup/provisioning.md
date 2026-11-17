@@ -21,7 +21,7 @@ When you set up a new board, WiFi and the certificate happen back to back after 
 
 ## Re-provision
 
-Use **Re-provision** in **System > Firmware** to:
+Use **Re-provision** in **Settings > Firmware** to:
 
 - Renew an expired certificate.
 - Make a certificate for a changed hostname.
@@ -31,7 +31,7 @@ Connect the board over USB, choose **Re-provision**, and follow the same steps a
 
 ## Forgot Credentials
 
-Choose **Forgot Credentials** in **System > Firmware** with the board connected over USB. It shows the board's hostname and the WiFi network it's set to join. It doesn't show the password. If you've lost the password, run **Re-provision** to set a new one.
+Choose **Forgot Credentials** in **Settings > Firmware** with the board connected over USB. It shows the board's hostname and the WiFi network it's set to join. It doesn't show the password. If you've lost the password, run **Re-provision** to set a new one.
 
 ## Troubleshooting
 

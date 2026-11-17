@@ -1,34 +1,39 @@
 # A Tour of Studio
 
-![Home](../assets/home.png)
+Studio has three columns: the menu on the left, what you picked in the centre, and the Agent on the right. A bar along the bottom shows the board's live readings.
 
 ## The menu, on the left
 
-- **Home** is the chat with Studio's agent.
-- **Editor** edits and runs code, with a debugger. See [Editor](../user-guide/editor-features.md).
-- **Files** moves files between the board and your browser's storage. See [Files](../user-guide/file-manager.md).
-- **Networks** configures WiFi, Ethernet, VPN, Bluetooth LE, WWAN, MQTT, Telephony, NTP and CAN.
-- **Peripherals** configures GPS, Modem and SD Card.
-- **System** has About, Settings, Agent and Firmware.
-- **Apps** lists what's installed, and **+** adds more.
+The bolt at the top is the way to a board: grey with none connected, green with one. Click it to connect, or to show the board you're connected to.
 
-The language selector is at the bottom.
+Below it are the Apps:
 
-## The main pane, in the centre
+- **Studio** is where you work on the board: the editor, its files and ScriptOs, the debugger, the terminal and the log. See [Editor](../user-guide/editor-features.md) and [Files](../user-guide/file-manager.md).
+- Each App you've installed, with its own pages beneath it.
+- **Browse** finds more Apps and ScriptOs for the connected board.
 
-Whatever you pick from the menu appears here. The chat waits on Home while you're elsewhere, and a banner on other views tells you when it needs an answer.
+The gear at the top opens **Settings**: About, Appearance, Agent, Firmware, and the network panels the board's hardware calls for. Click the **×** in its place to go back to the Apps.
 
-## The sidebar, on the right
+## Studio, in the centre
 
-It stays in every view:
+The editor fills the top, with the terminal beneath it. A pane down the right side holds three tabs:
 
-- **The board** and what it has, or a list of boards you've used when none is connected.
-- **ScriptOs**, each with Start or Stop, At startup, Code and Remove.
-- **The terminal**, the board's one REPL, once a board is connected. See [Terminal](../user-guide/terminal.md).
+- **Files**: the board's files, and a folder on your computer.
+- **ScriptOs**: what's installed on the board, each with Start or Stop, At startup, Code and Remove. **Code** opens it in the editor.
+- **Debug**: the debugger, which comes forward while a session runs.
 
-Drag the divider on its left to make it wider, for long terminal output. Studio remembers the width.
+Beneath the editor are the **Terminal**, the board's REPL, and the **Log**. See [Terminal](../user-guide/terminal.md).
+
+**Files** at the right of the toolbar shows or hides the pane down the right side; its **×** hides it too. **Log** in the terminal's bar shows or hides the Log. Drag any divider to resize. Studio remembers all of it.
+
+## The Agent, on the right
+
+- **The board**: its name on your network, what it is, the agent's model, and the hardware it has. With none connected, the boards you've used.
+- **The chat** with the agent. See [Studio's Agent](../agent/studio-agent.md).
+
+Close it with its **×** to leave a strip with its name; click the strip to open it again. Drag its left edge to make it wider.
 
 ## Stopping things
 
-- **Stop** in the chat ends Studio's agent and its call, and leaves everything else running.
-- **Stop** above the editor, and under **Other agents** on Home, breaks whatever is running, whichever client started it, and stops ScriptOs and Apps as well.
+- **Stop** in the chat ends the agent's turn and its call, and leaves everything else running.
+- **Stop** above the editor breaks whatever is running, whichever client started it, and stops ScriptOs and Apps as well.

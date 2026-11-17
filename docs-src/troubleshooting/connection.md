@@ -19,7 +19,7 @@ A board holds three WebSockets. A fourth client is refused with a message saying
 
 ## Forgot the password
 
-Connect the board by USB and open **System > Firmware**. **Re-provision** gives the board new certificates and a new password, and keeps its WiFi settings. **Change WiFi** changes only the network. See [Provisioning](../device-setup/provisioning.md).
+Connect the board by USB and open **Settings > Firmware**. **Re-provision** gives the board new certificates and a new password, and keeps its WiFi settings. **Change WiFi** changes only the network. See [Provisioning](../device-setup/provisioning.md).
 
 ## Studio's agent
 
@@ -33,7 +33,7 @@ Connect the board by USB and open **System > Firmware**. **Re-provision** gives 
 
 ## An outside agent
 
-**It can't reach the board.** Check that the address and token match **System > Agent**. They change if you change the board's password.
+**It can't reach the board.** Check that the address and token match **Settings > Agent**. They change if you change the board's password.
 
 **A tool is missing or "Unknown tool".** A session can keep the tool list it started with. Start a new session.
 

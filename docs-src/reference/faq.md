@@ -3,7 +3,7 @@
 ## General
 
 **What boards does it run on?**
-ESP32 boards running Studio's firmware. **System > Firmware** lists what can be flashed, and [Board Configurations](../device-setup/board-configurations.md) describes the board manifests.
+ESP32 boards running Studio's firmware. **Settings > Firmware** lists what can be flashed, and [Board Configurations](../device-setup/board-configurations.md) describes the board manifests.
 
 **Which browser do I need?**
 Any modern browser can connect to a board. Flashing firmware over USB needs Chrome or Edge, because it uses Web Serial.

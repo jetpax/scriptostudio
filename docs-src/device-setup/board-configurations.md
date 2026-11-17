@@ -26,7 +26,7 @@ uart_cfg = board.uart("primary")
 
 Use an existing board config when:
 
-- Your board is in the list under **System > Firmware**. Pick it.
+- Your board is in the list under **Settings > Firmware**. Pick it.
 
 Create a custom config when:
 
@@ -176,7 +176,7 @@ public list, submit a pull request against
 [jetpax/botiq](https://github.com/jetpax/botiq). It appears with the next
 release.
 
-### 4. Pick it under System > Firmware
+### 4. Pick it under Settings > Firmware
 
 After the next release, the board appears in the
 **Board Configuration** dropdown on the firmware panel when a matching chip

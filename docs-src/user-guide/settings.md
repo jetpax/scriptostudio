@@ -1,23 +1,19 @@
 # Settings
 
-**System > Settings** holds the options for how Studio looks and which network interfaces the board starts. Changes to appearance apply at once.
+Click the gear at the top of the menu to open **Settings**. It lists About, Appearance, Agent and Firmware, then under **Networks** the panels the board's hardware calls for. Click the **×** in the gear's place to go back to the Apps.
 
 ## Appearance
 
-- **Theme**: **Light**, **Dark** or **Device**, which follows your system.
-- **Color Scheme**: the accent color. Choose **Teal**, **Blue**, **Purple**, **Green**, **Red** or **Orange**.
-- **Editor Theme**: the code editor's colors. **Auto** matches the app theme. The others are **Cobalt**, **Xcode** and **Cool Glow**.
-- **Temperature Unit**: show temperatures in **Celsius** or **Fahrenheit**.
+- **Theme**: **Device**, which follows your computer or phone, **Light** or **Dark**.
+- **Accent**: the colour of what's chosen and what to press.
 
-## Network Interfaces
+Changes apply at once.
 
-With a board connected, **Network Interfaces** lists WiFi, and Ethernet and WWAN (4G) on boards that have them. Switch an interface off and a disabled one won't start at boot. At least one must stay on. Click **Save Network Settings** to send the choice to the board.
+## Networks
 
-## Language
-
-The language selector is at the bottom of the sidebar, below the menu.
+Wi-Fi, Ethernet, Mobile data, VPN, MQTT, Telephony, Time and CAN, as the board has them. See [Network Setup](../device-setup/network-setup.md).
 
 ## Related
 
-- [System Information](system-info.md)
+- [About](system-info.md)
 - [Network Setup](../device-setup/network-setup.md)
