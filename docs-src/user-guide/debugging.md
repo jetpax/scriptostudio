@@ -6,9 +6,9 @@ The debugger runs the file you're editing on the board and stops it at breakpoin
 
 1. Connect a board and open a Python file in the **Editor**.
 2. Optionally, set breakpoints in the gutter (below).
-3. Click **Debug** in the toolbar. The **Setup Debugger** sidebar opens. It's available only in the Editor view, with a board connected and a file open.
+3. Click **Debug** in the toolbar. The debugger opens beside the code, with the file, its breakpoints and the watch expressions. **Debug** needs a board connected and a file open.
 4. Add watch expressions if you want them.
-5. Click **Start Debugging**, or click **Run** in the toolbar.
+5. Click **Start debugging**.
 
 Studio prepares the file in the browser, interrupts whatever is running, and runs the prepared file in the terminal. While a session is open the editor is read-only, and **New** and **Save** are disabled.
 
