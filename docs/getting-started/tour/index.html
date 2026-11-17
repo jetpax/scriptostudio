@@ -446,10 +446,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-main-pane-in-the-centre" class="md-nav__link">
+  <a href="#studio-in-the-centre" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The main pane, in the centre
+        Studio, in the centre
       
     </span>
   </a>
@@ -457,10 +457,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-sidebar-on-the-right" class="md-nav__link">
+  <a href="#the-agent-on-the-right" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The sidebar, on the right
+        The Agent, on the right
       
     </span>
   </a>
@@ -1827,10 +1827,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-main-pane-in-the-centre" class="md-nav__link">
+  <a href="#studio-in-the-centre" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The main pane, in the centre
+        Studio, in the centre
       
     </span>
   </a>
@@ -1838,10 +1838,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-sidebar-on-the-right" class="md-nav__link">
+  <a href="#the-agent-on-the-right" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The sidebar, on the right
+        The Agent, on the right
       
     </span>
   </a>
@@ -1880,32 +1880,35 @@
 
 
 <h1 id="a-tour-of-studio">A Tour of Studio<a class="headerlink" href="#a-tour-of-studio" title="Permanent link">&para;</a></h1>
-<p><img alt="Home" src="../../assets/home.png" /></p>
+<p>Studio has three columns: the menu on the left, what you picked in the centre, and the Agent on the right. A bar along the bottom shows the board's live readings.</p>
 <h2 id="the-menu-on-the-left">The menu, on the left<a class="headerlink" href="#the-menu-on-the-left" title="Permanent link">&para;</a></h2>
+<p>The bolt at the top is the way to a board: grey with none connected, green with one. Click it to connect, or to show the board you're connected to.</p>
+<p>Below it are the Apps:</p>
 <ul>
-<li><strong>Home</strong> is the chat with Studio's agent.</li>
-<li><strong>Editor</strong> edits and runs code, with a debugger. See <a href="../../user-guide/editor-features/">Editor</a>.</li>
-<li><strong>Files</strong> moves files between the board and your browser's storage. See <a href="../../user-guide/file-manager/">Files</a>.</li>
-<li><strong>Networks</strong> configures WiFi, Ethernet, VPN, Bluetooth LE, WWAN, MQTT, Telephony, NTP and CAN.</li>
-<li><strong>Peripherals</strong> configures GPS, Modem and SD Card.</li>
-<li><strong>System</strong> has About, Settings, Agent and Firmware.</li>
-<li><strong>Apps</strong> lists what's installed, and <strong>+</strong> adds more.</li>
+<li><strong>Studio</strong> is where you work on the board: the editor, the debugger, the terminal and the log. See <a href="../../user-guide/editor-features/">Editor</a>.</li>
+<li>Each App you've installed, with its own pages beneath it.</li>
+<li><strong>Browse</strong> finds more Apps and ScriptOs for the connected board.</li>
 </ul>
-<p>The language selector is at the bottom.</p>
-<h2 id="the-main-pane-in-the-centre">The main pane, in the centre<a class="headerlink" href="#the-main-pane-in-the-centre" title="Permanent link">&para;</a></h2>
-<p>Whatever you pick from the menu appears here. The chat waits on Home while you're elsewhere, and a banner on other views tells you when it needs an answer.</p>
-<h2 id="the-sidebar-on-the-right">The sidebar, on the right<a class="headerlink" href="#the-sidebar-on-the-right" title="Permanent link">&para;</a></h2>
-<p>It stays in every view:</p>
+<p>Two buttons at the top turn the menu into something else. Click the <strong>×</strong> in a button's place to go back to the Apps.</p>
 <ul>
-<li><strong>The board</strong> and what it has, or a list of boards you've used when none is connected.</li>
-<li><strong>ScriptOs</strong>, each with Start or Stop, At startup, Code and Remove.</li>
-<li><strong>The terminal</strong>, the board's one REPL, once a board is connected. See <a href="../../user-guide/terminal/">Terminal</a>.</li>
+<li>The folder shows <strong>Files</strong>, in three parts: the board's <strong>ScriptOs</strong>, the <strong>Board</strong>'s files, and <strong>This computer</strong>, a folder on your computer. Whatever is in the centre stays there, and opening a file brings Studio forward. Drag the menu's right edge to make it wider. See <a href="../../user-guide/file-manager/">Files</a>.</li>
+<li>The gear opens <strong>Settings</strong>: About, Appearance, Agent, Firmware, and the network panels the board's hardware calls for.</li>
 </ul>
-<p>Drag the divider on its left to make it wider, for long terminal output. Studio remembers the width.</p>
+<p>Each ScriptO shows whether it's running. Hover over one for its start or stop button, and click it to open its code. Right-click it, or click its <strong>⋯</strong>, for <strong>Run at startup</strong>, <strong>Open the code</strong>, <strong>Ask about the crash</strong> when it has crashed, and <strong>Remove</strong>. Click the <strong>ScriptOs</strong> heading to fold the list away.</p>
+<h2 id="studio-in-the-centre">Studio, in the centre<a class="headerlink" href="#studio-in-the-centre" title="Permanent link">&para;</a></h2>
+<p>The editor fills the top. <strong>Debug</strong> in its toolbar shows the debugger beside the code; while it shows, <strong>Run</strong> runs the file in it, a line at a time. See <a href="../../user-guide/debugging/">Debugging</a>.</p>
+<p>Beneath the editor are the <strong>Terminal</strong>, the board's REPL, and the <strong>Log</strong>. <strong>Log</strong> in the terminal's bar shows or hides the Log. See <a href="../../user-guide/terminal/">Terminal</a>.</p>
+<p>Drag any divider to resize. Studio remembers all of it.</p>
+<h2 id="the-agent-on-the-right">The Agent, on the right<a class="headerlink" href="#the-agent-on-the-right" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>The board</strong>: its name on your network, what it is, the agent's model, and the hardware it has. With none connected, the boards you've used.</li>
+<li><strong>The chat</strong> with the agent. See <a href="../../agent/studio-agent/">Studio's Agent</a>.</li>
+</ul>
+<p>It starts as wide as the centre. Drag its left edge to change that; it keeps its share as the window changes size. Close it with its <strong>×</strong> to leave a strip with its name, and click the strip to open it again.</p>
 <h2 id="stopping-things">Stopping things<a class="headerlink" href="#stopping-things" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Stop</strong> in the chat ends Studio's agent and its call, and leaves everything else running.</li>
-<li><strong>Stop</strong> above the editor, and under <strong>Other agents</strong> on Home, breaks whatever is running, whichever client started it, and stops ScriptOs and Apps as well.</li>
+<li><strong>Stop</strong> in the chat ends the agent's turn and its call, and leaves everything else running.</li>
+<li><strong>Stop</strong> above the editor breaks whatever is running, whichever client started it, and stops ScriptOs and Apps as well.</li>
 </ul>
 
 

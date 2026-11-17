@@ -1929,11 +1929,11 @@
 <ol>
 <li>Connect a board and open a Python file in the <strong>Editor</strong>.</li>
 <li>Optionally, set breakpoints in the gutter (below).</li>
-<li>Click <strong>Debug</strong> in the toolbar. The <strong>Setup Debugger</strong> sidebar opens. It's available only in the Editor view, with a board connected and a file open.</li>
-<li>Add watch expressions if you want them.</li>
-<li>Click <strong>Start Debugging</strong>, or click <strong>Run</strong> in the toolbar.</li>
+<li>Click <strong>Debug</strong> in the toolbar, or press F5. The debugger opens beside the code, with the file's breakpoints and your watch expressions.</li>
+<li>Click <strong>Run</strong>, or press F5 again. The file runs, and stops at its first breakpoint, or at its first line if it has none.</li>
 </ol>
-<p>Studio prepares the file in the browser, interrupts whatever is running, and runs the prepared file in the terminal. While a session is open the editor is read-only, and <strong>New</strong> and <strong>Save</strong> are disabled.</p>
+<p>Click <strong>Debug</strong> again to hide the debugger; <strong>Run</strong> then runs the file as usual.</p>
+<p>Running in the debugger needs a board connected and a file open. Studio prepares the file in the browser, interrupts whatever is running, and runs the prepared file in the terminal. While a session is open the editor is read-only, and <strong>New</strong> and <strong>Save</strong> are disabled.</p>
 <h2 id="breakpoints">Breakpoints<a class="headerlink" href="#breakpoints" title="Permanent link">&para;</a></h2>
 <p>Click the gutter beside a line number to set a breakpoint. A marker appears in the gutter, and the line gets a <code># ●</code> comment at its end. Click the marker to open the breakpoint dialog:</p>
 <table>
@@ -1964,7 +1964,7 @@
 </table>
 <p>Click <strong>Save</strong> to keep your changes.</p>
 <h2 id="watch-expressions">Watch expressions<a class="headerlink" href="#watch-expressions" title="Permanent link">&para;</a></h2>
-<p><strong>Watch Expressions</strong> takes one expression per line, for example <code>x * 2</code>. Studio evaluates them each time the program stops.</p>
+<p><strong>Watch</strong>, in the debugger, takes one expression per line, for example <code>x * 2</code>. Studio works them out each time the program stops. They become part of the file that runs, so watches you add during a session are worked out from the next time you click <strong>Run</strong>. Studio keeps them for next time.</p>
 <h2 id="while-the-program-is-stopped">While the program is stopped<a class="headerlink" href="#while-the-program-is-stopped" title="Permanent link">&para;</a></h2>
 <p>The toolbar shows these buttons during a session:</p>
 <table>
@@ -1997,7 +1997,7 @@
 </tr>
 </tbody>
 </table>
-<p>The sidebar, titled <strong>Debug Session</strong>, shows <strong>Live Variables</strong>: your watch expressions and the local variables at the stop. The terminal prints the stop as well, with the file and line, the watches, the locals, the memory in use and the elapsed time.</p>
+<p>The debugger shows where the program stopped, its <strong>Variables</strong> and your <strong>Watch</strong> expressions, with the values that changed since the last stop highlighted. <strong>Ask about this</strong> hands the file and the values to the agent. The terminal marks each stop with its line.</p>
 <h2 id="how-it-connects">How it connects<a class="headerlink" href="#how-it-connects" title="Permanent link">&para;</a></h2>
 <p>The prepared file runs on the terminal stream. The board reports each stop on that stream, and Studio sends <strong>Continue</strong> and the step commands back through the <code>exec</code> tool. See <a href="../../reference/mcp-tools/">MCP tools</a>.</p>
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>

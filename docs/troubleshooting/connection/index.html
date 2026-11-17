@@ -1937,14 +1937,14 @@
 <h2 id="the-board-refuses-another-client">The board refuses another client<a class="headerlink" href="#the-board-refuses-another-client" title="Permanent link">&para;</a></h2>
 <p>A board holds three WebSockets. A fourth client is refused with a message saying why, and nobody is pushed off. Studio holds one, and a second once its agent has run, until you press Stop or start a New chat. Close another client on your computer, or use plain HTTP for it, which holds none between calls.</p>
 <h2 id="forgot-the-password">Forgot the password<a class="headerlink" href="#forgot-the-password" title="Permanent link">&para;</a></h2>
-<p>Connect the board by USB and open <strong>System &gt; Firmware</strong>. <strong>Re-provision</strong> gives the board new certificates and a new password, and keeps its WiFi settings. <strong>Change WiFi</strong> changes only the network. See <a href="../../device-setup/provisioning/">Provisioning</a>.</p>
+<p>Connect the board by USB and open <strong>Settings &gt; Firmware</strong>. <strong>Re-provision</strong> gives the board new certificates and a new password, and keeps its WiFi settings. <strong>Change WiFi</strong> changes only the network. See <a href="../../device-setup/provisioning/">Provisioning</a>.</p>
 <h2 id="studios-agent">Studio's agent<a class="headerlink" href="#studios-agent" title="Permanent link">&para;</a></h2>
 <p><strong>It says it needs a key.</strong> Click <strong>Add an API key</strong> under the message box.</p>
 <p><strong>"Your OpenRouter account is out of credits."</strong> Add credit at OpenRouter, or pick a free model.</p>
 <p><strong>A free model stops with a rate limit.</strong> Free models have daily limits. Wait, or choose another model.</p>
 <p><strong>"Connect a board, and an agent can get to work on it."</strong> Studio needs a board connected before the agent can start. A saved chat still shows while you're disconnected.</p>
 <h2 id="an-outside-agent">An outside agent<a class="headerlink" href="#an-outside-agent" title="Permanent link">&para;</a></h2>
-<p><strong>It can't reach the board.</strong> Check that the address and token match <strong>System &gt; Agent</strong>. They change if you change the board's password.</p>
+<p><strong>It can't reach the board.</strong> Check that the address and token match <strong>Settings &gt; Agent</strong>. They change if you change the board's password.</p>
 <p><strong>A tool is missing or "Unknown tool".</strong> A session can keep the tool list it started with. Start a new session.</p>
 <p><strong>It connected to the wrong board.</strong> Each <code>claude mcp add</code> line names one board. See what's configured with <code>claude mcp list</code>.</p>
 

@@ -1367,6 +1367,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Log
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#resize-it" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1827,6 +1838,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Log
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#resize-it" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1880,41 +1902,16 @@
 
 
 <h1 id="terminal">Terminal<a class="headerlink" href="#terminal" title="Permanent link">&para;</a></h1>
-<p>Studio has one terminal, a MicroPython REPL on the connected board. It sits in the sidebar on the right, under the board and its ScriptOs, and stays there in every view: Home, Files, the Editor, panels and Apps.</p>
+<p>Studio has one terminal, a MicroPython REPL on the connected board. It sits beneath the editor in <strong>Studio</strong>, with the <strong>Log</strong> beside it.</p>
 <h2 id="use-it">Use it<a class="headerlink" href="#use-it" title="Permanent link">&para;</a></h2>
 <p>Click in the terminal and type, as you would at a MicroPython prompt. Output from <strong>Run</strong> in the editor appears here, along with error messages and tracebacks.</p>
-<p>The buttons above the terminal:</p>
-<table>
-<thead>
-<tr>
-<th>Button</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Copy</td>
-<td>Copy the selected text.</td>
-</tr>
-<tr>
-<td>Paste</td>
-<td>Paste into the prompt.</td>
-</tr>
-<tr>
-<td>Clean</td>
-<td>Clear the terminal. Shortcut: Ctrl+L or Cmd+L.</td>
-</tr>
-<tr>
-<td>Toggle Logs</td>
-<td>Show or hide the Logs list beside the terminal.</td>
-</tr>
-</tbody>
-</table>
-<p>The arrow at the end of the bar closes the terminal and opens it again.</p>
+<p><strong>Clear</strong> in the terminal's bar clears it. Shortcut: Ctrl+L or Cmd+L.</p>
+<h2 id="the-log">The Log<a class="headerlink" href="#the-log" title="Permanent link">&para;</a></h2>
+<p>The Log lists the board's messages and the calls agents make, newest at the foot. <strong>Clear</strong> empties it. <strong>Log</strong> in the terminal's bar shows or hides it; hidden, the terminal has the full width.</p>
 <h2 id="resize-it">Resize it<a class="headerlink" href="#resize-it" title="Permanent link">&para;</a></h2>
-<p>Drag the handle in the terminal's bar up or down to change its height. Drag the vertical divider between the main area and the sidebar to change the sidebar's width. Studio remembers the width.</p>
+<p>Drag the divider above the terminal to change its height, and the one between the terminal and the Log to share the width. Studio remembers both.</p>
 <h2 id="what-an-agent-does">What an agent does<a class="headerlink" href="#what-an-agent-does" title="Permanent link">&para;</a></h2>
-<p>When an agent runs code on the board, the code and its output appear in this terminal. Each line is tagged with the name the agent's client gives itself, in square brackets, for example <code>[Claude Code]</code>. Calls an agent makes also show in the Logs list. If the terminal is closed when an agent starts working, it opens.</p>
+<p>When an agent runs code on the board, the code and its output appear in this terminal. Each line is tagged with the name the agent's client gives itself, in square brackets, for example <code>[Claude Code]</code>. Calls an agent makes also show in the Log.</p>
 <p>Stop is above the editor. It interrupts what's running in the terminal and stops background tasks, whoever started them.</p>
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>

@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#system-information" class="md-skip">
+        <a href="#about" class="md-skip">
           Skip to content
         </a>
       
@@ -1384,61 +1384,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#studio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Studio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#firmware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Firmware
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#board" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Board
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mcu-micropython" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MCU &amp; MicroPython
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#flash-partitions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flash Partitions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#status-bar" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1849,61 +1794,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#studio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Studio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#firmware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Firmware
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#board" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Board
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mcu-micropython" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MCU &amp; MicroPython
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#flash-partitions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flash Partitions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#status-bar" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1945,9 +1835,8 @@
   
 
 
-<h1 id="system-information">System Information<a class="headerlink" href="#system-information" title="Permanent link">&para;</a></h1>
-<p><strong>System &gt; About</strong> shows what Studio, the firmware and the board report about themselves. Without a board connected, it shows only the Studio section.</p>
-<h2 id="studio">Studio<a class="headerlink" href="#studio" title="Permanent link">&para;</a></h2>
+<h1 id="about">About<a class="headerlink" href="#about" title="Permanent link">&para;</a></h1>
+<p><strong>Settings &gt; About</strong> shows what the connected board is. Without a board connected, it says to connect one.</p>
 <table>
 <thead>
 <tr>
@@ -1957,127 +1846,33 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Studio Version</strong></td>
-<td>The version of Studio you're running.</td>
-</tr>
-<tr>
-<td><strong>Build</strong></td>
-<td>The commit it was built from.</td>
-</tr>
-<tr>
-<td><strong>Build Date</strong></td>
-<td>When it was built.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="firmware">Firmware<a class="headerlink" href="#firmware" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Firmware Version</strong></td>
-<td>The firmware release on the board.</td>
-</tr>
-<tr>
-<td><strong>Built</strong></td>
-<td>When the firmware was built.</td>
-</tr>
-<tr>
-<td><strong>Origin</strong></td>
-<td><code>gha</code> for a CI build, <code>local</code> for one built by hand.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="board">Board<a class="headerlink" href="#board" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Board Name</strong></td>
+<td><strong>Board</strong></td>
 <td>The board's name, from its manifest.</td>
 </tr>
 <tr>
-<td><strong>Board ID</strong></td>
-<td>The manifest's identifier, for example <code>generic_esp32s3</code>.</td>
+<td><strong>Hardware</strong></td>
+<td>What the board has on it, from its manifest.</td>
 </tr>
 <tr>
-<td><strong>Chip</strong></td>
-<td>The chip family.</td>
+<td><strong>botIQ</strong></td>
+<td>The botIQ release on the board.</td>
 </tr>
 <tr>
-<td><strong>Hardware Revision</strong></td>
-<td>The board's revision. Hidden when the manifest has none.</td>
+<td><strong>Firmware</strong></td>
+<td>The firmware build.</td>
 </tr>
 <tr>
-<td><strong>Description</strong></td>
-<td>What the board has on it.</td>
+<td><strong>MicroPython</strong></td>
+<td>The MicroPython version the firmware is built on.</td>
+</tr>
+<tr>
+<td><strong>Address</strong></td>
+<td>The board's name on your network.</td>
 </tr>
 </tbody>
 </table>
 <p>See <a href="../../device-setup/board-configurations/">Board Configurations</a>.</p>
-<h2 id="mcu-micropython">MCU &amp; MicroPython<a class="headerlink" href="#mcu-micropython" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Unique ID</strong></td>
-<td>The chip's unique ID.</td>
-</tr>
-<tr>
-<td><strong>Frequency</strong></td>
-<td>CPU clock, in MHz.</td>
-</tr>
-<tr>
-<td><strong>Flash Size</strong></td>
-<td>Total flash.</td>
-</tr>
-<tr>
-<td><strong>Platform</strong></td>
-<td>The MicroPython platform, for example <code>esp32</code>.</td>
-</tr>
-<tr>
-<td><strong>System</strong></td>
-<td>The system name.</td>
-</tr>
-<tr>
-<td><strong>Release</strong></td>
-<td>The MicroPython release.</td>
-</tr>
-<tr>
-<td><strong>Version</strong></td>
-<td>The detailed MicroPython version string.</td>
-</tr>
-<tr>
-<td><strong>Implementation</strong></td>
-<td>The firmware variant.</td>
-</tr>
-<tr>
-<td><strong>SPIRAM</strong></td>
-<td>Whether the board has PSRAM.</td>
-</tr>
-<tr>
-<td><strong>MPY Version</strong></td>
-<td>The bytecode version.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="flash-partitions">Flash Partitions<a class="headerlink" href="#flash-partitions" title="Permanent link">&para;</a></h2>
-<p>A table of the flash partitions, with each one's <strong>Name</strong>, <strong>Type</strong>, <strong>Offset</strong> and <strong>Size</strong>. The <code>vfs</code> partition holds the board's files.</p>
+<p>About also offers what Studio can do next: a newer Studio to reload into, installing Studio as an app, or a newer botIQ for the board.</p>
 <h2 id="status-bar">Status bar<a class="headerlink" href="#status-bar" title="Permanent link">&para;</a></h2>
 <p>The bar at the bottom of Studio shows live readings:</p>
 <table>
@@ -2090,11 +1885,11 @@
 <tbody>
 <tr>
 <td><strong>RAM</strong></td>
-<td>Memory used and total. PSRAM counts toward the total.</td>
+<td>Memory in use.</td>
 </tr>
 <tr>
 <td><strong>TEMP</strong></td>
-<td>Chip temperature. Set the unit in <a href="../settings/">Settings</a>.</td>
+<td>Chip temperature.</td>
 </tr>
 <tr>
 <td><strong>UPTIME</strong></td>

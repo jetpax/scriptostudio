@@ -1908,31 +1908,31 @@
 <h2 id="2-set-up-a-new-board">2. Set up a new board<a class="headerlink" href="#2-set-up-a-new-board" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Plug the board in with USB.</li>
-<li>Click <strong>Set up a new board</strong> at the bottom of the sidebar. That opens <strong>System &gt; Firmware</strong>.</li>
+<li>Click the gear at the top of the sidebar, then <strong>Firmware</strong>.</li>
 <li>Follow the steps to flash the firmware and give the board your WiFi details. Its certificate is generated for you.</li>
 <li>Choose the board's password at <code>https://&lt;host&gt;.local/setup</code>. Your browser warns about the board's certificate the first time, because the board signed it itself. That's expected, so proceed to it.</li>
 <li>The board sends you back to Studio with its address filled in.</li>
 </ol>
 <p>See <a href="../device-setup/flashing-firmware/">Flashing Firmware</a> and <a href="../device-setup/provisioning/">Provisioning</a> for the details.</p>
 <h2 id="3-connect">3. Connect<a class="headerlink" href="#3-connect" title="Permanent link">&para;</a></h2>
-<p>Click <strong>Connect a board</strong>, or <strong>Connect</strong> beside a board you've used before.</p>
+<p>Click <strong>Connect a board</strong> at the top of the sidebar. A board you've used before is listed beneath it; click it to connect again.</p>
 <p><img alt="The connection dialog" src="../assets/connect-dialog.png" /></p>
 <ul>
-<li><strong>Device URL</strong> is the board's address, such as <code>wss://pybot-6014.local/mcp</code>.</li>
+<li><strong>Address</strong> is the board's name on your network, such as <code>pybot-6014.local</code>.</li>
 <li><strong>Password</strong> is the one you chose during setup.</li>
 </ul>
-<p>The board then appears in the sidebar with what it has, such as CAN, Clock or Motion, and the ScriptOs on it.</p>
+<p>The board then shows at the top of the sidebar, with what it is and what it has, such as CAN or Bluetooth. Its ScriptOs are in <a href="../user-guide/file-manager/">Files</a>.</p>
 <h2 id="4-add-an-api-key">4. Add an API key<a class="headerlink" href="#4-add-an-api-key" title="Permanent link">&para;</a></h2>
 <p>Studio's agent runs in your browser and uses models through <a href="https://openrouter.ai">OpenRouter</a>, on your own account.</p>
 <ol>
-<li>Click <strong>Add an API key</strong> under the message box, and paste your key.</li>
+<li>Click <strong>Add an API key</strong> under the message box in the Agent, on the right, and paste your key.</li>
 <li>Click the model's name beside it to choose another model. Tick <strong>Free only</strong> to see the free ones.</li>
 </ol>
 <p>The key stays in this browser, in a separate frame that Studio's pages and Apps can't read.</p>
 <p>If you'd rather use Claude Code or another agent, see <a href="../agent/other-agents/">Other Agents</a>. You don't need a key for that.</p>
 <h2 id="5-ask-for-something">5. Ask for something<a class="headerlink" href="#5-ask-for-something" title="Permanent link">&para;</a></h2>
-<p><img alt="Home, ready for a request" src="../assets/home-start.png" /></p>
-<p>Type what the board should do, or pick a suggestion. Suggestions come from what the board says it has.</p>
+<p><img alt="Studio, ready for a request" src="../assets/home-start.png" /></p>
+<p>In the Agent, type what the board should do, or pick a suggestion. Suggestions come from what the board says it has.</p>
 <p>Next: <a href="first-scripto/">Your First ScriptO</a>.</p>
 
 

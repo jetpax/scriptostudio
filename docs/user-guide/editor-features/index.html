@@ -1333,10 +1333,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#json-mode" class="md-nav__link">
+  <a href="#json" class="md-nav__link">
     <span class="md-ellipsis">
       
-        JSON mode
+        JSON
       
     </span>
   </a>
@@ -1348,17 +1348,6 @@
     <span class="md-ellipsis">
       
         Breakpoints
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#other-shortcuts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Other shortcuts
       
     </span>
   </a>
@@ -1882,10 +1871,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#json-mode" class="md-nav__link">
+  <a href="#json" class="md-nav__link">
     <span class="md-ellipsis">
       
-        JSON mode
+        JSON
       
     </span>
   </a>
@@ -1897,17 +1886,6 @@
     <span class="md-ellipsis">
       
         Breakpoints
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#other-shortcuts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Other shortcuts
       
     </span>
   </a>
@@ -1946,8 +1924,8 @@
 
 
 <h1 id="editor-features">Editor Features<a class="headerlink" href="#editor-features" title="Permanent link">&para;</a></h1>
-<p>The Editor edits files on the board or in your browser storage. Open it with <strong>Editor</strong> in the menu.</p>
-<p><img alt="The Editor" src="../../assets/editor.png" /></p>
+<p>The editor fills the top of Studio. It edits files on the board, or in a folder on your computer that you've opened in <a href="../file-manager/">Files</a>.</p>
+<p><img alt="A ScriptO's code in the editor, with Files in the sidebar" src="../../assets/editor.png" /></p>
 <p>The editor is CodeMirror 6. It has Python and JSON highlighting, line numbers, folding, bracket matching, search and undo history.</p>
 <h2 id="toolbar">Toolbar<a class="headerlink" href="#toolbar" title="Permanent link">&para;</a></h2>
 <table>
@@ -1961,68 +1939,52 @@
 <tbody>
 <tr>
 <td><strong>New</strong></td>
-<td>Create a file.</td>
-<td>Ctrl+N / Cmd+N</td>
+<td>Start a new file. A new Python file holds a short test: it prints Hello, ScriptO! and calls <code>neofetch()</code>.</td>
+<td></td>
 </tr>
 <tr>
 <td><strong>Save</strong></td>
-<td>Save the current file.</td>
+<td>Save the file. A new file asks where on the board it goes.</td>
 <td>Ctrl+S / Cmd+S</td>
 </tr>
 <tr>
 <td><strong>Reset</strong></td>
-<td>Reset the board.</td>
+<td>Restart the board's Python, or the whole board.</td>
 <td></td>
 </tr>
 <tr>
 <td><strong>Stop</strong></td>
-<td>Interrupt what's running and stop background tasks.</td>
+<td>Break whatever is running, and stop ScriptOs and Apps too.</td>
 <td></td>
 </tr>
 <tr>
 <td><strong>Run</strong></td>
-<td>Run the current file on the board.</td>
-<td>Ctrl+R / Cmd+R</td>
+<td>Run the file, or only what's selected in it. With the debugger showing, run the file in it.</td>
+<td>Ctrl+Enter / Cmd+Enter</td>
 </tr>
 <tr>
 <td><strong>Debug</strong></td>
-<td>Start a debug session. See <a href="../debugging/">Debugging</a>.</td>
-<td></td>
+<td>Show or hide the debugger. See <a href="../debugging/">Debugging</a>.</td>
+<td>F5</td>
 </tr>
 </tbody>
 </table>
+<p>Studio opens on a new file when nothing is open, so <strong>Run</strong> is a one-click test of the board.</p>
 <h2 id="tabs">Tabs<a class="headerlink" href="#tabs" title="Permanent link">&para;</a></h2>
-<p>Each open file has a tab. A CPU icon means the file is on the board, and a desktop icon means it's in browser storage. A <code>*</code> marks unsaved changes.</p>
+<p>Each open file has a tab. A dot marks unsaved changes; Studio keeps unsaved files in this browser until you save them.</p>
 <ul>
 <li>Click a tab to switch to it.</li>
-<li>Click the name on the active tab to rename the file.</li>
-<li>Click the <strong>x</strong> to close it.</li>
+<li>Click the <strong>×</strong> to close it. If it has unsaved changes, Studio asks first.</li>
 </ul>
 <h2 id="run">Run<a class="headerlink" href="#run" title="Permanent link">&para;</a></h2>
-<p><strong>Run</strong> sends the editor's current text to the board, saved or not. Output appears in the <a href="../terminal/">terminal</a> in the sidebar.</p>
-<h2 id="json-mode">JSON mode<a class="headerlink" href="#json-mode" title="Permanent link">&para;</a></h2>
-<p>Files that end in <code>.json</code> get JSON highlighting. When you open one that holds a JSON object or array, Studio reformats it with two-space indentation.</p>
+<p><strong>Run</strong> sends the editor's text to the board, saved or not, and its output appears in the <a href="../terminal/">terminal</a> beneath. With part of the file selected, it runs only that.</p>
+<h2 id="json">JSON<a class="headerlink" href="#json" title="Permanent link">&para;</a></h2>
+<p>Files that end in <code>.json</code> get JSON highlighting.</p>
 <h2 id="breakpoints">Breakpoints<a class="headerlink" href="#breakpoints" title="Permanent link">&para;</a></h2>
 <p>Click the gutter beside a line number to set a breakpoint. See <a href="../debugging/">Debugging</a>.</p>
-<h2 id="other-shortcuts">Other shortcuts<a class="headerlink" href="#other-shortcuts" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Shortcut</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl+L / Cmd+L</td>
-<td>Clear the terminal.</td>
-</tr>
-</tbody>
-</table>
-<p>These act in the Editor, apart from clearing the terminal, so Cmd+R reloads the page anywhere else. Browsers keep Cmd+N for themselves in a tab, so that one needs Studio installed as an app.</p>
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../file-manager/">File Manager</a></li>
+<li><a href="../file-manager/">Files</a></li>
 <li><a href="../terminal/">Terminal</a></li>
 <li><a href="../debugging/">Debugging</a></li>
 <li><a href="../../scriptos/writing-scriptos/">Writing ScriptOs</a></li>

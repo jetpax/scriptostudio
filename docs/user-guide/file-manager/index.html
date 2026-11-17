@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#file-manager" class="md-skip">
+        <a href="#files" class="md-skip">
           Skip to content
         </a>
       
@@ -1272,10 +1272,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-two-panes" class="md-nav__link">
+  <a href="#scriptos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The two panes
+        ScriptOs
       
     </span>
   </a>
@@ -1283,10 +1283,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#select-open-and-navigate" class="md-nav__link">
+  <a href="#the-boards-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Select, open and navigate
+        The board's files
       
     </span>
   </a>
@@ -1294,21 +1294,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-rename-and-delete" class="md-nav__link">
+  <a href="#this-computer" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Create, rename and delete
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#move-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Move files
+        This computer
       
     </span>
   </a>
@@ -1827,10 +1816,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-two-panes" class="md-nav__link">
+  <a href="#scriptos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The two panes
+        ScriptOs
       
     </span>
   </a>
@@ -1838,10 +1827,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#select-open-and-navigate" class="md-nav__link">
+  <a href="#the-boards-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Select, open and navigate
+        The board's files
       
     </span>
   </a>
@@ -1849,21 +1838,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-rename-and-delete" class="md-nav__link">
+  <a href="#this-computer" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Create, rename and delete
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#move-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Move files
+        This computer
       
     </span>
   </a>
@@ -1901,83 +1879,60 @@
   
 
 
-<h1 id="file-manager">File Manager<a class="headerlink" href="#file-manager" title="Permanent link">&para;</a></h1>
-<p>The File Manager shows the board's files next to files kept in your browser, and moves files between them.</p>
-<p>Open it with <strong>Files</strong> in the menu.</p>
-<p><img alt="The Files view" src="../../assets/files.png" /></p>
-<h2 id="the-two-panes">The two panes<a class="headerlink" href="#the-two-panes" title="Permanent link">&para;</a></h2>
+<h1 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h1>
+<p>The folder button at the top of the sidebar shows <strong>Files</strong> in place of the Apps. Whatever is in the centre stays there, and opening a file brings Studio forward. Click the <strong>×</strong> in the button's place to go back to the Apps. Drag the sidebar's right edge to make it wider.</p>
+<p><img alt="Files, with a log file's menu open" src="../../assets/files.png" /></p>
+<p>Files has three parts.</p>
 <table>
 <thead>
 <tr>
-<th>Pane</th>
+<th>Part</th>
 <th>Shows</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Left</td>
-<td>The board's filesystem. It reads <strong>Connect to board</strong> until a board is connected.</td>
+<td><strong>ScriptOs</strong></td>
+<td>What's installed on the board, and whether each is running.</td>
 </tr>
 <tr>
-<td>Right</td>
-<td>Browser storage: files Studio keeps in your browser, on your computer.</td>
+<td><strong>Board</strong></td>
+<td>The board's files and folders.</td>
+</tr>
+<tr>
+<td><strong>This computer</strong></td>
+<td>A folder on your computer, once you open one.</td>
 </tr>
 </tbody>
 </table>
-<p>Each pane has a header with its path and three buttons: new folder, new file, and upload (left pane) or import (right pane). Files show their size. Folders are listed first.</p>
-<p>Between the panes is a column of buttons that act on what you've selected:</p>
-<table>
-<thead>
-<tr>
-<th>Button</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Edit (pencil)</td>
-<td>Open the selected files in the editor.</td>
-</tr>
-<tr>
-<td>Left arrow</td>
-<td>Copy the selection from browser storage to the board.</td>
-</tr>
-<tr>
-<td>Right arrow</td>
-<td>Copy the selection from the board to browser storage.</td>
-</tr>
-<tr>
-<td>Down arrow</td>
-<td>Export the selected files to your computer, as browser downloads.</td>
-</tr>
-<tr>
-<td>Trash</td>
-<td>Delete the selection.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="select-open-and-navigate">Select, open and navigate<a class="headerlink" href="#select-open-and-navigate" title="Permanent link">&para;</a></h2>
+<h2 id="scriptos">ScriptOs<a class="headerlink" href="#scriptos" title="Permanent link">&para;</a></h2>
+<p>Each row has a dot that says whether the ScriptO is running, stopped or crashed.</p>
 <ul>
-<li>Click an item to select it. Click it again to clear it.</li>
-<li>Double-click a file to open it in the editor.</li>
-<li>Double-click a folder to go into it. Click <code>..</code> at the top of the list to go up.</li>
+<li>Hover over a row for its start or stop button.</li>
+<li>Click a row to open its code in the editor.</li>
+<li>Right-click it, or click its <strong>⋯</strong>, for <strong>Run at startup</strong>, <strong>Open the code</strong>, <strong>Ask about the crash</strong> when it has crashed, and <strong>Remove</strong>.</li>
 </ul>
-<h2 id="create-rename-and-delete">Create, rename and delete<a class="headerlink" href="#create-rename-and-delete" title="Permanent link">&para;</a></h2>
+<p>Click the <strong>ScriptOs</strong> heading to fold the list away. An App's own ScriptO belongs to the App, so it isn't listed here.</p>
+<h2 id="the-boards-files">The board's files<a class="headerlink" href="#the-boards-files" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>New file</strong> and <strong>New folder</strong> add an empty entry to the list with a name field. Type a name and press Enter. Press Escape to cancel.</li>
-<li><strong>Rename</strong>: click the text-cursor icon at the end of a row, edit the name, and press Enter.</li>
-<li><strong>Delete</strong>: select items, click the trash button and confirm. The confirmation lists what will go.</li>
+<li>Click a file to open it in the editor. Click a folder to open or close it.</li>
+<li>Shift-click or Cmd-click to select several.</li>
+<li>Right-click for <strong>Open</strong>, <strong>Download</strong>, <strong>Ask about this</strong>, <strong>Rename</strong>, <strong>Duplicate</strong> and <strong>Delete</strong>.</li>
+<li>The upload button in the <strong>Board</strong> heading sends files from your computer to the board. Its <strong>+</strong> has <strong>New file</strong>, <strong>New folder</strong>, <strong>Upload files</strong>, <strong>Back up the board</strong> and <strong>Refresh</strong>.</li>
+<li>Drag a file or folder onto a folder to move it. Drop files from your computer onto the list to upload them.</li>
 </ul>
+<p>The board's own files, the ones botIQ runs on, are folded away under <strong>The board's own files</strong>. Studio warns before you rename or delete one of them.</p>
 <blockquote>
 <p>[!WARNING]
 Deleting <code>boot.py</code> or breaking <code>main.py</code> can keep the board from starting.</p>
 </blockquote>
-<h2 id="move-files">Move files<a class="headerlink" href="#move-files" title="Permanent link">&para;</a></h2>
+<p>The bar at the bottom shows how much space the board has free.</p>
+<h2 id="this-computer">This computer<a class="headerlink" href="#this-computer" title="Permanent link">&para;</a></h2>
+<p>Click <strong>Open a folder</strong> to keep files on your computer beside the board's. Chrome and Edge allow this; the browser asks again before Studio uses the folder in a later visit.</p>
 <ul>
-<li><strong>Copy to the board or to browser storage</strong> with the arrow buttons. If a file of the same name is already at the destination, Studio lists the files it would overwrite and asks first.</li>
-<li><strong>Upload</strong> (left pane header) sends files from your computer straight to the board.</li>
-<li><strong>Import</strong> (right pane header) brings files from your computer into browser storage.</li>
-<li><strong>Export</strong> (down arrow) saves the selected files from either pane to your computer.</li>
+<li>Drag between the two places to copy.</li>
+<li>Right-click a folder on your computer for <strong>Restore to the board</strong>, which writes everything in it to the same place on the board.</li>
+<li><strong>Back up the board</strong>, in the board's <strong>+</strong>, copies all the board's files into a dated folder here. It leaves out the board's certificate and its settings file, which holds the Wi-Fi password.</li>
 </ul>
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>

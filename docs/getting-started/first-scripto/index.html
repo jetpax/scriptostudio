@@ -1902,31 +1902,31 @@
 
 
 <h1 id="your-first-scripto">Your First ScriptO<a class="headerlink" href="#your-first-scripto" title="Permanent link">&para;</a></h1>
-<p>This walks through one request on a board with an accelerometer and a buzzer. On another board, ask for something it has hardware for.</p>
+<p>This walks through one request that any board can do: every ESP32 can read its own temperature.</p>
 <h2 id="ask">Ask<a class="headerlink" href="#ask" title="Permanent link">&para;</a></h2>
-<p>On Home, type:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Beep when the board is tilted
+<p>In the Agent, type:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Log the chip temperature to a file every minute
 </code></pre></div>
 <h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
 <p><img alt="The agent's calls and the ScriptO it left" src="../../assets/home.png" /></p>
 <p>The chat shows each call the agent makes, and the terminal shows the code it runs and what that printed.</p>
 <ol>
-<li><strong>It tries the hardware.</strong> It calls <code>exec</code> to read the accelerometer and see what it reads at rest.</li>
+<li><strong>It tries the hardware.</strong> It calls <code>exec</code> to find the temperature sensor and read it.</li>
 <li><strong>It leaves a ScriptO.</strong> It calls <code>scripto_create</code> with an id and the code. The code is checked before anything is written, so a mistake can't replace what's working.</li>
 <li><strong>Studio checks on it.</strong> Two seconds after a ScriptO starts, Studio tells the agent what became of it. If it crashed, the agent sees the error and can fix it.</li>
-<li><strong>It reports.</strong> It says what it did and what it couldn't check. An agent can't hear a buzzer, so it asks you to try it.</li>
+<li><strong>It reports.</strong> It says what it did, where the readings go, and what it couldn't check.</li>
 </ol>
-<p>The ScriptO's row appears in the sidebar, marked <strong>Running</strong>.</p>
+<p>The ScriptO appears under <strong>ScriptOs</strong> in <a href="../../user-guide/file-manager/">Files</a>, marked <strong>Running</strong>.</p>
 <h2 id="try-it">Try it<a class="headerlink" href="#try-it" title="Permanent link">&para;</a></h2>
-<p>Tilt the board. It should beep once per tilt.</p>
+<p>After a few minutes, open the file the agent named, in Files. There's a new line each minute.</p>
 <p>If it doesn't do what you wanted, say so in the same chat. The agent can read the sensor again, change the code and restart it.</p>
 <h2 id="keep-it">Keep it<a class="headerlink" href="#keep-it" title="Permanent link">&para;</a></h2>
-<p>The ScriptO keeps running after you close Studio. To have it start every time the board powers up, tick <strong>At startup</strong> on its row, or ask the agent.</p>
-<p>From the row you can also:</p>
+<p>The ScriptO keeps running after you close Studio. To have it start every time the board powers up, choose <strong>Run at startup</strong> from its menu in Files, or ask the agent.</p>
+<p>From its row you can also:</p>
 <ul>
-<li><strong>Stop</strong> or <strong>Start</strong> it.</li>
-<li>Read its code with <strong>Code</strong>, which opens it in the Editor.</li>
-<li><strong>Remove</strong> it, which deletes its code and leaves its data.</li>
+<li>Stop or start it, with the button that shows when you hover over it.</li>
+<li>Open its code in the editor, by clicking it.</li>
+<li><strong>Remove</strong> it, from its menu, which deletes its code and leaves its data.</li>
 </ul>
 <h2 id="where-it-lives">Where it lives<a class="headerlink" href="#where-it-lives" title="Permanent link">&para;</a></h2>
 <p>The code is at <code>/lib/ext/&lt;folder&gt;/main.py</code>, and <code>/lib/ext/registry.json</code> records what's installed. See <a href="../../scriptos/">ScriptOs</a>.</p>
