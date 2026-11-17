@@ -5,8 +5,8 @@
  * deploy is a new worker with its own cache. A new worker waits until the page tells it to
  * take over, which the page does when the person presses Reload.
  */
-const VERSION = '64e7dda5832e'
-const FILES = ["./assets/__vite-browser-external-BIHI7g3E.js","./assets/agentFrame-CQe3wCnv.js","./assets/editor--OQSkCrM.js","./assets/favicon-CmaffBQr.svg","./assets/gallery-DJenDvjh.css","./assets/gallery-pCCK4w41.js","./assets/main-CrauiZnY.css","./assets/main-SOBKb-f3.js","./assets/menu-BIwDklZK.js","./assets/menu-C8of6Vrf.css","./assets/modulepreload-polyfill-B5Qt9EMX.js","./assets/tasmota-esptool.bundle-CejzY9o0.js","./assets/terminal-BGGhj1af.js","./assets/terminal-DOrYoP_4.css","./assets/tree-sitter-python-BlcJAWGl.wasm","./assets/tree-sitter-python-DxlSE_Ss.js","./assets/tree-sitter-qKYAACSa.wasm","./assets/vendor-D_y76g1R.js","./favicon.svg","./index.html","./locales/de.json","./locales/en.json","./locales/es.json","./locales/fr.json","./locales/zh.json","./manifest.json","./media/SS.svg","./media/icon-192.png","./media/icon-512.png","./media/tabler-sprite.svg","./science.png"]
+const VERSION = '88c6f36e6078'
+const FILES = ["./assets/__vite-browser-external-BIHI7g3E.js","./assets/agentFrame-CQe3wCnv.js","./assets/editor--OQSkCrM.js","./assets/favicon-CmaffBQr.svg","./assets/gallery-DJenDvjh.css","./assets/gallery-pJRszxn2.js","./assets/main-6SK-SXdl.js","./assets/main-BCubi1x4.css","./assets/menu-BIwDklZK.js","./assets/menu-C8of6Vrf.css","./assets/modulepreload-polyfill-B5Qt9EMX.js","./assets/tasmota-esptool.bundle-CejzY9o0.js","./assets/terminal-BGGhj1af.js","./assets/terminal-DOrYoP_4.css","./assets/tree-sitter-python-BlcJAWGl.wasm","./assets/tree-sitter-python-DxlSE_Ss.js","./assets/tree-sitter-qKYAACSa.wasm","./assets/vendor-D_y76g1R.js","./favicon.svg","./index.html","./locales/de.json","./locales/en.json","./locales/es.json","./locales/fr.json","./locales/zh.json","./manifest.json","./media/SS.svg","./media/icon-192.png","./media/icon-512.png","./media/tabler-sprite.svg","./science.png"]
 const CACHE = `studio-${VERSION}`
 
 self.addEventListener('install', (event) => {
