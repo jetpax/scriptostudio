@@ -40,7 +40,7 @@ Permission prompts belong to the agent you're using, so Studio doesn't ask on it
 `ss-relay` is a small stdio MCP server you can run beside an agent. It passes the board's tools through and adds what needs your computer: syncing a folder by hash, moving files by path, discovery and flashing. It also suits a client that only speaks stdio.
 
 ```bash
-claude mcp add pybot -e SS_RELAY_PASSWORD=<password> -- uvx ss-relay --device wss://pybot-6014.local/mcp
+claude mcp add botiq -e SS_RELAY_PASSWORD=<password> -- uvx ss-relay --device wss://botiq-6014.local/mcp
 ```
 
 ## Things to know

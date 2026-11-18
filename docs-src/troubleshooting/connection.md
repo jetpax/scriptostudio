@@ -4,7 +4,7 @@
 
 Check these in order:
 
-1. **The address.** It should look like `wss://pybot-6014.local/mcp`. Studio adds `/mcp` for you.
+1. **The address.** It should look like `wss://botiq-6014.local/mcp`. Studio adds `/mcp` for you.
 2. **The network.** The board and your computer need to be on the same network. If the `.local` name doesn't resolve, try the board's IP address.
 3. **The certificate.** The board signs its own certificate, so your browser refuses it until you've accepted it once. Open `https://<host>/` in a tab, proceed past the warning, then try again. The connection dialog offers a link to this.
 4. **The password.** It's the one you chose at setup.

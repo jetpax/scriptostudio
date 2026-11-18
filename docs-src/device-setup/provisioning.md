@@ -4,7 +4,7 @@ Provisioning gives a board its HTTPS certificate and its password. A new board g
 
 ## What it does
 
-- Generates a self-signed HTTPS certificate for `https://<hostname>.local`, where the hostname looks like `pybot-xxxx`.
+- Generates a self-signed HTTPS certificate for `https://<hostname>.local`, where the hostname looks like `botiq-xxxx`.
 - Restarts the board into setup mode, where it serves a password page.
 - Sends you to Studio with the board's address filled in.
 
