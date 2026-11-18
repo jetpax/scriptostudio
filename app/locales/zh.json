@@ -385,6 +385,8 @@
     "ok": "确定",
     "noNewerRelease": "ScriptoHub 上没有适用于这块开发板的更新平台版本。",
     "newest": "{version} 是最新的平台版本。",
-    "notChecked": "尚未检查更新"
+    "notChecked": "尚未检查更新",
+    "reconnecting": "Studio lost touch with the board {seconds} s ago and is reconnecting. The update carries on without it. Last heard: {last}.",
+    "quiet": "No word from the board for {seconds} s. Last heard: {last}."
   }
 }

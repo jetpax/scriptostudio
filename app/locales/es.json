@@ -385,6 +385,8 @@
     "ok": "Aceptar",
     "noNewerRelease": "ScriptoHub no tiene una versión más nueva de la plataforma para esta placa.",
     "newest": "{version} es la versión más nueva de la plataforma.",
-    "notChecked": "Aún no se han buscado actualizaciones"
+    "notChecked": "Aún no se han buscado actualizaciones",
+    "reconnecting": "Studio lost touch with the board {seconds} s ago and is reconnecting. The update carries on without it. Last heard: {last}.",
+    "quiet": "No word from the board for {seconds} s. Last heard: {last}."
   }
 }

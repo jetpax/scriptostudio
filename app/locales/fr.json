@@ -385,6 +385,8 @@
     "ok": "OK",
     "noNewerRelease": "ScriptoHub n'a pas de version plus récente de la plateforme pour cette carte.",
     "newest": "{version} est la version la plus récente de la plateforme.",
-    "notChecked": "Mises à jour pas encore vérifiées"
+    "notChecked": "Mises à jour pas encore vérifiées",
+    "reconnecting": "Studio lost touch with the board {seconds} s ago and is reconnecting. The update carries on without it. Last heard: {last}.",
+    "quiet": "No word from the board for {seconds} s. Last heard: {last}."
   }
 }
