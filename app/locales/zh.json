@@ -269,7 +269,7 @@
     "denied": "已拒绝",
     "agentWaiting": "智能体正在等待你的答复",
     "address": "Address",
-    "addressHint": "Its name on your network, such as pybot-2b88.local",
+    "addressHint": "Its name on your network, such as botiq-2b88.local",
     "password": "Password",
     "disconnect": "Disconnect",
     "reconnecting": "Reconnecting…",
