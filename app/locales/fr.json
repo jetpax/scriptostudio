@@ -245,7 +245,8 @@
       "canLog": "Enregistrer le trafic CAN dans un fichier",
       "drift": "Montrer l'écart de l'horloge avec NTP",
       "ledFade": "Faire varier la LED d'état entre plusieurs couleurs",
-      "freeMemory": "Dis-moi combien de mémoire est libre"
+      "freeMemory": "Dis-moi combien de mémoire est libre",
+      "sineWave": "Plot a sine wave on the terminal"
     },
     "model": "Modèle",
     "noCredits": "Votre compte OpenRouter n'a plus de crédits.",
@@ -267,6 +268,8 @@
     "allowed": "Autorisé",
     "denied": "Refusé",
     "agentWaiting": "L'agent attend votre réponse",
+    "frameUnreachable": "Studio couldn't reach {host}, which keeps your API key out of Studio's own page. Check that this computer is online and that nothing, such as an ad blocker or a firewall, blocks {host}, then send again.",
+    "frameUnreachableLocal": "Studio couldn't reach its key frame at {host}. Start it from Studio's folder with npm run frame, then send again.",
     "address": "Address",
     "addressHint": "Its name on your network, such as pybot-2b88.local",
     "password": "Password",

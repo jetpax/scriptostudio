@@ -212,7 +212,6 @@
       "audio": "Audio",
       "bluetooth": "Bluetooth"
     },
-    "placeholder": "Beep when the board is tilted",
     "send": "Send",
     "newChat": "New chat",
     "otherAgents": "Other agents",
@@ -228,7 +227,8 @@
     "keyBadShape": "That isn't an OpenRouter key. Those start with sk-or-.",
     "keyRejected": "OpenRouter didn't accept this key. Check it's your OpenRouter key (sk-or-…).",
     "typeSomething": "Type what the board should do",
-    "frameMissing": "Studio couldn't load the frame that holds your API key.",
+    "frameUnreachable": "Studio couldn't reach {host}, which keeps your API key out of Studio's own page. Check that this computer is online and that nothing, such as an ad blocker or a firewall, blocks {host}, then send again.",
+    "frameUnreachableLocal": "Studio couldn't reach its key frame at {host}. Start it from Studio's folder with npm run frame, then send again.",
     "stopped": "Stopped",
     "notRun": "This wasn't run, because the reply was cut short.",
     "refused": "The model declined this request.",
@@ -244,7 +244,8 @@
       "tilt": "Beep when the board is tilted",
       "canLog": "Log CAN traffic to a file",
       "drift": "Show how far the clock chip drifts from NTP",
-      "ledFade": "Fade the status LED through some colours",
+      "ledFade": "Fade the status LED through a rainbow, with gamma correction",
+      "sineWave": "Plot a sine wave on the terminal",
       "freeMemory": "Tell me how much memory is free"
     },
     "model": "Model",

@@ -245,7 +245,8 @@
       "canLog": "将 CAN 流量记录到文件",
       "drift": "显示时钟芯片与 NTP 的偏差",
       "ledFade": "让状态 LED 在几种颜色间渐变",
-      "freeMemory": "告诉我还有多少可用内存"
+      "freeMemory": "告诉我还有多少可用内存",
+      "sineWave": "Plot a sine wave on the terminal"
     },
     "model": "模型",
     "noCredits": "你的 OpenRouter 账户余额不足。",
@@ -267,6 +268,8 @@
     "allowed": "已允许",
     "denied": "已拒绝",
     "agentWaiting": "智能体正在等待你的答复",
+    "frameUnreachable": "Studio couldn't reach {host}, which keeps your API key out of Studio's own page. Check that this computer is online and that nothing, such as an ad blocker or a firewall, blocks {host}, then send again.",
+    "frameUnreachableLocal": "Studio couldn't reach its key frame at {host}. Start it from Studio's folder with npm run frame, then send again.",
     "address": "Address",
     "addressHint": "Its name on your network, such as pybot-2b88.local",
     "password": "Password",
