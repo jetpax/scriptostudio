@@ -23,7 +23,7 @@ Click **Connect a board** at the top of the sidebar. A board you've used before 
 ![The connection dialog](../assets/connect-dialog.png)
 
 - **Address** is the board's name on your network, such as `pybot-6014.local`.
-- **Password** is the one you chose during setup.
+- **Password** is the one you chose during setup. This browser keeps it for that board, so next time it's filled in.
 
 The board then shows at the top of the sidebar, with what it is and what it has, such as CAN or Bluetooth. Its ScriptOs are in [Files](../user-guide/file-manager.md).
 

@@ -12,7 +12,7 @@ Below it are the Apps:
 - Each App you've installed, with its own pages beneath it.
 - **Browse** finds more Apps and ScriptOs for the connected board.
 
-Two buttons at the top turn the menu into something else. Click the **×** in a button's place to go back to the Apps.
+Three buttons at the top say what the menu shows, and the one showing is lit. The house shows the Apps.
 
 - The folder shows **Files**, in three parts: the board's **ScriptOs**, the **Board**'s files, and **This computer**, a folder on your computer. Whatever is in the centre stays there, and opening a file brings Studio forward. Drag the menu's right edge to make it wider. See [Files](../user-guide/file-manager.md).
 - The gear opens **Settings**: About, Appearance, Agent, Firmware, and the network panels the board's hardware calls for.

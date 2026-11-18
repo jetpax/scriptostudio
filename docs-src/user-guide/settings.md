@@ -1,6 +1,6 @@
 # Settings
 
-Click the gear at the top of the menu to open **Settings**. It lists About, Appearance, Agent and Firmware, then under **Networks** the panels the board's hardware calls for. Click the **×** in the gear's place to go back to the Apps.
+Click the gear at the top of the menu to open **Settings**. It lists About, Appearance, Agent and Firmware, then under **Networks** the panels the board's hardware calls for. The gear stays lit while Settings shows; click the house to go back to the Apps.
 
 ## Appearance
 

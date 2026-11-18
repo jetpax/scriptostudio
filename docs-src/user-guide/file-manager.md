@@ -1,6 +1,6 @@
 # Files
 
-The folder button at the top of the sidebar shows **Files** in place of the Apps. Whatever is in the centre stays there, and opening a file brings Studio forward. Click the **×** in the button's place to go back to the Apps. Drag the sidebar's right edge to make it wider.
+The folder button at the top of the sidebar shows **Files** in place of the Apps. Whatever is in the centre stays there, and opening a file brings Studio forward. The folder stays lit while Files shows; click the house to go back to the Apps. Drag the sidebar's right edge to make it wider.
 
 ![Files, with a log file's menu open](../assets/files.png)
 
