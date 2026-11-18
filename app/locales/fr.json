@@ -268,8 +268,6 @@
     "allowed": "Autorisé",
     "denied": "Refusé",
     "agentWaiting": "L'agent attend votre réponse",
-    "frameUnreachable": "Studio couldn't reach {host}, which keeps your API key out of Studio's own page. Check that this computer is online and that nothing, such as an ad blocker or a firewall, blocks {host}, then send again.",
-    "frameUnreachableLocal": "Studio couldn't reach its key frame at {host}. Start it from Studio's folder with npm run frame, then send again.",
     "address": "Address",
     "addressHint": "Its name on your network, such as pybot-2b88.local",
     "password": "Password",
@@ -277,7 +275,9 @@
     "reconnecting": "Reconnecting…",
     "chat": "Chat",
     "certHint": "If this browser hasn't opened this board before, it may need to accept the board's certificate first.",
-    "certOpen": "Open {host} to accept it, then connect again."
+    "certOpen": "Open {host} to accept it, then connect again.",
+    "frameUnreachable": "Studio couldn't reach {host}, which keeps your API key out of Studio's own page. Check that this computer is online and that nothing, such as an ad blocker or a firewall, blocks {host}, then send again.",
+    "frameUnreachableLocal": "Studio couldn't reach its key frame at {host}. Start it from Studio's folder with npm run frame, then send again."
   },
   "firmware": {
     "deviceSetup": "Configuration de l'Appareil",
