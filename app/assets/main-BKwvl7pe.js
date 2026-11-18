@@ -363,7 +363,7 @@ ${new TextDecoder().decode(s)}
     </button>`}function Zn({icon:e,iconSvg:t,label:n,sub:o,on:s,note:a,onClick:r}){return i`
     <button type="button" class=${fe("shell-item",o&&"shell-item-sub",a&&"shell-item-away")} aria-current=${s?"page":void 0} onClick=${r}>
       ${o?null:i`<${R} name=${e} svg=${t} />`}<span>${n}</span>${a?i`<small>${a}</small>`:null}
-    </button>`}function Kh(){const e=Oe.value;return Ct.value.filter(t=>!t.apart).map(t=>{const n=t.panels.length===1,o=N.value&&t.board&&!le.value.some(a=>a.id===t.id),s=he.value==="apps"&&e&&e.app.id===t.id;return i`
+    </button>`}function Kh(){const e=Oe.value;return Ct.value.filter(t=>!t.apart).map(t=>{const n=t.panels.length===1,o=N.value&&t.board&&!le.value.some(a=>a.id===t.id),s=he.value==="apps"&&e&&e.app.id===t.id;return o&&!s?null:i`
       <${Zn} icon=${t.icon} iconSvg=${t.iconSvg} label=${t.name} on=${n&&s} note=${o?"not on this board":null}
         onClick=${()=>ne("apps",`${t.id}/${(s?e.panel:t.panels[0]).id}`)} />
       ${n?null:t.panels.map(a=>i`
