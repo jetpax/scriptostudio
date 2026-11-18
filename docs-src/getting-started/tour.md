@@ -9,7 +9,7 @@ The bolt at the top is the way to a board: grey with none connected, green with 
 Below it are the Apps:
 
 - **Studio** is where you work on the board: the editor, the debugger, the terminal and the log. See [Editor](../user-guide/editor-features.md).
-- Each App you've installed, with its own pages beneath it.
+- Each App you've installed, with its own pages beneath it. An App whose ScriptO the connected board doesn't have is left out; **Browse** offers it for that board.
 - **Browse** finds more Apps and ScriptOs for the connected board.
 
 Three buttons at the top say what the menu shows, and the one showing is lit. The house shows the Apps.
